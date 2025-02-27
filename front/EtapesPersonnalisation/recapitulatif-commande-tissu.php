@@ -177,15 +177,20 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['comment'])) {
           <p>'. htmlspecialchars($assocData['dossier_tissu'][$commande['id_dossier_tissu']]['nom'] ?? 'N/A') . '</p>
         </div>';
   ?>
-
+  
   <h3>Étape 6 : Choisi tes accoudoirs</h3>
-  <?php
-  echo '<div class="option">
-          <img src="../../admin/uploads/accoudoirs-tissu/'.htmlspecialchars($assocData['accoudoir_tissu'][$commande['id_accoudoir_tissu']]['img'] ?? 'N/A').'" 
-              alt="'.htmlspecialchars($assocData['accoudoir_tissu'][$commande['id_accoudoir_tissu']]['nom'] ?? 'N/A').'">
-          <p>'. htmlspecialchars($assocData['accoudoir_tissu'][$commande['id_accoudoir_tissu']]['nom'] ?? 'N/A') . '</p>
-        </div>';
-  ?>
+<?php
+// Récupération de la quantité depuis la colonne id_nb_accoudoir dans la commande
+$quantite_accoudoir = htmlspecialchars($commande['id_nb_accoudoir'] ?? 'N/A'); // Récupère la quantité si elle existe
+
+echo '<div class="option">
+        <img src="../../admin/uploads/accoudoirs-tissu/'.htmlspecialchars($assocData['accoudoir_tissu'][$commande['id_accoudoir_tissu']]['img'] ?? 'N/A').'" 
+            alt="'.htmlspecialchars($assocData['accoudoir_tissu'][$commande['id_accoudoir_tissu']]['nom'] ?? 'N/A').'">
+        <p>'. htmlspecialchars($assocData['accoudoir_tissu'][$commande['id_accoudoir_tissu']]['nom'] ?? 'N/A') . '</p>
+        <p>Quantité : ' . $quantite_accoudoir . '</p> <!-- Affichage de la quantité -->
+      </div>';
+?>
+
 
   <h3>Étape 7 : Choisi ta mousse</h3>
   <?php

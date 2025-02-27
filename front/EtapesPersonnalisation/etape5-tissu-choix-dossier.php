@@ -167,86 +167,107 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <button class="close-btn">OK</button>
         </div>
     </div>
-
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const options = document.querySelectorAll('.color-2options .option img'); // Sélectionne toutes les images
-            const mainImage = document.querySelector('.main-display img');
-            const suivantButton = document.querySelector('.btn-suivant');
-            const helpPopup = document.getElementById('help-popup'); // Popup besoin d'aide
-            const abandonnerPopup = document.getElementById('abandonner-popup'); // Popup abandonner
-            const selectionPopup = document.getElementById('selection-popup'); // Popup de sélection
-            const selectedDossierTissuInput = document.getElementById('selected-dossier_tissu'); // Input caché
-            let selected = false; // Variable pour savoir si une option est sélectionnée
+    document.addEventListener('DOMContentLoaded', () => {
+        const options = document.querySelectorAll('.color-2options .option img'); // Sélectionne toutes les images
+        const mainImage = document.querySelector('.main-display img');
+        const suivantButton = document.querySelector('.btn-suivant');
+        const helpPopup = document.getElementById('help-popup'); // Popup besoin d'aide
+        const abandonnerPopup = document.getElementById('abandonner-popup'); // Popup abandonner
+        const selectionPopup = document.getElementById('selection-popup'); // Popup de sélection
+        const selectedDossierTissuInput = document.getElementById('selected-dossier_tissu'); // Input caché
+        let selected = false; // Variable pour savoir si une option est sélectionnée
 
-            // Affichage des éléments avec la classe "transition"
-            document.querySelectorAll('.transition').forEach(element => {
-                element.classList.add('show');
-            });
-
-            // Gestion de la sélection des images
+        // Vérification si une sélection existe dans localStorage
+        let savedDossierTissuId = localStorage.getItem('selectedDossierTissuId');
+        
+        if (savedDossierTissuId) {
             options.forEach(img => {
-                img.addEventListener('click', () => {
-                    // Retirer la classe "selected" de toutes les images
-                    options.forEach(opt => opt.classList.remove('selected'));
-
-                    // Ajouter la classe "selected" à l'image cliquée
+                if (img.getAttribute('data-dossier-id') === savedDossierTissuId) {
                     img.classList.add('selected');
-
-                    // Mettre à jour l'image principale
                     mainImage.src = img.src;
                     mainImage.alt = img.alt;
-
-                    // Mettre à jour l'input caché avec l'ID du tissu sélectionné
-                    selectedDossierTissuInput.value = img.getAttribute('data-dossier-id');
-                    selected = true; // Marquer comme sélectionné
-                });
-            });
-
-            // Action sur le bouton "Suivant"
-            suivantButton.addEventListener('click', (event) => {
-                if (!selected) {
-                    // Si aucune option n'est sélectionnée, afficher le popup
-                    event.preventDefault();
-                    selectionPopup.style.display = 'flex';
+                    selectedDossierTissuInput.value = savedDossierTissuId;
+                    selected = true;
                 }
             });
+        }
 
-            // Fermeture du popup de sélection
-            document.querySelector('#selection-popup .close-btn').addEventListener('click', () => {
-                selectionPopup.style.display = 'none';
-            });
+        // Affichage des éléments avec la classe "transition"
+        document.querySelectorAll('.transition').forEach(element => {
+            element.classList.add('show');
+        });
 
-            // Fermer le popup de sélection si clic à l'extérieur
-            window.addEventListener('click', (event) => {
-                if (event.target === selectionPopup) {
-                    selectionPopup.style.display = 'none';
-                }
-            });
+        // Gestion de la sélection des images
+        options.forEach(img => {
+            img.addEventListener('click', () => {
+                // Retirer la classe "selected" de toutes les images
+                options.forEach(opt => opt.classList.remove('selected'));
 
-            // Gestion du popup "Besoin d'aide"
-            document.querySelector('.btn-aide').addEventListener('click', () => {
-                helpPopup.style.display = 'flex';
-            });
+                // Ajouter la classe "selected" à l'image cliquée
+                img.classList.add('selected');
 
-            document.querySelector('.close-btn').addEventListener('click', () => {
-                helpPopup.style.display = 'none';
-            });
+                // Mettre à jour l'image principale
+                mainImage.src = img.src;
+                mainImage.alt = img.alt;
 
-            // Gestion du popup "Abandonner"
-            document.querySelector('.btn-abandonner').addEventListener('click', () => {
-                abandonnerPopup.style.display = 'flex';
-            });
+                // Mettre à jour l'input caché avec l'ID du tissu sélectionné
+                selectedDossierTissuInput.value = img.getAttribute('data-dossier-id');
+                selected = true; // Marquer comme sélectionné
 
-            document.querySelector('.no-btn').addEventListener('click', () => {
-                abandonnerPopup.style.display = 'none';
-            });
-
-            document.querySelector('.yes-btn').addEventListener('click', () => {
-                window.location.href = 'index.php'; // Redirection vers la page d'accueil
+                saveSelection(img.getAttribute('data-dossier-id'));
             });
         });
-    </script>
+
+        // Action sur le bouton "Suivant"
+        suivantButton.addEventListener('click', (event) => {
+            if (!selected) {
+                // Si aucune option n'est sélectionnée, afficher le popup
+                event.preventDefault();
+                selectionPopup.style.display = 'flex';
+            }
+        });
+
+        // Fermeture du popup de sélection
+        document.querySelector('#selection-popup .close-btn').addEventListener('click', () => {
+            selectionPopup.style.display = 'none';
+        });
+
+        // Fermer le popup de sélection si clic à l'extérieur
+        window.addEventListener('click', (event) => {
+            if (event.target === selectionPopup) {
+                selectionPopup.style.display = 'none';
+            }
+        });
+
+        // Gestion du popup "Besoin d'aide"
+        document.querySelector('.btn-aide').addEventListener('click', () => {
+            helpPopup.style.display = 'flex';
+        });
+
+        document.querySelector('.close-btn').addEventListener('click', () => {
+            helpPopup.style.display = 'none';
+        });
+
+        // Gestion du popup "Abandonner"
+        document.querySelector('.btn-abandonner').addEventListener('click', () => {
+            abandonnerPopup.style.display = 'flex';
+        });
+
+        document.querySelector('.no-btn').addEventListener('click', () => {
+            abandonnerPopup.style.display = 'none';
+        });
+
+        document.querySelector('.yes-btn').addEventListener('click', () => {
+            window.location.href = 'index.php'; // Redirection vers la page d'accueil
+        });
+
+        function saveSelection(dossierTissuId) {
+            localStorage.setItem('selectedDossierTissuId', dossierTissuId);
+        }
+    });
+</script>
+
 
 </main>
 
