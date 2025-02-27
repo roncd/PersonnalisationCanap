@@ -7,7 +7,37 @@ if (!isset($_SESSION['user_id'])) {
     header("Location: ../formulaire/Connexion.php");
     exit;
 }
+
+$id_client = $_SESSION['user_id'];
+
+// Vérifier si une commande temporaire existe déjà pour cet utilisateur
+$stmt = $pdo->prepare("SELECT * FROM commande_temporaire WHERE id_client = ?");
+$stmt->execute([$id_client]);
+$commande = $stmt->fetch(PDO::FETCH_ASSOC);
+
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+  // Vérifier si longueurA est bien renseignée (obligatoire)
+  if (!empty($_POST["longueurA"])) {
+      $longueurA = (int) trim($_POST["longueurA"]);
+      $longueurB = !empty($_POST["longueurB"]) ? (int) trim($_POST["longueurB"]) : null;
+      $longueurC = !empty($_POST["longueurC"]) ? (int) trim($_POST["longueurC"]) : null;
+
+      if ($commande) {
+          $id = $commande['id']; // Récupérer l'ID de la commande temporaire
+
+          // Correction de la requête SQL
+          $stmt = $pdo->prepare("UPDATE commande_temporaire SET longueurA = ?, longueurB = ?, longueurC = ? WHERE id = ?");
+          if ($stmt->execute([$longueurA, $longueurB, $longueurC, $id])) {
+            // Redirection après mise à jour réussie
+            header("Location: etape2-type-banquette.php");
+            exit();
+          }
+      } 
+  } 
+}
 ?>
+
+
 
 <!DOCTYPE html>
 <html lang="fr">
@@ -58,33 +88,34 @@ if (!isset($_SESSION['user_id'])) {
     <!-- Colonne de gauche -->
     <div class="left-column transition">
       <h2>Étape 1 - Choisi tes mesures</h2>
-      
-      <form class="formulaire">
-      <p>Largeur banquette : <span class="bold">50cm (par défaut)</span></p>
-          <div class="form-row">
-           
-            <div class="form-group">
-              <label for="longueurA">Longueur banquette A (en cm) :</label>
-              <input type="number" id="longueurA"  class="input-field" step="100" required placeholder="Ex: 150">
+      <form  method="POST" class="formulaire">
+        <p>Largeur banquette : <span class="bold">50cm (par défaut)</span></p>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="longueurA">Longueur banquette A (en cm) :</label>
+                <input type="number" id="longueurA" name="longueurA" class="input-field" placeholder="Ex: 150">
+              </div>
             </div>
-          </div>
-          <div class="form-row">
-            <div class="form-group">
-              <label for="longueurB">Longueur banquette B (en cm) :</label>
-              <input type="number" id="longueurB"  class="input-field" step="100" required placeholder="Ex: 350">
+            <div class="form-row">
+              <div class="form-group">
+                <label for="longueurB">Longueur banquette B (en cm) :</label>
+                <input type="number" id="longueurB" name="longueurB" class="input-field" placeholder="Ex: 350">
+              </div>
             </div>
-          </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="longueurC">Longueur banquette C (en cm) :</label>
+                <input type="number" id="longueurC" name="longueurC" class="input-field" placeholder="Ex: 350">
+              </div>
+            </div>
+            <div class="footer">
+            <p>Total : <span>899 €</span></p>
+            <div class="buttons">
+            <button type="button" class="btn-retour" onclick="history.go(-1)">Retour</button>
+            <button type="submit" class="btn-suivant transition">Suivant</button>
+            </div>
+            </div>
       </form>
-      
-
-
-      <div class="footer">
-        <p>Total : <span>899 €</span></p>
-        <div class="buttons">
-          <button class="btn-retour" onclick="history.go(-1)">Retour</button>
-          <button class="btn-suivant transition">Suivant</button>
-        </div>
-      </div>
     </div>
 
 
@@ -133,24 +164,17 @@ if (!isset($_SESSION['user_id'])) {
 <script>
 document.addEventListener('DOMContentLoaded', () => {
   // Sélection des éléments
-  const suivantButton = document.querySelector('.btn-suivant');
+  const form = document.querySelector('.formulaire');
   const erreurPopup = document.getElementById('erreur-popup');
-  const closeErreurBtn = erreurPopup.querySelector('.close-btn'); // Sélection spécifique du bouton de fermeture
+  const closeErreurBtn = erreurPopup.querySelector('.close-btn');
   const longueurAInput = document.getElementById('longueurA');
-  const longueurBInput = document.getElementById('longueurB');
 
-  suivantButton.addEventListener('click', (event) => {
-    event.preventDefault(); // Empêche la redirection immédiate
-
+  form.addEventListener('submit', (event) => {
     const longueurA = longueurAInput.value.trim();
-    const longueurB = longueurBInput.value.trim();
 
-    if (!longueurA || !longueurB) {
-      // Afficher le popup d'erreur si les dimensions ne sont pas remplies
-      erreurPopup.style.display = 'flex';
-    } else {
-      // Redirection vers la page suivante si toutes les dimensions sont remplies
-      window.location.href = 'etape2-type-banquette.php';
+    if (!longueurA) {
+      event.preventDefault(); // Empêche le formulaire d'être soumis
+      erreurPopup.style.display = 'flex'; // Afficher le popup d'erreur
     }
   });
 

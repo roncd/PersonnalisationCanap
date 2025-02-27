@@ -40,17 +40,20 @@ foreach ($tables as $table) {
 }
 }
 
-$stmt = $pdo->prepare("SELECT id, longueurA, longueurB, longueurC FROM dimension");
-$stmt->execute();
-$data['dimension'] = $stmt->fetchAll(PDO::FETCH_ASSOC);
-$assocData['dimension'] = [];
+$id = $commande['id']; 
 
-foreach ($data['dimension'] as $dim) {
-  $assocData['dimension'][$dim['id']] = [
+$stmt = $pdo->prepare("SELECT id, longueurA, longueurB, longueurC FROM commande_temporaire WHERE id = ?");
+$stmt->execute([$id]); // Remplacer $id par l'ID spécifique que tu veux récupérer.
+$data['commande_temporaire'] = $stmt->fetchAll(PDO::FETCH_ASSOC);
+$assocData['commande_temporaire'] = [];
+
+foreach ($data['commande_temporaire'] as $dim) {
+  $assocData['commande_temporaire'][$dim['id']] = [
     'longueurA' => $dim['longueurA'],
     'longueurB' => $dim['longueurB'],
     'longueurC' => $dim['longueurC']
-];}
+  ];
+}
 
 // Récupérer les accoudoirs associés à la commande temporaire
 $stmt = $pdo->prepare("SELECT cta.id_accoudoir_bois, cta.nb_accoudoir, ab.nom, ab.img
@@ -66,9 +69,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['comment'])) {
       $commentaire = trim($_POST["comment"]); 
 
       if ($commande) {
-        $id = $commande['id']; // Récupérer l'ID de la commande temporaire
           // Mettre à jour la commande temporaire avec le commentaire
-          $stmt = $pdo->prepare("UPDATE commande_temporaire SET commentaire = ? WHERE commande_temporaire.id = ?");
+          $stmt = $pdo->prepare("UPDATE commande_temporaire SET commentaire = ? WHERE id = ?");
           $stmt->execute([$commentaire, $id]);
           $message = '<p class="message success">Commentaire ajouté avec succès !</p>';
       } else {
