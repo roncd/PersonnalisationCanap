@@ -8,9 +8,19 @@ if (!isset($_SESSION['user_id'])) {
     exit;
 }
 
+$id_client = $_SESSION['user_id'];
+
 // Récupérer les types d'accoudoirs depuis la base de données
 $stmt = $pdo->query("SELECT * FROM accoudoir_tissu");
 $accoudoir_tissu = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+// Récupérer la sélection existante de l'utilisateur dans la commande temporaire
+$stmt = $pdo->prepare("SELECT id_accoudoir_tissu, id_nb_accoudoir FROM commande_temporaire WHERE id_client = ?");
+$stmt->execute([$id_client]);
+$commande_existante = $stmt->fetch(PDO::FETCH_ASSOC);
+
+$accoudoir_selectionne = $commande_existante['id_accoudoir_tissu'] ?? null;
+$nb_accoudoir_selectionne = $commande_existante['id_nb_accoudoir'] ?? 1; // Valeur par défaut à 1
 
 // Vérifier si le formulaire a été soumis
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -19,16 +29,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 
-    $id_client = $_SESSION['user_id'];
     $id_accoudoir_tissu = $_POST['accoudoir_tissu_id'];
     $nb_accoudoir = $_POST['nb_accoudoir'];
 
     // Vérifier si une commande temporaire existe déjà pour cet utilisateur
-    $stmt = $pdo->prepare("SELECT id FROM commande_temporaire WHERE id_client = ?");
-    $stmt->execute([$id_client]);
-    $existing_order = $stmt->fetch(PDO::FETCH_ASSOC);
-
-    if ($existing_order) {
+    if ($commande_existante) {
         $stmt = $pdo->prepare("UPDATE commande_temporaire SET id_accoudoir_tissu = ?, id_nb_accoudoir = ? WHERE id_client = ?");
         $stmt->execute([$id_accoudoir_tissu, $nb_accoudoir, $id_client]);
     } else {
@@ -36,11 +41,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->execute([$id_client, $id_accoudoir_tissu, $nb_accoudoir]);
     }
 
-    // Rediriger vers l'étape suivante
-    header("Location: etape7-tissu-choix-mousse.php");
+    // Sauvegarder la sélection dans le localStorage via JavaScript
+    echo "<script>
+        localStorage.setItem('selectedAccoudoir', '$id_accoudoir_tissu');
+        localStorage.setItem('selectedNbAccoudoir', '$nb_accoudoir');
+        window.location.href = 'etape7-tissu-choix-mousse.php';
+    </script>";
     exit;
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="fr">
@@ -110,9 +120,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             <!-- Compteur de quantité (maintenant à l'intérieur de .option) -->
             <div class="quantity-selector">
-              <button class="btn-decrease" onclick="updateQuantity(this, -1)">-</button>
-              <input type="text" class="quantity-input" value="0" readonly>
-              <button class="btn-increase" onclick="updateQuantity(this, 1)">+</button>
+            <button class="decrease-btn" onclick="updateQuantity(this, -1)">-</button>
+<input type="text" class="quantity-input" value="0" readonly>
+<button class="increase-btn" onclick="updateQuantity(this, 1)">+</button>
+
             </div>
           </div>
         <?php endforeach; ?>
@@ -128,8 +139,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <button class="btn-retour transition" onclick="history.go(-1)">Retour</button>
         <form method="POST" action="">
         <input type="hidden" name="accoudoir_tissu_id" id="selected-accoudoir_tissu" required>
-<input type="hidden" name="nb_accoudoir" id="selected-nb_accoudoir" required>
-
+        <input type="hidden" name="nb_accoudoir" id="selected-nb_accoudoir" required>
           <button type="submit" class="btn-suivant transition">Suivant</button>
         </form>
       </div>
@@ -177,31 +187,75 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <button class="no-btn">Non !</button>
   </div>
 </div>
+
 <script>
+  
   document.addEventListener('DOMContentLoaded', () => {
-    const options = document.querySelectorAll('.color-2options .option img'); // Sélectionne toutes les images
+    const options = document.querySelectorAll('.color-2options .option img');
     const mainImage = document.querySelector('.main-display img');
     const suivantButton = document.querySelector('.btn-suivant');
-    const selectionPopup = document.getElementById('selection-popup'); // Popup de sélection
-    const helpPopup = document.getElementById('help-popup'); // Popup besoin d'aide
-    const abandonnerPopup = document.getElementById('abandonner-popup'); // Popup abandonner
+    const selectionPopup = document.getElementById('selection-popup');
+    const helpPopup = document.getElementById('help-popup');
+    const abandonnerPopup = document.getElementById('abandonner-popup');
     const closeSelectionBtn = document.querySelector('#selection-popup .close-btn');
-    const openButton = document.querySelector('.btn-aide');
-    const closeButton = document.querySelector('.close-btn');
     const selectedAccoudoirTissuInput = document.getElementById('selected-accoudoir_tissu');
     const selectedNbAccoudoirInput = document.getElementById('selected-nb_accoudoir');
-    let selected = false; // Variable pour savoir si une option est sélectionnée
+    let selected = false;
 
     // Affichage des éléments avec la classe "transition"
     document.querySelectorAll('.transition').forEach(element => {
       element.classList.add('show');
     });
 
+    // Fonction pour sauvegarder la sélection dans le localStorage
+    function saveSelectionToLocalStorage(selectedImage) {
+      const selectedAccoudoirId = selectedImage.getAttribute('data-accoudoir-id');
+      const quantityInput = selectedImage.closest('.option').querySelector('.quantity-input');
+      localStorage.setItem('selectedAccoudoir', selectedAccoudoirId);
+      localStorage.setItem('accoudoirQuantity', quantityInput.value); // Sauvegarde de la quantité
+    }
+
+    // Fonction pour récupérer la sélection depuis le localStorage
+    function loadSelectionFromLocalStorage() {
+      const selectedAccoudoirId = localStorage.getItem('selectedAccoudoir');
+      const accoudoirQuantity = localStorage.getItem('accoudoirQuantity');
+
+      if (selectedAccoudoirId && accoudoirQuantity) {
+        const selectedImage = document.querySelector(`.color-2options .option img[data-accoudoir-id="${selectedAccoudoirId}"]`);
+        
+        if (selectedImage) {
+          selectedImage.classList.add('selected');
+          mainImage.src = selectedImage.src;
+          mainImage.alt = selectedImage.alt;
+          selectedAccoudoirTissuInput.value = selectedAccoudoirId;
+
+          // Mettre à jour la quantité
+          const quantityInput = selectedImage.closest('.option').querySelector('.quantity-input');
+          quantityInput.value = accoudoirQuantity;
+
+          // Mettre à jour la variable selected
+          selected = true;
+          selectedNbAccoudoirInput.value = accoudoirQuantity;
+        }
+      }
+    }
+
+    // Charger la sélection depuis le localStorage au chargement de la page
+    loadSelectionFromLocalStorage();
+
     // Gestion de la sélection des images
     options.forEach(img => {
       img.addEventListener('click', () => {
         // Retirer la classe "selected" de toutes les images
         options.forEach(opt => opt.classList.remove('selected'));
+
+        // Réinitialiser la quantité à 0 pour tous les accoudoirs
+        options.forEach(opt => {
+          const quantityInput = opt.closest('.option').querySelector('.quantity-input');
+          if (quantityInput) {
+            quantityInput.value = 0;
+          }
+        });
 
         // Ajouter la classe "selected" à l'image cliquée
         img.classList.add('selected');
@@ -213,28 +267,69 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Mettre à jour l'input caché avec l'ID du tissu sélectionné
         selectedAccoudoirTissuInput.value = img.getAttribute('data-accoudoir-id');
         selected = true; // Marquer comme sélectionné
+
+        // Mettre à jour la quantité de l'accoudoir sélectionné à 1
+        const quantityInput = img.closest('.option').querySelector('.quantity-input');
+        if (quantityInput) {
+          quantityInput.value = 1; // Définit la quantité sur 1
+        }
+
+        // Sauvegarder la sélection dans le localStorage
+        saveSelectionToLocalStorage(img);
       });
     });
 
+    // Gestion des boutons augmenter et diminuer
+    const decreaseButtons = document.querySelectorAll('.decrease-btn');
+    const increaseButtons = document.querySelectorAll('.increase-btn');
+
+    decreaseButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        const quantityInput = button.closest('.option').querySelector('.quantity-input');
+        let quantity = parseInt(quantityInput.value);
+        if (quantity > 0) {
+          quantity--;
+          quantityInput.value = quantity;
+          const selectedImage = button.closest('.option').querySelector('img.selected');
+          if (selectedImage) {
+            saveSelectionToLocalStorage(selectedImage); // Sauvegarder la nouvelle quantité
+          }
+        }
+      });
+    });
+
+    increaseButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        const quantityInput = button.closest('.option').querySelector('.quantity-input');
+        const selectedImage = button.closest('.option').querySelector('img.selected');
+        if (selectedImage) {
+          let quantity = parseInt(quantityInput.value);
+          quantity++;
+          quantityInput.value = quantity;
+          saveSelectionToLocalStorage(selectedImage); // Sauvegarder la nouvelle quantité
+        }
+      });
+    });
+
+    // Gestion du bouton suivant
     suivantButton.addEventListener('click', (event) => {
-  event.preventDefault(); // Empêcher la redirection immédiate
-  if (!selected) {
-    selectionPopup.style.display = 'flex';
-  } else {
-    const selectedOption = document.querySelector('.option img.selected');
-    if (selectedOption) {
-      const quantityInput = selectedOption.closest('.option').querySelector('.quantity-input');
-      selectedNbAccoudoirInput.value = quantityInput.value;
-
-      if (quantityInput.value > 0) {
-        document.forms[0].submit(); // Soumettre le formulaire si une quantité est choisie
+      event.preventDefault(); // Empêcher la redirection immédiate
+      if (!selected) {
+        selectionPopup.style.display = 'flex';
       } else {
-        alert("Veuillez choisir une quantité avant de continuer.");
-      }
-    }
-  }
-});
+        const selectedOption = document.querySelector('.option img.selected');
+        if (selectedOption) {
+          const quantityInput = selectedOption.closest('.option').querySelector('.quantity-input');
+          selectedNbAccoudoirInput.value = quantityInput.value;
 
+          if (quantityInput.value > 0) {
+            document.forms[0].submit(); // Soumettre le formulaire si une quantité est choisie
+          } else {
+            alert("Veuillez choisir une quantité avant de continuer.");
+          }
+        }
+      }
+    });
 
     // Fermeture du popup de sélection
     closeSelectionBtn.addEventListener('click', () => {
@@ -248,15 +343,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       }
     });
 
-            // Gestion du popup "Besoin d'aide"
-            document.querySelector('.btn-aide').addEventListener('click', () => {
-                helpPopup.style.display = 'flex';
-            });
+    // Gestion du popup "Besoin d'aide"
+    document.querySelector('.btn-aide').addEventListener('click', () => {
+      helpPopup.style.display = 'flex';
+    });
 
-            document.querySelector('#help-popup .close-btn').addEventListener('click', () => {
-    helpPopup.style.display = 'none';
-});
-
+    document.querySelector('#help-popup .close-btn').addEventListener('click', () => {
+      helpPopup.style.display = 'none';
+    });
 
     // Gestion du popup "Abandonner"
     document.querySelector('.btn-abandonner').addEventListener('click', () => {
@@ -272,17 +366,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     });
   });
 
-  function updateQuantity(button, change) {
-    let input = button.parentElement.querySelector('.quantity-input');
-    let currentValue = parseInt(input.value, 10);
-    let newValue = currentValue + change;
-
-    // Empêcher d'aller en dessous de 0
-    if (newValue < 0) newValue = 0;
-
-    input.value = newValue;
-  }
 </script>
+
+
 
 
 </main>

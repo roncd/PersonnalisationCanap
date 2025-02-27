@@ -187,84 +187,94 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 
   <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const options = document.querySelectorAll('.color-2options .option img');
-      const selectedModeleInput = document.getElementById('selected-modele');
-      const selectedModeleTypeInput = document.getElementById('selected-modele-type');
-      const suivantButton = document.querySelector('.btn-suivant');
-      const helpPopup = document.getElementById('help-popup'); // Popup besoin d'aide
-      const abandonnerPopup = document.getElementById('abandonner-popup'); // Popup abandonner
-      const selectionPopup = document.getElementById('selection-popup');
-      const mainImage = document.getElementById('main-image');
-      let selected = false;
+  document.addEventListener('DOMContentLoaded', () => {
+    const options = document.querySelectorAll('.color-2options .option img');
+    const selectedModeleInput = document.getElementById('selected-modele');
+    const selectedModeleTypeInput = document.getElementById('selected-modele-type');
+    const suivantButton = document.querySelector('.btn-suivant');
+    const helpPopup = document.getElementById('help-popup'); // Popup besoin d'aide
+    const abandonnerPopup = document.getElementById('abandonner-popup'); // Popup abandonner
+    const selectionPopup = document.getElementById('selection-popup');
+    const mainImage = document.getElementById('main-image');
+    let selected = false;
 
-
-      document.querySelectorAll('.transition').forEach(element => {
-        element.classList.add('show');
-      });
-
-
+    let savedModeleId = localStorage.getItem('selectedModeleId');
+    let savedModeleType = localStorage.getItem('selectedModeleType');
+    
+    if (savedModeleId && savedModeleType) {
       options.forEach(img => {
-        img.addEventListener('click', () => {
-          options.forEach(opt => opt.classList.remove('selected'));
+        if (img.getAttribute('data-modele-id') === savedModeleId && img.getAttribute('data-modele-type') === savedModeleType) {
           img.classList.add('selected');
-          selectedModeleInput.value = img.getAttribute('data-modele-id');
-          selectedModeleTypeInput.value = img.getAttribute('data-modele-type');
-
-
-          // Mise à jour de l'image principale
           mainImage.src = img.src;
           mainImage.alt = img.alt;
-
-
+          selectedModeleInput.value = savedModeleId;
+          selectedModeleTypeInput.value = savedModeleType;
           selected = true;
-        });
-      });
-
-
-      suivantButton.addEventListener('click', (event) => {
-        if (!selected) {
-          event.preventDefault();
-          selectionPopup.style.display = 'flex';
         }
       });
+    }
 
-
-      document.querySelector('#selection-popup .close-btn').addEventListener('click', () => {
-        selectionPopup.style.display = 'none';
-      });
-
-
-      // Gestion du popup "Besoin d'aide"
-      document.querySelector('.btn-aide').addEventListener('click', () => {
-                helpPopup.style.display = 'flex';
-            });
-
-
-            document.querySelector('.close-btn').addEventListener('click', () => {
-                helpPopup.style.display = 'none';
-            });
-
-
-            // Gestion du popup "Abandonner"
-            document.querySelector('.btn-abandonner').addEventListener('click', () => {
-                abandonnerPopup.style.display = 'flex';
-            });
-
-
-            document.querySelector('.no-btn').addEventListener('click', () => {
-                abandonnerPopup.style.display = 'none';
-            });
-
-
-            document.querySelector('.yes-btn').addEventListener('click', () => {
-                window.location.href = 'index.php'; // Redirection vers la page d'accueil
-            });
-
-
-     
+    document.querySelectorAll('.transition').forEach(element => {
+      element.classList.add('show');
     });
-  </script>
+
+    options.forEach(img => {
+      img.addEventListener('click', () => {
+        options.forEach(opt => opt.classList.remove('selected'));
+        img.classList.add('selected');
+        selectedModeleInput.value = img.getAttribute('data-modele-id');
+        selectedModeleTypeInput.value = img.getAttribute('data-modele-type');
+
+        // Mise à jour de l'image principale
+        mainImage.src = img.src;
+        mainImage.alt = img.alt;
+
+        selected = true;
+        saveSelection(img.getAttribute('data-modele-id'), img.getAttribute('data-modele-type'));
+      });
+    });
+
+    suivantButton.addEventListener('click', (event) => {
+      if (!selected) {
+        event.preventDefault();
+        selectionPopup.style.display = 'flex';
+      }
+    });
+
+    document.querySelector('#selection-popup .close-btn').addEventListener('click', () => {
+      selectionPopup.style.display = 'none';
+    });
+
+    // Gestion du popup "Besoin d'aide"
+    document.querySelector('.btn-aide').addEventListener('click', () => {
+      helpPopup.style.display = 'flex';
+    });
+
+    document.querySelector('.close-btn').addEventListener('click', () => {
+      helpPopup.style.display = 'none';
+    });
+
+    // Gestion du popup "Abandonner"
+    document.querySelector('.btn-abandonner').addEventListener('click', () => {
+      abandonnerPopup.style.display = 'flex';
+    });
+
+    document.querySelector('.no-btn').addEventListener('click', () => {
+      abandonnerPopup.style.display = 'none';
+    });
+
+    document.querySelector('.yes-btn').addEventListener('click', () => {
+      window.location.href = 'index.php'; // Redirection vers la page d'accueil
+    });
+
+    function saveSelection(modeleId, modeleType) {
+      localStorage.setItem('selectedModeleId', modeleId);
+      localStorage.setItem('selectedModeleType', modeleType);
+    }
+  });
+</script>
+
+
 </main>
 
 

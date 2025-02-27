@@ -200,124 +200,145 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       <button class="close-btn">OK</button>
       </div>
   </div>
+  
   <script>
-    document.addEventListener('DOMContentLoaded', () => {
+  document.addEventListener('DOMContentLoaded', () => {
     const options = document.querySelectorAll('.color-options .option img');
     const mainImage = document.querySelector('.main-display img');
     const suivantButton = document.querySelector('.btn-suivant');
     const helpPopup = document.getElementById('help-popup');
     const abandonnerPopup = document.getElementById('abandonner-popup');
     const selectionPopup = document.getElementById('selection-popup');
-    const selectedAccoudoirBoisInput = document.getElementById('selected-accoudoir_bois'); 
+    const selectedAccoudoirBoisInput = document.getElementById('selected-accoudoir_bois');
     const selectedNbAccoudoirInput = document.getElementById('selected-nb_accoudoir');
-    let selectedOptions = {};
+    let selectedOptions = JSON.parse(localStorage.getItem('selectedOptions')) || {};
 
     // Afficher la transition des éléments
     document.querySelectorAll('.transition').forEach(element => {
-        element.classList.add('show');
+      element.classList.add('show');
     });
+
+    // Restaurer les sélections depuis localStorage
+    options.forEach(img => {
+      const boisId = img.getAttribute('data-bois-id');
+      const parentOption = img.closest('.option');
+      let quantityInput = parentOption.querySelector('.quantity-input1');
+
+      if (selectedOptions[boisId]) {
+        img.classList.add('selected');
+        quantityInput.value = selectedOptions[boisId];
+      }
+    });
+
+    updateHiddenInputs();
 
     // Sélectionner un accoudoir
     options.forEach(img => {
-        img.addEventListener('click', () => {
-            const boisId = img.getAttribute('data-bois-id');
-            const parentOption = img.closest('.option');
-            let quantityInput = parentOption.querySelector('.quantity-input1');
+      img.addEventListener('click', () => {
+        const boisId = img.getAttribute('data-bois-id');
+        const parentOption = img.closest('.option');
+        let quantityInput = parentOption.querySelector('.quantity-input1');
 
-            if (selectedOptions[boisId]) {
-                delete selectedOptions[boisId]; // Désélectionner
-                img.classList.remove('selected');
-                quantityInput.value = 0;
-            } else {
-                selectedOptions[boisId] = 1; // Ajouter avec quantité 1 par défaut
-                img.classList.add('selected');
-                quantityInput.value = 1;
-            }
+        if (selectedOptions[boisId]) {
+          delete selectedOptions[boisId]; // Désélectionner
+          img.classList.remove('selected');
+          quantityInput.value = 0;
+        } else {
+          selectedOptions[boisId] = 1; // Ajouter avec quantité 1 par défaut
+          img.classList.add('selected');
+          quantityInput.value = 1;
+        }
 
-            updateHiddenInputs();
-        });
+        updateHiddenInputs();
+        saveSelection();
+      });
     });
 
     // Mettre à jour la quantité
     document.querySelectorAll('.btn-increase, .btn-decrease').forEach(button => {
-        button.addEventListener('click', (event) => {
-            const parentOption = event.target.closest('.option');
-            const boisId = parentOption.querySelector('img').getAttribute('data-bois-id');
-            let quantityInput = parentOption.querySelector('.quantity-input1');
+      button.addEventListener('click', (event) => {
+        const parentOption = event.target.closest('.option');
+        const boisId = parentOption.querySelector('img').getAttribute('data-bois-id');
+        let quantityInput = parentOption.querySelector('.quantity-input1');
 
-            if (!selectedOptions[boisId]) return; // Si non sélectionné, ne rien faire
+        if (!selectedOptions[boisId]) return; // Si non sélectionné, ne rien faire
 
-            let newValue = parseInt(quantityInput.value, 10) + (event.target.classList.contains('btn-increase') ? 1 : -1);
-            newValue = Math.max(newValue, 0); // Empêcher d'aller sous 0
-            quantityInput.value = newValue;
-            
-            if (newValue === 0) {
-                delete selectedOptions[boisId]; // Supprimer si quantité = 0
-                parentOption.querySelector('img').classList.remove('selected');
-            } else {
-                selectedOptions[boisId] = newValue;
-            }
+        let newValue = parseInt(quantityInput.value, 10) + (event.target.classList.contains('btn-increase') ? 1 : -1);
+        newValue = Math.max(newValue, 0); // Empêcher d'aller sous 0
+        quantityInput.value = newValue;
 
-            updateHiddenInputs();
-        });
+        if (newValue === 0) {
+          delete selectedOptions[boisId]; // Supprimer si quantité = 0
+          parentOption.querySelector('img').classList.remove('selected');
+        } else {
+          selectedOptions[boisId] = newValue;
+        }
+
+        updateHiddenInputs();
+        saveSelection();
+      });
     });
 
     // Vérifier la sélection avant de passer à l'étape suivante
     suivantButton.addEventListener('click', (event) => {
-        if (Object.keys(selectedOptions).length === 0 || !selectedNbAccoudoirInput.value || selectedNbAccoudoirInput.value == "0") {
-            event.preventDefault(); 
-            selectionPopup.style.display = 'flex'; 
-        }
+      if (Object.keys(selectedOptions).length === 0 || !selectedNbAccoudoirInput.value || selectedNbAccoudoirInput.value === "0") {
+        event.preventDefault();
+        selectionPopup.style.display = 'flex';
+      }
     });
 
     // Fermer le popup de sélection
     document.querySelector('#selection-popup .close-btn').addEventListener('click', () => {
-        selectionPopup.style.display = 'none';
+      selectionPopup.style.display = 'none';
     });
 
     window.addEventListener('click', (event) => {
-        if (event.target === selectionPopup) {
-            selectionPopup.style.display = 'none';
-        }
+      if (event.target === selectionPopup) {
+        selectionPopup.style.display = 'none';
+      }
     });
 
     // Afficher l'aide
     document.querySelector('.btn-aide').addEventListener('click', () => {
-        helpPopup.style.display = 'flex';
+      helpPopup.style.display = 'flex';
     });
 
     document.querySelector('#help-popup .close-btn').addEventListener('click', () => {
-        helpPopup.style.display = 'none';
+      helpPopup.style.display = 'none';
     });
 
     window.addEventListener('click', (event) => {
-        if (event.target === helpPopup) {
-            helpPopup.style.display = 'none';
-        }
+      if (event.target === helpPopup) {
+        helpPopup.style.display = 'none';
+      }
     });
 
     // Afficher le popup d'abandon
     document.querySelector('.btn-abandonner').addEventListener('click', () => {
-        abandonnerPopup.style.display = 'flex';
+      abandonnerPopup.style.display = 'flex';
     });
 
     document.querySelector('#abandonner-popup .yes-btn').addEventListener('click', () => {
-        window.location.href = '../pages/';
+      window.location.href = '../pages/';
     });
 
     document.querySelector('#abandonner-popup .no-btn').addEventListener('click', () => {
-        abandonnerPopup.style.display = 'none';
+      abandonnerPopup.style.display = 'none';
     });
 
     // Mettre à jour les champs cachés pour l'envoi du formulaire
     function updateHiddenInputs() {
-        selectedAccoudoirBoisInput.value = Object.keys(selectedOptions).join(',');
-        selectedNbAccoudoirInput.value = Object.values(selectedOptions).join(',');
+      selectedAccoudoirBoisInput.value = Object.keys(selectedOptions).join(',');
+      selectedNbAccoudoirInput.value = Object.values(selectedOptions).join(',');
     }
-});
 
-
+    // Sauvegarde dans localStorage
+    function saveSelection() {
+      localStorage.setItem('selectedOptions', JSON.stringify(selectedOptions));
+    }
+  });
 </script>
+
 
 </main>
 

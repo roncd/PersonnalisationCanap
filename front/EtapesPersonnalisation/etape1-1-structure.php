@@ -154,73 +154,87 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       <button class="close-btn">OK</button>
     </div>
   </div>
-
   <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const options = document.querySelectorAll('.color-options .option img'); 
-      const selectedStructureInput = document.getElementById('selected-structure');
-      const suivantButton = document.querySelector('.btn-suivant');
-      const helpPopup = document.getElementById('help-popup'); // Popup besoin d'aide
-      const abandonnerPopup = document.getElementById('abandonner-popup'); // Popup abandonner
-      const selectionPopup = document.getElementById('selection-popup');
-      const mainImage = document.getElementById('main-image'); 
-      let selected = false;
+  document.addEventListener('DOMContentLoaded', () => {
+    const options = document.querySelectorAll('.color-options .option img'); 
+    const selectedStructureInput = document.getElementById('selected-structure');
+    const suivantButton = document.querySelector('.btn-suivant');
+    const helpPopup = document.getElementById('help-popup'); // Popup besoin d'aide
+    const abandonnerPopup = document.getElementById('abandonner-popup'); // Popup abandonner
+    const selectionPopup = document.getElementById('selection-popup');
+    const mainImage = document.getElementById('main-image'); 
+    let selected = false;
 
-      document.querySelectorAll('.transition').forEach(element => {
-        element.classList.add('show');
-      });
+    document.querySelectorAll('.transition').forEach(element => {
+      element.classList.add('show');
+    });
 
+    // Vérifier s'il y a une sélection enregistrée dans localStorage
+    const savedStructureId = localStorage.getItem('selectedStructure');
+    if (savedStructureId) {
+      selectedStructureInput.value = savedStructureId;
       options.forEach(img => {
-        img.addEventListener('click', () => {
-          options.forEach(opt => opt.classList.remove('selected'));
+        if (img.getAttribute('data-structure-id') === savedStructureId) {
           img.classList.add('selected');
-          selectedStructureInput.value = img.getAttribute('data-structure-id');
-
-          
-          // Mise à jour de l'image principale
           mainImage.src = img.src;
           mainImage.alt = img.alt;
-
           selected = true;
-        });
-      });
-
-      suivantButton.addEventListener('click', (event) => {
-        if (!selected) {
-          event.preventDefault();
-          selectionPopup.style.display = 'flex';
         }
       });
+    }
 
-      document.querySelector('#selection-popup .close-btn').addEventListener('click', () => {
-        selectionPopup.style.display = 'none';
+    options.forEach(img => {
+      img.addEventListener('click', () => {
+        options.forEach(opt => opt.classList.remove('selected'));
+        img.classList.add('selected');
+        selectedStructureInput.value = img.getAttribute('data-structure-id');
+
+        // Mise à jour de l'image principale
+        mainImage.src = img.src;
+        mainImage.alt = img.alt;
+
+        selected = true;
+
+        // Sauvegarder l'ID de la structure sélectionnée dans localStorage
+        localStorage.setItem('selectedStructure', img.getAttribute('data-structure-id'));
       });
-
-      
-            // Gestion du popup "Besoin d'aide"
-            document.querySelector('.btn-aide').addEventListener('click', () => {
-                helpPopup.style.display = 'flex';
-            });
-
-            document.querySelector('.close-btn').addEventListener('click', () => {
-                helpPopup.style.display = 'none';
-            });
-
-            // Gestion du popup "Abandonner"
-            document.querySelector('.btn-abandonner').addEventListener('click', () => {
-                abandonnerPopup.style.display = 'flex';
-            });
-
-            document.querySelector('.no-btn').addEventListener('click', () => {
-                abandonnerPopup.style.display = 'none';
-            });
-
-            document.querySelector('.yes-btn').addEventListener('click', () => {
-                window.location.href = 'index.php'; // Redirection vers la page d'accueil
-            });
-
     });
-  </script>
+
+    suivantButton.addEventListener('click', (event) => {
+      if (!selected) {
+        event.preventDefault();
+        selectionPopup.style.display = 'flex';
+      }
+    });
+
+    document.querySelector('#selection-popup .close-btn').addEventListener('click', () => {
+      selectionPopup.style.display = 'none';
+    });
+
+    // Gestion du popup "Besoin d'aide"
+    document.querySelector('.btn-aide').addEventListener('click', () => {
+      helpPopup.style.display = 'flex';
+    });
+
+    document.querySelector('.close-btn').addEventListener('click', () => {
+      helpPopup.style.display = 'none';
+    });
+
+    // Gestion du popup "Abandonner"
+    document.querySelector('.btn-abandonner').addEventListener('click', () => {
+      abandonnerPopup.style.display = 'flex';
+    });
+
+    document.querySelector('.no-btn').addEventListener('click', () => {
+      abandonnerPopup.style.display = 'none';
+    });
+
+    document.querySelector('.yes-btn').addEventListener('click', () => {
+      window.location.href = 'index.php'; // Redirection vers la page d'accueil
+    });
+  });
+</script>
+
 </main>
 
 <?php require_once '../../squelette/footer.php'; ?>
