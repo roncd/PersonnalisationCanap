@@ -40,7 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   
   
   // Rediriger vers l'étape suivante
-  header("Location: recapitulatif-commande.php");
+  header("Location: recapitulatif-commande-bois.php");
   exit;
   }
 ?>
@@ -174,87 +174,93 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       <button class="close-btn">OK</button>
     </div>
   </div>
-
   <script>
-      document.addEventListener('DOMContentLoaded', () => {
-        const options = document.querySelectorAll('.color-options .option img');
-        const mainImage = document.querySelector('.main-display img');
-        const suivantButton = document.querySelector('.btn-suivant');
-        const helpPopup = document.getElementById('help-popup');
-        const abandonnerPopup = document.getElementById('abandonner-popup');
-        const selectionPopup = document.getElementById('selection-popup');
-        const selectedCouleurBoisInput = document.getElementById('selected-motif_bois'); // Input caché
-        let selected = false;
+  document.addEventListener('DOMContentLoaded', () => {
+    const options = document.querySelectorAll('.color-options .option img');
+    const mainImage = document.querySelector('.main-display img');
+    const suivantButton = document.querySelector('.btn-suivant');
+    const helpPopup = document.getElementById('help-popup');
+    const abandonnerPopup = document.getElementById('abandonner-popup');
+    const selectionPopup = document.getElementById('selection-popup');
+    const selectedCouleurBoisInput = document.getElementById('selected-motif_bois'); // Input caché
 
+    let selectedMotifBoisId = localStorage.getItem('selectedMotifBois') || ''; 
+    let selected = selectedMotifBoisId !== ''; 
 
-        document.querySelectorAll('.transition').forEach(element => {
-          element.classList.add('show');
-        });
+    // Restaurer la sélection si elle existe
+    options.forEach(img => {
+      if (img.getAttribute('data-bois-id') === selectedMotifBoisId) {
+        img.classList.add('selected');
+        mainImage.src = img.src;
+        selectedCouleurBoisInput.value = selectedMotifBoisId;
+      }
+    });
 
+    document.querySelectorAll('.transition').forEach(element => {
+      element.classList.add('show');
+    });
 
-        options.forEach(img => {
-          img.addEventListener('click', () => {
-            options.forEach(opt => opt.classList.remove('selected'));
-            img.classList.add('selected');
-            mainImage.src = img.src;
-            selectedCouleurBoisInput.value = img.getAttribute('data-bois-id'); // Mettre à jour l'input caché
-            selected = true;  
-          });
-        });
-
-
-        suivantButton.addEventListener('click', (event) => {
-          if (!selected) {
-            event.preventDefault();
-            selectionPopup.style.display = 'flex';
-          }
-        });
-
-
-        document.querySelector('#selection-popup .close-btn').addEventListener('click', () => {
-          selectionPopup.style.display = 'none';
-        });
-
-
-        window.addEventListener('click', (event) => {
-          if (event.target === selectionPopup) {
-            selectionPopup.style.display = 'none';
-          }
-        });
-
-
-        document.querySelector('.btn-aide').addEventListener('click', () => {
-          helpPopup.style.display = 'flex';
-        });
-
-
-        document.querySelector('#help-popup .close-btn').addEventListener('click', () => {
-          helpPopup.style.display = 'none';
-        });
-
-
-        window.addEventListener('click', (event) => {
-          if (event.target === helpPopup) {
-            helpPopup.style.display = 'none';
-          }
-        });
-
-
-        document.querySelector('.btn-abandonner').addEventListener('click', () => {
-          abandonnerPopup.style.display = 'flex';
-        });
-
-
-        document.querySelector('#abandonner-popup .yes-btn').addEventListener('click', () => {
-          window.location.href = '../pages/';
-        });
-
-
-        document.querySelector('#abandonner-popup .no-btn').addEventListener('click', () => {
-          abandonnerPopup.style.display = 'none';
-        });
+    options.forEach(img => {
+      img.addEventListener('click', () => {
+        options.forEach(opt => opt.classList.remove('selected'));
+        img.classList.add('selected');
+        mainImage.src = img.src;
+        selectedMotifBoisId = img.getAttribute('data-bois-id');
+        selectedCouleurBoisInput.value = selectedMotifBoisId;
+        selected = true;
+        saveSelection();
       });
-    </script>
+    });
+
+    suivantButton.addEventListener('click', (event) => {
+      if (!selected) {
+        event.preventDefault();
+        selectionPopup.style.display = 'flex';
+      }
+    });
+
+    document.querySelector('#selection-popup .close-btn').addEventListener('click', () => {
+      selectionPopup.style.display = 'none';
+    });
+
+    window.addEventListener('click', (event) => {
+      if (event.target === selectionPopup) {
+        selectionPopup.style.display = 'none';
+      }
+    });
+
+    document.querySelector('.btn-aide').addEventListener('click', () => {
+      helpPopup.style.display = 'flex';
+    });
+
+    document.querySelector('#help-popup .close-btn').addEventListener('click', () => {
+      helpPopup.style.display = 'none';
+    });
+
+    window.addEventListener('click', (event) => {
+      if (event.target === helpPopup) {
+        helpPopup.style.display = 'none';
+      }
+    });
+
+    document.querySelector('.btn-abandonner').addEventListener('click', () => {
+      abandonnerPopup.style.display = 'flex';
+    });
+
+    document.querySelector('#abandonner-popup .yes-btn').addEventListener('click', () => {
+      window.location.href = '../pages/';
+    });
+
+    document.querySelector('#abandonner-popup .no-btn').addEventListener('click', () => {
+      abandonnerPopup.style.display = 'none';
+    });
+
+    function saveSelection() {
+      localStorage.setItem('selectedMotifBois', selectedMotifBoisId);
+    }
+  });
+</script>
+
 </main>
 
 <?php require_once '../../squelette/footer.php' ?>

@@ -167,91 +167,110 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <button class="close-btn">OK</button>
         </div>
     </div>
-
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const openButton = document.querySelector('.btn-aide'); // Bouton pour ouvrir le popup
-            const popup = document.getElementById('help-popup');
-            const closeButton = document.querySelector('.close-btn'); // Bouton "Merci !" pour fermer
-            closeButton.addEventListener('click', () => {
+    document.addEventListener('DOMContentLoaded', () => {
+        const openButton = document.querySelector('.btn-aide'); // Bouton pour ouvrir le popup
+        const popup = document.getElementById('help-popup');
+        const closeButton = document.querySelector('.close-btn'); // Bouton "Merci !" pour fermer
+        closeButton.addEventListener('click', () => {
+            popup.style.display = 'none';
+        });
+
+        // Fermer le popup si clic à l'extérieur
+        window.addEventListener('click', (event) => {
+            if (event.target === popup) {
                 popup.style.display = 'none';
-            });
+            }
+        });
 
-            // Fermer le popup si clic à l'extérieur
-            window.addEventListener('click', (event) => {
-                if (event.target === popup) {
-                    popup.style.display = 'none';
-                }
-            });
+        // Sélectionner les éléments nécessaires
+        const options = document.querySelectorAll('.color-options .option img'); // Les images des options
+        const selectedMotifTissuInput = document.getElementById('selected-motif_tissu');
+        const mainImage = document.querySelector('.main-display img'); 
+        const suivantButton = document.querySelector('.btn-suivant'); // Le bouton "Suivant"
+        const selectionPopup = document.getElementById('selection-popup'); // Pop-up de sélection
+        let selected = false; // Marque si une option a été sélectionnée
 
-            // Sélectionner les éléments nécessaires
-            const options = document.querySelectorAll('.color-options .option img'); // Les images des options
-            const selectedMotifTissuInput = document.getElementById('selected-motif_tissu');
-            const mainImage = document.querySelector('.main-display img'); 
-            const suivantButton = document.querySelector('.btn-suivant'); // Le bouton "Suivant"
-            const selectionPopup = document.getElementById('selection-popup'); // Pop-up de sélection
-            let selected = false; // Marque si une option a été sélectionnée
-
-            // Appliquer les transitions aux éléments
-            document.querySelectorAll('.transition').forEach(element => {
-                element.classList.add('show');
-            });
-
+        // Vérification si une sélection existe dans localStorage
+        let savedMotifTissuId = localStorage.getItem('selectedMotifTissuId');
+        
+        if (savedMotifTissuId) {
             options.forEach(img => {
-                img.addEventListener('click', () => {
-                    options.forEach(opt => opt.classList.remove('selected'));
+                if (img.getAttribute('data-motif-id') === savedMotifTissuId) {
                     img.classList.add('selected');
-                    selectedMotifTissuInput.value = img.getAttribute('data-motif-id');
-
-                    // Mise à jour de l'image principale
                     mainImage.src = img.src;
                     mainImage.alt = img.alt;
-
+                    selectedMotifTissuInput.value = savedMotifTissuId;
                     selected = true;
-                });
-            });
-
-            suivantButton.addEventListener('click', (event) => {
-                if (!selected) {
-                    event.preventDefault();
-                    selectionPopup.style.display = 'flex';
                 }
             });
+        }
 
-            document.querySelector('#selection-popup .close-btn').addEventListener('click', () => {
-                selectionPopup.style.display = 'none';
-            });
+        // Appliquer les transitions aux éléments
+        document.querySelectorAll('.transition').forEach(element => {
+            element.classList.add('show');
+        });
 
-            // Option supplémentaire : fermer le pop-up de sélection si clic à l'extérieur
-            window.addEventListener('click', (event) => {
-                if (event.target === selectionPopup) {
-                    selectionPopup.style.display = 'none';
-                }
-            });
+        options.forEach(img => {
+            img.addEventListener('click', () => {
+                options.forEach(opt => opt.classList.remove('selected'));
+                img.classList.add('selected');
+                selectedMotifTissuInput.value = img.getAttribute('data-motif-id');
 
-            // Gestion du pop-up "Besoin d'aide"
-            document.querySelector('.btn-aide').addEventListener('click', () => {
-                popup.style.display = 'flex';
-            });
+                // Mise à jour de l'image principale
+                mainImage.src = img.src;
+                mainImage.alt = img.alt;
 
-            document.querySelector('.close-btn').addEventListener('click', () => {
-                popup.style.display = 'none';
-            });
-
-            // Gestion du pop-up "Abandonner"
-            document.querySelector('.btn-abandonner').addEventListener('click', () => {
-                abandonnerPopup.style.display = 'flex';
-            });
-
-            document.querySelector('.no-btn').addEventListener('click', () => {
-                abandonnerPopup.style.display = 'none';
-            });
-
-            document.querySelector('.yes-btn').addEventListener('click', () => {
-                window.location.href = 'index.php'; // Redirection vers la page d'accueil
+                selected = true;
+                saveSelection(img.getAttribute('data-motif-id'));
             });
         });
-    </script>
+
+        suivantButton.addEventListener('click', (event) => {
+            if (!selected) {
+                event.preventDefault();
+                selectionPopup.style.display = 'flex';
+            }
+        });
+
+        document.querySelector('#selection-popup .close-btn').addEventListener('click', () => {
+            selectionPopup.style.display = 'none';
+        });
+
+        // Option supplémentaire : fermer le pop-up de sélection si clic à l'extérieur
+        window.addEventListener('click', (event) => {
+            if (event.target === selectionPopup) {
+                selectionPopup.style.display = 'none';
+            }
+        });
+
+        // Gestion du pop-up "Besoin d'aide"
+        document.querySelector('.btn-aide').addEventListener('click', () => {
+            popup.style.display = 'flex';
+        });
+
+        document.querySelector('.close-btn').addEventListener('click', () => {
+            popup.style.display = 'none';
+        });
+
+        // Gestion du pop-up "Abandonner"
+        document.querySelector('.btn-abandonner').addEventListener('click', () => {
+            abandonnerPopup.style.display = 'flex';
+        });
+
+        document.querySelector('.no-btn').addEventListener('click', () => {
+            abandonnerPopup.style.display = 'none';
+        });
+
+        document.querySelector('.yes-btn').addEventListener('click', () => {
+            window.location.href = 'index.php'; // Redirection vers la page d'accueil
+        });
+
+        function saveSelection(motifTissuId) {
+            localStorage.setItem('selectedMotifTissuId', motifTissuId);
+        }
+    });
+</script>
 
 </main>
 

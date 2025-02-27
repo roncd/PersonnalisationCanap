@@ -36,7 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     // Rediriger vers l'étape suivante
-    header("Location: recapitulatif-commande.php");
+    header("Location: recapitulatif-commande-tissu.php");
     exit;
 }
 ?>
@@ -167,76 +167,96 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       <button class="close-btn">OK</button>
     </div>
   </div>
-
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      const options = document.querySelectorAll('.color-options .option img'); 
-      const mainImage = document.querySelector('.main-display img'); 
-      const suivantButton = document.querySelector('.btn-suivant');
-      const helpPopup = document.getElementById('help-popup');
-      const abandonnerPopup = document.getElementById('abandonner-popup');
-      const selectionPopup = document.getElementById('selection-popup');
-      const selectedMousseInput = document.getElementById('selected-mousse'); // Input caché
-      let selected = false; 
+        const options = document.querySelectorAll('.color-options .option img'); 
+        const mainImage = document.querySelector('.main-display img'); 
+        const suivantButton = document.querySelector('.btn-suivant');
+        const helpPopup = document.getElementById('help-popup');
+        const abandonnerPopup = document.getElementById('abandonner-popup');
+        const selectionPopup = document.getElementById('selection-popup');
+        const selectedMousseInput = document.getElementById('selected-mousse'); // Input caché
+        let selected = false; 
 
-      document.querySelectorAll('.transition').forEach(element => {
-        element.classList.add('show'); 
-      });
+        // Vérification si une sélection existe dans localStorage
+        let savedMousseId = localStorage.getItem('selectedMousseId');
+        
+        if (savedMousseId) {
+            options.forEach(img => {
+                if (img.getAttribute('data-mousse-id') === savedMousseId) {
+                    img.classList.add('selected');
+                    mainImage.src = img.src;
+                    selectedMousseInput.value = savedMousseId;
+                    selected = true;
+                }
+            });
+        }
 
-      options.forEach(img => {
-        img.addEventListener('click', () => {
-          options.forEach(opt => opt.classList.remove('selected'));
-          img.classList.add('selected');
-          mainImage.src = img.src;
-          selectedMousseInput.value = img.getAttribute('data-mousse-id'); // Mettre à jour l'input caché
-          selected = true;  
+        document.querySelectorAll('.transition').forEach(element => {
+            element.classList.add('show'); 
         });
-      });
 
-      suivantButton.addEventListener('click', (event) => {
-        if (!selected) {
-          event.preventDefault();
-          selectionPopup.style.display = 'flex';
+        options.forEach(img => {
+            img.addEventListener('click', () => {
+                options.forEach(opt => opt.classList.remove('selected'));
+                img.classList.add('selected');
+                mainImage.src = img.src;
+                selectedMousseInput.value = img.getAttribute('data-mousse-id'); // Mettre à jour l'input caché
+                selected = true;  
+
+                saveSelection(img.getAttribute('data-mousse-id'));
+            });
+        });
+
+        suivantButton.addEventListener('click', (event) => {
+            if (!selected) {
+                event.preventDefault();
+                selectionPopup.style.display = 'flex';
+            }
+        });
+
+        document.querySelector('#selection-popup .close-btn').addEventListener('click', () => {
+            selectionPopup.style.display = 'none';
+        });
+
+        window.addEventListener('click', (event) => {
+            if (event.target === selectionPopup) {
+                selectionPopup.style.display = 'none';
+            }
+        });
+
+        document.querySelector('.btn-aide').addEventListener('click', () => {
+            helpPopup.style.display = 'flex';
+        });
+
+        document.querySelector('#help-popup .close-btn').addEventListener('click', () => {
+            helpPopup.style.display = 'none';
+        });
+
+        window.addEventListener('click', (event) => {
+            if (event.target === helpPopup) {
+                helpPopup.style.display = 'none';
+            }
+        });
+
+        document.querySelector('.btn-abandonner').addEventListener('click', () => {
+            abandonnerPopup.style.display = 'flex';
+        });
+
+        document.querySelector('#abandonner-popup .yes-btn').addEventListener('click', () => {
+            window.location.href = '../pages/';
+        });
+
+        document.querySelector('#abandonner-popup .no-btn').addEventListener('click', () => {
+            abandonnerPopup.style.display = 'none';
+        });
+
+        function saveSelection(mousseId) {
+            localStorage.setItem('selectedMousseId', mousseId);
         }
-      });
-
-      document.querySelector('#selection-popup .close-btn').addEventListener('click', () => {
-        selectionPopup.style.display = 'none';
-      });
-
-      window.addEventListener('click', (event) => {
-        if (event.target === selectionPopup) {
-          selectionPopup.style.display = 'none';
-        }
-      });
-
-      document.querySelector('.btn-aide').addEventListener('click', () => {
-        helpPopup.style.display = 'flex';
-      });
-
-      document.querySelector('#help-popup .close-btn').addEventListener('click', () => {
-        helpPopup.style.display = 'none';
-      });
-
-      window.addEventListener('click', (event) => {
-        if (event.target === helpPopup) {
-          helpPopup.style.display = 'none';
-        }
-      });
-
-      document.querySelector('.btn-abandonner').addEventListener('click', () => {
-        abandonnerPopup.style.display = 'flex';
-      });
-
-      document.querySelector('#abandonner-popup .yes-btn').addEventListener('click', () => {
-        window.location.href = '../pages/';
-      });
-
-      document.querySelector('#abandonner-popup .no-btn').addEventListener('click', () => {
-        abandonnerPopup.style.display = 'none';
-      });
     });
-  </script>
+</script>
+
 </main>
 <?php require_once '../../squelette/footer.php'?>
 </body>
