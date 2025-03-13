@@ -71,15 +71,26 @@ if (isset($_GET['message']) && $_GET['message'] == 'success') {
                     <div class="form-group">
                         <label for="motdepasse">Mot de passe</label>
                         <input type="password" id="motdepasse" name="motdepasse" class="input-field" required>
+                        <div class="footer">
+                    
+                    <p><span><a href="reset_password.php" class="link-connect">Mot de passe oublié ?</a></span></p>
+
+                    
+                </div>
                     </div>
+                    
                 </div>
                 <div class="footer">
                     <p>Tu n'as pas de compte ? <span><a href="CreationCompte.php" class="link-connect">Inscris-toi</a></span></p>
+                    
+
                     <div class="buttons">
                         <button type="submit" class="btn-valider">Valider</button>
                     </div>
+                    
                 </div>
             </form>
+
         </div>
 
     <!-- Colonne de droite avec l'image -->
