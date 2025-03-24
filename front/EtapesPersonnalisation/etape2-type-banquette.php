@@ -79,7 +79,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
   </style>
 </head>
-<body>
+<body data-user-id="<?php echo $_SESSION['user_id']; ?>">
 
 <header>
   <?php require '../../squelette/header.php'; ?>
@@ -110,8 +110,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       </section>
 
       <div class="footer">
-        <p>Total : <span>899 €</span></p>
-        <div class="buttons">
+      <p>Total : <span>899 €</span></p>
+      <div class="buttons">
         <button class="btn-retour transition" onclick="history.go(-1)">Retour</button>
           <form method="POST" action="">
             <input type="hidden" name="banquette_id" id="selected-banquette">
@@ -164,6 +164,66 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       <button class="close-btn">OK</button>
     </div>
   </div>
+  <script>
+   document.addEventListener('DOMContentLoaded', () => {
+    let totalPrice = 0; // Total global pour toutes les étapes
+
+    // Charger l'ID utilisateur depuis une variable PHP intégrée dans le HTML
+    const userId = document.body.getAttribute('data-user-id'); // Ex. <body data-user-id="<?php echo $_SESSION['user_id']; ?>">
+    if (!userId) {
+        console.error("ID utilisateur non trouvé. Vérifiez que 'data-user-id' est bien défini dans le HTML.");
+        return;
+    }
+    console.log("ID utilisateur récupéré :", userId);
+
+    // Charger toutes les options sélectionnées depuis sessionStorage (par utilisateur)
+    const sessionKey = `allSelectedOptions_${userId}`;
+    const selectedKey = `selectedOptions_${userId}`;
+    let allSelectedOptions = JSON.parse(sessionStorage.getItem(sessionKey)) || [];
+    let selectedOptions = JSON.parse(sessionStorage.getItem(selectedKey)) || {}; // Charger `selectedOptions` pour cet utilisateur
+    console.log("Données globales récupérées depuis sessionStorage :", allSelectedOptions);
+
+    // Vérifier si `allSelectedOptions` est un tableau
+    if (!Array.isArray(allSelectedOptions)) {
+        allSelectedOptions = [];
+        console.warn("allSelectedOptions n'était pas un tableau. Réinitialisé à []");
+    }
+
+    // Fonction pour mettre à jour le total global
+    function updateTotal() {
+        // Calculer le total global en prenant en compte les quantités
+        totalPrice = allSelectedOptions.reduce((sum, option) => {
+            const price = option.price || 0; // S'assurer que le prix est valide
+            const quantity = option.quantity || 1; // Par défaut, quantité = 1
+            return sum + (price * quantity);
+        }, 0);
+
+        console.log("Total global mis à jour :", totalPrice);
+
+        // Mettre à jour le total dans l'interface
+        const totalElement = document.querySelector(".footer p span");
+        if (totalElement) {
+            totalElement.textContent = `${totalPrice.toFixed(2)} €`;
+        } else {
+            console.error("L'élément '.footer p span' est introuvable !");
+        }
+    }
+
+    // Sauvegarder les données mises à jour dans sessionStorage
+    function saveData() {
+        sessionStorage.setItem(sessionKey, JSON.stringify(allSelectedOptions));
+        sessionStorage.setItem(selectedKey, JSON.stringify(selectedOptions));
+    }
+
+    // Initialiser le total dès le chargement de la page
+    updateTotal();
+
+    // Sauvegarder les données au chargement de la page (au cas où elles sont modifiées)
+    saveData();
+});
+
+
+  </script>
   <script>
   document.addEventListener('DOMContentLoaded', () => {
     const options = document.querySelectorAll('.color-2options .option img'); 
