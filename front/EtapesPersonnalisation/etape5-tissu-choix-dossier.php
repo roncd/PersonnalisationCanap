@@ -114,7 +114,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </section>
 
             <div class="footer">
-                <p>Total : <span>899 €</span></p>
+            <div id="totalPrice">Total: <span> 0€</span></div>
                 <div class="buttons">
                     <button class="btn-retour transition" onclick="history.go(-1)">Retour</button>
                                         <form method="POST" action="">
@@ -167,6 +167,89 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <button class="close-btn">OK</button>
         </div>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+    let totalPrice = 0; // Total global pour toutes les étapes
+
+    // Identifier l'étape actuelle (par exemple, "5-dossiers")
+    const currentStep = "5-dossiers"; // Changez cela pour chaque étape (par exemple "4-2", "5-dossiers", etc.)
+
+    // Charger toutes les options sélectionnées (globalement) depuis localStorage
+    let allSelectedOptions = JSON.parse(localStorage.getItem("allSelectedOptions")) || [];
+    console.log("Données globales récupérées depuis localStorage :", allSelectedOptions);
+
+    // Vérifier si `allSelectedOptions` est un tableau
+    if (!Array.isArray(allSelectedOptions)) {
+        allSelectedOptions = [];
+        console.warn("allSelectedOptions n'était pas un tableau. Réinitialisé à []");
+    }
+
+    // Fonction pour mettre à jour le total global
+    function updateTotal() {
+        totalPrice = allSelectedOptions.reduce((sum, option) => sum + option.price, 0);
+        console.log("Total global mis à jour :", totalPrice);
+
+        // Mettre à jour le total dans l'interface
+        const totalElement = document.getElementById("totalPrice");
+        if (totalElement) {
+            totalElement.textContent = `Total: ${totalPrice.toFixed(2)} €`;
+        } else {
+            console.error("L'élément '#totalPrice' est introuvable !");
+        }
+    }
+
+    // Gérer les sélections d'options pour cette étape
+    document.querySelectorAll('.color-2options .option img').forEach(option => {
+        let optionId = option.getAttribute('data-dossier-id');
+        let price = parseFloat(option.getAttribute('data-dossier-prix')) || 0;
+
+        // Vérifiez si les attributs sont valides
+        if (!optionId || isNaN(price)) {
+            console.warn(`Attributs manquants ou invalides pour une option : data-dossier-id=${optionId}, data-dossier-prix=${price}`);
+            return; // Ignorer cette option si les attributs ne sont pas valides
+        }
+
+        // Créer un identifiant unique basé sur l'étape actuelle
+        let uniqueId = `${currentStep}_${optionId}`;
+
+        console.log(`Option détectée : ID Unique = ${uniqueId}, Prix = ${price}`);
+
+        // Vérifier si l'option est déjà sélectionnée (dans toutes les étapes)
+        if (allSelectedOptions.some(opt => opt.id === uniqueId)) {
+            option.parentElement.classList.add('selected');
+        }
+
+        // Gérer les clics sur les options
+        option.addEventListener('click', () => {
+            // Supprimer toutes les sélections existantes dans l'étape actuelle
+            document.querySelectorAll('.color-2options .option img').forEach(opt => {
+                opt.parentElement.classList.remove('selected'); // Retirer la classe CSS
+            });
+
+            // Supprimer les options de cette étape dans le stockage global
+            allSelectedOptions = allSelectedOptions.filter(opt => !opt.id.startsWith(`${currentStep}_`));
+
+            // Ajouter l'option actuellement sélectionnée
+            allSelectedOptions.push({ id: uniqueId, price: price });
+            option.parentElement.classList.add('selected'); // Ajouter la classe CSS
+
+            console.log(`Option sélectionnée : ID Unique = ${uniqueId}, Prix = ${price}`);
+
+            // Sauvegarder les données globales dans localStorage
+            localStorage.setItem("allSelectedOptions", JSON.stringify(allSelectedOptions));
+
+            // Mettre à jour le total
+            updateTotal();
+        });
+    });
+
+    // Initialiser le total dès le chargement de la page
+    updateTotal();
+});
+
+    </script>
+    
     <script>
     document.addEventListener('DOMContentLoaded', () => {
         const options = document.querySelectorAll('.color-2options .option img'); // Sélectionne toutes les images
