@@ -18,7 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         echo "Erreur : Aucun type de mousse sélectionné.";
         exit;
     }
-
+ 
     $id_client = $_SESSION['user_id'];
     $id_mousse = $_POST['mousse_id'];
 
@@ -72,7 +72,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
   </style>
 </head>
-<body>
+<body data-user-id="<?php echo $_SESSION['user_id']; ?>">
 
 <header>
   <?php require '../../squelette/header.php'; ?>
@@ -117,8 +117,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       </section>
 
       <div class="footer">
-        <p>Total : <span>899 €</span></p>
-        <div class="buttons">
+      <p>Total : <span>899 €</span></p>
+      <div class="buttons">
           <button class="btn-retour transition" onclick="history.go(-1)">Retour</button>
           <form method="POST" action="">
             <input type="hidden" name="mousse_id" id="selected-mousse">
@@ -168,6 +168,103 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       <button class="close-btn">OK</button>
     </div>
   </div>
+
+  
+  <script>document.addEventListener('DOMContentLoaded', () => {
+    let totalPrice = 0; // Total global pour toutes les étapes
+
+    // Identifier l'étape actuelle (par exemple, "7-mousse")
+    const currentStep = "7-mousse-bois"; // Étape spécifique
+
+    // Charger l'ID utilisateur depuis une variable PHP intégrée dans le HTML
+    const userId = document.body.getAttribute('data-user-id'); // Ex. <body data-user-id="<?php echo $_SESSION['user_id']; ?>">
+    if (!userId) {
+        console.error("ID utilisateur non trouvé. Vérifiez que 'data-user-id' est bien défini dans le HTML.");
+        return;
+    }
+    console.log("ID utilisateur récupéré :", userId);
+
+    // Charger toutes les options sélectionnées depuis sessionStorage (par utilisateur)
+    const sessionKey = `allSelectedOptions_${userId}`;
+    let allSelectedOptions = JSON.parse(sessionStorage.getItem(sessionKey)) || [];
+    console.log("Données globales récupérées depuis sessionStorage :", allSelectedOptions);
+
+    // Vérifier si `allSelectedOptions` est un tableau
+    if (!Array.isArray(allSelectedOptions)) {
+        allSelectedOptions = [];
+        console.warn("allSelectedOptions n'était pas un tableau. Réinitialisé à []");
+    }
+
+    // Fonction pour mettre à jour le total global
+    function updateTotal() {
+        // Calculer le total global en prenant en compte les quantités
+        totalPrice = allSelectedOptions.reduce((sum, option) => {
+            const price = option.price || 0; // S'assurer que le prix est valide
+            const quantity = option.quantity || 1; // Par défaut, quantité = 1
+            return sum + (price * quantity);
+        }, 0);
+
+        console.log("Total global mis à jour :", totalPrice);
+
+        // Mettre à jour le total dans l'interface
+        const totalElement = document.querySelector(".footer p span");
+        if (totalElement) {
+            totalElement.textContent = `${totalPrice.toFixed(2)} €`;
+        } else {
+            console.error("L'élément '.footer p span' est introuvable !");
+        }
+    }
+
+    // Gérer les sélections d'options pour cette étape
+    document.querySelectorAll('.color-options .option img').forEach(option => {
+        const optionId = option.getAttribute('data-mousse-id');
+        const price = parseFloat(option.getAttribute('data-mousse-prix')) || 0;
+
+        // Vérifiez si les attributs sont valides
+        if (!optionId || isNaN(price)) {
+            console.warn(`Attributs manquants ou invalides pour une option : data-mousse-id=${optionId}, data-mousse-prix=${price}`);
+            return; // Ignorer cette option si les attributs ne sont pas valides
+        }
+
+        // Créer un identifiant unique basé sur l'étape actuelle
+        const uniqueId = `${currentStep}_${optionId}`;
+
+        console.log(`Option détectée : ID Unique = ${uniqueId}, Prix = ${price}`);
+
+        // Vérifier si l'option est déjà sélectionnée (dans toutes les étapes)
+        if (allSelectedOptions.some(opt => opt.id === uniqueId)) {
+            option.parentElement.classList.add('selected');
+        }
+
+        // Gérer les clics sur les options
+        option.addEventListener('click', () => {
+            // Supprimer toutes les sélections existantes dans l'étape actuelle
+            document.querySelectorAll('.color-options .option img').forEach(opt => {
+                opt.parentElement.classList.remove('selected'); // Retirer la classe CSS
+            });
+
+            // Supprimer les options de cette étape dans le stockage global
+            allSelectedOptions = allSelectedOptions.filter(opt => !opt.id.startsWith(`${currentStep}_`));
+
+            // Ajouter l'option actuellement sélectionnée
+            allSelectedOptions.push({ id: uniqueId, price: price });
+            option.parentElement.classList.add('selected'); // Ajouter la classe CSS
+
+            console.log(`Option sélectionnée : ID Unique = ${uniqueId}, Prix = ${price}`);
+
+            // Sauvegarder les données globales dans sessionStorage pour cet utilisateur
+            sessionStorage.setItem(sessionKey, JSON.stringify(allSelectedOptions));
+
+            // Mettre à jour le total
+            updateTotal();
+        });
+    });
+
+    // Initialiser le total dès le chargement de la page
+    updateTotal();
+});
+
+  </script>
 
   <script>
   document.addEventListener('DOMContentLoaded', () => {

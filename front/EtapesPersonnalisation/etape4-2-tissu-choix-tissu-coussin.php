@@ -70,6 +70,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             border-radius: 5px;
             box-sizing: border-box;
         }
+
+        .option.selected {
+    border: 2px solid #4CAF50;
+    box-shadow: 0 0 5px rgba(0, 255, 0, 0.8);
+}
+
     </style>
 </head>
 <body>
@@ -97,24 +103,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div class="left-column transition">
             <h2>Étape 4 - Choisi ton tissu de coussin</h2>
             <section class="color-options">
-                <?php if (!empty($motif_tissu)): ?>
-                    <?php foreach ($motif_tissu as $tissu): ?>
-                        <div class="option transition">
-                            <img src="../../admin/uploads/motif-tissu/<?php echo htmlspecialchars($tissu['img']); ?>" 
-                                 alt="<?php echo htmlspecialchars($tissu['nom']); ?>" 
-                                 data-motif-id="<?php echo $tissu['id']; ?>" 
-                                 data-motif-prix="<?php echo $tissu['prix']; ?>"> 
-                            <p><?php echo htmlspecialchars($tissu['nom']); ?></p>
-                            <p><strong><?php echo htmlspecialchars($tissu['prix']); ?> €</strong></p>
-                        </div>
-                    <?php endforeach; ?>
-                <?php else: ?>
-                    <p>Aucun tissu de coussin disponible pour le moment.</p>
-                <?php endif; ?>               
-            </section>
+    <?php if (!empty($motif_tissu)): ?>
+        <?php foreach ($motif_tissu as $tissu): ?>
+            <div class="option transition">
+                <img src="../../admin/uploads/motif-tissu/<?php echo htmlspecialchars($tissu['img']); ?>" 
+                     alt="<?php echo htmlspecialchars($tissu['nom']); ?>" 
+                     data-motif-id="<?php echo $tissu['id']; ?>" 
+                     data-motif-prix="<?php echo number_format($tissu['prix'], 2, '.', ''); ?>"> 
+                <p><?php echo htmlspecialchars($tissu['nom']); ?></p>
+                <p><strong><?php echo number_format($tissu['prix'], 2, '.', ''); ?> €</strong></p>
+            </div>
+        <?php endforeach; ?>
+    <?php else: ?>
+        <p>Aucun tissu de coussin disponible pour le moment.</p>
+    <?php endif; ?>
+</section>
 
             <div class="footer">
-                <p>Total : <span>899 €</span></p>
+            <div id="totalPrice">Total: 0€</div>
                 <div class="buttons">
                     <button class="btn-retour transition" onclick="history.go(-1)">Retour</button>
                     <form method="POST" action="">
@@ -167,6 +173,99 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <button class="close-btn">OK</button>
         </div>
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+    let totalPrice = 0; // Total global pour toutes les étapes
+
+    // Identifier l'étape actuelle (par exemple, "4-2")
+    const currentStep = "4-2"; // Changez cette valeur pour chaque étape (par exemple "4-3")
+
+    // Charger toutes les options sélectionnées (globalement) depuis localStorage
+    let allSelectedOptions = JSON.parse(localStorage.getItem("allSelectedOptions")) || [];
+    console.log("Données globales récupérées depuis localStorage :", allSelectedOptions);
+
+    // Vérifier si `allSelectedOptions` est un tableau
+    if (!Array.isArray(allSelectedOptions)) {
+        allSelectedOptions = [];
+        console.warn("allSelectedOptions n'était pas un tableau. Réinitialisé à []");
+    }
+
+    // Fonction pour mettre à jour le total global
+    function updateTotal() {
+        totalPrice = allSelectedOptions.reduce((sum, option) => sum + option.price, 0);
+        console.log("Total global mis à jour :", totalPrice);
+
+        // Mettre à jour le total dans l'interface
+        const totalElement = document.getElementById("totalPrice");
+        if (totalElement) {
+            totalElement.textContent = `Total: ${totalPrice.toFixed(2)}€`;
+        } else {
+            console.error("L'élément '#totalPrice' est introuvable !");
+        }
+    }
+
+    // Charger les options spécifiques à cette étape depuis localStorage
+    let selectedMotifOptions = JSON.parse(localStorage.getItem("selectedMotifOptions")) || [];
+    console.log("Données récupérées depuis localStorage (Motifs spécifiques) :", selectedMotifOptions);
+
+    // Vérifier si `selectedMotifOptions` est un tableau
+    if (!Array.isArray(selectedMotifOptions)) {
+        selectedMotifOptions = [];
+        console.warn("selectedMotifOptions n'était pas un tableau. Réinitialisé à []");
+    }
+
+    // Gérer les sélections d'options pour cette étape
+    document.querySelectorAll('.color-options .option img').forEach(option => {
+        let optionId = option.getAttribute('data-motif-id');
+        let price = parseFloat(option.getAttribute('data-motif-prix')) || 0;
+
+        // Vérifiez si les attributs sont valides
+        if (!optionId || isNaN(price)) {
+            console.warn(`Attributs manquants ou invalides pour une option : data-motif-id=${optionId}, data-motif-prix=${price}`);
+            return; // Ignorer cette option si les attributs ne sont pas valides
+        }
+
+        // Créer un identifiant unique basé sur l'étape actuelle
+        let uniqueId = `${currentStep}_${optionId}`;
+
+        console.log(`Option détectée : ID Unique = ${uniqueId}, Prix = ${price}`);
+
+        // Vérifier si l'option est déjà sélectionnée (dans toutes les étapes)
+        if (allSelectedOptions.some(opt => opt.id === uniqueId)) {
+            option.parentElement.classList.add('selected');
+        }
+
+        // Gérer les clics sur les options
+        option.addEventListener('click', () => {
+            // Supprimer toutes les sélections existantes dans l'étape actuelle
+            document.querySelectorAll('.color-options .option img').forEach(opt => {
+                opt.parentElement.classList.remove('selected'); // Retirer la classe CSS
+            });
+
+            // Supprimer les options de cette étape dans le stockage global
+            allSelectedOptions = allSelectedOptions.filter(opt => !opt.id.startsWith(`${currentStep}_`));
+
+            // Ajouter l'option actuellement sélectionnée
+            allSelectedOptions.push({ id: uniqueId, price: price });
+            selectedMotifOptions = [{ id: uniqueId, price: price }]; // Mise à jour spécifique à cette étape
+            option.parentElement.classList.add('selected'); // Ajouter la classe CSS
+
+            console.log(`Option sélectionnée : ID Unique = ${uniqueId}, Prix = ${price}`);
+
+            // Sauvegarder les données globales dans localStorage
+            localStorage.setItem("allSelectedOptions", JSON.stringify(allSelectedOptions));
+            localStorage.setItem("selectedMotifOptions", JSON.stringify(selectedMotifOptions));
+
+            // Mettre à jour le total
+            updateTotal();
+        });
+    });
+
+    // Initialiser le total dès le chargement de la page
+    updateTotal();
+});
+
+    </script>
     <script>
     document.addEventListener('DOMContentLoaded', () => {
         const openButton = document.querySelector('.btn-aide'); // Bouton pour ouvrir le popup
