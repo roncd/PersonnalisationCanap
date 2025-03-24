@@ -280,7 +280,7 @@ span {
 }
 
 /* ================== BUTTONS ================== */
-.btn-aide, .btn-abandonner, .btn-submit-com {
+.btn-aide, .btn-abandonner, .btn-submit-com, .pdf-btn {
   background-color: #997765;
   color: #fff;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
@@ -291,9 +291,9 @@ span {
   font-weight: bold;
 }
 
-.btn-abandonner, .btn-submit-com { background-color: #000; }
+.btn-abandonner, .btn-submit-com, .pdf-btn { background-color: #000; }
 
-.btn-aide:hover, .btn-abandonner:hover, .btn-suivant:hover, .btn-retour:hover, .btn-submit-com:hover {
+.btn-aide:hover, .btn-abandonner:hover, .btn-suivant:hover, .btn-retour:hover, .btn-submit-com:hover, .pdf-btn:hover {
   transform: scale(1.1);
   transition: transform .2s;
 }
