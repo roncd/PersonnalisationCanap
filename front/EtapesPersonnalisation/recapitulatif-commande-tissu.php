@@ -15,6 +15,18 @@ $stmt = $pdo->prepare("SELECT * FROM commande_temporaire WHERE id_client = ?");
 $stmt->execute([$id_client]);
 $commande = $stmt->fetch(PDO::FETCH_ASSOC);
 
+$sql = "SELECT * FROM client WHERE id = :id_client";
+$stmt = $pdo->prepare($sql);
+$stmt->bindValue(':id_client', $commande['id_client'], PDO::PARAM_INT);
+$stmt->execute();
+$client = $stmt->fetch(PDO::FETCH_ASSOC);
+
+if ($client) {
+  $assocMail['client'][$commande['id_client']] = $client;
+} else {
+  $assocMail['client'][$commande['id_client']] = ['mail' => '-'];
+}
+
 $tables = ['structure', 'type_banquette', 'mousse', 'accoudoir_tissu',
   'dossier_tissu', 'couleur_tissu', 'motif_tissu', 'modele'
 ];
@@ -41,7 +53,7 @@ foreach ($tables as $table) {
 $id = $commande['id']; 
 
 $stmt = $pdo->prepare("SELECT id, longueurA, longueurB, longueurC FROM commande_temporaire WHERE id = ?");
-$stmt->execute([$id]); // Remplacer $id par l'ID spécifique que tu veux récupérer.
+$stmt->execute([$id]); 
 $data['commande_temporaire'] = $stmt->fetchAll(PDO::FETCH_ASSOC);
 $assocData['commande_temporaire'] = [];
 
@@ -71,6 +83,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['comment'])) {
   }
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -207,11 +220,95 @@ echo '<div class="option">
           <p>Total : <span>899 €</span></p>
           <div class="buttons">
             <button class="btn-retour">Retour</button>
-            <button class="btn-suivant">Générer un devis</button>
+            <button class="btn-suivant"data-id="<?= htmlspecialchars($id) ?>">Générer un devis</button>
           </div>
         </div>
     </div>
 
+      <!-- Popup devis -->
+  <div id="pdf-popup" class="popup">
+    <div class="popup-content">
+      <h2>Commande finalisé !</h2>
+      <p>Votre devis a été créé et envoyé à l'adresse suivante :
+      </br><?php echo "<strong>" . htmlspecialchars($assocMail['client'][$commande['id_client']]['mail'] ?? '-') . "</strong>"; ?>
+      </p>
+        <br>
+      <button class="close-btn">Fermer</button>
+      <button class="pdf-btn">Voir le devis</button>
+    </div>
+  </div>
+
+    <script>
+    document.querySelector('.btn-suivant').addEventListener('click', function() {
+    let idCommande = this.getAttribute('data-id'); // Récupérer l'ID stocké    
+
+    fetch('transfer-tissu.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: idCommande })
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log(data); // Vérifie ce que renvoie PHP
+
+        if (data.success && data.new_id) {
+            let newCommandeId = data.new_id;
+            console.log("Nouvel ID de commande :", newCommandeId);
+
+            // Afficher le pop-up et stocker l’ID dans le bouton
+            document.getElementById('pdf-popup').style.display = 'flex';
+            document.querySelector('.pdf-btn').setAttribute('data-id', newCommandeId);
+
+        } else {
+            console.error('Erreur : newCommandeId est invalide ou non défini.');
+        }
+    })
+    .catch(error => console.error('Erreur:', error));
+});
+
+// Lorsque l'utilisateur clique sur "Voir le devis", ouvrir le PDF dans un nouvel onglet
+document.querySelector('.pdf-btn').addEventListener('click', function() {
+    let newCommandeId = this.getAttribute('data-id'); // Récupérer l'ID stocké dans le bouton
+    console.log("Nouvel ID de commande :", newCommandeId);
+
+    if (newCommandeId) {
+        fetch('generer-devis-tissu.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ id: newCommandeId })
+        })
+        .then(response => response.blob()) // Récupérer le PDF sous forme de blob
+        .then(blob => {
+            const url = window.URL.createObjectURL(blob);
+            // Ouvrir un nouvel onglet avec l'URL Blob
+            window.open(url, '_blank');
+        })
+        .catch(error => console.error('Erreur lors de la génération du PDF:', error));
+    } else {
+        console.error('Erreur : newCommandeId est indéfini');
+    }
+});
+
+const closeBtn = document.querySelector('.close-btn'); 
+const popup = document.getElementById('pdf-popup');
+
+ // Masquer le popup avec le bouton "Non !"
+ closeBtn.addEventListener('click', () => {
+    console.log('Popup fermé via le bouton Fermer');
+    popup.style.display = 'none';
+  });
+
+  // Fermer le popup si clic à l'extérieur
+  window.addEventListener('click', (event) => {
+    if (event.target === popup) {
+      console.log('Clic à l\'extérieur du popup');
+      popup.style.display = 'none';
+    }
+  });
+
+</script>
     <!-- Colonne de droite -->
     <div class="right-column">
       <section class="main-display-recap">
@@ -232,7 +329,6 @@ echo '<div class="option">
       </form>
       </section>
       </section>
-      
     </div>
   </div>
   
@@ -304,7 +400,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Rediriger vers la page d'accueil avec le bouton "Oui ..."
   yesButton.addEventListener('click', () => {
     console.log('Redirection vers la page d\'accueil');
-    window.location.href = '../pages/'; // Remplace '/' par l'URL de votre page d'accueil
+    window.location.href = '../pages/'; 
   });
 
   // Masquer le popup avec le bouton "Non !"
@@ -321,24 +417,16 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 });
-</script>
 
-  <script>
   document.addEventListener('DOMContentLoaded', () => {
     // Sélection des boutons
     const retourButton = document.querySelector('.btn-retour');
-    const suivantButton = document.querySelector('.btn-suivant');
 
     // Action du bouton "Retour" : rediriger vers la page précédente
     retourButton.addEventListener('click', () => {
       window.history.back(); // Navigue vers la page précédente
     });
-
-    // Action du bouton "Suivant" : rediriger vers la page suivante
-    suivantButton.addEventListener('click', () => {
-      window.location.href = 'recapitulatif-commande.php'; // Remplacez par le lien de la page suivante
     });
-  });
 </script>
 
 </main>

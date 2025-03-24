@@ -15,6 +15,17 @@ $stmt = $pdo->prepare("SELECT * FROM commande_temporaire WHERE id_client = ?");
 $stmt->execute([$id_client]);
 $commande = $stmt->fetch(PDO::FETCH_ASSOC);
 
+$sql = "SELECT * FROM client WHERE id = :id_client";
+$stmt = $pdo->prepare($sql);
+$stmt->bindValue(':id_client', $commande['id_client'], PDO::PARAM_INT);
+$stmt->execute();
+$client = $stmt->fetch(PDO::FETCH_ASSOC);
+
+if ($client) {
+  $assocMail['client'][$commande['id_client']] = $client;
+} else {
+  $assocMail['client'][$commande['id_client']] = ['mail' => '-'];
+}
 
 $tables = ['structure', 'type_banquette', 'mousse', 'couleur_bois', 'accoudoir_bois',
   'dossier_bois', 'couleur_tissu_bois', 'motif_bois', 'decoration'
@@ -43,7 +54,7 @@ foreach ($tables as $table) {
 $id = $commande['id']; 
 
 $stmt = $pdo->prepare("SELECT id, longueurA, longueurB, longueurC FROM commande_temporaire WHERE id = ?");
-$stmt->execute([$id]); // Remplacer $id par l'ID spécifique que tu veux récupérer.
+$stmt->execute([$id]); 
 $data['commande_temporaire'] = $stmt->fetchAll(PDO::FETCH_ASSOC);
 $assocData['commande_temporaire'] = [];
 
@@ -93,7 +104,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['comment'])) {
   <title>Récapitulatif de la commande</title>
   <style>
     .footer p {
-      margin-bottom: 20px; /* Augmente l'espace entre le texte et les boutons */
+      margin-bottom: 20px; 
     }
     .message {
             padding: 10px;
@@ -126,45 +137,45 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['comment'])) {
   <h3>Étape 1 : Choisi ta structure</h3>
   <?php
   echo '<div class="option">
-          <img src="../../admin/uploads/structure/'.htmlspecialchars($assocData['structure'][$commande['id_structure']]['img'] ?? 'N/A').'" 
-              alt="'.htmlspecialchars($assocData['structure'][$commande['id_structure']]['nom'] ?? 'N/A').'">
-          <p>'. htmlspecialchars($assocData['structure'][$commande['id_structure']]['nom'] ?? 'N/A') . '</p>
+          <img src="../../admin/uploads/structure/'.htmlspecialchars($assocData['structure'][$commande['id_structure']]['img'] ?? '-').'" 
+              alt="'.htmlspecialchars($assocData['structure'][$commande['id_structure']]['nom'] ?? '-').'">
+          <p>'. htmlspecialchars($assocData['structure'][$commande['id_structure']]['nom'] ?? '-') . '</p>
         </div>';
   ?>
  
   <h3>Étape 1 : Choisi tes dimensions</h3>
   <?php
   echo ' <div class="dimension-container">
-        <p class="input-field">Longueur banquette A (en cm): ' . htmlspecialchars($dim['longueurA']?? 'N/A') . '</p>
+        <p class="input-field">Longueur banquette A (en cm): ' . htmlspecialchars($dim['longueurA']?? '-') . '</p>
         </div> <div class="dimension-container">
-        <p class="input-field">Longueur banquette B (en cm): ' . htmlspecialchars($dim['longueurB']?? 'N/A') . '</p>
+        <p class="input-field">Longueur banquette B (en cm): ' . htmlspecialchars($dim['longueurB']?? '-') . '</p>
         </div> <div class="dimension-container">
-        <p class="input-field">Longueur banquette C (en cm): ' . htmlspecialchars($dim['longueurC']?? 'N/A') . '</p>   
+        <p class="input-field">Longueur banquette C (en cm): ' . htmlspecialchars($dim['longueurC']?? '-') . '</p>   
         </div>';
   ?>
   <h3>Étape 2 : Choisi ton type de banquette</h3>
   <?php
   echo '<div class="option">
-          <img src="../../admin/uploads/banquette/'.htmlspecialchars($assocData['type_banquette'][$commande['id_banquette']]['img'] ?? 'N/A').'" 
-              alt="'.htmlspecialchars($assocData['type_banquette'][$commande['id_banquette']]['nom'] ?? 'N/A').'">
-          <p>'. htmlspecialchars($assocData['type_banquette'][$commande['id_banquette']]['nom'] ?? 'N/A') . '</p>
+          <img src="../../admin/uploads/banquette/'.htmlspecialchars($assocData['type_banquette'][$commande['id_banquette']]['img'] ?? '-').'" 
+              alt="'.htmlspecialchars($assocData['type_banquette'][$commande['id_banquette']]['nom'] ?? '-').'">
+          <p>'. htmlspecialchars($assocData['type_banquette'][$commande['id_banquette']]['nom'] ?? '-') . '</p>
         </div>';
   ?>
 
   <h3>Étape 3 : Choisi ta couleur de bois</h3>
   <?php
   echo '<div class="option">
-          <img src="../../admin/uploads/couleur-banquette-bois/'.htmlspecialchars($assocData['couleur_bois'][$commande['id_couleur_bois']]['img'] ?? 'N/A').'" 
-              alt="'.htmlspecialchars($assocData['couleur_bois'][$commande['id_couleur_bois']]['nom'] ?? 'N/A').'">
-          <p>'. htmlspecialchars($assocData['couleur_bois'][$commande['id_couleur_bois']]['nom'] ?? 'N/A') . '</p>
+          <img src="../../admin/uploads/couleur-banquette-bois/'.htmlspecialchars($assocData['couleur_bois'][$commande['id_couleur_bois']]['img'] ?? '-').'" 
+              alt="'.htmlspecialchars($assocData['couleur_bois'][$commande['id_couleur_bois']]['nom'] ?? '-').'">
+          <p>'. htmlspecialchars($assocData['couleur_bois'][$commande['id_couleur_bois']]['nom'] ?? '-') . '</p>
         </div>';
   ?>
   <h3>Étape 4 : Choisi ta decoration</h3>
   <?php
   echo '<div class="option">
-          <img src="../../admin/uploads/decoration/'.htmlspecialchars($assocData['decoration'][$commande['id_decoration']]['img'] ?? 'N/A').'" 
-              alt="'.htmlspecialchars($assocData['decoration'][$commande['id_decoration']]['nom'] ?? 'N/A').'">
-          <p>'. htmlspecialchars($assocData['decoration'][$commande['id_decoration']]['nom'] ?? 'N/A') . '</p>
+          <img src="../../admin/uploads/decoration/'.htmlspecialchars($assocData['decoration'][$commande['id_decoration']]['img'] ?? '-').'" 
+              alt="'.htmlspecialchars($assocData['decoration'][$commande['id_decoration']]['nom'] ?? '-').'">
+          <p>'. htmlspecialchars($assocData['decoration'][$commande['id_decoration']]['nom'] ?? '-') . '</p>
         </div>';
   ?>
 
@@ -173,9 +184,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['comment'])) {
   foreach ($accoudoirs as $accoudoir) {
       // Affichage de l'accoudoir avec son image, nom, et quantité
       echo '<div class="option">
-              <img src="../../admin/uploads/accoudoirs-bois/' . htmlspecialchars($accoudoir['img'] ?? 'N/A') . '"
-                  alt="' . htmlspecialchars($accoudoir['nom'] ?? 'N/A') . '">
-              <p>' . htmlspecialchars($accoudoir['nom'] ?? 'N/A') . '</p>
+              <img src="../../admin/uploads/accoudoirs-bois/' . htmlspecialchars($accoudoir['img'] ?? '-') . '"
+                  alt="' . htmlspecialchars($accoudoir['nom'] ?? '-') . '">
+              <p>' . htmlspecialchars($accoudoir['nom'] ?? '-') . '</p>
               <p>Quantité : ' . htmlspecialchars($accoudoir['nb_accoudoir']) . '</p>
             </div>';
   }
@@ -184,36 +195,36 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['comment'])) {
   <h3>Étape 6 : Choisi ton dossier</h3>
    <?php
   echo '<div class="option">
-          <img src="../../admin/uploads/dossier-bois/'.htmlspecialchars($assocData['dossier_bois'][$commande['id_dossier_bois']]['img'] ?? 'N/A').'" 
-              alt="'.htmlspecialchars($assocData['dossier_bois'][$commande['id_dossier_bois']]['nom'] ?? 'N/A').'">
-          <p>'. htmlspecialchars($assocData['dossier_bois'][$commande['id_dossier_bois']]['nom'] ?? 'N/A') . '</p>
+          <img src="../../admin/uploads/dossier-bois/'.htmlspecialchars($assocData['dossier_bois'][$commande['id_dossier_bois']]['img'] ?? '-').'" 
+              alt="'.htmlspecialchars($assocData['dossier_bois'][$commande['id_dossier_bois']]['nom'] ?? '-').'">
+          <p>'. htmlspecialchars($assocData['dossier_bois'][$commande['id_dossier_bois']]['nom'] ?? '-') . '</p>
         </div>';
   ?>
 
   <h3>Étape 7 : Choisi ta mousse</h3>
   <?php
   echo '<div class="option">
-          <img src="../../admin/uploads/mousse/'.htmlspecialchars($assocData['mousse'][$commande['id_mousse']]['img'] ?? 'N/A').'" 
-              alt="'.htmlspecialchars($assocData['mousse'][$commande['id_mousse']]['nom'] ?? 'N/A').'">
-          <p>'. htmlspecialchars($assocData['mousse'][$commande['id_mousse']]['nom'] ?? 'N/A') . '</p>
+          <img src="../../admin/uploads/mousse/'.htmlspecialchars($assocData['mousse'][$commande['id_mousse']]['img'] ?? '-').'" 
+              alt="'.htmlspecialchars($assocData['mousse'][$commande['id_mousse']]['nom'] ?? '-').'">
+          <p>'. htmlspecialchars($assocData['mousse'][$commande['id_mousse']]['nom'] ?? '-') . '</p>
         </div>';
   ?>
 
   <h3>Étape 8 : Choisi ton tissu</h3>
   <?php
   echo '<div class="option">
-          <img src="../../admin/uploads/couleur-tissu-bois/'.htmlspecialchars($assocData['couleur_tissu_bois'][$commande['id_couleur_tissu_bois']]['img'] ?? 'N/A').'" 
-              alt="'.htmlspecialchars($assocData['couleur_tissu_bois'][$commande['id_couleur_tissu_bois']]['nom'] ?? 'N/A').'">
-          <p>'. htmlspecialchars($assocData['couleur_tissu_bois'][$commande['id_couleur_tissu_bois']]['nom'] ?? 'N/A') . '</p>
+          <img src="../../admin/uploads/couleur-tissu-bois/'.htmlspecialchars($assocData['couleur_tissu_bois'][$commande['id_couleur_tissu_bois']]['img'] ?? '-').'" 
+              alt="'.htmlspecialchars($assocData['couleur_tissu_bois'][$commande['id_couleur_tissu_bois']]['nom'] ?? '-').'">
+          <p>'. htmlspecialchars($assocData['couleur_tissu_bois'][$commande['id_couleur_tissu_bois']]['nom'] ?? '-') . '</p>
         </div>';
   ?>
 
   <h3>Étape 8 : Choisi ton motif de coussin</h3>
    <?php
    echo '<div class="option">
-          <img src="../../admin/uploads/motif-bois/'.htmlspecialchars($assocData['motif_bois'][$commande['id_motif_bois']]['img'] ?? 'N/A').'" 
-              alt="'.htmlspecialchars($assocData['motif_bois'][$commande['id_motif_bois']]['nom'] ?? 'N/A').'">
-          <p>'. htmlspecialchars($assocData['motif_bois'][$commande['id_motif_bois']]['nom'] ?? 'N/A') . '</p>
+          <img src="../../admin/uploads/motif-bois/'.htmlspecialchars($assocData['motif_bois'][$commande['id_motif_bois']]['img'] ?? '-').'" 
+              alt="'.htmlspecialchars($assocData['motif_bois'][$commande['id_motif_bois']]['nom'] ?? '-').'">
+          <p>'. htmlspecialchars($assocData['motif_bois'][$commande['id_motif_bois']]['nom'] ?? '-') . '</p>
         </div>';
   ?>
 </section>
@@ -223,10 +234,96 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['comment'])) {
           <p>Total : <span>899 €</span></p>
           <div class="buttons">
             <button class="btn-retour">Retour</button>
-            <button class="btn-suivant">Générer un devis</button>
+            <button class="btn-suivant"data-id="<?= htmlspecialchars($id) ?>">Générer un devis</button>
           </div>
         </div>
     </div>
+
+    <!-- Popup devis -->
+  <div id="pdf-popup" class="popup">
+    <div class="popup-content">
+      <h2>Commande finalisé !</h2>
+      <p>Votre devis a été créé et envoyé à l'adresse suivante :
+      </br><?php echo "<strong>" . htmlspecialchars($assocMail['client'][$commande['id_client']]['mail'] ?? '-') . "</strong>"; ?>
+      </p>
+        <br>
+      <button class="close-btn">Fermer</button>
+      <button class="pdf-btn">Voir le devis</button>
+    </div>
+  </div>
+
+  <script>
+    document.querySelector('.btn-suivant').addEventListener('click', function() {
+    let idCommande = this.getAttribute('data-id'); // Récupérer l'ID stocké    
+
+    fetch('transfer-bois.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: idCommande })
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log(data); // Vérifie ce que renvoie PHP
+
+        if (data.success && data.new_id) {
+            let newCommandeId = data.new_id;
+            console.log("Nouvel ID de commande :", newCommandeId);
+
+            // Afficher le pop-up et stocker l’ID dans le bouton
+            document.getElementById('pdf-popup').style.display = 'flex';
+            document.querySelector('.pdf-btn').setAttribute('data-id', newCommandeId);
+
+        } else {
+            console.error('Erreur : newCommandeId est invalide ou non défini.');
+        }
+    })
+    .catch(error => console.error('Erreur:', error));
+});
+
+// Lorsque l'utilisateur clique sur "Voir le devis", ouvrir le PDF dans un nouvel onglet
+document.querySelector('.pdf-btn').addEventListener('click', function() {
+    let newCommandeId = this.getAttribute('data-id'); // Récupérer l'ID stocké dans le bouton
+    console.log("Nouvel ID de commande :", newCommandeId);
+
+    if (newCommandeId) {
+        fetch('generer-devis-bois.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ id: newCommandeId })
+        })
+        .then(response => response.blob()) // Récupérer le PDF sous forme de blob
+        .then(blob => {
+            const url = window.URL.createObjectURL(blob);
+            // Ouvrir un nouvel onglet avec l'URL Blob
+            window.open(url, '_blank');
+        })
+        .catch(error => console.error('Erreur lors de la génération du PDF:', error));
+    } else {
+        console.error('Erreur : newCommandeId est indéfini');
+    }
+});
+
+const closeBtn = document.querySelector('.close-btn'); 
+const popup = document.getElementById('pdf-popup');
+
+ // Masquer le popup avec le bouton "Non !"
+ closeBtn.addEventListener('click', () => {
+    console.log('Popup fermé via le bouton Fermer');
+    popup.style.display = 'none';
+  });
+
+  // Fermer le popup si clic à l'extérieur
+  window.addEventListener('click', (event) => {
+    if (event.target === popup) {
+      console.log('Clic à l\'extérieur du popup');
+      popup.style.display = 'none';
+    }
+  });
+
+</script>
+
 
     <!-- Colonne de droite -->
     <div class="right-column">
@@ -248,7 +345,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['comment'])) {
       </form>
       </section>
     </section>
-      
     </div>
   </div>
   
@@ -280,7 +376,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Masquer le popup avec le bouton "Merci !"
   closeButton.addEventListener('click', () => {
-    console.log('Bouton Merci cliqué');
+    console.log('Popup fermé via le bouton');
     popup.style.display = 'none';
   });
 
@@ -320,12 +416,12 @@ document.addEventListener('DOMContentLoaded', () => {
   // Rediriger vers la page d'accueil avec le bouton "Oui ..."
   yesButton.addEventListener('click', () => {
     console.log('Redirection vers la page d\'accueil');
-    window.location.href = '../pages/'; // Remplace '/' par l'URL de votre page d'accueil
+    window.location.href = '../pages/';
   });
 
   // Masquer le popup avec le bouton "Non !"
   noButton.addEventListener('click', () => {
-    console.log('Popup fermé via le bouton Non !');
+    console.log('Popup fermé via le bouton');
     popup.style.display = 'none';
   });
 
@@ -343,17 +439,12 @@ document.addEventListener('DOMContentLoaded', () => {
   document.addEventListener('DOMContentLoaded', () => {
     // Sélection des boutons
     const retourButton = document.querySelector('.btn-retour');
-    const suivantButton = document.querySelector('.btn-suivant');
 
     // Action du bouton "Retour" : rediriger vers la page précédente
     retourButton.addEventListener('click', () => {
       window.history.back(); // Navigue vers la page précédente
     });
 
-    // Action du bouton "Suivant" : rediriger vers la page suivante
-    suivantButton.addEventListener('click', () => {
-      window.location.href = 'recapitulatif-commande.php'; // Remplacez par le lien de la page suivante
-    });
   });
 </script>
 
