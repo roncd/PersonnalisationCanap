@@ -1,5 +1,5 @@
 <?php
-require('../GenerationPDF/fpdf.php');
+require('fpdf.php');
 require('../../admin/config.php');
 
 header('Content-Type: application/pdf');

@@ -30,7 +30,7 @@
     margin: 0 0 10px;
   }
   
-  .close-btn {
+  .close-btn, .thank-btn {
     background-color: #997765;
     color: #fff;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
@@ -41,7 +41,7 @@
     font-weight: bold;
   }
 
-  .close-btn:hover {
+  .close-btn:hover, .thank-btn:hover {
     transform: scale(1.1);
     transition: transform .2s;
   }
