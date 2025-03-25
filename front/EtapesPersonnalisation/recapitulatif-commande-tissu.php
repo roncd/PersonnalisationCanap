@@ -132,30 +132,38 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['comment'])) {
   <h3>Étape 1 : Choisi ta structure</h3>
   <?php
   echo '<div class="option">
-          <img src="../../admin/uploads/structure/'.htmlspecialchars($assocData['structure'][$commande['id_structure']]['img'] ?? 'N/A').'" 
-              alt="'.htmlspecialchars($assocData['structure'][$commande['id_structure']]['nom'] ?? 'N/A').'">
-          <p>'. htmlspecialchars($assocData['structure'][$commande['id_structure']]['nom'] ?? 'N/A') . '</p>
+          <img src="../../admin/uploads/structure/'.htmlspecialchars($assocData['structure'][$commande['id_structure']]['img'] ?? '-').'" 
+              alt="'.htmlspecialchars($assocData['structure'][$commande['id_structure']]['nom'] ?? '-').'">
+          <p>'. htmlspecialchars($assocData['structure'][$commande['id_structure']]['nom'] ?? '-') . '</p>
         </div>';
   ?>
  
   <h3>Étape 1 : Choisi tes dimensions</h3>
   <?php
-  echo '
-        <div class="dimension-container">
-        <p class="input-field">Longueur banquette A (en cm): ' . htmlspecialchars($dim['longueurA']?? 'N/A') . '</p>
-        </div> <div class="dimension-container">
-        <p class="input-field">Longueur banquette B (en cm): ' . htmlspecialchars($dim['longueurB']?? 'N/A') . '</p>
-        </div> <div class="dimension-container">
-        <p class="input-field">Longueur banquette C (en cm): ' . htmlspecialchars($dim['longueurC']?? 'N/A') . '</p>   
+  $longueurB = isset($dim['longueurB']) && !empty(trim($dim['longueurB'])) ? htmlspecialchars($dim['longueurB']) : null;
+  $longueurC = isset($dim['longueurC']) && !empty(trim($dim['longueurC'])) ? htmlspecialchars($dim['longueurC']) : null;
+
+  echo '<div class="dimension-container">
+          <p class="input-field">Longueur banquette A : ' . htmlspecialchars($dim['longueurA'] ?? '-') . ' cm</p>
         </div>';
+  if ($longueurB !== null) {
+      echo '<div class="dimension-container">
+              <p class="input-field">Longueur banquette B : ' . $longueurB . ' cm</p>
+            </div>';
+  }
+  if ($longueurC !== null) {
+      echo '<div class="dimension-container">
+              <p class="input-field">Longueur banquette C : ' . $longueurC . ' cm</p>
+            </div>';
+  }
   ?>
 
   <h3>Étape 2 : Choisi ton type de banquette</h3>
   <?php
   echo '<div class="option">
-          <img src="../../admin/uploads/banquette/'.htmlspecialchars($assocData['type_banquette'][$commande['id_banquette']]['img'] ?? 'N/A').'" 
-              alt="'.htmlspecialchars($assocData['type_banquette'][$commande['id_banquette']]['nom'] ?? 'N/A').'">
-          <p>'. htmlspecialchars($assocData['type_banquette'][$commande['id_banquette']]['nom'] ?? 'N/A') . '</p>
+          <img src="../../admin/uploads/banquette/'.htmlspecialchars($assocData['type_banquette'][$commande['id_banquette']]['img'] ?? '-').'" 
+              alt="'.htmlspecialchars($assocData['type_banquette'][$commande['id_banquette']]['nom'] ?? '-').'">
+          <p>'. htmlspecialchars($assocData['type_banquette'][$commande['id_banquette']]['nom'] ?? '-') . '</p>
         
         </div>';
   ?>
@@ -163,47 +171,47 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['comment'])) {
   <h3>Étape 3 : Choisi ton modèle</h3>
   <?php
   echo '<div class="option">
-          <img src="../../admin/uploads/modele/'.htmlspecialchars($assocData['modele'][$commande['id_modele']]['img'] ?? 'N/A').'" 
-              alt="'.htmlspecialchars($assocData['modele'][$commande['id_modele']]['nom'] ?? 'N/A').'">
-          <p>'. htmlspecialchars($assocData['modele'][$commande['id_modele']]['nom'] ?? 'N/A') . '</p>
+          <img src="../../admin/uploads/modele/'.htmlspecialchars($assocData['modele'][$commande['id_modele']]['img'] ?? '-').'" 
+              alt="'.htmlspecialchars($assocData['modele'][$commande['id_modele']]['nom'] ?? '-').'">
+          <p>'. htmlspecialchars($assocData['modele'][$commande['id_modele']]['nom'] ?? '-') . '</p>
         </div>';
   ?>
   <h3>Étape 4 : Choisi ta couleur de tissu</h3>
   <?php
   echo '<div class="option">
-          <img src="../../admin/uploads/couleur-tissu-tissu/'.htmlspecialchars($assocData['couleur_tissu'][$commande['id_couleur_tissu']]['img'] ?? 'N/A').'" 
-              alt="'.htmlspecialchars($assocData['couleur_tissu'][$commande['id_couleur_tissu']]['nom'] ?? 'N/A').'">
-          <p>'. htmlspecialchars($assocData['couleur_tissu'][$commande['id_couleur_tissu']]['nom'] ?? 'N/A') . '</p>
+          <img src="../../admin/uploads/couleur-tissu-tissu/'.htmlspecialchars($assocData['couleur_tissu'][$commande['id_couleur_tissu']]['img'] ?? '-').'" 
+              alt="'.htmlspecialchars($assocData['couleur_tissu'][$commande['id_couleur_tissu']]['nom'] ?? '-').'">
+          <p>'. htmlspecialchars($assocData['couleur_tissu'][$commande['id_couleur_tissu']]['nom'] ?? '-') . '</p>
         </div>';
   ?>
 
   <h3>Étape 4 : Choisi ton motif de coussin</h3>
   <?php
   echo '<div class="option">
-          <img src="../../admin/uploads/motif-tissu/'.htmlspecialchars($assocData['motif_tissu'][$commande['id_motif_tissu']]['img'] ?? 'N/A').'" 
-              alt="'.htmlspecialchars($assocData['motif_tissu'][$commande['id_motif_tissu']]['nom'] ?? 'N/A').'">
-          <p>'. htmlspecialchars($assocData['motif_tissu'][$commande['id_motif_tissu']]['nom'] ?? 'N/A') . '</p>
+          <img src="../../admin/uploads/motif-tissu/'.htmlspecialchars($assocData['motif_tissu'][$commande['id_motif_tissu']]['img'] ?? '-').'" 
+              alt="'.htmlspecialchars($assocData['motif_tissu'][$commande['id_motif_tissu']]['nom'] ?? '-').'">
+          <p>'. htmlspecialchars($assocData['motif_tissu'][$commande['id_motif_tissu']]['nom'] ?? '-') . '</p>
         </div>';
   ?>
 
   <h3>Étape 5 : Choisi ton dossier</h3>
    <?php
   echo '<div class="option">
-          <img src="../../admin/uploads/dossier-tissu/'.htmlspecialchars($assocData['dossier_tissu'][$commande['id_dossier_tissu']]['img'] ?? 'N/A').'" 
-              alt="'.htmlspecialchars($assocData['dossier_tissu'][$commande['id_dossier_tissu']]['nom'] ?? 'N/A').'">
-          <p>'. htmlspecialchars($assocData['dossier_tissu'][$commande['id_dossier_tissu']]['nom'] ?? 'N/A') . '</p>
+          <img src="../../admin/uploads/dossier-tissu/'.htmlspecialchars($assocData['dossier_tissu'][$commande['id_dossier_tissu']]['img'] ?? '-').'" 
+              alt="'.htmlspecialchars($assocData['dossier_tissu'][$commande['id_dossier_tissu']]['nom'] ?? '-').'">
+          <p>'. htmlspecialchars($assocData['dossier_tissu'][$commande['id_dossier_tissu']]['nom'] ?? '-') . '</p>
         </div>';
   ?>
   
   <h3>Étape 6 : Choisi tes accoudoirs</h3>
 <?php
 // Récupération de la quantité depuis la colonne id_nb_accoudoir dans la commande
-$quantite_accoudoir = htmlspecialchars($commande['id_nb_accoudoir'] ?? 'N/A'); // Récupère la quantité si elle existe
+$quantite_accoudoir = htmlspecialchars($commande['id_nb_accoudoir'] ?? '-'); // Récupère la quantité si elle existe
 
 echo '<div class="option">
-        <img src="../../admin/uploads/accoudoirs-tissu/'.htmlspecialchars($assocData['accoudoir_tissu'][$commande['id_accoudoir_tissu']]['img'] ?? 'N/A').'" 
-            alt="'.htmlspecialchars($assocData['accoudoir_tissu'][$commande['id_accoudoir_tissu']]['nom'] ?? 'N/A').'">
-        <p>'. htmlspecialchars($assocData['accoudoir_tissu'][$commande['id_accoudoir_tissu']]['nom'] ?? 'N/A') . '</p>
+        <img src="../../admin/uploads/accoudoirs-tissu/'.htmlspecialchars($assocData['accoudoir_tissu'][$commande['id_accoudoir_tissu']]['img'] ?? '-').'" 
+            alt="'.htmlspecialchars($assocData['accoudoir_tissu'][$commande['id_accoudoir_tissu']]['nom'] ?? '-').'">
+        <p>'. htmlspecialchars($assocData['accoudoir_tissu'][$commande['id_accoudoir_tissu']]['nom'] ?? '-') . '</p>
         <p>Quantité : ' . $quantite_accoudoir . '</p> <!-- Affichage de la quantité -->
       </div>';
 ?>
@@ -212,9 +220,9 @@ echo '<div class="option">
   <h3>Étape 7 : Choisi ta mousse</h3>
   <?php
   echo '<div class="option">
-          <img src="../../admin/uploads/mousse/'.htmlspecialchars($assocData['mousse'][$commande['id_mousse']]['img'] ?? 'N/A').'" 
-              alt="'.htmlspecialchars($assocData['mousse'][$commande['id_mousse']]['nom'] ?? 'N/A').'">
-          <p>'. htmlspecialchars($assocData['mousse'][$commande['id_mousse']]['nom'] ?? 'N/A') . '</p>
+          <img src="../../admin/uploads/mousse/'.htmlspecialchars($assocData['mousse'][$commande['id_mousse']]['img'] ?? '-').'" 
+              alt="'.htmlspecialchars($assocData['mousse'][$commande['id_mousse']]['nom'] ?? '-').'">
+          <p>'. htmlspecialchars($assocData['mousse'][$commande['id_mousse']]['nom'] ?? '-') . '</p>
         </div>';
   ?>
 </section>
