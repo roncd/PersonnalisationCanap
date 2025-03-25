@@ -47,10 +47,11 @@ $totalPages = ceil($totalCommandes / $limit);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Commandes</title> 
     <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&display=swap" rel="stylesheet">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <link rel="stylesheet" href="../../styles/commandes.css">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="../../styles/popup.css">
     <script src="../../scrpit/commandes.js"></script> 
+    <script type="module" src="../../scrpit/download.js"></script>
     <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
 </head>
 <body>
@@ -66,110 +67,6 @@ $totalPages = ceil($totalCommandes / $limit);
                 <button onclick="location.href='?statut=construction'" class="tab <?= ($statut === 'construction') ? 'active' : '' ?>">En cours de construction</button>
                 <button onclick="location.href='?statut=final'" class="tab <?= ($statut === 'final') ? 'active' : '' ?>">Commandes finalisées</button>
             </div>
-                    <script>
-                        function updateStatus(button) {
-                        const commandDiv = button.closest('.commande'); // Récupère la commande liée
-                        const commandId = commandDiv.getAttribute('data-id'); // Récupère l'ID de la commande
-                        const currentStatut = commandDiv.getAttribute('data-statut'); // Récupère le statut actuel
-                        console.log('Statut mis à jour pour la commande :', commandDiv);
-
-                        // Déterminer le statut suivant
-                        let nextStatut;
-                        if (currentStatut === 'validation') {
-                            nextStatut = 'construction';
-                        } else if (currentStatut === 'construction') {
-                            nextStatut = 'final';
-                        } else {
-                            alert('Statut final atteint.');
-                            return;
-                        }
-
-                        // Envoyer une requête pour mettre à jour le statut
-                        fetch('update_statut.php', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                            },
-                            body: JSON.stringify({ id: commandId, statut: nextStatut }),
-                        })
-                        .then(response => {
-                            console.log('Réponse brute :', response);
-                            return response.json();
-                        })
-                        .then(data => {
-                            if (data.success) {
-                                console.log('Statut mis à jour avec succès' + nextStatut);
-                                location.reload();
-                            } else {
-                                console.error('Erreur côté serveur :', data.error);
-                            }
-                        })
-                        .catch(error => {
-                            console.error('Erreur:', error);
-                        });
-
-                        }
-
-                        // Fonction pour masquer la commande avec confirmation
-                        function removeCommand(button) {
-                        const commandDiv = button.closest('.commande'); // Récupère la commande liée
-                        const commandId = commandDiv.getAttribute('data-id'); // Récupère l'ID de la commande
-                        const popup = document.getElementById('supprimer-popup'); // Récupère le popup
-                        const yesButton = popup.querySelector('.yes-btn'); // Bouton "Oui" dans le popup
-                        const noButton = popup.querySelector('.no-btn'); // Bouton "Non" dans le popup
-
-                        // Afficher le popup
-                        popup.style.display = 'flex';
-
-                        // Ajouter un gestionnaire pour le bouton "Oui"
-                        yesButton.onclick = () => {
-                            console.log('Suppression confirmée de la commande.');
-                               // Envoyer une requête au serveur pour supprimer la commande
-                            fetch('delete_commande.php', {
-                                method: 'POST',
-                                headers: {
-                                    'Content-Type': 'application/json',
-                                },
-                                body: JSON.stringify({ id: commandId }), // Envoie l'ID de la commande
-                            })
-                            .then(response => {
-                                console.log('Réponse brute :', response);
-                                return response.json();
-                            })
-                            .then(data => {
-                                if (data.success) {
-                                    console.log('Commande supprimée de la base de données.');
-                                    commandDiv.remove(); // Supprime la commande de l'interface
-                                } else {
-                                    alert('Erreur : Impossible de supprimer la commande.');
-                                }
-                            })
-                            .catch(error => {
-                                console.error('Erreur lors de la suppression :', error);
-                            });
-
-                            popup.style.display = 'none'; // Ferme le popup
-                        };
-                        // Ajouter un gestionnaire pour le bouton "Non"
-                        noButton.onclick = () => {
-                            console.log('Suppression annulée.');
-                            popup.style.display = 'none'; // Ferme le popup
-                        };
-
-                        // Fermer le popup si clic à l'extérieur
-                        window.addEventListener('click', (event) => {
-                            if (event.target === popup) {
-                                console.log('Clic à l\'extérieur du popup, fermeture.');
-                                popup.style.display = 'none';
-                            }
-                        });
-                        }
-
-                        // Initialisation des événements après le chargement du DOM
-                        document.addEventListener('DOMContentLoaded', () => {
-                        console.log('DOM entièrement chargé.');
-                        });
-                    </script>
                             <div id="supprimer-popup" class="popup">
                             <div class="popup-content">
                                 <h2>Êtes vous sûr de vouloir supprimer ?</h2> 
@@ -191,9 +88,9 @@ $totalPages = ceil($totalCommandes / $limit);
                                                     <p><strong>N° commande :</strong> <?= htmlspecialchars($commande['id']) ?></p>
                                                 </div>
                                                 <div class="actions">
-                                                    <i title="Passez la commande au statut suivant" class="fa-solid fa-check actions vert" onclick="updateStatus(this)"></i>
-                                                    <i title="Supprimez la commande" class="fa-solid fa-trash actions rouge" onclick="removeCommand(this)"></i>
-                                                    <i title="Téléchargez la commande" class="fa-solid fa-file-pdf"></i>
+                                                    <i title="Passez la commande au statut suivant" class="bx bx-check-square actions vert" onclick="updateStatus(this)"></i>
+                                                    <i title="Supprimez la commande"  class="bx bx-trash-alt actions rouge" onclick="removeCommand(this)"></i>
+                                                    <i title="Téléchargez le devis" class="bx bxs-file-pdf" data-id="<?= htmlspecialchars($commande['id'])?>"></i>
                                                 </div>
                                             </div>
                                         <?php endforeach; ?>
@@ -231,9 +128,9 @@ $totalPages = ceil($totalCommandes / $limit);
                                                     <p><strong>N° commande :</strong> <?= htmlspecialchars($commande['id']) ?></p>
                                                 </div>
                                                 <div class="actions">
-                                                    <i title="Passez la commande au statut suivant" class="fa-solid fa-check actions vert" onclick="updateStatus(this)"></i>
-                                                    <i title="Supprimez la commande" class="fa-solid fa-trash actions rouge" onclick="removeCommand(this)"></i>
-                                                    <i title="Téléchargez la commande" class="fa-solid fa-file-pdf"></i>
+                                                <i title="Passez la commande au statut suivant" class="bx bx-check-square actions vert" onclick="updateStatus(this)"></i>
+                                                <i title="Supprimez la commande"  class="bx bx-trash-alt actions rouge" onclick="removeCommand(this)"></i>
+                                                <i title="Téléchargez le devis" class="bx bxs-file-pdf" data-id="<?= htmlspecialchars($commande['id'])?>"></i>
                                                 </div>
                                             </div>
                                         <?php endforeach; ?>
@@ -271,8 +168,8 @@ $totalPages = ceil($totalCommandes / $limit);
                                                     <p><strong>N° commande :</strong> <?= htmlspecialchars($commande['id']) ?></p>
                                                 </div>
                                                 <div class="actions">
-                                                    <i title="Supprimez la commande" class="fa-solid fa-trash actions rouge" onclick="removeCommand(this)"></i>
-                                                    <i title="Téléchargez la commande" class="fa-solid fa-file-pdf"></i>
+                                                <i title="Supprimez la commande"  class="bx bx-trash-alt actions rouge" onclick="removeCommand(this)"></i>
+                                                <i title="Téléchargez le devis" class="bx bxs-file-pdf" data-id="<?= htmlspecialchars($commande['id'])?>"></i>
                                                 </div>
                                             </div>
                                         <?php endforeach; ?>

@@ -26,9 +26,8 @@ document.querySelector('.btn-suivant').addEventListener('click', function() {
     .catch(error => console.error('Erreur:', error));
 });
 
-// Lorsque l'utilisateur clique sur "Voir le devis", ouvrir le PDF dans un nouvel onglet
 document.querySelector('.pdf-btn').addEventListener('click', function() {
-    let newCommandeId = this.getAttribute('data-id'); // Récupérer l'ID stocké dans le bouton
+    let newCommandeId = this.getAttribute('data-id'); 
     console.log("Nouvel ID de commande :", newCommandeId);
 
     if (newCommandeId) {
@@ -39,10 +38,10 @@ document.querySelector('.pdf-btn').addEventListener('click', function() {
             },
             body: JSON.stringify({ id: newCommandeId })
         })
-        .then(response => response.blob()) // Récupérer le PDF sous forme de blob
+        .then(response => response.blob()) 
         .then(blob => {
             const url = window.URL.createObjectURL(blob);
-            // Ouvrir un nouvel onglet avec l'URL Blob
+            // ouvre un nouvel onglet avec l'URL temporaire
             window.open(url, '_blank');
         })
         .catch(error => console.error('Erreur lors de la génération du PDF:', error));

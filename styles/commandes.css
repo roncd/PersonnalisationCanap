@@ -88,9 +88,8 @@ body {
   
   /* Styles pour les icônes */
 .actions {
-  font-size: 1.4rem;
-  margin-right: 3px;
-  padding: 0;
+  font-size: 1.9rem;
+  margin-right: -3px;
   text-decoration: none;
   color: #000000; /* Couleur des icônes */
   transition: color 0.3s ease;
@@ -98,7 +97,7 @@ body {
 }
 
 .actions .vert:hover {
-  color: #28a745; /* Vert pour Modifier */
+  color: #25a042; /* Vert pour Modifier */
 }
 
 .actions .rouge:hover {
