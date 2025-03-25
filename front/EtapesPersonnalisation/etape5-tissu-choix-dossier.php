@@ -72,7 +72,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     </style>
 </head>
-<body>
+<body data-user-id="<?php echo $_SESSION['user_id']; ?>">
 
 <header>
     <?php require '../../squelette/header.php'; ?>
@@ -114,8 +114,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </section>
 
             <div class="footer">
-            <div id="totalPrice">Total: <span> 0€</span></div>
-                <div class="buttons">
+            <p>Total : <span>899 €</span></p>
+            <div class="buttons">
                     <button class="btn-retour transition" onclick="history.go(-1)">Retour</button>
                                         <form method="POST" action="">
                         <input type="hidden" name="dossier_tissu_id" id="selected-dossier_tissu">
@@ -167,88 +167,71 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <button class="close-btn">OK</button>
         </div>
     </div>
-
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-    let totalPrice = 0; // Total global pour toutes les étapes
+    document.addEventListener('DOMContentLoaded', () => {
+        let totalPrice = 0; // Total global
 
-    // Identifier l'étape actuelle (par exemple, "5-dossiers")
-    const currentStep = "5-dossiers"; // Changez cela pour chaque étape (par exemple "4-2", "5-dossiers", etc.)
+        // Identifier l'étape actuelle
+        const currentStep = "5-dossier-tissu";
+        const userId = document.body.getAttribute('data-user-id');
 
-    // Charger toutes les options sélectionnées (globalement) depuis localStorage
-    let allSelectedOptions = JSON.parse(localStorage.getItem("allSelectedOptions")) || [];
-    console.log("Données globales récupérées depuis localStorage :", allSelectedOptions);
-
-    // Vérifier si `allSelectedOptions` est un tableau
-    if (!Array.isArray(allSelectedOptions)) {
-        allSelectedOptions = [];
-        console.warn("allSelectedOptions n'était pas un tableau. Réinitialisé à []");
-    }
-
-    // Fonction pour mettre à jour le total global
-    function updateTotal() {
-        totalPrice = allSelectedOptions.reduce((sum, option) => sum + option.price, 0);
-        console.log("Total global mis à jour :", totalPrice);
-
-        // Mettre à jour le total dans l'interface
-        const totalElement = document.getElementById("totalPrice");
-        if (totalElement) {
-            totalElement.textContent = `Total: ${totalPrice.toFixed(2)} €`;
-        } else {
-            console.error("L'élément '#totalPrice' est introuvable !");
-        }
-    }
-
-    // Gérer les sélections d'options pour cette étape
-    document.querySelectorAll('.color-2options .option img').forEach(option => {
-        let optionId = option.getAttribute('data-dossier-id');
-        let price = parseFloat(option.getAttribute('data-dossier-prix')) || 0;
-
-        // Vérifiez si les attributs sont valides
-        if (!optionId || isNaN(price)) {
-            console.warn(`Attributs manquants ou invalides pour une option : data-dossier-id=${optionId}, data-dossier-prix=${price}`);
-            return; // Ignorer cette option si les attributs ne sont pas valides
+        if (!userId) {
+            console.error("ID utilisateur non trouvé.");
+            return;
         }
 
-        // Créer un identifiant unique basé sur l'étape actuelle
-        let uniqueId = `${currentStep}_${optionId}`;
+        const sessionKey = `allSelectedOptions_${userId}`;
+        let allSelectedOptions = JSON.parse(sessionStorage.getItem(sessionKey)) || [];
 
-        console.log(`Option détectée : ID Unique = ${uniqueId}, Prix = ${price}`);
+        // Fonction pour mettre à jour le total global
+        function updateTotal() {
+            totalPrice = allSelectedOptions.reduce((sum, option) => {
+                const price = option.price || 0;
+                const quantity = option.quantity || 1;
+                return sum + (price * quantity);
+            }, 0);
 
-        // Vérifier si l'option est déjà sélectionnée (dans toutes les étapes)
-        if (allSelectedOptions.some(opt => opt.id === uniqueId)) {
-            option.parentElement.classList.add('selected');
+            const totalElement = document.querySelector(".footer p span");
+            if (totalElement) {
+                totalElement.textContent = `${totalPrice.toFixed(2)} €`;
+            }
         }
 
-        // Gérer les clics sur les options
-        option.addEventListener('click', () => {
-            // Supprimer toutes les sélections existantes dans l'étape actuelle
-            document.querySelectorAll('.color-2options .option img').forEach(opt => {
-                opt.parentElement.classList.remove('selected'); // Retirer la classe CSS
+        // Gestion des clics sur les options
+        document.querySelectorAll('.color-2options .option img').forEach(option => {
+            const optionId = option.getAttribute('data-dossier-id');
+            const price = parseFloat(option.getAttribute('data-dossier-prix')) || 0;
+
+            if (!optionId || isNaN(price)) {
+                console.warn(`Attributs invalides : data-dossier-id=${optionId}, data-dossier-prix=${price}`);
+                return;
+            }
+
+            const uniqueId = `${currentStep}_${optionId}`;
+
+            if (allSelectedOptions.some(opt => opt.id === uniqueId)) {
+                option.parentElement.classList.add('selected');
+            }
+
+            option.addEventListener('click', () => {
+                document.querySelectorAll('.color-2options .option img').forEach(opt => {
+                    opt.parentElement.classList.remove('selected');
+                });
+
+                allSelectedOptions = allSelectedOptions.filter(opt => !opt.id.startsWith(`${currentStep}_`));
+
+                allSelectedOptions.push({ id: uniqueId, price: price });
+                option.parentElement.classList.add('selected');
+
+                sessionStorage.setItem(sessionKey, JSON.stringify(allSelectedOptions));
+                updateTotal();
             });
-
-            // Supprimer les options de cette étape dans le stockage global
-            allSelectedOptions = allSelectedOptions.filter(opt => !opt.id.startsWith(`${currentStep}_`));
-
-            // Ajouter l'option actuellement sélectionnée
-            allSelectedOptions.push({ id: uniqueId, price: price });
-            option.parentElement.classList.add('selected'); // Ajouter la classe CSS
-
-            console.log(`Option sélectionnée : ID Unique = ${uniqueId}, Prix = ${price}`);
-
-            // Sauvegarder les données globales dans localStorage
-            localStorage.setItem("allSelectedOptions", JSON.stringify(allSelectedOptions));
-
-            // Mettre à jour le total
-            updateTotal();
         });
+
+        updateTotal();
     });
+</script>
 
-    // Initialiser le total dès le chargement de la page
-    updateTotal();
-});
-
-    </script>
     
     <script>
     document.addEventListener('DOMContentLoaded', () => {
