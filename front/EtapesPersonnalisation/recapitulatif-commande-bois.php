@@ -125,7 +125,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['comment'])) {
     </style>
   </style>
 </head>
-<body>
+<body data-user-id="<?php echo $_SESSION['user_id']; ?>">
 
 <header>
   <?php require '../../squelette/header.php'; ?>
@@ -301,5 +301,69 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['comment'])) {
 </div>
 </main>
 <?php require_once '../../squelette/footer.php'; ?>
+
+
+
+<script>
+   document.addEventListener('DOMContentLoaded', () => {
+    let totalPrice = 0; // Total global pour toutes les étapes
+
+    // Charger l'ID utilisateur depuis une variable PHP intégrée dans le HTML
+    const userId = document.body.getAttribute('data-user-id'); // Ex. <body data-user-id="<?php echo $_SESSION['user_id']; ?>">
+    if (!userId) {
+        console.error("ID utilisateur non trouvé. Vérifiez que 'data-user-id' est bien défini dans le HTML.");
+        return;
+    }
+    console.log("ID utilisateur récupéré :", userId);
+
+    // Charger toutes les options sélectionnées depuis sessionStorage (par utilisateur)
+    const sessionKey = `allSelectedOptions_${userId}`;
+    const selectedKey = `selectedOptions_${userId}`;
+    let allSelectedOptions = JSON.parse(sessionStorage.getItem(sessionKey)) || [];
+    let selectedOptions = JSON.parse(sessionStorage.getItem(selectedKey)) || {}; // Charger `selectedOptions` pour cet utilisateur
+    console.log("Données globales récupérées depuis sessionStorage :", allSelectedOptions);
+
+    // Vérifier si `allSelectedOptions` est un tableau
+    if (!Array.isArray(allSelectedOptions)) {
+        allSelectedOptions = [];
+        console.warn("allSelectedOptions n'était pas un tableau. Réinitialisé à []");
+    }
+
+    function updateTotal() {
+    // Vérifier le contenu de allSelectedOptions
+    console.log("Contenu actuel de allSelectedOptions :", allSelectedOptions);
+
+    // Calculer le total global
+    totalPrice = allSelectedOptions.reduce((sum, option) => {
+        const price = parseFloat(option.price || 0); // Vérifie que le prix est un nombre
+        const quantity = parseInt(option.quantity || 1); // Par défaut, une unité
+        return sum + (price * quantity);
+    }, 0);
+
+    console.log("Total calculé :", totalPrice);
+
+    // Mettre à jour l'élément dans l'interface
+    const totalElement = document.querySelector(".footer-processus p span");
+    if (totalElement) {
+        totalElement.textContent = `${totalPrice.toFixed(2)} €`;
+    } else {
+        console.error("L'élément '.footer-processus p span' est introuvable !");
+    }
+}
+
+    // Sauvegarder les données mises à jour dans sessionStorage
+    function saveData() {
+        sessionStorage.setItem(sessionKey, JSON.stringify(allSelectedOptions));
+        sessionStorage.setItem(selectedKey, JSON.stringify(selectedOptions));
+    }
+
+    // Initialiser le total dès le chargement de la page
+    updateTotal();
+
+    // Sauvegarder les données au chargement de la page (au cas où elles sont modifiées)
+    saveData();
+});
+
+  </script>
 </body>
 </html>
