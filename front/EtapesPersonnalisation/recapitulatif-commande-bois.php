@@ -148,13 +148,22 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['comment'])) {
  
   <h3>Étape 1 : Choisi tes dimensions</h3>
   <?php
-  echo ' <div class="dimension-container">
-        <p class="input-field">Longueur banquette A (en cm): ' . htmlspecialchars($dim['longueurA']?? '-') . '</p>
-        </div> <div class="dimension-container">
-        <p class="input-field">Longueur banquette B (en cm): ' . htmlspecialchars($dim['longueurB']?? '-') . '</p>
-        </div> <div class="dimension-container">
-        <p class="input-field">Longueur banquette C (en cm): ' . htmlspecialchars($dim['longueurC']?? '-') . '</p>   
+  $longueurB = isset($dim['longueurB']) && !empty(trim($dim['longueurB'])) ? htmlspecialchars($dim['longueurB']) : null;
+  $longueurC = isset($dim['longueurC']) && !empty(trim($dim['longueurC'])) ? htmlspecialchars($dim['longueurC']) : null;
+
+  echo '<div class="dimension-container">
+          <p class="input-field">Longueur banquette A (en cm): ' . htmlspecialchars($dim['longueurA'] ?? '-') . '</p>
         </div>';
+  if ($longueurB !== null) {
+      echo '<div class="dimension-container">
+              <p class="input-field">Longueur banquette B (en cm): ' . $longueurB . '</p>
+            </div>';
+  }
+  if ($longueurC !== null) {
+      echo '<div class="dimension-container">
+              <p class="input-field">Longueur banquette C (en cm): ' . $longueurC . '</p>
+            </div>';
+  }
   ?>
   <h3>Étape 2 : Choisi ton type de banquette</h3>
   <?php
