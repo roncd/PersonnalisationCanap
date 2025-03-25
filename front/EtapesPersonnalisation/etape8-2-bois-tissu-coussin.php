@@ -175,14 +175,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
   </div>
   
-  <script>document.addEventListener('DOMContentLoaded', () => {
+  <script>
+  
+  document.addEventListener('DOMContentLoaded', () => {
     let totalPrice = 0; // Total global pour toutes les étapes
 
     // Identifier l'étape actuelle (par exemple, "8-2-bois-tissu")
     const currentStep = "8-2-bois-tissu"; // Étape spécifique
 
     // Charger l'ID utilisateur depuis une variable PHP intégrée dans le HTML
-    const userId = document.body.getAttribute('data-user-id'); // Ex. <body data-user-id="<?php echo $_SESSION['user_id']; ?>">
+    const userId = document.body.getAttribute('data-user-id'); 
     if (!userId) {
         console.error("ID utilisateur non trouvé. Vérifiez que 'data-user-id' est bien défini dans le HTML.");
         return;
@@ -268,10 +270,71 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Initialiser le total dès le chargement de la page
     updateTotal();
 });
-
-
-
   </script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        let totalPrice = 0; // Total global
+        const suivantButton = document.querySelector('.btn-suivant');
+        const userId = document.body.getAttribute('data-user-id');
+
+        if (!userId) {
+            console.error("ID utilisateur non trouvé.");
+            return;
+        }
+
+        const sessionKey = `allSelectedOptions_${userId}`;
+        let allSelectedOptions = JSON.parse(sessionStorage.getItem(sessionKey)) || [];
+
+        // Fonction pour mettre à jour le total global
+        function updateTotal() {
+            totalPrice = allSelectedOptions.reduce((sum, option) => {
+                const price = option.price || 0;
+                const quantity = option.quantity || 1;
+                return sum + (price * quantity);
+            }, 0);
+
+            const totalElement = document.querySelector(".footer p span");
+            if (totalElement) {
+                totalElement.textContent = `${totalPrice.toFixed(2)} €`;
+            }
+        }
+
+        // Mettre à jour le total au chargement de la page
+        updateTotal();
+
+        // Gestion du bouton suivant
+        suivantButton.addEventListener('click', (event) => {
+            event.preventDefault();
+
+            // Envoyer le total au backend via une requête POST
+            fetch('save_total_price.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    user_id: userId,
+                    total_price: totalPrice
+                }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    console.log("Prix total sauvegardé avec succès !");
+                    // Redirection vers la page suivante
+                    window.location.href = "recapitulatif-commande-bois.php";
+                } else {
+                    console.error("Erreur lors de la sauvegarde :", data.message);
+                }
+            })
+            .catch(error => {
+                console.error("Erreur de requête :", error);
+            });
+        });
+    });
+</script>
+
   <script>
   document.addEventListener('DOMContentLoaded', () => {
     const options = document.querySelectorAll('.color-options .option img');

@@ -72,7 +72,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
   </style>
 </head>
-<body>
+<body data-user-id="<?php echo $_SESSION['user_id']; ?>">
 
 <header>
   <?php require '../../squelette/header.php'; ?>
@@ -116,7 +116,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       </section>
 
       <div class="footer">
-      <div id="totalPrice">Total: <span> 0€</span></div>
+      <p>Total : <span>899 €</span></p>
       <div class="buttons">
           <button class="btn-retour transition" onclick="history.go(-1)">Retour</button>
           <form method="POST" action="">
@@ -166,89 +166,135 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       <br>
       <button class="close-btn">OK</button>
     </div>
-  </div>
-  <script>
+  </div><script>
     document.addEventListener('DOMContentLoaded', () => {
-    let totalPrice = 0; // Total global pour toutes les étapes
+        let totalPrice = 0; // Total global
 
-    // Identifier l'étape actuelle (par exemple, "7-mousse")
-    const currentStep = "7-mousse-tissu"; // Étape spécifique
+        // Identifier l'étape actuelle
+        const currentStep = "7-mousse-tissu";
+        const userId = document.body.getAttribute('data-user-id');
 
-    // Charger toutes les options sélectionnées (globalement) depuis localStorage
-    let allSelectedOptions = JSON.parse(localStorage.getItem("allSelectedOptions")) || [];
-    console.log("Données globales récupérées depuis localStorage :", allSelectedOptions);
-
-    // Vérifier si `allSelectedOptions` est un tableau
-    if (!Array.isArray(allSelectedOptions)) {
-        allSelectedOptions = [];
-        console.warn("allSelectedOptions n'était pas un tableau. Réinitialisé à []");
-    }
-
-    // Fonction pour mettre à jour le total global
-    function updateTotal() {
-        totalPrice = allSelectedOptions.reduce((sum, option) => sum + option.price, 0);
-        console.log("Total global mis à jour :", totalPrice);
-
-        // Mettre à jour le total dans l'interface
-        const totalElement = document.querySelector("#totalPrice span");
-        if (totalElement) {
-            totalElement.textContent = `${totalPrice.toFixed(2)} €`;
-        } else {
-            console.error("L'élément '#totalPrice span' est introuvable !");
-        }
-    }
-
-    // Gérer les sélections d'options pour cette étape
-    document.querySelectorAll('.color-options .option img').forEach(option => {
-        let optionId = option.getAttribute('data-mousse-id');
-        let price = parseFloat(option.getAttribute('data-mousse-prix')) || 0;
-
-        // Vérifiez si les attributs sont valides
-        if (!optionId || isNaN(price)) {
-            console.warn(`Attributs manquants ou invalides pour une option : data-mousse-id=${optionId}, data-mousse-prix=${price}`);
-            return; // Ignorer cette option si les attributs ne sont pas valides
+        if (!userId) {
+            console.error("ID utilisateur non trouvé.");
+            return;
         }
 
-        // Créer un identifiant unique basé sur l'étape actuelle
-        let uniqueId = `${currentStep}_${optionId}`;
+        const sessionKey = `allSelectedOptions_${userId}`;
+        let allSelectedOptions = JSON.parse(sessionStorage.getItem(sessionKey)) || [];
 
-        console.log(`Option détectée : ID Unique = ${uniqueId}, Prix = ${price}`);
+        // Fonction pour mettre à jour le total global
+        function updateTotal() {
+            totalPrice = allSelectedOptions.reduce((sum, option) => {
+                const price = option.price || 0;
+                const quantity = option.quantity || 1;
+                return sum + (price * quantity);
+            }, 0);
 
-        // Vérifier si l'option est déjà sélectionnée (dans toutes les étapes)
-        if (allSelectedOptions.some(opt => opt.id === uniqueId)) {
-            option.parentElement.classList.add('selected');
+            const totalElement = document.querySelector(".footer p span");
+            if (totalElement) {
+                totalElement.textContent = `${totalPrice.toFixed(2)} €`;
+            }
         }
 
-        // Gérer les clics sur les options
-        option.addEventListener('click', () => {
-            // Supprimer toutes les sélections existantes dans l'étape actuelle
-            document.querySelectorAll('.color-options .option img').forEach(opt => {
-                opt.parentElement.classList.remove('selected'); // Retirer la classe CSS
+        // Gestion des clics sur les options
+        document.querySelectorAll('.color-options .option img').forEach(option => {
+            const optionId = option.getAttribute('data-mousse-id');
+            const price = parseFloat(option.getAttribute('data-mousse-prix')) || 0;
+
+            if (!optionId || isNaN(price)) {
+                console.warn(`Attributs invalides : data-mousse-id=${optionId}, data-mousse-prix=${price}`);
+                return;
+            }
+
+            const uniqueId = `${currentStep}_${optionId}`;
+
+            if (allSelectedOptions.some(opt => opt.id === uniqueId)) {
+                option.parentElement.classList.add('selected');
+            }
+
+            option.addEventListener('click', () => {
+                document.querySelectorAll('.color-options .option img').forEach(opt => {
+                    opt.parentElement.classList.remove('selected');
+                });
+
+                allSelectedOptions = allSelectedOptions.filter(opt => !opt.id.startsWith(`${currentStep}_`));
+
+                allSelectedOptions.push({ id: uniqueId, price: price });
+                option.parentElement.classList.add('selected');
+
+                sessionStorage.setItem(sessionKey, JSON.stringify(allSelectedOptions));
+                updateTotal();
             });
+        });
 
-            // Supprimer les options de cette étape dans le stockage global
-            allSelectedOptions = allSelectedOptions.filter(opt => !opt.id.startsWith(`${currentStep}_`));
+        updateTotal();
+    });
+</script>
 
-            // Ajouter l'option actuellement sélectionnée
-            allSelectedOptions.push({ id: uniqueId, price: price });
-            option.parentElement.classList.add('selected'); // Ajouter la classe CSS
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        let totalPrice = 0; // Total global
+        const suivantButton = document.querySelector('.btn-suivant');
+        const userId = document.body.getAttribute('data-user-id');
 
-            console.log(`Option sélectionnée : ID Unique = ${uniqueId}, Prix = ${price}`);
+        if (!userId) {
+            console.error("ID utilisateur non trouvé.");
+            return;
+        }
 
-            // Sauvegarder les données globales dans localStorage
-            localStorage.setItem("allSelectedOptions", JSON.stringify(allSelectedOptions));
+        const sessionKey = `allSelectedOptions_${userId}`;
+        let allSelectedOptions = JSON.parse(sessionStorage.getItem(sessionKey)) || [];
 
-            // Mettre à jour le total
-            updateTotal();
+        // Fonction pour mettre à jour le total global
+        function updateTotal() {
+            totalPrice = allSelectedOptions.reduce((sum, option) => {
+                const price = option.price || 0;
+                const quantity = option.quantity || 1;
+                return sum + (price * quantity);
+            }, 0);
+
+            const totalElement = document.querySelector(".footer p span");
+            if (totalElement) {
+                totalElement.textContent = `${totalPrice.toFixed(2)} €`;
+            }
+        }
+
+        // Mettre à jour le total au chargement de la page
+        updateTotal();
+
+        // Gestion du bouton suivant
+        suivantButton.addEventListener('click', (event) => {
+            event.preventDefault();
+
+            // Envoyer le total au backend via une requête POST
+            fetch('save_total_price.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    user_id: userId,
+                    total_price: totalPrice
+                }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    console.log("Prix total sauvegardé avec succès !");
+                    // Redirection vers la page suivante
+                    window.location.href = "recapitulatif-commande-tissu.php";
+                } else {
+                    console.error("Erreur lors de la sauvegarde :", data.message);
+                }
+            })
+            .catch(error => {
+                console.error("Erreur de requête :", error);
+            });
         });
     });
-
-    // Initialiser le total dès le chargement de la page
-    updateTotal();
-});
+</script>
 
 
-  </script>
   <script>
     document.addEventListener('DOMContentLoaded', () => {
         const options = document.querySelectorAll('.color-options .option img'); 

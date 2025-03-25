@@ -84,7 +84,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   </style>
  
 </head>
-<body>
+<body data-user-id="<?php echo $_SESSION['user_id']; ?>">
 
 
 <header>
@@ -118,8 +118,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <img src="../../admin/uploads/modele/<?php echo htmlspecialchars($item['img']); ?>"
                  alt="<?php echo htmlspecialchars($item['nom']); ?>"
                  data-modele-id="<?php echo $item['id']; ?>"
-                 data-modele-type="<?php echo htmlspecialchars($item['nom']); ?>">
+                 data-modele-prix="<?php echo $item['prix']; ?>"> 
             <p><?php echo htmlspecialchars($item['nom']); ?></p>
+            <p><strong><?php echo htmlspecialchars($item['prix']); ?> €</strong></p>
+
           </div>
         <?php endforeach; ?>
       </section>
@@ -184,6 +186,70 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       <button class="close-btn">OK</button>
     </div>
   </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        let totalPrice = 0; // Total global
+
+        // Identifier l'étape actuelle
+        const currentStep = "3-modele-tissu";
+        const userId = document.body.getAttribute('data-user-id');
+
+        if (!userId) {
+            console.error("ID utilisateur non trouvé.");
+            return;
+        }
+
+        const sessionKey = `allSelectedOptions_${userId}`;
+        let allSelectedOptions = JSON.parse(sessionStorage.getItem(sessionKey)) || [];
+
+        // Fonction pour mettre à jour le total global
+        function updateTotal() {
+            totalPrice = allSelectedOptions.reduce((sum, option) => {
+                const price = option.price || 0;
+                const quantity = option.quantity || 1;
+                return sum + (price * quantity);
+            }, 0);
+
+            const totalElement = document.querySelector(".footer p span");
+            if (totalElement) {
+                totalElement.textContent = `${totalPrice.toFixed(2)} €`;
+            }
+        }
+
+        // Gestion des clics sur les options
+        document.querySelectorAll('.color-2options .option img').forEach(option => {
+            const optionId = option.getAttribute('data-modele-id');
+            const price = parseFloat(option.getAttribute('data-modele-prix')) || 0;
+
+            if (!optionId || isNaN(price)) {
+                console.warn(`Attributs invalides : data-modele-id=${optionId}, data-modele-prix=${price}`);
+                return;
+            }
+
+            const uniqueId = `${currentStep}_${optionId}`;
+
+            if (allSelectedOptions.some(opt => opt.id === uniqueId)) {
+                option.parentElement.classList.add('selected');
+            }
+
+            option.addEventListener('click', () => {
+                document.querySelectorAll('.color-2options .option img').forEach(opt => {
+                    opt.parentElement.classList.remove('selected');
+                });
+
+                allSelectedOptions = allSelectedOptions.filter(opt => !opt.id.startsWith(`${currentStep}_`));
+
+                allSelectedOptions.push({ id: uniqueId, price: price });
+                option.parentElement.classList.add('selected');
+
+                sessionStorage.setItem(sessionKey, JSON.stringify(allSelectedOptions));
+                updateTotal();
+            });
+        });
+
+        updateTotal();
+    });
+</script>
 
 
   <script>

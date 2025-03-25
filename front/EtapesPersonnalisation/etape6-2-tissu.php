@@ -83,7 +83,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
   </style>
 </head>
-<body>
+<body data-user-id="<?php echo $_SESSION['user_id']; ?>">
 
 <header>
   <?php require '../../squelette/header.php'; ?>
@@ -187,6 +187,141 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <button class="no-btn">Non !</button>
   </div>
 </div>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    let totalPrice = 0; // Total global pour toutes les étapes
+    const currentStep = "6-accoudoir-tissu"; // Étape actuelle
+    const userId = document.body.getAttribute('data-user-id');
+    const sessionKey = `allSelectedOptions_${userId}`;
+    const selectedKey = `selectedOptions_${userId}`;
+    let allSelectedOptions = JSON.parse(sessionStorage.getItem(sessionKey)) || [];
+    let selectedOptions = JSON.parse(sessionStorage.getItem(selectedKey)) || {};
+    const selectedAccoudoirTissuInput = document.getElementById('selected-accoudoir_tissu');
+    const selectedNbAccoudoirInput = document.getElementById('selected-nb_accoudoir');
+
+    // Vérifications initiales
+    if (!userId) {
+        console.error("ID utilisateur non trouvé.");
+        return;
+    }
+
+    // Restaurer les sélections depuis le localStorage/sessionStorage
+    function restoreSelections() {
+      document.querySelectorAll('.color-2options .option img').forEach(img => {
+        const accoudoirId = img.getAttribute('data-accoudoir-id');
+        const parentOption = img.closest('.option');
+        const quantityInput = parentOption.querySelector('.quantity-input');
+
+        if (selectedOptions[accoudoirId]) {
+          img.classList.add('selected');
+          quantityInput.value = selectedOptions[accoudoirId];
+        } else {
+          img.classList.remove('selected');
+          quantityInput.value = 0;
+        }
+      });
+      updateTotal();
+    }
+
+    // Fonction pour mettre à jour le total global
+    function updateTotal() {
+      totalPrice = allSelectedOptions.reduce((sum, option) => {
+        const price = option.price || 0;
+        const quantity = option.quantity || 1;
+        return sum + (price * quantity);
+      }, 0);
+
+      const totalElement = document.querySelector(".footer p span");
+      if (totalElement) {
+        totalElement.textContent = `${totalPrice.toFixed(2)} €`;
+      }
+    }
+
+    // Fonction pour sauvegarder les sélections dans sessionStorage
+    function saveSelectedOption(optionId, price, quantity) {
+      const uniqueId = `${currentStep}_${optionId}`;
+      allSelectedOptions = allSelectedOptions.filter(opt => opt.id !== uniqueId);
+
+      if (quantity > 0) {
+        allSelectedOptions.push({
+          id: uniqueId,
+          price: price,
+          quantity: quantity
+        });
+      }
+
+      sessionStorage.setItem(sessionKey, JSON.stringify(allSelectedOptions));
+    }
+
+    // Gestion des clics sur les options
+    document.querySelectorAll('.color-2options .option img').forEach(img => {
+      img.addEventListener('click', () => {
+        const accoudoirId = img.getAttribute('data-accoudoir-id');
+        const parentOption = img.closest('.option');
+        const quantityInput = parentOption.querySelector('.quantity-input');
+        const price = parseFloat(img.getAttribute('data-accoudoir-prix')) || 0;
+
+        // Désélectionner ou sélectionner
+        if (selectedOptions[accoudoirId]) {
+          delete selectedOptions[accoudoirId];
+          img.classList.remove('selected');
+          quantityInput.value = 0;
+          saveSelectedOption(accoudoirId, price, 0);
+        } else {
+          selectedOptions[accoudoirId] = 1;
+          img.classList.add('selected');
+          quantityInput.value = 1;
+          saveSelectedOption(accoudoirId, price, 1);
+        }
+
+        sessionStorage.setItem(selectedKey, JSON.stringify(selectedOptions));
+        updateHiddenInputs();
+        updateTotal();
+      });
+    });
+
+    // Gestion des boutons augmenter et diminuer
+    document.querySelectorAll('.increase-btn, .decrease-btn').forEach(button => {
+      button.addEventListener('click', (event) => {
+        const parentOption = event.target.closest('.option');
+        const accoudoirId = parentOption.querySelector('img').getAttribute('data-accoudoir-id');
+        const quantityInput = parentOption.querySelector('.quantity-input');
+        const price = parseFloat(parentOption.querySelector('img').getAttribute('data-accoudoir-prix')) || 0;
+
+        if (!selectedOptions[accoudoirId]) return;
+
+        let newQuantity = parseInt(quantityInput.value) || 0;
+        newQuantity += event.target.classList.contains('increase-btn') ? 1 : -1;
+        newQuantity = Math.max(newQuantity, 0);
+        quantityInput.value = newQuantity;
+
+        if (newQuantity === 0) {
+          delete selectedOptions[accoudoirId];
+          parentOption.querySelector('img').classList.remove('selected');
+          saveSelectedOption(accoudoirId, price, 0);
+        } else {
+          selectedOptions[accoudoirId] = newQuantity;
+          saveSelectedOption(accoudoirId, price, newQuantity);
+        }
+
+        sessionStorage.setItem(selectedKey, JSON.stringify(selectedOptions));
+        updateHiddenInputs();
+        updateTotal();
+      });
+    });
+
+    // Mise à jour des champs cachés
+    function updateHiddenInputs() {
+      selectedAccoudoirTissuInput.value = Object.keys(selectedOptions).join(',');
+      selectedNbAccoudoirInput.value = Object.values(selectedOptions).join(',');
+    }
+
+    // Restaurer les sélections au chargement
+    restoreSelections();
+  });
+</script>
+
+
 
 <script>
   
@@ -199,7 +334,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     const abandonnerPopup = document.getElementById('abandonner-popup');
     const closeSelectionBtn = document.querySelector('#selection-popup .close-btn');
     const selectedAccoudoirTissuInput = document.getElementById('selected-accoudoir_tissu');
-    const selectedNbAccoudoirInput = document.getElementById('selected-nb_accoudoir');
     let selected = false;
 
     // Affichage des éléments avec la classe "transition"
