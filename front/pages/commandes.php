@@ -39,7 +39,6 @@ $stmtCount = $pdo->prepare("SELECT COUNT(*) AS total FROM commande_detail WHERE 
 $stmtCount->execute([$userId, $statut]);
 $totalCommandes = $stmtCount->fetchColumn();
 
-
 $totalPages = ceil($totalCommandes / $limit);
 
 // Organiser les commandes par statut
@@ -56,7 +55,10 @@ foreach ($commandes as $commande) {
     <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
     <title>Mes Commandes</title>
     <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&display=swap" rel="stylesheet">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <link rel="stylesheet" href="../../styles/commandes.css">    
+    <script type="module" src="../../scrpit/download.js"></script>
+    <script type="module" src="../../scrpit/commandes.js"></script> 
 </head>
 <body>
     <header>
@@ -84,7 +86,7 @@ foreach ($commandes as $commande) {
                             <p><strong>N° commande :</strong> <?= htmlspecialchars($commande['id']) ?></p>
                         </div>
                         <div class="actions">
-                            <i class="fa-solid fa-file-pdf"></i>
+                        <i title="Téléchargez le devis" class="bx bxs-file-pdf" data-id="<?= htmlspecialchars($commande['id'])?>"></i>                        
                         </div>
                     </div>
                     <?php endforeach; ?>
@@ -123,8 +125,8 @@ foreach ($commandes as $commande) {
                                                     <p><strong>N° commande :</strong> <?= htmlspecialchars($commande['id']) ?></p>
                                                 </div>
                                                 <div class="actions">
-                            <i class="fa-solid fa-file-pdf"></i>
-                        </div>
+                                                <i title="Téléchargez le devis" class="bx bxs-file-pdf" data-id="<?= htmlspecialchars($commande['id'])?>"></i>                        
+                                                </div>
                                             </div>
                                         <?php endforeach; ?>
                                     <?php else: ?>
@@ -161,8 +163,8 @@ foreach ($commandes as $commande) {
                                                     <p><strong>N° commande :</strong> <?= htmlspecialchars($commande['id']) ?></p>
                                                 </div>
                                                 <div class="actions">
-                            <i class="fa-solid fa-file-pdf"></i>
-                        </div>
+                                                <i title="Téléchargez le devis" class="bx bxs-file-pdf" data-id="<?= htmlspecialchars($commande['id'])?>"></i>                        
+                                                </div>
                                             </div>
                                         <?php endforeach; ?>
                                     <?php else: ?>
@@ -189,7 +191,6 @@ foreach ($commandes as $commande) {
         </div>
         
 </main>
-<script src="../../scrpit/commandes.js"></script> 
 <?php require_once '../../squelette/footer.php'?>
 </body>
 </html>
