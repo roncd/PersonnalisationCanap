@@ -152,16 +152,16 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['comment'])) {
   $longueurC = isset($dim['longueurC']) && !empty(trim($dim['longueurC'])) ? htmlspecialchars($dim['longueurC']) : null;
 
   echo '<div class="dimension-container">
-          <p class="input-field">Longueur banquette A (en cm): ' . htmlspecialchars($dim['longueurA'] ?? '-') . '</p>
+          <p class="input-field">Longueur banquette A : ' . htmlspecialchars($dim['longueurA'] ?? '-') . ' cm</p>
         </div>';
   if ($longueurB !== null) {
       echo '<div class="dimension-container">
-              <p class="input-field">Longueur banquette B (en cm): ' . $longueurB . '</p>
+              <p class="input-field">Longueur banquette B : ' . $longueurB . ' cm</p>
             </div>';
   }
   if ($longueurC !== null) {
       echo '<div class="dimension-container">
-              <p class="input-field">Longueur banquette C (en cm): ' . $longueurC . '</p>
+              <p class="input-field">Longueur banquette C : ' . $longueurC . ' cm</p>
             </div>';
   }
   ?>
@@ -246,7 +246,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['comment'])) {
           <p>Total : <span>899 €</span></p>
           <div class="buttons">
             <button class="btn-retour">Retour</button>
-            <button class="btn-suivant"data-id="<?= htmlspecialchars($id) ?>">Générer un devis</button>
+            <button class="btn-suivant" name="envoyer" data-id="<?= htmlspecialchars($id) ?>">Générer un devis</button>
           </div>
         </div>
     </div>
@@ -263,7 +263,31 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['comment'])) {
       <button class="pdf-btn">Voir le devis</button>
     </div>
   </div>
+  
+  <!--if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["envoyer"])) {
+                $nom = $_POST['nom'];
+                $prenom = $_POST['prenom'];
+                $to = $assocMail['client'][$commande['id_client']]['mail']; 
+              
 
+                if (empty($nom) or empty($to) or empty($message) or empty($prenom)) {
+                } else {
+                    // Envoie du mail de confirmation à l'user
+                    $sujet = "Confirmation de la commande"; 
+                    $txt = "Bonjour $nom,\n Merci d'avoir généré un devis chez Deco du Monde. Pour procéder à la construction de votre canapé, veillez vous rendre chez Deco du Monde et payer un accompte. Vous trouverez ci-joint votre devis en pdf.\n\n";
+                    $header = "From: decodumonde.alternance@gmail.com"; 
+
+                    if (mail($to, $sujet, $txt, $header)) {
+                        // Envoi du mail à l'admin
+                        $sujet_admin = "Copie de la commande envoyé";
+                        $txt_admin = $txt; 
+                        mail('decodumonde.alternance@gmail.com', $sujet_admin, $txt_admin, $header);    
+                    } else {
+                    }
+                }
+                }
+                -->
+  
     <!-- Colonne de droite -->
     <div class="right-column">
     <section class="main-display-recap">
