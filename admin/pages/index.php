@@ -36,12 +36,10 @@ if (!isset($_SESSION['id'])){
                 <div class="button-grid-container">
                     <a class="custom-button" href="../client/index.php">Client</a>
                     <a class="custom-button" href="../utilisateur/index.php">Utilisateur</a>
-                    <a class="custom-button" href="../commande-detail/index.php">Commande détaillé</a>
+                    <a class="custom-button" href="../commande-detail/index.php">Commande</a>
                     
                     <a class="custom-button" href="../structure/index.php">Structure</a>
-                    <a class="custom-button" href="../dimension/index.php">Dimension</a>
                     <a class="custom-button" href="../banquette/index.php">Type banquette</a>
-                   
                     <a class="custom-button" href="../mousse/index.php">Type mousse</a>
                 </div>
 

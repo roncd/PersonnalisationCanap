@@ -88,6 +88,11 @@ WHERE cda.id_commande_detail = ?");
 $stmtAccoudoirBois->execute([$idCommande]);
 $accoudoirsBois = $stmtAccoudoirBois->fetchAll(PDO::FETCH_ASSOC);
 
+
+$query_structure = $pdo->prepare("SELECT img, nom FROM structure WHERE id = (SELECT id_structure FROM commande_detail WHERE id = ?)");
+$query_structure->execute([$idCommande]);
+$structure = $query_structure->fetch(PDO::FETCH_ASSOC);
+
 // Infos de l'entreprise
 $entreprise = [
     "nom" => "DECO DU MONDE",
@@ -266,7 +271,31 @@ if ($detail && isset($detail['prix'])) {
 }
 
 $pdf->Ln(10);
-$pdf->Ln();
-$pdf->Output(); 
+
+$imageName = $structure['img'] ?? null;
+$name = $structure['nom'] ?? null;
+$imagePath = $imageName ? "../../admin/uploads/structure/" . $imageName : null; 
+
+
+
+if ($imagePath && file_exists($imagePath)) {
+    $pdf->AddPage();
+    $pdf->Ln(10);
+    $pdf->SetFont('Arial', 'B', 13);
+    $pdf->Cell(65, 10, mb_convert_encoding ("NUMÉRO DE COMMANDE :", "ISO-8859-1", "UTF-8"), 0, 0);
+    $pdf->Cell(110, 10, $idCommande, 0, 1);
+    $pdf->Ln(10);
+    $pdf->SetFont('Arial', 'B', 12);
+    $pdf->Cell(0, 10, mb_convert_encoding("Structure associée à la commande : " .$name ."", "ISO-8859-1", "UTF-8"), 0, 1, 'C');
+    $pdf->Image($imagePath, 10, 70, 190);
+} else {
+    $pdf->AddPage();
+    $pdf->SetFont('Arial', 'B', 12);
+    $pdf->Cell(80, 10, mb_convert_encoding("Aucune image de strucutre trouvé", "ISO-8859-1", "UTF-8"), 1, 1);        
+    $pdf->Ln(10);
+}
+
+$pdf->Output();
+
 
 ?>
