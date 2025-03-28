@@ -30,9 +30,7 @@ if (!isset($_SESSION['id'])){
             <div class="tableau">
                 <div class="button-grid-container">
                     <a class="custom-button" href="../client/add.php">Un Client</a>
-                    <a class="custom-button" href="../utilisateur/add.php">Un Utilisateur</a>
-                    <a class="custom-button" href="../commande-detail/add.php">Une Commande détaillé</a>
-                    
+                    <a class="custom-button" href="../utilisateur/add.php">Un Utilisateur</a>                    
                     <a class="custom-button" href="../structure/add.php">Une Structure</a>
                     <a class="custom-button" href="../banquette/add.php">Un Type de banquette</a>
                     <a class="custom-button" href="../mousse/add.php">Un Type de mousse</a>

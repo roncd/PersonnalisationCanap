@@ -30,13 +30,15 @@ foreach ($tables as $table) {
     $assocData[$table] = array_column($data[$table], 'nom', 'id');
 }
 
-$stmt = $pdo->prepare("SELECT id, longueurA, longueurB, longueurC FROM dimension");
+$stmt = $pdo->prepare("SELECT id, longueurA, longueurB, longueurC FROM commande_detail");
 $stmt->execute();
-$data['dimension'] = $stmt->fetchAll(PDO::FETCH_ASSOC);
-$assocData['dimension'] = [];
+$data['commande_detail'] = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-foreach ($data['dimension'] as $dim) {
-    $assocData['dimension'][$dim['id']] = "{$dim['longueurA']} x {$dim['longueurB']} x {$dim['longueurC']}";
+$assocData['commande_detail'] = [];
+foreach ($data['commande_detail'] as $dim) {
+    $assocData['commande_detail'][$dim['id']] = [
+        'dimensions' => trim("{$dim['longueurA']} x {$dim['longueurB']} x {$dim['longueurC']}", " x"),
+    ];
 }
 
 
@@ -126,26 +128,26 @@ foreach ($data['dimension'] as $dim) {
                 <thead>
                 <tr>
                     <th>ID</th>
-                    <th>CLIENT_ID</th>
+                    <th>CLIENT</th>
                     <th>TOTAL</th>
                     <th>COMMENTAIRE</th>
                     <th>DATE</th>
                     <th>STATUT</th>
-                    <th>STRUCTUR_ID</th>
-                    <th>DIMENSION_ID</th>
-                    <th>TYPE_BANQUETTE_ID</th>
-                    <th>MOUSSE_ID</th>  
-                    <th>COULEUR_BOIS_ID</th>
-                    <th>DECORATION_BOIS_ID</th>
-                    <th>ACCOUDOIR_BOIS_ID</th>
-                    <th>DOSSIER_BOIS_ID</th>
-                    <th>COULEUR_TISSU_BOIS_ID</th>
-                    <th>MOTIF_BOIS_ID</th>
-                    <th>MODELE_ID</th>
-                    <th>COULEUR_TISSU_ID</th>
-                    <th>MOTIF_TISSU_ID</th>
-                    <th>DOSSIER_TISSU_ID</th>
-                    <th>ACCOUDOIR_TISSU_ID</th>
+                    <th>STRUCTURE</th>
+                    <th>DIMENSIONS</th>
+                    <th>TYPE_BANQUETTE</th>
+                    <th>MOUSSE</th>  
+                    <th>COULEUR_BOIS</th>
+                    <th>DECORATION_BOIS</th>
+                    <th>ACCOUDOIR_BOIS</th>
+                    <th>DOSSIER_BOIS</th>
+                    <th>COULEUR_TISSU_BOIS</th>
+                    <th>MOTIF_BOIS</th>
+                    <th>MODELE</th>
+                    <th>COULEUR_TISSU</th>
+                    <th>MOTIF_TISSU</th>
+                    <th>DOSSIER_TISSU</th>
+                    <th>ACCOUDOIR_TISSU</th>
                     <th>ACTION</th>
                 </tr>
                 </thead>
@@ -161,26 +163,27 @@ foreach ($data['dimension'] as $dim) {
                     while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                         echo "<tr>";
                         echo "<td>{$row['id']}</td>";
-                        echo "<td>" . htmlspecialchars($assocData['client'][$row['id_client']] ?? 'N/A') . "</td>";
+                        echo "<td>" . htmlspecialchars($assocData['client'][$row['id_client']] ?? '-') . "</td>";
                         echo "<td>{$row['prix']}</td>";
                         echo "<td>{$row['commentaire']}</td>";
                         echo "<td>{$row['date']}</td>";
                         echo "<td>{$row['statut']}</td>";
-                        echo "<td>" . htmlspecialchars($assocData['structure'][$row['id_structure']] ?? 'N/A') . "</td>";
-                        echo "<td>" . htmlspecialchars($assocData['dimension'][$row['id_dimension']] ?? 'N/A') . "</td>";
-                        echo "<td>" . htmlspecialchars($assocData['type_banquette'][$row['id_banquette']] ?? 'N/A') . "</td>";
-                        echo "<td>" . htmlspecialchars($assocData['mousse'][$row['id_mousse']] ?? 'N/A') . "</td>";
-                        echo "<td>" . htmlspecialchars($assocData['couleur_bois'][$row['id_couleur_bois']] ?? 'N/A') . "</td>";
-                        echo "<td>" . htmlspecialchars($assocData['decoration'][$row['id_decoration']] ?? 'N/A') . "</td>";
-                        echo "<td>" . htmlspecialchars($assocData['accoudoir_bois'][$row['id_accoudoir_bois']] ?? 'N/A') . "</td>";
-                        echo "<td>" . htmlspecialchars($assocData['dossier_bois'][$row['id_dossier_bois']] ?? 'N/A') . "</td>";
-                        echo "<td>" . htmlspecialchars($assocData['couleur_tissu_bois'][$row['id_couleur_tissu_bois']] ?? 'N/A') . "</td>";
-                        echo "<td>" . htmlspecialchars($assocData['motif_bois'][$row['id_motif_bois']] ?? 'N/A') . "</td>";
-                        echo "<td>" . htmlspecialchars($assocData['modele'][$row['id_modele']] ?? 'N/A') . "</td>";
-                        echo "<td>" . htmlspecialchars($assocData['couleur_tissu'][$row['id_couleur_tissu']] ?? 'N/A') . "</td>";
-                        echo "<td>" . htmlspecialchars($assocData['motif_tissu'][$row['id_motif_tissu']] ?? 'N/A') . "</td>";
-                        echo "<td>" . htmlspecialchars($assocData['dossier_tissu'][$row['id_dossier_tissu']] ?? 'N/A') . "</td>";
-                        echo "<td>" . htmlspecialchars($assocData['accoudoir_tissu'][$row['id_accoudoir_tissu']] ?? 'N/A') . "</td>";
+                        echo "<td>" . htmlspecialchars($assocData['structure'][$row['id_structure']] ?? '-') . "</td>";
+                        $dimensions = htmlspecialchars($assocData['commande_detail'][$row['id']]['dimensions'] ?? '-');
+                        echo "<td>{$dimensions}</td>";
+                        echo "<td>" . htmlspecialchars($assocData['type_banquette'][$row['id_banquette']] ?? '-') . "</td>";
+                        echo "<td>" . htmlspecialchars($assocData['mousse'][$row['id_mousse']] ?? '-') . "</td>";
+                        echo "<td>" . htmlspecialchars($assocData['couleur_bois'][$row['id_couleur_bois']] ?? '-') . "</td>";
+                        echo "<td>" . htmlspecialchars($assocData['decoration'][$row['id_decoration']] ?? '-') . "</td>";
+                        echo "<td>" . htmlspecialchars($assocData['accoudoir_bois'][$row['id_accoudoir_bois']] ?? '-') . "</td>";
+                        echo "<td>" . htmlspecialchars($assocData['dossier_bois'][$row['id_dossier_bois']] ?? '-') . "</td>";
+                        echo "<td>" . htmlspecialchars($assocData['couleur_tissu_bois'][$row['id_couleur_tissu_bois']] ?? '-') . "</td>";
+                        echo "<td>" . htmlspecialchars($assocData['motif_bois'][$row['id_motif_bois']] ?? '-') . "</td>";
+                        echo "<td>" . htmlspecialchars($assocData['modele'][$row['id_modele']] ?? '-') . "</td>";
+                        echo "<td>" . htmlspecialchars($assocData['couleur_tissu'][$row['id_couleur_tissu']] ?? '-') . "</td>";
+                        echo "<td>" . htmlspecialchars($assocData['motif_tissu'][$row['id_motif_tissu']] ?? '-') . "</td>";
+                        echo "<td>" . htmlspecialchars($assocData['dossier_tissu'][$row['id_dossier_tissu']] ?? '-') . "</td>";
+                        echo "<td>" . htmlspecialchars($assocData['accoudoir_tissu'][$row['id_accoudoir_tissu']] ?? '-') . "</td>";
                         echo "<td class='actions'>";
                         echo "<a href='edit.php?id={$row['id']}' class='edit-action actions vert' title='Modifier'>EDIT</a>";
                         echo "<a href='delete.php?id={$row['id']}' class='delete-action actions rouge' title='Supprimer' onclick='return confirm(\"Voulez-vous vraiment supprimer cette structure ?\");'>DELETE</a>";                        echo "</td>";
