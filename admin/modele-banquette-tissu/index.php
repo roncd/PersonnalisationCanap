@@ -1,17 +1,18 @@
-<?php 
+<?php
 require '../config.php';
 session_start();
 
-if (!isset($_SESSION['id'])){
+if (!isset($_SESSION['id'])) {
     header("Location: ../index.php");
     exit();
-    }
+}
 
 // Traitement de la recherche
 $search = $_GET['search'] ?? '';
 ?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -31,6 +32,7 @@ $search = $_GET['search'] ?? '';
             padding: 10px;
             border-radius: 5px;
         }
+
         .search-bar input {
             padding: 8px;
             font-size: 16px;
@@ -38,6 +40,7 @@ $search = $_GET['search'] ?? '';
             border-radius: 10px;
             width: 300px;
         }
+
         .search-bar button {
             padding: 8px 12px;
             font-size: 16px;
@@ -48,90 +51,97 @@ $search = $_GET['search'] ?? '';
             margin-left: 8px;
             cursor: pointer;
         }
+
         .search-bar button:hover {
             background-color: #333;
         }
+
         .message {
             padding: 10px;
             margin: 10px 0;
             border-radius: 5px;
         }
+
         .success {
             background-color: #d4edda;
             color: #155724;
         }
+
         .error {
             background-color: #f8d7da;
             color: #721c24;
         }
     </style>
 </head>
+
 <body>
 
-<header>
-    <?php require '../squelette/header.php'; ?>
-</header>
+    <header>
+        <?php require '../squelette/header.php'; ?>
+    </header>
 
-<main>
-    <div class="container">
-        <h2>Modèle banquette en tissu</h2>
-        <?php
-        if (isset($_SESSION['message'])) {
-            echo '<div class="message ' . htmlspecialchars($_SESSION['message_type']) . '">';
-            echo htmlspecialchars($_SESSION['message']);
-            echo '</div>';
-            unset($_SESSION['message']);
-            unset($_SESSION['message_type']);
-        }
-        ?>
-        <!-- Barre de recherche -->
-        <div class="search-bar">
-            <form method="GET" action="index.php">
-                <input type="text" name="search" placeholder="Rechercher par nom..." value="<?php echo htmlspecialchars($search); ?>">
-                <button type="submit">Rechercher</button>
-            </form>
-        </div>
-        
-        <div class="tab-container">
-            <table class="styled-table">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>NOM</th>
-                        <th>PRIX</th>
-                        <th>IMAGE</th>
-                        <th>ACTION</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php
-                    if ($search) {
-                        $stmt = $pdo->prepare("SELECT * FROM modele WHERE nom LIKE ?");
-                        $stmt->execute(['%' . $search . '%']);
-                    } else {
-                        $stmt = $pdo->query("SELECT * FROM modele");
-                    }
-                    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                        echo "<tr>";
-                        echo "<td>{$row['id']}</td>";
-                        echo "<td>{$row['nom']}</td>";
-                        echo "<td>{$row['prix']}</td>";
-                        echo "<td><img src='../uploads/modele/{$row['img']}' alt='{$row['nom']}' style='width:50px; height:auto;'></td>";
-                        echo "<td class='actions'>";
-                        echo "<a href='edit.php?id={$row['id']}' class='edit-action actions vert' title='Modifier'>EDIT</a>";
-                        echo "<a href='delete.php?id={$row['id']}' class='delete-action actions rouge' title='Supprimer' onclick='return confirm(\"Voulez-vous vraiment supprimer cette structure ?\");'>DELETE</a>";                        echo "</td>";
-                        echo "</tr>";
-                    }
-                    ?>
-                </tbody>
-            </table>
-        </div>
-    </div>
-</main>
+    <main>
+        <div class="container">
+            <h2>Modèle banquette en tissu</h2>
+            <?php
+            if (isset($_SESSION['message'])) {
+                echo '<div class="message ' . htmlspecialchars($_SESSION['message_type']) . '">';
+                echo htmlspecialchars($_SESSION['message']);
+                echo '</div>';
+                unset($_SESSION['message']);
+                unset($_SESSION['message_type']);
+            }
+            ?>
+            <!-- Barre de recherche -->
+            <div class="search-bar">
+                <form method="GET" action="index.php">
+                    <input type="text" name="search" placeholder="Rechercher par nom..." value="<?php echo htmlspecialchars($search); ?>">
+                    <button type="submit">Rechercher</button>
+                </form>
+            </div>
 
-<footer>
+            <div class="tab-container">
+                <table class="styled-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>NOM</th>
+                            <th>PRIX</th>
+                            <th>IMAGE</th>
+                            <th>ACTION</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                        if ($search) {
+                            $stmt = $pdo->prepare("SELECT * FROM modele WHERE nom LIKE ?");
+                            $stmt->execute(['%' . $search . '%']);
+                        } else {
+                            $stmt = $pdo->query("SELECT * FROM modele");
+                        }
+                        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                            echo "<tr>";
+                            echo "<td>{$row['id']}</td>";
+                            echo "<td>{$row['nom']}</td>";
+                            echo "<td>{$row['prix']}</td>";
+                            echo "<td><img src='../uploads/modele/{$row['img']}' alt='{$row['nom']}' style='width:50px; height:auto;'></td>";
+                            echo "<td class='actions'>";
+                            echo "<a href='edit.php?id={$row['id']}' class='edit-action actions vert' title='Modifier'>EDIT</a>";
+                            echo "<a href='delete.php?id={$row['id']}' class='delete-action actions rouge' title='Supprimer' onclick='return confirm(\"Voulez-vous vraiment supprimer cette structure ?\");'>DELETE</a>";
+                            echo "</td>";
+                            echo "</tr>";
+                        }
+                        ?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <footer>
         <?php require '../squelette/footer.php'; ?>
-</footer>
+    </footer>
 
 </body>
+
 </html>

@@ -25,10 +25,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['user_name'] = $user['prenom'];
             if (!empty($_SESSION['redirect_to'])) {
                 $redirect_to = $_SESSION['redirect_to'];
-                unset($_SESSION['redirect_to']); 
+                unset($_SESSION['redirect_to']);
                 header("Location: $redirect_to");
             } else {
-                header("Location: ../pages/index.php"); 
+                header("Location: ../pages/index.php");
             }
             exit;
         } else {
@@ -42,4 +42,3 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 }
-?>

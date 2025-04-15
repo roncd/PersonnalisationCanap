@@ -1,15 +1,16 @@
-<?php 
+<?php
 require '../config.php';
 session_start();
 
-if (!isset($_SESSION['id'])){
+if (!isset($_SESSION['id'])) {
     header("Location: ../index.php");
     exit();
-    }
+}
 $search = $_GET['search'] ?? '';
 ?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -29,6 +30,7 @@ $search = $_GET['search'] ?? '';
             padding: 10px;
             border-radius: 5px;
         }
+
         .search-bar input {
             padding: 8px;
             font-size: 16px;
@@ -36,6 +38,7 @@ $search = $_GET['search'] ?? '';
             border-radius: 10px;
             width: 300px;
         }
+
         .search-bar button {
             padding: 8px 12px;
             font-size: 16px;
@@ -46,32 +49,37 @@ $search = $_GET['search'] ?? '';
             margin-left: 8px;
             cursor: pointer;
         }
+
         .search-bar button:hover {
             background-color: #333;
         }
+
         .message {
             padding: 10px;
             margin: 10px 0;
             border-radius: 5px;
         }
+
         .success {
             background-color: #d4edda;
             color: #155724;
         }
+
         .error {
             background-color: #f8d7da;
             color: #721c24;
         }
     </style>
 </head>
+
 <body>
 
     <header>
-    <?php require '../squelette/header.php'; ?>
+        <?php require '../squelette/header.php'; ?>
     </header>
     <main>
         <div class="container">
-            <h2>Utilisateur</h2> 
+            <h2>Utilisateur</h2>
             <?php
             if (isset($_SESSION['message'])) {
                 echo '<div class="message ' . htmlspecialchars($_SESSION['message_type']) . '">';
@@ -88,41 +96,43 @@ $search = $_GET['search'] ?? '';
                 </form>
             </div>
             <div class="tab-container">
-            <table class="styled-table">
-                <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>MAIL</th>
-                    <th>MOT_DE_PASSE</th>
-                    <th>ACTION</th>
-                </tr>
-                </thead>
-                <tbody>
-                <?php
-                    if ($search) {
-                        $stmt = $pdo->prepare("SELECT * FROM utilisateur WHERE mail LIKE ?");
-                        $stmt->execute(['%' . $search . '%']);
-                    } else {
-                        $stmt = $pdo->query("SELECT * FROM utilisateur");
-                    }
-                    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                        echo "<tr>";
-                        echo "<td>{$row['id']}</td>";
-                        echo "<td>{$row['mail']}</td>";
-                        echo "<td>{$row['mdp']}</td>";
-                        echo "<td class='actions'>";
-                        echo "<a href='edit.php?id={$row['id']}' class='edit-action actions vert' title='Modifier'>EDIT</a>";
-                        echo "<a href='delete.php?id={$row['id']}' class='delete-action actions rouge' title='Supprimer' onclick='return confirm(\"Voulez-vous vraiment supprimer cette structure ?\");'>DELETE</a>";                        echo "</td>";
-                        echo "</tr>";
-                    }
-                    ?>
-                </tbody>
-            </table>
+                <table class="styled-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>MAIL</th>
+                            <th>MOT_DE_PASSE</th>
+                            <th>ACTION</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                        if ($search) {
+                            $stmt = $pdo->prepare("SELECT * FROM utilisateur WHERE mail LIKE ?");
+                            $stmt->execute(['%' . $search . '%']);
+                        } else {
+                            $stmt = $pdo->query("SELECT * FROM utilisateur");
+                        }
+                        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                            echo "<tr>";
+                            echo "<td>{$row['id']}</td>";
+                            echo "<td>{$row['mail']}</td>";
+                            echo "<td>{$row['mdp']}</td>";
+                            echo "<td class='actions'>";
+                            echo "<a href='edit.php?id={$row['id']}' class='edit-action actions vert' title='Modifier'>EDIT</a>";
+                            echo "<a href='delete.php?id={$row['id']}' class='delete-action actions rouge' title='Supprimer' onclick='return confirm(\"Voulez-vous vraiment supprimer cette structure ?\");'>DELETE</a>";
+                            echo "</td>";
+                            echo "</tr>";
+                        }
+                        ?>
+                    </tbody>
+                </table>
             </div>
         </div>
     </main>
 </body>
 <footer>
-        <?php require '../squelette/footer.php'; ?>
-    </footer>
+    <?php require '../squelette/footer.php'; ?>
+</footer>
+
 </html>

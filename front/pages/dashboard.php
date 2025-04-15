@@ -9,13 +9,14 @@ if (!isset($_SESSION['user_id'])) {
 
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&family=Be+Vietnam+Pro&display=swap" rel="stylesheet">
     <title>Dashboard</title>
     <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
-    
+
     <style>
         /* Styles généraux */
         .body {
@@ -31,34 +32,54 @@ if (!isset($_SESSION['user_id'])) {
             font-size: 2.5rem;
             color: #000000;
             margin-bottom: 20px;
-            animation: fadeIn 1s ease-in-out; /* Animation de fondu */
+            animation: fadeIn 1s ease-in-out;
+            /* Animation de fondu */
         }
 
         @keyframes fadeIn {
-            0% { opacity: 0; }
-            100% { opacity: 1; }
+            0% {
+                opacity: 0;
+            }
+
+            100% {
+                opacity: 1;
+            }
         }
 
         .img {
-            width: 50%; /* Utilise toute la largeur disponible */
-            max-width: 1200px; /* Limite la largeur maximale */
-            height: auto; /* Maintient les proportions */
-            max-height: 400px; /* Limite la hauteur maximale */
-            object-fit: cover; /* Recadre l'image pour remplir le conteneur */
+            width: 50%;
+            /* Utilise toute la largeur disponible */
+            max-width: 1200px;
+            /* Limite la largeur maximale */
+            height: auto;
+            /* Maintient les proportions */
+            max-height: 400px;
+            /* Limite la hauteur maximale */
+            object-fit: cover;
+            /* Recadre l'image pour remplir le conteneur */
             margin: 20px 0;
             border-radius: 10px;
             box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-            animation: fadeIn 1s ease-in-out; /* Appliquer la même animation que pour le texte */
+            animation: fadeIn 1s ease-in-out;
+            /* Appliquer la même animation que pour le texte */
         }
 
         .buttons {
             margin-top: 30px;
-            animation: slideIn 1s ease-in-out; /* Animation de glissement */
+            animation: slideIn 1s ease-in-out;
+            /* Animation de glissement */
         }
 
         @keyframes slideIn {
-            0% { transform: translateY(20px); opacity: 0; }
-            100% { transform: translateY(0); opacity: 1; }
+            0% {
+                transform: translateY(20px);
+                opacity: 0;
+            }
+
+            100% {
+                transform: translateY(0);
+                opacity: 1;
+            }
         }
 
         .btn-valider {
@@ -71,33 +92,38 @@ if (!isset($_SESSION['user_id'])) {
             border-radius: 12px;
             box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
             cursor: pointer;
-            transition: background-color 0.2s ease, transform 0.2s ease; /* Combinez les deux transitions */
-            text-decoration: none; /* Supprimer le soulignement */
+            transition: background-color 0.2s ease, transform 0.2s ease;
+            /* Combinez les deux transitions */
+            text-decoration: none;
+            /* Supprimer le soulignement */
         }
 
         .btn-valider:hover {
             background-color: #555555;
-            transform: scale(1.1); /* Agrandir légèrement le bouton au survol */
+            transform: scale(1.1);
+            /* Agrandir légèrement le bouton au survol */
         }
     </style>
 </head>
+
 <body>
-<header>
-<link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
-  <?php require '../../squelette/header.php'; ?>
-</header>
-<main>
-    <div class="body">
-    <h1>Bienvenue, <?php echo htmlspecialchars($_SESSION['user_name']); ?>!</h1>
-    <img class="img" src="../../medias/CanapéMeknès_VueDeAngle_-Photoroom.png" alt="Image d'illustration">
-    <div class="buttons">
-        <a href="../EtapesPersonnalisation/etape1-1-structure.php" class="btn-valider">Commencer la personnalisation</a>
-    </div>
-    </div>
-</main>
+    <header>
+        <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
+        <?php require '../../squelette/header.php'; ?>
+    </header>
+    <main>
+        <div class="body">
+            <h1>Bienvenue, <?php echo htmlspecialchars($_SESSION['user_name']); ?>!</h1>
+            <img class="img" src="../../medias/CanapéMeknès_VueDeAngle_-Photoroom.png" alt="Image d'illustration">
+            <div class="buttons">
+                <a href="../EtapesPersonnalisation/etape1-1-structure.php" class="btn-valider">Commencer la personnalisation</a>
+            </div>
+        </div>
+    </main>
 </body>
 
 <footer>
-  <?php require '../../squelette/footer.php'; ?>
+    <?php require '../../squelette/footer.php'; ?>
 </footer>
+
 </html>

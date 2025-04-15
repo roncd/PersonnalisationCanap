@@ -33,5 +33,3 @@ if (isset($data['id'])) {
 } else {
     echo json_encode(['success' => false, 'error' => 'Aucun ID reçu.']);
 }
-
-?>

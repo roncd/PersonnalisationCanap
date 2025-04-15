@@ -38,7 +38,8 @@ span {
 .color-options {
   display: grid;
   gap: 20px;
-  grid-template-columns: repeat(3, 1fr); /* 3 colonnes pour les options */
+  grid-template-columns: repeat(3, 1fr);
+  /* 3 colonnes pour les options */
   height: 400px;
   max-height: 400px;
   overflow-y: auto;
@@ -48,7 +49,8 @@ span {
 .color-options {
   display: grid;
   gap: 20px;
-  grid-template-columns: repeat(3, 1fr); /* 3 colonnes pour les options */
+  grid-template-columns: repeat(3, 1fr);
+  /* 3 colonnes pour les options */
   max-height: 400px;
   overflow-y: auto;
   padding-right: 20px;
@@ -62,7 +64,8 @@ span {
   color: #000000;
   padding-left: 10px;
   margin-top: 20px;
-  grid-column: 1 / -1; /* Étendre le titre sur toute la largeur */
+  grid-column: 1 / -1;
+  /* Étendre le titre sur toute la largeur */
 }
 
 /* Options */
@@ -111,7 +114,8 @@ span {
   display: grid;
   gap: 20px;
   height: 400px;
-  grid-template-columns: repeat(3, 1fr); /* 3 colonnes pour les options */
+  grid-template-columns: repeat(3, 1fr);
+  /* 3 colonnes pour les options */
   padding-right: 20px;
 }
 
@@ -123,7 +127,8 @@ span {
   color: #000000;
   padding-left: 10px;
   margin-top: 20px;
-  grid-column: 1 / -1; /* Étendre le titre sur toute la largeur */
+  grid-column: 1 / -1;
+  /* Étendre le titre sur toute la largeur */
 }
 
 /* Options */
@@ -213,8 +218,16 @@ span {
   font-weight: bold;
 }
 
-.btn-retour { background-color: #997765; color: #fff; }
-.btn-suivant, .btn-submit-com { background-color: #000; color: #fff; }
+.btn-retour {
+  background-color: #997765;
+  color: #fff;
+}
+
+.btn-suivant,
+.btn-submit-com {
+  background-color: #000;
+  color: #fff;
+}
 
 /* ================== RIGHT COLUMN ================== */
 .right-column {
@@ -258,29 +271,40 @@ span {
 }
 
 .comment-section {
-  width: 100%; /* Prend toute la largeur disponible */
-  text-align: left; /* Aligne le texte et le contenu à gauche */
-  margin-top: -10px; /* Ajoute un peu d'espace au-dessus */
+  width: 100%;
+  /* Prend toute la largeur disponible */
+  text-align: left;
+  /* Aligne le texte et le contenu à gauche */
+  margin-top: -10px;
+  /* Ajoute un peu d'espace au-dessus */
 }
 
 /* Style du textarea */
 .textarea-custom {
-  width: 100%; /* Utilise 100% de la largeur de son parent */
-  max-width: 480px; /* Limite la largeur à 600px */
-  min-width: 300px; /* Définit une largeur minimale de 300px */
+  width: 100%;
+  /* Utilise 100% de la largeur de son parent */
+  max-width: 480px;
+  /* Limite la largeur à 600px */
+  min-width: 300px;
+  /* Définit une largeur minimale de 300px */
   height: 70px;
   padding: 10px;
-  background-color: rgba(227, 209, 200, 0.71); /* Beige avec opacité */
+  background-color: rgba(227, 209, 200, 0.71);
+  /* Beige avec opacité */
   border-radius: 8px;
   font-size: 1em;
   border-color: rgba(227, 209, 200, 0.71);
   line-height: 1.5;
-  resize: vertical; /* Permet de redimensionner verticalement */
+  resize: vertical;
+  /* Permet de redimensionner verticalement */
   margin-bottom: 10px;
 }
 
 /* ================== BUTTONS ================== */
-.btn-aide, .btn-abandonner, .btn-submit-com, .pdf-btn {
+.btn-aide,
+.btn-abandonner,
+.btn-submit-com,
+.pdf-btn {
   background-color: #997765;
   color: #fff;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
@@ -291,9 +315,18 @@ span {
   font-weight: bold;
 }
 
-.btn-abandonner, .btn-submit-com, .pdf-btn { background-color: #000; }
+.btn-abandonner,
+.btn-submit-com,
+.pdf-btn {
+  background-color: #000;
+}
 
-.btn-aide:hover, .btn-abandonner:hover, .btn-suivant:hover, .btn-retour:hover, .btn-submit-com:hover, .pdf-btn:hover {
+.btn-aide:hover,
+.btn-abandonner:hover,
+.btn-suivant:hover,
+.btn-retour:hover,
+.btn-submit-com:hover,
+.pdf-btn:hover {
   transform: scale(1.1);
   transition: transform .2s;
 }

@@ -33,3 +33,5 @@ if ($result) {
         'message' => 'Commande introuvable.'
     ]);
 }
+
+?>

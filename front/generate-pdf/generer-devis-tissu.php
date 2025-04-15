@@ -33,7 +33,8 @@ $details = $query_details->fetchAll(PDO::FETCH_ASSOC);
 $tablesNoPrix = ['structure', 'type_banquette'];
 
 // Fonction pour récupérer les données des tables sans prix
-function fetchNoPrixData($pdo, $table) {
+function fetchNoPrixData($pdo, $table)
+{
     $stmt = $pdo->prepare("SELECT id, nom FROM $table");
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -54,7 +55,8 @@ foreach ($tablesNoPrix as $tableNoPrix) {
 $tables = ['mousse', 'accoudoir_tissu', 'dossier_tissu', 'couleur_tissu', 'motif_tissu', 'modele'];
 
 // Fonction pour récupérer les données des tables avec prix
-function fetchData($pdo, $table) {
+function fetchData($pdo, $table)
+{
     $stmt = $pdo->prepare("SELECT id, nom, prix FROM $table");
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -143,13 +145,13 @@ $pdf->Cell($colWidth, $lineHeight, $entreprise['telephone'], 0, 1, 'R');
 $pdf->Ln(10);
 
 $pdf->SetFont('Arial', 'B', 13);
-$pdf->Cell(65, 10, mb_convert_encoding ("NUMÉRO DE COMMANDE :", "ISO-8859-1", "UTF-8"), 0, 0);
-$pdf->Cell(110, 10, $idCommande, 0, 1);       
+$pdf->Cell(65, 10, mb_convert_encoding("NUMÉRO DE COMMANDE :", "ISO-8859-1", "UTF-8"), 0, 0);
+$pdf->Cell(110, 10, $idCommande, 0, 1);
 
 $pdf->SetFont('Arial', '', 10);
 $pdf->Cell(12, 10, "Date :", 0, 0);
 $date = htmlspecialchars($commande['date'] ?? '-');
-$pdf->Cell(40, 10, $date, 0, 1);  
+$pdf->Cell(40, 10, $date, 0, 1);
 $pdf->Ln();
 
 // Table des produits commandés
@@ -163,7 +165,7 @@ $pdf->Ln();
 $pdf->SetFont('Arial', '', 12);
 // Tableau de correspondance pour les colonnes spéciales
 $tableColumn = [
-    'type_banquette' => 'id_banquette', 
+    'type_banquette' => 'id_banquette',
 ];
 
 // Parcours des détails
@@ -184,68 +186,67 @@ foreach ($details as $detail) {
                 $quantite_accoudoir = htmlspecialchars($commande['id_nb_accoudoir'] ?? '-');
                 $pdf->Cell(20, 10, $quantite_accoudoir, 1); // Quantité pour accoudoir_tissu
             } else {
-                $pdf->Cell(20, 10, "-", 1); 
-            }            
+                $pdf->Cell(20, 10, "-", 1);
+            }
             $pdf->Cell(50, 10, $prix, 1);
             $pdf->Ln();
         }
     }
 
     // Vérification si les données existent avant d'afficher
-if (!empty($commande)) {
-    $longueurA = htmlspecialchars($commande['longueurA'] ?? '-');
-    $longueurB = isset($commande['longueurB']) && !empty(trim($commande['longueurB'])) ? htmlspecialchars($commande['longueurB']) : null;
-    $longueurC = isset($commande['longueurC']) && !empty(trim($commande['longueurC'])) ? htmlspecialchars($commande['longueurC']) : null;
-    $commentaire = isset($commande['commentaire']) && !empty(trim($commande['commentaire'])) ? htmlspecialchars($commande['commentaire']) : null;
-    $pdf->Ln(10); 
-    $pdf->Cell(60, 10, "Longueur A (en cm)", 1, 0);
-    $pdf->Cell(30, 10, $longueurA, 1, 0);  
-    $pdf->Ln();
-
-    if ($longueurB !== null) {
-        $pdf->Cell(60, 10, "Longueur B (en cm)", 1);
-        $pdf->Cell(30, 10, $longueurB, 1);
+    if (!empty($commande)) {
+        $longueurA = htmlspecialchars($commande['longueurA'] ?? '-');
+        $longueurB = isset($commande['longueurB']) && !empty(trim($commande['longueurB'])) ? htmlspecialchars($commande['longueurB']) : null;
+        $longueurC = isset($commande['longueurC']) && !empty(trim($commande['longueurC'])) ? htmlspecialchars($commande['longueurC']) : null;
+        $commentaire = isset($commande['commentaire']) && !empty(trim($commande['commentaire'])) ? htmlspecialchars($commande['commentaire']) : null;
+        $pdf->Ln(10);
+        $pdf->Cell(60, 10, "Longueur A (en cm)", 1, 0);
+        $pdf->Cell(30, 10, $longueurA, 1, 0);
         $pdf->Ln();
+
+        if ($longueurB !== null) {
+            $pdf->Cell(60, 10, "Longueur B (en cm)", 1);
+            $pdf->Cell(30, 10, $longueurB, 1);
+            $pdf->Ln();
         }
-    if ($longueurC !== null) {
-        $pdf->Cell(60, 10, "Longueur C (en cm)", 1);
-        $pdf->Cell(30, 10, $longueurC, 1);
+        if ($longueurC !== null) {
+            $pdf->Cell(60, 10, "Longueur C (en cm)", 1);
+            $pdf->Cell(30, 10, $longueurC, 1);
+            $pdf->Ln();
+        }
+        if ($commentaire !== null) {
+            $pdf->SetFont('Arial', '', 10);
+            $pdf->Ln(10);
+            $pdf->Cell(40, 10, "Commentaire du client :");
+            $pdf->Cell(30, 10, $commentaire);
+        }
+    } else {
+        $pdf->Ln(10);
+        $pdf->Cell(90, 10, mb_convert_encoding("Données de commande introuvables", "ISO-8859-1", "UTF-8"), 1);
         $pdf->Ln();
-        }   
-    if ($commentaire !== null) {
-        $pdf->SetFont('Arial', '', 10);
-        $pdf->Ln(10); 
-        $pdf->Cell(40, 10, "Commentaire du client :");
-        $pdf->Cell(30, 10, $commentaire);
     }
-} else {
-    $pdf->Ln(10);
-    $pdf->Cell(90, 10, mb_convert_encoding("Données de commande introuvables", "ISO-8859-1", "UTF-8"), 1);
-    $pdf->Ln();
-}
-
 }
 
 if ($detail && isset($detail['prix'])) {
     $prixTotal = number_format($detail['prix'], 2, ',', ' ') . " EUR";
 
-    $pdf->Ln(10); 
+    $pdf->Ln(10);
     $pdf->SetFont('Arial', 'B', 12);
-    $pdf->SetX($pdf->GetPageWidth() - 80); 
+    $pdf->SetX($pdf->GetPageWidth() - 80);
     $pdf->Cell(30, 10, "Prix Total :", 1, 0);
     $pdf->SetFont('Arial', '', 12);
-    $pdf->Cell(40, 10, $prixTotal, 1, 1, 'R');   
+    $pdf->Cell(40, 10, $prixTotal, 1, 1, 'R');
 } else {
     $pdf->Ln(10);
-    $pdf->SetX($pdf->GetPageWidth() - 100); 
-    $pdf->Cell(90, 10, mb_convert_encoding("Aucun prix total trouvé", "ISO-8859-1", "UTF-8"), 1, 1, 'R');        
+    $pdf->SetX($pdf->GetPageWidth() - 100);
+    $pdf->Cell(90, 10, mb_convert_encoding("Aucun prix total trouvé", "ISO-8859-1", "UTF-8"), 1, 1, 'R');
 }
 
 $pdf->Ln(10);
 
 $imageName = $structure['img'] ?? null;
 $name = $structure['nom'] ?? null;
-$imagePath = $imageName ? "../../admin/uploads/structure/" . $imageName : null; 
+$imagePath = $imageName ? "../../admin/uploads/structure/" . $imageName : null;
 
 
 
@@ -253,17 +254,16 @@ if ($imagePath && file_exists($imagePath)) {
     $pdf->AddPage();
     $pdf->Ln(10);
     $pdf->SetFont('Arial', 'B', 13);
-    $pdf->Cell(65, 10, mb_convert_encoding ("NUMÉRO DE COMMANDE :", "ISO-8859-1", "UTF-8"), 0, 0);
+    $pdf->Cell(65, 10, mb_convert_encoding("NUMÉRO DE COMMANDE :", "ISO-8859-1", "UTF-8"), 0, 0);
     $pdf->Cell(110, 10, $idCommande, 0, 1);
     $pdf->Ln(10);
     $pdf->SetFont('Arial', 'B', 12);
-    $pdf->Cell(0, 10, mb_convert_encoding("Structure associée à la commande : " .$name ."", "ISO-8859-1", "UTF-8"), 0, 1, 'C');
+    $pdf->Cell(0, 10, mb_convert_encoding("Structure associée à la commande : " . $name . "", "ISO-8859-1", "UTF-8"), 0, 1, 'C');
     $pdf->Image($imagePath, 10, 70, 190);
 } else {
     $pdf->AddPage();
     $pdf->SetFont('Arial', 'B', 12);
-    $pdf->Cell(80, 10, mb_convert_encoding("Aucune image de strucutre trouvé", "ISO-8859-1", "UTF-8"), 1, 1);        
+    $pdf->Cell(80, 10, mb_convert_encoding("Aucune image de strucutre trouvé", "ISO-8859-1", "UTF-8"), 1, 1);
     $pdf->Ln(10);
 }
 $pdf->Output();
-?>
