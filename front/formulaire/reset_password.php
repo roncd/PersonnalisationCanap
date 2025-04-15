@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -15,103 +16,102 @@
             margin: 10px 0;
             border-radius: 5px;
         }
+
         .success {
             background-color: #d4edda;
             color: #155724;
         }
+
         .error {
             background-color: #f8d7da;
             color: #721c24;
         }
 
         body {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    margin: 0;
-    background-color: #f5f5f5;
-    font-family: Arial, sans-serif;
-}
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f5f5f5;
+            font-family: Arial, sans-serif;
+        }
 
-.connexion {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-}
+        .connexion {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+        }
 
-.container {
-    background: white;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    text-align: center;
-    width: 550px;
-    display: flex;
-    flex-direction: column;
-    gap: 15px; /* Espacement entre les éléments */
-}
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 550px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            /* Espacement entre les éléments */
+        }
 
-h2 {
-    font-family: 'Baloo 2', sans-serif;
-    margin-bottom: 20px;
-}
+        h2 {
+            font-family: 'Baloo 2', sans-serif;
+            margin-bottom: 20px;
+        }
 
-.form {
-    width: 100%;
-}
+        .form {
+            width: 100%;
+        }
 
-.form-group {
-    display: flex;
-    flex-direction: column;
-    text-align: left;
-    margin-bottom: 15px;
-}
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            text-align: left;
+            margin-bottom: 15px;
+        }
 
-.input-field {
-    width: 95%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-}
+        .input-field {
+            width: 95%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
 
-.buttons {
-    margin-top: 10px;
-}
+        .buttons {
+            margin-top: 10px;
+        }
 
-.btn-connexion {
-    background-color:rgb(0, 0, 0);
-    color: white;
-    padding: 10px;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    width: 100%;
-    font-size: 16px;
-}
+        .btn-connexion {
+            background-color: rgb(0, 0, 0);
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 16px;
+        }
 
-.btn-connexion:hover {
+        .footer {
+            margin-top: 15px;
+            font-size: 14px;
+        }
 
-}
+        .link-connect {
+            color: #007bff;
+            text-decoration: none;
+            font-weight: bold;
+        }
 
-.footer {
-    margin-top: 15px;
-    font-size: 14px;
-}
-
-.link-connect {
-    color: #007bff;
-    text-decoration: none;
-    font-weight: bold;
-}
-
-.link-connect:hover {
-    text-decoration: underline;
-}
-
+        .link-connect:hover {
+            text-decoration: underline;
+        }
     </style>
 </head>
+
 <body>
     <main class="connexion">
         <div class="container">
@@ -161,4 +161,5 @@ h2 {
         </div>
     </main>
 </body>
+
 </html>

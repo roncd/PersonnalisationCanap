@@ -2,10 +2,10 @@
 require '../config.php';
 session_start();
 
-if (!isset($_SESSION['id'])){
+if (!isset($_SESSION['id'])) {
     header("Location: ../index.php");
     exit();
-    }
+}
 
 // Nom du fichier d'export
 $file_name = "backup_" . date("Y-m-d_H:i:s") . ".sql";
@@ -24,7 +24,7 @@ if (file_exists($file_name)) {
     header('Cache-Control: must-revalidate');
     header('Pragma: public');
     header('Content-Length: ' . filesize($file_name));
-    
+
     // Envoyer le fichier au navigateur
     readfile($file_name);
 
@@ -34,4 +34,3 @@ if (file_exists($file_name)) {
 } else {
     echo "Erreur lors de l'exportation de la base de données.";
 }
-?>

@@ -1,11 +1,11 @@
-<?php 
+<?php
 require '../config.php';
 session_start();
 
-if (!isset($_SESSION['id'])){
+if (!isset($_SESSION['id'])) {
     header("Location: ../index.php");
     exit();
-    }
+}
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nom = trim($_POST['name']);
     $img = $_FILES['img'];
@@ -50,6 +50,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 ?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -63,20 +64,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             margin: 10px 0;
             border-radius: 5px;
         }
+
         .success {
             background-color: #d4edda;
             color: #155724;
         }
+
         .error {
             background-color: #f8d7da;
             color: #721c24;
         }
     </style>
 </head>
+
 <body>
 
     <header>
-    <?php require '../squelette/header.php'; ?>
+        <?php require '../squelette/header.php'; ?>
     </header>
     <main>
         <div class="container">
@@ -92,25 +96,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
             ?>
             <div class="form">
-                <form class="formulaire-creation-compte" action="" method="POST" enctype="multipart/form-data" >
+                <form class="formulaire-creation-compte" action="" method="POST" enctype="multipart/form-data">
                     <div class="form-row">
-                    <div class="form-group">
-                        <label for="name">Nom</label>
-                        <input type="text" id="name" name="name" class="input-field" required>
-                    </div>
+                        <div class="form-group">
+                            <label for="name">Nom</label>
+                            <input type="text" id="name" name="name" class="input-field" required>
+                        </div>
                     </div>
                     <div class="form-row">
-                    <div class="form-group">
-                        <label for="img">Image</label>
-                        <input type="file" id="img" name="img" class="input-field" required accept="image/*">
+                        <div class="form-group">
+                            <label for="img">Image</label>
+                            <input type="file" id="img" name="img" class="input-field" required accept="image/*">
+                        </div>
                     </div>
-                    </div>
-                
+
                     <div class="footer">
-                    <div class="buttons">
-                    <button type="button" class="btn-retour" onclick="history.go(-1)">Retour</button>
-                    <input type="submit" class="btn-valider" value="Ajouter">
-                    </div>
+                        <div class="buttons">
+                            <button type="button" class="btn-retour" onclick="history.go(-1)">Retour</button>
+                            <input type="submit" class="btn-valider" value="Ajouter">
+                        </div>
                     </div>
                 </form>
             </div>
@@ -120,4 +124,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <?php require '../squelette/footer.php'; ?>
     </footer>
 </body>
+
 </html>

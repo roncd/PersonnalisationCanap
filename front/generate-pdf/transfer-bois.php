@@ -1,5 +1,5 @@
 <?php
-require '../../admin/config.php'; 
+require '../../admin/config.php';
 
 header('Content-Type: application/json');
 
@@ -54,10 +54,10 @@ try {
 
     // Valider la transaction
     $pdo->commit();
-    echo json_encode(["success" => true, "message" => "Commande transférée avec succès.","new_id" => $lastCommandeDetailId]);
-
+    echo json_encode(["success" => true, "message" => "Commande transférée avec succès.", "new_id" => $lastCommandeDetailId]);
 } catch (Exception $e) {
     // Annuler la transaction en cas d'erreur
     $pdo->rollBack();
-    echo json_encode(["success" => false, "message" => "Erreur : " . $e->getMessage()]);}
+    echo json_encode(["success" => false, "message" => "Erreur : " . $e->getMessage()]);
+}
 ?>

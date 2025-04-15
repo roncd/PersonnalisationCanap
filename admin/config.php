@@ -1,9 +1,9 @@
 <?php
 
 $host = 'mysql-decodumonde.alwaysdata.net';
-$dbname = 'decodumonde_personnalisation'; 
-$username = '390609'; 
-$password = '2024DDM!'; 
+$dbname = 'decodumonde_personnalisation';
+$username = '390609';
+$password = '2024DDM!';
 
 try {
     // Connexion à la base de données avec PDO

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,10 +15,12 @@
             margin: 10px 0;
             border-radius: 5px;
         }
+
         .success {
             background-color: #d4edda;
             color: #155724;
         }
+
         .error {
             background-color: #f8d7da;
             color: #721c24;
@@ -106,42 +109,43 @@
         }
     </style>
 </head>
+
 <body>
     <main class="connexion">
         <div class="container">
             <h2>Entrez un nouveau mot de passe</h2>
             <?php
-require '../../admin/config.php';
-if (!isset($_GET['token'])) {
-    die("<div class='message error'>Lien invalide.</div>");
-}
+            require '../../admin/config.php';
+            if (!isset($_GET['token'])) {
+                die("<div class='message error'>Lien invalide.</div>");
+            }
 
-$token = $_GET['token'];
-$stmt = $pdo->prepare("SELECT * FROM client WHERE reset_token = :token AND reset_expires > NOW()");
-$stmt->execute(['token' => $token]);
-$user = $stmt->fetch(PDO::FETCH_ASSOC);
+            $token = $_GET['token'];
+            $stmt = $pdo->prepare("SELECT * FROM client WHERE reset_token = :token AND reset_expires > NOW()");
+            $stmt->execute(['token' => $token]);
+            $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-if (!$user) {
-    die("<div class='message error'>Lien invalide ou expiré.</div>");
-}
+            if (!$user) {
+                die("<div class='message error'>Lien invalide ou expiré.</div>");
+            }
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $new_password = $_POST['new_password'];
+            if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+                $new_password = $_POST['new_password'];
 
-    // Vérifier que le mot de passe est différent de l'ancien
-    if (password_verify($new_password, $user['mdp'])) {
-        echo "<div class='message error'>Le nouveau mot de passe doit être différent de l'ancien.</div>";
-    } else {
-        // Hasher le nouveau mot de passe
-        $hashed_password = password_hash($new_password, PASSWORD_DEFAULT);
-        $stmt = $pdo->prepare("UPDATE client SET mdp = :mdp, reset_token = NULL, reset_expires = NULL WHERE id = :id");
-        $stmt->execute(['mdp' => $hashed_password, 'id' => $user['id']]);
-        echo "<div class='message success'>Votre mot de passe a été mis à jour.</div>";
-        header("refresh:3;url=Connexion.php");
-        exit;
-    }
-}
-?>
+                // Vérifier que le mot de passe est différent de l'ancien
+                if (password_verify($new_password, $user['mdp'])) {
+                    echo "<div class='message error'>Le nouveau mot de passe doit être différent de l'ancien.</div>";
+                } else {
+                    // Hasher le nouveau mot de passe
+                    $hashed_password = password_hash($new_password, PASSWORD_DEFAULT);
+                    $stmt = $pdo->prepare("UPDATE client SET mdp = :mdp, reset_token = NULL, reset_expires = NULL WHERE id = :id");
+                    $stmt->execute(['mdp' => $hashed_password, 'id' => $user['id']]);
+                    echo "<div class='message success'>Votre mot de passe a été mis à jour.</div>";
+                    header("refresh:3;url=Connexion.php");
+                    exit;
+                }
+            }
+            ?>
 
             <form method="POST" class="form">
                 <div class="form-group">
@@ -158,4 +162,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
     </main>
 </body>
+
 </html>

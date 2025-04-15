@@ -17,15 +17,16 @@ h2 {
 }
 
 a {
-    text-decoration: none; 
+    text-decoration: none;
 }
 
 /* Responsive table container */
 .tab-container {
-    overflow-x: auto; /* Active le défilement horizontal si nécessaire */
+    overflow-x: auto;
+    /* Active le défilement horizontal si nécessaire */
     margin: 20px auto;
     border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 
@@ -33,7 +34,7 @@ a {
     border-collapse: collapse;
     font-size: 0.9em;
     min-width: 600px;
-    width: 100%; 
+    width: 100%;
 }
 
 .styled-table thead tr {
@@ -42,10 +43,12 @@ a {
     text-align: left;
 }
 
-.styled-table th, .styled-table td {
+.styled-table th,
+.styled-table td {
     padding: 12px 15px;
     text-align: center;
-    border: none; /* Désactive toutes les bordures */
+    border: none;
+    /* Désactive toutes les bordures */
 }
 
 .styled-table tbody tr {
@@ -62,20 +65,24 @@ a {
     justify-content: center;
     align-items: center;
     gap: 10px;
-    padding: 12px; /* Ajustez au besoin */
-    border: none; /* Supprime toute bordure */
-    background-color: inherit; /* Garde la couleur de fond */
+    padding: 12px;
+    /* Ajustez au besoin */
+    border: none;
+    /* Supprime toute bordure */
+    background-color: inherit;
+    /* Garde la couleur de fond */
 }
 
 /* Styles pour les icônes */
-.actions a, .actions span {
+.actions a,
+.actions span {
     background-color: black;
     color: white;
     font-size: 14px;
     font-weight: bold;
     padding: 10px 10px;
     text-align: center;
-    vertical-align:bottom;
+    vertical-align: bottom;
     border: none;
     border-radius: 10px;
     cursor: pointer;
@@ -84,19 +91,25 @@ a {
 }
 
 .actions .vert:hover {
-    background-color: #28a745; /* Vert pour Modifier */
+    background-color: #28a745;
+    /* Vert pour Modifier */
 }
 
 .actions .rouge:hover {
-    background-color: #dc3545; /* Rouge pour Supprimer */
+    background-color: #dc3545;
+    /* Rouge pour Supprimer */
 }
 
- 
- 
+
+
 /* Media query pour les très petits écrans */
 @media screen and (max-width: 600px) {
-    .styled-table th, .styled-table td {
-        font-size: 0.8em; /* Réduit la taille de la police */
-        padding: 8px; /* Réduit les marges */
+
+    .styled-table th,
+    .styled-table td {
+        font-size: 0.8em;
+        /* Réduit la taille de la police */
+        padding: 8px;
+        /* Réduit les marges */
     }
 }

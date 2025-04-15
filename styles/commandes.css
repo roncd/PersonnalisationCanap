@@ -1,107 +1,110 @@
 body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-  }
-  
-  .container {
-    width: 90%;
-    margin: 50px;
-  }
-  
-  h2 {
-    font-size: 37px;
-    font-family: 'Baloo 2', sans-serif;
-    margin-bottom: 20px;
-  }
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+}
 
-  .tableau {
-    width: 90%;
-    max-width: 800px;
-    margin: 20px auto;
-  }
-  
-  .tabs {
-    display: flex;
-    justify-content: space-between;
-    margin: 20px auto;
-  }
-  
-  .tab {
-    padding: 10px 20px;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    font-weight: bold;
-    background-color: #f4f1f1;
+.container {
+  width: 90%;
+  margin: 50px;
+}
 
-  }
-  
-  .tab.active {
-    background-color: #000000;
-    color: #fff;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-  }
-  
-  .tab:not(:last-child) {
-    margin-right: 5px;
-  }
-  
-  .tab-content {
-    display: none;
-  }
-  
-  .tab-content.active {
-    display: block;
-  }
-  
-  .commande {
-    display: flex;
-    justify-content: space-between;
-    align-items: end;
-    background-color: rgba(227, 209, 200, 0.85);
-    padding: 15px;
-    margin-bottom: 10px;
-    border-radius: 5px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  }
-  
-  .info p {
-    margin: 5px 0;
-  }
-  
-  .actions .img {
-    font-size: 18px;
-    border: none;
-    background: none;
-    cursor: pointer;
-    width: 20px;
-  }
+h2 {
+  font-size: 37px;
+  font-family: 'Baloo 2', sans-serif;
+  margin-bottom: 20px;
+}
 
-  .actions .img-admin {
-    font-size: 18px;
-    border: none;
-    background: none;
-    cursor: pointer;
-    width: 18px;
-  }
-  
-  /* Styles pour les icônes */
+.tableau {
+  width: 90%;
+  max-width: 800px;
+  margin: 20px auto;
+}
+
+.tabs {
+  display: flex;
+  justify-content: space-between;
+  margin: 20px auto;
+}
+
+.tab {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: bold;
+  background-color: #f4f1f1;
+
+}
+
+.tab.active {
+  background-color: #000000;
+  color: #fff;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.tab:not(:last-child) {
+  margin-right: 5px;
+}
+
+.tab-content {
+  display: none;
+}
+
+.tab-content.active {
+  display: block;
+}
+
+.commande {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  background-color: rgba(227, 209, 200, 0.85);
+  padding: 15px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.info p {
+  margin: 5px 0;
+}
+
+.actions .img {
+  font-size: 18px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  width: 20px;
+}
+
+.actions .img-admin {
+  font-size: 18px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  width: 18px;
+}
+
+/* Styles pour les icônes */
 .actions {
   font-size: 1.9rem;
   margin-right: -3px;
   text-decoration: none;
-  color: #000000; /* Couleur des icônes */
+  color: #000000;
+  /* Couleur des icônes */
   transition: color 0.3s ease;
   cursor: pointer;
 }
 
 .actions .vert:hover {
-  color: #25a042; /* Vert pour Modifier */
+  color: #25a042;
+  /* Vert pour Modifier */
 }
 
 .actions .rouge:hover {
-  color: #dc3545; /* Rouge pour Supprimer */
+  color: #dc3545;
+  /* Rouge pour Supprimer */
 }
 
 .visuallyhidden {
@@ -157,7 +160,7 @@ body {
 }
 
 .pagination a::after {
- content: none;
+  content: none;
 }
 
 .pagination a[aria-current="page"] {

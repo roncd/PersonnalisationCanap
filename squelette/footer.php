@@ -7,14 +7,14 @@
     <div class="ft-grid">
       <!-- Image du logo -->
       <img src="../../medias/logo_trasparent-decodumonde-2.png" alt="logo" class="ft-logo">
-      
+
       <!-- Section adresse et contact -->
       <div class="ft-contact">
         <p class="ft-text">Adresse : 76 Av. Lenine, 93380 Pierrefitte-Sur-Seine</p>
         <p class="ft-text">E-mail : <span class="ft-email">decorient@gmail.com</span></p>
         <p class="ft-text">Téléphone : 01 48 22 98 05</p>
       </div>
-      
+
       <!-- Navigation -->
       <nav class="ft-nav">
         <ol>

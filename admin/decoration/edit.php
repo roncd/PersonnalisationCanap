@@ -1,11 +1,11 @@
-<?php 
+<?php
 require '../config.php';
 session_start();
 
-if (!isset($_SESSION['id'])){
+if (!isset($_SESSION['id'])) {
     header("Location: ../index.php");
     exit();
-    }
+}
 
 $id = $_GET['id'] ?? null;
 
@@ -64,12 +64,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['message_type'] = 'success';
             header("Location: index.php");
             exit();
-        } 
+        }
     }
 }
 ?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -83,20 +84,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             margin: 10px 0;
             border-radius: 5px;
         }
+
         .success {
             background-color: #d4edda;
             color: #155724;
         }
+
         .error {
             background-color: #f8d7da;
             color: #721c24;
         }
     </style>
 </head>
+
 <body>
 
     <header>
-    <?php require '../squelette/header.php'; ?>
+        <?php require '../squelette/header.php'; ?>
     </header>
     <main>
         <div class="container">
@@ -111,7 +115,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
             ?>
             <div class="form">
-            <form action="edit.php?id=<?php echo $couleurbois['id']; ?>" method="POST" enctype="multipart/form-data" class="formulaire-creation-compte">
+                <form action="edit.php?id=<?php echo $couleurbois['id']; ?>" method="POST" enctype="multipart/form-data" class="formulaire-creation-compte">
                     <div class="form-row">
                         <div class="form-group">
                             <label for="name">Nom</label>
@@ -119,10 +123,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         </div>
                     </div>
                     <div class="form-row">
-                    <div class="form-group">
-                        <label for="price">Prix (en €)</label>
-                        <input type="number" id="price" name="price" class="input-field" value="<?php echo htmlspecialchars($decoration['prix']); ?>" required>
-                    </div>
+                        <div class="form-group">
+                            <label for="price">Prix (en €)</label>
+                            <input type="number" id="price" name="price" class="input-field" value="<?php echo htmlspecialchars($decoration['prix']); ?>" required>
+                        </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group">
@@ -132,11 +136,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </div>
                     <div class="footer">
                         <div class="buttons">
-                        <button type="button" class="btn-retour" onclick="history.go(-1)">Retour</button>
+                            <button type="button" class="btn-retour" onclick="history.go(-1)">Retour</button>
                             <input type="submit" class="btn-valider" value="Mettre à jour">
                         </div>
                     </div>
-            </form>
+                </form>
             </div>
         </div>
     </main>
@@ -144,4 +148,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <?php require '../squelette/footer.php'; ?>
     </footer>
 </body>
+
 </html>

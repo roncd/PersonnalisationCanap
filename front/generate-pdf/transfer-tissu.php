@@ -28,13 +28,14 @@ try {
     }
 
     $lastCommandeDetailId = $pdo->lastInsertId();
-    
-   // Valider la transaction
-   $pdo->commit();
-   echo json_encode(["success" => true, "message" => "Commande transférée avec succès.","new_id" => $lastCommandeDetailId]);
 
+    // Valider la transaction
+    $pdo->commit();
+    echo json_encode(["success" => true, "message" => "Commande transférée avec succès.", "new_id" => $lastCommandeDetailId]);
 } catch (Exception $e) {
-   // Annuler la transaction en cas d'erreur
-   $pdo->rollBack();
-   echo json_encode(["success" => false, "message" => "Erreur : " . $e->getMessage()]);}
+    // Annuler la transaction en cas d'erreur
+    $pdo->rollBack();
+    echo json_encode(["success" => false, "message" => "Erreur : " . $e->getMessage()]);
+}
+
 ?>

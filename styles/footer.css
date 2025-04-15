@@ -1,88 +1,99 @@
 /* Footer styles */
 .ft {
-    background-color: #E3D1C8; /* Beige */
-    padding: 16px 0;
-    margin-top: 100px;
-  }
-  
-  .ft-container {
-    display: flex;
-    justify-content: center;
-  }
-  
-  .ft-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    align-items: center;
-  }
-  
-  /* Logo */
-  .ft-logo {
-    width: 250px;
-    height: auto;
-    margin-right: 40px;
-  }
-  
-  /* Contact section */
-  .ft-contact {
-    font-family: "Be Vietnam Pro", sans-serif; /* Assurez-vous d'importer la police */
-    font-weight: bold;
-    font-size: 0.875rem; /* Equivalent à text-sm */
-    margin: 0 auto;
-  }
-  
-  .ft-text {
-    margin: 24px 0; /* Equivalent à my-6 */
-  }
-  
-  .ft-email {
-    text-decoration: underline;
-  }
-  
-  /* Navigation */
-  .ft-nav {
-    font-family: "Be Vietnam Pro", sans-serif; /* Assurez-vous d'importer la police */
-    font-weight: bold;
-    font-size: 0.875rem; /* Equivalent à text-sm */
-    margin: 0 auto;
-  }
-  
-  .ft-nav ol{
-    list-style-type: none;
-  }
-  .ft-nav-item {
-    margin: 24px 0; /* Equivalent à my-6 */
-  }
+  background-color: #E3D1C8;
+  /* Beige */
+  padding: 16px 0;
+  margin-top: 100px;
+}
 
- 
-  
-  .ft-nav-item a {
-    color: #000000;
-    text-decoration: none;
-    font-family: 'Be Vietnam Pro', sans-serif;
-    font-weight: 700;
-    font-size: 14px;
-    position: relative;
-  }
+.ft-container {
+  display: flex;
+  justify-content: center;
+}
 
-  .ft-nav-item a::after {
-    content: '';
-    position: absolute;
-    left: 0;
-    bottom: -2px; /* Positionne le soulignement juste en dessous du texte */
-    width: 0;
-    height: 1px;
-    background-color: #000000;
-    transition: width 0.3s ease;
-  }
+.ft-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  align-items: center;
+}
 
-  .ft-nav-item a:hover::after {
-    width: 100%; /* Le soulignement prend toute la largeur */
-  }
-  /* Mentions légales */
-  .ft-legal {
-    text-align: center;
-    margin-top: 16px;
-    font-size: 0.75rem; /* Equivalent à text-xs */
-  }
-  
+/* Logo */
+.ft-logo {
+  width: 250px;
+  height: auto;
+  margin-right: 40px;
+}
+
+/* Contact section */
+.ft-contact {
+  font-family: "Be Vietnam Pro", sans-serif;
+  /* Assurez-vous d'importer la police */
+  font-weight: bold;
+  font-size: 0.875rem;
+  /* Equivalent à text-sm */
+  margin: 0 auto;
+}
+
+.ft-text {
+  margin: 24px 0;
+  /* Equivalent à my-6 */
+}
+
+.ft-email {
+  text-decoration: underline;
+}
+
+/* Navigation */
+.ft-nav {
+  font-family: "Be Vietnam Pro", sans-serif;
+  /* Assurez-vous d'importer la police */
+  font-weight: bold;
+  font-size: 0.875rem;
+  /* Equivalent à text-sm */
+  margin: 0 auto;
+}
+
+.ft-nav ol {
+  list-style-type: none;
+}
+
+.ft-nav-item {
+  margin: 24px 0;
+  /* Equivalent à my-6 */
+}
+
+
+
+.ft-nav-item a {
+  color: #000000;
+  text-decoration: none;
+  font-family: 'Be Vietnam Pro', sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  position: relative;
+}
+
+.ft-nav-item a::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  /* Positionne le soulignement juste en dessous du texte */
+  width: 0;
+  height: 1px;
+  background-color: #000000;
+  transition: width 0.3s ease;
+}
+
+.ft-nav-item a:hover::after {
+  width: 100%;
+  /* Le soulignement prend toute la largeur */
+}
+
+/* Mentions légales */
+.ft-legal {
+  text-align: center;
+  margin-top: 16px;
+  font-size: 0.75rem;
+  /* Equivalent à text-xs */
+}

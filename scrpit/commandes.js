@@ -1,23 +1,23 @@
 document.addEventListener('DOMContentLoaded', () => {
-  const tabs = document.querySelectorAll('.tab');
-  const tabContents = document.querySelectorAll('.tab-content');
+    const tabs = document.querySelectorAll('.tab');
+    const tabContents = document.querySelectorAll('.tab-content');
 
-  tabs.forEach(tab => {
-    tab.addEventListener('click', () => {
-      // Retirer la classe active des onglets et du contenu
-      tabs.forEach(t => t.classList.remove('active'));
-      tabContents.forEach(content => content.classList.remove('active'));
+    tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            // Retirer la classe active des onglets et du contenu
+            tabs.forEach(t => t.classList.remove('active'));
+            tabContents.forEach(content => content.classList.remove('active'));
 
-      // Ajouter la classe active au clic
-      tab.classList.add('active');
-      document.getElementById(tab.dataset.tab).classList.add('active');
+            // Ajouter la classe active au clic
+            tab.classList.add('active');
+            document.getElementById(tab.dataset.tab).classList.add('active');
+        });
     });
-  });
 });
 
 
-  //Back-office
-  window.updateStatus = function(button) {
+//Back-office
+window.updateStatus = function (button) {
     const commandDiv = button.closest('.commande');
     const commandId = commandDiv.getAttribute('data-id');
     const currentStatut = commandDiv.getAttribute('data-statut'); // Récupérer le statut actuel
@@ -41,20 +41,20 @@ document.addEventListener('DOMContentLoaded', () => {
         },
         body: JSON.stringify({ id: commandId, statut: nextStatut }),
     })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            console.log('Statut mis à jour avec succès :', nextStatut);
-            location.reload(); // Recharger la page pour afficher les changements
-        } else {
-            console.error('Erreur côté serveur :', data.error);
-        }
-    })
-    .catch(error => console.error('Erreur :', error));
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                console.log('Statut mis à jour avec succès :', nextStatut);
+                location.reload(); // Recharger la page pour afficher les changements
+            } else {
+                console.error('Erreur côté serveur :', data.error);
+            }
+        })
+        .catch(error => console.error('Erreur :', error));
 };
 
 
-window.removeCommand = function(button) {
+window.removeCommand = function (button) {
     const commandDiv = button.closest('.commande'); // Récupère la commande liée
     const commandId = commandDiv.getAttribute('data-id'); // Récupère l'ID de la commande
     const popup = document.getElementById('supprimer-popup'); // Récupère le popup
@@ -69,29 +69,29 @@ window.removeCommand = function(button) {
         console.log('Suppression confirmée de la commande.');
         // Envoyer une requête au serveur pour supprimer la commande
         fetch('delete_commande.php', {
-          method: 'POST',
-          headers: {
-              'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ id: commandId }),
-      })
-      .then(response => {
-          return response.text(); // Utilisez text() pour voir le contenu brut
-      })
-      .then(data => {
-          console.log('Données reçues :', data); // Vérifiez si c'est du JSON valide
-          const parsedData = JSON.parse(data); // Puis analysez le JSON
-          if (parsedData.success) {
-              console.log('Commande supprimée avec succès.');
-              commandDiv.remove();
-          } else {
-              console.error('Erreur :', parsedData.error);
-          }
-      })
-      .catch(error => {
-          console.error('Erreur lors de la suppression :', error);
-      });
-      
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ id: commandId }),
+        })
+            .then(response => {
+                return response.text(); // Utilisez text() pour voir le contenu brut
+            })
+            .then(data => {
+                console.log('Données reçues :', data); // Vérifiez si c'est du JSON valide
+                const parsedData = JSON.parse(data); // Puis analysez le JSON
+                if (parsedData.success) {
+                    console.log('Commande supprimée avec succès.');
+                    commandDiv.remove();
+                } else {
+                    console.error('Erreur :', parsedData.error);
+                }
+            })
+            .catch(error => {
+                console.error('Erreur lors de la suppression :', error);
+            });
+
 
         popup.style.display = 'none'; // Ferme le popup
     };

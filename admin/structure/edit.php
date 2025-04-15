@@ -1,11 +1,11 @@
-<?php 
+<?php
 require '../config.php';
 session_start();
 
-if (!isset($_SESSION['id'])){
+if (!isset($_SESSION['id'])) {
     header("Location: ../index.php");
     exit();
-    }
+}
 
 $id = $_GET['id'] ?? null;
 
@@ -63,12 +63,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['message_type'] = 'success';
             header("Location: index.php");
             exit();
-        } 
+        }
     }
 }
 ?>
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -82,61 +83,65 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             margin: 10px 0;
             border-radius: 5px;
         }
+
         .success {
             background-color: #d4edda;
             color: #155724;
         }
+
         .error {
             background-color: #f8d7da;
             color: #721c24;
         }
     </style>
 </head>
+
 <body>
-<header>
-    <?php require '../squelette/header.php'; ?>
+    <header>
+        <?php require '../squelette/header.php'; ?>
     </header>
 
-<main>
-    <div class="container">
-        <h2>Modifier une structure</h2>
-        
-        <?php
-        if (isset($_SESSION['message'])) {
-            echo '<div class="message ' . htmlspecialchars($_SESSION['message_type']) . '">';
-            echo htmlspecialchars($_SESSION['message']);
-            echo '</div>';
-            unset($_SESSION['message']);
-            unset($_SESSION['message_type']);
-        }
-        ?>
+    <main>
+        <div class="container">
+            <h2>Modifier une structure</h2>
 
-        <div class="form">
-            <form action="edit.php?id=<?php echo $structure['id']; ?>" method="POST" enctype="multipart/form-data" class="formulaire-creation-compte">
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="name">Nom</label>
-                        <input type="text" id="name" name="name" class="input-field" value="<?php echo htmlspecialchars($structure['nom']); ?>" required>
+            <?php
+            if (isset($_SESSION['message'])) {
+                echo '<div class="message ' . htmlspecialchars($_SESSION['message_type']) . '">';
+                echo htmlspecialchars($_SESSION['message']);
+                echo '</div>';
+                unset($_SESSION['message']);
+                unset($_SESSION['message_type']);
+            }
+            ?>
+
+            <div class="form">
+                <form action="edit.php?id=<?php echo $structure['id']; ?>" method="POST" enctype="multipart/form-data" class="formulaire-creation-compte">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="name">Nom</label>
+                            <input type="text" id="name" name="name" class="input-field" value="<?php echo htmlspecialchars($structure['nom']); ?>" required>
+                        </div>
                     </div>
-                </div>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="img">Image (Laissez vide pour conserver l'image actuelle)</label>
-                        <input type="file" id="img" name="img" class="input-field" accept="image/*">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="img">Image (Laissez vide pour conserver l'image actuelle)</label>
+                            <input type="file" id="img" name="img" class="input-field" accept="image/*">
+                        </div>
                     </div>
-                </div>
-                <div class="footer">
-                    <div class="buttons">
-                    <button type="button" class="btn-retour" onclick="history.go(-1)">Retour</button>
-                        <input type="submit" class="btn-valider" value="Mettre à jour">
+                    <div class="footer">
+                        <div class="buttons">
+                            <button type="button" class="btn-retour" onclick="history.go(-1)">Retour</button>
+                            <input type="submit" class="btn-valider" value="Mettre à jour">
+                        </div>
                     </div>
-                </div>
-            </form>
+                </form>
+            </div>
         </div>
-    </div>
-</main>
-<footer>
+    </main>
+    <footer>
         <?php require '../squelette/footer.php'; ?>
-</footer>
+    </footer>
 </body>
+
 </html>

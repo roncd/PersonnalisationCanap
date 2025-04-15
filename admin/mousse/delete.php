@@ -1,11 +1,11 @@
-<?php 
+<?php
 require '../config.php';
 session_start();
 
-if (!isset($_SESSION['id'])){
+if (!isset($_SESSION['id'])) {
     header("Location: ../index.php");
     exit();
-    }
+}
 
 $id = $_GET['id'] ?? null;
 
@@ -35,4 +35,3 @@ try {
 
 header("Location: index.php");
 exit();
-?>
