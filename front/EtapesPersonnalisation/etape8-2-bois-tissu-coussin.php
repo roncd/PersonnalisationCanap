@@ -54,7 +54,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../../styles/processus.css">
   <link rel="stylesheet" href="../../styles/popup.css">
-
+  <script type="module" src="../../scrpit/popup.js"></script>
+  <script type="module" src="../../scrpit/button.js"></script>
   <title>Étape 8 - Choisi ton motif de coussin</title>
   <style>
     /* Transition pour les éléments de la page */
@@ -166,17 +167,71 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
   </div>
 
-  
-  <div id="selection-popup" class="popup transition">
+<!-- Pop-up de sélection d'option -->
+<div id="selection-popup" class="popup transition">
     <div class="popup-content">
       <h2>Veuillez choisir une option avant de continuer.</h2>
       <br>
       <button class="close-btn">OK</button>
-    </div>
+      </div>
   </div>
-  
+
+  <!-- GESTION DES SELECTIONS -->
   <script>
-  
+  document.addEventListener('DOMContentLoaded', () => {
+    const options = document.querySelectorAll('.color-options .option img');
+    const mainImage = document.querySelector('.main-display img');
+    const selectionPopup = document.getElementById('selection-popup');
+    const selectedCouleurBoisInput = document.getElementById('selected-motif_bois'); // Input caché
+
+    let selectedMotifBoisId = localStorage.getItem('selectedMotifBois') || ''; 
+    let selected = selectedMotifBoisId !== ''; 
+
+    // Restaurer la sélection si elle existe
+    options.forEach(img => {
+      if (img.getAttribute('data-bois-id') === selectedMotifBoisId) {
+        img.classList.add('selected');
+        mainImage.src = img.src;
+        selectedCouleurBoisInput.value = selectedMotifBoisId;
+      }
+    });
+
+    document.querySelectorAll('.transition').forEach(element => {
+      element.classList.add('show');
+    });
+
+    options.forEach(img => {
+      img.addEventListener('click', () => {
+        options.forEach(opt => opt.classList.remove('selected'));
+        img.classList.add('selected');
+        mainImage.src = img.src;
+        selectedMotifBoisId = img.getAttribute('data-bois-id');
+        selectedCouleurBoisInput.value = selectedMotifBoisId;
+        selected = true;
+        saveSelection();
+      });
+    });
+
+
+    document.querySelector('#selection-popup .close-btn').addEventListener('click', () => {
+      selectionPopup.style.display = 'none';
+    });
+
+    window.addEventListener('click', (event) => {
+      if (event.target === selectionPopup) {
+        selectionPopup.style.display = 'none';
+      }
+    });
+
+    function saveSelection() {
+      localStorage.setItem('selectedMotifBois', selectedMotifBoisId);
+    }
+  });
+</script>
+
+
+  <!-- VARIATION DES PRIX  -->
+  <script>
   document.addEventListener('DOMContentLoaded', () => {
     let totalPrice = 0; // Total global pour toutes les étapes
 
@@ -271,156 +326,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     updateTotal();
 });
   </script>
-
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        let totalPrice = 0; // Total global
-        const suivantButton = document.querySelector('.btn-suivant');
-        const userId = document.body.getAttribute('data-user-id');
-
-        if (!userId) {
-            console.error("ID utilisateur non trouvé.");
-            return;
-        }
-
-        const sessionKey = `allSelectedOptions_${userId}`;
-        let allSelectedOptions = JSON.parse(sessionStorage.getItem(sessionKey)) || [];
-
-        // Fonction pour mettre à jour le total global
-        function updateTotal() {
-            totalPrice = allSelectedOptions.reduce((sum, option) => {
-                const price = option.price || 0;
-                const quantity = option.quantity || 1;
-                return sum + (price * quantity);
-            }, 0);
-
-            const totalElement = document.querySelector(".footer p span");
-            if (totalElement) {
-                totalElement.textContent = `${totalPrice.toFixed(2)} €`;
-            }
-        }
-
-        // Mettre à jour le total au chargement de la page
-        updateTotal();
-
-        // Gestion du bouton suivant
-        suivantButton.addEventListener('click', (event) => {
-            event.preventDefault();
-
-            // Envoyer le total au backend via une requête POST
-            fetch('save_total_price.php', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    user_id: userId,
-                    total_price: totalPrice
-                }),
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    console.log("Prix total sauvegardé avec succès !");
-                    // Redirection vers la page suivante
-                    window.location.href = "recapitulatif-commande-bois.php";
-                } else {
-                    console.error("Erreur lors de la sauvegarde :", data.message);
-                }
-            })
-            .catch(error => {
-                console.error("Erreur de requête :", error);
-            });
-        });
-    });
-</script>
-
-  <script>
-  document.addEventListener('DOMContentLoaded', () => {
-    const options = document.querySelectorAll('.color-options .option img');
-    const mainImage = document.querySelector('.main-display img');
-    const suivantButton = document.querySelector('.btn-suivant');
-    const helpPopup = document.getElementById('help-popup');
-    const abandonnerPopup = document.getElementById('abandonner-popup');
-    const selectionPopup = document.getElementById('selection-popup');
-    const selectedCouleurBoisInput = document.getElementById('selected-motif_bois'); // Input caché
-
-    let selectedMotifBoisId = localStorage.getItem('selectedMotifBois') || ''; 
-    let selected = selectedMotifBoisId !== ''; 
-
-    // Restaurer la sélection si elle existe
-    options.forEach(img => {
-      if (img.getAttribute('data-bois-id') === selectedMotifBoisId) {
-        img.classList.add('selected');
-        mainImage.src = img.src;
-        selectedCouleurBoisInput.value = selectedMotifBoisId;
-      }
-    });
-
-    document.querySelectorAll('.transition').forEach(element => {
-      element.classList.add('show');
-    });
-
-    options.forEach(img => {
-      img.addEventListener('click', () => {
-        options.forEach(opt => opt.classList.remove('selected'));
-        img.classList.add('selected');
-        mainImage.src = img.src;
-        selectedMotifBoisId = img.getAttribute('data-bois-id');
-        selectedCouleurBoisInput.value = selectedMotifBoisId;
-        selected = true;
-        saveSelection();
-      });
-    });
-
-    suivantButton.addEventListener('click', (event) => {
-      if (!selected) {
-        event.preventDefault();
-        selectionPopup.style.display = 'flex';
-      }
-    });
-
-    document.querySelector('#selection-popup .close-btn').addEventListener('click', () => {
-      selectionPopup.style.display = 'none';
-    });
-
-    window.addEventListener('click', (event) => {
-      if (event.target === selectionPopup) {
-        selectionPopup.style.display = 'none';
-      }
-    });
-
-    document.querySelector('.btn-aide').addEventListener('click', () => {
-      helpPopup.style.display = 'flex';
-    });
-
-    document.querySelector('#help-popup .close-btn').addEventListener('click', () => {
-      helpPopup.style.display = 'none';
-    });
-
-    window.addEventListener('click', (event) => {
-      if (event.target === helpPopup) {
-        helpPopup.style.display = 'none';
-      }
-    });
-
-    document.querySelector('.btn-abandonner').addEventListener('click', () => {
-      abandonnerPopup.style.display = 'flex';
-    });
-
-    document.querySelector('#abandonner-popup .yes-btn').addEventListener('click', () => {
-      window.location.href = '../pages/';
-    });
-
-    document.querySelector('#abandonner-popup .no-btn').addEventListener('click', () => {
-      abandonnerPopup.style.display = 'none';
-    });
-
-    function saveSelection() {
-      localStorage.setItem('selectedMotifBois', selectedMotifBoisId);
-    }
-  });
-</script>
 
 </main>
 
