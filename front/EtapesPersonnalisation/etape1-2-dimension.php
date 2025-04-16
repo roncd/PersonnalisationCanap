@@ -299,6 +299,16 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
           }
         }
 
+        // Empêcher la saisie de plus de 3 chiffres dans les champs de type number
+document.querySelectorAll(".input-field").forEach(input => {
+  input.addEventListener("input", () => {
+    if (input.value.length > 3) {
+      input.value = input.value.slice(0, 3);
+    }
+  });
+});
+
+
         
 
 
