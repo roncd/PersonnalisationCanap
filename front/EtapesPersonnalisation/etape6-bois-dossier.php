@@ -55,6 +55,8 @@ exit;
   <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../../styles/processus.css">
   <link rel="stylesheet" href="../../styles/popup.css">
+  <script type="module" src="../../scrpit/popup.js"></script>
+  <script type="module" src="../../scrpit/button.js"></script>
   <title>Étape 6 - Choisi ton dossier</title>
   <style>
     /* Transition pour les éléments de la page */
@@ -168,7 +170,8 @@ exit;
       <button class="no-btn">Non !</button>
     </div>
   </div>
-
+  
+<!-- Pop-up de sélection d'option -->
   <div id="selection-popup" class="popup transition">
     <div class="popup-content">
       <h2>Veuillez choisir une option avant de continuer.</h2>
@@ -177,7 +180,7 @@ exit;
       </div>
   </div>
 
-  
+  <!-- VARIATION DES PRIX  -->
   <script>
     document.addEventListener('DOMContentLoaded', () => {
     let totalPrice = 0; // Total global pour toutes les étapes
@@ -271,14 +274,11 @@ exit;
 
   </script>
 
-  
+  <!-- GESTION DES SELECTIONS -->
   <script>
   document.addEventListener('DOMContentLoaded', () => {
     const options = document.querySelectorAll('.color-options .option img');
     const mainImage = document.querySelector('.main-display img');
-    const suivantButton = document.querySelector('.btn-suivant');
-    const helpPopup = document.getElementById('help-popup');
-    const abandonnerPopup = document.getElementById('abandonner-popup');
     const selectionPopup = document.getElementById('selection-popup');
     const selectedDossierBoisInput = document.getElementById('selected-dossier_bois');
 
@@ -310,13 +310,6 @@ exit;
       });
     });
 
-    suivantButton.addEventListener('click', (event) => {
-      if (!selected) {
-        event.preventDefault();
-        selectionPopup.style.display = 'flex';
-      }
-    });
-
     document.querySelector('#selection-popup .close-btn').addEventListener('click', () => {
       selectionPopup.style.display = 'none';
     });
@@ -327,37 +320,12 @@ exit;
       }
     });
 
-    document.querySelector('.btn-aide').addEventListener('click', () => {
-      helpPopup.style.display = 'flex';
-    });
-
-    document.querySelector('#help-popup .close-btn').addEventListener('click', () => {
-      helpPopup.style.display = 'none';
-    });
-
-    window.addEventListener('click', (event) => {
-      if (event.target === helpPopup) {
-        helpPopup.style.display = 'none';
-      }
-    });
-
-    document.querySelector('.btn-abandonner').addEventListener('click', () => {
-      abandonnerPopup.style.display = 'flex';
-    });
-
-    document.querySelector('#abandonner-popup .yes-btn').addEventListener('click', () => {
-      window.location.href = '../pages/';
-    });
-
-    document.querySelector('#abandonner-popup .no-btn').addEventListener('click', () => {
-      abandonnerPopup.style.display = 'none';
-    });
-
     function saveSelection() {
       localStorage.setItem('selectedDossierBois', selectedBoisId);
     }
   });
 </script>
+
 
 </main>
 
