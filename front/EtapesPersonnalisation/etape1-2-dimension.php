@@ -92,7 +92,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
       <div class="left-column transition">
         <h2>Étape 1 - Choisi tes mesures</h2>
         <form method="POST" class="formulaire">
-          <p>Largeur banquette : <span class="bold">50cm (par défaut)</span></p>
+          <p>Largeur banquette : <span class="bold">50cm (par défaut) </span> | Prix total des dimensions : <span id="dimension-price">0.00</span> €</p>
           <div class="form-row">
             <div class="form-group">
               <label for="longueurA">Longueur banquette A (en cm) :</label>
@@ -240,6 +240,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
           allSelectedOptions = [];
           console.warn("allSelectedOptions n'était pas un tableau. Réinitialisé à []");
         }
+        
 
         // Fonction pour ajouter les dimensions au calcul
         function calculateDimensionPrice() {
@@ -255,6 +256,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
           const dimensionPrice = totalMeters * 350; // 350 € par mètre
           console.log(`Prix des dimensions : ${dimensionPrice}`);
 
+          document.getElementById("dimension-price").textContent = dimensionPrice.toFixed(2);
+
           // Supprimer les dimensions précédentes pour cette étape
           allSelectedOptions = allSelectedOptions.filter(opt => !opt.id.startsWith(`${currentStep}_`));
 
@@ -264,6 +267,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
           // Sauvegarder dans sessionStorage pour cet utilisateur
           sessionStorage.setItem(sessionKey, JSON.stringify(allSelectedOptions));
         }
+        
 
         // Fonction pour sauvegarder les valeurs des dimensions dans sessionStorage
         function saveDimensions() {
@@ -294,6 +298,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             console.error("L'élément '.footer p span' est introuvable !");
           }
         }
+
+        
+
 
         // Pré-remplir les champs avec les dimensions sauvegardées
         document.getElementById("longueurA").value = savedDimensions.longueurA;
