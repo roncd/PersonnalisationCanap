@@ -156,7 +156,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       </div>
     </div>
 
-    
+
     <!-- POPUP SELECTION -->
     <div id="selection-popup" class="popup transition">
       <div class="popup-content">

@@ -242,7 +242,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 
         <!-- VARIATION DES PRIX  -->
-        <script>document.addEventListener('DOMContentLoaded', () => {
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
                 let totalPrice = 0; // Total global
 
                 // Identifier l'étape actuelle
@@ -294,7 +295,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                         allSelectedOptions = allSelectedOptions.filter(opt => !opt.id.startsWith(`${currentStep}_`));
 
-                        allSelectedOptions.push({ id: uniqueId, price: price });
+                        allSelectedOptions.push({
+                            id: uniqueId,
+                            price: price
+                        });
                         option.parentElement.classList.add('selected');
 
                         sessionStorage.setItem(sessionKey, JSON.stringify(allSelectedOptions));
