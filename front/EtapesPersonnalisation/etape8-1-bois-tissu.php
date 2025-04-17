@@ -53,6 +53,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../../styles/processus.css">
   <link rel="stylesheet" href="../../styles/popup.css">
+  <script type="module" src="../../scrpit/popup.js"></script>
+  <script type="module" src="../../scrpit/button.js"></script>
   <title>Étape 8 - Choisi ton tissu</title>
   <style>
     .transition {
@@ -159,6 +161,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
   </div>
 
+  <!-- Pop-up de sélection d'option -->
   <div id="selection-popup" class="popup transition">
     <div class="popup-content">
       <h2>Veuillez choisir une option avant de continuer.</h2>
@@ -168,6 +171,59 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   </div>
 
   
+  <!-- GESTION DES SELECTIONS -->
+  <script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const options = document.querySelectorAll('.color-options .option img');
+    const mainImage = document.querySelector('.main-display img');
+    const selectionPopup = document.getElementById('selection-popup');
+    const selectedCouleurBoisInput = document.getElementById('selected-couleur_tissu_bois');
+
+    let selectedCouleurTissuBoisId = localStorage.getItem('selectedCouleurTissuBois') || ''; 
+    let selected = selectedCouleurTissuBoisId !== ''; 
+
+    document.querySelectorAll('.transition').forEach(element => {
+      element.classList.add('show');
+    });
+
+    // Restaurer la sélection si elle existe
+    options.forEach(img => {
+      if (img.getAttribute('data-bois-id') === selectedCouleurTissuBoisId) {
+        img.classList.add('selected');
+        mainImage.src = img.src;
+        selectedCouleurBoisInput.value = selectedCouleurTissuBoisId;
+      }
+    });
+
+    options.forEach(img => {
+      img.addEventListener('click', () => {
+        options.forEach(opt => opt.classList.remove('selected'));
+        img.classList.add('selected');
+        mainImage.src = img.src;
+        selectedCouleurTissuBoisId = img.getAttribute('data-bois-id');
+        selectedCouleurBoisInput.value = selectedCouleurTissuBoisId;
+        selected = true;
+        saveSelection();
+      });
+    });
+
+    document.querySelector('#selection-popup .close-btn').addEventListener('click', () => {
+      selectionPopup.style.display = 'none';
+    });
+
+    window.addEventListener('click', (event) => {
+      if (event.target === selectionPopup) {
+        selectionPopup.style.display = 'none';
+      }
+    });
+
+    function saveSelection() {
+      localStorage.setItem('selectedCouleurTissuBois', selectedCouleurTissuBoisId);
+    }
+  });
+</script>
+
+  <!-- VARIATION DES PRIX  -->
   <script>
    document.addEventListener('DOMContentLoaded', () => {
     let totalPrice = 0; // Total global pour toutes les étapes
@@ -262,96 +318,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Initialiser le total dès le chargement de la page
     updateTotal();
 });
-
-
   </script>
-
-  <script>
-  document.addEventListener('DOMContentLoaded', () => {
-    const options = document.querySelectorAll('.color-options .option img');
-    const mainImage = document.querySelector('.main-display img');
-    const suivantButton = document.querySelector('.btn-suivant');
-    const helpPopup = document.getElementById('help-popup');
-    const abandonnerPopup = document.getElementById('abandonner-popup');
-    const selectionPopup = document.getElementById('selection-popup');
-    const selectedCouleurBoisInput = document.getElementById('selected-couleur_tissu_bois');
-
-    let selectedCouleurTissuBoisId = localStorage.getItem('selectedCouleurTissuBois') || ''; 
-    let selected = selectedCouleurTissuBoisId !== ''; 
-
-    document.querySelectorAll('.transition').forEach(element => {
-      element.classList.add('show');
-    });
-
-    // Restaurer la sélection si elle existe
-    options.forEach(img => {
-      if (img.getAttribute('data-bois-id') === selectedCouleurTissuBoisId) {
-        img.classList.add('selected');
-        mainImage.src = img.src;
-        selectedCouleurBoisInput.value = selectedCouleurTissuBoisId;
-      }
-    });
-
-    options.forEach(img => {
-      img.addEventListener('click', () => {
-        options.forEach(opt => opt.classList.remove('selected'));
-        img.classList.add('selected');
-        mainImage.src = img.src;
-        selectedCouleurTissuBoisId = img.getAttribute('data-bois-id');
-        selectedCouleurBoisInput.value = selectedCouleurTissuBoisId;
-        selected = true;
-        saveSelection();
-      });
-    });
-
-    suivantButton.addEventListener('click', (event) => {
-      if (!selected) {
-        event.preventDefault();
-        selectionPopup.style.display = 'flex';
-      }
-    });
-
-    document.querySelector('#selection-popup .close-btn').addEventListener('click', () => {
-      selectionPopup.style.display = 'none';
-    });
-
-    window.addEventListener('click', (event) => {
-      if (event.target === selectionPopup) {
-        selectionPopup.style.display = 'none';
-      }
-    });
-
-    document.querySelector('.btn-aide').addEventListener('click', () => {
-      helpPopup.style.display = 'flex';
-    });
-
-    document.querySelector('#help-popup .close-btn').addEventListener('click', () => {
-      helpPopup.style.display = 'none';
-    });
-
-    window.addEventListener('click', (event) => {
-      if (event.target === helpPopup) {
-        helpPopup.style.display = 'none';
-      }
-    });
-
-    document.querySelector('.btn-abandonner').addEventListener('click', () => {
-      abandonnerPopup.style.display = 'flex';
-    });
-
-    document.querySelector('#abandonner-popup .yes-btn').addEventListener('click', () => {
-      window.location.href = '../pages/';
-    });
-
-    document.querySelector('#abandonner-popup .no-btn').addEventListener('click', () => {
-      abandonnerPopup.style.display = 'none';
-    });
-
-    function saveSelection() {
-      localStorage.setItem('selectedCouleurTissuBois', selectedCouleurTissuBoisId);
-    }
-  });
-</script>
 
 </main>
 

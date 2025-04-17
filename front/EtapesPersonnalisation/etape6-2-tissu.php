@@ -61,6 +61,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../../styles/processus.css">
   <link rel="stylesheet" href="../../styles/popup.css">
+  <script type="module" src="../../scrpit/popup.js"></script>
+  <script type="module" src="../../scrpit/button.js"></script>
   <title>Étape 6 - Ajoute tes accoudoirs</title>
   <style>
     /* Transition pour les éléments de la page */
@@ -136,7 +138,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <div class="footer">
       <p>Total : <span>899 €</span></p>
       <div class="buttons">
-        <button class="btn-retour transition" onclick="history.go(-1)">Retour</button>
+        <button class="btn-retour transition">Retour</button>
         <form method="POST" action="">
         <input type="hidden" name="accoudoir_tissu_id" id="selected-accoudoir_tissu" required>
         <input type="hidden" name="nb_accoudoir" id="selected-nb_accoudoir" required>
@@ -155,14 +157,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       </div>
       <img src="../../medias/process-main-image.png" alt="Armoire" class="transition">
     </section>
-  </div>
-</div>
-
-<!-- Popup de sélection (si aucune option choisie) -->
-<div id="selection-popup" class="popup transition">
-  <div class="popup-content">
-    <h2>Veuillez choisir une option avant de continuer.</h2>
-    <button class="close-btn">OK</button>
   </div>
 </div>
 
@@ -187,151 +181,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <button class="no-btn">Non !</button>
   </div>
 </div>
+
+<!-- Pop-up de sélection d'option -->
+<div id="selection-popup" class="popup transition">
+  <div class="popup-content">
+    <h2>Veuillez choisir une option avant de continuer.</h2>
+    <button class="close-btn">OK</button>
+  </div>
+</div>
+
+
+<!-- GESTION DES SELECTIONS -->
 <script>
-  document.addEventListener('DOMContentLoaded', () => {
-    let totalPrice = 0; // Total global pour toutes les étapes
-    const currentStep = "6-accoudoir-tissu"; // Étape actuelle
-    const userId = document.body.getAttribute('data-user-id');
-    const sessionKey = `allSelectedOptions_${userId}`;
-    const selectedKey = `selectedOptions_${userId}`;
-    let allSelectedOptions = JSON.parse(sessionStorage.getItem(sessionKey)) || [];
-    let selectedOptions = JSON.parse(sessionStorage.getItem(selectedKey)) || {};
-    const selectedAccoudoirTissuInput = document.getElementById('selected-accoudoir_tissu');
-    const selectedNbAccoudoirInput = document.getElementById('selected-nb_accoudoir');
-
-    // Vérifications initiales
-    if (!userId) {
-        console.error("ID utilisateur non trouvé.");
-        return;
-    }
-
-    // Restaurer les sélections depuis le localStorage/sessionStorage
-    function restoreSelections() {
-      document.querySelectorAll('.color-2options .option img').forEach(img => {
-        const accoudoirId = img.getAttribute('data-accoudoir-id');
-        const parentOption = img.closest('.option');
-        const quantityInput = parentOption.querySelector('.quantity-input');
-
-        if (selectedOptions[accoudoirId]) {
-          img.classList.add('selected');
-          quantityInput.value = selectedOptions[accoudoirId];
-        } else {
-          img.classList.remove('selected');
-          quantityInput.value = 0;
-        }
-      });
-      updateTotal();
-    }
-
-    // Fonction pour mettre à jour le total global
-    function updateTotal() {
-      totalPrice = allSelectedOptions.reduce((sum, option) => {
-        const price = option.price || 0;
-        const quantity = option.quantity || 1;
-        return sum + (price * quantity);
-      }, 0);
-
-      const totalElement = document.querySelector(".footer p span");
-      if (totalElement) {
-        totalElement.textContent = `${totalPrice.toFixed(2)} €`;
-      }
-    }
-
-    // Fonction pour sauvegarder les sélections dans sessionStorage
-    function saveSelectedOption(optionId, price, quantity) {
-      const uniqueId = `${currentStep}_${optionId}`;
-      allSelectedOptions = allSelectedOptions.filter(opt => opt.id !== uniqueId);
-
-      if (quantity > 0) {
-        allSelectedOptions.push({
-          id: uniqueId,
-          price: price,
-          quantity: quantity
-        });
-      }
-
-      sessionStorage.setItem(sessionKey, JSON.stringify(allSelectedOptions));
-    }
-
-    // Gestion des clics sur les options
-    document.querySelectorAll('.color-2options .option img').forEach(img => {
-      img.addEventListener('click', () => {
-        const accoudoirId = img.getAttribute('data-accoudoir-id');
-        const parentOption = img.closest('.option');
-        const quantityInput = parentOption.querySelector('.quantity-input');
-        const price = parseFloat(img.getAttribute('data-accoudoir-prix')) || 0;
-
-        // Désélectionner ou sélectionner
-        if (selectedOptions[accoudoirId]) {
-          delete selectedOptions[accoudoirId];
-          img.classList.remove('selected');
-          quantityInput.value = 0;
-          saveSelectedOption(accoudoirId, price, 0);
-        } else {
-          selectedOptions[accoudoirId] = 1;
-          img.classList.add('selected');
-          quantityInput.value = 1;
-          saveSelectedOption(accoudoirId, price, 1);
-        }
-
-        sessionStorage.setItem(selectedKey, JSON.stringify(selectedOptions));
-        updateHiddenInputs();
-        updateTotal();
-      });
-    });
-
-    // Gestion des boutons augmenter et diminuer
-    document.querySelectorAll('.increase-btn, .decrease-btn').forEach(button => {
-      button.addEventListener('click', (event) => {
-        const parentOption = event.target.closest('.option');
-        const accoudoirId = parentOption.querySelector('img').getAttribute('data-accoudoir-id');
-        const quantityInput = parentOption.querySelector('.quantity-input');
-        const price = parseFloat(parentOption.querySelector('img').getAttribute('data-accoudoir-prix')) || 0;
-
-        if (!selectedOptions[accoudoirId]) return;
-
-        let newQuantity = parseInt(quantityInput.value) || 0;
-        newQuantity += event.target.classList.contains('increase-btn') ? 1 : -1;
-        newQuantity = Math.max(newQuantity, 0);
-        quantityInput.value = newQuantity;
-
-        if (newQuantity === 0) {
-          delete selectedOptions[accoudoirId];
-          parentOption.querySelector('img').classList.remove('selected');
-          saveSelectedOption(accoudoirId, price, 0);
-        } else {
-          selectedOptions[accoudoirId] = newQuantity;
-          saveSelectedOption(accoudoirId, price, newQuantity);
-        }
-
-        sessionStorage.setItem(selectedKey, JSON.stringify(selectedOptions));
-        updateHiddenInputs();
-        updateTotal();
-      });
-    });
-
-    // Mise à jour des champs cachés
-    function updateHiddenInputs() {
-      selectedAccoudoirTissuInput.value = Object.keys(selectedOptions).join(',');
-      selectedNbAccoudoirInput.value = Object.values(selectedOptions).join(',');
-    }
-
-    // Restaurer les sélections au chargement
-    restoreSelections();
-  });
-</script>
-
-
-
-<script>
-  
   document.addEventListener('DOMContentLoaded', () => {
     const options = document.querySelectorAll('.color-2options .option img');
     const mainImage = document.querySelector('.main-display img');
     const suivantButton = document.querySelector('.btn-suivant');
     const selectionPopup = document.getElementById('selection-popup');
-    const helpPopup = document.getElementById('help-popup');
-    const abandonnerPopup = document.getElementById('abandonner-popup');
     const closeSelectionBtn = document.querySelector('#selection-popup .close-btn');
     const selectedAccoudoirTissuInput = document.getElementById('selected-accoudoir_tissu');
     let selected = false;
@@ -476,30 +342,143 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         selectionPopup.style.display = 'none';
       }
     });
-
-    // Gestion du popup "Besoin d'aide"
-    document.querySelector('.btn-aide').addEventListener('click', () => {
-      helpPopup.style.display = 'flex';
-    });
-
-    document.querySelector('#help-popup .close-btn').addEventListener('click', () => {
-      helpPopup.style.display = 'none';
-    });
-
-    // Gestion du popup "Abandonner"
-    document.querySelector('.btn-abandonner').addEventListener('click', () => {
-      abandonnerPopup.style.display = 'flex';
-    });
-
-    document.querySelector('.no-btn').addEventListener('click', () => {
-      abandonnerPopup.style.display = 'none';
-    });
-
-    document.querySelector('.yes-btn').addEventListener('click', () => {
-      window.location.href = '../pages/'; // Rediriger vers la page d'accueil
-    });
   });
+</script>
 
+
+<!-- VARIATION DES PRIX  -->
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    let totalPrice = 0; // Total global pour toutes les étapes
+    const currentStep = "6-accoudoir-tissu"; // Étape actuelle
+    const userId = document.body.getAttribute('data-user-id');
+    const sessionKey = `allSelectedOptions_${userId}`;
+    const selectedKey = `selectedOptions_${userId}`;
+    let allSelectedOptions = JSON.parse(sessionStorage.getItem(sessionKey)) || [];
+    let selectedOptions = JSON.parse(sessionStorage.getItem(selectedKey)) || {};
+    const selectedAccoudoirTissuInput = document.getElementById('selected-accoudoir_tissu');
+    const selectedNbAccoudoirInput = document.getElementById('selected-nb_accoudoir');
+
+    // Vérifications initiales
+    if (!userId) {
+        console.error("ID utilisateur non trouvé.");
+        return;
+    }
+
+    // Restaurer les sélections depuis le localStorage/sessionStorage
+    function restoreSelections() {
+      document.querySelectorAll('.color-2options .option img').forEach(img => {
+        const accoudoirId = img.getAttribute('data-accoudoir-id');
+        const parentOption = img.closest('.option');
+        const quantityInput = parentOption.querySelector('.quantity-input');
+
+        if (selectedOptions[accoudoirId]) {
+          img.classList.add('selected');
+          quantityInput.value = selectedOptions[accoudoirId];
+        } else {
+          img.classList.remove('selected');
+          quantityInput.value = 0;
+        }
+      });
+      updateTotal();
+    }
+
+    // Fonction pour mettre à jour le total global
+    function updateTotal() {
+      totalPrice = allSelectedOptions.reduce((sum, option) => {
+        const price = option.price || 0;
+        const quantity = option.quantity || 1;
+        return sum + (price * quantity);
+      }, 0);
+
+      const totalElement = document.querySelector(".footer p span");
+      if (totalElement) {
+        totalElement.textContent = `${totalPrice.toFixed(2)} €`;
+      }
+    }
+
+    // Fonction pour sauvegarder les sélections dans sessionStorage
+    function saveSelectedOption(optionId, price, quantity) {
+      const uniqueId = `${currentStep}_${optionId}`;
+      allSelectedOptions = allSelectedOptions.filter(opt => opt.id !== uniqueId);
+
+      if (quantity > 0) {
+        allSelectedOptions.push({
+          id: uniqueId,
+          price: price,
+          quantity: quantity
+        });
+      }
+
+      sessionStorage.setItem(sessionKey, JSON.stringify(allSelectedOptions));
+    }
+
+    // Gestion des clics sur les options
+    document.querySelectorAll('.color-2options .option img').forEach(img => {
+      img.addEventListener('click', () => {
+        const accoudoirId = img.getAttribute('data-accoudoir-id');
+        const parentOption = img.closest('.option');
+        const quantityInput = parentOption.querySelector('.quantity-input');
+        const price = parseFloat(img.getAttribute('data-accoudoir-prix')) || 0;
+
+        // Désélectionner ou sélectionner
+        if (selectedOptions[accoudoirId]) {
+          delete selectedOptions[accoudoirId];
+          img.classList.remove('selected');
+          quantityInput.value = 0;
+          saveSelectedOption(accoudoirId, price, 0);
+        } else {
+          selectedOptions[accoudoirId] = 1;
+          img.classList.add('selected');
+          quantityInput.value = 1;
+          saveSelectedOption(accoudoirId, price, 1);
+        }
+
+        sessionStorage.setItem(selectedKey, JSON.stringify(selectedOptions));
+        updateHiddenInputs();
+        updateTotal();
+      });
+    });
+
+    // Gestion des boutons augmenter et diminuer
+    document.querySelectorAll('.increase-btn, .decrease-btn').forEach(button => {
+      button.addEventListener('click', (event) => {
+        const parentOption = event.target.closest('.option');
+        const accoudoirId = parentOption.querySelector('img').getAttribute('data-accoudoir-id');
+        const quantityInput = parentOption.querySelector('.quantity-input');
+        const price = parseFloat(parentOption.querySelector('img').getAttribute('data-accoudoir-prix')) || 0;
+
+        if (!selectedOptions[accoudoirId]) return;
+
+        let newQuantity = parseInt(quantityInput.value) || 0;
+        newQuantity += event.target.classList.contains('increase-btn') ? 1 : -1;
+        newQuantity = Math.max(newQuantity, 0);
+        quantityInput.value = newQuantity;
+
+        if (newQuantity === 0) {
+          delete selectedOptions[accoudoirId];
+          parentOption.querySelector('img').classList.remove('selected');
+          saveSelectedOption(accoudoirId, price, 0);
+        } else {
+          selectedOptions[accoudoirId] = newQuantity;
+          saveSelectedOption(accoudoirId, price, newQuantity);
+        }
+
+        sessionStorage.setItem(selectedKey, JSON.stringify(selectedOptions));
+        updateHiddenInputs();
+        updateTotal();
+      });
+    });
+
+    // Mise à jour des champs cachés
+    function updateHiddenInputs() {
+      selectedAccoudoirTissuInput.value = Object.keys(selectedOptions).join(',');
+      selectedNbAccoudoirInput.value = Object.values(selectedOptions).join(',');
+    }
+
+    // Restaurer les sélections au chargement
+    restoreSelections();
+  });
 </script>
 
 
