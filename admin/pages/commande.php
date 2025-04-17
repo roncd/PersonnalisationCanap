@@ -54,6 +54,23 @@ $totalPages = ceil($totalCommandes / $limit);
     <script src="../../scrpit/commandes.js"></script>
     <script type="module" src="../../scrpit/download.js"></script>
     <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
+    <style>
+        .message {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+    </style>
 </head>
 
 <body>
@@ -69,10 +86,20 @@ $totalPages = ceil($totalCommandes / $limit);
                     <button onclick="location.href='?statut=construction'" class="tab <?= ($statut === 'construction') ? 'active' : '' ?>">En cours de construction</button>
                     <button onclick="location.href='?statut=final'" class="tab <?= ($statut === 'final') ? 'active' : '' ?>">Commandes finalisées</button>
                 </div>
+                <div id="message-container"></div>
                 <div id="supprimer-popup" class="popup">
                     <div class="popup-content">
                         <h2>Êtes vous sûr de vouloir supprimer ?</h2>
                         <p>(La commande disparaîtra définitivement)</p>
+                        <br>
+                        <button class="yes-btn">Oui</button>
+                        <button class="no-btn">Non</button>
+                    </div>
+                </div>
+                <div id="update-popup" class="popup">
+                    <div class="popup-content">
+                        <h2>Êtes-vous sûr de continuer ?</h2>
+                        <p>Cette commande passera au statut suivant</p>
                         <br>
                         <button class="yes-btn">Oui</button>
                         <button class="no-btn">Non</button>
@@ -90,7 +117,7 @@ $totalPages = ceil($totalCommandes / $limit);
                                         <p><strong>N° commande :</strong> <?= htmlspecialchars($commande['id']) ?></p>
                                     </div>
                                     <div class="actions">
-                                        <i title="Passez la commande au statut suivant" class="bx bx-check-square actions vert" onclick="updateStatus(this)"></i>
+                                        <i title="Passez la commande au statut suivant" class="bx bxs-chevrons-right vert" onclick="updateStatus(this)"></i>
                                         <i title="Supprimez la commande" class="bx bx-trash-alt actions rouge" onclick="removeCommand(this)"></i>
                                         <i title="Téléchargez le devis" class="bx bxs-file-pdf" data-id="<?= htmlspecialchars($commande['id']) ?>"></i>
                                     </div>
@@ -130,7 +157,7 @@ $totalPages = ceil($totalCommandes / $limit);
                                         <p><strong>N° commande :</strong> <?= htmlspecialchars($commande['id']) ?></p>
                                     </div>
                                     <div class="actions">
-                                        <i title="Passez la commande au statut suivant" class="bx bx-check-square actions vert" onclick="updateStatus(this)"></i>
+                                        <i title="Passez la commande au statut suivant" class="bx bxs-chevrons-right vert" onclick="updateStatus(this)"></i>
                                         <i title="Supprimez la commande" class="bx bx-trash-alt actions rouge" onclick="removeCommand(this)"></i>
                                         <i title="Téléchargez le devis" class="bx bxs-file-pdf" data-id="<?= htmlspecialchars($commande['id']) ?>"></i>
                                     </div>

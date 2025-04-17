@@ -15,7 +15,14 @@ $statut = htmlspecialchars($data['statut']); // Sécuriser l'entrée
 try {
     $stmt = $pdo->prepare("UPDATE commande_detail SET statut = ? WHERE id = ?");
     $stmt->execute([$statut, $id]);
-    echo json_encode(['success' => true]);
-} catch (PDOException $e) {
-    echo json_encode(['success' => false, 'error' => $e->getMessage()]);
+    echo json_encode([
+        'success' => true,
+        'message' => 'Statut de commande mis à jour avec succès.'
+    ]);
+} 
+catch (PDOException $e) {
+    echo json_encode([
+        'success' => false,
+        'message' => 'Une erreur est survenue, veuillez réessayer.'
+    ]);
 }

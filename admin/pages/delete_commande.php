@@ -23,13 +23,21 @@ if (isset($data['id'])) {
 
         // Valider la transaction
         $pdo->commit();
-
-        echo json_encode(['success' => true]);
+        echo json_encode([
+            'success' => true,
+            'message' => 'Commande supprimé avec succès.'
+        ]);
     } catch (PDOException $e) {
         // Annuler la transaction en cas d'erreur
         $pdo->rollBack();
-        echo json_encode(['success' => false, 'error' => $e->getMessage()]);
+        echo json_encode([
+            'success' => false,
+            'message' => 'Une erreur est survenue, veuillez réessayer.'
+        ]);
     }
 } else {
-    echo json_encode(['success' => false, 'error' => 'Aucun ID reçu.']);
+    echo json_encode([
+        'success' => false,
+        'message' => 'Aucun ID reçu.'
+    ]);
 }
