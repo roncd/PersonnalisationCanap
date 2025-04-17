@@ -54,7 +54,17 @@ foreach ($data['commande_detail'] as $dim) {
     ];
 }
 
+// Paramètres de pagination
+$page = isset($_GET['page']) && is_numeric($_GET['page']) && $_GET['page'] > 0 ? (int)$_GET['page'] : 1;
+$limit = 10; // Nombre de commandes par page
+$offset = ($page - 1) * $limit;
 
+// Compter le nombre total de commandes pour ce statut
+$stmtCount = $pdo->prepare("SELECT COUNT(*) AS total FROM commande_detail");
+$stmtCount->execute();
+$totalCommandes = $stmtCount->fetchColumn();
+
+$totalPages = ceil($totalCommandes / $limit);
 ?>
 
 <!DOCTYPE html>
@@ -68,6 +78,7 @@ foreach ($data['commande_detail'] as $dim) {
     <link rel="stylesheet" href="../../styles/tab.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
     <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
+    <link rel="stylesheet" href="../../styles/commandes.css">
     <style>
         /* Styles pour la barre de recherche et les messages */
         .search-bar {
@@ -175,11 +186,19 @@ foreach ($data['commande_detail'] as $dim) {
                     <tbody>
                         <?php
                         if ($search) {
-                            $stmt = $pdo->prepare("SELECT * FROM commande_detail INNER JOIN client ON commande_detail.id_client = client.id WHERE client.nom LIKE ?");
-                            $stmt->execute(['%' . $search . '%']);
+                            $stmt = $pdo->prepare("SELECT cd.*, c.id AS id_client, c.nom, c.prenom
+                                                    FROM commande_detail AS cd
+                                                    INNER JOIN client AS c ON cd.id_client = c.id
+                                                    WHERE c.nom LIKE :search
+                                                    ORDER BY cd.id DESC 
+                                                    ");
+                            $stmt->bindValue(':search', '%' . $search . '%', PDO::PARAM_STR);
                         } else {
-                            $stmt = $pdo->query("SELECT * FROM commande_detail");
+                            $stmt = $pdo->prepare("SELECT * FROM commande_detail ORDER BY id DESC LIMIT :limit OFFSET :offset");
+                            $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
+                            $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
                         }
+                        $stmt->execute();
                         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                             echo "<tr>";
                             echo "<td>{$row['id']}</td>";
@@ -214,6 +233,29 @@ foreach ($data['commande_detail'] as $dim) {
                     </tbody>
                 </table>
             </div>
+            <?php
+            if (!$search) { 
+                echo '<nav class="nav" aria-label="pagination">';
+                echo '<ul class="pagination">';
+
+                if ($page > 1) {
+                    echo '<li><a href="?page=' . ($page - 1) . '">Précédent</a></li>';
+                }
+
+                for ($i = 1; $i <= $totalPages; $i++) {
+                    echo '<li>';
+                    echo '<a class="' . ($i === $page ? 'active' : '') . '" href="?page=' . $i . '">' . $i . '</a>';
+                    echo '</li>';
+                }
+
+                if ($page < $totalPages) {
+                    echo '<li><a href="?page=' . ($page + 1) . '">Suivant</a></li>';
+                }
+
+                echo '</ul>';
+                echo '</nav>';
+            }
+            ?>
         </div>
     </main>
     <footer>

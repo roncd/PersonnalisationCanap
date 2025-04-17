@@ -9,6 +9,18 @@ if (!isset($_SESSION['id'])) {
 
 // Traitement de la recherche
 $search = $_GET['search'] ?? '';
+
+// Paramètres de pagination
+$page = isset($_GET['page']) && is_numeric($_GET['page']) && $_GET['page'] > 0 ? (int)$_GET['page'] : 1;
+$limit = 10; // Nombre de commandes par page
+$offset = ($page - 1) * $limit;
+
+// Compter le nombre total de commandes pour ce statut
+$stmtCount = $pdo->prepare("SELECT COUNT(*) AS total FROM structure");
+$stmtCount->execute();
+$totalCommandes = $stmtCount->fetchColumn();
+
+$totalPages = ceil($totalCommandes / $limit);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -20,6 +32,7 @@ $search = $_GET['search'] ?? '';
     <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../../styles/tab.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../styles/commandes.css">
     <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
     <style>
         .message {
@@ -106,6 +119,7 @@ $search = $_GET['search'] ?? '';
                 <table class="styled-table">
                     <thead>
                         <tr>
+                            <th>ID</th>
                             <th>NOM</th>
                             <th>IMAGE</th>
                             <th>ACTION</th>
@@ -115,13 +129,17 @@ $search = $_GET['search'] ?? '';
                         <?php
                         // Récupérer les données depuis la base de données
                         if ($search) {
-                            $stmt = $pdo->prepare("SELECT * FROM structure WHERE nom LIKE ?");
-                            $stmt->execute(['%' . $search . '%']);
+                            $stmt = $pdo->prepare("SELECT * FROM structure WHERE nom LIKE :search ORDER BY id DESC");
+                            $stmt->bindValue(':search', '%' . $search . '%', PDO::PARAM_STR);
                         } else {
-                            $stmt = $pdo->query("SELECT * FROM structure");
+                            $stmt = $pdo->prepare("SELECT * FROM structure ORDER BY id LIMIT :limit OFFSET :offset");
+                            $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
+                            $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
                         }
+                        $stmt->execute();
                         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                             echo "<tr>";
+                            echo "<td>{$row['id']}</td>";
                             echo "<td>{$row['nom']}</td>";
                             echo "<td><img src='../uploads/structure/{$row['img']}' alt='{$row['nom']}' style='width:50px; height:auto;'></td>";
                             echo "<td class='actions'>";
@@ -134,6 +152,29 @@ $search = $_GET['search'] ?? '';
                     </tbody>
                 </table>
             </div>
+            <?php
+            if (!$search) { 
+                echo '<nav class="nav" aria-label="pagination">';
+                echo '<ul class="pagination">';
+
+                if ($page > 1) {
+                    echo '<li><a href="?page=' . ($page - 1) . '">Précédent</a></li>';
+                }
+
+                for ($i = 1; $i <= $totalPages; $i++) {
+                    echo '<li>';
+                    echo '<a class="' . ($i === $page ? 'active' : '') . '" href="?page=' . $i . '">' . $i . '</a>';
+                    echo '</li>';
+                }
+
+                if ($page < $totalPages) {
+                    echo '<li><a href="?page=' . ($page + 1) . '">Suivant</a></li>';
+                }
+
+                echo '</ul>';
+                echo '</nav>';
+            }
+            ?>
         </div>
     </main>
     <footer>
