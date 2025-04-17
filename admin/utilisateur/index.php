@@ -101,7 +101,6 @@ $search = $_GET['search'] ?? '';
                         <tr>
                             <th>ID</th>
                             <th>MAIL</th>
-                            <th>MOT_DE_PASSE</th>
                             <th>ACTION</th>
                         </tr>
                     </thead>
@@ -117,7 +116,6 @@ $search = $_GET['search'] ?? '';
                             echo "<tr>";
                             echo "<td>{$row['id']}</td>";
                             echo "<td>{$row['mail']}</td>";
-                            echo "<td>{$row['mdp']}</td>";
                             echo "<td class='actions'>";
                             echo "<a href='edit.php?id={$row['id']}' class='edit-action actions vert' title='Modifier'>EDIT</a>";
                             echo "<a href='delete.php?id={$row['id']}' class='delete-action actions rouge' title='Supprimer' onclick='return confirm(\"Voulez-vous vraiment supprimer cette structure ?\");'>DELETE</a>";

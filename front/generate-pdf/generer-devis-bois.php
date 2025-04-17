@@ -16,7 +16,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 error_log("Méthode HTTP : " . $_SERVER['REQUEST_METHOD']);
 error_log("ID récupéré : " . $idCommande);
-error_log("Début génération PDF...");
 
 
 // Récupération des informations du client

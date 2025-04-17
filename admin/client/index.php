@@ -105,7 +105,6 @@ $search = $_GET['search'] ?? '';
                             <th>PRENOM</th>
                             <th>MAIL</th>
                             <th>TELEPHONE</th>
-                            <th>MOT_DE_PASSE</th>
                             <th>ADRESSE</th>
                             <th>INFO_SUP</th>
                             <th>CODE_POSTAL</th>
@@ -129,7 +128,6 @@ $search = $_GET['search'] ?? '';
                             echo "<td>{$row['prenom']}</td>";
                             echo "<td>{$row['mail']}</td>";
                             echo "<td>{$row['tel']}</td>";
-                            echo "<td>{$row['mdp']}</td>";
                             echo "<td>{$row['adresse']}</td>";
                             echo "<td>{$row['info']}</td>";
                             echo "<td>{$row['codepostal']}</td>";

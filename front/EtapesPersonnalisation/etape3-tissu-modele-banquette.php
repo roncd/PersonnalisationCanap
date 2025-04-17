@@ -243,7 +243,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       });
     </script>
 
-    
+
     <!-- VARIATION DES PRIX  -->
     <script>
       document.addEventListener('DOMContentLoaded', () => {
@@ -298,7 +298,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             allSelectedOptions = allSelectedOptions.filter(opt => !opt.id.startsWith(`${currentStep}_`));
 
-            allSelectedOptions.push({ id: uniqueId, price: price });
+            allSelectedOptions.push({
+              id: uniqueId,
+              price: price
+            });
             option.parentElement.classList.add('selected');
 
             sessionStorage.setItem(sessionKey, JSON.stringify(allSelectedOptions));

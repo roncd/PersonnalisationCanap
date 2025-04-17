@@ -311,7 +311,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             allSelectedOptions = allSelectedOptions.filter(opt => !opt.id.startsWith(`${currentStep}_`));
 
             // Ajouter l'option actuellement sélectionnée
-            allSelectedOptions.push({ id: uniqueId, price: price });
+            allSelectedOptions.push({
+              id: uniqueId,
+              price: price
+            });
             option.parentElement.classList.add('selected'); // Ajouter la classe CSS
 
             console.log(`Option sélectionnée : ID Unique = ${uniqueId}, Prix = ${price}`);
