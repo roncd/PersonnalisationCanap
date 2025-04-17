@@ -1,3 +1,4 @@
+//Download Commande front-back
 document.querySelectorAll('.bx.bxs-file-pdf').forEach(button => {
     button.addEventListener('click', function () {
         // Récupérer l'ID avec data-id
@@ -13,7 +14,6 @@ document.querySelectorAll('.bx.bxs-file-pdf').forEach(button => {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ id: idCommande })
             })
-
                 .then(response => response.json())
                 .then(data => {
                     if (data.success && data.type) {
@@ -41,7 +41,7 @@ document.querySelectorAll('.bx.bxs-file-pdf').forEach(button => {
                                     const pdfUrl = window.URL.createObjectURL(blob);
                                     const a = document.createElement('a');
                                     a.href = pdfUrl;
-                                    a.download = `devis-${data.type}.pdf`;
+                                    a.download = `devis-${idCommande}.pdf`;
                                     document.body.appendChild(a);
                                     a.click();
                                     window.URL.revokeObjectURL(pdfUrl); // Libérer la mémoire

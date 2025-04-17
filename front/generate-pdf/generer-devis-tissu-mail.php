@@ -2,9 +2,6 @@
 require('fpdf.php');
 require('../../admin/config.php');
 
-header('Content-Type: application/pdf');
-header('Content-Disposition: inline; filename="devis.pdf"');
-
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $input = json_decode(file_get_contents("php://input"), true);
     $idCommande = isset($input['id']) ? (int) $input['id'] : 0;
@@ -12,11 +9,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     http_response_code(400);
     die("Requête invalide.");
 }
-
-
-error_log("Méthode HTTP : " . $_SERVER['REQUEST_METHOD']);
-error_log("ID récupéré : " . $idCommande);
-
 
 // Récupération des informations du client
 $query_client = $pdo->prepare("SELECT nom, prenom, adresse, codepostal, ville, mail, tel FROM client WHERE id IN (SELECT id_client FROM commande_detail WHERE id = ?)");
@@ -28,11 +20,6 @@ $query_details = $pdo->prepare("SELECT * FROM commande_detail WHERE id = ?");
 $query_details->execute([$idCommande]);
 $details = $query_details->fetchAll(PDO::FETCH_ASSOC);
 
-if (!$details) {
-    http_response_code(404);
-    error_log("Erreur : Commande introuvable pour ID $idCommande.");
-    die("Commande introuvable.");
-}
 // Tables sans prix
 $tablesNoPrix = ['structure', 'type_banquette'];
 
@@ -56,7 +43,7 @@ foreach ($tablesNoPrix as $tableNoPrix) {
 }
 
 // Tables avec prix
-$tables = ['mousse', 'dossier_bois', 'couleur_bois', 'motif_bois', 'decoration'];
+$tables = ['mousse', 'accoudoir_tissu', 'dossier_tissu', 'couleur_tissu', 'motif_tissu', 'modele'];
 
 // Fonction pour récupérer les données des tables avec prix
 function fetchData($pdo, $table)
@@ -78,16 +65,9 @@ foreach ($tables as $table) {
 }
 
 // Récupération des longueurs et du nombre d'accoudoirs
-$stmt = $pdo->prepare("SELECT longueurA, longueurB, longueurC, commentaire, date FROM commande_detail WHERE id = ?");
+$stmt = $pdo->prepare("SELECT longueurA, longueurB, longueurC, id_nb_accoudoir, commentaire, date FROM commande_detail WHERE id = ?");
 $stmt->execute([$idCommande]);
 $commande = $stmt->fetch(PDO::FETCH_ASSOC);
-
-$stmtAccoudoirBois = $pdo->prepare("SELECT cda.id_accoudoir_bois, cda.nb_accoudoir, ab.nom, ab.prix
-FROM commande_detail_accoudoir cda
-JOIN accoudoir_bois ab ON cda.id_accoudoir_bois = ab.id
-WHERE cda.id_commande_detail = ?");
-$stmtAccoudoirBois->execute([$idCommande]);
-$accoudoirsBois = $stmtAccoudoirBois->fetchAll(PDO::FETCH_ASSOC);
 
 
 $query_structure = $pdo->prepare("SELECT img, nom FROM structure WHERE id = (SELECT id_structure FROM commande_detail WHERE id = ?)");
@@ -128,6 +108,7 @@ $pdf->AliasNbPages();
 $pdf->AddPage();
 $pdf->SetFont('Arial', '', 10);
 
+// Largeur des colonnes
 $colWidth = 90;
 $lineHeight = 5;
 
@@ -173,7 +154,6 @@ $pdf->Cell(50, 10, "Prix", 1);
 $pdf->Ln();
 
 $pdf->SetFont('Arial', '', 12);
-
 // Tableau de correspondance pour les colonnes spéciales
 $tableColumn = [
     'type_banquette' => 'id_banquette',
@@ -193,31 +173,15 @@ foreach ($details as $detail) {
             // Ajout des données au PDF
             $pdf->Cell(60, 10, mb_convert_encoding($table, "ISO-8859-1", "UTF-8"), 1);
             $pdf->Cell(60, 10, mb_convert_encoding($element['nom'], "ISO-8859-1", "UTF-8"), 1);
-            $pdf->Cell(20, 10, "-", 1); // Quantité par défaut
+            if ($table === "accoudoir_tissu") {
+                $quantite_accoudoir = htmlspecialchars($commande['id_nb_accoudoir'] ?? '-');
+                $pdf->Cell(20, 10, $quantite_accoudoir, 1); // Quantité pour accoudoir_tissu
+            } else {
+                $pdf->Cell(20, 10, "-", 1);
+            }
             $pdf->Cell(50, 10, $prix, 1);
             $pdf->Ln();
         }
-    }
-    if (!empty($accoudoirsBois)) {
-        // Boucle sur chaque accoudoir bois
-        foreach ($accoudoirsBois as $accoudoir) {
-            $nom = mb_convert_encoding($accoudoir['nom'], "ISO-8859-1", "UTF-8"); // Récupère le nom de l'accoudoir bois
-            $quantite = htmlspecialchars($accoudoir['nb_accoudoir']); // Quantité d'accoudoirs bois
-            $prix = isset($accoudoir['prix']) ? number_format($accoudoir['prix'], 2, ',', ' ') . " EUR" : "-";
-
-
-            // Affiche les colonnes
-            $pdf->Cell(60, 10, "accoudoir_bois", 1);
-            $pdf->Cell(60, 10, $nom, 1);
-            $pdf->Cell(20, 10, $quantite, 1);
-            $pdf->Cell(50, 10, $prix, 1);
-            $pdf->Ln();
-        }
-    } else {
-        // Message si aucun accoudoir bois trouvé
-        $pdf->Ln(10);
-        $pdf->SetFont('Arial', 'B', 12);
-        $pdf->Cell(190, 10, mb_convert_encoding("Aucun accoudoir bois trouvé", "ISO-8859-1", "UTF-8"), 1, 1, 'C');
     }
 
     // Vérification si les données existent avant d'afficher
@@ -226,7 +190,6 @@ foreach ($details as $detail) {
         $longueurB = isset($commande['longueurB']) && !empty(trim($commande['longueurB'])) ? htmlspecialchars($commande['longueurB']) : null;
         $longueurC = isset($commande['longueurC']) && !empty(trim($commande['longueurC'])) ? htmlspecialchars($commande['longueurC']) : null;
         $commentaire = isset($commande['commentaire']) && !empty(trim($commande['commentaire'])) ? htmlspecialchars($commande['commentaire']) : null;
-
         $pdf->Ln(10);
         $pdf->Cell(60, 10, "Longueur A (en cm)", 1, 0);
         $pdf->Cell(30, 10, $longueurA, 1, 0);
@@ -250,7 +213,7 @@ foreach ($details as $detail) {
         }
     } else {
         $pdf->Ln(10);
-        $pdf->Cell(80, 10, mb_convert_encoding("Données de commande introuvables", "ISO-8859-1", "UTF-8"), 1);
+        $pdf->Cell(90, 10, mb_convert_encoding("Données de commande introuvables", "ISO-8859-1", "UTF-8"), 1);
         $pdf->Ln();
     }
 }
@@ -267,7 +230,7 @@ if ($detail && isset($detail['prix'])) {
 } else {
     $pdf->Ln(10);
     $pdf->SetX($pdf->GetPageWidth() - 100);
-    $pdf->Cell(80, 10, mb_convert_encoding("Aucun prix total trouvé", "ISO-8859-1", "UTF-8"), 1, 1);
+    $pdf->Cell(90, 10, mb_convert_encoding("Aucun prix total trouvé", "ISO-8859-1", "UTF-8"), 1, 1, 'R');
 }
 
 $pdf->Ln(10);
@@ -294,5 +257,3 @@ if ($imagePath && file_exists($imagePath)) {
     $pdf->Cell(80, 10, mb_convert_encoding("Aucune image de strucutre trouvé", "ISO-8859-1", "UTF-8"), 1, 1);
     $pdf->Ln(10);
 }
-
-$pdf->Output();

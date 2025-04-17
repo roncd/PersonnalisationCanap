@@ -2,9 +2,6 @@
 require('fpdf.php');
 require('../../admin/config.php');
 
-header('Content-Type: application/pdf');
-header('Content-Disposition: inline; filename="devis.pdf"');
-
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $input = json_decode(file_get_contents("php://input"), true);
     $idCommande = isset($input['id']) ? (int) $input['id'] : 0;
@@ -12,11 +9,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     http_response_code(400);
     die("Requête invalide.");
 }
-
-
-error_log("Méthode HTTP : " . $_SERVER['REQUEST_METHOD']);
-error_log("ID récupéré : " . $idCommande);
-
 
 // Récupération des informations du client
 $query_client = $pdo->prepare("SELECT nom, prenom, adresse, codepostal, ville, mail, tel FROM client WHERE id IN (SELECT id_client FROM commande_detail WHERE id = ?)");
@@ -295,4 +287,3 @@ if ($imagePath && file_exists($imagePath)) {
     $pdf->Ln(10);
 }
 
-$pdf->Output();
