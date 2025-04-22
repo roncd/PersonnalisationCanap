@@ -17,8 +17,9 @@ if (!$id) {
 
 // Supprimer le motif de la base de données
 try {
-    $stmt = $pdo->prepare("DELETE FROM motif_tissu WHERE id = ?");
-    $stmt->execute([$id]);
+    $stmt = $pdo->prepare("DELETE FROM motif_tissu WHERE id = :id");
+    $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+    $stmt->execute();
 
     if ($stmt->rowCount() > 0) {
         $_SESSION['message'] = 'Le motif a été supprimée avec succès !';

@@ -18,8 +18,9 @@ if (!$id) {
 
 // Supprimer le modèle de banquette de la base de données
 try {
-    $stmt = $pdo->prepare("DELETE FROM modele WHERE id = ?");
-    $stmt->execute([$id]);
+    $stmt = $pdo->prepare("DELETE FROM modele WHERE id = :id");
+    $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+    $stmt->execute();
 
     if ($stmt->rowCount() > 0) {
         $_SESSION['message'] = 'Le modèle de banquette a été supprimée avec succès !';

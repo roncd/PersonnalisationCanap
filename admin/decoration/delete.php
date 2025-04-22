@@ -17,8 +17,9 @@ if (!$id) {
 }
 
 try {
-    $stmt = $pdo->prepare("DELETE FROM decoration WHERE id = ?");
-    $stmt->execute([$id]);
+    $stmt = $pdo->prepare("DELETE FROM decoration WHERE id = :id");
+    $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+    $stmt->execute();
 
     if ($stmt->rowCount() > 0) {
         $_SESSION['message'] = 'La décoration a été supprimée avec succès !';
