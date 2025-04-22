@@ -17,8 +17,9 @@ if (!$id) {
 }
 
 // Récupérer les données actuelles de la mousse
-$stmt = $pdo->prepare("SELECT * FROM mousse WHERE id = ?");
-$stmt->execute([$id]);
+$stmt = $pdo->prepare("SELECT * FROM mousse WHERE  id = :id");
+$stmt->bindValue(':id', $id, PDO::PARAM_INT);
+$stmt->execute();
 $mousse = $stmt->fetch(PDO::FETCH_ASSOC);
 
 if (!$mousse) {
@@ -110,15 +111,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <main>
         <div class="container">
             <h2>Modifier le type de mousse</h2>
-
-            <?php if (isset($_SESSION['message'])): ?>
-                <div class="message <?= htmlspecialchars($_SESSION['message_type']); ?>">
-                    <?= htmlspecialchars($_SESSION['message']); ?>
-                </div>
-            <?php unset($_SESSION['message']);
-                unset($_SESSION['message_type']);
-            endif; ?>
-
+            <?php require '../include/message.php'; ?>
             <div class="form">
                 <form action="edit.php?id=<?= $id ?>" method="POST" enctype="multipart/form-data" class="formulaire-creation-compte">
                     <div class="form-row">

@@ -16,8 +16,9 @@ if (!$id) {
 }
 
 // Récupérer les données actuelles de couleur du bois
-$stmt = $pdo->prepare("SELECT * FROM couleur_bois WHERE id = ?");
-$stmt->execute([$id]);
+$stmt = $pdo->prepare("SELECT * FROM couleur_bois WHERE  id = :id");
+$stmt->bindValue(':id', $id, PDO::PARAM_INT);
+$stmt->execute();
 $couleurbois = $stmt->fetch(PDO::FETCH_ASSOC);
 
 if (!$couleurbois) {
@@ -104,15 +105,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <main>
         <div class="container">
             <h2>Modifie une couleur de banquette en bois</h2>
-            <?php
-            if (isset($_SESSION['message'])) {
-                echo '<div class="message ' . htmlspecialchars($_SESSION['message_type']) . '">';
-                echo htmlspecialchars($_SESSION['message']);
-                echo '</div>';
-                unset($_SESSION['message']);
-                unset($_SESSION['message_type']);
-            }
-            ?>
+            <?php require '../include/message.php'; ?>
             <div class="form">
                 <form action="edit.php?id=<?php echo $couleurbois['id']; ?>" method="POST" enctype="multipart/form-data" class="formulaire-creation-compte">
                     <div class="form-row">

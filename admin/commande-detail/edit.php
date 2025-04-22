@@ -17,8 +17,9 @@ if (!$id) {
 }
 
 // Récupérer les données actuelles de la commande
-$stmt = $pdo->prepare("SELECT * FROM commande_detail WHERE id = ?");
-$stmt->execute([$id]);
+$stmt = $pdo->prepare("SELECT * FROM commande_detail WHERE  id = :id");
+$stmt->bindValue(':id', $id, PDO::PARAM_INT);
+$stmt->execute();
 $commande = $stmt->fetch(PDO::FETCH_ASSOC);
 
 if (!$commande) {
@@ -51,11 +52,6 @@ $accoudoirstissu = fetchData($pdo, 'accoudoir_tissu');
 $dossierstissu = fetchData($pdo, 'dossier_tissu');
 $decorations = fetchData($pdo, 'decoration');
 
-$stmt = $pdo->prepare("SELECT id, longueurA, longueurB, longueurC FROM dimension");
-$stmt->execute();
-$dimensions = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Récupérer et valider les données
     $prix = trim($_POST['prix']);
@@ -64,7 +60,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $statut = trim($_POST['statut']);
     $idClient = trim($_POST['client']);
     $idStructure = trim($_POST['structure']);
-    $idDimension = trim($_POST['dimension']);
+    $longueurA = trim($_POST['longueurA']);
+    $longueurB = trim($_POST['longueurB'])  ? $_POST['longueurB'] : NULL;
+    $longueurC = trim($_POST['longueurC']) ? $_POST['longueurC'] : NULL;
     $idBanquette = trim($_POST['banquette']);
     $idMousse = trim($_POST['mousse']);
     $idCouleurBois = trim($_POST['couleurbois']) ? $_POST['couleurbois'] : NULL;
@@ -79,12 +77,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $idAccoudoirTissu = trim($_POST['accoudoirtissu']) ? $_POST['accoudoirtissu'] : NULL;
     $idDossierTissu = trim($_POST['dossiertissu']) ? $_POST['dossiertissu'] : NULL;
 
-    if (empty($prix) || empty($idClient) || empty($idStructure) || empty($idDimension) || empty($idBanquette) || empty($idMousse)) {
+    if (empty($prix) || empty($idClient) || empty($idStructure) || empty($longueurA) || empty($idBanquette) || empty($idMousse)) {
         $_SESSION['message'] = 'Tous les champs requis doivent être remplis.';
         $_SESSION['message_type'] = 'error';
     } else {
         // Mettre à jour la commande dans la base de données
-        $stmt = $pdo->prepare("UPDATE commande_detail SET prix = ?, commentaire = ?, date = ?, statut = ?, id_client = ?, id_structure = ?, id_dimension = ?, id_banquette = ?, id_mousse = ?, id_couleur_bois = ?, id_decoration = ?, id_accoudoir_bois = ?, id_dossier_bois = ?, id_couleur_tissu_bois = ?,  id_motif_bois = ?, id_modele = ?, id_couleur_tissu = ?, id_motif_tissu = ?, id_accoudoir_tissu = ?, id_dossier_tissu = ? 
+        $stmt = $pdo->prepare("UPDATE commande_detail SET prix = ?, commentaire = ?, date = ?, statut = ?, id_client = ?, id_structure = ?, longueurA = ?, longueurB = ?, longueurC = ?, id_banquette = ?, id_mousse = ?, id_couleur_bois = ?, id_decoration = ?, id_accoudoir_bois = ?, id_dossier_bois = ?, id_couleur_tissu_bois = ?,  id_motif_bois = ?, id_modele = ?, id_couleur_tissu = ?, id_motif_tissu = ?, id_accoudoir_tissu = ?, id_dossier_tissu = ? 
         WHERE id = ?");
         if ($stmt->execute([
             $prix,
@@ -93,7 +91,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $statut,
             $idClient,
             $idStructure,
-            $idDimension,
+            $longueurA,
+            $longueurB,
+            $longueurC,
             $idBanquette,
             $idMousse,
             $idCouleurBois,
@@ -157,15 +157,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <main>
         <div class="container">
             <h2>Modifie une commande détaillée</h2>
-            <?php
-            if (isset($_SESSION['message'])) {
-                echo '<div class="message ' . htmlspecialchars($_SESSION['message_type']) . '">';
-                echo htmlspecialchars($_SESSION['message']);
-                echo '</div>';
-                unset($_SESSION['message']);
-                unset($_SESSION['message_type']);
-            }
-            ?>
+            <?php require '../include/message.php'; ?>
             <div class="form">
                 <form action="edit.php?id=<?php echo $commande['id']; ?>" method="POST" enctype="multipart/form-data" class="formulaire-creation-compte">
                     <div class="form-row">
@@ -226,16 +218,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </div>
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="dimension">ID Dimension</label>
-                            <select class="input-field" id="dimension" name="dimension">
-                                <option value="">-- Sélectionnez une dimension --</option>
-                                <?php foreach ($dimensions as $dimension): ?>
-                                    <option value="<?= htmlspecialchars($dimension['id']) ?>"
-                                        <?= ($dimension['id'] == $commande['id_dimension']) ? 'selected' : '' ?>>
-                                        <?= htmlspecialchars($dimension['longueurA'] . ' x ' . $dimension['longueurB'] . ' x ' . $dimension['longueurC']) ?>
-                                    </option>
-                                <?php endforeach; ?>
-                            </select>
+                            <label for="longueurA">Longueur A :</label>
+                            <input type="number" id="longueurA" name="longueurA" class="input-field" value="<?php echo htmlspecialchars($commande['longueurA']); ?>" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="longueurB">Longueur B :</label>
+                            <input type="number" id="longueurB" name="longueurB" class="input-field" value="<?php echo htmlspecialchars($commande['longueurB']); ?>">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="longueurC">Longueur C :</label>
+                            <input type="number" id="longueurC" name="longueurC" class="input-field" value="<?php echo htmlspecialchars($commande['longueurC']); ?>">
                         </div>
                     </div>
                     <div class="form-row">
