@@ -31,8 +31,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             if (move_uploaded_file($img['tmp_name'], $uploadPath)) {
                 try {
-                    $stmt = $pdo->prepare("INSERT INTO accoudoir_bois (nom, prix, img) VALUES (?, ?, ?)");
-                    $stmt->execute([$nom, $price, $fileName]);
+                    $stmt = $pdo->prepare("INSERT INTO accoudoir_bois (nom, prix, img) VALUES (:nom, :prix, :img)");
+                    $stmt->bindValue(':nom', $nom, PDO::PARAM_STR);
+                    $stmt->bindValue(':prix', $price, PDO::PARAM_INT);
+                    $stmt->bindValue(':img', $fileName, PDO::PARAM_STR);
+                    $stmt->execute();
 
                     $_SESSION['message'] = 'L\'accoudoir en bois a été ajoutée avec succès !';
                     $_SESSION['message_type'] = 'success';
@@ -85,15 +88,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <main>
         <div class="container">
             <h2>Ajoute un accoudoir bois</h2>
-            <?php
-            if (isset($_SESSION['message'])) {
-                echo '<div class="message ' . htmlspecialchars($_SESSION['message_type']) . '">';
-                echo htmlspecialchars($_SESSION['message']);
-                echo '</div>';
-                unset($_SESSION['message']);
-                unset($_SESSION['message_type']);
-            }
-            ?>
+            <?php require '../include/message.php'; ?>
             <div class="form">
                 <form class="formulaire-creation-compte" action="" method="POST" enctype="multipart/form-data">
                     <div class="form-row">

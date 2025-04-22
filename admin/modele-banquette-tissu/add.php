@@ -85,16 +85,7 @@
 
         <div class="container">
             <h2>Ajouter un modèle de banquette tissu</h2>
-            <?php
-            if (isset($_SESSION['message'])) {
-                echo '<div class="message ' . htmlspecialchars($_SESSION['message_type']) . '">';
-                echo htmlspecialchars($_SESSION['message']);
-                echo '</div>';
-                unset($_SESSION['message']);
-                unset($_SESSION['message_type']);
-            }
-            ?>
-
+            <?php require '../include/message.php'; ?>
             <div class="form">
                 <form method="POST" enctype="multipart/form-data" class="formulaire-creation-compte">
                     <div class="form-row">

@@ -85,18 +85,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <main>
         <div class="container">
             <h2>Ajouter une structure</h2>
-
-            <?php
-            if (isset($_SESSION['message'])) {
-                echo '<div class="message ' . htmlspecialchars($_SESSION['message_type']) . '">';
-                echo htmlspecialchars($_SESSION['message']);
-                echo '</div>';
-                // Unset the message after displaying it
-                unset($_SESSION['message']);
-                unset($_SESSION['message_type']);
-            }
-            ?>
-
+            <?php require '../include/message.php'; ?>
             <div class="form">
                 <form action="" method="POST" enctype="multipart/form-data" class="formulaire-creation-compte">
                     <div class="form-row">
