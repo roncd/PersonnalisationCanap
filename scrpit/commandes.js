@@ -53,7 +53,9 @@ window.updateStatus = function (button) {
                 const messageContainer = document.getElementById('message-container');
                 if (data.success) {
                     console.log('Statut mis à jour avec succès :', nextStatut);
-                    messageContainer.innerHTML = `<p class="message success">${data.message}</p>`;
+                    sessionStorage.setItem('flashMessage', data.message);
+                    sessionStorage.setItem('flashType', 'success');
+                    location.reload();
                 } else {
                     console.error('Erreur côté serveur :', data.error);
                     messageContainer.innerHTML = `<p class="message error">${data.message}</p>`;
@@ -77,6 +79,18 @@ window.updateStatus = function (button) {
         }
     });
 };
+
+window.addEventListener('DOMContentLoaded', () => {
+    const message = sessionStorage.getItem('flashMessage');
+    const type = sessionStorage.getItem('flashType');
+
+    if (message && type) {
+        const messageContainer = document.getElementById('message-container');
+        messageContainer.innerHTML = `<p class="message ${type}">${message}</p>`;
+        sessionStorage.removeItem('flashMessage');
+        sessionStorage.removeItem('flashType');
+    }
+});
 
 //DELETE COMMANDE
 window.removeCommand = function (button) {
@@ -131,7 +145,6 @@ window.removeCommand = function (button) {
     // Fermer le popup si clic à l'extérieur
     window.addEventListener('click', (event) => {
         if (event.target === popup) {
-            console.log('Clic à l\'extérieur du popup, fermeture.');
             popup.style.display = 'none';
         }
     });
