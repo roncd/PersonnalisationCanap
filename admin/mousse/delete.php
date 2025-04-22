@@ -18,8 +18,9 @@ if (!$id) {
 
 // Supprimer la mousse de la base de données
 try {
-    $stmt = $pdo->prepare("DELETE FROM mousse WHERE id = ?");
-    $stmt->execute([$id]);
+    $stmt = $pdo->prepare("DELETE FROM mousse WHERE id = :id");
+    $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+    $stmt->execute();
 
     if ($stmt->rowCount() > 0) {
         $_SESSION['message'] = 'La mousse a été supprimée avec succès !';

@@ -27,8 +27,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Tentative d'insertion dans la base de données
     try {
-        $stmt = $pdo->prepare("INSERT INTO client (nom, prenom, mail, tel, mdp, adresse, info, codepostal, ville, date_creation) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-        $stmt->execute([$nom, $prenom, $email, $tel, $mdp, $adresse, $info, $codepostal, $ville, $date]);
+        $stmt = $pdo->prepare("INSERT INTO client (nom, prenom, mail, tel, mdp, adresse, info, codepostal, ville, date_creation) VALUES (:nom, :prenom, :mail, :tel, :mdp, :adresse, :info, :codepostal, :ville, :date_creation)");
+        $stmt->bindValue(':nom', $nom, PDO::PARAM_STR);
+        $stmt->bindValue(':prenom', $prenom, PDO::PARAM_STR);
+        $stmt->bindValue(':mail', $email, PDO::PARAM_STR);
+        $stmt->bindValue(':tel', $tel, PDO::PARAM_INT);
+        $stmt->bindValue(':mdp', $mdp, PDO::PARAM_STR);
+        $stmt->bindValue(':adresse', $adresse, PDO::PARAM_STR);
+        $stmt->bindValue(':info', $info, PDO::PARAM_STR);
+        $stmt->bindValue(':codepostal', $codepostal, PDO::PARAM_STR);
+        $stmt->bindValue(':ville', $ville, PDO::PARAM_STR);
+        $stmt->bindValue(':date_creation', $date, PDO::PARAM_STR);
+        $stmt->execute();
 
         $_SESSION['message'] = 'Le client a été ajouté avec succès !';
         $_SESSION['message_type'] = 'success';
@@ -76,16 +86,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <main>
         <div class="container">
             <h2>Ajoute un client</h2>
-            <?php
-            if (isset($_SESSION['message'])) {
-                echo '<div class="message ' . htmlspecialchars($_SESSION['message_type']) . '">';
-                echo htmlspecialchars($_SESSION['message']);
-                echo '</div>';
-                // Unset the message after displaying it
-                unset($_SESSION['message']);
-                unset($_SESSION['message_type']);
-            }
-            ?>
+            <?php require '../include/message.php'; ?>
             <div class="form">
                 <form class="formulaire-creation-compte" action="" method="POST" enctype="multipart/form-data">
                     <div class="form-row">
@@ -163,5 +164,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <?php require '../squelette/footer.php'; ?>
     </footer>
 </body>
+
+</html>
 
 </html>

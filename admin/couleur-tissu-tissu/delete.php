@@ -17,8 +17,9 @@ if (!$id) {
 }
 
 try {
-    $stmt = $pdo->prepare("DELETE FROM couleur_tissu WHERE id = ?");
-    $stmt->execute([$id]);
+    $stmt = $pdo->prepare("DELETE FROM couleur_tissu WHERE id = :id");
+    $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+    $stmt->execute();
 
     if ($stmt->rowCount() > 0) {
         $_SESSION['message'] = 'La couleur du tissu a été supprimée avec succès !';

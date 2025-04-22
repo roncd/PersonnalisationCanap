@@ -17,8 +17,9 @@ if (!$id) {
 }
 
 // Récupérer les données actuelles de la decoration
-$stmt = $pdo->prepare("SELECT * FROM decoration WHERE id = ?");
-$stmt->execute([$id]);
+$stmt = $pdo->prepare("SELECT * FROM decoration WHERE  id = :id");
+$stmt->bindValue(':id', $id, PDO::PARAM_INT);
+$stmt->execute();
 $decoration = $stmt->fetch(PDO::FETCH_ASSOC);
 
 if (!$decoration) {
@@ -105,15 +106,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <main>
         <div class="container">
             <h2>Modifie une décoration</h2>
-            <?php
-            if (isset($_SESSION['message'])) {
-                echo '<div class="message ' . htmlspecialchars($_SESSION['message_type']) . '">';
-                echo htmlspecialchars($_SESSION['message']);
-                echo '</div>';
-                unset($_SESSION['message']);
-                unset($_SESSION['message_type']);
-            }
-            ?>
+            <?php require '../include/message.php'; ?>
             <div class="form">
                 <form action="edit.php?id=<?php echo $couleurbois['id']; ?>" method="POST" enctype="multipart/form-data" class="formulaire-creation-compte">
                     <div class="form-row">

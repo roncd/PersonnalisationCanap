@@ -30,7 +30,6 @@ $totalPages = ceil($totalCommandes / $limit);
     <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../../styles/tab.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="../../styles/commandes.css">
     <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
     <style>
         /* Styles pour la barre de recherche et les messages */
@@ -93,21 +92,13 @@ $totalPages = ceil($totalCommandes / $limit);
     <main>
         <div class="container">
             <h2>Couleur tissu</h2>
-            <?php
-            if (isset($_SESSION['message'])) {
-                echo '<div class="message ' . htmlspecialchars($_SESSION['message_type']) . '">';
-                echo htmlspecialchars($_SESSION['message']);
-                echo '</div>';
-                unset($_SESSION['message']);
-                unset($_SESSION['message_type']);
-            }
-            ?>
             <div class="search-bar">
                 <form method="GET" action="index.php">
                     <input type="text" name="search" placeholder="Rechercher par nom..." value="<?php echo htmlspecialchars($search); ?>">
                     <button type="submit">Rechercher</button>
                 </form>
             </div>
+            <?php require '../include/message.php'; ?>
             <div class="tab-container">
                 <table class="styled-table">
                     <thead>
@@ -138,7 +129,7 @@ $totalPages = ceil($totalCommandes / $limit);
                             echo "<td><img src='../uploads/couleur-tissu-tissu/{$row['img']}' alt='{$row['nom']}' style='width:50px; height:auto;'></td>";
                             echo "<td class='actions'>";
                             echo "<a href='edit.php?id={$row['id']}' class='edit-action actions vert' title='Modifier'>EDIT</a>";
-                            echo "<a href='delete.php?id={$row['id']}' class='delete-action actions rouge' title='Supprimer' onclick='return confirm(\"Voulez-vous vraiment supprimer cette structure ?\");'>DELETE</a>";
+                            echo "<a href='delete.php?id={$row['id']}' class='delete-action actions rouge' title='Supprimer' onclick='return confirm(\"Voulez-vous vraiment supprimer cette couleur de tissu ?\");'>DELETE</a>";
                             echo "</td>";
                             echo "</tr>";
                         }
@@ -146,29 +137,7 @@ $totalPages = ceil($totalCommandes / $limit);
                     </tbody>
                 </table>
             </div>
-            <?php
-            if (!$search) { 
-                echo '<nav class="nav" aria-label="pagination">';
-                echo '<ul class="pagination">';
-
-                if ($page > 1) {
-                    echo '<li><a href="?page=' . ($page - 1) . '">Précédent</a></li>';
-                }
-
-                for ($i = 1; $i <= $totalPages; $i++) {
-                    echo '<li>';
-                    echo '<a class="' . ($i === $page ? 'active' : '') . '" href="?page=' . $i . '">' . $i . '</a>';
-                    echo '</li>';
-                }
-
-                if ($page < $totalPages) {
-                    echo '<li><a href="?page=' . ($page + 1) . '">Suivant</a></li>';
-                }
-
-                echo '</ul>';
-                echo '</nav>';
-            }
-            ?>
+            <?php require '../include/pagination.php'; ?>
         </div>
     </main>
     <footer>
