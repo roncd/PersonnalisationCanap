@@ -60,26 +60,57 @@ if ($type === 'Bois') {
 }
 
 // Envoi du mail avec le PDF en PJ
-$mail = new PHPMailer(true);
+
+//Envoie au client
+$mailClient = new PHPMailer(true);
 
 try {
-    $mail->isSMTP();
-    $mail->Host       = 'smtp.gmail.com';        
-    $mail->SMTPAuth   = true;
-    $mail->Username   = 'decodumonde.alternance@gmail.com';    
-    $mail->Password   = 'dlop yctn sqlu xywd';      
-    $mail->SMTPSecure = 'tls';
-    $mail->Port       = 587;
+    $mailClient->isSMTP();
+    $env = parse_ini_file(__DIR__ . '/../../.env');
+    $mailClient->Host       = $env['SMTP_HOST'];
+    $mailClient->SMTPAuth   = true;
+    $mailClient->Username   = $env['SMTP_USER'];
+    $mailClient->Password   = $env['SMTP_PASS'];    
+    $mailClient->SMTPSecure = 'tls';
+    $mailClient->Port       = 587;
 
-    $mail->setFrom('decodumonde.alternance@gmail.com', mb_convert_encoding('Déco du Monde', "ISO-8859-1", "UTF-8"));    
-    $mail->addAddress($client['mail'], $client['prenom'] . ' ' . $client['nom']);
+    $mailClient->setFrom('decodumonde.alternance@gmail.com', mb_convert_encoding('Déco du Monde', "ISO-8859-1", "UTF-8"));    
+    $mailClient->addAddress($client['mail'], $client['prenom'] . ' ' . $client['nom']);
 
-    $mail->Subject = mb_convert_encoding('Devis n°' . $idCommande, "ISO-8859-1", "UTF-8");    
-    $mail->Body    = "Bonjour " . $client['prenom'] . ",\n\nMerci d'avoir créé une commande sur notre site de personnalisation de canapé marocain. Veuillez trouver ci-joint votre devis.\n\nUne fois votre devis généré vous devez vous rendre au magasin Déco du Monde pour effectué un accompte, ensuite nous commenceron la construction du canapé.\n\nBien cordialement,\nL'équipe " . $entreprise['nom'];
-    $mail->addStringAttachment($pdfContent, "devis-$idCommande.pdf");
-    $mail->send();
-    echo json_encode(['success' => true, 'message' => 'Le mail a bien été envoyé.']);
+    $mailClient->Subject = mb_convert_encoding('Devis n°' . $idCommande, "ISO-8859-1", "UTF-8");    
+    $mailClient->Body    = "Bonjour " . $client['prenom'] . ",\n\nMerci d'avoir créé une commande sur notre site de personnalisation de canapé marocain. Veuillez trouver ci-joint votre devis.\n\nUne fois votre devis généré vous devez vous rendre au magasin Déco du Monde pour effectué un accompte, ensuite nous commenceron la construction du canapé.\n\nBien cordialement,\nL'équipe " . $entreprise['nom'];
+    $mailClient->addStringAttachment($pdfContent, "devis-$idCommande.pdf");
+    $mailClient->send();
+    echo json_encode(['success' => true, 'message' => 'Le mail au client a bien été envoyé.']);
 } catch (Exception $e) {
-    error_log("Erreur lors de l'envoi du mail : " . $mail->ErrorInfo);
-    echo json_encode(['success' => false, 'message' => "Erreur SMTP : " . $mail->ErrorInfo]);
+    error_log("Erreur lors de l'envoi du mail au client : " . $mailClient->ErrorInfo);
+    echo json_encode(['success' => false, 'message' => "Erreur SMTP : " . $mailClient->ErrorInfo]);
 }
+
+//Envoie à l'entreprise
+$mailEntreprise = new PHPMailer(true);
+
+try {
+    $mailEntreprise->isSMTP();
+    $env = parse_ini_file(__DIR__ . '/../../.env');
+    $mailEntreprise->Host       = $env['SMTP_HOST'];
+    $mailEntreprise->SMTPAuth   = true;
+    $mailEntreprise->Username   = $env['SMTP_USER'];
+    $mailEntreprise->Password   = $env['SMTP_PASS']; 
+    $mailEntreprise->SMTPSecure = 'tls';
+    $mailEntreprise->Port       = 587;
+
+    $mailEntreprise->setFrom('decodumonde.alternance@gmail.com', mb_convert_encoding('Déco du Monde', "ISO-8859-1", "UTF-8"));
+    $mailEntreprise->addAddress('rosalie.nicaud@gmail.com', 'Déco du Monde');
+
+    $mailEntreprise->Subject = mb_convert_encoding('Nouvelle commande reçue - Devis n°' . $idCommande, "ISO-8859-1", "UTF-8");    
+    $mailEntreprise->Body    = "Une nouvelle commande a été passée par " . $client['prenom'] . " " . $client['nom'] . ". Veuillez trouver ci-joint le devis correspondant.\n\nID Commande : " . $idCommande . "\nEmail client : " . $client['mail'] . "\n\nDéco du Monde";
+    $mailEntreprise->addStringAttachment($pdfContent, "devis-$idCommande.pdf");
+
+    $mailEntreprise->send();
+    echo json_encode(['success' => true, 'message' => 'Le mail à l’entreprise a bien été envoyé.']);
+} catch (Exception $e) {
+    error_log("Erreur lors de l'envoi du mail à l’entreprise : " . $mailEntreprise->ErrorInfo);
+    echo json_encode(['success' => false, 'message' => "Erreur SMTP : " . $mailEntreprise->ErrorInfo]);
+}
+
