@@ -171,7 +171,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       </div>
     </div>
 
-
+    
     <!-- GESTION DES SELECTIONS -->
     <script>
       document.addEventListener('DOMContentLoaded', () => {

@@ -53,6 +53,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link rel="stylesheet" href="../../styles/popup.css">
     <script type="module" src="../../scrpit/popup.js"></script>
     <script type="module" src="../../scrpit/button.js"></script>
+    <script type="module" src="../../scrpit/variationPrix.js"></script>
+
     <title>Étape 4 - Choisi ton tissu de coussin</title>
     <style>
         /* Transition pour les éléments de la page */
@@ -77,7 +79,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </style>
 </head>
 
-<body data-user-id="<?php echo $_SESSION['user_id']; ?>">
+<body data-user-id="<?php echo $_SESSION['user_id']; ?>" data-current-step="4-2-couleur-tissu">
 
     <header>
         <?php require '../../squelette/header.php'; ?>
@@ -107,8 +109,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <div class="option transition">
                                 <img src="../../admin/uploads/motif-tissu/<?php echo htmlspecialchars($tissu['img']); ?>"
                                     alt="<?php echo htmlspecialchars($tissu['nom']); ?>"
-                                    data-motif-id="<?php echo $tissu['id']; ?>"
-                                    data-motif-prix="<?php echo number_format($tissu['prix'], 2, '.', ''); ?>">
+                                    data-motif-tissu-id="<?php echo $tissu['id']; ?>"
+                                    data-motif-tissu-prix="<?php echo number_format($tissu['prix'], 2, '.', ''); ?>">
                                 <p><?php echo htmlspecialchars($tissu['nom']); ?></p>
                                 <p><strong><?php echo number_format($tissu['prix'], 2, '.', ''); ?> €</strong></p>
                             </div>
@@ -191,7 +193,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 if (savedMotifTissuId) {
                     options.forEach(img => {
-                        if (img.getAttribute('data-motif-id') === savedMotifTissuId) {
+                        if (img.getAttribute('data-motif-tissu-id') === savedMotifTissuId) {
                             img.classList.add('selected');
                             mainImage.src = img.src;
                             mainImage.alt = img.alt;
@@ -210,14 +212,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     img.addEventListener('click', () => {
                         options.forEach(opt => opt.classList.remove('selected'));
                         img.classList.add('selected');
-                        selectedMotifTissuInput.value = img.getAttribute('data-motif-id');
+                        selectedMotifTissuInput.value = img.getAttribute('data-motif-tissu-id');
 
                         // Mise à jour de l'image principale
                         mainImage.src = img.src;
                         mainImage.alt = img.alt;
 
                         selected = true;
-                        saveSelection(img.getAttribute('data-motif-id'));
+                        saveSelection(img.getAttribute('data-motif-tissu-id'));
                     });
                 });
 
@@ -237,77 +239,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 }
             });
         </script>
-
-
-        <!-- VARIATION DES PRIX  -->
-        <script>
-            document.addEventListener('DOMContentLoaded', () => {
-                let totalPrice = 0; // Total global
-
-                // Identifier l'étape actuelle
-                const currentStep = "4-2 tissu";
-                const userId = document.body.getAttribute('data-user-id');
-
-                if (!userId) {
-                    console.error("ID utilisateur non trouvé.");
-                    return;
-                }
-
-                const sessionKey = `allSelectedOptions_${userId}`;
-                let allSelectedOptions = JSON.parse(sessionStorage.getItem(sessionKey)) || [];
-
-                // Fonction pour mettre à jour le total global
-                function updateTotal() {
-                    totalPrice = allSelectedOptions.reduce((sum, option) => {
-                        const price = option.price || 0;
-                        const quantity = option.quantity || 1;
-                        return sum + (price * quantity);
-                    }, 0);
-
-                    const totalElement = document.querySelector(".footer p span");
-                    if (totalElement) {
-                        totalElement.textContent = `${totalPrice.toFixed(2)} €`;
-                    }
-                }
-
-                // Gestion des clics sur les options
-                document.querySelectorAll('.color-options .option img').forEach(option => {
-                    const optionId = option.getAttribute('data-motif-id');
-                    const price = parseFloat(option.getAttribute('data-motif-prix')) || 0;
-
-                    if (!optionId || isNaN(price)) {
-                        console.warn(`Attributs invalides : data-motif-id=${optionId}, data-motif-prix=${price}`);
-                        return;
-                    }
-
-                    const uniqueId = `${currentStep}_${optionId}`;
-
-                    if (allSelectedOptions.some(opt => opt.id === uniqueId)) {
-                        option.parentElement.classList.add('selected');
-                    }
-
-                    option.addEventListener('click', () => {
-                        document.querySelectorAll('.color-options .option img').forEach(opt => {
-                            opt.parentElement.classList.remove('selected');
-                        });
-
-                        allSelectedOptions = allSelectedOptions.filter(opt => !opt.id.startsWith(`${currentStep}_`));
-
-                        allSelectedOptions.push({
-                            id: uniqueId,
-                            price: price
-                        });
-                        option.parentElement.classList.add('selected');
-
-                        sessionStorage.setItem(sessionKey, JSON.stringify(allSelectedOptions));
-                        updateTotal();
-                    });
-                });
-
-                updateTotal();
-            });
-        </script>
-
 
     </main>
 

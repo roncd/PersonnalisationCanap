@@ -75,7 +75,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
   </style>
 </head>
 
-<body data-user-id="<?php echo $_SESSION['user_id']; ?>">
+<body data-user-id="<?php echo $_SESSION['user_id']; ?>" data-current-step="1-dimensions">
   <header>
     <?php require '../../squelette/header.php'; ?>
   </header>
@@ -240,7 +240,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
           allSelectedOptions = [];
           console.warn("allSelectedOptions n'était pas un tableau. Réinitialisé à []");
         }
-
+        
 
         // Fonction pour ajouter les dimensions au calcul
         function calculateDimensionPrice() {
@@ -262,15 +262,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
           allSelectedOptions = allSelectedOptions.filter(opt => !opt.id.startsWith(`${currentStep}_`));
 
           // Ajouter les dimensions au stockage global
-          allSelectedOptions.push({
-            id: `${currentStep}_dimensions`,
-            price: dimensionPrice
-          });
+          allSelectedOptions.push({ id: `${currentStep}_dimensions`, price: dimensionPrice });
 
           // Sauvegarder dans sessionStorage pour cet utilisateur
           sessionStorage.setItem(sessionKey, JSON.stringify(allSelectedOptions));
         }
-
+        
 
         // Fonction pour sauvegarder les valeurs des dimensions dans sessionStorage
         function saveDimensions() {
@@ -278,11 +275,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
           const longueurB = document.getElementById("longueurB").value || "";
           const longueurC = document.getElementById("longueurC").value || "";
 
-          const dimensions = {
-            longueurA,
-            longueurB,
-            longueurC
-          };
+          const dimensions = { longueurA, longueurB, longueurC };
           sessionStorage.setItem(dimensionKey, JSON.stringify(dimensions));
           console.log("Dimensions sauvegardées :", dimensions);
         }
@@ -307,16 +300,16 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         }
 
         // Empêcher la saisie de plus de 3 chiffres dans les champs de type number
-        document.querySelectorAll(".input-field").forEach(input => {
-          input.addEventListener("input", () => {
-            if (input.value.length > 3) {
-              input.value = input.value.slice(0, 3);
-            }
-          });
-        });
+document.querySelectorAll(".input-field").forEach(input => {
+  input.addEventListener("input", () => {
+    if (input.value.length > 3) {
+      input.value = input.value.slice(0, 3);
+    }
+  });
+});
 
 
-
+        
 
 
         // Pré-remplir les champs avec les dimensions sauvegardées
