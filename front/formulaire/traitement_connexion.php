@@ -10,7 +10,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     echo 'Email : ' . htmlspecialchars($email) . '<br>';
     echo 'Mot de passe : ' . htmlspecialchars($password) . '<br>';
 
-    // Change 'email' to 'mail' in the SQL query
     $stmt = $pdo->prepare("SELECT * FROM client WHERE mail = :mail");
     $stmt->execute(['mail' => $email]);
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -19,7 +18,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Ligne de débogage
         echo 'Hash stocké : ' . htmlspecialchars($user['mdp']) . '<br>';
 
-        // Change 'mot_de_passe' to 'mdp'
         if (password_verify($password, $user['mdp'])) {
             $_SESSION['user_id'] = $user['id'];
             $_SESSION['user_name'] = $user['prenom'];

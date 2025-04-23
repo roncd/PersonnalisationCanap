@@ -56,6 +56,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../../styles/formulaire.css">
+  <link rel="stylesheet" href="../../styles/message.css">
   <title>Créer ton compte</title>
   <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
 </head>
@@ -65,24 +66,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <header>
     <?php require '../../squelette/header.php'; ?>
   </header>
-
-  <style>
-    .php-message-success {
-      background-color: #d4edda;
-      color: #155724;
-      padding: 10px;
-      border-radius: 5px;
-      margin-bottom: 10px;
-    }
-
-    .php-message-error {
-      background-color: #f8d7da;
-      color: #721c24;
-      padding: 10px;
-      border-radius: 5px;
-      margin-bottom: 10px;
-    }
-  </style>
 
   <main>
     <div class="container">

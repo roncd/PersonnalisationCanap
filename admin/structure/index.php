@@ -33,60 +33,7 @@ $totalPages = ceil($totalCommandes / $limit);
     <link rel="stylesheet" href="../../styles/tab.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
     <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
-    <style>
-        .message {
-            padding: 10px;
-            margin: 10px 0;
-            border-radius: 5px;
-        }
-
-        .success {
-            background-color: #d4edda;
-            color: #155724;
-        }
-
-        .error {
-            background-color: #f8d7da;
-            color: #721c24;
-        }
-
-        .search-bar {
-            margin-bottom: 20px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: rgba(227, 209, 200, 0.8);
-            /* Beige avec opacité réduite */
-            padding: 10px;
-            border-radius: 5px;
-        }
-
-        .search-bar input {
-
-            padding: 8px;
-            font-size: 16px;
-            border: 1px solid #ccc;
-            border-radius: 10px;
-            width: 300px;
-        }
-
-        .search-bar button {
-            padding: 8px 12px;
-            font-size: 16px;
-            color: white;
-            background-color: #000;
-            /* Bouton noir */
-            border: none;
-            border-radius: 10px;
-            margin-left: 8px;
-            cursor: pointer;
-        }
-
-        .search-bar button:hover {
-            background-color: #333;
-            /* Changement de couleur au survol */
-        }
-    </style>
+    <link rel="stylesheet" href="../../styles/message.css">
 </head>
 
 <body>

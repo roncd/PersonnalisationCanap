@@ -209,7 +209,7 @@ foreach ($details as $detail) {
         // Message si aucun accoudoir bois trouvé
         $pdf->Ln(10);
         $pdf->SetFont('Arial', 'B', 12);
-        $pdf->Cell(190, 10, mb_convert_encoding("Aucun accoudoir bois trouvé", "ISO-8859-1", "UTF-8"), 1, 1, 'C');
+        $pdf->Cell(190, 10, mb_convert_encoding("Aucun accoudoir bois pour cette commande", "ISO-8859-1", "UTF-8"), 1, 1, 'C');
     }
 
     // Vérification si les données existent avant d'afficher

@@ -54,23 +54,7 @@ $totalPages = ceil($totalCommandes / $limit);
     <script src="../../scrpit/commandes.js"></script>
     <script type="module" src="../../scrpit/download.js"></script>
     <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
-    <style>
-        .message {
-            padding: 10px;
-            margin: 10px 0;
-            border-radius: 5px;
-        }
-
-        .success {
-            background-color: #d4edda;
-            color: #155724;
-        }
-
-        .error {
-            background-color: #f8d7da;
-            color: #721c24;
-        }
-    </style>
+    <link rel="stylesheet" href="../../styles/message.css">
 </head>
 
 <body>
