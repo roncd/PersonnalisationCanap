@@ -34,7 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Envoi de l'email de vérification
         $subject = "Vérification de votre compte";
         $message = "Bonjour $prenom,\n\nVeuillez cliquer sur ce lien pour vérifier votre compte :\n";
-        $message .= "https://diangou-cmr.alwaysdata.net/PersonnalisationCanapLocal/front/formulaire/verification.php?token=$token";  // Remplacez "votre-site.com" par votre domaine réel
+        $message .= "https://diangou-cmr.alwaysdata.net/PersonnalisationCanapLocal/front/formulaire/verification.php?token=$token";  
         $headers = "From: no-reply@votre-site.com";
 
         // Envoi de l'email

@@ -1,0 +1,62 @@
+/* Transition pour les éléments de la page */
+.transition {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+
+.transition.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+
+/* Appliquer les transitions aux images sélectionnées */
+.option img.selected {
+    border: 3px solid #997765;
+    /* Couleur marron */
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+.container {
+    display: flex;
+    flex-direction: row-reverse;
+    /* Inverse l'ordre des colonnes */
+
+}
+
+/* Style général pour la zone contenant les dimensions et autres éléments */
+.option-l {
+    background-color: #f5f5dc;
+    /* Couleur beige */
+    border-radius: 15px;
+    /* Bords arrondis */
+    padding: 20px;
+    /* Un peu de marge à l'intérieur */
+    margin-bottom: 10px;
+    /* Espacement entre les options */
+    display: flex;
+    /* Flexbox pour centrer le contenu */
+    justify-content: center;
+    /* Centrer horizontalement */
+    align-items: center;
+    /* Centrer verticalement */
+    text-align: center;
+    /* Centrer le texte */
+    height: 150px;
+    /* Hauteur du carré */
+    width: 200px;
+    /* Largeur du carré */
+}
+
+/* Si tu veux un style supplémentaire pour le texte */
+.option-l p {
+    font-size: 16px;
+    /* Taille de la police */
+    font-weight: bold;
+    /* Mettre le texte en gras */
+    color: #333;
+    /* Couleur du texte */
+}

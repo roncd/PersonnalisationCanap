@@ -26,35 +26,9 @@ echo "<!DOCTYPE html>
 <head>
     <meta charset='UTF-8'>
     <meta name='viewport' content='width=device-width, initial-scale=1.0'>
-      <link rel='icon' type='image/x-icon' href='../../medias/favicon.png'>
-
+    <link rel='icon' type='image/x-icon' href='../../medias/favicon.png'>
+    <link rel='stylesheet' href='../../styles/verif.css'>
     <title>Vérification réussie</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            background-color: #f8f9fa;
-            margin: 0;
-            padding: 0;
-        }
-        .message-container {
-            margin-top: 20%;
-            padding: 20px;
-            background-color: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
-            border-radius: 8px;
-            display: inline-block;
-            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-        }
-        .message-container h1 {
-            font-size: 24px;
-            margin-bottom: 10px;
-        }
-        .message-container p {
-            font-size: 16px;
-        }
-    </style>
 </head>
 <body>
     <div class='message-container'>
@@ -67,4 +41,3 @@ echo "<!DOCTYPE html>
 // Redirige après 3 secondes
 header("refresh:3;url=Connexion.php");
 exit();
-?>

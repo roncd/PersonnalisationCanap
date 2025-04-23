@@ -101,29 +101,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['comment'])) {
   <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../../styles/processus.css">
   <link rel="stylesheet" href="../../styles/popup.css">
+  <link rel="stylesheet" href="../../styles/message.css">
   <script type="module" src="../../scrpit/popup-bois.js"></script>
   <script type="module" src="../../scrpit/button.js"></script>
 
   <title>Récapitulatif de la commande</title>
-  <style>
-    .footer p {
-      margin-bottom: 20px; 
-    }
-    .message {
-            padding: 10px;
-            margin: 10px 0;
-            border-radius: 5px;
-        }
-        .success {
-            background-color: #d4edda;
-            color: #155724;
-        }
-        .error {
-            background-color: #f8d7da;
-            color: #721c24;
-        }
-    </style>
-  </style>
 </head>
 <body data-user-id="<?php echo $_SESSION['user_id']; ?>">
 
