@@ -117,7 +117,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div class="footer">
           <p>Total : <span>899 €</span></p>
           <div class="buttons">
-            <button class="btn-retour transition" onclick="history.go(-1)">Retour</button>
+            <button class="btn-retour transition">Retour</button>
             <form method="POST" action="">
               <input type="hidden" name="banquette_id" id="selected-banquette">
               <input type="hidden" name="banquette_type" id="selected-banquette-type">
@@ -238,14 +238,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           console.error("ID utilisateur non trouvé. Vérifiez que 'data-user-id' est bien défini dans le HTML.");
           return;
         }
-        console.log("ID utilisateur récupéré :", userId);
 
         // Charger toutes les options sélectionnées depuis sessionStorage (par utilisateur)
         const sessionKey = `allSelectedOptions_${userId}`;
         const selectedKey = `selectedOptions_${userId}`;
         let allSelectedOptions = JSON.parse(sessionStorage.getItem(sessionKey)) || [];
         let selectedOptions = JSON.parse(sessionStorage.getItem(selectedKey)) || {}; // Charger `selectedOptions` pour cet utilisateur
-        console.log("Données globales récupérées depuis sessionStorage :", allSelectedOptions);
 
         // Vérifier si `allSelectedOptions` est un tableau
         if (!Array.isArray(allSelectedOptions)) {
@@ -262,7 +260,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             return sum + (price * quantity);
           }, 0);
 
-          console.log("Total global mis à jour :", totalPrice);
+          console.log("Total global :", totalPrice);
 
           // Mettre à jour le total dans l'interface
           const totalElement = document.querySelector(".footer p span");

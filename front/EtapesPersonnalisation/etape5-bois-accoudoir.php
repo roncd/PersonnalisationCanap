@@ -84,6 +84,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <link rel="stylesheet" href="../../styles/popup.css">
   <script type="module" src="../../scrpit/popup.js"></script>
   <script type="module" src="../../scrpit/button.js"></script>
+  <script type="module" src="../../scrpit/variationPrix.js"></script>
+
   <title>Étape 5 - Ajoute tes accoudoirs</title>
   <style>
     /* Transition pour les éléments de la page */
@@ -144,7 +146,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 
 
-<body data-user-id="<?php echo $_SESSION['user_id']; ?>">
+<body data-user-id="<?php echo $_SESSION['user_id']; ?>" data-current-step="5-accoudoir-bois">
 
 
   <header>
@@ -367,7 +369,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
         // Identifier l'étape actuelle
-        const currentStep = "5-accoudoirs"; // Étape spécifique
+        const currentStep = "5-accoudoir-bois"; // Étape spécifique
 
 
         // Charger l'ID utilisateur depuis une variable PHP intégrée dans le HTML

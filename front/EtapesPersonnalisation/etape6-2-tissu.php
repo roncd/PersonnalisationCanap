@@ -63,6 +63,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <link rel="stylesheet" href="../../styles/popup.css">
   <script type="module" src="../../scrpit/popup.js"></script>
   <script type="module" src="../../scrpit/button.js"></script>
+  <script type="module" src="../../scrpit/variationPrix.js"></script>
+
   <title>Étape 6 - Ajoute tes accoudoirs</title>
   <style>
     /* Transition pour les éléments de la page */
@@ -85,7 +87,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
   </style>
 </head>
-<body data-user-id="<?php echo $_SESSION['user_id']; ?>">
+<body data-user-id="<?php echo $_SESSION['user_id']; ?>" data-current-step="6-accoudoir-tissu">
 
 <header>
   <?php require '../../squelette/header.php'; ?>
