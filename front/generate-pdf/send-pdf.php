@@ -78,7 +78,34 @@ try {
     $mailClient->addAddress($client['mail'], $client['prenom'] . ' ' . $client['nom']);
 
     $mailClient->Subject = mb_convert_encoding('Devis n°' . $idCommande, "ISO-8859-1", "UTF-8");    
-    $mailClient->Body    = "Bonjour " . $client['prenom'] . ",\n\nMerci d'avoir créé une commande sur notre site de personnalisation de canapé marocain. Veuillez trouver ci-joint votre devis.\n\nUne fois votre devis généré vous devez vous rendre au magasin Déco du Monde pour effectué un accompte, ensuite nous commenceron la construction du canapé.\n\nBien cordialement,\nL'équipe " . $entreprise['nom'];
+    $mailClient->isHTML(true);
+    $mailClient->Body = "
+    <p>Bonjour " . htmlspecialchars($client['prenom']) . ",</p>
+    
+    <p>Merci d'avoir créé une commande sur notre site de personnalisation de canapé marocain.</p>
+    
+    <p>Veuillez trouver ci-joint le devis correspondant à votre commande.</p>
+    
+    <h3>Étapes à suivre pour finaliser votre commande :</h3>
+    <ol>
+        <li>Rendez-vous en magasin (<strong>Déco du Monde</strong>) afin de valider le devis.</li>
+        <li>Un acompte devra être réglé sur place pour confirmer la commande.</li>
+    </ol>
+    
+    <p><strong>Moyens de paiement acceptés :</strong></p>
+    <ul>
+        <li>Espèces</li>
+        <li>Carte bancaire</li>
+        <li>Virement bancaire</li>
+        <li>Paiement en plusieurs fois via <strong>Alma</strong> (2x, 3x ou 4x)</li>
+    </ul>
+    
+    <p><strong>⚠️ La commande ne sera confirmée qu’après le paiement de l’acompte. La fabrication de votre canapé débutera à ce moment-là.</strong></p>
+    
+    <p>Nous restons à votre disposition pour toute question.</p>
+    
+    <p>Bien cordialement,<br>
+    L’équipe " . htmlspecialchars($entreprise['nom']) . "</p>";
     $mailClient->addStringAttachment($pdfContent, "devis-$idCommande.pdf");
     $mailClient->send();
     echo json_encode(['success' => true, 'message' => 'Le mail au client a bien été envoyé.']);
