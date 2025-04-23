@@ -21,6 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $id_client = $_SESSION['user_id'];
     $id_mousse = $_POST['mousse_id'];
+    $prix_total = isset($_POST['total_price']) ? floatval($_POST['total_price']) : 0;
 
     // Vérifier si une commande temporaire existe déjà pour cet utilisateur
     $stmt = $pdo->prepare("SELECT id FROM commande_temporaire WHERE id_client = ?");
@@ -28,11 +29,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $existing_order = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if ($existing_order) {
-        $stmt = $pdo->prepare("UPDATE commande_temporaire SET id_mousse = ? WHERE id_client = ?");
-        $stmt->execute([$id_mousse, $id_client]);
+        $stmt = $pdo->prepare("UPDATE commande_temporaire SET id_mousse = ?, prix = ? WHERE id_client = ?");
+        $stmt->execute([$id_mousse, $prix_total, $id_client]);
     } else {
-        $stmt = $pdo->prepare("INSERT INTO commande_temporaire (id_client, id_mousse) VALUES (?, ?)");
-        $stmt->execute([$id_client, $id_mousse]);
+        $stmt = $pdo->prepare("INSERT INTO commande_temporaire (id_client, id_mousse, prix) VALUES (?, ?, ?)");
+        $stmt->execute([$id_client, $id_mousse, $prix_total]);
     }
 
     // Rediriger vers l'étape suivante
@@ -40,6 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     exit;
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="fr">
@@ -122,9 +124,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       <div class="footer">
       <p>Total : <span>899 €</span></p>
       <div class="buttons">
-          <button class="btn-retour transition" onclick="history.go(-1)">Retour</button>
+          <button class="btn-retour transition" >Retour</button>
           <form method="POST" action="">
             <input type="hidden" name="mousse_id" id="selected-mousse">
+            <input type="hidden" name="total_price" id="total-price"> <!-- Ajout pour envoyer le prix -->
             <button type="submit" class="btn-suivant transition">Suivant</button>
           </form>
         </div>
@@ -171,6 +174,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       <button class="close-btn">OK</button>
     </div>
   </div>
+
+  <script>
+    
+    document.addEventListener('DOMContentLoaded', () => {
+    const totalElement = document.querySelector(".footer p span");
+    const totalPriceInput = document.querySelector("#total-price");
+    
+    function updateTotalPriceInput() {
+        if (totalElement && totalPriceInput) {
+            totalPriceInput.value = parseFloat(totalElement.textContent) || 0;
+        }
+    }
+
+    // Mettre à jour la valeur avant l'envoi
+    const suivantButton = document.querySelector(".btn-suivant");
+    if (suivantButton) {
+        suivantButton.addEventListener("click", updateTotalPriceInput);
+    }
+});
+  </script>
 
   <script>
     document.addEventListener('DOMContentLoaded', () => {

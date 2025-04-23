@@ -75,7 +75,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
   </style>
 </head>
-<body data-user-id="<?php echo $_SESSION['user_id']; ?>" data-current-step="8-2-tissu-motif-bois">
+<body data-user-id="<?php echo $_SESSION['user_id']; ?>" data-current-step="8-1-motifparrure-bois">
 
 <header>
   <?php require '../../squelette/header.php'; ?>
@@ -120,7 +120,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       <div class="footer">
       <p>Total : <span>899 €</span></p>
       <div class="buttons">
-          <button class="btn-retour transition" onclick="history.go(-1)">Retour</button>
+          <button class="btn-retour transition" >Retour</button>
           <form method="POST" action="">
             <input type="hidden" name="couleur_tissu_bois_id" id="selected-couleur_tissu_bois">
             <button type="submit" class="btn-suivant transition">Suivant</button>

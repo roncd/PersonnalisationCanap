@@ -17,24 +17,25 @@ $commande = $stmt->fetch(PDO::FETCH_ASSOC);
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
   // Vérifier si longueurA est bien renseignée (obligatoire)
-  if (!empty($_POST["longueurA"])) {
-    $longueurA = (int) trim($_POST["longueurA"]);
-    $longueurB = !empty($_POST["longueurB"]) ? (int) trim($_POST["longueurB"]) : null;
-    $longueurC = !empty($_POST["longueurC"]) ? (int) trim($_POST["longueurC"]) : null;
 
-    if ($commande) {
-      $id = $commande['id']; // Récupérer l'ID de la commande temporaire
+if (!empty($_POST["longueurA"])) {
+  $longueurA = (int) trim($_POST["longueurA"]);
+  $longueurB = !empty($_POST["longueurB"]) ? (int) trim($_POST["longueurB"]) : null;
+  $longueurC = !empty($_POST["longueurC"]) ? (int) trim($_POST["longueurC"]) : null;
+  $prix_dimensions = !empty($_POST["prix_dimensions"]) ? (float) trim($_POST["prix_dimensions"]) : null;
 
-      // Correction de la requête SQL
-      $stmt = $pdo->prepare("UPDATE commande_temporaire SET longueurA = ?, longueurB = ?, longueurC = ? WHERE id = ?");
-      if ($stmt->execute([$longueurA, $longueurB, $longueurC, $id])) {
-        // Redirection après mise à jour réussie
-        header("Location: etape2-type-banquette.php");
-        exit();
-      }
+  if ($commande) {
+    $id = $commande['id'];
+
+    $stmt = $pdo->prepare("UPDATE commande_temporaire SET longueurA = ?, longueurB = ?, longueurC = ?, prix_dimensions = ? WHERE id = ?");
+    if ($stmt->execute([$longueurA, $longueurB, $longueurC, $prix_dimensions, $id])) {
+      header("Location: etape2-type-banquette.php");
+      exit();
     }
   }
 }
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -114,7 +115,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
           <div class="footer">
             <p>Total : <span>899 €</span></p>
             <div class="buttons">
-              <button type="button" class="btn-retour" onclick="history.go(-1)">Retour</button>
+              <button type="button" class="btn-retour">Retour</button>
+              <input type="hidden" name="prix_dimensions" id="prix_dimensions_hidden" value="">
               <button type="submit" class="btn-suivant transition">Suivant</button>
             </div>
           </div>
@@ -222,7 +224,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
           console.error("ID utilisateur non trouvé. Vérifiez que 'data-user-id' est bien défini dans le HTML.");
           return;
         }
-        console.log("ID utilisateur récupéré :", userId);
 
         // Charger les données spécifiques à l'utilisateur depuis sessionStorage
         const sessionKey = `allSelectedOptions_${userId}`;
@@ -233,7 +234,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
           longueurB: "",
           longueurC: ""
         };
-        console.log("Données globales récupérées depuis sessionStorage :", allSelectedOptions);
 
         // Vérifier si `allSelectedOptions` est un tableau
         if (!Array.isArray(allSelectedOptions)) {
@@ -244,30 +244,27 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
         // Fonction pour ajouter les dimensions au calcul
         function calculateDimensionPrice() {
-          const longueurA = parseFloat(document.getElementById("longueurA").value) || 0;
-          const longueurB = parseFloat(document.getElementById("longueurB").value) || 0;
-          const longueurC = parseFloat(document.getElementById("longueurC").value) || 0;
+  const longueurA = parseFloat(document.getElementById("longueurA").value) || 0;
+  const longueurB = parseFloat(document.getElementById("longueurB").value) || 0;
+  const longueurC = parseFloat(document.getElementById("longueurC").value) || 0;
 
-          // Calculez la longueur totale en mètres (convertir cm en mètre)
-          const totalMeters = (longueurA + longueurB + longueurC) / 100;
-          console.log(`Longueur totale en mètres : ${totalMeters}`);
+  const totalMeters = (longueurA + longueurB + longueurC) / 100;
+  const dimensionPrice = totalMeters * 350;
 
-          // Prix basé sur la longueur totale
-          const dimensionPrice = totalMeters * 350; // 350 € par mètre
-          console.log(`Prix des dimensions : ${dimensionPrice}`);
+  document.getElementById("dimension-price").textContent = dimensionPrice.toFixed(2);
 
-          document.getElementById("dimension-price").textContent = dimensionPrice.toFixed(2);
+  // Mettre à jour le champ caché
+  document.getElementById("prix_dimensions_hidden").value = dimensionPrice.toFixed(2);
 
-          // Supprimer les dimensions précédentes pour cette étape
-          allSelectedOptions = allSelectedOptions.filter(opt => !opt.id.startsWith(`${currentStep}_`));
+  // Supprimer les dimensions précédentes pour cette étape
+  allSelectedOptions = allSelectedOptions.filter(opt => !opt.id.startsWith(`${currentStep}_`));
 
-          // Ajouter les dimensions au stockage global
-          allSelectedOptions.push({ id: `${currentStep}_dimensions`, price: dimensionPrice });
+  // Ajouter les dimensions au stockage global
+  allSelectedOptions.push({ id: `${currentStep}_dimensions`, price: dimensionPrice });
 
-          // Sauvegarder dans sessionStorage pour cet utilisateur
-          sessionStorage.setItem(sessionKey, JSON.stringify(allSelectedOptions));
-        }
-        
+  sessionStorage.setItem(sessionKey, JSON.stringify(allSelectedOptions));
+}
+
 
         // Fonction pour sauvegarder les valeurs des dimensions dans sessionStorage
         function saveDimensions() {
