@@ -61,6 +61,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <link rel="stylesheet" href="../../styles/popup.css">
   <script type="module" src="../../scrpit/popup.js"></script>
   <script type="module" src="../../scrpit/button.js"></script>
+  <script type="module" src="../../scrpit/variationPrix.js"></script>
+
   <title>Étape 3 - Choisi ton modèle</title>
 
 
@@ -88,7 +90,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 </head>
 
-<body data-user-id="<?php echo $_SESSION['user_id']; ?>">
+<body data-user-id="<?php echo $_SESSION['user_id']; ?>" data-current-step="3-modele-tissu">
 
 
   <header>
@@ -120,8 +122,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           <?php foreach ($modele as $item): ?>
             <div class="option transition">
               <img src="../../admin/uploads/modele/<?php echo htmlspecialchars($item['img']); ?>"
-                alt="<?php echo htmlspecialchars($item['nom']); ?>" data-modele-id="<?php echo $item['id']; ?>"
-                data-modele-prix="<?php echo $item['prix']; ?>">
+                alt="<?php echo htmlspecialchars($item['nom']); ?>" data-modele-tissu-id="<?php echo $item['id']; ?>"
+                data-modele-tissu-prix="<?php echo $item['prix']; ?>">
               <p><?php echo htmlspecialchars($item['nom']); ?></p>
               <p><strong><?php echo htmlspecialchars($item['prix']); ?> €</strong></p>
 
@@ -201,7 +203,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if (savedModeleId && savedModeleType) {
           options.forEach(img => {
-            if (img.getAttribute('data-modele-id') === savedModeleId && img.getAttribute('data-modele-type') === savedModeleType) {
+            if (img.getAttribute('data-modele-tissu-id') === savedModeleId && img.getAttribute('data-modele-tissu-type') === savedModeleType) {
               img.classList.add('selected');
               mainImage.src = img.src;
               mainImage.alt = img.alt;
@@ -220,15 +222,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           img.addEventListener('click', () => {
             options.forEach(opt => opt.classList.remove('selected'));
             img.classList.add('selected');
-            selectedModeleInput.value = img.getAttribute('data-modele-id');
-            selectedModeleTypeInput.value = img.getAttribute('data-modele-type');
+            selectedModeleInput.value = img.getAttribute('data-modele-tissu-id');
+            selectedModeleTypeInput.value = img.getAttribute('data-modele-tissu-type');
 
             // Mise à jour de l'image principale
             mainImage.src = img.src;
             mainImage.alt = img.alt;
 
             selected = true;
-            saveSelection(img.getAttribute('data-modele-id'), img.getAttribute('data-modele-type'));
+            saveSelection(img.getAttribute('data-modele-tissu-id'), img.getAttribute('data-modele-tissu-type'));
           });
         });
 
@@ -242,77 +244,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
       });
     </script>
-
-
-    <!-- VARIATION DES PRIX  -->
-    <script>
-      document.addEventListener('DOMContentLoaded', () => {
-        let totalPrice = 0; // Total global
-
-        // Identifier l'étape actuelle
-        const currentStep = "3-modele-tissu";
-        const userId = document.body.getAttribute('data-user-id');
-
-        if (!userId) {
-          console.error("ID utilisateur non trouvé.");
-          return;
-        }
-
-        const sessionKey = `allSelectedOptions_${userId}`;
-        let allSelectedOptions = JSON.parse(sessionStorage.getItem(sessionKey)) || [];
-
-        // Fonction pour mettre à jour le total global
-        function updateTotal() {
-          totalPrice = allSelectedOptions.reduce((sum, option) => {
-            const price = option.price || 0;
-            const quantity = option.quantity || 1;
-            return sum + (price * quantity);
-          }, 0);
-
-          const totalElement = document.querySelector(".footer p span");
-          if (totalElement) {
-            totalElement.textContent = `${totalPrice.toFixed(2)} €`;
-          }
-        }
-
-        // Gestion des clics sur les options
-        document.querySelectorAll('.color-2options .option img').forEach(option => {
-          const optionId = option.getAttribute('data-modele-id');
-          const price = parseFloat(option.getAttribute('data-modele-prix')) || 0;
-
-          if (!optionId || isNaN(price)) {
-            console.warn(`Attributs invalides : data-modele-id=${optionId}, data-modele-prix=${price}`);
-            return;
-          }
-
-          const uniqueId = `${currentStep}_${optionId}`;
-
-          if (allSelectedOptions.some(opt => opt.id === uniqueId)) {
-            option.parentElement.classList.add('selected');
-          }
-
-          option.addEventListener('click', () => {
-            document.querySelectorAll('.color-2options .option img').forEach(opt => {
-              opt.parentElement.classList.remove('selected');
-            });
-
-            allSelectedOptions = allSelectedOptions.filter(opt => !opt.id.startsWith(`${currentStep}_`));
-
-            allSelectedOptions.push({
-              id: uniqueId,
-              price: price
-            });
-            option.parentElement.classList.add('selected');
-
-            sessionStorage.setItem(sessionKey, JSON.stringify(allSelectedOptions));
-            updateTotal();
-          });
-        });
-
-        updateTotal();
-      });
-    </script>
-
 
   </main>
 
