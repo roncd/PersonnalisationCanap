@@ -1,129 +1,135 @@
-
 .popup {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.6);
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-  }
-  
-  .popup-content {
-    background: #E3D1C8;
-    padding: 20px;
-    border-radius: 20px;
-    text-align: center;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  }
-  
-  .popup-content h2 {
-    font-size: 20px;
-    margin: 0 0 10px;
-  }
-  
-  .popup-content p {
-    font-size: 16px;
-    margin: 0 0 10px;
-  }
-  
-  .close-btn, .thank-btn, .close-btn-selection {
-    background-color: #997765;
-    color: #fff;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-    padding: 10px 20px;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    font-weight: bold;
-  }
-
-  .close-btn:hover, .thank-btn, .close-btn-selection:hover {
-    transform: scale(1.1);
-    transition: transform .2s;
-  }
-
-  .close-btn-selection {
-    background-color: #997765;
-    color: #fff;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-    padding: 10px 20px;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    font-weight: bold;
-  }
-
-  
-  .close-btn-selection {
-    background-color: #997765;
-    color: #fff;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-    padding: 10px 20px;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    font-weight: bold;
-  }
-
-  .close-btn-selection:hover {
-    transform: scale(1.1);
-    transition: transform .2s;
-  }
-
-  .close-erreur-btn {
-    background-color: #997765;
-    color: #fff;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-    padding: 10px 20px;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    font-weight: bold;
-  }
-
-  .close-erreur-btn:hover {
-    transform: scale(1.1);
-    transition: transform .2s;
-  }
-  
-  .yes-btn {
-    background-color: #997765;
-    color: #fff;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-    padding: 10px 20px;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    font-weight: bold;
-  }
-
-  .yes-btn:hover {
-    transform: scale(1.1);
-    transition: transform .2s;
-  }
-  
-  
-.no-btn {
-  background-color: #000000;
-  color: #fff;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-    padding: 10px 20px;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    font-weight: bold;
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
 }
 
-.no-btn:hover {
-  transform: scale(1.1);
+.popup-content {
+  background: #E3D1C8;
+  padding: 20px;
+  border-radius: 20px;
+  text-align: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.popup-content h2 {
+  font-size: 20px;
+  margin: 0 0 10px;
+}
+
+.popup-content p {
+  font-size: 16px;
+  margin: 0 0 10px;
+}
+
+.close-btn,
+.close-btn-selection,
+.btn-close {
+  background-color: #997765;
+  color: #fff;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  padding: 10px 20px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.close-btn:hover,
+.close-btn-selection:hover,
+.btn-close:hover {
+  transform: scale(1.05);
   transition: transform .2s;
 }
 
-.yes-btn, .no-btn {
-  margin: 10px; /* Ajoute un espace autour des boutons */
+.close-btn-selection {
+  background-color: #997765;
+  color: #fff;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  padding: 10px 20px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: bold;
 }
 
+
+.close-btn-selection {
+  background-color: #997765;
+  color: #fff;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  padding: 10px 20px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.close-btn-selection:hover {
+  transform: scale(1.05);
+  transition: transform .2s;
+}
+
+.close-erreur-btn {
+  background-color: #997765;
+  color: #fff;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  padding: 10px 20px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.close-erreur-btn:hover {
+  transform: scale(1.05);
+  transition: transform .2s;
+}
+
+.yes-btn {
+  background-color: #997765;
+  color: #fff;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  padding: 10px 20px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.yes-btn:hover {
+  transform: scale(1.05);
+  transition: transform .2s;
+}
+
+
+.no-btn,
+.pdf-btn {
+  background-color: #000000;
+  color: #fff;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  padding: 10px 20px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.no-btn:hover,
+.pdf-btn:hover {
+  transform: scale(1.05);
+  transition: transform .2s;
+}
+
+.yes-btn,
+.no-btn {
+  margin: 10px;
+  /* Ajoute un espace autour des boutons */
+}

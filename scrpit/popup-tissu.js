@@ -92,13 +92,8 @@ document.querySelector('.pdf-btn').addEventListener('click', function () {
   }
 });
 
-const closeBtn = document.querySelector('.close-btn');
-const popup = document.getElementById('pdf-popup');
 
-// Masquer le popup avec le bouton "Non !"
-closeBtn.addEventListener('click', () => {
-  popup.style.display = 'none';
-});
+const popup = document.getElementById('pdf-popup');
 
 // Fermer le popup si clic à l'extérieur
 window.addEventListener('click', (event) => {
@@ -107,46 +102,26 @@ window.addEventListener('click', (event) => {
   }
 });
 
-
-//Pop up aide
+//Popup validation genreration
 document.addEventListener('DOMContentLoaded', () => {
-  const openButton = document.querySelector('.btn-aide'); // Bouton pour ouvrir le popup
-  const popup = document.getElementById('help-popup');
-  const closeButton = document.querySelector('.thank-btn'); // Bouton "Merci !" pour fermer le popup
+  const openButton = document.querySelector('.btn-generer'); // Bouton pour ouvrir le popup
+  const popup = document.getElementById('generer-popup');
+  const yesButton = document.querySelector('.btn-suivant'); // Bouton "Oui ..." pour redirection
+  const noButton = document.querySelector('.btn-close'); // Bouton "Non !" pour fermer le popup
+
+
+  document.querySelectorAll('.transition').forEach(element => {
+    element.classList.add('show');
+  });
 
   // Afficher le popup
   openButton.addEventListener('click', () => {
     popup.style.display = 'flex';
   });
 
-  // Masquer le popup avec le bouton "Merci !"
-  closeButton.addEventListener('click', () => {
-    popup.style.display = 'none';
-  });
-
-  // Fermer le popup si clic à l'extérieur
-  window.addEventListener('click', (event) => {
-    if (event.target === popup) {
-      popup.style.display = 'none';
-    }
-  });
-});
-
-//Pop up abandonner
-document.addEventListener('DOMContentLoaded', () => {
-  const openButton = document.querySelector('.btn-abandonner'); // Bouton pour ouvrir le popup
-  const popup = document.getElementById('abandonner-popup');
-  const yesButton = document.querySelector('.yes-btn'); // Bouton "Oui ..." pour redirection
-  const noButton = document.querySelector('.no-btn'); // Bouton "Non !" pour fermer le popup
-
-  // Afficher le popup
-  openButton.addEventListener('click', () => {
-    popup.style.display = 'flex';
-  });
-
-  // Rediriger vers la page d'accueil avec le bouton "Oui ..."
+  //Cache le pop up 
   yesButton.addEventListener('click', () => {
-    window.location.href = '../pages/';
+    popup.style.display = 'none';
   });
 
   // Masquer le popup avec le bouton "Non !"
