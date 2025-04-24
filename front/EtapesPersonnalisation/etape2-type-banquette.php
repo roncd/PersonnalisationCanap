@@ -61,7 +61,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <link rel="stylesheet" href="../../styles/processus.css">
   <link rel="stylesheet" href="../../styles/popup.css">
   <script type="module" src="../../scrpit/popup.js"></script>
-  <script type="module" src="../../scrpit/button.js"></script>
   <title>Étape 2 - Choisi ton type de banquette</title>
 
   <style>
@@ -117,8 +116,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div class="footer">
           <p>Total : <span>899 €</span></p>
           <div class="buttons">
-            <button class="btn-retour transition">Retour</button>
-            <form method="POST" action="">
+          <button onclick="retourEtapePrecedente()" class="btn-retour transition">Retour</button>
+          <form method="POST" action="">
               <input type="hidden" name="banquette_id" id="selected-banquette">
               <input type="hidden" name="banquette_type" id="selected-banquette-type">
               <button type="submit" class="btn-suivant transition">Suivant</button>
@@ -186,6 +185,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         const savedBanquetteId = localStorage.getItem('selectedBanquette');
         const savedBanquetteType = localStorage.getItem('selectedBanquetteType');
 
+        
         if (savedBanquetteId && savedBanquetteType) {
           selectedBanquetteInput.value = savedBanquetteId;
           selectedBanquetteTypeInput.value = savedBanquetteType;
@@ -285,6 +285,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       });
     </script>
 
+
+  
+      <!-- BOUTTON RETOUR -->
+      <script>
+       function retourEtapePrecedente() {
+    // Exemple : tu es sur étape 8, tu veux revenir à étape 7
+    window.location.href = "etape1-2-dimension.php"; 
+  }
+    </script>
   </main>
 
   <?php require_once '../../squelette/footer.php'; ?>

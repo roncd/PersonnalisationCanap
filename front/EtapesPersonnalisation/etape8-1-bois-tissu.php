@@ -54,7 +54,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <link rel="stylesheet" href="../../styles/processus.css">
   <link rel="stylesheet" href="../../styles/popup.css">
   <script type="module" src="../../scrpit/popup.js"></script>
-  <script type="module" src="../../scrpit/button.js"></script>
   <script type="module" src="../../scrpit/variationPrix.js"></script>
 
   <title>Étape 8 - Choisi ton tissu</title>
@@ -120,7 +119,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       <div class="footer">
       <p>Total : <span>899 €</span></p>
       <div class="buttons">
-          <button class="btn-retour transition" >Retour</button>
+      <button onclick="retourEtapePrecedente()" class="btn-retour transition">Retour</button>
           <form method="POST" action="">
             <input type="hidden" name="couleur_tissu_bois_id" id="selected-couleur_tissu_bois">
             <button type="submit" class="btn-suivant transition">Suivant</button>
@@ -128,6 +127,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
       </div>
     </div>
+
+    <script>
+       function retourEtapePrecedente() {
+    // Exemple : tu es sur étape 8, tu veux revenir à étape 7
+    window.location.href = "etape7-bois-mousse.php"; 
+  }
+    </script>
 
     <!-- Colonne de droite -->
     <div class="right-column transition">
@@ -184,6 +190,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     let selectedCouleurTissuBoisId = localStorage.getItem('selectedCouleurTissuBois') || ''; 
     let selected = selectedCouleurTissuBoisId !== ''; 
 
+    
     document.querySelectorAll('.transition').forEach(element => {
       element.classList.add('show');
     });
@@ -224,6 +231,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
   });
 </script>
+
+  <!-- BOUTTON RETOUR -->
+<script>
+       function retourEtapePrecedente() {
+    // Exemple : tu es sur étape 8, tu veux revenir à étape 7
+    window.location.href = "etape7-bois-mousse.php"; 
+  }
+    </script>
 
 </main>
 

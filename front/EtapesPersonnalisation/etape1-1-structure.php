@@ -238,6 +238,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           console.warn("allSelectedOptions n'était pas un tableau. Réinitialisé à []");
         }
 
+        
         // Fonction pour mettre à jour le total global
         function updateTotal() {
           // Calculer le total global en prenant en compte les quantités

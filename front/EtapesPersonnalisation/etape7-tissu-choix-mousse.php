@@ -124,7 +124,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       <div class="footer">
       <p>Total : <span>899 €</span></p>
       <div class="buttons">
-          <button class="btn-retour transition" >Retour</button>
+      <button onclick="retourEtapePrecedente()" class="btn-retour transition">Retour</button>
           <form method="POST" action="">
             <input type="hidden" name="mousse_id" id="selected-mousse">
             <input type="hidden" name="total_price" id="total-price"> <!-- Ajout pour envoyer le prix -->
@@ -209,6 +209,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Vérification si une sélection existe dans localStorage
         let savedMousseId = localStorage.getItem('selectedMousseId');
         
+        //  🔽 Ajoute cette ligne ici !
+window.allSelectedOptions = allSelectedOptions;
+
         if (savedMousseId) {
             options.forEach(img => {
                 if (img.getAttribute('data-mousse-tissu-id') === savedMousseId) {
@@ -284,6 +287,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     });
 </script>
+
+
+      <!-- BOUTTON RETOUR -->
+      <script>
+       function retourEtapePrecedente() {
+    // Exemple : tu es sur étape 8, tu veux revenir à étape 7
+    window.location.href = "etape6-tissu-accoudoir.php"; 
+  }
+    </script>
 
 </main>
 <?php require_once '../../squelette/footer.php'?>

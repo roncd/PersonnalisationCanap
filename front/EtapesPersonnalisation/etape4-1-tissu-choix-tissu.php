@@ -52,7 +52,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link rel="stylesheet" href="../../styles/processus.css">
     <link rel="stylesheet" href="../../styles/popup.css">
     <script type="module" src="../../scrpit/popup.js"></script>
-    <script type="module" src="../../scrpit/button.js"></script>
     <script type="module" src="../../scrpit/variationPrix.js"></script>
 
     <title>Étape 4 - Choisi ton tissu</title>
@@ -119,8 +118,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <p>Total : <span>899 €</span></p>
 
                     <div class="buttons">
-                        <button class="btn-retour transition" >Retour</button>
-                        <form method="POST" action="">
+                    <button onclick="retourEtapePrecedente()" class="btn-retour transition">Retour</button>
+                    <form method="POST" action="">
                             <input type="hidden" name="couleur_tissu_id" id="selected-couleur_tissu">
                             <button type="submit" class="btn-suivant transition">Suivant</button>
                         </form>
@@ -257,6 +256,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 // Vérification si une sélection existe dans localStorage
                 let savedCouleurTissuId = localStorage.getItem('selectedCouleurTissuId');
 
+                
                 if (savedCouleurTissuId) {
                     options.forEach(img => {
                         if (img.getAttribute('data-couleur-tissu-id') === savedCouleurTissuId) {
@@ -313,6 +313,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             });
         </script>
 
+ <!-- BOUTTON RETOUR -->
+ <script>
+       function retourEtapePrecedente() {
+    // Exemple : tu es sur étape 8, tu veux revenir à étape 7
+    window.location.href = "etape3-tissu-modele-banquette.php"; 
+  }
+    </script>
 
     </main>
 
