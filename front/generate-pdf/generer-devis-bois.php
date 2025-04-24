@@ -215,8 +215,8 @@ foreach ($details as $detail) {
         }
     } else {
         // Message si aucun accoudoir bois trouvé
-        $pdf->Ln(10);
-        $pdf->SetFont('Arial', 'B', 12);
+        $pdf->Ln(5);
+        $pdf->SetFont('Arial', 'B', 11);
         $pdf->Cell(190, 10, mb_convert_encoding("Aucun accoudoir bois pour cette commande", "ISO-8859-1", "UTF-8"), 1, 1, 'C');
     }
 
@@ -225,29 +225,43 @@ foreach ($details as $detail) {
         $longueurA = htmlspecialchars($commande['longueurA'] ?? '-');
         $longueurB = isset($commande['longueurB']) && !empty(trim($commande['longueurB'])) ? htmlspecialchars($commande['longueurB']) : null;
         $longueurC = isset($commande['longueurC']) && !empty(trim($commande['longueurC'])) ? htmlspecialchars($commande['longueurC']) : null;
+        $longueurC = isset($commande['longueurC']) && !empty(trim($commande['longueurC'])) ? htmlspecialchars($commande['longueurC']) : null;
+        $prix_dimensions = number_format($detail['prix_dimensions'] , 2, ',', ' ') . " EUR";
         $commentaire = isset($commande['commentaire']) && !empty(trim($commande['commentaire'])) ? htmlspecialchars($commande['commentaire']) : null;
-
+        
         $pdf->Ln(10);
-        $pdf->Cell(60, 10, "Longueur A (en cm)", 1, 0);
-        $pdf->Cell(30, 10, $longueurA, 1, 0);
+        $pdf->SetFont('Arial', 'B', 12);
+        $pdf->Cell(65, 10, mb_convert_encoding("Dimensions du canapé :", "ISO-8859-1", "UTF-8"), 0, 0);
+        
+        $pdf->SetFont('Arial', '', 12);
+        $pdf->Ln(10);
+        $pdf->Cell(45, 10, "Longueur A (en cm)", 1, 0);
+        $pdf->Cell(15, 10, $longueurA, 1, 0, 'R');
+        $pdf->Cell(40);
+        $pdf->SetFont('Arial', 'B', 11);
+        $pdf->Cell(60, 10, "Prix total des dimensions :", 1, 0);
+        $pdf->Cell(30, 10, $prix_dimensions, 1, 0, 'R');
         $pdf->Ln();
 
+        $pdf->SetFont('Arial', '', 12);
         if ($longueurB !== null) {
-            $pdf->Cell(60, 10, "Longueur B (en cm)", 1);
-            $pdf->Cell(30, 10, $longueurB, 1);
+            $pdf->Cell(45, 10, "Longueur B (en cm)",  1, 0);
+            $pdf->Cell(15, 10, $longueurB, 1, 0, 'R');
             $pdf->Ln();
         }
         if ($longueurC !== null) {
-            $pdf->Cell(60, 10, "Longueur C (en cm)", 1);
-            $pdf->Cell(30, 10, $longueurC, 1);
+            $pdf->Cell(45, 10, "Longueur C (en cm)",  1, 0);
+            $pdf->Cell(15, 10, $longueurC, 1, 0, 'R');
             $pdf->Ln();
         }
+
         if ($commentaire !== null) {
             $pdf->SetFont('Arial', '', 10);
             $pdf->Ln(10);
             $pdf->Cell(40, 10, "Commentaire du client :");
             $pdf->Cell(30, 10, $commentaire);
         }
+
     } else {
         $pdf->Ln(10);
         $pdf->Cell(80, 10, mb_convert_encoding("Données de commande introuvables", "ISO-8859-1", "UTF-8"), 1);
@@ -262,7 +276,6 @@ if ($detail && isset($detail['prix'])) {
     $pdf->SetFont('Arial', 'B', 12);
     $pdf->SetX($pdf->GetPageWidth() - 80);
     $pdf->Cell(30, 10, "Prix Total :", 1, 0);
-    $pdf->SetFont('Arial', '', 12);
     $pdf->Cell(40, 10, $prixTotal, 1, 1, 'R');
 } else {
     $pdf->Ln(10);

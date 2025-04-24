@@ -16,8 +16,8 @@ try {
     $idCommande = (int) $input['id']; // Sécurisation de l'ID
 
     // Insérer uniquement la commande avec cet ID
-    $sql = "INSERT INTO commande_detail (prix, commentaire, statut, id_client, id_structure, longueurA, longueurB, longueurC, id_banquette, id_mousse, id_accoudoir_tissu, id_dossier_tissu, id_couleur_tissu, id_motif_tissu, id_modele, id_nb_accoudoir)
-            SELECT prix, commentaire, statut, id_client, id_structure, longueurA, longueurB, longueurC, id_banquette, id_mousse, id_accoudoir_tissu, id_dossier_tissu, id_couleur_tissu, id_motif_tissu, id_modele, id_nb_accoudoir
+    $sql = "INSERT INTO commande_detail (prix, prix_dimensions, commentaire, statut, id_client, id_structure, longueurA, longueurB, longueurC, id_banquette, id_mousse, id_accoudoir_tissu, id_dossier_tissu, id_couleur_tissu, id_motif_tissu, id_modele, id_nb_accoudoir)
+            SELECT prix, prix_dimensions, commentaire, statut, id_client, id_structure, longueurA, longueurB, longueurC, id_banquette, id_mousse, id_accoudoir_tissu, id_dossier_tissu, id_couleur_tissu, id_motif_tissu, id_modele, id_nb_accoudoir
             FROM commande_temporaire
             WHERE id = :id";
 
