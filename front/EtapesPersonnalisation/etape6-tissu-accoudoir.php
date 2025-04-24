@@ -62,7 +62,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <link rel="stylesheet" href="../../styles/processus.css">
   <link rel="stylesheet" href="../../styles/popup.css">
   <script type="module" src="../../scrpit/popup.js"></script>
-  <script type="module" src="../../scrpit/button.js"></script>
   <script type="module" src="../../scrpit/variationPrix.js"></script>
 
   <title>Étape 6 - Ajoute tes accoudoirs</title>
@@ -140,7 +139,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <div class="footer">
       <p>Total : <span>899 €</span></p>
       <div class="buttons">
-        <button class="btn-retour transition">Retour</button>
+      <button onclick="retourEtapePrecedente()" class="btn-retour transition">Retour</button>
         <form method="POST" action="">
         <input type="hidden" name="accoudoir_tissu_id" id="selected-accoudoir_tissu" required>
         <input type="hidden" name="nb_accoudoir" id="selected-nb_accoudoir" required>
@@ -204,6 +203,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     const selectedAccoudoirTissuInput = document.getElementById('selected-accoudoir_tissu');
     let selected = false;
 
+ 
     // Affichage des éléments avec la classe "transition"
     document.querySelectorAll('.transition').forEach(element => {
       element.classList.add('show');
@@ -482,6 +482,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     restoreSelections();
   });
 </script>
+
+  
+      <!-- BOUTTON RETOUR -->
+      <script>
+       function retourEtapePrecedente() {
+    // Exemple : tu es sur étape 8, tu veux revenir à étape 7
+    window.location.href = "etape5-tissu-choix-dossier.php"; 
+  }
+    </script>
 
 
 
