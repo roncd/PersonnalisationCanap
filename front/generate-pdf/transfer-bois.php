@@ -17,8 +17,8 @@ try {
     $idCommande = (int) $input['id']; // Sécurisation de l'ID
 
     // Étape 1 : Insérer dans commande_detail
-    $sql = "INSERT INTO commande_detail (prix, commentaire, statut, id_client, id_structure, longueurA, longueurB, longueurC, id_banquette, id_mousse, id_accoudoir_bois, id_dossier_bois, id_couleur_bois, id_motif_bois, id_couleur_tissu_bois, id_decoration, id_nb_accoudoir)
-            SELECT prix, commentaire, statut, id_client, id_structure, longueurA, longueurB, longueurC, id_banquette, id_mousse, id_accoudoir_bois, id_dossier_bois, id_couleur_bois, id_motif_bois, id_couleur_tissu_bois, id_decoration, id_nb_accoudoir
+    $sql = "INSERT INTO commande_detail (prix, prix_dimensions, commentaire, statut, id_client, id_structure, longueurA, longueurB, longueurC, id_banquette, id_mousse, id_accoudoir_bois, id_dossier_bois, id_couleur_bois, id_motif_bois, id_couleur_tissu_bois, id_decoration, id_nb_accoudoir)
+            SELECT prix, prix_dimensions, commentaire, statut, id_client, id_structure, longueurA, longueurB, longueurC, id_banquette, id_mousse, id_accoudoir_bois, id_dossier_bois, id_couleur_bois, id_motif_bois, id_couleur_tissu_bois, id_decoration, id_nb_accoudoir
             FROM commande_temporaire
             WHERE id = :id";
     $stmt = $pdo->prepare($sql);

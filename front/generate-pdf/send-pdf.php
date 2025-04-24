@@ -24,6 +24,10 @@ $query = $pdo->prepare("SELECT mail, nom, prenom FROM client WHERE id IN (SELECT
 $query->execute([$idCommande]);
 $client = $query->fetch(PDO::FETCH_ASSOC);
 
+$query = $pdo->prepare("SELECT date FROM commande_detail WHERE id = ?");
+$query->execute([$idCommande]);
+$commande = $query->fetch(PDO::FETCH_ASSOC);
+
 if (!$client || empty($client['mail'])) {
     echo json_encode(['success' => false, 'message' => 'Email client introuvable']);
     exit;
@@ -131,7 +135,7 @@ try {
     $mailEntreprise->addAddress('rosalie.nicaud@gmail.com', 'Déco du Monde');
 
     $mailEntreprise->Subject = mb_convert_encoding('Nouvelle commande reçue - Devis n°' . $idCommande, "ISO-8859-1", "UTF-8");    
-    $mailEntreprise->Body    = "Une nouvelle commande a été passée par " . $client['prenom'] . " " . $client['nom'] . ". Veuillez trouver ci-joint le devis correspondant.\n\nID Commande : " . $idCommande . "\nEmail client : " . $client['mail'] . "\n\nDéco du Monde";
+    $mailEntreprise->Body    = "Une nouvelle commande a été passée par " . $client['prenom'] . " " . $client['nom'] . ". Veuillez trouver ci-joint le devis correspondant.\n\nNuméro de commande : " . $idCommande . "\nDate de commande : " . $commande['date'] . "\nEmail client : " . $client['mail'] . "\n\nDéco du Monde";
     $mailEntreprise->addStringAttachment($pdfContent, "devis-$idCommande.pdf");
 
     $mailEntreprise->send();
