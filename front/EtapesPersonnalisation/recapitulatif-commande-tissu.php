@@ -103,17 +103,17 @@ foreach ($data['commande_temporaire'] as $dim) {
 // Traitement du formulaire pour ajouter ou modifier un commentaire
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['comment'])) {
   if (!empty(trim($_POST["comment"]))) {
-      $commentaire = trim($_POST["comment"]);
+    $commentaire = trim($_POST["comment"]);
 
-      if ($commande) {
-          $stmt = $pdo->prepare("UPDATE commande_temporaire SET commentaire = ? WHERE id = ?");
-          $stmt->execute([$commentaire, $id]);
-          $message = '<p class="message success">Commentaire ajouté/modifié avec succès !</p>';
-      } else {
-          $message = '<p class="message error">Aucune commande trouvée pour cet utilisateur.</p>';
-      }
+    if ($commande) {
+      $stmt = $pdo->prepare("UPDATE commande_temporaire SET commentaire = ? WHERE id = ?");
+      $stmt->execute([$commentaire, $id]);
+      $message = '<p class="message success">Commentaire ajouté/modifié avec succès !</p>';
+    } else {
+      $message = '<p class="message error">Aucune commande trouvée pour cet utilisateur.</p>';
+    }
   } else {
-      $message = '<p class="message error">Le commentaire ne peut pas être vide.</p>';
+    $message = '<p class="message error">Le commentaire ne peut pas être vide.</p>';
   }
 }
 ?>
@@ -129,6 +129,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['comment'])) {
   <link rel="stylesheet" href="../../styles/processus.css">
   <link rel="stylesheet" href="../../styles/popup.css">
   <script type="module" src="../../scrpit/popup-tissu.js"></script>
+  <script type="module" src="../../scrpit/popup.js"></script>
   <script type="module" src="../../scrpit/button.js"></script>
   <title>Récapitulatif de la commande</title>
   <style>
@@ -269,7 +270,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['comment'])) {
           <p>Total : <span>899 €</span></p>
           <div class="buttons">
             <button class="btn-retour">Retour</button>
-            <button class="btn-suivant" data-id="<?= htmlspecialchars($id) ?>">Générer un devis</button>
+            <button class="btn-generer">Générer un devis</button>
           </div>
         </div>
       </div>
@@ -285,53 +286,65 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['comment'])) {
           <img src="../../medias/canapekenitra.png" alt="Armoire">
 
 
-           <!-- Section commentaire -->
-           <section class="comment-section">
-    <?php if (!empty($message)) { echo $message; } ?>
-    <h3>Ajoute un commentaire à propos de ta commande : </h3>
-    <form action="" method="POST">
-        <textarea class="textarea-custom" id="comment" name="comment" rows="5" placeholder="Écris ton commentaire ici..."><?= htmlspecialchars($commentaire) ?></textarea>
-        <button type="submit" class="btn-submit-com">
-            <?= empty($commentaire) ? 'Ajouter' : 'Modifier' ?>
-        </button>
-    </form>
-</section>
+          <!-- Section commentaire -->
+          <section class="comment-section">
+            <?php if (!empty($message)) {
+              echo $message;
+            } ?>
+            <h3>Ajoute un commentaire à propos de ta commande : </h3>
+            <form action="" method="POST">
+              <textarea class="textarea-custom" id="comment" name="comment" rows="5" placeholder="Écris ton commentaire ici..."><?= htmlspecialchars($commentaire) ?></textarea>
+              <button type="submit" class="btn-submit-com">
+                <?= empty($commentaire) ? 'Ajouter' : 'Modifier' ?>
+              </button>
+            </form>
+          </section>
 
-      <!-- Popup devis -->
-      <div id="pdf-popup" class="popup">
-        <div class="popup-content">
-          <h2>Commande finalisé !</h2>
-          <p>Votre devis a été créé et envoyé à l'adresse suivante :
-            </br><?php echo "<strong>" . htmlspecialchars($assocMail['client'][$commande['id_client']]['mail'] ?? '-') . "</strong>"; ?>
-          </p>
-          <br>
-          <button class="close-btn">Fermer</button>
-          <button class="pdf-btn">Voir le devis</button>
-        </div>
-      </div>
+          <!-- Popup devis -->
+          <div id="pdf-popup" class="popup">
+            <div class="popup-content">
+              <h2>Commande finalisé !</h2>
+              <p>Votre devis a été créé et envoyé à l'adresse suivante :
+                </br><?php echo "<strong>" . htmlspecialchars($assocMail['client'][$commande['id_client']]['mail'] ?? '-') . "</strong>"; ?>
+              </p>
+              <br>
+              <button onclick="location.href='../pages/commandes.php'" class="close-btn">Voir mes commandes</button>
+              <button class="pdf-btn">Voir le devis</button>
+            </div>
+          </div>
 
-    <!-- Popup besoin d'aide -->
-    <div id="help-popup" class="popup">
-      <div class="popup-content">
-        <h2>Vous avez une question ?</h2>
-        <p>Contactez nous au numéro suivant et un vendeur vous assistera :
-          <br><br>
-          <strong>06 58 47 58 56</strong>
-        </p>
-        <br>
-        <button class="thank-btn">Merci !</button>
-      </div>
-    </div>
+          <!-- Popup besoin d'aide -->
+          <div id="help-popup" class="popup">
+            <div class="popup-content">
+              <h2>Vous avez une question ?</h2>
+              <p>Contactez nous au numéro suivant et un vendeur vous assistera :
+                <br><br>
+                <strong>06 58 47 58 56</strong>
+              </p>
+              <br>
+              <button class="close-btn">Merci !</button>
+            </div>
+          </div>
 
-    <!-- Popup abandonner -->
-    <div id="abandonner-popup" class="popup">
-      <div class="popup-content">
-        <h2>Êtes vous sûr de vouloir abandonner ?</h2>
-        <br>
-        <button class="yes-btn">Oui ...</button>
-        <button class="no-btn">Non !</button>
-      </div>
-    </div>
+          <!-- Popup abandonner -->
+          <div id="abandonner-popup" class="popup">
+            <div class="popup-content">
+              <h2>Êtes vous sûr de vouloir abandonner ?</h2>
+              <br>
+              <button class="yes-btn">Oui ...</button>
+              <button class="no-btn">Non !</button>
+            </div>
+          </div>
+
+          <!-- Popup validation generation -->
+          <div id="generer-popup" class="popup">
+            <div class="popup-content">
+              <h2>Êtes vous sûr de vouloir générer un devis ?</h2>
+              <p>Vous ne pourrez plus effectuer de modifictions sur votre commande</p>
+              <button class="btn-close">Non</button>
+              <button class="btn-suivant" name="envoyer" data-id="<?= htmlspecialchars($id) ?>">Oui</button>
+            </div>
+          </div>
   </main>
   <?php require_once '../../squelette/footer.php'; ?>
 

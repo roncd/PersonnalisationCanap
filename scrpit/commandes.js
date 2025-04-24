@@ -1,21 +1,3 @@
-document.addEventListener('DOMContentLoaded', () => {
-    const tabs = document.querySelectorAll('.tab');
-    const tabContents = document.querySelectorAll('.tab-content');
-
-    tabs.forEach(tab => {
-        tab.addEventListener('click', () => {
-            // Retirer la classe active des onglets et du contenu
-            tabs.forEach(t => t.classList.remove('active'));
-            tabContents.forEach(content => content.classList.remove('active'));
-
-            // Ajouter la classe active au clic
-            tab.classList.add('active');
-            document.getElementById(tab.dataset.tab).classList.add('active');
-        });
-    });
-});
-
-
 //Update statut pop up
 window.updateStatus = function (button) {
     const commandDiv = button.closest('.commande');
@@ -97,8 +79,8 @@ window.removeCommand = function (button) {
     const commandDiv = button.closest('.commande'); // Récupère la commande liée
     const commandId = commandDiv.getAttribute('data-id'); // Récupère l'ID de la commande
     const popup = document.getElementById('supprimer-popup'); // Récupère le popup
-    const yesButton = popup.querySelector('.yes-btn'); 
-    const noButton = popup.querySelector('.no-btn'); 
+    const yesButton = popup.querySelector('.yes-btn');
+    const noButton = popup.querySelector('.no-btn');
 
     // Afficher le popup
     popup.style.display = 'flex';
@@ -117,16 +99,20 @@ window.removeCommand = function (button) {
                 return response.text(); // Utilisez text() pour voir le contenu brut
             })
             .then(data => {
-                console.log('Données reçues :', data); // Vérifiez si c'est du JSON valide
-                const parsedData = JSON.parse(data); // Puis analysez le JSON
-                const messageContainer = document.getElementById('message-container');
-                if (parsedData.success) {
-                    messageContainer.innerHTML = `<p class="message success">${parsedData.message}</p>`;
-                    console.log('Commande supprimée avec succès.');
-                    commandDiv.remove();
-                } else {
-                    console.error('Erreur :', parsedData.error);
-                    messageContainer.innerHTML = `<p class="message error">${parsedData.message}</p>`;
+                try {
+                    console.log('Données reçues :', data); // Vérifiez si c'est du JSON valide
+                    const parsedData = JSON.parse(data); // Puis analysez le JSON
+                    const messageContainer = document.getElementById('message-container');
+                    if (parsedData.success) {
+                        messageContainer.innerHTML = `<p class="message success">${parsedData.message}</p>`;
+                        console.log('Commande supprimée avec succès.');
+                        commandDiv.remove();
+                    } else {
+                        console.error('Erreur :', parsedData.error);
+                        messageContainer.innerHTML = `<p class="message error">${parsedData.message}</p>`;
+                    }
+                } catch (err) {
+                    console.error("Erreur lors du parsing JSON :", err);
                 }
             })
             .catch(error => {
