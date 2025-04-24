@@ -119,7 +119,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <p>Total : <span>899 €</span></p>
 
                     <div class="buttons">
-                        <button class="btn-retour transition" onclick="history.go(-1)">Retour</button>
+                        <button class="btn-retour transition" >Retour</button>
                         <form method="POST" action="">
                             <input type="hidden" name="couleur_tissu_id" id="selected-couleur_tissu">
                             <button type="submit" class="btn-suivant transition">Suivant</button>

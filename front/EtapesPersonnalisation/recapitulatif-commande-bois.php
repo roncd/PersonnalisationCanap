@@ -15,6 +15,14 @@ $stmt = $pdo->prepare("SELECT * FROM commande_temporaire WHERE id_client = ?");
 $stmt->execute([$id_client]);
 $commande = $stmt->fetch(PDO::FETCH_ASSOC);
 
+$commentaire = "";
+$message = "";
+
+// Préremplir le commentaire si déjà existant
+if ($commande && isset($commande['commentaire'])) {
+  $commentaire = $commande['commentaire'];
+}
+
 $sql = "SELECT * FROM client WHERE id = :id_client";
 $stmt = $pdo->prepare($sql);
 $stmt->bindValue(':id_client', $commande['id_client'], PDO::PARAM_INT);
@@ -83,7 +91,7 @@ $stmt = $pdo->prepare("SELECT cta.id_accoudoir_bois, cta.nb_accoudoir, ab.nom, a
 $stmt->execute([$commande['id']]);
 $accoudoirs = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['comment'])) {
+/*if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['comment'])) {
   // Vérifier si un commentaire a été saisi
   if (!empty($_POST["comment"])) {
     $commentaire = trim($_POST["comment"]);
@@ -98,6 +106,24 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['comment'])) {
     }
   } else {
     $message = '<p class="message error">Le commentaire ne peut pas être vide.</p>';
+  }
+}*/
+
+
+// Traitement du formulaire pour ajouter ou modifier un commentaire
+if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['comment'])) {
+  if (!empty(trim($_POST["comment"]))) {
+      $commentaire = trim($_POST["comment"]);
+
+      if ($commande) {
+          $stmt = $pdo->prepare("UPDATE commande_temporaire SET commentaire = ? WHERE id = ?");
+          $stmt->execute([$commentaire, $id]);
+          $message = '<p class="message success">Commentaire ajouté/modifié avec succès !</p>';
+      } else {
+          $message = '<p class="message error">Aucune commande trouvée pour cet utilisateur.</p>';
+      }
+  } else {
+      $message = '<p class="message error">Le commentaire ne peut pas être vide.</p>';
   }
 }
 ?>
@@ -274,20 +300,17 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['comment'])) {
           </div>
           <img src="../../medias/canapekenitra.png" alt="Armoire">
 
-          <!-- Section commentaire -->
-          <section class="comment-section">
-            <?php if (!empty($message)) {
-              echo $message;
-            } ?>
-            <h3>Ajoute un commentaire à propos de ta commande : </h3>
-            <form action="" method="POST">
-              <textarea class="textarea-custom" id="comment" name="comment" rows="5" placeholder="Écris ton commentaire ici..."></textarea>
-              <button type="submit" class="btn-submit-com">Ajouter</button>
-            </form>
-          </section>
-        </section>
-      </div>
-    </div>
+           <!-- Section commentaire -->
+<section class="comment-section">
+    <?php if (!empty($message)) { echo $message; } ?>
+    <h3>Ajoute un commentaire à propos de ta commande : </h3>
+    <form action="" method="POST">
+        <textarea class="textarea-custom" id="comment" name="comment" rows="5" placeholder="Écris ton commentaire ici..."><?= htmlspecialchars($commentaire) ?></textarea>
+        <button type="submit" class="btn-submit-com">
+            <?= empty($commentaire) ? 'Ajouter' : 'Modifier' ?>
+        </button>
+    </form>
+</section>
 
     <!-- Popup besoin d'aide -->
     <div id="help-popup" class="popup">
