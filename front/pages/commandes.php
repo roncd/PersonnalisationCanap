@@ -58,8 +58,8 @@ foreach ($commandes as $commande) {
     <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&display=swap" rel="stylesheet">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <link rel="stylesheet" href="../../styles/commandes.css">
-    <script type="module" src="../../scrpit/download.js"></script>
-    <script type="module" src="../../scrpit/commandes.js"></script>
+    <script type="module" src="../../script/download.js"></script>
+    <script type="module" src="../../script/commandes.js"></script>
 </head>
 
 <body>
