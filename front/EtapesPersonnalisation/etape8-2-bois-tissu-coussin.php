@@ -48,7 +48,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <link rel="stylesheet" href="../../styles/processus.css">
   <link rel="stylesheet" href="../../styles/popup.css">
   <script type="module" src="../../scrpit/variationPrix.js"></script>
-  <script src="../../scrpit/reset.js"></script>
+  <script src="../../script/reset.js"></script>
+  <script type="module" src="../../script/variationPrix.js"></script>
 
 
   <title>Étape 8 - Choisi ton motif de coussin</title>
