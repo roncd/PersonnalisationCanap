@@ -14,10 +14,7 @@ $couleur_bois = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 // Vérifier si le formulaire a été soumis
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-  if (!isset($_POST['couleur_bois_id']) || empty($_POST['couleur_bois_id'])) {
-    echo "Erreur : Aucun type de bois sélectionné.";
-    exit;
-  }
+  // A ce stade, on suppose que JavaScript a empêché les soumissions sans sélection
 
   $id_client = $_SESSION['user_id'];
   $id_couleur_bois = $_POST['couleur_bois_id'];
@@ -40,7 +37,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   exit;
 }
 ?>
-
 
 <!DOCTYPE html>
 <html lang="fr">
@@ -176,70 +172,79 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       </div>
     </div>
 
-    <div id="selection-popup" class="popup transition">
+<!-- Popup d'erreur si les dimensions ne sont pas remplies -->
+<div id="erreur-popup" class="popup transition">
       <div class="popup-content">
         <h2>Veuillez choisir une option avant de continuer.</h2>
-        <br>
         <button class="close-btn">OK</button>
       </div>
     </div>
 
     <!-- GESTION DES SELECTIONS -->
     <script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const options = document.querySelectorAll('.color-options .option img');
+    const mainImage = document.querySelector('.main-display img');
+    const erreurPopup = document.getElementById('erreur-popup');
+    const closeErreurBtn = erreurPopup.querySelector('.close-btn');
+    const selectedCouleurBoisInput = document.getElementById('selected-couleur_bois');
+    const form = document.querySelector('form'); // Assure-toi que ton <form> a bien une balise identifiable
 
-      document.addEventListener('DOMContentLoaded', () => {
-        const options = document.querySelectorAll('.color-options .option img');
-        const mainImage = document.querySelector('.main-display img');
-        const selectionPopup = document.getElementById('selection-popup');
-        const selectedCouleurBoisInput = document.getElementById('selected-couleur_bois');
+    let selectedBoisId = localStorage.getItem('selectedCouleurBois') || '';
+    let selected = selectedBoisId !== '';
 
-        let selectedBoisId = localStorage.getItem('selectedCouleurBois') || '';
-        let selected = selectedBoisId !== '';
+    // Animation de transition (facultatif)
+    document.querySelectorAll('.transition').forEach(element => {
+      element.classList.add('show');
+    });
 
-        
-        
-        document.querySelectorAll('.transition').forEach(element => {
-          element.classList.add('show');
-        });
+    // Restaurer la sélection si elle existe
+    options.forEach(img => {
+      if (img.getAttribute('data-bois-id') === selectedBoisId) {
+        img.classList.add('selected');
+        mainImage.src = img.src;
+        selectedCouleurBoisInput.value = selectedBoisId;
+      }
+    });
 
-        // Restaurer la sélection si elle existe
-        options.forEach(img => {
-          if (img.getAttribute('data-bois-id') === selectedBoisId) {
-            img.classList.add('selected');
-            mainImage.src = img.src;
-            selectedCouleurBoisInput.value = selectedBoisId;
-          }
-        });
-
-        options.forEach(img => {
-          img.addEventListener('click', () => {
-            options.forEach(opt => opt.classList.remove('selected'));
-            img.classList.add('selected');
-            mainImage.src = img.src;
-            selectedBoisId = img.getAttribute('data-bois-id');
-            selectedCouleurBoisInput.value = selectedBoisId;
-            selected = true;
-            saveSelection();
-          });
-        });
-
-        document.querySelector('#selection-popup .close-btn').addEventListener('click', () => {
-          selectionPopup.style.display = 'none';
-        });
-
-        window.addEventListener('click', (event) => {
-          if (event.target === selectionPopup) {
-            selectionPopup.style.display = 'none';
-          }
-        });
-
-        function saveSelection() {
-          localStorage.setItem('selectedCouleurBois', selectedBoisId);
-        }
+    // Gestion du clic sur une option
+    options.forEach(img => {
+      img.addEventListener('click', () => {
+        options.forEach(opt => opt.classList.remove('selected'));
+        img.classList.add('selected');
+        mainImage.src = img.src;
+        selectedBoisId = img.getAttribute('data-bois-id');
+        selectedCouleurBoisInput.value = selectedBoisId;
+        selected = true;
+        saveSelection();
       });
+    });
 
-      
-    </script>
+    // Empêcher la soumission du formulaire si rien n'est sélectionné
+    form.addEventListener('submit', (e) => {
+      if (!selectedCouleurBoisInput.value) {
+        e.preventDefault();
+        erreurPopup.style.display = 'flex'; // ou 'block' selon ton CSS
+      }
+    });
+
+    // Fermer le popup
+    closeErreurBtn.addEventListener('click', () => {
+      erreurPopup.style.display = 'none';
+    });
+
+    window.addEventListener('click', (event) => {
+      if (event.target === erreurPopup) {
+        erreurPopup.style.display = 'none';
+      }
+    });
+
+    function saveSelection() {
+      localStorage.setItem('selectedCouleurBois', selectedBoisId);
+    }
+  });
+</script>
+
 
 
     <!-- VARIATION DES PRIX EN FONCTION DU CHEMIN BOIS OU TISSU -->

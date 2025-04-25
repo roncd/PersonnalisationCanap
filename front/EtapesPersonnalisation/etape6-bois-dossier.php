@@ -15,11 +15,6 @@ $dossier_bois = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 // Vérifier si le formulaire a été soumis
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-if (!isset($_POST['dossier_bois_id']) || empty($_POST['dossier_bois_id'])) {
-    echo "Erreur : Aucun type de bois sélectionné.";
-    exit;
-}
-
 
 $id_client = $_SESSION['user_id'];
 $id_dossier_bois = $_POST['dossier_bois_id'];
@@ -56,7 +51,8 @@ exit;
   <link rel="stylesheet" href="../../styles/processus.css">
   <link rel="stylesheet" href="../../styles/popup.css">
   <script type="module" src="../../scrpit/popup.js"></script>
-=  <script type="module" src="../../scrpit/variationPrix.js"></script>
+  <script type="module" src="../../scrpit/variationPrix.js"></script>
+  <script src="../../scrpit/reset.js"></script>
 
   <title>Étape 6 - Choisi ton dossier</title>
   <style>
@@ -131,6 +127,7 @@ exit;
             <input type="hidden" name="dossier_bois_id" id="selected-dossier_bois">
             <button type="submit" class="btn-suivant transition">Suivant</button>
           </form>
+          <button id="reset-selection" class="btn-reset transition">Réinitialiser</button>
         </div>
       </div>
     </div>
@@ -172,27 +169,28 @@ exit;
     </div>
   </div>
   
-<!-- Pop-up de sélection d'option -->
-  <div id="selection-popup" class="popup transition">
-    <div class="popup-content">
-      <h2>Veuillez choisir une option avant de continuer.</h2>
-      <br>
-      <button class="close-btn">OK</button>
+
+<!-- Popup d'erreur si les dimensions ne sont pas remplies -->
+<div id="erreur-popup" class="popup transition">
+      <div class="popup-content">
+        <h2>Veuillez choisir une option avant de continuer.</h2>
+        <button class="close-btn">OK</button>
       </div>
-  </div>
+    </div>
+
 
   <!-- GESTION DES SELECTIONS -->
   <script>
   document.addEventListener('DOMContentLoaded', () => {
     const options = document.querySelectorAll('.color-options .option img');
     const mainImage = document.querySelector('.main-display img');
-    const selectionPopup = document.getElementById('selection-popup');
+    const erreurPopup = document.getElementById('erreur-popup');
+    const closeErreurBtn = erreurPopup.querySelector('.close-btn');
     const selectedDossierBoisInput = document.getElementById('selected-dossier_bois');
-
+    const form = document.querySelector('form'); // Assure-toi que ton <form> a bien une balise identifiable
     let selectedBoisId = localStorage.getItem('selectedDossierBois') || ''; 
     let selected = selectedBoisId !== ''; 
-//  🔽 Ajoute cette ligne ici !
-window.allSelectedOptions = allSelectedOptions;
+
 
     document.querySelectorAll('.transition').forEach(element => {
       element.classList.add('show');
@@ -219,15 +217,27 @@ window.allSelectedOptions = allSelectedOptions;
       });
     });
 
-    document.querySelector('#selection-popup .close-btn').addEventListener('click', () => {
-      selectionPopup.style.display = 'none';
+   // Empêcher la soumission du formulaire si rien n'est sélectionné
+   form.addEventListener('submit', (e) => {
+  if (!selectedDossierBoisInput.value) {
+    e.preventDefault();
+    erreurPopup.style.display = 'flex';
+  }
+});
+
+
+
+    // Fermer le popup
+    closeErreurBtn.addEventListener('click', () => {
+      erreurPopup.style.display = 'none';
     });
 
     window.addEventListener('click', (event) => {
-      if (event.target === selectionPopup) {
-        selectionPopup.style.display = 'none';
+      if (event.target === erreurPopup) {
+        erreurPopup.style.display = 'none';
       }
     });
+
 
     function saveSelection() {
       localStorage.setItem('selectedDossierBois', selectedBoisId);

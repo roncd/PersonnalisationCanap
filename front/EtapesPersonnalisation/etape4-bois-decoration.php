@@ -14,11 +14,6 @@ $decoration = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 // Vérifier si le formulaire a été soumis
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-  if (!isset($_POST['decoration_id']) || empty($_POST['decoration_id'])) {
-    echo "Erreur : Aucun type de bois sélectionné.";
-    exit;
-  }
-
 
   $id_client = $_SESSION['user_id'];
   $id_decoration = $_POST['decoration_id'];
@@ -181,23 +176,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       </div>
     </div>
 
-
-    <div id="selection-popup" class="popup transition">
+    
+    
+<!-- Popup d'erreur si les dimensions ne sont pas remplies -->
+<div id="erreur-popup" class="popup transition">
       <div class="popup-content">
         <h2>Veuillez choisir une option avant de continuer.</h2>
-        <br>
         <button class="close-btn">OK</button>
       </div>
     </div>
-    
 
     <!-- GESTION DES SELECTIONS -->
     <script>
       document.addEventListener('DOMContentLoaded', () => {
         const options = document.querySelectorAll('.color-options .option img');
         const mainImage = document.querySelector('.main-display img');
-        const selectionPopup = document.getElementById('selection-popup');
+        const erreurPopup = document.getElementById('erreur-popup');
+        const closeErreurBtn = erreurPopup.querySelector('.close-btn');
         const selectedDecorationInput = document.getElementById('selected-decoration');
+        const form = document.querySelector('form'); // Assure-toi que ton <form> a bien une balise identifiable
 
         let selectedDecoId = localStorage.getItem('selectedDecoration') || '';
         let selected = selectedDecoId !== '';
@@ -228,15 +225,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           });
         });
 
-        document.querySelector('#selection-popup .close-btn').addEventListener('click', () => {
-          selectionPopup.style.display = 'none';
-        });
+        
+    // Empêcher la soumission du formulaire si rien n'est sélectionné
+    form.addEventListener('submit', (e) => {
+      if (!selectedDecorationInput.value) {
+        e.preventDefault();
+        erreurPopup.style.display = 'flex'; // ou 'block' selon ton CSS
+      }
+    });
 
-        window.addEventListener('click', (event) => {
-          if (event.target === selectionPopup) {
-            selectionPopup.style.display = 'none';
-          }
-        });
+    // Fermer le popup
+    closeErreurBtn.addEventListener('click', () => {
+      erreurPopup.style.display = 'none';
+    });
+
+    window.addEventListener('click', (event) => {
+      if (event.target === erreurPopup) {
+        erreurPopup.style.display = 'none';
+      }
+    });
+
+     
 
         function saveSelection() {
           localStorage.setItem('selectedDecoration', selectedDecoId);
