@@ -16,12 +16,7 @@ $modele = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 
 // Vérifier si le formulaire a été soumis
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-  if (!isset($_POST['modele_id']) || empty($_POST['modele_id']) || !isset($_POST['modele_type'])) {
-    echo "Erreur : aucun modèle sélectionné.";
-    exit;
-  }
-
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {  
 
   $id_client = $_SESSION['user_id'];
   $id_modele = $_POST['modele_id'];
@@ -178,11 +173,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
 
 
-    <!-- Pop-up de sélection d'option -->
-    <div id="selection-popup" class="popup transition">
+<!-- Popup d'erreur si les dimensions ne sont pas remplies -->
+<div id="erreur-popup" class="popup transition">
       <div class="popup-content">
-        <h2>Veuillez sélectionner une option avant de continuer.</h2>
-        <br>
+        <h2>Veuillez choisir une option avant de continuer.</h2>
         <button class="close-btn">OK</button>
       </div>
     </div>
@@ -193,12 +187,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         const options = document.querySelectorAll('.color-2options .option img');
         const selectedModeleInput = document.getElementById('selected-modele');
         const selectedModeleTypeInput = document.getElementById('selected-modele-type');
-        const selectionPopup = document.getElementById('selection-popup');
+        const erreurPopup = document.getElementById('erreur-popup');
         const mainImage = document.getElementById('main-image');
+        const form = document.querySelector('form'); // Assure-toi que ton <form> a bien une balise identifiable
+
         let selected = false;
 
         let savedModeleId = localStorage.getItem('selectedModeleId');
         let savedModeleType = localStorage.getItem('selectedModeleType');
+        
+        document.querySelectorAll('.transition').forEach(element => {
+          element.classList.add('show');
+        });
 
         if (savedModeleId && savedModeleType) {
           options.forEach(img => {
@@ -214,10 +214,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
           
         }
-
-        document.querySelectorAll('.transition').forEach(element => {
-          element.classList.add('show');
-        });
 
         options.forEach(img => {
           img.addEventListener('click', () => {
@@ -235,9 +231,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           });
         });
 
-        document.querySelector('#selection-popup .close-btn').addEventListener('click', () => {
-          selectionPopup.style.display = 'none';
-        });
+        
+    // Empêcher la soumission du formulaire si rien n'est sélectionné
+    form.addEventListener('submit', (e) => {
+      if (!selectedCouleurBoisInput.value) {
+        e.preventDefault();
+        erreurPopup.style.display = 'flex'; // ou 'block' selon ton CSS
+      }
+    });
+
+    // Fermer le popup
+    closeErreurBtn.addEventListener('click', () => {
+      erreurPopup.style.display = 'none';
+    });
+
+    window.addEventListener('click', (event) => {
+      if (event.target === erreurPopup) {
+        erreurPopup.style.display = 'none';
+      }
+    });
+
+
 
         function saveSelection(modeleId, modeleType) {
           localStorage.setItem('selectedModeleId', modeleId);
