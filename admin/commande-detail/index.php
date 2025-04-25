@@ -65,6 +65,11 @@ $stmtCount->execute();
 $totalCommandes = $stmtCount->fetchColumn();
 
 $totalPages = ceil($totalCommandes / $limit);
+$order = (isset($_GET['order']) && $_GET['order'] === 'asc') ? 'ASC' : 'DESC';
+$next  = ($order === 'ASC') ? 'desc' : 'asc';
+$icon  = ($order === 'ASC')
+    ? '../../assets/sort-dsc.svg'
+    : '../../assets/sort-asc.svg';
 ?>
 
 <!DOCTYPE html>
@@ -73,7 +78,7 @@ $totalPages = ceil($totalCommandes / $limit);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Commande détaillée</title>
+    <title>Commande</title>
     <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../../styles/tab.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
@@ -88,11 +93,11 @@ $totalPages = ceil($totalCommandes / $limit);
     </header>
     <main>
         <div class="container">
-            <h2>Commande détaillée</h2>
+            <h2>Commande</h2>
 
             <div class="search-bar">
                 <form method="GET" action="index.php">
-                    <input type="text" name="search" placeholder="Rechercher par nom..." value="<?php echo htmlspecialchars($search); ?>">
+                    <input type="text" name="search" placeholder="Rechercher par nom ou ID..." value="<?php echo htmlspecialchars($search); ?>">
                     <button type="submit">Rechercher</button>
                 </form>
             </div>
@@ -100,29 +105,35 @@ $totalPages = ceil($totalCommandes / $limit);
             <div class="tab-container">
                 <table class="styled-table">
                     <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>CLIENT</th>
-                            <th>TOTAL</th>
-                            <th>COMMENTAIRE</th>
-                            <th>DATE</th>
-                            <th>STATUT</th>
-                            <th>STRUCTURE</th>
-                            <th>DIMENSIONS</th>
-                            <th>TYPE_BANQUETTE</th>
-                            <th>MOUSSE</th>
-                            <th>COULEUR_BOIS</th>
-                            <th>DECORATION_BOIS</th>
-                            <th>ACCOUDOIR_BOIS</th>
-                            <th>DOSSIER_BOIS</th>
-                            <th>COULEUR_TISSU_BOIS</th>
-                            <th>MOTIF_BOIS</th>
-                            <th>MODELE</th>
-                            <th>COULEUR_TISSU</th>
-                            <th>MOTIF_TISSU</th>
-                            <th>DOSSIER_TISSU</th>
-                            <th>ACCOUDOIR_TISSU</th>
-                            <th>ACTION</th>
+                        <th class="btn-order">
+                            <a
+                                href="?page=<?= $page ?>&order=<?= $next ?>"
+                                title="Trier <?= $order === 'ASC' ? 'du plus récent au plus ancien' : 'du plus ancien au plus récent' ?>">
+                                <img src="<?= $icon ?>" alt="" width="20" height="20">
+                            </a>
+                            ID
+                        </th>
+                        <th>CLIENT</th>
+                        <th>TOTAL</th>
+                        <th>COMMENTAIRE</th>
+                        <th>DATE</th>
+                        <th>STATUT</th>
+                        <th>STRUCTURE</th>
+                        <th>DIMENSIONS</th>
+                        <th>TYPE_BANQUETTE</th>
+                        <th>MOUSSE</th>
+                        <th>COULEUR_BOIS</th>
+                        <th>DECORATION_BOIS</th>
+                        <th>ACCOUDOIR_BOIS</th>
+                        <th>DOSSIER_BOIS</th>
+                        <th>COULEUR_TISSU_BOIS</th>
+                        <th>MOTIF_BOIS</th>
+                        <th>MODELE</th>
+                        <th>COULEUR_TISSU</th>
+                        <th>MOTIF_TISSU</th>
+                        <th>DOSSIER_TISSU</th>
+                        <th>ACCOUDOIR_TISSU</th>
+                        <th>ACTION</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -131,12 +142,12 @@ $totalPages = ceil($totalCommandes / $limit);
                             $stmt = $pdo->prepare("SELECT cd.*, c.id AS id_client, c.nom, c.prenom
                                                     FROM commande_detail AS cd
                                                     INNER JOIN client AS c ON cd.id_client = c.id
-                                                    WHERE c.nom LIKE :search
-                                                    ORDER BY cd.id DESC 
+                                                    WHERE c.nom LIKE :search OR cd.id LIKE :search
+                                                    ORDER BY id $order
                                                     ");
                             $stmt->bindValue(':search', '%' . $search . '%', PDO::PARAM_STR);
                         } else {
-                            $stmt = $pdo->prepare("SELECT * FROM commande_detail ORDER BY id DESC LIMIT :limit OFFSET :offset");
+                            $stmt = $pdo->prepare("SELECT * FROM commande_detail ORDER BY id $order LIMIT :limit OFFSET :offset");
                             $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
                             $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
                         }

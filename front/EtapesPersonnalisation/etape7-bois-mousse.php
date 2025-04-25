@@ -46,9 +46,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../../styles/processus.css">
   <link rel="stylesheet" href="../../styles/popup.css">
-  <script type="module" src="../../scrpit/popup.js"></script>
-  <script type="module" src="../../scrpit/variationPrix.js"></script>
-  <script src="../../scrpit/reset.js"></script>
+  <script type="module" src="../../script/popup.js"></script>
+  <script type="module" src="../../script/variationPrix.js"></script>
+  <script src="../../script/reset.js"></script>
 
   <title>Étape 7 - Choisi ta mousse</title>
   <style>

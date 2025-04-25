@@ -51,7 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
   <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../../styles/processus.css">
-  <script type="module" src="../../scrpit/variationPrix.js"></script>
+  <script type="module" src="../../script/variationPrix.js"></script>
   <script type="module" src="../../script/savePriceTissu.js"></script>
 
 
