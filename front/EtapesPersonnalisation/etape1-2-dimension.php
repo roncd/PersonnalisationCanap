@@ -49,7 +49,6 @@ if (!empty($_POST["longueurA"])) {
   <link rel="stylesheet" href="../../styles/processus.css">
   <link rel="stylesheet" href="../../styles/popup.css">
   <script type="module" src="../../scrpit/popup.js"></script>
-  <script type="module" src="../../scrpit/button.js"></script>
   <title>Étape 1 - Choisi tes mesures</title>
   <style>
     /* Transition pour les éléments de la page */
@@ -115,8 +114,8 @@ if (!empty($_POST["longueurA"])) {
           <div class="footer">
             <p>Total : <span>899 €</span></p>
             <div class="buttons">
-              <button type="button" class="btn-retour">Retour</button>
-              <input type="hidden" name="prix_dimensions" id="prix_dimensions_hidden" value="">
+            <button type="button" onclick="retourEtapePrecedente()" class="btn-retour transition">Retour</button>
+            <input type="hidden" name="prix_dimensions" id="prix_dimensions_hidden" value="">
               <button type="submit" class="btn-suivant transition">Suivant</button>
             </div>
           </div>
@@ -327,6 +326,15 @@ document.querySelectorAll(".input-field").forEach(input => {
         calculateDimensionPrice();
         updateTotal();
       });
+    </script>
+
+      
+      <!-- BOUTTON RETOUR -->
+      <script>
+       function retourEtapePrecedente() {
+    // Exemple : tu es sur étape 8, tu veux revenir à étape 7
+    window.location.href = "etape1-1-structure.php"; 
+  }
     </script>
   </main>
   <?php require_once '../../squelette/footer.php' ?>

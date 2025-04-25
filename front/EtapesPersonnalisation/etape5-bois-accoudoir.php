@@ -83,7 +83,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <link rel="stylesheet" href="../../styles/processus.css">
   <link rel="stylesheet" href="../../styles/popup.css">
   <script type="module" src="../../scrpit/popup.js"></script>
-  <script type="module" src="../../scrpit/button.js"></script>
   <script type="module" src="../../scrpit/variationPrix.js"></script>
 
   <title>Étape 5 - Ajoute tes accoudoirs</title>
@@ -200,8 +199,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div class="footer">
           <p>Total : <span>899 €</span></p>
           <div class="buttons">
-            <button class="btn-retour transition">Retour</button>
-            <form method="POST" action="">
+          <button onclick="retourEtapePrecedente()" class="btn-retour transition">Retour</button>
+          <form method="POST" action="">
               <input type="hidden" name="accoudoir_bois_id" id="selected-accoudoir_bois">
               <input type="hidden" name="nb_accoudoir" id="selected-nb_accoudoir" required>
               <button type="submit" class="btn-suivant transition">Suivant</button>
@@ -287,6 +286,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const selectedAccoudoirBoisInput = document.getElementById('selected-accoudoir_bois');
   let selectedOptions = JSON.parse(localStorage.getItem('selectedOptions')) || {};
 
+
+  
   // Afficher la transition des éléments
   document.querySelectorAll('.transition').forEach(element => {
     element.classList.add('show');
@@ -569,7 +570,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     </script>
 
-
+ <!-- BOUTTON RETOUR -->
+ <script>
+       function retourEtapePrecedente() {
+    // Exemple : tu es sur étape 8, tu veux revenir à étape 7
+    window.location.href = "etape4-bois-decoration.php"; 
+  }
+    </script>
 
 
 

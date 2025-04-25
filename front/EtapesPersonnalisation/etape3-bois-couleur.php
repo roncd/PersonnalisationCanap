@@ -53,8 +53,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <link rel="stylesheet" href="../../styles/processus.css">
   <link rel="stylesheet" href="../../styles/popup.css">
   <script type="module" src="../../scrpit/popup.js"></script>
-  <script type="module" src="../../scrpit/button.js"></script>
   <script type="module" src="../../scrpit/variationPrix.js"></script>
+  <script src="../../scrpit/reset.js"></script>
 
   <title>Étape 3 - Choisi ta couleur</title>
   <style>
@@ -130,15 +130,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div class="footer">
           <p>Total : <span>899 €</span></p>
           <div class="buttons">
-            <button class="btn-retour transition"  >Retour</button>
-            <form method="POST" action="">
+          <button onclick="retourEtapePrecedente()" class="btn-retour transition">Retour</button>
+          <form method="POST" action="">
               <input type="hidden" name="couleur_bois_id" id="selected-couleur_bois">
               <button type="submit" class="btn-suivant transition">Suivant</button>
             </form>
+            <button id="reset-selection" class="btn-reset transition">Réinitialiser</button>
           </div>
         </div>
       </div>
 
+      
       <!-- Colonne de droite -->
       <div class="right-column transition">
         <section class="main-display">
@@ -184,6 +186,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <!-- GESTION DES SELECTIONS -->
     <script>
+
       document.addEventListener('DOMContentLoaded', () => {
         const options = document.querySelectorAll('.color-options .option img');
         const mainImage = document.querySelector('.main-display img');
@@ -193,6 +196,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         let selectedBoisId = localStorage.getItem('selectedCouleurBois') || '';
         let selected = selectedBoisId !== '';
 
+        
+        
         document.querySelectorAll('.transition').forEach(element => {
           element.classList.add('show');
         });
@@ -232,6 +237,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           localStorage.setItem('selectedCouleurBois', selectedBoisId);
         }
       });
+
+      
     </script>
 
 
@@ -327,6 +334,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   });
 </script>
 
+
+  
+      <!-- BOUTTON RETOUR -->
+      <script>
+       function retourEtapePrecedente() {
+    // Exemple : tu es sur étape 8, tu veux revenir à étape 7
+    window.location.href = "etape2-type-banquette.php"; 
+  }
+    </script>
 
   </main>
 
