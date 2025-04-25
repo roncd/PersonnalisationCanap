@@ -14,10 +14,6 @@ $couleur_tissu = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 // Vérifier si le formulaire a été soumis
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (!isset($_POST['couleur_tissu_id']) || empty($_POST['couleur_tissu_id'])) {
-        echo "Erreur : Aucun tissu sélectionné.";
-        exit;
-    }
 
     $id_client = $_SESSION['user_id'];
     $id_couleur_tissu = $_POST['couleur_tissu_id'];
@@ -53,6 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link rel="stylesheet" href="../../styles/popup.css">
     <script type="module" src="../../scrpit/popup.js"></script>
     <script type="module" src="../../scrpit/variationPrix.js"></script>
+    <script src="../../scrpit/reset.js"></script>
 
     <title>Étape 4 - Choisi ton tissu</title>
     <style>
@@ -123,6 +120,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <input type="hidden" name="couleur_tissu_id" id="selected-couleur_tissu">
                             <button type="submit" class="btn-suivant transition">Suivant</button>
                         </form>
+                        <button id="reset-selection" class="btn-reset transition">Réinitialiser</button>
                     </div>
                 </div>
             </div>
@@ -162,14 +160,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
         </div>
 
-        <!-- Pop-up de sélection d'option -->
-        <div id="selection-popup" class="popup transition">
-            <div class="popup-content">
-                <h2>Veuillez choisir une option avant de continuer.</h2>
-                <br>
-                <button class="close-btn">OK</button>
-            </div>
-        </div>
+<!-- Popup d'erreur si les dimensions ne sont pas remplies -->
+<div id="erreur-popup" class="popup transition">
+      <div class="popup-content">
+        <h2>Veuillez choisir une option avant de continuer.</h2>
+        <button class="close-btn">OK</button>
+      </div>
+    </div>
 
         <!-- GESTION DES SELECTIONS -->
         <script>
@@ -179,8 +176,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 const options = document.querySelectorAll('.color-options .option img'); // Les images des options
                 const selectedCouleurTissuInput = document.getElementById('selected-couleur_tissu');
                 const mainImage = document.querySelector('.main-display img');
-                const selectionPopup = document.getElementById('selection-popup'); // Pop-up de sélection
+                const erreurPopup = document.getElementById('erreur-popup');
+                const closeErreurBtn = erreurPopup.querySelector('.close-btn');
                 let selected = false; // Marque si une option a été sélectionnée
+                const form = document.querySelector('form'); // Assure-toi que ton <form> a bien une balise identifiable
 
                 // Vérification si une sélection existe dans localStorage
                 let savedCouleurTissuId = localStorage.getItem('selectedCouleurTissuId');
@@ -224,16 +223,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     }
                 });
 
-                document.querySelector('#selection-popup .close-btn').addEventListener('click', () => {
-                    selectionPopup.style.display = 'none';
-                });
+               
+    // Empêcher la soumission du formulaire si rien n'est sélectionné
+    form.addEventListener('submit', (e) => {
+      if (!selectedCouleurTissuInput.value) {
+        e.preventDefault();
+        erreurPopup.style.display = 'flex'; // ou 'block' selon ton CSS
+      }
+    });
 
-                // Option supplémentaire : fermer le pop-up de sélection si clic à l'extérieur
-                window.addEventListener('click', (event) => {
-                    if (event.target === selectionPopup) {
-                        selectionPopup.style.display = 'none';
-                    }
-                });
+    // Fermer le popup
+    closeErreurBtn.addEventListener('click', () => {
+      erreurPopup.style.display = 'none';
+    });
+
+    window.addEventListener('click', (event) => {
+      if (event.target === erreurPopup) {
+        erreurPopup.style.display = 'none';
+      }
+    });
 
                 function saveSelection(couleurTissuId) {
                     localStorage.setItem('selectedCouleurTissuId', couleurTissuId);
@@ -250,7 +258,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 const options = document.querySelectorAll('.color-options .option img'); // Les images des options
                 const selectedCouleurTissuInput = document.getElementById('selected-couleur_tissu');
                 const mainImage = document.querySelector('.main-display img');
-                const selectionPopup = document.getElementById('selection-popup'); // Pop-up de sélection
+                const erreurPopup = document.getElementById('erreur-popup');
+                const closeErreurBtn = erreurPopup.querySelector('.close-btn');
+                const form = document.querySelector('form'); // Assure-toi que ton <form> a bien une balise identifiable
+ 
+                
                 let selected = false; // Marque si une option a été sélectionnée
 
                 // Vérification si une sélection existe dans localStorage
@@ -265,6 +277,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             mainImage.alt = img.alt;
                             selectedCouleurTissuInput.value = savedCouleurTissuId;
                             selected = true;
+                            saveSelection();
                         }
                     });
                 }
@@ -296,17 +309,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     }
                 });
 
-                document.querySelector('#selection-popup .close-btn').addEventListener('click', () => {
-                    selectionPopup.style.display = 'none';
-                });
+                
+    // Empêcher la soumission du formulaire si rien n'est sélectionné
+    form.addEventListener('submit', (e) => {
+      if (!selectedCouleurTissuInput.value) {
+        e.preventDefault();
+        erreurPopup.style.display = 'flex'; // ou 'block' selon ton CSS
+      }
+    });
 
-                // Option supplémentaire : fermer le pop-up de sélection si clic à l'extérieur
-                window.addEventListener('click', (event) => {
-                    if (event.target === selectionPopup) {
-                        selectionPopup.style.display = 'none';
-                    }
-                });
+    // Fermer le popup
+    closeErreurBtn.addEventListener('click', () => {
+      erreurPopup.style.display = 'none';
+    });
 
+    window.addEventListener('click', (event) => {
+      if (event.target === erreurPopup) {
+        erreurPopup.style.display = 'none';
+      }
+    });
                 function saveSelection(couleurTissuId) {
                     localStorage.setItem('selectedCouleurTissuId', couleurTissuId);
                 }

@@ -209,9 +209,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Vérification si une sélection existe dans localStorage
         let savedMousseId = localStorage.getItem('selectedMousseId');
         
-        //  🔽 Ajoute cette ligne ici !
-window.allSelectedOptions = allSelectedOptions;
-
+        
         if (savedMousseId) {
             options.forEach(img => {
                 if (img.getAttribute('data-mousse-tissu-id') === savedMousseId) {

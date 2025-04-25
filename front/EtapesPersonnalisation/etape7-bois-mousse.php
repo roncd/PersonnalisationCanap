@@ -13,11 +13,7 @@ $stmt = $pdo->query("SELECT * FROM mousse");
 $mousse = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 // Vérifier si le formulaire a été soumis
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (!isset($_POST['mousse_id']) || empty($_POST['mousse_id'])) {
-        echo "Erreur : Aucun type de mousse sélectionné.";
-        exit;
-    }
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {    
  
     $id_client = $_SESSION['user_id'];
     $id_mousse = $_POST['mousse_id'];
@@ -52,6 +48,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <link rel="stylesheet" href="../../styles/popup.css">
   <script type="module" src="../../scrpit/popup.js"></script>
   <script type="module" src="../../scrpit/variationPrix.js"></script>
+  <script src="../../scrpit/reset.js"></script>
 
   <title>Étape 7 - Choisi ta mousse</title>
   <style>
@@ -127,6 +124,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <input type="hidden" name="mousse_id" id="selected-mousse">
             <button type="submit" class="btn-suivant transition">Suivant</button>
           </form>
+          <button id="reset-selection" class="btn-reset transition">Réinitialiser</button>
         </div>
       </div>
     </div>
@@ -164,14 +162,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
   </div>
 
-<!-- Pop-up de sélection d'option -->
-  <div id="selection-popup" class="popup transition">
-    <div class="popup-content">
-      <h2>Veuillez choisir une option avant de continuer.</h2>
-      <br>
-      <button class="close-btn">OK</button>
+<!-- Popup d'erreur si les dimensions ne sont pas remplies -->
+<div id="erreur-popup" class="popup transition">
+      <div class="popup-content">
+        <h2>Veuillez choisir une option avant de continuer.</h2>
+        <button class="close-btn">OK</button>
+      </div>
     </div>
-  </div>
 
   
   <!-- GESTION DES SELECTIONS -->
@@ -180,7 +177,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     const options = document.querySelectorAll('.color-options .option img');
     const mainImage = document.querySelector('.main-display img');
     const selectionPopup = document.getElementById('selection-popup');
+    const erreurPopup = document.getElementById('erreur-popup');
+    const closeErreurBtn = erreurPopup.querySelector('.close-btn');
     const selectedMousseInput = document.getElementById('selected-mousse');
+    const form = document.querySelector('form'); // Assure-toi que ton <form> a bien une balise identifiable
 
     let selectedMousseId = localStorage.getItem('selectedMousse') || ''; 
     let selected = selectedMousseId !== ''; 
@@ -211,13 +211,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       });
     });
 
-    document.querySelector('#selection-popup .close-btn').addEventListener('click', () => {
-      selectionPopup.style.display = 'none';
+    // Empêcher la soumission du formulaire si rien n'est sélectionné
+    form.addEventListener('submit', (e) => {
+      if (!selectedMousseInput.value) {
+        e.preventDefault();
+        erreurPopup.style.display = 'flex'; // ou 'block' selon ton CSS
+      }
+    });
+
+    // Fermer le popup
+    closeErreurBtn.addEventListener('click', () => {
+      erreurPopup.style.display = 'none';
     });
 
     window.addEventListener('click', (event) => {
-      if (event.target === selectionPopup) {
-        selectionPopup.style.display = 'none';
+      if (event.target === erreurPopup) {
+        erreurPopup.style.display = 'none';
       }
     });
 

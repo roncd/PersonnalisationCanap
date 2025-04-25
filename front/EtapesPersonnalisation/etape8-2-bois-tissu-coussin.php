@@ -14,11 +14,7 @@ $motif_bois = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 // Vérifier si le formulaire a été soumis
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (!isset($_POST['motif_bois_id']) || empty($_POST['motif_bois_id'])) {
-        echo "Erreur : Aucun type de bois sélectionné.";
-        exit;
-    }
-
+   
     $id_client = $_SESSION['user_id'];
     $id_motif_bois = $_POST['motif_bois_id'];
     $prix_total = isset($_POST['total_price']) ? floatval($_POST['total_price']) : 0;
@@ -52,6 +48,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <link rel="stylesheet" href="../../styles/processus.css">
   <link rel="stylesheet" href="../../styles/popup.css">
   <script type="module" src="../../scrpit/variationPrix.js"></script>
+  <script src="../../scrpit/reset.js"></script>
 
 
   <title>Étape 8 - Choisi ton motif de coussin</title>
@@ -128,6 +125,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <input type="hidden" name="total_price" id="total-price"> <!-- Ajout pour envoyer le prix -->
             <button type="submit" class="btn-suivant transition">Suivant</button>
           </form>
+          <button id="reset-selection" class="btn-reset transition">Réinitialiser</button>
         </div>
       </div>
     </div>
@@ -187,13 +185,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   </div>
 
   
-  <div id="selection-popup" class="popup transition">
-    <div class="popup-content">
-      <h2>Veuillez choisir une option avant de continuer.</h2>
-      <br>
-      <button class="close-btn">OK</button>
+
+<!-- Popup d'erreur si les dimensions ne sont pas remplies -->
+<div id="erreur-popup" class="popup transition">
+      <div class="popup-content">
+        <h2>Veuillez choisir une option avant de continuer.</h2>
+        <button class="close-btn">OK</button>
+      </div>
     </div>
-  </div>
   
   
       <!-- BOUTTON RETOUR -->
@@ -211,8 +210,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     const suivantButton = document.querySelector('.btn-suivant');
     const helpPopup = document.getElementById('help-popup');
     const abandonnerPopup = document.getElementById('abandonner-popup');
-    const selectionPopup = document.getElementById('selection-popup');
+    const erreurPopup = document.getElementById('erreur-popup');
+    const closeErreurBtn = erreurPopup.querySelector('.close-btn');
     const selectedCouleurBoisInput = document.getElementById('selected-motif_bois'); // Input caché
+    const form = document.querySelector('form'); // Assure-toi que ton <form> a bien une balise identifiable
 
     let selectedMotifBoisId = localStorage.getItem('selectedMotifBois') || ''; 
     let selected = selectedMotifBoisId !== ''; 
@@ -249,15 +250,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       }
     });
 
-    document.querySelector('#selection-popup .close-btn').addEventListener('click', () => {
-      selectionPopup.style.display = 'none';
+
+    // Empêcher la soumission du formulaire si rien n'est sélectionné
+    form.addEventListener('submit', (e) => {
+      if (!selectedCouleurBoisInput.value) {
+        e.preventDefault();
+        erreurPopup.style.display = 'flex'; // ou 'block' selon ton CSS
+      }
+    });
+
+    // Fermer le popup
+    closeErreurBtn.addEventListener('click', () => {
+      erreurPopup.style.display = 'none';
     });
 
     window.addEventListener('click', (event) => {
-      if (event.target === selectionPopup) {
-        selectionPopup.style.display = 'none';
+      if (event.target === erreurPopup) {
+        erreurPopup.style.display = 'none';
       }
     });
+
 
     document.querySelector('.btn-aide').addEventListener('click', () => {
       helpPopup.style.display = 'flex';
