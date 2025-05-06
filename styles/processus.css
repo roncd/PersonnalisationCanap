@@ -299,7 +299,8 @@ span {
 .btn-abandonner,
 .btn-submit-com,
 .btn-generer,
-.btn-suivant {
+.btn-suivant,
+.btn-retour {
   background-color: #997765;
   color: #fff;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
@@ -308,8 +309,10 @@ span {
   border-radius: 10px;
   cursor: pointer;
   font-weight: bold;
+  transition: transform 0.3s ease; /* ✅ Ajoute la transition ici */
 }
 
+/* Boutons en noir */
 .btn-abandonner,
 .btn-submit-com,
 .btn-suivant,
@@ -317,15 +320,25 @@ span {
   background-color: #000;
 }
 
+/* Effet zoom au survol */
 .btn-aide:hover,
 .btn-abandonner:hover,
 .btn-suivant:hover,
 .btn-retour:hover,
 .btn-submit-com:hover,
 .btn-generer:hover {
-  transform: scale(1.05);
-  transition: transform .2s;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3); /* Ombre plus forte */
+  transform: translateY(-3px); /* Légère élévation */
+  transition: all 0.3s ease;
 }
+
+.footer .buttons button:hover,
+.footer-processus .buttons button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+
 
 /* ================== FORM ================== */
 .formulaire {
