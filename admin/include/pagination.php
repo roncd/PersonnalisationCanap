@@ -2,14 +2,15 @@
 if (!$search) {
     echo '<nav class="nav" aria-label="pagination">';
     echo '<ul class="pagination">';
-
+    $params = $_GET;
+    unset($params['page']);
     if ($page > 1) {
-        echo '<li><a href="?page=' . ($page - 1) . '">Précédent</a></li>';
+        echo '<li><a href="?' . http_build_query($params) . '&page=' . ($page - 1) . '">Précédent</a></li>';
     }
 
     // Nombre maximal de liens à afficher
     $max_links = 3;
-    //Premier lien pagination 
+    // Premier lien pagination 
     $start = max(1, $page - floor($max_links / 2));
     // Dernier lien pagination
     $end = min($totalPages, $start + $max_links - 1);
@@ -20,7 +21,7 @@ if (!$search) {
 
     // Affichage de première page et de ... entre max_link et première page
     if ($start > 1) {
-        echo '<li><a href="?page=1">1</a></li>';
+        echo '<li><a href="?' . http_build_query($params) . '&page=1">1</a></li>';
         if ($start > 2) {
             echo '<li><span>…</span></li>';
         }
@@ -29,7 +30,7 @@ if (!$search) {
     // Page active
     for ($i = $start; $i <= $end; $i++) {
         echo '<li>';
-        echo '<a class="' . ($i == $page ? 'active' : '') . '" href="?page=' . $i . '">' . $i . '</a>';
+        echo '<a class="' . ($i == $page ? 'active' : '') . '" href="?' . http_build_query($params) . '&page=' . $i . '">' . $i . '</a>';
         echo '</li>';
     }
 
@@ -38,11 +39,11 @@ if (!$search) {
         if ($end < $totalPages - 1) {
             echo '<li><span>…</span></li>';
         }
-        echo '<li><a href="?page=' . $totalPages . '">' . $totalPages . '</a></li>';
+        echo '<li><a href="?' . http_build_query($params) . '&page=' . $totalPages . '">' . $totalPages . '</a></li>';
     }
 
     if ($page < $totalPages) {
-        echo '<li><a href="?page=' . ($page + 1) . '">Suivant</a></li>';
+        echo '<li><a href="?' . http_build_query($params) . '&page=' . ($page + 1) . '">Suivant</a></li>';
     }
 
     echo '</ul>';
