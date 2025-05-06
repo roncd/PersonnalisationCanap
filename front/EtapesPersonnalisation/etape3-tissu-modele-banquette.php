@@ -56,6 +56,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <link rel="stylesheet" href="../../styles/popup.css">
   <script type="module" src="../../script/popup.js"></script>
   <script type="module" src="../../script/variationPrix.js"></script>
+  <script src="../../script/reset.js"></script>
+
 
   <title>Étape 3 - Choisi ton modèle</title>
 
@@ -129,10 +131,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           <div class="buttons">
           <button onclick="retourEtapePrecedente()" class="btn-retour transition">Retour</button>
           <form method="POST" action="">
-              <input type="hidden" name="modele_id" id="selected-modele">
-              <input type="hidden" name="modele_type" id="selected-modele-type">
+              <input type="hidden" name="modele_id" id="selected-modele_tissu">
               <button type="submit" class="btn-suivant transition">Suivant</button>
             </form>
+            <button id="reset-selection" class="btn-reset transition">Réinitialiser</button>
           </div>
         </div>
       </div>
@@ -173,7 +175,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
 
 
-<!-- Popup d'erreur si les dimensions ne sont pas remplies -->
+<!-- Popup d'erreur si option non selectionnée -->
 <div id="erreur-popup" class="popup transition">
       <div class="popup-content">
         <h2>Veuillez choisir une option avant de continuer.</h2>
@@ -185,22 +187,47 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <script>
       document.addEventListener('DOMContentLoaded', () => {
         const options = document.querySelectorAll('.color-2options .option img');
-        const selectedModeleInput = document.getElementById('selected-modele');
-        const selectedModeleTypeInput = document.getElementById('selected-modele-type');
-        const erreurPopup = document.getElementById('erreur-popup');
+        const selectedModeleTissuInput = document.getElementById('selected-modele_tissu');
         const mainImage = document.getElementById('main-image');
+        const erreurPopup = document.getElementById('erreur-popup');
+        const closeErreurBtn = erreurPopup.querySelector('.close-btn');
         const form = document.querySelector('form'); // Assure-toi que ton <form> a bien une balise identifiable
 
-        let selected = false;
+        let savedModeleTissuId = localStorage.getItem('selectedModeleTissuId');
+        let selected = savedModeleTissuId!=='';
 
-        let savedModeleId = localStorage.getItem('selectedModeleId');
-        let savedModeleType = localStorage.getItem('selectedModeleType');
         
+        // Appliquer les transitions aux éléments
         document.querySelectorAll('.transition').forEach(element => {
-          element.classList.add('show');
+            element.classList.add('show');
         });
 
-        if (savedModeleId && savedModeleType) {
+ // Restaurer la sélection si elle existe
+ options.forEach(img => {
+                if (img.getAttribute('data-modele-tissu-id') === savedModeleTissuId) {
+                img.classList.add('selected');
+                mainImage.src = img.src;
+                selectedModeleTissuInput.value = savedModeleTissuId;
+               }
+            });
+
+                // Gestion du clic sur une option
+                options.forEach(img => {
+                img.addEventListener('click', () => {
+                options.forEach(opt => opt.classList.remove('selected'));
+                img.classList.add('selected');
+                mainImage.src = img.src;
+                savedModeleTissuId = img.getAttribute('data-modele-tissu-id');
+                selectedModeleTissuInput.value = savedModeleTissuId;
+                selected = true;
+                saveSelection();
+               });
+            });
+       
+
+
+
+        /*if (savedModeleId && savedModeleType) {
           options.forEach(img => {
             if (img.getAttribute('data-modele-tissu-id') === savedModeleId && img.getAttribute('data-modele-tissu-type') === savedModeleType) {
               img.classList.add('selected');
@@ -230,11 +257,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             saveSelection(img.getAttribute('data-modele-tissu-id'), img.getAttribute('data-modele-tissu-type'));
           });
         });
-
+*/
         
     // Empêcher la soumission du formulaire si rien n'est sélectionné
     form.addEventListener('submit', (e) => {
-      if (!selectedCouleurBoisInput.value) {
+      if (!selectedModeleTissuInput.value) {
         e.preventDefault();
         erreurPopup.style.display = 'flex'; // ou 'block' selon ton CSS
       }
@@ -253,11 +280,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 
 
-        function saveSelection(modeleId, modeleType) {
-          localStorage.setItem('selectedModeleId', modeleId);
-          localStorage.setItem('selectedModeleType', modeleType);
-        }
-      });
+    function saveSelection() {
+                    localStorage.setItem('selectedModeleTissuId', savedModeleTissuId);
+                }
+            });
     </script>
 
      <!-- BOUTTON RETOUR -->

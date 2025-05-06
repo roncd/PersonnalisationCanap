@@ -14,10 +14,6 @@ $structures = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 // Vérifier si le formulaire a été soumis
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-  if (!isset($_POST['structure_id']) || empty($_POST['structure_id'])) {
-    echo "Erreur : aucune structure sélectionnée.";
-    exit;
-  }
 
   $id_client = $_SESSION['user_id']; // Assurez-vous que user_id correspond bien à id_client
   $id_structure = $_POST['structure_id'];
@@ -55,6 +51,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <link rel="stylesheet" href="../../styles/popup.css">
   <script type="module" src="../../script/popup.js"></script>
   <script type="module" src="../../script/button.js"></script>
+  <script src="../../script/reset.js"></script>
+
   
 
 
@@ -117,6 +115,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
               <input type="hidden" name="structure_id" id="selected-structure">
               <button type="submit" class="btn-suivant transition">Suivant</button>
             </form>
+            <button id="reset-selection" class="btn-reset transition">Réinitialiser</button>
           </div>
         </div>
       </div>
@@ -158,14 +157,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
 
     
-    <!-- POPUP SELECTION -->
-    <div id="selection-popup" class="popup transition">
+<!-- Popup d'erreur si option non selectionnée -->
+<div id="erreur-popup" class="popup transition">
       <div class="popup-content">
-        <h2>Veuillez sélectionner une option avant de continuer.</h2>
-        <br>
+        <h2>Veuillez choisir une option avant de continuer.</h2>
         <button class="close-btn">OK</button>
       </div>
     </div>
+
 
     <!-- GESTION DES SELECTIONS -->
     <script>
@@ -173,12 +172,42 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         const options = document.querySelectorAll('.color-options .option img');
         const selectedStructureInput = document.getElementById('selected-structure');
         const mainImage = document.getElementById('main-image');
-        let selected = false;
+        const erreurPopup = document.getElementById('erreur-popup');
+        const closeErreurBtn = erreurPopup.querySelector('.close-btn');
+        const form = document.querySelector('form'); // Assure-toi que ton <form> a bien une balise identifiable
 
+        // Vérification si une sélection existe dans localStorage
+        let savedStructureId = localStorage.getItem('selectedStructureId');
+        let selected = savedStructureId!=='';
 
+        // Appliquer les transitions aux éléments
         document.querySelectorAll('.transition').forEach(element => {
           element.classList.add('show');
         });
+
+        // Restaurer la sélection si elle existe
+        options.forEach(img => {
+        if (img.getAttribute('data-structure-id') === savedStructureId) {
+        img.classList.add('selected');
+        mainImage.src = img.src;
+        selectedStructureInput.value = savedStructureId;
+         }
+       });
+
+        // Gestion du clic sur une option
+        options.forEach(img => {
+        img.addEventListener('click', () => {
+        options.forEach(opt => opt.classList.remove('selected'));
+        img.classList.add('selected');
+        mainImage.src = img.src;
+        savedStructureId = img.getAttribute('data-structure-id');
+        selectedStructureInput.value = savedStructureId;
+        selected = true;
+        saveSelection();
+        });
+     });        
+          
+        /*
 
         // Vérifier s'il y a une sélection enregistrée dans localStorage
         const savedStructureId = localStorage.getItem('selectedStructure');
@@ -210,7 +239,35 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Sauvegarder l'ID de la structure sélectionnée dans localStorage
             localStorage.setItem('selectedStructure', img.getAttribute('data-structure-id'));
           });
-        });
+        });*/
+
+    // Empêcher la soumission du formulaire si rien n'est sélectionné
+    form.addEventListener('submit', (e) => {
+      if (!selectedStructureInput.value) {
+        e.preventDefault();
+        erreurPopup.style.display = 'flex'; // ou 'block' selon ton CSS
+      }
+    });
+
+    // Fermer le popup
+    closeErreurBtn.addEventListener('click', () => {
+      erreurPopup.style.display = 'none';
+    });
+
+    window.addEventListener('click', (event) => {
+      if (event.target === erreurPopup) {
+        erreurPopup.style.display = 'none';
+      }
+    });
+
+                function saveSelection() {
+                    localStorage.setItem('selectedStructureId', savedStructureId);
+                }
+
+
+
+
+
       });
     </script>
 

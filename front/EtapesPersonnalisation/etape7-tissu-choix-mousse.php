@@ -14,10 +14,6 @@ $mousse = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 // Vérifier si le formulaire a été soumis
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (!isset($_POST['mousse_id']) || empty($_POST['mousse_id'])) {
-        echo "Erreur : Aucun type de mousse sélectionné.";
-        exit;
-    }
 
     $id_client = $_SESSION['user_id'];
     $id_mousse = $_POST['mousse_id'];
@@ -53,6 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <link rel="stylesheet" href="../../styles/processus.css">
   <script type="module" src="../../script/variationPrix.js"></script>
   <script type="module" src="../../script/savePriceTissu.js"></script>
+  <script src="../../script/reset.js"></script>
 
 
   <link rel="stylesheet" href="../../styles/popup.css">
@@ -130,6 +127,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <input type="hidden" name="total_price" id="total-price"> <!-- Ajout pour envoyer le prix -->
             <button type="submit" class="btn-suivant transition">Suivant</button>
           </form>
+          <button id="reset-selection" class="btn-reset transition">Réinitialiser</button>
         </div>
       </div>
     </div>
@@ -167,13 +165,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
   </div>
 
-  <div id="selection-popup" class="popup transition">
-    <div class="popup-content">
-      <h2>Veuillez choisir une option avant de continuer.</h2>
-      <br>
-      <button class="close-btn">OK</button>
-    </div>
-  </div>
+<!-- Popup d'erreur si option non selectionné -->
+<div id="erreur-popup" class="popup transition">
+      <div class="popup-content">
+        <h2>Veuillez choisir une option avant de continuer.</h2>
+        <button class="close-btn">OK</button>
+      </div>
+      </div>
 
   <script>
     
@@ -202,15 +200,48 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         const suivantButton = document.querySelector('.btn-suivant');
         const helpPopup = document.getElementById('help-popup');
         const abandonnerPopup = document.getElementById('abandonner-popup');
-        const selectionPopup = document.getElementById('selection-popup');
+        const erreurPopup = document.getElementById('erreur-popup');
+        const closeErreurBtn = erreurPopup.querySelector('.close-btn');
+        const form = document.querySelector('form'); // Assure-toi que ton <form> a bien une balise identifiable
         const selectedMousseInput = document.getElementById('selected-mousse'); // Input caché
-        let selected = false; 
+        
 
         // Vérification si une sélection existe dans localStorage
         let savedMousseId = localStorage.getItem('selectedMousseId');
+        let selected = savedMousseId!=='';
+
+        // Affichage des éléments avec la classe "transition"
+        document.querySelectorAll('.transition').forEach(element => {
+            element.classList.add('show');
+        });
+
+        // Restaurer la sélection si elle existe
+        options.forEach(img => {
+        if (img.getAttribute('data-mousse-tissu-id') === savedMousseId) {
+        img.classList.add('selected');
+        mainImage.src = img.src;
+        selectedMousseInput.value = savedMousseId;
+        }
+      });
+
+       // Gestion du clic sur une option
+       options.forEach(img => {
+       img.addEventListener('click', () => {
+       options.forEach(opt => opt.classList.remove('selected'));
+       img.classList.add('selected');
+       mainImage.src = img.src;
+       savedMousseId = img.getAttribute('data-mousse-tissu-id');
+       selectedMousseInput.value = savedMousseId;
+       selected = true;
+       saveSelection();
+      });
+      });
         
+                
+      
+
         
-        if (savedMousseId) {
+       /* if (savedMousseId) {
             options.forEach(img => {
                 if (img.getAttribute('data-mousse-tissu-id') === savedMousseId) {
                     img.classList.add('selected');
@@ -221,9 +252,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             });
         }
 
-        document.querySelectorAll('.transition').forEach(element => {
-            element.classList.add('show'); 
-        });
 
         options.forEach(img => {
             img.addEventListener('click', () => {
@@ -235,7 +263,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 saveSelection(img.getAttribute('data-mousse-tissu-id'));
             });
-        });
+        });*/
 
         suivantButton.addEventListener('click', (event) => {
             if (!selected) {
@@ -244,15 +272,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         });
 
-        document.querySelector('#selection-popup .close-btn').addEventListener('click', () => {
-            selectionPopup.style.display = 'none';
-        });
+        
+    // Empêcher la soumission du formulaire si rien n'est sélectionné
+    form.addEventListener('submit', (e) => {
+      if (!selectedMousseInput.value) {
+        e.preventDefault();
+        erreurPopup.style.display = 'flex'; // ou 'block' selon ton CSS
+      }
+    });
 
-        window.addEventListener('click', (event) => {
-            if (event.target === selectionPopup) {
-                selectionPopup.style.display = 'none';
-            }
-        });
+    // Fermer le popup
+    closeErreurBtn.addEventListener('click', () => {
+      erreurPopup.style.display = 'none';
+    });
+
+    window.addEventListener('click', (event) => {
+      if (event.target === erreurPopup) {
+        erreurPopup.style.display = 'none';
+      }
+    });
 
         document.querySelector('.btn-aide').addEventListener('click', () => {
             helpPopup.style.display = 'flex';
@@ -281,7 +319,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         });
 
         function saveSelection(mousseId) {
-            localStorage.setItem('selectedMousseId', mousseId);
+            localStorage.setItem('selectedMousseId', savedMousseId);
         }
     });
 </script>

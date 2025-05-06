@@ -160,7 +160,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
         </div>
 
-<!-- Popup d'erreur si les dimensions ne sont pas remplies -->
+<!-- Popup d'erreur si option non selectionnée -->
 <div id="erreur-popup" class="popup transition">
       <div class="popup-content">
         <h2>Veuillez choisir une option avant de continuer.</h2>
@@ -178,50 +178,38 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 const mainImage = document.querySelector('.main-display img');
                 const erreurPopup = document.getElementById('erreur-popup');
                 const closeErreurBtn = erreurPopup.querySelector('.close-btn');
-                let selected = false; // Marque si une option a été sélectionnée
                 const form = document.querySelector('form'); // Assure-toi que ton <form> a bien une balise identifiable
 
                 // Vérification si une sélection existe dans localStorage
                 let savedCouleurTissuId = localStorage.getItem('selectedCouleurTissuId');
-
-                if (savedCouleurTissuId) {
-                    options.forEach(img => {
-                        if (img.getAttribute('data-couleur-tissu-id') === savedCouleurTissuId) {
-                            img.classList.add('selected');
-                            mainImage.src = img.src;
-                            mainImage.alt = img.alt;
-                            selectedCouleurTissuInput.value = savedCouleurTissuId;
-                            selected = true;
-                        }
-                    });
-                }
+                let selected = savedCouleurTissuId!=='';
 
                 // Appliquer les transitions aux éléments
                 document.querySelectorAll('.transition').forEach(element => {
                     element.classList.add('show');
                 });
 
+                // Restaurer la sélection si elle existe
                 options.forEach(img => {
-                    img.addEventListener('click', () => {
-                        options.forEach(opt => opt.classList.remove('selected'));
-                        img.classList.add('selected');
-                        selectedCouleurTissuInput.value = img.getAttribute('data-couleur-tissu-id');
+                if (img.getAttribute('data-couleur-tissu-id') === savedCouleurTissuId) {
+                img.classList.add('selected');
+                mainImage.src = img.src;
+                selectedCouleurTissuInput.value = savedCouleurTissuId;
+               }
+            });
 
-                        // Mise à jour de l'image principale
-                        mainImage.src = img.src;
-                        mainImage.alt = img.alt;
-
-                        selected = true;
-                        saveSelection(img.getAttribute('data-couleur-tissu-id'));
-                    });
-                });
-
-                suivantButton.addEventListener('click', (event) => {
-                    if (!selected) {
-                        event.preventDefault();
-                        selectionPopup.style.display = 'flex';
-                    }
-                });
+                // Gestion du clic sur une option
+                options.forEach(img => {
+                img.addEventListener('click', () => {
+                options.forEach(opt => opt.classList.remove('selected'));
+                img.classList.add('selected');
+                mainImage.src = img.src;
+                savedCouleurTissuId = img.getAttribute('data-couleur-tissu-id');
+                selectedCouleurTissuInput.value = savedCouleurTissuId;
+                selected = true;
+                saveSelection();
+               });
+            });
 
                
     // Empêcher la soumission du formulaire si rien n'est sélectionné
@@ -243,98 +231,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       }
     });
 
-                function saveSelection(couleurTissuId) {
-                    localStorage.setItem('selectedCouleurTissuId', couleurTissuId);
+                function saveSelection() {
+                    localStorage.setItem('selectedCouleurTissuId', savedCouleurTissuId);
                 }
             });
         </script>
 
 
-        <!-- GESTION DES SELECTIONS -->
-        <script>
-            document.addEventListener('DOMContentLoaded', () => {
-
-                // Sélectionner les éléments nécessaires
-                const options = document.querySelectorAll('.color-options .option img'); // Les images des options
-                const selectedCouleurTissuInput = document.getElementById('selected-couleur_tissu');
-                const mainImage = document.querySelector('.main-display img');
-                const erreurPopup = document.getElementById('erreur-popup');
-                const closeErreurBtn = erreurPopup.querySelector('.close-btn');
-                const form = document.querySelector('form'); // Assure-toi que ton <form> a bien une balise identifiable
- 
-                
-                let selected = false; // Marque si une option a été sélectionnée
-
-                // Vérification si une sélection existe dans localStorage
-                let savedCouleurTissuId = localStorage.getItem('selectedCouleurTissuId');
-
-                
-                if (savedCouleurTissuId) {
-                    options.forEach(img => {
-                        if (img.getAttribute('data-couleur-tissu-id') === savedCouleurTissuId) {
-                            img.classList.add('selected');
-                            mainImage.src = img.src;
-                            mainImage.alt = img.alt;
-                            selectedCouleurTissuInput.value = savedCouleurTissuId;
-                            selected = true;
-                            saveSelection();
-                        }
-                    });
-                }
-
-                // Appliquer les transitions aux éléments
-                document.querySelectorAll('.transition').forEach(element => {
-                    element.classList.add('show');
-                });
-
-                options.forEach(img => {
-                    img.addEventListener('click', () => {
-                        options.forEach(opt => opt.classList.remove('selected'));
-                        img.classList.add('selected');
-                        selectedCouleurTissuInput.value = img.getAttribute('data-couleur-tissu-id');
-
-                        // Mise à jour de l'image principale
-                        mainImage.src = img.src;
-                        mainImage.alt = img.alt;
-
-                        selected = true;
-                        saveSelection(img.getAttribute('data-couleur-tissu-id'));
-                    });
-                });
-
-                suivantButton.addEventListener('click', (event) => {
-                    if (!selected) {
-                        event.preventDefault();
-                        selectionPopup.style.display = 'flex';
-                    }
-                });
-
-                
-    // Empêcher la soumission du formulaire si rien n'est sélectionné
-    form.addEventListener('submit', (e) => {
-      if (!selectedCouleurTissuInput.value) {
-        e.preventDefault();
-        erreurPopup.style.display = 'flex'; // ou 'block' selon ton CSS
-      }
-    });
-
-    // Fermer le popup
-    closeErreurBtn.addEventListener('click', () => {
-      erreurPopup.style.display = 'none';
-    });
-
-    window.addEventListener('click', (event) => {
-      if (event.target === erreurPopup) {
-        erreurPopup.style.display = 'none';
-      }
-    });
-                function saveSelection(couleurTissuId) {
-                    localStorage.setItem('selectedCouleurTissuId', couleurTissuId);
-                }
-            });
-        </script>
-
- <!-- BOUTTON RETOUR -->
+ <!-- BOUTTON RETOUR --> 
  <script>
        function retourEtapePrecedente() {
     // Exemple : tu es sur étape 8, tu veux revenir à étape 7
