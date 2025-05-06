@@ -24,10 +24,7 @@ $nb_accoudoir_selectionne = $commande_existante['id_nb_accoudoir'] ?? 1; // Vale
 
 // Vérifier si le formulaire a été soumis
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (!isset($_POST['accoudoir_tissu_id']) || empty($_POST['accoudoir_tissu_id']) || !isset($_POST['nb_accoudoir']) || empty($_POST['nb_accoudoir'])) {
-        echo "Erreur : Aucun accoudoir ou quantité sélectionné.";
-        exit;
-    }
+
 
     $id_accoudoir_tissu = $_POST['accoudoir_tissu_id'];
     $nb_accoudoir = $_POST['nb_accoudoir'];
@@ -63,6 +60,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <link rel="stylesheet" href="../../styles/popup.css">
   <script type="module" src="../../script/popup.js"></script>
   <script type="module" src="../../script/variationPrix.js"></script>
+  <script src="../../script/reset.js"></script>
 
   <title>Étape 6 - Ajoute tes accoudoirs</title>
   <style>
@@ -145,6 +143,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <input type="hidden" name="nb_accoudoir" id="selected-nb_accoudoir" required>
           <button type="submit" class="btn-suivant transition">Suivant</button>
         </form>
+        <button id="reset-selection" class="btn-reset transition">Réinitialiser</button>
       </div>
     </div>
   </div>
@@ -182,42 +181,38 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <button class="no-btn">Non !</button>
   </div>
 </div>
-
-<!-- Pop-up de sélection d'option -->
-<div id="selection-popup" class="popup transition">
+<!-- Popup d'erreur si option non sélectionnée -->
+<div id="erreur-popup" class="popup transition">
   <div class="popup-content">
     <h2>Veuillez choisir une option avant de continuer.</h2>
     <button class="close-btn">OK</button>
   </div>
 </div>
 
-
-<!-- GESTION DES SELECTIONS -->
 <script>
   document.addEventListener('DOMContentLoaded', () => {
     const options = document.querySelectorAll('.color-2options .option img');
+    const selectedAccoudoirTissuInput = document.getElementById('selected-accoudoir_tissu');
+    const selectedNbAccoudoirInput = document.getElementById('selected-nb_accoudoir'); // assure-toi que cet input existe
     const mainImage = document.querySelector('.main-display img');
     const suivantButton = document.querySelector('.btn-suivant');
-    const selectionPopup = document.getElementById('selection-popup');
-    const closeSelectionBtn = document.querySelector('#selection-popup .close-btn');
-    const selectedAccoudoirTissuInput = document.getElementById('selected-accoudoir_tissu');
+    const erreurPopup = document.getElementById('erreur-popup');
+    const closeErreurBtn = erreurPopup.querySelector('.close-btn');
+    const form = document.querySelector('form');
+
     let selected = false;
 
- 
-    // Affichage des éléments avec la classe "transition"
     document.querySelectorAll('.transition').forEach(element => {
       element.classList.add('show');
     });
 
-    // Fonction pour sauvegarder la sélection dans le localStorage
     function saveSelectionToLocalStorage(selectedImage) {
       const selectedAccoudoirId = selectedImage.getAttribute('data-accoudoir-id');
       const quantityInput = selectedImage.closest('.option').querySelector('.quantity-input');
       localStorage.setItem('selectedAccoudoir', selectedAccoudoirId);
-      localStorage.setItem('accoudoirQuantity', quantityInput.value); // Sauvegarde de la quantité
+      localStorage.setItem('accoudoirQuantity', quantityInput.value);
     }
 
-    // Fonction pour récupérer la sélection depuis le localStorage
     function loadSelectionFromLocalStorage() {
       const selectedAccoudoirId = localStorage.getItem('selectedAccoudoir');
       const accoudoirQuantity = localStorage.getItem('accoudoirQuantity');
@@ -231,57 +226,39 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           mainImage.alt = selectedImage.alt;
           selectedAccoudoirTissuInput.value = selectedAccoudoirId;
 
-          // Mettre à jour la quantité
           const quantityInput = selectedImage.closest('.option').querySelector('.quantity-input');
           quantityInput.value = accoudoirQuantity;
 
-          // Mettre à jour la variable selected
           selected = true;
           selectedNbAccoudoirInput.value = accoudoirQuantity;
         }
       }
     }
 
-    // Charger la sélection depuis le localStorage au chargement de la page
     loadSelectionFromLocalStorage();
 
-    // Gestion de la sélection des images
     options.forEach(img => {
       img.addEventListener('click', () => {
-        // Retirer la classe "selected" de toutes les images
         options.forEach(opt => opt.classList.remove('selected'));
-
-        // Réinitialiser la quantité à 0 pour tous les accoudoirs
         options.forEach(opt => {
           const quantityInput = opt.closest('.option').querySelector('.quantity-input');
-          if (quantityInput) {
-            quantityInput.value = 0;
-          }
+          if (quantityInput) quantityInput.value = 0;
         });
 
-        // Ajouter la classe "selected" à l'image cliquée
         img.classList.add('selected');
-
-        // Mettre à jour l'image principale
         mainImage.src = img.src;
         mainImage.alt = img.alt;
 
-        // Mettre à jour l'input caché avec l'ID du tissu sélectionné
         selectedAccoudoirTissuInput.value = img.getAttribute('data-accoudoir-id');
-        selected = true; // Marquer comme sélectionné
+        selected = true;
 
-        // Mettre à jour la quantité de l'accoudoir sélectionné à 1
         const quantityInput = img.closest('.option').querySelector('.quantity-input');
-        if (quantityInput) {
-          quantityInput.value = 1; // Définit la quantité sur 1
-        }
+        if (quantityInput) quantityInput.value = 1;
 
-        // Sauvegarder la sélection dans le localStorage
         saveSelectionToLocalStorage(img);
       });
     });
 
-    // Gestion des boutons augmenter et diminuer
     const decreaseButtons = document.querySelectorAll('.decrease-btn');
     const increaseButtons = document.querySelectorAll('.increase-btn');
 
@@ -293,9 +270,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           quantity--;
           quantityInput.value = quantity;
           const selectedImage = button.closest('.option').querySelector('img.selected');
-          if (selectedImage) {
-            saveSelectionToLocalStorage(selectedImage); // Sauvegarder la nouvelle quantité
-          }
+          if (selectedImage) saveSelectionToLocalStorage(selectedImage);
         }
       });
     });
@@ -308,40 +283,42 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           let quantity = parseInt(quantityInput.value);
           quantity++;
           quantityInput.value = quantity;
-          saveSelectionToLocalStorage(selectedImage); // Sauvegarder la nouvelle quantité
+          saveSelectionToLocalStorage(selectedImage);
         }
       });
     });
 
-    // Gestion du bouton suivant
+    // BOUTON SUIVANT : vérifie sélection + quantité
     suivantButton.addEventListener('click', (event) => {
-      event.preventDefault(); // Empêcher la redirection immédiate
-      if (!selected) {
-        selectionPopup.style.display = 'flex';
-      } else {
-        const selectedOption = document.querySelector('.option img.selected');
-        if (selectedOption) {
-          const quantityInput = selectedOption.closest('.option').querySelector('.quantity-input');
-          selectedNbAccoudoirInput.value = quantityInput.value;
+      event.preventDefault();
 
-          if (quantityInput.value > 0) {
-            document.forms[0].submit(); // Soumettre le formulaire si une quantité est choisie
-          } else {
-            alert("Veuillez choisir une quantité avant de continuer.");
-          }
-        }
+      const selectedOption = document.querySelector('.option img.selected');
+
+      if (!selectedOption) {
+        erreurPopup.style.display = 'flex';
+        return;
       }
+
+      const quantityInput = selectedOption.closest('.option').querySelector('.quantity-input');
+      const quantity = parseInt(quantityInput.value);
+
+      if (quantity <= 0 || isNaN(quantity)) {
+        erreurPopup.style.display = 'flex';
+        return;
+      }
+
+      selectedNbAccoudoirInput.value = quantity;
+      form.submit();
     });
 
-    // Fermeture du popup de sélection
-    closeSelectionBtn.addEventListener('click', () => {
-      selectionPopup.style.display = 'none';
+    // FERMETURE DU POPUP
+    closeErreurBtn.addEventListener('click', () => {
+      erreurPopup.style.display = 'none';
     });
 
-    // Fermer le popup de sélection si clic à l'extérieur
     window.addEventListener('click', (event) => {
-      if (event.target === selectionPopup) {
-        selectionPopup.style.display = 'none';
+      if (event.target === erreurPopup) {
+        erreurPopup.style.display = 'none';
       }
     });
   });

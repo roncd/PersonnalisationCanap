@@ -129,7 +129,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['comment'])) {
   <link rel="stylesheet" href="../../styles/processus.css">
   <link rel="stylesheet" href="../../styles/popup.css">
   <script type="module" src="../../script/popup-tissu.js"></script>
-  <script type="module" src="../../script/popup.js"></script>
   <script type="module" src="../../script/button.js"></script>
   <title>Récapitulatif de la commande</title>
   <style>
@@ -273,7 +272,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['comment'])) {
             <button class="btn-suivant" data-id="<?= htmlspecialchars($id) ?>">Générer un devis</button>
           </div>
         </div>
-      </div>
+      </div> 
 
 
       <!-- Colonne de droite -->

@@ -14,10 +14,6 @@ $dossier_tissu = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 // Vérifier si le formulaire a été soumis
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (!isset($_POST['dossier_tissu_id']) || empty($_POST['dossier_tissu_id'])) {
-        echo "Erreur : Aucun dossier sélectionné.";
-        exit;
-    }
 
     $id_client = $_SESSION['user_id'];
     $id_dossier_tissu = $_POST['dossier_tissu_id'];
@@ -53,6 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link rel="stylesheet" href="../../styles/popup.css">
     <script type="module" src="../../script/popup.js"></script>
     <script type="module" src="../../script/variationPrix.js"></script>
+    <script src="../../script/reset.js"></script>
 
     <title>Étape 5 - Choisi ton dossier</title>
     <style>
@@ -127,6 +124,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <input type="hidden" name="dossier_tissu_id" id="selected-dossier_tissu">
                             <button type="submit" class="btn-suivant transition">Suivant</button>
                         </form>
+                    <button id="reset-selection" class="btn-reset transition">Réinitialiser</button>
                     </div>
                 </div>
             </div>
@@ -166,29 +164,58 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
         </div>
 
-        <!-- Pop-up de sélection d'option -->
-        <div id="selection-popup" class="popup transition">
-            <div class="popup-content">
-                <h2>Veuillez choisir une option avant de continuer.</h2>
-                <br>
-                <button class="close-btn">OK</button>
-            </div>
-        </div>
+      
+<!-- Popup d'erreur si option non selectionné -->
+<div id="erreur-popup" class="popup transition">
+      <div class="popup-content">
+        <h2>Veuillez choisir une option avant de continuer.</h2>
+        <button class="close-btn">OK</button>
+      </div>
+      </div>
         
         <!-- GESTION DES SELECTIONS -->
         <script>
             document.addEventListener('DOMContentLoaded', () => {
                 const options = document.querySelectorAll('.color-2options .option img'); // Sélectionne toutes les images
+                const selectedDossierTissuInput = document.getElementById('selected-dossier_tissu');
                 const mainImage = document.querySelector('.main-display img');
-                const selectionPopup = document.getElementById('selection-popup'); // Popup de sélection
-                const selectedDossierTissuInput = document.getElementById('selected-dossier_tissu'); // Input caché
-                let selected = false; // Variable pour savoir si une option est sélectionnée
+                const erreurPopup = document.getElementById('erreur-popup');
+                const closeErreurBtn = erreurPopup.querySelector('.close-btn');
+                const form = document.querySelector('form'); // Assure-toi que ton <form> a bien une balise identifiable
 
                 // Vérification si une sélection existe dans localStorage
                 let savedDossierTissuId = localStorage.getItem('selectedDossierTissuId');
+                let selected = savedDossierTissuId!=='';
+
+                // Affichage des éléments avec la classe "transition"
+                document.querySelectorAll('.transition').forEach(element => {
+                    element.classList.add('show');
+                });   
+                
+                // Restaurer la sélection si elle existe
+                options.forEach(img => {
+                if (img.getAttribute('data-dossier-tissu-id') === savedDossierTissuId) {
+                img.classList.add('selected');
+                mainImage.src = img.src;
+                selectedDossierTissuInput.value = savedDossierTissuId;
+               }
+            });
+
+                // Gestion du clic sur une option
+                options.forEach(img => {
+                img.addEventListener('click', () => {
+                options.forEach(opt => opt.classList.remove('selected'));
+                img.classList.add('selected');
+                mainImage.src = img.src;
+                savedDossierTissuId = img.getAttribute('data-dossier-tissu-id');
+                selectedDossierTissuInput.value = savedDossierTissuId;
+                selected = true;
+                saveSelection();
+               });
+            });               
 
                 
-                if (savedDossierTissuId) {
+              /*  if (savedDossierTissuId) {
                     options.forEach(img => {
                         if (img.getAttribute('data-dossier-tissu-id') === savedDossierTissuId) {
                             img.classList.add('selected');
@@ -199,11 +226,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         }
                     });
                 }
-
-                // Affichage des éléments avec la classe "transition"
-                document.querySelectorAll('.transition').forEach(element => {
-                    element.classList.add('show');
-                });
 
                 // Gestion de la sélection des images
                 options.forEach(img => {
@@ -224,22 +246,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                         saveSelection(img.getAttribute('data-dossier-tissu-id'));
                     });
-                });
+                });*/
 
-                // Fermeture du popup de sélection
-                document.querySelector('#selection-popup .close-btn').addEventListener('click', () => {
-                    selectionPopup.style.display = 'none';
-                });
+                form.addEventListener('submit', (e) => {
+      if (!selectedDossierTissuInput.value) {
+        e.preventDefault();
+        erreurPopup.style.display = 'flex'; // ou 'block' selon ton CSS
+      }
+    });
 
-                // Fermer le popup de sélection si clic à l'extérieur
-                window.addEventListener('click', (event) => {
-                    if (event.target === selectionPopup) {
-                        selectionPopup.style.display = 'none';
-                    }
-                });
+    // Fermer le popup
+    closeErreurBtn.addEventListener('click', () => {
+      erreurPopup.style.display = 'none';
+    });
+
+    window.addEventListener('click', (event) => {
+      if (event.target === erreurPopup) {
+        erreurPopup.style.display = 'none';
+      }
+    });
+              
 
                 function saveSelection(dossierTissuId) {
-                    localStorage.setItem('selectedDossierTissuId', dossierTissuId);
+                    localStorage.setItem('selectedDossierTissuId', savedDossierTissuId);
                 }
             });
         </script>
