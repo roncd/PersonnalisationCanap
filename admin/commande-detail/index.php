@@ -70,6 +70,11 @@ $next  = ($order === 'ASC') ? 'desc' : 'asc';
 $icon  = ($order === 'ASC')
     ? '../../assets/sort-dsc.svg'
     : '../../assets/sort-asc.svg';
+
+$params = $_GET;
+$params['order'] = $next;
+
+$triURL = '?' . http_build_query($params);
 ?>
 
 <!DOCTYPE html>
@@ -107,7 +112,7 @@ $icon  = ($order === 'ASC')
                     <thead>
                         <th class="btn-order">
                             <a
-                                href="?page=<?= $page ?>&order=<?= $next ?>"
+                                href="<?= $triURL ?>"
                                 title="Trier <?= $order === 'ASC' ? 'du plus récent au plus ancien' : 'du plus ancien au plus récent' ?>">
                                 <img src="<?= $icon ?>" alt="" width="20" height="20">
                             </a>

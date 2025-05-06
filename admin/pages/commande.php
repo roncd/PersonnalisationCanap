@@ -29,6 +29,7 @@ $params = $_GET;
 $params['order'] = $next;
 
 $triURL = '?' . http_build_query($params);
+
 if ($search) {
     $stmt = $pdo->prepare("SELECT cd.id, cd.date, cd.statut, cl.id 
     AS id_client, cl.nom, cl.prenom 
