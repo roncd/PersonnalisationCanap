@@ -14,10 +14,6 @@ $banquettes = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 // Vérifier si le formulaire a été soumis
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-  if (!isset($_POST['banquette_id']) || empty($_POST['banquette_id']) || !isset($_POST['banquette_type'])) {
-    echo "Erreur : aucune banquette sélectionnée.";
-    exit;
-  }
 
   $id_client = $_SESSION['user_id'];
   $id_banquette = $_POST['banquette_id'];
@@ -61,6 +57,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <link rel="stylesheet" href="../../styles/processus.css">
   <link rel="stylesheet" href="../../styles/popup.css">
   <script type="module" src="../../script/popup.js"></script>
+  <script src="../../script/reset.js"></script>
+
   <title>Étape 2 - Choisi ton type de banquette</title>
 
   <style>
@@ -121,7 +119,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
               <input type="hidden" name="banquette_id" id="selected-banquette">
               <input type="hidden" name="banquette_type" id="selected-banquette-type">
               <button type="submit" class="btn-suivant transition">Suivant</button>
-            </form>
+          </form>
+            <button id="reset-selection" class="btn-reset transition">Réinitialiser</button>
           </div>
         </div>
       </div>
@@ -161,69 +160,79 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       </div>
     </div>
 
-    <!-- Pop-up de sélection d'option -->
-    <div id="selection-popup" class="popup transition">
+<!-- Popup d'erreur si option non selectionnée -->
+<div id="erreur-popup" class="popup transition">
       <div class="popup-content">
-        <h2>Veuillez sélectionner une option avant de continuer.</h2>
-        <br>
+        <h2>Veuillez choisir une option avant de continuer.</h2>
         <button class="close-btn">OK</button>
       </div>
     </div>
-
     
     <!-- GESTION DES SELECTIONS -->
-    <script>
-      document.addEventListener('DOMContentLoaded', () => {
-        const options = document.querySelectorAll('.color-2options .option img');
-        const selectedBanquetteInput = document.getElementById('selected-banquette');
-        const selectedBanquetteTypeInput = document.getElementById('selected-banquette-type');
-        const selectionPopup = document.getElementById('selection-popup');
-        const mainImage = document.getElementById('main-image');
-        let selected = false;
+    <script>document.addEventListener('DOMContentLoaded', () => {
+  const options = document.querySelectorAll('.color-2options .option img');
+  const selectedBanquetteInput = document.getElementById('selected-banquette');
+  const selectedBanquetteTypeInput = document.getElementById('selected-banquette-type');
+  const mainImage = document.getElementById('main-image');
+  const erreurPopup = document.getElementById('erreur-popup');
+  const closeErreurBtn = erreurPopup.querySelector('.close-btn');
+  const form = document.querySelector('form');
 
-        // Vérifier s'il y a une sélection enregistrée dans localStorage
-        const savedBanquetteId = localStorage.getItem('selectedBanquette');
-        const savedBanquetteType = localStorage.getItem('selectedBanquetteType');
+  let savedBanquetteId = localStorage.getItem('selectedBanquetteId');
+  let savedBanquetteType = localStorage.getItem('selectedBanquetteType');
 
-        
-        if (savedBanquetteId && savedBanquetteType) {
-          selectedBanquetteInput.value = savedBanquetteId;
-          selectedBanquetteTypeInput.value = savedBanquetteType;
+  // Appliquer les transitions
+  document.querySelectorAll('.transition').forEach(el => el.classList.add('show'));
 
-          options.forEach(img => {
-            if (img.getAttribute('data-banquette-id') === savedBanquetteId && img.getAttribute('data-banquette-type') === savedBanquetteType) {
-              img.classList.add('selected');
-              mainImage.src = img.src;
-              mainImage.alt = img.alt;
-              selected = true;
-            }
-          });
-        }
+  // Restaurer la sélection si elle existe
+  options.forEach(img => {
+    if (img.getAttribute('data-banquette-id') === savedBanquetteId &&
+        img.getAttribute('data-banquette-type') === savedBanquetteType) {
+      img.classList.add('selected');
+      mainImage.src = img.src;
+      selectedBanquetteInput.value = savedBanquetteId;
+      selectedBanquetteTypeInput.value = savedBanquetteType;
+    }
+  });
 
-        options.forEach(img => {
-          img.addEventListener('click', () => {
-            options.forEach(opt => opt.classList.remove('selected'));
-            img.classList.add('selected');
-            selectedBanquetteInput.value = img.getAttribute('data-banquette-id');
-            selectedBanquetteTypeInput.value = img.getAttribute('data-banquette-type');
+  // Gérer le clic sur une option
+  options.forEach(img => {
+    img.addEventListener('click', () => {
+      options.forEach(opt => opt.classList.remove('selected'));
+      img.classList.add('selected');
+      mainImage.src = img.src;
 
-            // Mise à jour de l'image principale
-            mainImage.src = img.src;
-            mainImage.alt = img.alt;
+      const id = img.getAttribute('data-banquette-id');
+      const type = img.getAttribute('data-banquette-type');
 
-            selected = true;
+      selectedBanquetteInput.value = id;
+      selectedBanquetteTypeInput.value = type;
 
-            // Sauvegarder l'ID et le type de la banquette sélectionnée dans localStorage
-            localStorage.setItem('selectedBanquette', img.getAttribute('data-banquette-id'));
-            localStorage.setItem('selectedBanquetteType', img.getAttribute('data-banquette-type'));
-          });
-        });
+      localStorage.setItem('selectedBanquetteId', id);
+      localStorage.setItem('selectedBanquetteType', type);
+    });
+  });
 
-        document.querySelector('#selection-popup .close-btn').addEventListener('click', () => {
-          selectionPopup.style.display = 'none';
-        });
+  // Empêcher la soumission si rien n'est sélectionné
+  form.addEventListener('submit', (e) => {
+    if (!selectedBanquetteInput.value || !selectedBanquetteTypeInput.value) {
+      e.preventDefault();
+      erreurPopup.style.display = 'flex';
+    }
+  });
 
-      });
+  // Fermer le popup
+  closeErreurBtn.addEventListener('click', () => {
+    erreurPopup.style.display = 'none';
+  });
+
+  window.addEventListener('click', (event) => {
+    if (event.target === erreurPopup) {
+      erreurPopup.style.display = 'none';
+    }
+  });
+});
+ 
     </script>
 
 

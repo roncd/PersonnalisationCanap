@@ -47,9 +47,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../../styles/processus.css">
   <link rel="stylesheet" href="../../styles/popup.css">
-  <script type="module" src="../../scrpit/variationPrix.js"></script>
-  <script src="../../script/reset.js"></script>
   <script type="module" src="../../script/variationPrix.js"></script>
+  <script src="../../script/reset.js"></script>
 
 
   <title>Étape 8 - Choisi ton motif de coussin</title>
@@ -202,7 +201,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Exemple : tu es sur étape 8, tu veux revenir à étape 7
     window.location.href = "etape8-1-bois-tissu.php"; 
   }
-    </script>
+    </script> 
 
   <script>
   document.addEventListener('DOMContentLoaded', () => {
