@@ -1,85 +1,338 @@
-/* Styles généraux */
-.body {
-  font-family: 'Be Vietnam Pro', sans-serif;
-  flex-direction: column;
+.hero-banner {
+  position: relative;
+  width: 100%;
+  height: 80vh;
+  /* Assurez-vous que ce chemin corresponde à l'emplacement de votre CSS
+     - Si ce style est dans un fichier CSS placé dans /css/, remontez d'un niveau : */
+  background-image: url('../medias/canape_dashboard.jpg');
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.hero-banner::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.3);
+}
+.hero-banner__content {
+  position: relative;
+  text-align: center;
+  color: #fff;
+  max-width: 600px;
+  padding: 2rem;
+}
+.hero-banner__content h1 {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  font-family: 'Baloo 2', sans-serif;
+}
+.hero-banner__content p {
+  font-size: 1.125rem;
+  line-height: 1.6;
+  font-family: 'Be Vietnam Pro', sans-serif;
+}
+.feature-icon {
+  width: 24px;
+  height: 24px;
+  margin-right: 0.75rem;
+}
+
+
+/* --------------- SECTION PERSONNALISATION --------------- */
+/* section personnalisation */
+.customize-section {
+  position: relative;
+  z-index: 1;               
+  background-color: #fff;   
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  max-width: 1200px;
+  margin: 4rem auto;
+  padding: 4rem 2rem;       /* haut + côtés */
+  gap: 2rem;
+  font-family: 'Be Vietnam Pro', sans-serif;
+}
+.customize-text {
+  flex: 1;
+  padding-right: 2rem;
+}
+.customize-text h2 {
+  font-size: 2.25rem;
+  color: #212529;
+  margin-bottom: 1.75rem;
+  font-weight: bold;
+  line-height: 1.2;
+}
+.customize-features {
+  list-style: none;
+  padding: 0;
+  margin-bottom: 2.5rem;
+}
+.customize-features li {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1.25rem;
+  line-height: 1.6;
+}
+.customize-features li i {
+  font-size: 1.25rem;
+  margin-right: 0.75rem;
+  color: #a3471c;
+}
+.customize-button {
+  display: inline-block;
+  background-color: #e3d1c8;
+  color: #212529;
+  padding: 1rem 1.75rem;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: background-color 0.3s;
+}
+.customize-button:hover {
+  background-color: #d1b8ac;
+}
+
+/* ------- IMAGE ET BLOB ------- */
+.customize-image {
+  flex: 1;
+  position: relative;
+  /* image de fond blob centrée */
+  background: url('../../medias/blob.png') center/contain no-repeat;
+  /* espace haut/bas pour faire de la place au blob */
+  padding: 3rem 0 2rem 0;          
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.customize-image .blob {
+  position: absolute;
+  top: 55%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  max-width: 700px;
+  z-index: -1;  /* Blob derrière le sofa */
+}
+.customize-image .sofa {
+  position: relative;
+  top: 100%;
+  width: 80%;       /* Ajustez pour réduire ou agrandir */
+  max-width: 800px;
+  height: auto;
+  z-index: 2;       /* Sofa devant le blob */
+  object-fit: contain;
+}
+/* ------------------- STYLES SECTION COMBINAISONS ------------------- */
+.combination-section {
+  max-width: 1200px;
+  margin: 4rem auto;
+  padding: 0 2rem;
+  font-family: 'Be Vietnam Pro', sans-serif;
+}
+.combination-section h2 {
+  font-size: 2rem;
+  color: #212529;
+  margin-bottom: 2rem;
+  margin-top: 6rem;
+  text-align: left;
+}
+.combination-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 2rem;
+}
+.product-card {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  padding: 1rem;
   text-align: center;
 }
-
-h1 {
-  font-family: 'Baloo 2', sans-serif;
-  font-size: 2.5rem;
-  color: #000000;
-  margin-bottom: 20px;
-  animation: fadeIn 1s ease-in-out;
-  /* Animation de fondu */
-}
-
-@keyframes fadeIn {
-  0% {
-    opacity: 0;
-  }
-
-  100% {
-    opacity: 1;
-  }
-}
-
-.img {
-  width: 50%;
-  /* Utilise toute la largeur disponible */
-  max-width: 1200px;
-  /* Limite la largeur maximale */
+.product-card img {
+  width: 100%;
   height: auto;
-  /* Maintient les proportions */
-  max-height: 400px;
-  /* Limite la hauteur maximale */
   object-fit: cover;
-  /* Recadre l'image pour remplir le conteneur */
-  margin: 20px 0;
-  border-radius: 10px;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-  animation: fadeIn 1s ease-in-out;
-  /* Appliquer la même animation que pour le texte */
+  margin-bottom: 1rem;
 }
-
-.buttons {
-  margin-top: 30px;
-  animation: slideIn 1s ease-in-out;
-  /* Animation de glissement */
+.product-card h3 {
+  font-size: 1.125rem;
+  margin: 0.5rem 0 0.25rem;
+  color: #212529;
 }
-
-@keyframes slideIn {
-  0% {
-    transform: translateY(20px);
-    opacity: 0;
-  }
-
-  100% {
-    transform: translateY(0);
-    opacity: 1;
-  }
+.product-card p {
+  font-size: 1rem;
+  color: #666;
+  margin-bottom: 0.5rem;
 }
-
-.btn-valider {
-  background-color: #000000;
-  color: #fff;
-  padding: 10px 30px;
+.price {
+  font-size: 1.25rem;
   font-weight: bold;
-  font-size: 16px;
-  border: none;
-  border-radius: 12px;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-  cursor: pointer;
-  transition: background-color 0.2s ease, transform 0.2s ease;
-  /* Combinez les deux transitions */
-  text-decoration: none;
-  /* Supprimer le soulignement */
+  color: #212529;
+  display: block;
+  margin-bottom: 0.25rem;
+}
+.eco-tax {
+  font-size: 0.875rem;
+  color: #999;
+  margin-bottom: 0.75rem;
+}
+.options {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+}
+.options img {
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+  border-radius: 4px;
+}
+.options .more {
+  font-size: 0.875rem;
+  color: #212529;
 }
 
-.btn-valider:hover {
-  background-color: #555555;
-  transform: scale(1.1);
-  /* Agrandir légèrement le bouton au survol */
+/* ------------------- STYLES SECTION ARTICLES INTÉRESSANTS ------------------- */
+.interest-section {
+  max-width: 1200px;
+  margin: 4rem auto;
+  padding: 0 2rem;
+  font-family: 'Be Vietnam Pro', sans-serif;
+}
+.interest-section h2 {
+  font-size: 2rem;
+  color: #212529;
+  margin-bottom: 2rem;
+  text-align: left;
+}
+.interest-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 2rem;
+}
+.interest-card {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  padding: 1rem;
+  text-align: center;
+}
+.interest-card img {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  margin-bottom: 1rem;
+}
+.interest-card h3 {
+  font-size: 1rem;
+  margin: 0.5rem 0 0.25rem;
+  color: #212529;
+}
+.interest-card p {
+  font-size: 0.875rem;
+  color: #666;
+  margin-bottom: 0.5rem;
+}
+.interest-card .price {
+  font-size: 1.125rem;
+  font-weight: bold;
+  color: #212529;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+.interest-card .rating {
+  font-size: 0.875rem;
+  color: #ffba00;
+  margin-bottom: 0.5rem;
+}
+.interest-card .rating .count {
+  color: #666;
+  margin-left: 0.25rem;
+}
+.interest-card .availability .status {
+  display: block;
+  font-size: 0.75rem;
+  color: #212529;
+  margin-bottom: 0.25rem;
+}
+.interest-card .availability .available {
+  color: #28a745;
+}
+.interest-card .availability .in-stock {
+  color: #28a745;
+}
+.interest-card .actions {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 0.75rem;
+}
+.interest-card .actions button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.25rem;
+  color: #212529;
+  transition: color 0.2s;
+}
+.interest-card .actions button:hover {
+  color: #a3471c;
+}
+@media (max-width: 768px) {
+  .interest-container {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  }
+}
+@media (max-width: 480px) {
+  .interest-container {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .combination-container {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+@media (max-width: 480px) {
+  .combination-container {
+    grid-template-columns: 1fr;
+  }
+}
+/* ------------------- RESPONSIVE ------------------- */
+@media (max-width: 992px) {
+  .customize-section {
+    flex-direction: column-reverse;
+    text-align: center;
+  }
+  .customize-text {
+    padding-right: 0;
+  }
+  .customize-image .blob {
+    display: none;
+  }
+  .customize-image .sofa {
+    width: 80%;
+    max-width: none;
+  }
+}
+
+@media (max-width: 576px) {
+  .customize-text h2 {
+    font-size: 1.75rem;
+  }
+  .customize-features li i {
+    font-size: 1rem;
+  }
+  .customize-image .sofa {
+    width: 100%;
+  }
 }
