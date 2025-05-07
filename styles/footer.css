@@ -1,7 +1,6 @@
 /* Footer styles */
 .ft {
-  background-color: #E3D1C8;
-  /* Beige */
+  background-color: #E3D1C8; 
   padding: 16px 0;
   margin-top: 100px;
 }
@@ -9,12 +8,16 @@
 .ft-container {
   display: flex;
   justify-content: center;
+  flex-wrap: wrap; /* Permet au contenu de passer sur plusieurs lignes si nécessaire */
 }
 
 .ft-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(3, 1fr); /* 3 colonnes sur grand écran */
   align-items: center;
+  gap: 20px; /* Espacement entre les colonnes */
+  width: 100%;
+  max-width: 1200px; /* Largeur maximale du footer */
 }
 
 /* Logo */
@@ -27,16 +30,14 @@
 /* Contact section */
 .ft-contact {
   font-family: "Be Vietnam Pro", sans-serif;
-  /* Assurez-vous d'importer la police */
   font-weight: bold;
-  font-size: 0.875rem;
-  /* Equivalent à text-sm */
+  font-size: 0.875rem; 
   margin: 0 auto;
+  text-align: center; 
 }
 
 .ft-text {
-  margin: 24px 0;
-  /* Equivalent à my-6 */
+  margin: 24px 0; 
 }
 
 .ft-email {
@@ -46,23 +47,20 @@
 /* Navigation */
 .ft-nav {
   font-family: "Be Vietnam Pro", sans-serif;
-  /* Assurez-vous d'importer la police */
   font-weight: bold;
-  font-size: 0.875rem;
-  /* Equivalent à text-sm */
+  font-size: 0.875rem; 
   margin: 0 auto;
+  text-align: center; 
 }
 
 .ft-nav ol {
   list-style-type: none;
+  padding: 0;
 }
 
 .ft-nav-item {
-  margin: 24px 0;
-  /* Equivalent à my-6 */
+  margin: 24px 0; 
 }
-
-
 
 .ft-nav-item a {
   color: #000000;
@@ -77,8 +75,7 @@
   content: '';
   position: absolute;
   left: 0;
-  bottom: -2px;
-  /* Positionne le soulignement juste en dessous du texte */
+  bottom: -2px; /* Positionne le soulignement juste en dessous du texte */
   width: 0;
   height: 1px;
   background-color: #000000;
@@ -86,14 +83,43 @@
 }
 
 .ft-nav-item a:hover::after {
-  width: 100%;
-  /* Le soulignement prend toute la largeur */
+  width: 100%; /* Le soulignement prend toute la largeur */
 }
 
 /* Mentions légales */
 .ft-legal {
   text-align: center;
   margin-top: 16px;
-  font-size: 0.75rem;
-  /* Equivalent à text-xs */
+  font-size: 0.75rem; 
+}
+
+/* Responsive Design */
+@media screen and (max-width: 768px) {
+  .ft-grid {
+    grid-template-columns: 1fr; /* Une seule colonne sur petits écrans */
+    text-align: center; /* Centre tous les éléments */
+  }
+
+  .ft-logo {
+    margin: 0 auto 20px; /* Centre le logo */
+    width: 200px; /* Réduit la taille du logo */
+  }
+
+  .ft-contact, .ft-nav {
+    margin: 20px 0; /* Ajoute de l'espacement entre les sections */
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .ft-logo {
+    width: 150px; /* Réduit encore la taille du logo */
+  }
+
+  .ft-contact, .ft-nav {
+    font-size: 0.75rem; /* Réduit légèrement la taille du texte */
+  }
+
+  .ft-text {
+    margin: 16px 0; /* Réduit l'espacement vertical */
+  }
 }

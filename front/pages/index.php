@@ -3,254 +3,203 @@ require '../../admin/config.php';
 session_start();
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Accueil</title>
     <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
-    <link rel="stylesheet" href="../../styles/styles.css">
-    <link href="../../dist/output.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../styles/style.css">
     <script src="../../node_modules/@preline/carousel/index.js"></script>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@400..800&family=Be+Vietnam+Pro:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap');
-
-        html {
-            font-family: 'Baloo', sans-serif;
-        }
-    </style>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap');
-
-        html {
-            font-family: 'Be Vietnam Pro', sans-serif;
-        }
-    </style>
+    <link rel="stylesheet" href="../../styles/landing-page.css"> <!-- Fichier CSS externe -->
+    <link href="../../dist/output.css" rel="stylesheet">
 </head>
 
 <body class="be-vietnam-pro-regular">
     <header>
         <?php require '../../squelette/header.php'; ?>
     </header>
-    <!--Main-->
+
+    <!-- Main -->
     <main>
-        <div class="container pt-24 md:pt-28 mx-auto flex flex-wrap flex-col md:flex-row items-center">
-            <!--Landing page-->
-            <div class="md:flex w-full mb-10">
-                <!--Left Col-->
-                <div class="w-full xl:w-3/5 p-12 overflow-hidden">
-
-                    <h1 class="baloo-2-bold my-4  md:text-5xl leading-tight text-center md:text-left mb-8">
-                        Personalise ton salon marocain
+        <!-- Section avec image de fond et texte superposé -->
+        <section class="hero-section">
+            <div class="hero-container">
+                <img src="../../medias/salon-marocain.jpg" alt="Salon marocain" class="hero-image">
+                <div class="hero-content">
+                    <h1 class="hero-title">
+                        Personnalisez votre salon marocain
                     </h1>
-                    <div>
-                        <p>
-                            Laissez vous tenter et personalisez votre salon de A à Z ! <br><br>
-                            Du canapé à la table, choisissez les configurations qui vous plaise le plus.<br>
-                            La couleur, le tissus, la forme vous pouvez en faire ce que vous voulez pour un prix resonable.<br>
-                        </p>
-                    </div>
-                    <div class="w-full md:w-3/4 lg:w-2/3 xl:w-1/2 mt-10 rounded-lg text-center md:text-left">
-                        <a href="dashboard.php">
-                            <button
-                                class="bg-black text-white be-vietnam-pro-bold py-3 px-7 rounded-[10px] shadow-lg shadow-gray-400 focus:ring transform transition hover:scale-105 duration-300 ease-in-out md:ml-auto md:mr-0"
-                                type="button">
-                                PERSONNALISER
+                    <p class="hero-description">
+                        Laissez-vous tenter et personnalisez votre salon de A à Z !<br>
+                        Du canapé à la table, choisissez les configurations qui vous plaisent le plus.<br>
+                        La couleur, le tissu, la forme... faites ce qui vous ressemble pour un prix raisonnable.
+                    </p>
+                    <a href="dashboard.php">
+                        <button class="hero-button">PERSONNALISER</button>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section "Inspirez-vous de nos modèles" -->
+        <div class="sections-wrapper">
+            <div class="container pt-10 md:pt-24 mx-auto text-center">
+                <h1 class="baloo-2-bold my-4 text-3xl md:text-5xl leading-tight mb-8">
+                    Inspirez-vous de nos salons marocains
+                </h1>
+            </div>
+
+            <!-- Slider -->
+            <section class="carousel-section mb-16">
+                <div data-hs-carousel='{
+    "loadingClasses": "opacity-0",
+    "dotsItemClasses": "hs-carousel-active:bg-blue-700 hs-carousel-active:border-blue-700 size-3 border border-gray-400 rounded-full cursor-pointer",
+    "slidesQty": {
+        "xs": 1,
+        "sm": 2,
+        "md": 2,
+        "lg": 3
+    },
+    "isDraggable": false
+}' class="relative">
+                    <div class="hs-carousel w-full overflow-hidden bg-white rounded-lg">
+                        <div class="relative min-h-72 -mx-1">
+                            <div
+                                class="hs-carousel-body absolute top-0 bottom-0 start-0 flex flex-nowrap transition-transform duration-700">
+
+                                <!-- Premier slide -->
+                                <div class="hs-carousel-slide flex-shrink-0 w-full lg:w-1/3 px-1">
+                                    <div class="flex flex-col justify-center mx-6">
+                                        <img class="rounded-[4px] transition duration-700"
+                                            src="../../medias/model-salon.png" alt="Modèle de salon">
+                                        <div class="text-center mt-4">
+                                            <h3 class="baloo-2-bold text-lg">Salon Casablanca</h3>
+                                            <p class="text-lg font-semibold mt-2">1800 €</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Deuxième slide -->
+                                <div class="hs-carousel-slide flex-shrink-0 w-full lg:w-1/3 px-1">
+                                    <div class="flex flex-col justify-center mx-6">
+                                        <img class="rounded-[4px] transition duration-700"
+                                            src="../../medias/model-salon.png" alt="Modèle de salon">
+                                        <div class="text-center mt-4">
+                                            <h3 class="baloo-2-bold text-lg">Salon Fès</h3>
+                                            <p class="text-lg font-semibold mt-2">1600 €</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Troisième slide -->
+                                <div class="hs-carousel-slide flex-shrink-0 w-full lg:w-1/3 px-1">
+                                    <div class="flex flex-col justify-center mx-6">
+                                        <img class="rounded-[4px] transition duration-700"
+                                            src="../../medias/model-salon.png" alt="Modèle de salon">
+                                        <div class="text-center mt-4">
+                                            <h3 class="baloo-2-bold text-lg">Salon Tanger</h3>
+                                            <p class="text-lg font-semibold mt-2">1400 €</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Quatrième slide -->
+                                <div class="hs-carousel-slide flex-shrink-0 w-full lg:w-1/3 px-1">
+                                    <div class="flex flex-col justify-center mx-6">
+                                        <img class="rounded-[4px] transition duration-700"
+                                            src="../../medias/model-salon.png" alt="Modèle de salon">
+                                        <div class="text-center mt-4">
+                                            <h3 class="baloo-2-bold text-lg">Salon Rabat</h3>
+                                            <p class="text-lg font-semibold mt-2">1500 €</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Cinquième slide -->
+                                <div class="hs-carousel-slide flex-shrink-0 w-full lg:w-1/3 px-1">
+                                    <div class="flex flex-col justify-center mx-6">
+                                        <img class="rounded-[4px] transition duration-700"
+                                            src="../../medias/model-salon.png" alt="Modèle de salon">
+                                        <div class="text-center mt-4">
+                                            <h3 class="baloo-2-bold text-lg">Salon Marrakech</h3>
+                                            <p class="text-lg font-semibold mt-2">1700 €</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Navigation buttons -->
+                            <button type="button"
+                                class="hs-carousel-prev hs-carousel-disabled:opacity-70 absolute start-0 top-[140px] bottom-[100px] inline-flex justify-center items-center w-[46px]">
+                                <span class="text-2xl">‹</span>
+                                <span class="sr-only">Previous</span>
                             </button>
-                        </a>
+
+                            <button type="button"
+                                class="hs-carousel-next hs-carousel-disabled:opacity-70 absolute end-0 top-[140px] bottom-[100px] inline-flex justify-center items-center w-[46px]">
+                                <span class="text-2xl">›</span>
+                                <span class="sr-only">Next</span>
+                            </button>
+
+                        </div>
                     </div>
-                </div>
+            </section>
 
-                <!--Right Col-->
-                <div class="flex flex-col px-2 py-4 w-full xl:w-2/5 justify-center lg:items-start overflow-y-hidden">
-                    <img class="rounded-[10px] w-16 md:w-48 lg:w-48" src="../../medias/canape.jpg" alt="Salon marocain" />
-                </div>
+            <!-- End Slider -->
+
+
+            <!-- Section Qui sommes-nous -->
+<section class="about-section">
+    <div class="about-container">
+        <div class="about-content">
+            <div class="about-text">
+                <h2 class="about-title">Qui sommes-nous ?</h2>
+                <p class="about-description">
+                    Chez Déco du Monde, chaque salon marocain est pensé comme une œuvre unique,
+                    façonnée selon vos envies, vos goûts et vos traditions. Du choix des tissus à la finition
+                    des détails,
+                    nous mettons notre passion et notre savoir-faire au service d'un mobilier qui vous
+                    ressemble.
+                </p>
+                <p class="about-mission">
+                    Notre mission : faire vivre l'artisanat marocain dans des intérieurs modernes et
+                    chaleureux,
+                    en alliant confort, élégance et culture.
+                </p>
             </div>
-
-
-            <div class="container pt-10 md:pt-24 mx-auto flex flex-wrap flex-col md:flex-row items-center">
-                <h1 class="baloo-2-bold my-4 text-3xl md:text-5xl leading-tight text-center md:text-left mb-8">
-                    Inspire toi de nos salons marocains
-                </h1>
-            </div>
-        </div>
-        <!-- Slider  -->
-
-        <div data-hs-carousel='{
-        "loadingClasses": "opacity-0",
-        "dotsItemClasses": "hs-carousel-active:bg-blue-700 hs-carousel-active:border-blue-700 size-3 border border-gray-400 rounded-full cursor-pointer",
-        "slidesQty": {
-            "xs": 1,
-            "sm": 2,
-            "md": 2,
-            "lg": 3
-        },
-        "isDraggable": false
-        }' class="relative">
-            <div class="hs-carousel w-full overflow-hidden bg-white rounded-lg">
-                <div class="relative min-h-72 -mx-1">
-                    <div class=" hs-carousel-body absolute top-0 bottom-0 start-0 flex flex-nowrap cursor-grab transition-transform duration-700 hs-carousel-dragging:transition-none hs-carousel-dragging:cursor-grabbing">
-
-                        <!-- Premier slide -->
-                        <div class="hs-carousel-slide flex-shrink-0 w-full lg:w-1/3 px-1">
-                            <div class="flex justify-center mx-6">
-                                <img class="rounded-[10px] transition duration-700" style="max-width: auto; height: auto;" src="../../medias/canape.jpg">
-                            </div>
-                        </div>
-
-                        <!--  Deuxième slide -->
-                        <div class="hs-carousel-slide flex-shrink-0 w-full lg:w-1/3 px-1">
-                            <div class="flex justify-center mx-6">
-                                <img class="rounded-[10px] transition duration-700" style="max-width: auto; height: auto;" src="../../medias/CanapéKénitra_VueDeAngle_SansTable-Photoroom.png">
-                            </div>
-                        </div>
-
-                        <!-- Troisième slide -->
-                        <div class="hs-carousel-slide flex-shrink-0 w-full lg:w-1/3 px-1">
-                            <div class="flex justify-center mx-6">
-                                <img class="rounded-[10px] transition duration-700" style="max-width: auto; height: auto;" src="../../medias/CanapéMeknès_VueDeAngle_-Photoroom.png">
-                            </div>
-                        </div>
-
-                        <!-- Quatrième slide -->
-                        <div class="hs-carousel-slide flex-shrink-0 w-full lg:w-1/3 px-1">
-                            <div class="flex justify-center mx-6">
-                                <img class="rounded-[10px] transition duration-700" style="max-width: auto; height: auto;" src="../../medias/canape.jpg">
-                            </div>
-                        </div>
-
-                        <!-- Cinquième slide -->
-                        <div class="hs-carousel-slide flex-shrink-0 w-full lg:w-1/3 px-1">
-                            <div class="flex justify-center mx-6">
-                                <img class="rounded-[10px] transition duration-700" style="max-width: auto; height: auto;" src="../../medias/CanapéKénitra_VueDeAngle_SansTable-Photoroom.png">
-                            </div>
-                        </div>
-
-                        <!--  Sixième slide -->
-                        <div class="hs-carousel-slide flex-shrink-0 w-full lg:w-1/3 px-1">
-                            <div class="flex justify-center mx-6">
-                                <img class="rounded-[10px] transition duration-700" style="max-width: auto; height: auto;" src="../../medias/CanapéMeknès_VueDeAngle_-Photoroom.png">
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-
-            <button type="button" class="hs-carousel-prev hs-carousel-disabled:opacity-70 hs-carousel-disabled:pointer-events-none absolute inset-y-0 start-0 inline-flex justify-center items-center w-[46px] h-full text-gray-800 hover:bg-gray-800/10 focus:outline-none focus:bg-gray-800/10 rounded-s-lg">
-                <span class="text-2xl" aria-hidden="true">
-                    <svg fill="#000000" xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 52 52" enable-background="new 0 0 52 52" xml:space="preserve" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" transform="matrix(-1.8369701987210297e-16,-1,1,-1.8369701987210297e-16,0,0)">
-                        <path d="M43.7,38H8.3c-1,0-1.7-1.3-0.9-2.2l17.3-21.2c0.6-0.8,1.9-0.8,2.5,0l17.5,21.2C45.4,36.7,44.8,38,43.7,38z"></path>
-                    </svg>
-                </span>
-                <span class="sr-only">Previous</span>
-            </button>
-            <button type="button" class="hs-carousel-next hs-carousel-disabled:opacity-70 hs-carousel-disabled:pointer-events-none absolute inset-y-0 end-0 inline-flex justify-center items-center w-[46px] h-full text-gray-800 hover:bg-gray-800/10 focus:outline-none focus:bg-gray-800/10 rounded-e-lg">
-                <span class="sr-only">Next</span>
-                <span class="text-2xl" aria-hidden="true">
-                    <svg fill="#000000" xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 52 52" enable-background="new 0 0 52 52" xml:space="preserve" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" transform="matrix(6.123233995736766e-17,1,-1,6.123233995736766e-17,0,0)">
-                        <path class="shrink-0 size-5" d="M43.7,38H8.3c-1,0-1.7-1.3-0.9-2.2l17.3-21.2c0.6-0.8,1.9-0.8,2.5,0l17.5,21.2C45.4,36.7,44.8,38,43.7,38z"></path>
-                    </svg>
-                </span>
-            </button>
-
-
-        </div>
-        <!-- End Slider -->
-
-        <div class="container mx-auto flex flex-wrap flex-col md:flex-row items-center">
-            <div class="container pt-10 md:pt-24 mx-auto flex flex-wrap flex-col md:flex-row items-center">
-                <h1 class="baloo-2-bold my-4 text-3xl md:text-5xl leading-tight text-center md:text-left mb-8">
-                    En détails
-                </h1>
+            <div class="about-image">
+                <img src="../../medias/salon-maroc.jpg" alt="Salon marocain" class="about-img">
             </div>
         </div>
+    </div>
+</section>
 
-
-        <!-- Slider  -->
-
-        <div data-hs-carousel='{
-        "loadingClasses": "opacity-0",
-        "dotsItemClasses": "hs-carousel-active:bg-blue-700 hs-carousel-active:border-blue-700 size-3 border border-gray-400 rounded-full cursor-pointer",
-        "slidesQty": {
-            "xs": 1,
-            "sm": 2,
-            "md": 2,
-            "lg": 3
-        },
-        "isDraggable": false
-        }' class="relative">
-            <div class="hs-carousel w-full overflow-hidden bg-white rounded-lg">
-                <div class="relative min-h-72 -mx-1">
-                    <div class=" hs-carousel-body absolute top-0 bottom-0 start-0 flex flex-nowrap cursor-grab transition-transform duration-700 hs-carousel-dragging:transition-none hs-carousel-dragging:cursor-grabbing">
-
-                        <!-- Premier slide -->
-                        <div class="hs-carousel-slide flex-shrink-0 w-full lg:w-1/3 px-1">
-                            <div class="flex justify-center mx-6">
-                                <img class="rounded-[10px] transition duration-700" style="max-width: auto; height: auto;" src="../../medias/canape.jpg">
-                            </div>
-                        </div>
-
-                        <!--  Deuxième slide -->
-                        <div class="hs-carousel-slide flex-shrink-0 w-full lg:w-1/3 px-1">
-                            <div class="flex justify-center mx-6">
-                                <img class="rounded-[10px] transition duration-700" style="max-width: auto; height: auto;" src="../../medias/CanapéKénitra_VueDeAngle_SansTable-Photoroom.png">
-                            </div>
-                        </div>
-
-                        <!-- Troisième slide -->
-                        <div class="hs-carousel-slide flex-shrink-0 w-full lg:w-1/3 px-1">
-                            <div class="flex justify-center mx-6">
-                                <img class="rounded-[10px] transition duration-700" style="max-width: auto; height: auto;" src="../../medias/CanapéMeknès_VueDeAngle_-Photoroom.png">
-                            </div>
-                        </div>
-
-                        <!-- Quatrième slide -->
-                        <div class="hs-carousel-slide flex-shrink-0 w-full lg:w-1/3 px-1">
-                            <div class="flex justify-center mx-6">
-                                <img class="rounded-[10px] transition duration-700" style="max-width: auto; height: auto;" src="../../medias/canape.jpg">
-                            </div>
-                        </div>
-
-                        <!-- Cinquième slide -->
-                        <div class="hs-carousel-slide flex-shrink-0 w-full lg:w-1/3 px-1">
-                            <div class="flex justify-center mx-6">
-                                <img class="rounded-[10px] transition duration-700" style="max-width: auto; height: auto;" src="../../medias/CanapéKénitra_VueDeAngle_SansTable-Photoroom.png">
-                            </div>
-                        </div>
-
-                        <!--  Sixième slide -->
-                        <div class="hs-carousel-slide flex-shrink-0 w-full lg:w-1/3 px-1">
-                            <div class="flex justify-center mx-6">
-                                <img class="rounded-[10px] transition duration-700" style="max-width: auto; height: auto;" src="../../medias/CanapéMeknès_VueDeAngle_-Photoroom.png">
-                            </div>
-                        </div>
-
-                    </div>
+            <!-- Section Commencer un devis -->
+            <section class="devis-section">
+                <div class="devis-container">
+                    <h2 class="devis-title">Commencer un devis :</h2>
+                    <p class="devis-description">
+                        Créez le salon marocain de vos rêves !<br>
+                        En quelques clics, démarrez votre devis personnalisé et façonnez un intérieur qui vous
+                        ressemble.
+                    </p>
+                    <a href="dashboard.php">
+                        <button class="devis-button">
+                            Commencer mon devis
+                        </button>
+                    </a>
                 </div>
-            </div>
-
-            <button type="button" class="hs-carousel-prev hs-carousel-disabled:opacity-70 hs-carousel-disabled:pointer-events-none absolute inset-y-0 start-0 inline-flex justify-center items-center w-[46px] h-full text-gray-800 hover:bg-gray-800/10 focus:outline-none focus:bg-gray-800/10 rounded-s-lg">
-                <span class="text-2xl" aria-hidden="true">
-                    <svg fill="#000000" xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 52 52" enable-background="new 0 0 52 52" xml:space="preserve" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" transform="matrix(-1.8369701987210297e-16,-1,1,-1.8369701987210297e-16,0,0)">
-                        <path d="M43.7,38H8.3c-1,0-1.7-1.3-0.9-2.2l17.3-21.2c0.6-0.8,1.9-0.8,2.5,0l17.5,21.2C45.4,36.7,44.8,38,43.7,38z"></path>
-                    </svg>
-                </span>
-                <span class="sr-only">Previous</span>
-            </button>
-            <button type="button" class="hs-carousel-next hs-carousel-disabled:opacity-70 hs-carousel-disabled:pointer-events-none absolute inset-y-0 end-0 inline-flex justify-center items-center w-[46px] h-full text-gray-800 hover:bg-gray-800/10 focus:outline-none focus:bg-gray-800/10 rounded-e-lg">
-                <span class="sr-only">Next</span>
-                <span class="text-2xl" aria-hidden="true">
-                    <svg fill="#000000" xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 52 52" enable-background="new 0 0 52 52" xml:space="preserve" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" transform="matrix(6.123233995736766e-17,1,-1,6.123233995736766e-17,0,0)">
-                        <path class="shrink-0 size-5" d="M43.7,38H8.3c-1,0-1.7-1.3-0.9-2.2l17.3-21.2c0.6-0.8,1.9-0.8,2.5,0l17.5,21.2C45.4,36.7,44.8,38,43.7,38z"></path>
-                    </svg>
-                </span>
-            </button>
-        </div>
-        <!-- End Slider -->
+            </section>
     </main>
-    <?php require_once '../../squelette/footer.php' ?>
+
+    </script>
+
+    <!-- Footer -->
+    <footer>
+        <?php require '../../squelette/footer.php'; ?>
+    </footer>
+
 </body>
 
 </html>
