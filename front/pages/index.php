@@ -12,7 +12,6 @@ session_start();
     <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
     <link rel="stylesheet" href="../../styles/style.css">
     <script src="../../node_modules/@preline/carousel/index.js"></script>
-    <link rel="stylesheet" href="../../styles/landing-page.css"> <!-- Fichier CSS externe -->
     <link href="../../dist/output.css" rel="stylesheet">
 </head>
 
