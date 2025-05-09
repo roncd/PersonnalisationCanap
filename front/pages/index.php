@@ -10,9 +10,8 @@ session_start();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Accueil</title>
     <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
-    <link rel="stylesheet" href="../../styles/style.css">
+    <link rel="stylesheet" href="../../styles/styles.css">
     <script src="../../node_modules/@preline/carousel/index.js"></script>
-    <link href="../../dist/output.css" rel="stylesheet">
 </head>
 
 <body class="be-vietnam-pro-regular">
