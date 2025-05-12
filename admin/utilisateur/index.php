@@ -55,7 +55,7 @@ $totalPages = ceil($totalCommandes / $limit);
                         <tr>
                             <th>ID</th>
                             <th>MAIL</th>
-                            <th>ACTION</th>
+                            <th class="sticky-col">ACTION</th>
                         </tr>
                     </thead>
                     <tbody>

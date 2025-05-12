@@ -23,11 +23,11 @@ a {
 /* Responsive table container */
 .tab-container {
     overflow-x: auto;
-    /* Active le défilement horizontal si nécessaire */
     margin: 20px auto;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
+
 
 .styled-table {
     border-collapse: collapse;
@@ -42,14 +42,6 @@ a {
     text-align: left;
 }
 
-.styled-table th,
-.styled-table td {
-    padding: 12px 15px;
-    text-align: center;
-    border: none;
-    /* Désactive toutes les bordures */
-}
-
 .styled-table tbody tr {
     background-color: #e3d1c8;
 }
@@ -58,30 +50,55 @@ a {
     background-color: #f2e9e3;
 }
 
-/* Ajustement de la colonne ACTION */
+.styled-table th,
+.styled-table td {
+    padding: 12px 15px;
+    text-align: center;
+    white-space: nowrap;
+    border: none;
+    width: 20%;
+}
+
+.styled-table thead th {
+    position: sticky;
+    top: 0;
+    background-color: black; 
+    color: white;
+    z-index: 3;
+}
+
+/* Dernière colonne sticky (ACTION) */
+.styled-table td:last-child {
+    position: sticky;
+    right: 0;
+    background-color: inherit;
+    z-index: 2;
+    min-width: 120px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.styled-table th.sticky-col{
+    position: sticky;
+    right: 0;
+}
+
 .styled-table td.actions {
     display: flex;
     justify-content: center;
     align-items: center;
     gap: 10px;
-    padding: 12px;
-    /* Ajustez au besoin */
-    border: none;
-    /* Supprime toute bordure */
-    background-color: inherit;
-    /* Garde la couleur de fond */
+    padding: 32px;
+    margin-left:auto;
 }
 
-/* Styles pour les icônes */
 .actions a,
 .actions span {
     background-color: black;
     color: white;
     font-size: 14px;
     font-weight: bold;
-    padding: 10px 10px;
+    padding: 10px;
     text-align: center;
-    vertical-align: bottom;
     border: none;
     border-radius: 10px;
     cursor: pointer;
@@ -91,12 +108,10 @@ a {
 
 .actions .vert:hover {
     background-color: #28a745;
-    /* Vert pour Modifier */
 }
 
 .actions .rouge:hover {
     background-color: #dc3545;
-    /* Rouge pour Supprimer */
 }
 
 .nav {
