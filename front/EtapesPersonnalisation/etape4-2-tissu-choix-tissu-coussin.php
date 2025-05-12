@@ -8,8 +8,11 @@ if (!isset($_SESSION['user_id'])) {
     exit;
 }
 
+$selectedTissuId = $_SESSION['id_couleur_tissu'];
+
 // Récupérer les tissus disponibles depuis la base de données
-$stmt = $pdo->query("SELECT * FROM motif_tissu");
+$stmt = $pdo->prepare("SELECT * FROM motif_tissu WHERE id_couleur_tissu = ?");
+$stmt->execute([$selectedTissuId]);
 $motif_tissu = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 // Vérifier si le formulaire a été soumis
@@ -119,12 +122,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <div class="footer">
                     <p>Total : <span>899 €</span></p>
                     <div class="buttons">
-                    <button onclick="retourEtapePrecedente()" class="btn-retour transition">Retour</button>
-                    <form method="POST" action="">
+                        <button onclick="retourEtapePrecedente()" class="btn-retour transition">Retour</button>
+                        <form method="POST" action="">
                             <input type="hidden" name="motif_tissu_id" id="selected-motif_tissu">
                             <button type="submit" class="btn-suivant transition">Suivant</button>
                         </form>
-                    <button id="reset-selection" class="btn-reset transition">Réinitialiser</button>
+                        <button id="reset-selection" class="btn-reset transition">Réinitialiser</button>
                     </div>
                 </div>
             </div>
@@ -164,13 +167,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
         </div>
 
-<!-- Popup d'erreur si option non selectionné -->
-<div id="erreur-popup" class="popup transition">
-      <div class="popup-content">
-        <h2>Veuillez choisir une option avant de continuer.</h2>
-        <button class="close-btn">OK</button>
-      </div>
-    </div>
+        <!-- Popup d'erreur si option non selectionné -->
+        <div id="erreur-popup" class="popup transition">
+            <div class="popup-content">
+                <h2>Veuillez choisir une option avant de continuer.</h2>
+                <button class="close-btn">OK</button>
+            </div>
+        </div>
 
         <!-- GESTION DES SELECTIONS -->
         <script>
@@ -186,7 +189,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 // Vérification si une sélection existe dans localStorage
                 let savedMotifTissuId = localStorage.getItem('selectedMotifTissuId');
-                let selected = savedMotifTissuId!=='';
+                let selected = savedMotifTissuId !== '';
 
                 // Affichage des éléments avec la classe "transition"
                 document.querySelectorAll('.transition').forEach(element => {
@@ -195,73 +198,73 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 // Restaurer la sélection si elle existe
                 options.forEach(img => {
-                if (img.getAttribute('data-motif-tissu-id') === savedMotifTissuId) {
-                img.classList.add('selected');
-                mainImage.src = img.src;
-                selectedMotifTissuInput.value = savedMotifTissuId;
-               }
-            });
+                    if (img.getAttribute('data-motif-tissu-id') === savedMotifTissuId) {
+                        img.classList.add('selected');
+                        mainImage.src = img.src;
+                        selectedMotifTissuInput.value = savedMotifTissuId;
+                    }
+                });
 
                 // Gestion du clic sur une option
-                options.forEach(img => {
-                img.addEventListener('click', () => {
-                options.forEach(opt => opt.classList.remove('selected'));
-                img.classList.add('selected');
-                mainImage.src = img.src;
-                savedMotifTissuId = img.getAttribute('data-motif-tissu-id');
-                selectedMotifTissuInput.value = savedMotifTissuId;
-                selected = true;
-                saveSelection();
-               });
-            });
-
-
-                
-               /* if (savedMotifTissuId) {
-                    options.forEach(img => {
-                        if (img.getAttribute('data-motif-tissu-id') === savedMotifTissuId) {
-                            img.classList.add('selected');
-                            mainImage.src = img.src;
-                            mainImage.alt = img.alt;
-                            selectedMotifTissuInput.value = savedMotifTissuId;
-                            selected = true;
-                        }
-                    });
-                }
-
                 options.forEach(img => {
                     img.addEventListener('click', () => {
                         options.forEach(opt => opt.classList.remove('selected'));
                         img.classList.add('selected');
-                        selectedMotifTissuInput.value = img.getAttribute('data-motif-tissu-id');
-
-                        // Mise à jour de l'image principale
                         mainImage.src = img.src;
-                        mainImage.alt = img.alt;
-
+                        savedMotifTissuId = img.getAttribute('data-motif-tissu-id');
+                        selectedMotifTissuInput.value = savedMotifTissuId;
                         selected = true;
-                        saveSelection(img.getAttribute('data-motif-tissu-id'));
+                        saveSelection();
                     });
-                });*/
+                });
 
-                   // Empêcher la soumission du formulaire si rien n'est sélectionné
-    form.addEventListener('submit', (e) => {
-      if (!selectedMotifTissuInput.value) {
-        e.preventDefault();
-        erreurPopup.style.display = 'flex'; // ou 'block' selon ton CSS
-      }
-    });
 
-    // Fermer le popup
-    closeErreurBtn.addEventListener('click', () => {
-      erreurPopup.style.display = 'none';
-    });
 
-    window.addEventListener('click', (event) => {
-      if (event.target === erreurPopup) {
-        erreurPopup.style.display = 'none';
-      }
-    });
+                /* if (savedMotifTissuId) {
+                     options.forEach(img => {
+                         if (img.getAttribute('data-motif-tissu-id') === savedMotifTissuId) {
+                             img.classList.add('selected');
+                             mainImage.src = img.src;
+                             mainImage.alt = img.alt;
+                             selectedMotifTissuInput.value = savedMotifTissuId;
+                             selected = true;
+                         }
+                     });
+                 }
+
+                 options.forEach(img => {
+                     img.addEventListener('click', () => {
+                         options.forEach(opt => opt.classList.remove('selected'));
+                         img.classList.add('selected');
+                         selectedMotifTissuInput.value = img.getAttribute('data-motif-tissu-id');
+
+                         // Mise à jour de l'image principale
+                         mainImage.src = img.src;
+                         mainImage.alt = img.alt;
+
+                         selected = true;
+                         saveSelection(img.getAttribute('data-motif-tissu-id'));
+                     });
+                 });*/
+
+                // Empêcher la soumission du formulaire si rien n'est sélectionné
+                form.addEventListener('submit', (e) => {
+                    if (!selectedMotifTissuInput.value) {
+                        e.preventDefault();
+                        erreurPopup.style.display = 'flex'; // ou 'block' selon ton CSS
+                    }
+                });
+
+                // Fermer le popup
+                closeErreurBtn.addEventListener('click', () => {
+                    erreurPopup.style.display = 'none';
+                });
+
+                window.addEventListener('click', (event) => {
+                    if (event.target === erreurPopup) {
+                        erreurPopup.style.display = 'none';
+                    }
+                });
 
                 function saveSelection(motifTissuId) {
                     localStorage.setItem('selectedMotifTissuId', savedMotifTissuId);
@@ -269,13 +272,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             });
         </script>
 
-         <!-- BOUTTON RETOUR -->
-      <script>
-       function retourEtapePrecedente() {
-    // Exemple : tu es sur étape 8, tu veux revenir à étape 7
-    window.location.href = "etape4-1-tissu-choix-tissu.php"; 
-  }
-    </script>
+        <!-- BOUTTON RETOUR -->
+        <script>
+            function retourEtapePrecedente() {
+                // Exemple : tu es sur étape 8, tu veux revenir à étape 7
+                window.location.href = "etape4-1-tissu-choix-tissu.php";
+            }
+        </script>
 
     </main>
 
