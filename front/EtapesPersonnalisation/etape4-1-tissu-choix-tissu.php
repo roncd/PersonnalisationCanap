@@ -13,7 +13,7 @@ $stmt = $pdo->query("SELECT * FROM couleur_tissu");
 $couleur_tissu = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 // Vérifier si le formulaire a été soumis
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['couleur_tissu_id'])) {
 
     $id_client = $_SESSION['user_id'];
     $id_couleur_tissu = $_POST['couleur_tissu_id'];
@@ -30,11 +30,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt = $pdo->prepare("INSERT INTO commande_temporaire (id_client, id_couleur_tissu) VALUES (?, ?)");
         $stmt->execute([$id_client, $id_couleur_tissu]);
     }
-
+    $_SESSION['id_couleur_tissu'] = $_POST['couleur_tissu_id'];
     // Rediriger vers l'étape suivante
     header("Location: etape4-2-tissu-choix-tissu-coussin.php");
     exit;
 }
+
 ?>
 
 <!DOCTYPE html>
@@ -115,8 +116,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <p>Total : <span>899 €</span></p>
 
                     <div class="buttons">
-                    <button onclick="retourEtapePrecedente()" class="btn-retour transition">Retour</button>
-                    <form method="POST" action="">
+                        <button onclick="retourEtapePrecedente()" class="btn-retour transition">Retour</button>
+                        <form method="POST" action="">
                             <input type="hidden" name="couleur_tissu_id" id="selected-couleur_tissu">
                             <button type="submit" class="btn-suivant transition">Suivant</button>
                         </form>
@@ -160,13 +161,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
         </div>
 
-<!-- Popup d'erreur si option non selectionnée -->
-<div id="erreur-popup" class="popup transition">
-      <div class="popup-content">
-        <h2>Veuillez choisir une option avant de continuer.</h2>
-        <button class="close-btn">OK</button>
-      </div>
-    </div>
+        <!-- Popup d'erreur si option non selectionnée -->
+        <div id="erreur-popup" class="popup transition">
+            <div class="popup-content">
+                <h2>Veuillez choisir une option avant de continuer.</h2>
+                <button class="close-btn">OK</button>
+            </div>
+        </div>
 
         <!-- GESTION DES SELECTIONS -->
         <script>
@@ -182,7 +183,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 // Vérification si une sélection existe dans localStorage
                 let savedCouleurTissuId = localStorage.getItem('selectedCouleurTissuId');
-                let selected = savedCouleurTissuId!=='';
+                let selected = savedCouleurTissuId !== '';
 
                 // Appliquer les transitions aux éléments
                 document.querySelectorAll('.transition').forEach(element => {
@@ -191,60 +192,69 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 // Restaurer la sélection si elle existe
                 options.forEach(img => {
-                if (img.getAttribute('data-couleur-tissu-id') === savedCouleurTissuId) {
-                img.classList.add('selected');
-                mainImage.src = img.src;
-                selectedCouleurTissuInput.value = savedCouleurTissuId;
-               }
-            });
+                    if (img.getAttribute('data-couleur-tissu-id') === savedCouleurTissuId) {
+                        img.classList.add('selected');
+                        mainImage.src = img.src;
+                        selectedCouleurTissuInput.value = savedCouleurTissuId;
+                    }
+                });
 
                 // Gestion du clic sur une option
                 options.forEach(img => {
-                img.addEventListener('click', () => {
-                options.forEach(opt => opt.classList.remove('selected'));
-                img.classList.add('selected');
-                mainImage.src = img.src;
-                savedCouleurTissuId = img.getAttribute('data-couleur-tissu-id');
-                selectedCouleurTissuInput.value = savedCouleurTissuId;
-                selected = true;
-                saveSelection();
-               });
-            });
+                    img.addEventListener('click', () => {
+                        options.forEach(opt => opt.classList.remove('selected'));
+                        img.classList.add('selected');
+                        mainImage.src = img.src;
+                        savedCouleurTissuId = img.getAttribute('data-couleur-tissu-id');
+                        selectedCouleurTissuInput.value = savedCouleurTissuId;
+                        selected = true;
+                        saveSelection();
+                    });
+                });
 
-               
-    // Empêcher la soumission du formulaire si rien n'est sélectionné
-    form.addEventListener('submit', (e) => {
-      if (!selectedCouleurTissuInput.value) {
-        e.preventDefault();
-        erreurPopup.style.display = 'flex'; // ou 'block' selon ton CSS
-      }
-    });
 
-    // Fermer le popup
-    closeErreurBtn.addEventListener('click', () => {
-      erreurPopup.style.display = 'none';
-    });
+                // Empêcher la soumission du formulaire si rien n'est sélectionné
+                form.addEventListener('submit', (e) => {
+                    if (!selectedCouleurTissuInput.value) {
+                        e.preventDefault();
+                        erreurPopup.style.display = 'flex'; // ou 'block' selon ton CSS
+                    }
+                });
 
-    window.addEventListener('click', (event) => {
-      if (event.target === erreurPopup) {
-        erreurPopup.style.display = 'none';
-      }
-    });
+                // Fermer le popup
+                closeErreurBtn.addEventListener('click', () => {
+                    erreurPopup.style.display = 'none';
+                });
+
+                window.addEventListener('click', (event) => {
+                    if (event.target === erreurPopup) {
+                        erreurPopup.style.display = 'none';
+                    }
+                });
 
                 function saveSelection() {
                     localStorage.setItem('selectedCouleurTissuId', savedCouleurTissuId);
                 }
             });
+
+
+
+            document.querySelectorAll('.color-options .option img').forEach(option => {
+                option.addEventListener('click', () => {
+                    const id = option.getAttribute('data-couleur-tissu-id');
+                    document.getElementById('selected-couleur_tissu').value = id;
+
+                });
+            });
         </script>
 
 
- <!-- BOUTTON RETOUR --> 
- <script>
-       function retourEtapePrecedente() {
-    // Exemple : tu es sur étape 8, tu veux revenir à étape 7
-    window.location.href = "etape3-tissu-modele-banquette.php"; 
-  }
-    </script>
+        <!-- BOUTTON RETOUR -->
+        <script>
+            function retourEtapePrecedente() {
+                window.location.href = "etape3-tissu-modele-banquette.php";
+            }
+        </script>
 
     </main>
 
