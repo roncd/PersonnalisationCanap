@@ -34,7 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   }
 
   // Rediriger vers l'étape suivante
-  header("Location: etape1-2-dimension.php");
+  header("Location: etape1-2-dimension.php?structure_id=" . $id_structure);
   exit;
 }
 ?>
@@ -96,17 +96,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <div class="container">
       <div class="left-column transition">
         <h2>Étape 1 - Choisi ta structure</h2>
+          
+<section class="color-options">
+  <?php foreach ($structures as $structure): ?>
+    <div class="option transition" data-nb-longueurs="<?php echo htmlspecialchars($structure['nb_longueurs']); ?>">
+      <img src="../../admin/uploads/structure/<?php echo htmlspecialchars($structure['img']); ?>"
+           alt="<?php echo htmlspecialchars($structure['nom']); ?>"
+           data-structure-id="<?php echo $structure['id']; ?>">
+      <p><?php echo htmlspecialchars($structure['nom']); ?></p>
+    </div>
+  <?php endforeach; ?>
+</section>
 
-        <section class="color-options">
-          <?php foreach ($structures as $structure): ?>
-            <div class="option transition">
-              <img src="../../admin/uploads/structure/<?php echo htmlspecialchars($structure['img']); ?>"
-                alt="<?php echo htmlspecialchars($structure['nom']); ?>"
-                data-structure-id="<?php echo $structure['id']; ?>">
-              <p><?php echo htmlspecialchars($structure['nom']); ?></p>
-            </div>
-          <?php endforeach; ?>
-        </section>
 
         <div class="footer">
           <p>Total : <span>899 €</span></p>
@@ -164,7 +165,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <button class="close-btn">OK</button>
       </div>
     </div>
-
 
     <!-- GESTION DES SELECTIONS -->
     <script>
@@ -260,16 +260,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       }
     });
 
-                function saveSelection() {
-                    localStorage.setItem('selectedStructureId', savedStructureId);
-                }
-
-
-
-
-
-      });
-    </script>
+    function saveSelection() {
+    localStorage.setItem('selectedStructureId', savedStructureId);
+    }
+  });
+    </script>  
 
     <!-- VARIATION DES PRIX  -->
     <script>
