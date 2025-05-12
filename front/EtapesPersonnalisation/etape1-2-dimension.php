@@ -5,7 +5,7 @@ session_start();
 // Vérifier si l'utilisateur est connecté
 if (!isset($_SESSION['user_id'])) {
   header("Location: ../formulaire/Connexion.php");
-  exit;
+  exit; 
 }
 
 $id_client = $_SESSION['user_id'];
@@ -35,7 +35,28 @@ if (!empty($_POST["longueurA"])) {
   }
 }
 }
+?>
 
+<?php
+// Récupérer l'ID de la structure sélectionnée
+if (isset($_GET['structure_id'])) {
+  $structure_id = $_GET['structure_id'];
+
+  // Récupérer la structure correspondante depuis la base de données
+  $stmt = $pdo->prepare("SELECT nb_longueurs FROM structure WHERE id = ?");
+  $stmt->execute([$structure_id]);
+  $structure = $stmt->fetch(PDO::FETCH_ASSOC);
+
+  if ($structure) {
+    $nbLongueurs = $structure['nb_longueurs'];
+  } else {
+    // Gestion de l'erreur si la structure n'existe pas
+    $nbLongueurs = 0;
+  }
+} else {
+  // Gestion de l'erreur si aucun ID de structure n'est passé dans l'URL
+  $nbLongueurs = 0;
+}
 ?>
 
 <!DOCTYPE html>
@@ -87,7 +108,7 @@ if (!empty($_POST["longueurA"])) {
         <li><a href="etape2-type-banquette.php">Banquette</a></li>
       </ul>
     </div>
-    <div class="container">
+    <div class="container"> 
       <!-- Colonne de gauche -->
       <div class="left-column transition">
         <h2>Étape 1 - Choisi tes mesures</h2>
@@ -121,6 +142,47 @@ if (!empty($_POST["longueurA"])) {
           </div>
         </form>
       </div>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    // Utiliser la variable PHP $nbLongueurs pour afficher les bons champs
+    const nbLongueurs = <?php echo $nbLongueurs; ?>;
+    updateVisibleInputs(nbLongueurs);
+
+    function updateVisibleInputs(nb) {
+      const a = document.getElementById('longueurA').closest('.form-row');
+      const b = document.getElementById('longueurB').closest('.form-row');
+      const c = document.getElementById('longueurC').closest('.form-row');
+
+      a.style.display = nb >= 1 ? 'block' : 'none';
+      b.style.display = nb >= 2 ? 'block' : 'none';
+      c.style.display = nb >= 3 ? 'block' : 'none';
+    }
+  });
+</script>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const url = new URL(window.location.href);
+  const structureId = url.searchParams.get("structure_id");
+
+  if (structureId) {
+    // Sauvegarde l'ID en localStorage
+    localStorage.setItem("selectedStructureId", structureId);
+  } else {
+    // Si pas dans l'URL, on essaie de le récupérer depuis le localStorage
+    const savedStructureId = localStorage.getItem("selectedStructureId");
+    if (savedStructureId) {
+      // Redirige en rajoutant l'id manquant dans l'URL
+      url.searchParams.set("structure_id", savedStructureId);
+      window.location.href = url.toString();
+    }
+  }
+});
+</script>
+
+
+
+
 
       <!-- Colonne de droite -->
       <div class="right-column transition">
