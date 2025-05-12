@@ -372,12 +372,28 @@ label {
 }
 
 .input-field {
-  padding: 12px;
+  padding: 10px;
   font-size: 16px;
   border: 1px solid #ccc;
   border-radius: 8px;
   background-color: rgba(227, 209, 200, 0.71);
   transition: all 0.3s ease;
+}
+
+.select-field {
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: rgba(227, 209, 200, 0.71);
+  transition: all 0.3s ease;
+  margin-bottom: 10px;
+}
+
+.select-field:focus {
+  background-color: rgba(227, 209, 200, 0.85);
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  outline: none;
 }
 
 .input-field:focus {
