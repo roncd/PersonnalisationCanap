@@ -46,7 +46,7 @@ document.addEventListener('DOMContentLoaded', () => {
         .then(data => {
             if (data.success) {
                 console.log('Prix tissu enregistré !');
-                window.location.href = "recapitulatif-commande-bois.php";
+                window.location.href = "recapitulatif-commande-tissu.php";
             } else {
                 console.error('Erreur côté serveur :', data.message);
             }
