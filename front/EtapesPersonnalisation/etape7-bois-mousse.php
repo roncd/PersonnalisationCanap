@@ -1,7 +1,7 @@
 <?php
 require '../../admin/config.php';
 session_start();
-
+ 
 // Vérifier si l'utilisateur est connecté
 if (!isset($_SESSION['user_id'])) {
     header("Location: ../formulaire/Connexion.php");
@@ -16,7 +16,7 @@ $mousse = $stmt->fetchAll(PDO::FETCH_ASSOC);
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {    
  
     $id_client = $_SESSION['user_id'];
-    $id_mousse = $_POST['mousse_id'];
+    $id_mousse_bois = $_POST['mousse_id']; // ou 'id_mousse_bois' si ton champ s'appelle comme ça dans le HTML
 
     // Vérifier si une commande temporaire existe déjà pour cet utilisateur
     $stmt = $pdo->prepare("SELECT id FROM commande_temporaire WHERE id_client = ?");
@@ -24,11 +24,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $existing_order = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if ($existing_order) {
-        $stmt = $pdo->prepare("UPDATE commande_temporaire SET id_mousse = ? WHERE id_client = ?");
-        $stmt->execute([$id_mousse, $id_client]);
+        $stmt = $pdo->prepare("UPDATE commande_temporaire SET id_mousse_bois = ? WHERE id_client = ?");
+        $stmt->execute([$id_mousse_bois, $id_client]);
     } else {
-        $stmt = $pdo->prepare("INSERT INTO commande_temporaire (id_client, id_mousse) VALUES (?, ?)");
-        $stmt->execute([$id_client, $id_mousse]);
+        $stmt = $pdo->prepare("INSERT INTO commande_temporaire (id_client, id_mousse_bois) VALUES (?, ?)");
+        $stmt->execute([$id_client, $id_mousse_bois]);
     }
 
     // Rediriger vers l'étape suivante
@@ -36,6 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     exit;
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="fr">
@@ -101,14 +102,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       
       <section class="color-options">
         <?php if (!empty($mousse)): ?>
-          <?php foreach ($mousse as $tissu): ?>
+          <?php foreach ($mousse as $mousse_bois): ?>
             <div class="option transition">
-              <img src="../../admin/uploads/mousse/<?php echo htmlspecialchars($tissu['img']); ?>" 
-                   alt="<?php echo htmlspecialchars($tissu['nom']); ?>" 
-                   data-mousse-bois-id="<?php echo $tissu['id']; ?>" 
-                   data-mousse-bois-prix="<?php echo $tissu['prix']; ?>"> 
-              <p><?php echo htmlspecialchars($tissu['nom']); ?></p>
-              <p><strong><?php echo htmlspecialchars($tissu['prix']); ?> €</strong></p>
+              <img src="../../admin/uploads/mousse/<?php echo htmlspecialchars($mousse_bois['img']); ?>" 
+                   alt="<?php echo htmlspecialchars($mousse_bois['nom']); ?>" 
+                   data-mousse-bois-id="<?php echo $mousse_bois['id']; ?>" 
+                   data-mousse-bois-prix="<?php echo $mousse_bois['prix']; ?>"> 
+              <p><?php echo htmlspecialchars($mousse_bois['nom']); ?></p>
+              <p><strong><?php echo htmlspecialchars($mousse_bois['prix']); ?> €</strong></p>
             </div>
           <?php endforeach; ?>
         <?php else: ?>
