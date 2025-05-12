@@ -64,7 +64,7 @@ $totalPages = ceil($totalCommandes / $limit);
                             <th>CODE_POSTAL</th>
                             <th>VILLE</th>
                             <th>DATE_CREATION</th>
-                            <th>ACTION</th>
+                            <th class="sticky-col">ACTION</th>
                         </tr>
                     </thead>
                     <tbody>

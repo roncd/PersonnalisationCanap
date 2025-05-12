@@ -138,7 +138,7 @@ $triURL = '?' . http_build_query($params);
                         <th>MOTIF_TISSU</th>
                         <th>DOSSIER_TISSU</th>
                         <th>ACCOUDOIR_TISSU</th>
-                        <th>ACTION</th>
+                        <th class="sticky-col">ACTION</th>
                         </tr>
                     </thead>
                     <tbody>

@@ -79,7 +79,7 @@ $totalPages = ceil($totalCommandes / $limit);
                             <th>PRIX</th>
                             <th>IMAGE</th>
                             <th>ID_COULEUR_TISSU</th>
-                            <th>ACTION</th>
+                            <th class="sticky-col">ACTION</th>
                         </tr>
                     </thead>
                     <tbody>
