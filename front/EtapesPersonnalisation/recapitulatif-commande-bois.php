@@ -228,21 +228,21 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['comment'])) {
           <img src="../../admin/uploads/decoration/' . htmlspecialchars($assocData['decoration'][$commande['id_decoration']]['img'] ?? '-') . '" 
               alt="' . htmlspecialchars($assocData['decoration'][$commande['id_decoration']]['nom'] ?? '-') . '">
           <p>' . htmlspecialchars($assocData['decoration'][$commande['id_decoration']]['nom'] ?? '-') . '</p>
-        </div>';
-          ?>
-
-          <h3>Étape 5 : Choisi tes accoudoirs</h3>
-          <?php
-          foreach ($accoudoirs as $accoudoir) {
-            // Affichage de l'accoudoir avec son image, nom, et quantité
-            echo '<div class="option">
-              <img src="../../admin/uploads/accoudoirs-bois/' . htmlspecialchars($accoudoir['img'] ?? '-') . '"
-                  alt="' . htmlspecialchars($accoudoir['nom'] ?? '-') . '">
-              <p>' . htmlspecialchars($accoudoir['nom'] ?? '-') . '</p>
+        </div>'; 
+          ?> 
+          <h3>Étape 5 : Choisi tes accouhuhuhuhdoirs</h3>
+  <?php
+  foreach ($accoudoirs as $accoudoir) {
+      // Affichage de l'accoudoir avec son image, nom, et quantité
+      echo '<div class="option">
+              <img src="../../admin/uploads/accoudoirs-bois/' . htmlspecialchars($accoudoir['img'] ?? 'N/A') . '"
+                  alt="' . htmlspecialchars($accoudoir['nom'] ?? 'N/A') . '">
+              <p>' . htmlspecialchars($accoudoir['nom'] ?? 'N/A') . '</p>
               <p>Quantité : ' . htmlspecialchars($accoudoir['nb_accoudoir']) . '</p>
             </div>';
-          }
-          ?>
+  }
+  ?>
+
 
           <h3>Étape 6 : Choisi ton dossier</h3>
           <?php

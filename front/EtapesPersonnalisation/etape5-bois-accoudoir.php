@@ -2,31 +2,17 @@
 require '../../admin/config.php';
 session_start();
 
-
 // Vérifier si l'utilisateur est connecté
 if (!isset($_SESSION['user_id'])) {
     header("Location: ../formulaire/Connexion.php");
     exit;
 }
 
-
 $id_client = $_SESSION['user_id'];
 
-
-// Récupérer les types d'accoudoirs en bois depuis la base de données
+// Récupérer les types d'accoudoirs depuis la base de données
 $stmt = $pdo->query("SELECT * FROM accoudoir_bois");
 $accoudoir_bois = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-
-// Récupérer la sélection existante de l'utilisateur dans la commande temporaire
-$stmt = $pdo->prepare("SELECT id_accoudoir_bois, id_nb_accoudoir FROM commande_temporaire WHERE id_client = ?");
-$stmt->execute([$id_client]);
-$commande_existante = $stmt->fetch(PDO::FETCH_ASSOC);
-
-
-$accoudoir_selectionne = $commande_existante['id_accoudoir_bois'] ?? null;
-$nb_accoudoir_selectionne = $commande_existante['id_nb_accoudoir'] ?? 1; // Valeur par défaut à 1
-
 
 // Vérifier si le formulaire a été soumis
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -35,30 +21,55 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 
+    $id_accoudoirs = explode(',', $_POST['accoudoir_bois_id']);
+    $nb_accoudoirs = explode(',', $_POST['nb_accoudoir']);
 
-    $id_accoudoir_bois = $_POST['accoudoir_bois_id'];
-    $nb_accoudoir = $_POST['nb_accoudoir'];
+    // Vérifier si une commande temporaire existe
+    $stmt = $pdo->prepare("SELECT id FROM commande_temporaire WHERE id_client = ?");
+    $stmt->execute([$id_client]);
+    $commande = $stmt->fetch(PDO::FETCH_ASSOC);
 
-
-    // Vérifier si une commande temporaire existe déjà pour cet utilisateur
-    if ($commande_existante) {
-        $stmt = $pdo->prepare("UPDATE commande_temporaire SET id_accoudoir_bois = ?, id_nb_accoudoir = ? WHERE id_client = ?");
-        $stmt->execute([$id_accoudoir_bois, $nb_accoudoir, $id_client]);
+    if (!$commande) {
+        // Créer une nouvelle commande temporaire
+        $stmt = $pdo->prepare("INSERT INTO commande_temporaire (id_client) VALUES (?)");
+        $stmt->execute([$id_client]);
+        $commande_id = $pdo->lastInsertId();
     } else {
-        $stmt = $pdo->prepare("INSERT INTO commande_temporaire (id_client, id_accoudoir_bois, id_nb_accoudoir) VALUES (?, ?, ?)");
-        $stmt->execute([$id_client, $id_accoudoir_bois, $nb_accoudoir]);
+        $commande_id = $commande['id'];
+
+        // Supprimer les anciennes entrées de la table pivot
+        $stmt = $pdo->prepare("DELETE FROM commande_temp_accoudoir WHERE id_commande_temporaire = ?");
+        $stmt->execute([$commande_id]);
     }
 
+    // Insérer les nouveaux accoudoirs sélectionnés
+    $stmt = $pdo->prepare("INSERT INTO commande_temp_accoudoir (id_commande_temporaire, id_accoudoir_bois, nb_accoudoir) VALUES (?, ?, ?)");
+
+    $js_accoudoir_ids = [];
+    $js_nb_accoudoirs = [];
+
+    foreach ($id_accoudoirs as $index => $id_accoudoir) {
+        $nb = (int) $nb_accoudoirs[$index];
+        if ($nb > 0) {
+            $stmt->execute([$commande_id, $id_accoudoir, $nb]);
+            $js_accoudoir_ids[] = $id_accoudoir;
+            $js_nb_accoudoirs[] = $nb;
+        }
+    }
 
     // Sauvegarder la sélection dans le localStorage via JavaScript
+    $js_ids = implode(',', $js_accoudoir_ids);
+    $js_nbs = implode(',', $js_nb_accoudoirs);
+
     echo "<script>
-        localStorage.setItem('selectedAccoudoirBois', '$id_accoudoir_bois');
-        localStorage.setItem('selectedNbAccoudoirBois', '$nb_accoudoir');
+        localStorage.setItem('selectedAccoudoirBois', '$js_ids');
+        localStorage.setItem('selectedNbAccoudoirBois', '$js_nbs');
         window.location.href = 'etape6-bois-dossier.php';
     </script>";
     exit;
 }
 ?>
+
 
 
 
@@ -193,7 +204,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           <?php else: ?>
             <p>Aucun accoudoir disponible pour le moment.</p>
           <?php endif; ?>
-        </section>
+        </section> 
 
 
         <div class="footer">
@@ -569,7 +580,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     </script>
-
+ 
  <!-- BOUTTON RETOUR -->
  <script>
        function retourEtapePrecedente() {
