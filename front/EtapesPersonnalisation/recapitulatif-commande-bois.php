@@ -230,7 +230,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['comment'])) {
           <p>' . htmlspecialchars($assocData['decoration'][$commande['id_decoration']]['nom'] ?? '-') . '</p>
         </div>'; 
           ?> 
-          <h3>Étape 5 : Choisi tes accouhuhuhuhdoirs</h3>
+          <h3>Étape 5 : Choisi tes accoudoirs</h3>
   <?php
   foreach ($accoudoirs as $accoudoir) {
       // Affichage de l'accoudoir avec son image, nom, et quantité
