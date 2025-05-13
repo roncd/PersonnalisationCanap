@@ -45,7 +45,7 @@ if (!isset($_SESSION['user_id'])) {
       <li><img src="../../medias/coussin_icon.png" alt="Coussins" class="feature-icon">Ajoutez vos coussins préférés</li>
       <li><img src="../../medias/artiste_icon.png" alt="Aperçu" class="feature-icon">Aperçu en temps réel de votre création</li>
     </ul>
-    <a href="/configurator" class="customize-button">Commencer la personnalisation</a>
+    <a href="../EtapesPersonnalisation/etape1-1-structure.php" class="customize-button">Commencer la personnalisation</a>
   </div>
   <div class="customize-image">
     <!-- Blob de fond (SVG ou PNG) -->

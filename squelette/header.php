@@ -56,6 +56,12 @@
                             <li><a href="../pages/information.php">Mes informations</a></li>
                         </div>
                     </ul>
+                    </li>
+                                <li>
+                    <a href="../pages/apropos.php"
+                    class="<?= $currentPage == 'apropos.php' ? 'active' : '' ?>">
+                        À propos
+                    </a>
                 </li>
                 <li>
                     <a href="../pages/aide.php" 
