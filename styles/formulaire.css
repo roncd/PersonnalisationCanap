@@ -190,3 +190,31 @@ label {
     margin-bottom: 10px;
 
 }
+/* Wrapper en position relative */
+.input-section {
+  position: relative;
+  width: 100%;
+}
+
+/* Le champ de saisie : on décale un peu le texte à droite */
+.input-section .input-field {
+  width: 100%;
+  padding-right: 40px;  /* suffisamment pour laisser la place de l'œil */
+  box-sizing: border-box;
+}
+
+/* L’icône œil en position absolue */
+.input-section img {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  width: 24px;    /* ajuster selon la taille souhaitée */
+  height: 24px;
+  cursor: pointer;
+}
+
+
+#eyeBtn {
+  cursor: pointer;
+}
