@@ -262,32 +262,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     const decreaseButtons = document.querySelectorAll('.decrease-btn');
     const increaseButtons = document.querySelectorAll('.increase-btn');
 
-    decreaseButtons.forEach(button => {
-      button.addEventListener('click', () => {
-        const quantityInput = button.closest('.option').querySelector('.quantity-input');
-        let quantity = parseInt(quantityInput.value);
-        if (quantity > 0) {
-          quantity--;
-          quantityInput.value = quantity;
-          const selectedImage = button.closest('.option').querySelector('img.selected');
-          if (selectedImage) saveSelectionToLocalStorage(selectedImage);
-        }
-      });
-    });
-
-    increaseButtons.forEach(button => {
-      button.addEventListener('click', () => {
-        const quantityInput = button.closest('.option').querySelector('.quantity-input');
-        const selectedImage = button.closest('.option').querySelector('img.selected');
-        if (selectedImage) {
-          let quantity = parseInt(quantityInput.value);
-          quantity++;
-          quantityInput.value = quantity;
-          saveSelectionToLocalStorage(selectedImage);
-        }
-      });
-    });
-
     // BOUTON SUIVANT : vérifie sélection + quantité
     suivantButton.addEventListener('click', (event) => {
       event.preventDefault();
@@ -302,7 +276,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       const quantityInput = selectedOption.closest('.option').querySelector('.quantity-input');
       const quantity = parseInt(quantityInput.value);
 
-      if (quantity <= 0 || isNaN(quantity)) {
+      if (quantity <= 0 || isNaN(quantity)) { 
         erreurPopup.style.display = 'flex';
         return;
       }
