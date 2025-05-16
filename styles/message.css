@@ -17,7 +17,7 @@
 .search-bar {
     margin-bottom: 20px;
     display: flex;
-    justify-content: center;
+    justify-content: right;
     align-items: center;
     color: rgba(227, 209, 200, 0.8);
     padding: 10px;

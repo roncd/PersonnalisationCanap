@@ -23,7 +23,7 @@ window.updateStatus = function (button) {
             return; // Arrête l'exécution si le statut est invalide
         }
         // Envoyer une requête au serveur pour update statut de la commande
-        fetch('update_statut.php', {
+        fetch('../include/update_statut.php', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -88,7 +88,7 @@ window.removeCommand = function (button) {
     // Ajouter un gestionnaire pour le bouton "Oui"
     yesButton.onclick = () => {
         // Envoyer une requête au serveur pour supprimer la commande
-        fetch('delete_commande.php', {
+        fetch('../include/delete_commande.php', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
