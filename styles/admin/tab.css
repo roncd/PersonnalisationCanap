@@ -1,8 +1,7 @@
 /* Container principal */
 .container {
-    align-content: center;
-    margin: 50px;
     width: 90%;
+    margin: 0px 50px;
 }
 
 body {
@@ -11,9 +10,8 @@ body {
 
 h2 {
     font-size: 37px;
-    text-align: center;
     font-family: 'Baloo 2', sans-serif;
-    margin-bottom: 20px;
+    margin: 0px;
 }
 
 a {
@@ -62,7 +60,7 @@ a {
 .styled-table thead th {
     position: sticky;
     top: 0;
-    background-color: black; 
+    background-color: black;
     color: white;
     z-index: 3;
 }
@@ -77,7 +75,7 @@ a {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.styled-table th.sticky-col{
+.styled-table th.sticky-col {
     position: sticky;
     right: 0;
 }
@@ -88,7 +86,7 @@ a {
     align-items: center;
     gap: 10px;
     padding: 32px;
-    margin-left:auto;
+    margin-left: auto;
 }
 
 .actions a,
@@ -124,45 +122,6 @@ a {
     justify-content: center;
 }
 
-.pagination {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-}
-
-.pagination li {
-    margin: 0 1px;
-}
-
-.pagination a.active {
-    background-color: #000000;
-    color: #fff;
-}
-
-.pagination a {
-    display: block;
-    padding: 0.5em 1em;
-    border: 1px solid #000000;
-    border-radius: 10px;
-    text-decoration: none;
-}
-
-.pagination a:hover {
-    background-color: #000000;
-    color: #fff;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-}
-
-.pagination a::after {
-    content: none;
-}
-
-.pagination a[aria-current="page"] {
-    background-color: #333;
-    color: #fff;
-}
-
 .btn-order {
     display: inline-flex;
     align-items: center;
@@ -170,6 +129,7 @@ a {
     text-decoration: none;
     font-weight: 600;
 }
+
 /* Media query pour les très petits écrans */
 @media screen and (max-width: 600px) {
 

@@ -85,8 +85,8 @@ select.input-field {
     outline: none;
 }
 
-/* Footer section */
-.footer {
+/* button section */
+.button-section {
     font-size: 18px;
     margin-top: 20px;
     display: flex;
@@ -95,19 +95,19 @@ select.input-field {
     justify-content: space-between;
 }
 
-.footer p {
+.button-section p {
     font-size: 15px;
     position: relative;
-    /* Nécessaire pour que ::after utilise .footer p comme référence */
+    /* Nécessaire pour que ::after utilise .button-section p comme référence */
 }
 
-.footer span {
+.button-section span {
     font-size: 15px;
     position: relative;
-    /* Nécessaire pour que ::after utilise .footer p comme référence */
+    /* Nécessaire pour que ::after utilise .button-section p comme référence */
 }
 
-.footer span::after {
+.button-section span::after {
     content: '';
     position: absolute;
     left: 0;
@@ -119,26 +119,26 @@ select.input-field {
     transition: width 0.3s ease;
 }
 
-.footer span:hover::after {
+.button-section span:hover::after {
     width: 100%;
     /* Le soulignement s'étend sur toute la largeur au survol */
 }
 
 
-.footer .link-connect {
+.button-section .link-connect {
     color: #997765;
     text-decoration: none;
     cursor: pointer;
 }
 
 
-.footer .buttons {
+.button-section .buttons {
     gap: 15px;
 }
 
 
 
-.footer button {
+.button-section button {
     padding: 10px 20px;
     border: none;
     border-radius: 10px;
@@ -146,7 +146,7 @@ select.input-field {
     font-weight: bold;
 }
 
-.footer input {
+.button-section input {
     padding: 10px 20px;
     border: none;
     border-radius: 10px;
@@ -160,7 +160,7 @@ select.input-field {
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-.footer .btn-connexion {
+.button-section .btn-connexion {
     background-color: #000000;
     color: #fff;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);

@@ -7,7 +7,7 @@
     <title>Ajoute un type de mousse</title>
     <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../../styles/message.css">
-    <link rel="stylesheet" href="../../styles/ajout.css">
+    <link rel="stylesheet" href="../../styles/admin/ajout.css">
     <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
 </head>
 
@@ -91,7 +91,7 @@
                             <input type="file" id="img" name="img" class="input-field" accept="image/*" required>
                         </div>
                     </div>
-                    <div class="footer">
+                    <div class="button-section">
                         <div class="buttons">
                             <button type="button" class="btn-retour" onclick="history.go(-1)">Retour</button>
                             <input type="submit" class="btn-valider" value="Ajouter">

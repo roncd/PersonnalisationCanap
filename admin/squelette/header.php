@@ -2,128 +2,87 @@
 <html lang="fr">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <title>Header</title>
-
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../styles/squelette-admin.css">
+  <script type="module" src="../../script/header-admin.js"></script>
 </head>
 
 <body>
+  <?php
+  // Déterminez la page actuelle
+  $currentPage = basename($_SERVER['REQUEST_URI']);
+  $currentPath = $_SERVER['REQUEST_URI'];
+  ?>
+  <aside>
+    <div class="menu-section">
+      <div class="close-icone">
+        <img src="../../assets/menu/closeMenu.svg" alt="" width="20" height="20">
+      </div>
+      <nav>
+        <a href="../pages/index.php" class="menu-link <?= strpos($currentPath, '/pages/index.php') !== false ? 'active' : '' ?>" data-icon="dashboard">
+          <img src="../../assets/menu/dashboard.svg" alt="" width="20" height="20">
+          <span>Tableau de bord</span>
+        </a>
+      </nav>
+      <nav class="space-nav">
+        <span><strong>ADMINISTRATION</strong></span>
+        <a href="../client/index.php" class="menu-link <?= strpos($currentPath, '/client/index.php') !== false ? 'active' : '' ?>" data-icon="client">
+          <img src="../../assets/menu/client.svg" alt="" width="20" height="20">
+          <span>Clients</span>
+        </a>
+        <a href="../pages/commande.php" class="menu-link <?= $currentPage == 'commande.php' ? 'active' : '' ?>" data-icon="commande">
+          <img src="../../assets/menu/commande.svg" alt="" width="20" height="20">
+          <span>Commandes</span>
+        </a>
 
-  <style>
-    /* Importation de la police */
-    @import url('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@700&display=swap');
+        <div class="menu-group">
+          <a href="#" class="menu-link catalogue <?= ($currentPage == 'visualiser.php' || $currentPage == 'ajouter.php') ? 'active' : '' ?>" data-icon="catalogue">
+            <img src="../../assets/menu/catalogue.svg" alt="" width="20" height="20">
+            <span>Catalogue
+            <span class="arrow">▾</span>
+          </a>
+          <div class="submenu">
+            <a href="../pages/ajouter.php" class="<?= $currentPage == 'ajouter.php' ? 'active' : '' ?>">Ajouter des options</a>
+            <a href="../pages/visualiser.php" class="<?= $currentPage == 'visualiser.php' ? 'active' : '' ?>">Visualiser des options</a>
+          </div>
+        </div>
 
-    /* Supprime les marges et le padding par défaut */
-    html,
-    body {
-      margin: 0;
-      padding: 0;
-    }
+      </nav>
 
-    /* Style de base pour le header */
-    header {
-      width: 100%;
-      /* Prend toute la largeur de la page */
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding-bottom: -20px;
-      /* Ajustez le padding pour la hauteur souhaitée */
-      background-color: #E3D1C8;
-      box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
-    }
-
-    /* Style pour le logo */
-    .logo {
-      font-size: 10px;
-      font-weight: bold;
-      font-family: 'Be Vietnam Pro', sans-serif;
-    }
-
-    /* Redimensionner l'image du logo */
-    .logo img {
-      width: 150px;
-      /* Ajustez la taille selon vos besoins */
-      height: auto;
-    }
-
-    /* Style pour le menu */
-    nav ul {
-      list-style-type: none;
-      margin: 0;
-      padding: 0;
-      display: flex;
-    }
-
-    /* Espacement des éléments du menu */
-    nav ul li {
-      margin-left: 70px;
-    }
-
-    /* Style pour les liens du menu */
-    nav ul li a {
-      color: #000000;
-      text-decoration: none;
-      font-family: 'Be Vietnam Pro', sans-serif;
-      font-weight: 700;
-      font-size: 14px;
-      position: relative;
-    }
-
-    nav ul li a::after {
-      content: '';
-      position: absolute;
-      left: 0;
-      bottom: -2px;
-      /* Positionne le soulignement juste en dessous du texte */
-      width: 0;
-      height: 1px;
-      background-color: #000000;
-      transition: width 0.3s ease;
-    }
-
-    nav ul li a:hover::after {
-      width: 100%;
-      /* Le soulignement prend toute la largeur */
-    }
-
-    /* Style pour le lien actif */
-    nav ul li a.active::after {
-      width: 100%;
-      /* Le soulignement reste visible sur l'élément actif */
-    }
-
-
-    nav {
-      margin-right: 90px;
-      /* Décaler le menu vers la gauche */
-    }
-  </style>
-
-  <header>
-    <!-- Logo à gauche -->
-    <div class="logo">
-      <a href="../pages/index.php"><img src="../../medias/logo_trasparent-decodumonde.png" alt="Logo Decodumonde"></a>
+      <nav class="space-nav">
+        <span><strong>PARAMÈTRES</strong></span>
+        <a href="../utilisateur/index.php" class="menu-link <?= strpos($currentPath, '/utilisateur/index.php') !== false ? 'active' : '' ?>" data-icon="equipe">
+          <img src="../../assets/menu/equipe.svg" alt="" width="20" height="20">
+          <span>Équipe</span>
+        </a>
+        <a href="../pages/account.php" class="menu-link <?= $currentPage == 'account.php' ? 'active' : '' ?>" data-icon="account">
+          <img src="../../assets/menu/account.svg" alt="" width="20" height="20">
+          <span>Mon compte</span>
+        </a>
+      </nav>
+      <nav class="space-nav">
+        <a href="../include/export_bdd.php" class="menu-link" data-icon="download">
+          <img src="../../assets/menu/download.svg" alt="" width="20" height="20">
+          <span>Télécharger la base de données</span>
+        </a>
+        <a href="../include/logout.php" class="menu-link" data-icon="logout">
+          <img src="../../assets/menu/logout.svg" alt="" width="20" height="20">
+          <span>Déconnexion</span>
+        </a>
+      </nav>
     </div>
+  </aside>
 
-    <!-- Menu à droite -->
-    <nav>
-      <ul>
-        <?php
-        // Déterminez la page actuelle
-        $currentPage = basename($_SERVER['REQUEST_URI']);
-        ?>
-        <li><a href="../pages/index.php" class="<?= $currentPage == 'index.php' ? 'active' : '' ?>">Base de données</a></li>
-        <li><a href="../pages/ajouter.php" class="<?= $currentPage == 'ajouter.php' ? 'active' : '' ?>">Ajouter</a></li>
-        <li><a href="../pages/commande.php" class="<?= $currentPage == 'commande.php' ? 'active' : '' ?>">Commandes</a></li>
-        <li><a href="../../front/pages/index.php" target="_blank">Voir le site</a></li>
-        <li><a href="../squelette/logout.php">Déconnexion</a></li>
-      </ul>
-    </nav>
-  </header>
+  <div class="head">
+    <a href="../../front/pages/index.php" target="_blank">
+      <span>Voir le site</span>
+      <img src="../../assets/extern-link.svg" alt="" width="13" height="13">
+    </a>
+  </div>
 
-</body>
 
 </html>

@@ -1,0 +1,129 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+h1 {
+    font-size: 37px;
+    font-family: 'Baloo 2', sans-serif;
+    margin: 0px;
+}
+
+.container {
+    width: 90%;
+    margin: 0px 50px;
+}
+
+.client-grid {
+    margin-top: 20px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas:
+        "identite commandes"
+        "contact commandes"
+        "adresse .";
+    gap: 30px;
+}
+
+.block-identite {
+    grid-area: identite;
+}
+
+.block-contact {
+    grid-area: contact;
+}
+
+.block-adresse {
+    grid-area: adresse;
+}
+
+.block-commandes {
+    grid-area: commandes;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.account-grid {
+    margin-top: 20px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.info-card {
+    background: #F4F1F1;
+    border-radius: 12px;
+    padding: 1rem;
+}
+
+.info-card h2 {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 15px;
+    font-family: 'Be Vietnam Pro', sans-serif;
+
+}
+
+.info-card p {
+    font-size: 15px;
+    line-height: 1.5;
+    margin: 0;
+}
+
+.commandes-card table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+}
+
+.commandes-card th,
+.commandes-card td {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    text-align: left;
+}
+
+.commandes-card th {
+    font-weight: 700;
+}
+
+tr:nth-of-type(even) {
+    background-color: #ffffff;
+}
+
+.bouton {
+    justify-content: right;
+    display: flex;
+}
+
+.btn {
+    margin-top: 10px;
+    background-color: black;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 10px 20px;
+    text-align: center;
+    border-radius: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s ease, background-color 0.3s ease;
+    text-decoration: none;
+    cursor: pointer;
+
+}
+
+/* Effet au survol */
+.btn:hover {
+    transform: scale(1.05);
+}
+
+@media screen and (max-width: 900px) {
+
+    .client-grid,
+    .account-grid {
+        display: flex;
+        flex-direction: column;
+    }
+}

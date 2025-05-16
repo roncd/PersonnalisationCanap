@@ -75,6 +75,7 @@ $totalPages = ceil($totalCommandes / $limit);
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <link rel="stylesheet" href="../../styles/commandes.css">
     <link rel="stylesheet" href="../../styles/popup.css">
+    <link rel="stylesheet" href="../../styles/pagination.css">
     <script src="../../script/commandes.js"></script>
     <script type="module" src="../../script/download.js"></script>
     <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">

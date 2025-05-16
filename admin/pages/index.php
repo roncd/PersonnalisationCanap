@@ -1,69 +1,124 @@
-<?php
-require '../config.php';
-session_start();
-
-if (!isset($_SESSION['id'])) {
-    header("Location: ../index.php");
-    exit();
-}
-?>
 <!DOCTYPE html>
 <html lang="en">
+<?php
+session_start();
+if (!isset($_SESSION['id'])) {
+    $_SESSION['redirect_to'] = $_SERVER['REQUEST_URI'];
+    header("Location: ../index.php"); // Redirection vers la page de connexion
+    exit();
+}
+
+require '../config.php';
+
+$id = $_SESSION['id'];
+
+$stmt = $pdo->prepare("SELECT prenom FROM utilisateur WHERE id = ?");
+$stmt->execute([$id]);
+$user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+if ($user) {
+    $prenom = $user['prenom'];
+} else {
+    $prenom = 'Utilisateur';
+}
+?>
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Base de données</title>
+    <title>Admin - Déco Du Monde</title>
     <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
+    <link rel="stylesheet" href="../../styles/admin/landing-page.css">
     <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&display=swap" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="../../styles/bdd.css">
 </head>
 
 <body>
-
     <header>
         <?php require '../squelette/header.php'; ?>
     </header>
 
     <main>
         <div class="container">
-            <!-- Colonne de gauche -->
-            <h2>Vous êtes bien connecté !</h2>
-            <h3>Visulaliser les données</h3>
-            <div class="tableau">
-                <div class="button-grid-container">
-                    <a class="custom-button" href="../client/index.php">Client</a>
-                    <a class="custom-button" href="../utilisateur/index.php">Utilisateur</a>
-                    <a class="custom-button" href="../commande-detail/index.php">Commande</a>
-
-                    <a class="custom-button" href="../structure/index.php">Structure</a>
-                    <a class="custom-button" href="../banquette/index.php">Type banquette</a>
-                    <a class="custom-button" href="../mousse/index.php">Type mousse</a>
+            <div>
+                <h1>Bonjour <?php echo htmlspecialchars($prenom); ?>,</h1>
+                <p>Vous êtes bien connecté à l'administration de Déco du Monde</p>
+            </div>
+            <div class="tables">
+                <div class="table-box client">
+                    <h2>5 DERNIER CLIENTS</h2>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Nom</th>
+                                <th>Prénom</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td colspan="3" style="height: 30px;"></td>
+                            </tr>
+                            <tr>
+                                <td colspan="3" style="height: 30px;"></td>
+                            </tr>
+                            <tr>
+                                <td colspan="3" style="height: 30px;"></td>
+                            </tr>
+                            <tr>
+                                <td colspan="3" style="height: 30px;"></td>
+                            </tr>
+                            <tr>
+                                <td colspan="3" style="height: 30px;"></td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
+                <div class="table-box">
+                    <h2>5 DERNIÈRE COMMANDES</h2>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Nom</th>
+                                <th>Prénom</th>
+                                <th>Date</th>
+                                <th>Montant</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td colspan="5" style="height: 30px;"></td>
+                            </tr>
+                            <tr>
+                                <td colspan="5" style="height: 30px;"></td>
+                            </tr>
+                            <tr>
+                                <td colspan="5" style="height: 30px;"></td>
+                            </tr>
+                            <tr>
+                                <td colspan="5" style="height: 30px;"></td>
+                            </tr>
+                            <tr>
+                                <td colspan="5" style="height: 30px;"></td>
+                            </tr>
 
-                <div class="button-grid-container">
-                    <a class="custom-button" href="../couleur-banquette-bois/index.php">Couleur bois</a>
-                    <a class="custom-button" href="../decoration/index.php">Décoration bois</a>
-                    <a class="custom-button" href="../accoudoirs-bois/index.php">Accoudoir bois</a>
-
-                    <a class="custom-button" href="../dossier-bois/index.php">Dossier bois</a>
-                    <a class="custom-button" href="../couleur-tissu-bois/index.php">Couleur tissu bois</a>
-                    <a class="custom-button" href="../motif-bois/index.php">Motif coussins bois</a>
-                </div>
-
-                <div class="button-grid-container">
-                    <a class="custom-button" href="../modele-banquette-tissu/index.php">Modèle banquette</a>
-                    <a class="custom-button" href="../couleur-tissu-tissu/index.php">Couleur tissu</a>
-                    <a class="custom-button" href="../motif-tissu/index.php">Motif coussin tissu</a>
-
-                    <a class="custom-button" href="../dossier-tissu/index.php">Dossier tissu</a>
-                    <a class="custom-button" href="../accoudoirs-tissu/index.php">Accoudoir tissu</a>
+                        </tbody>
+                    </table>
                 </div>
             </div>
-            <a href="export_bdd.php" class="export-button">
-                <i class="fa-solid fa-download"></i> Base de données
-            </a>
+
+            <div class="tables">
+                <a href="../pages/visualiser.php">
+                    <div class="table-box img1">
+                        <h2>VISUALISER DES DONNÉES</h2>
+                    </div>
+                </a>
+                <a href="../pages/ajouter.php">
+                    <div class="table-box img2">
+                        <h2>AJOUTER DES DONNÉES</h2>
+                    </div>
+                </a>
+            </div>
         </div>
     </main>
     <footer>
