@@ -286,7 +286,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   });
 </script>
 
-<SCript>
+<script>
   // Popup sélection
 document.addEventListener('DOMContentLoaded', () => {
   const options = document.querySelectorAll('.color-options .option img');
@@ -372,7 +372,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 });
 
-</SCript>
+</script>
 
     <!-- VARIATION DES PRIX  -->
     <script>

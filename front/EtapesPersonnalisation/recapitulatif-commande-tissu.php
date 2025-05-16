@@ -266,7 +266,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['comment'])) {
           ?>
 
           <h3>Étape 6 : Choisi tes accoudoirs</h3>
-          <?php
+          <?php 
           // Récupération de la quantité depuis la colonne id_nb_accoudoir dans la commande
           $quantite_accoudoir = htmlspecialchars($commande['id_nb_accoudoir'] ?? '-'); // Récupère la quantité si elle existe
 
