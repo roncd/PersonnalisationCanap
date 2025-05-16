@@ -51,6 +51,7 @@ function updateTotal() {
   console.log(`🧾 Options sélectionnées :`, allSelectedOptions);
 }
 
+
 const attributeSuffix = isTissu ? '-tissu' : '-bois';
 const imgElements = document.querySelectorAll('img');
 
@@ -69,20 +70,29 @@ imgElements.forEach(option => {
   }
 
   option.addEventListener('click', () => {
-    console.log(`🖱️ Option cliquée : ID=${optionId}, Prix=${price} €`);
+  const alreadySelected = option.parentElement.classList.contains('selected');
 
+  if (alreadySelected) {
+    // ➖ Désélectionner
+    option.parentElement.classList.remove('selected');
+    allSelectedOptions = allSelectedOptions.filter(opt => opt.id !== uniqueId);
+    console.log(`➖ Option retirée : ${uniqueId}`);
+  } else {
+    // 🧹 Enlever les autres options de la même étape (si choix unique)
     imgElements.forEach(opt => opt.parentElement.classList.remove('selected'));
     allSelectedOptions = allSelectedOptions.filter(opt => !opt.id.startsWith(`${currentStep}_`));
     clearOtherPathOptions();
 
+    // ➕ Ajouter nouvelle sélection
     allSelectedOptions.push({ id: uniqueId, price: price });
     option.parentElement.classList.add('selected');
-
     console.log(`➕ Option ajoutée : ${uniqueId} (${price} €)`);
+  }
 
-    sessionStorage.setItem(sessionKey, JSON.stringify(allSelectedOptions));
-    updateTotal();
-  });
+  sessionStorage.setItem(sessionKey, JSON.stringify(allSelectedOptions));
+  updateTotal();
+});
+
 });
 
 clearOtherPathOptions();
