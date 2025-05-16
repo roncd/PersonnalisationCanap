@@ -1,22 +1,22 @@
 <?php
 require '../../admin/config.php';
 session_start();
-
+ 
 // Vérifier si l'utilisateur est connecté
 if (!isset($_SESSION['user_id'])) {
-    header("Location: ../formulaire/Connexion.php");
+    header("Location: ../formulaire/Connexion.php"); 
     exit;
-}
-
+} 
+  
 // Récupérer les types de mousse depuis la base de données
 $stmt = $pdo->query("SELECT * FROM mousse");
 $mousse = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 // Vérifier si le formulaire a été soumis
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {    
+ 
     $id_client = $_SESSION['user_id'];
-    $id_mousse = $_POST['mousse_id'];
+    $id_mousse_bois = $_POST['mousse_id']; // ou 'id_mousse_bois' si ton champ s'appelle comme ça dans le HTML
     $prix_total = isset($_POST['total_price']) ? floatval($_POST['total_price']) : 0;
 
     // Vérifier si une commande temporaire existe déjà pour cet utilisateur
@@ -25,11 +25,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $existing_order = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if ($existing_order) {
-        $stmt = $pdo->prepare("UPDATE commande_temporaire SET id_mousse = ?, prix = ? WHERE id_client = ?");
-        $stmt->execute([$id_mousse, $prix_total, $id_client]);
+        $stmt = $pdo->prepare("UPDATE commande_temporaire SET id_mousse_bois = ?, prix = ? WHERE id_client = ?");
+        $stmt->execute([$id_mousse_bois, $prix_total, $id_client]);
     } else {
-        $stmt = $pdo->prepare("INSERT INTO commande_temporaire (id_client, id_mousse, prix) VALUES (?, ?, ?)");
-        $stmt->execute([$id_client, $id_mousse, $prix_total]);
+        $stmt = $pdo->prepare("INSERT INTO commande_temporaire (id_client, id_mousse_bois, prix) VALUES (?, ?, ?)");
+        $stmt->execute([$id_client, $id_mousse_bois, $prix_total]);
     }
 
     // Rediriger vers l'étape suivante
@@ -47,12 +47,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
   <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../../styles/processus.css">
+  <link rel="stylesheet" href="../../styles/popup.css">
+  <script type="module" src="../../script/popup.js"></script>
   <script type="module" src="../../script/variationPrix.js"></script>
-  <script type="module" src="../../script/savePriceTissu.js"></script>
   <script src="../../script/reset.js"></script>
 
-
-  <link rel="stylesheet" href="../../styles/popup.css">
   <title>Étape 7 - Choisi ta mousse</title>
   <style>
     /* Transition pour les éléments de la page */
@@ -75,42 +74,45 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
   </style>
 </head>
-<body data-user-id="<?php echo $_SESSION['user_id']; ?>" data-current-step="7-mousse-tissu">
+<body data-user-id="<?php echo $_SESSION['user_id']; ?>" data-current-step="7-tissu">
 
 <header>
   <?php require '../../squelette/header.php'; ?>
 </header>
 
+
 <main>
+
+
 <div class="fil-ariane-container" aria-label="fil-ariane">
-        <ul class="fil-ariane">
-            <li><a href="etape1-1-structure.php">Structure</a></li>
-            <li><a href="etape1-2-dimension.php">Dimension</a></li>
-            <li><a href="etape2-type-banquette.php">Banquette</a></li>
-            <li><a href="etape3-tissu-modele-banquette.php">Modèle</a></li>
-            <li><a href="etape4-1-tissu-choix-tissu.php">Tissu</a></li>
-            <li><a href="etape5-tissu-choix-dossier.php">Dossier</a></li>
-            <li><a href="etape6-tissu-accoudoir.php">Accoudoir</a></li>
-            <li><a href="etape7-tissu-choix-mousse.php"  class="active">Mousse</a></li>
-        </ul>
-    </div> 
+  <ul class="fil-ariane">
+    <li><a href="etape1-1-structure.php">Structure</a></li>
+    <li><a href="etape1-2-dimension.php">Dimension</a></li>
+    <li><a href="etape2-type-banquette.php">Banquette</a></li>
+    <li><a href="etape3-tissu-modele-banquette.php">Modèle</a></li>
+    <li><a href="etape4-1-tissu-choix-tissu.php">Tissu</a></li>
+    <li><a href="etape5-tissu-choix-dossier.php">Dossier</a></li>
+    <li><a href="etape6-tissu-accoudoir.php">Accoudoir</a></li>
+    <li><a href="etape7-tissu-choix-mousse.php"  class="active">Mousse</a></li>
+  </ul>
+</div>
 
   <div class="container">
     <!-- Colonne de gauche -->
     <div class="left-column transition">
 
-    <h2>Étape 7 - Choisi ta mousse</h2>
+    <h2>Étape 7 - lol ta mousse</h2>
       
       <section class="color-options">
         <?php if (!empty($mousse)): ?>
-          <?php foreach ($mousse as $tissu): ?>
+          <?php foreach ($mousse as $mousse_bois): ?>
             <div class="option transition">
-              <img src="../../admin/uploads/mousse/<?php echo htmlspecialchars($tissu['img']); ?>" 
-                   alt="<?php echo htmlspecialchars($tissu['nom']); ?>" 
-                   data-mousse-tissu-id="<?php echo $tissu['id']; ?>" 
-                   data-mousse-tissu-prix="<?php echo $tissu['prix']; ?>"> 
-              <p><?php echo htmlspecialchars($tissu['nom']); ?></p>
-              <p><strong><?php echo htmlspecialchars($tissu['prix']); ?> €</strong></p>
+              <img src="../../admin/uploads/mousse/<?php echo htmlspecialchars($mousse_bois['img']); ?>" 
+                   alt="<?php echo htmlspecialchars($mousse_bois['nom']); ?>" 
+                   data-mousse-bois-id="<?php echo $mousse_bois['id']; ?>" 
+                   data-mousse-bois-prix="<?php echo $mousse_bois['prix']; ?>"> 
+              <p><?php echo htmlspecialchars($mousse_bois['nom']); ?></p>
+              <p><strong><?php echo htmlspecialchars($mousse_bois['prix']); ?> €</strong></p>
             </div>
           <?php endforeach; ?>
         <?php else: ?>
@@ -131,6 +133,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
       </div>
     </div>
+
+    
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+    const totalElement = document.querySelector(".footer p span");
+    const totalPriceInput = document.querySelector("#total-price");
+    
+    function updateTotalPriceInput() {
+        if (totalElement && totalPriceInput) {
+            totalPriceInput.value = parseFloat(totalElement.textContent) || 0;
+        }
+    }
+
+    // Mettre à jour la valeur avant l'envoi
+    const suivantButton = document.querySelector(".btn-suivant");
+    if (suivantButton) {
+        suivantButton.addEventListener("click", updateTotalPriceInput);
+    }
+});
+    </script>
+
 
     <!-- Colonne de droite -->
     <div class="right-column transition">
@@ -165,114 +188,55 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
   </div>
 
-<!-- Popup d'erreur si option non selectionné -->
+<!-- Popup d'erreur si les dimensions ne sont pas remplies -->
 <div id="erreur-popup" class="popup transition">
       <div class="popup-content">
         <h2>Veuillez choisir une option avant de continuer.</h2>
         <button class="close-btn">OK</button>
       </div>
-      </div>
+    </div>
 
+  
+  <!-- GESTION DES SELECTIONS -->
   <script>
-    
-    document.addEventListener('DOMContentLoaded', () => {
-    const totalElement = document.querySelector(".footer p span");
-    const totalPriceInput = document.querySelector("#total-price");
-    
-    function updateTotalPriceInput() {
-        if (totalElement && totalPriceInput) {
-            totalPriceInput.value = parseFloat(totalElement.textContent) || 0;
-        }
-    }
+  document.addEventListener('DOMContentLoaded', () => {
+    const options = document.querySelectorAll('.color-options .option img');
+    const mainImage = document.querySelector('.main-display img');
+    const selectionPopup = document.getElementById('selection-popup');
+    const erreurPopup = document.getElementById('erreur-popup');
+    const closeErreurBtn = erreurPopup.querySelector('.close-btn');
+    const selectedMousseInput = document.getElementById('selected-mousse');
+    const form = document.querySelector('form'); // Assure-toi que ton <form> a bien une balise identifiable
 
-    // Mettre à jour la valeur avant l'envoi
-    const suivantButton = document.querySelector(".btn-suivant");
-    if (suivantButton) {
-        suivantButton.addEventListener("click", updateTotalPriceInput);
-    }
-});
-  </script>
+    let selectedMousseId = localStorage.getItem('selectedMousse') || ''; 
+    let selected = selectedMousseId !== ''; 
 
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const options = document.querySelectorAll('.color-options .option img'); 
-        const mainImage = document.querySelector('.main-display img'); 
-        const suivantButton = document.querySelector('.btn-suivant');
-        const helpPopup = document.getElementById('help-popup');
-        const abandonnerPopup = document.getElementById('abandonner-popup');
-        const erreurPopup = document.getElementById('erreur-popup');
-        const closeErreurBtn = erreurPopup.querySelector('.close-btn');
-        const form = document.querySelector('form'); // Assure-toi que ton <form> a bien une balise identifiable
-        const selectedMousseInput = document.getElementById('selected-mousse'); // Input caché
-        
 
-        // Vérification si une sélection existe dans localStorage
-        let savedMousseId = localStorage.getItem('selectedMousseId');
-        let selected = savedMousseId!=='';
+    document.querySelectorAll('.transition').forEach(element => {
+      element.classList.add('show');
+    });
 
-        // Affichage des éléments avec la classe "transition"
-        document.querySelectorAll('.transition').forEach(element => {
-            element.classList.add('show');
-        });
-
-        // Restaurer la sélection si elle existe
-        options.forEach(img => {
-        if (img.getAttribute('data-mousse-tissu-id') === savedMousseId) {
+    // Restaurer la sélection si elle existe
+    options.forEach(img => {
+      if (img.getAttribute('data-mousse-bois-id') === selectedMousseId) {
         img.classList.add('selected');
         mainImage.src = img.src;
-        selectedMousseInput.value = savedMousseId;
-        }
+        selectedMousseInput.value = selectedMousseId;
+      }
+    });
+
+    options.forEach(img => {
+      img.addEventListener('click', () => {
+        options.forEach(opt => opt.classList.remove('selected'));
+        img.classList.add('selected');
+        mainImage.src = img.src;
+        selectedMousseId = img.getAttribute('data-mousse-bois-id');
+        selectedMousseInput.value = selectedMousseId;
+        selected = true;
+        saveSelection();
       });
+    });
 
-       // Gestion du clic sur une option
-       options.forEach(img => {
-       img.addEventListener('click', () => {
-       options.forEach(opt => opt.classList.remove('selected'));
-       img.classList.add('selected');
-       mainImage.src = img.src;
-       savedMousseId = img.getAttribute('data-mousse-tissu-id');
-       selectedMousseInput.value = savedMousseId;
-       selected = true;
-       saveSelection();
-      });
-      });
-        
-                
-      
-
-        
-       /* if (savedMousseId) {
-            options.forEach(img => {
-                if (img.getAttribute('data-mousse-tissu-id') === savedMousseId) {
-                    img.classList.add('selected');
-                    mainImage.src = img.src;
-                    selectedMousseInput.value = savedMousseId;
-                    selected = true;
-                }
-            });
-        }
-
-
-        options.forEach(img => {
-            img.addEventListener('click', () => {
-                options.forEach(opt => opt.classList.remove('selected'));
-                img.classList.add('selected');
-                mainImage.src = img.src;
-                selectedMousseInput.value = img.getAttribute('data-mousse-tissu-id'); // Mettre à jour l'input caché
-                selected = true;  
-
-                saveSelection(img.getAttribute('data-mousse-tissu-id'));
-            });
-        });*/
-
-        suivantButton.addEventListener('click', (event) => {
-            if (!selected) {
-                event.preventDefault();
-                selectionPopup.style.display = 'flex';
-            }
-        });
-
-        
     // Empêcher la soumission du formulaire si rien n'est sélectionné
     form.addEventListener('submit', (e) => {
       if (!selectedMousseInput.value) {
@@ -292,49 +256,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       }
     });
 
-        document.querySelector('.btn-aide').addEventListener('click', () => {
-            helpPopup.style.display = 'flex';
-        });
-
-        document.querySelector('#help-popup .close-btn').addEventListener('click', () => {
-            helpPopup.style.display = 'none';
-        });
-
-        window.addEventListener('click', (event) => {
-            if (event.target === helpPopup) {
-                helpPopup.style.display = 'none';
-            }
-        });
-
-        document.querySelector('.btn-abandonner').addEventListener('click', () => {
-            abandonnerPopup.style.display = 'flex';
-        });
-
-        document.querySelector('#abandonner-popup .yes-btn').addEventListener('click', () => {
-            window.location.href = '../pages/';
-        });
-
-        document.querySelector('#abandonner-popup .no-btn').addEventListener('click', () => {
-            abandonnerPopup.style.display = 'none';
-        });
-
-        function saveSelection(mousseId) {
-            localStorage.setItem('selectedMousseId', savedMousseId);
-        }
-    });
+    function saveSelection() {
+      localStorage.setItem('selectedMousse', selectedMousseId);
+    }  
+  });
 </script>
 
 
       <!-- BOUTTON RETOUR -->
       <script>
        function retourEtapePrecedente() {
-    // Exemple : tu es sur étape 8, tu veux revenir à étape 7
     window.location.href = "etape6-tissu-accoudoir.php"; 
   }
     </script>
-
-</main>
+ 
+</main> 
 <?php require_once '../../squelette/footer.php'?>
 </body>
 </html>
-

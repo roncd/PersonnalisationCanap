@@ -8,7 +8,7 @@ if (!isset($_SESSION['user_id'])) {
   exit;
 }
 
-$id_client = $_SESSION['user_id'];
+$id_client = $_SESSION['user_id']; 
 
 // Vérifier si une commande temporaire existe déjà pour cet utilisateur
 $stmt = $pdo->prepare("SELECT * FROM commande_temporaire WHERE id_client = ?");
@@ -100,22 +100,40 @@ foreach ($data['commande_temporaire'] as $dim) {
 }*/
 
 
+
+
 // Traitement du formulaire pour ajouter ou modifier un commentaire
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['comment'])) {
-  if (!empty(trim($_POST["comment"]))) {
-      $commentaire = trim($_POST["comment"]);
+    $commentaire_saisi = trim($_POST["comment"]);
+    
+    if ($commande) {
+        $ancien_commentaire = $commande['commentaire'] ?? '';
 
-      if ($commande) {
-          $stmt = $pdo->prepare("UPDATE commande_temporaire SET commentaire = ? WHERE id = ?");
-          $stmt->execute([$commentaire, $id]);
-          $message = '<p class="message success">Commentaire ajouté/modifié avec succès !</p>';
-      } else {
-          $message = '<p class="message error">Aucune commande trouvée pour cet utilisateur.</p>';
-      }
-  } else {
-      $message = '<p class="message error">Le commentaire ne peut pas être vide.</p>';
-  }
+        // Cas : commentaire vide et ancien commentaire vide → erreur
+        if ($commentaire_saisi === '' && $ancien_commentaire === '') {
+            $message = '<p class="message error">Le commentaire ne peut pas être vide.</p>';
+        } else {
+            // Mettre à jour en base même si vide (pour supprimer)
+            $stmt = $pdo->prepare("UPDATE commande_temporaire SET commentaire = ? WHERE id = ?");
+            $stmt->execute([$commentaire_saisi, $id]);
+
+            if ($commentaire_saisi === '' && $ancien_commentaire !== '') {
+                $message = '<p class="message success">Commentaire supprimé avec succès.</p>';
+            } elseif ($ancien_commentaire === '') {
+                $message = '<p class="message success">Commentaire ajouté avec succès !</p>';
+            } elseif ($commentaire_saisi !== $ancien_commentaire) {
+                $message = '<p class="message success">Commentaire modifié avec succès !</p>';
+            } else {
+                $message = '<p class="message"></p>';
+            }
+
+            $commentaire = $commentaire_saisi;
+        }
+    } else {
+        $message = '<p class="message error">Aucune commande trouvée pour cet utilisateur.</p>';
+    }
 }
+
 ?>
 
 <!DOCTYPE html>
@@ -129,7 +147,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['comment'])) {
   <link rel="stylesheet" href="../../styles/processus.css">
   <link rel="stylesheet" href="../../styles/popup.css">
   <script type="module" src="../../script/popup-tissu.js"></script>
-  <script type="module" src="../../script/button.js"></script>
   <title>Récapitulatif de la commande</title>
   <style>
     .footer p {
@@ -152,6 +169,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['comment'])) {
       background-color: #f8d7da;
       color: #721c24;
     }
+
+    
+    #feedback-message {
+  opacity: 1;
+  transition: opacity 1s ease;
+}
   </style>
 </head>
 
@@ -243,7 +266,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['comment'])) {
           ?>
 
           <h3>Étape 6 : Choisi tes accoudoirs</h3>
-          <?php
+          <?php 
           // Récupération de la quantité depuis la colonne id_nb_accoudoir dans la commande
           $quantite_accoudoir = htmlspecialchars($commande['id_nb_accoudoir'] ?? '-'); // Récupère la quantité si elle existe
 
@@ -259,20 +282,27 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['comment'])) {
           <h3>Étape 7 : Choisi ta mousse</h3>
           <?php
           echo '<div class="option">
-          <img src="../../admin/uploads/mousse/' . htmlspecialchars($assocData['mousse'][$commande['id_mousse']]['img'] ?? '-') . '" 
-              alt="' . htmlspecialchars($assocData['mousse'][$commande['id_mousse']]['nom'] ?? '-') . '">
-          <p>' . htmlspecialchars($assocData['mousse'][$commande['id_mousse']]['nom'] ?? '-') . '</p>
+          <img src="../../admin/uploads/mousse/' . htmlspecialchars($assocData['mousse'][$commande['id_mousse_bois']]['img'] ?? '-') . '" 
+              alt="' . htmlspecialchars($assocData['mousse'][$commande['id_mousse_bois']]['nom'] ?? '-') . '">
+          <p>' . htmlspecialchars($assocData['mousse'][$commande['id_mousse_bois']]['nom'] ?? '-') . '</p>
         </div>';
-          ?>
+          ?> 
         </section>
         <div class="footer-processus">
           <p>Total : <span>899 €</span></p>
           <div class="buttons">
-            <button class="btn-retour">Retour</button>
+            <button onclick="retourEtapePrecedente()" class="btn-retour transition">Retour</button>
             <button class="btn-suivant" data-id="<?= htmlspecialchars($id) ?>">Générer un devis</button>
           </div>
         </div>
       </div> 
+
+        <script>
+        function retourEtapePrecedente() {
+          // Exemple : tu es sur étape 8, tu veux revenir à étape 7
+          window.location.href = "etape7-tissu-choix-mousse.php";
+        }
+      </script>
 
 
       <!-- Colonne de droite -->
@@ -286,9 +316,14 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['comment'])) {
 
 
            <!-- Section commentaire -->
-           <section class="comment-section">
-    <?php if (!empty($message)) { echo $message; } ?>
-    <h3>Ajoute un commentaire à propos de ta commande : </h3>
+<section class="comment-section">
+    <?php if (!empty($message)) { ?>
+        <div id="feedback-message" class="feedback-message">
+            <?= $message ?>
+        </div>
+    <?php } ?>
+    
+    <h3>Ajoute un commentaire à propos de ta commande :</h3>
     <form action="" method="POST">
         <textarea class="textarea-custom" id="comment" name="comment" rows="5" placeholder="Écris ton commentaire ici..."><?= htmlspecialchars($commentaire) ?></textarea>
         <button type="submit" class="btn-submit-com">
@@ -396,6 +431,21 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['comment'])) {
       saveData();
     });
   </script>
+
+  
+  <script>
+  setTimeout(() => {
+    const msg = document.getElementById('feedback-message');
+    if (msg) {
+      msg.style.transition = "opacity 1s ease";
+      msg.style.opacity = "0";
+
+      // Optionnel : supprimer complètement du DOM après animation
+      setTimeout(() => msg.remove(), 100);
+    }
+  }, 5000); // 20 secondes
+</script>
+
 </body>
 
-</html>
+</html>   

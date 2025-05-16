@@ -6,7 +6,7 @@ session_start();
 if (!isset($_SESSION['user_id'])) {
   header("Location: ../formulaire/Connexion.php");
   exit; 
-}
+}  
 
 $id_client = $_SESSION['user_id'];
 
@@ -43,7 +43,7 @@ if (isset($_GET['structure_id'])) {
   $structure_id = $_GET['structure_id'];
 
   // Récupérer la structure correspondante depuis la base de données
-  $stmt = $pdo->prepare("SELECT nb_longueurs FROM structure WHERE id = ?");
+  $stmt = $pdo->prepare("SELECT nb_longueurs, img FROM structure WHERE id = ?");
   $stmt->execute([$structure_id]);
   $structure = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -111,7 +111,7 @@ if (isset($_GET['structure_id'])) {
     <div class="container"> 
       <!-- Colonne de gauche -->
       <div class="left-column transition">
-        <h2>Étape 1 - Choisi tes mesures</h2>
+        <h2>Étape 1 - Choisi te s mesures</h2>
         <form method="POST" class="formulaire">
           <p>Largeur banquette : <span class="bold">50cm (par défaut) </span> | Prix total des dimensions : <span id="dimension-price">0.00</span> €</p>
           <div class="form-row">
@@ -191,7 +191,11 @@ document.addEventListener("DOMContentLoaded", () => {
             <button class="btn-aide">Besoin d'aide ?</button>
             <button class="btn-abandonner">Abandonner</button>
           </div>
-          <img src="../../medias/process-main-image.png" alt="Armoire" class="transition">
+<?php if (!empty($structure['img'])): ?>
+  <img src="../../admin/uploads/structure/<?php echo htmlspecialchars($structure['img']); ?>" alt="Structure sélectionnée" class="transition">
+<?php else: ?>
+  <img src="../../medias/process-main-image.png" alt="Image par défaut" class="transition">
+<?php endif; ?>
         </section>
       </div>
     </div>
