@@ -51,7 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <link rel="stylesheet" href="../../styles/popup.css">
   <script type="module" src="../../script/popup.js"></script>
   <script type="module" src="../../script/button.js"></script>
-  <script src="../../script/reset.js"></script>
+  <script src="../../script/abandonner.js"></script>
 
   
 
@@ -116,7 +116,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
               <input type="hidden" name="structure_id" id="selected-structure">
               <button type="submit" class="btn-suivant transition">Suivant</button>
             </form>
-            <button id="reset-selection" class="btn-reset transition">Réinitialiser</button>
           </div>
         </div>
       </div>
@@ -205,41 +204,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         selected = true;
         saveSelection();
         });
-     });        
-          
-        /*
-
-        // Vérifier s'il y a une sélection enregistrée dans localStorage
-        const savedStructureId = localStorage.getItem('selectedStructure');
-        if (savedStructureId) {
-          selectedStructureInput.value = savedStructureId;
-          options.forEach(img => {
-            if (img.getAttribute('data-structure-id') === savedStructureId) {
-              img.classList.add('selected');
-              mainImage.src = img.src;
-              mainImage.alt = img.alt;
-              selected = true;
-            }
-          });
-        }
-
-        // Sélectionner une option et enregistrer l'état
-        options.forEach(img => {
-          img.addEventListener('click', () => {
-            options.forEach(opt => opt.classList.remove('selected'));
-            img.classList.add('selected');
-            selectedStructureInput.value = img.getAttribute('data-structure-id');
-
-            // Mise à jour de l'image principale
-            mainImage.src = img.src;
-            mainImage.alt = img.alt;
-
-            selected = true;
-
-            // Sauvegarder l'ID de la structure sélectionnée dans localStorage
-            localStorage.setItem('selectedStructure', img.getAttribute('data-structure-id'));
-          });
-        });*/
+     });     
 
     // Empêcher la soumission du formulaire si rien n'est sélectionné
     form.addEventListener('submit', (e) => {
@@ -323,6 +288,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         saveData();
       });
     </script>
+
 
   </main>
   <?php require_once '../../squelette/footer.php'; ?>

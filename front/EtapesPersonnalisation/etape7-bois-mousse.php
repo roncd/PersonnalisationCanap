@@ -4,17 +4,17 @@ session_start();
  
 // Vérifier si l'utilisateur est connecté
 if (!isset($_SESSION['user_id'])) {
-    header("Location: ../formulaire/Connexion.php");
+    header("Location: ../formulaire/Connexion.php"); 
     exit;
 }
 
 // Récupérer les types de mousse depuis la base de données
 $stmt = $pdo->query("SELECT * FROM mousse");
 $mousse = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
+   
 // Vérifier si le formulaire a été soumis
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {    
- 
+   
     $id_client = $_SESSION['user_id'];
     $id_mousse_bois = $_POST['mousse_id']; // ou 'id_mousse_bois' si ton champ s'appelle comme ça dans le HTML
 
@@ -49,7 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <link rel="stylesheet" href="../../styles/popup.css">
   <script type="module" src="../../script/popup.js"></script>
   <script type="module" src="../../script/variationPrix.js"></script>
-  <script src="../../script/reset.js"></script>
+  <script src="../../script/abandonner.js"></script>
 
   <title>Étape 7 - Choisi ta mousse</title>
   <style>
@@ -125,7 +125,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <input type="hidden" name="mousse_id" id="selected-mousse">
             <button type="submit" class="btn-suivant transition">Suivant</button>
           </form>
-          <button id="reset-selection" class="btn-reset transition">Réinitialiser</button>
         </div>
       </div>
     </div>

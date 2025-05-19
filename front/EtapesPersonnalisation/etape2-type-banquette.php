@@ -57,7 +57,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <link rel="stylesheet" href="../../styles/processus.css">
   <link rel="stylesheet" href="../../styles/popup.css">
   <script type="module" src="../../script/popup.js"></script>
-  <script src="../../script/reset.js"></script>
+  <script src="../../script/abandonner.js"></script>
 
   <title>Étape 2 - Choisi ton type de banquette</title>
 
@@ -120,7 +120,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
               <input type="hidden" name="banquette_type" id="selected-banquette-type">
               <button type="submit" class="btn-suivant transition">Suivant</button>
           </form>
-            <button id="reset-selection" class="btn-reset transition">Réinitialiser</button>
           </div>
         </div>
       </div>

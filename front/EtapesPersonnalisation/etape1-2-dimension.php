@@ -70,6 +70,8 @@ if (isset($_GET['structure_id'])) {
   <link rel="stylesheet" href="../../styles/processus.css">
   <link rel="stylesheet" href="../../styles/popup.css">
   <script type="module" src="../../script/popup.js"></script>
+  <script src="../../script/abandonner.js"></script>
+
   <title>Étape 1 - Choisi tes mesures</title>
   <style>
     /* Transition pour les éléments de la page */

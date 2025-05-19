@@ -56,7 +56,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['couleur_tissu_bois_id
   <link rel="stylesheet" href="../../styles/popup.css">
   <script type="module" src="../../script/popup.js"></script>
   <script type="module" src="../../script/variationPrix.js"></script>
-  <script src="../../script/reset.js"></script>
+  <script src="../../script/abandonner.js"></script>
   <script type="module" src="../../script/filtrerCouleur.js"></script>
 
 
@@ -140,7 +140,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['couleur_tissu_bois_id
               <input type="hidden" name="couleur_tissu_bois_id" id="selected-couleur_tissu_bois">
               <button type="submit" class="btn-suivant transition">Suivant</button>
             </form>
-            <button id="reset-selection" class="btn-reset transition">Réinitialiser</button>
           </div>
         </div>
       </div>
