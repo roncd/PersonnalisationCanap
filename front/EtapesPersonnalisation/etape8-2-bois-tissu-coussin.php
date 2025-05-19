@@ -52,7 +52,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <link rel="stylesheet" href="../../styles/processus.css">
   <link rel="stylesheet" href="../../styles/popup.css">
   <script type="module" src="../../script/variationPrix.js"></script>
-  <script src="../../script/reset.js"></script>
+  <script src="../../script/abandonner.js"></script>
 
 
   <title>Étape 8 - Choisi ton motif de coussin</title>
@@ -122,14 +122,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
       <div class="footer">
       <p>Total : <span>899 €</span></p>
-      <div class="buttons">
+      <div class="buttons"> 
       <button onclick="retourEtapePrecedente()" class="btn-retour transition">Retour</button>
           <form method="POST" action="">
             <input type="hidden" name="motif_bois_id" id="selected-motif_bois">
             <input type="hidden" name="total_price" id="total-price"> <!-- Ajout pour envoyer le prix -->
             <button type="submit" class="btn-suivant transition">Suivant</button>
           </form>
-          <button id="reset-selection" class="btn-reset transition">Réinitialiser</button>
         </div>
       </div>
     </div>

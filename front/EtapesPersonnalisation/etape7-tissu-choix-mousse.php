@@ -50,7 +50,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <link rel="stylesheet" href="../../styles/popup.css">
   <script type="module" src="../../script/popup.js"></script>
   <script type="module" src="../../script/variationPrix.js"></script>
-  <script src="../../script/reset.js"></script>
+  <script src="../../script/abandonner.js"></script>
 
   <title>Étape 7 - Choisi ta mousse</title>
   <style>
@@ -129,7 +129,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <input type="hidden" name="total_price" id="total-price"> <!-- Ajout pour envoyer le prix -->
             <button type="submit" class="btn-suivant transition">Suivant</button>
           </form>
-          <button id="reset-selection" class="btn-reset transition">Réinitialiser</button>
         </div>
       </div>
     </div>

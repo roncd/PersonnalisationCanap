@@ -52,7 +52,7 @@ exit;
   <link rel="stylesheet" href="../../styles/popup.css">
   <script type="module" src="../../script/popup.js"></script>
   <script type="module" src="../../script/variationPrix.js"></script>
-  <script src="../../script/reset.js"></script>
+    <script src="../../script/abandonner.js"></script>
 
   <title>Étape 6 - Choisi ton dossier</title>
   <style>
@@ -127,7 +127,6 @@ exit;
             <input type="hidden" name="dossier_bois_id" id="selected-dossier_bois">
             <button type="submit" class="btn-suivant transition">Suivant</button>
           </form>
-          <button id="reset-selection" class="btn-reset transition">Réinitialiser</button>
         </div>
       </div>
     </div>
