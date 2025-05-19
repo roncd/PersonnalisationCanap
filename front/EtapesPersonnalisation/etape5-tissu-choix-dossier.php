@@ -49,7 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link rel="stylesheet" href="../../styles/popup.css">
     <script type="module" src="../../script/popup.js"></script>
     <script type="module" src="../../script/variationPrix.js"></script>
-    <script src="../../script/reset.js"></script>
+    <script src="../../script/abandonner.js"></script>
 
     <title>Étape 5 - Choisi ton dossier</title>
     <style>
@@ -124,7 +124,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <input type="hidden" name="dossier_tissu_id" id="selected-dossier_tissu">
                             <button type="submit" class="btn-suivant transition">Suivant</button>
                         </form>
-                    <button id="reset-selection" class="btn-reset transition">Réinitialiser</button>
                     </div>
                 </div>
             </div>
