@@ -400,7 +400,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             </select>
                         </div>
                     </div>
-                    <div class="footer">
+                    <div class="button-section">
                         <div class="buttons">
                             <button type="button" class="btn-retour" onclick="history.go(-1)">Retour</button>
                             <input type="submit" class="btn-valider" value="Mettre à jour"></input>

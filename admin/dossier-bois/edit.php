@@ -99,8 +99,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <label for="name">Nom</label>
                             <input type="text" id="name" name="name" class="input-field" value="<?= htmlspecialchars($motif['nom']); ?>" required>
                         </div>
-                    </div>
-                    <div class="form-row">
                         <div class="form-group">
                             <label for="prix">Prix</label>
                             <input type="text" id="prix" name="prix" class="input-field" value="<?= htmlspecialchars($motif['prix']); ?>" required>
@@ -112,7 +110,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <input type="file" id="img" name="img" class="input-field" accept="image/*">
                         </div>
                     </div>
-                    <div class="footer">
+                    <div class="button-section">
                         <div class="buttons">
                             <button type="button" class="btn-retour" onclick="history.go(-1)">Retour</button>
                             <input type="submit" class="btn-valider" value="Mettre à jour">

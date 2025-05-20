@@ -36,8 +36,24 @@ document.addEventListener('DOMContentLoaded', function () {
 document.addEventListener('DOMContentLoaded', function () {
     const aside = document.querySelector('aside');
     const closeBtn = document.querySelector('.close-icone');
-
+    const main = document.querySelector('main');
+  
+    // Vérifie l'état stocké au chargement de la page
+    const isCollapsed = localStorage.getItem('menuCollapsed') === 'true';
+    if (isCollapsed) {
+      aside.classList.add('collapsed');
+      main.classList.add('collapsed-menu');
+    }
+  
+    // Gestion du clic sur le bouton
     closeBtn.addEventListener('click', function () {
       aside.classList.toggle('collapsed');
+      main.classList.toggle('collapsed-menu');
+  
+      // Met à jour l'état dans le localStorage
+      const isNowCollapsed = aside.classList.contains('collapsed');
+      localStorage.setItem('menuCollapsed', isNowCollapsed);
     });
   });
+  
+  

@@ -44,11 +44,16 @@ $totalPages = ceil($totalCommandes / $limit);
     <main>
         <div class="container">
             <h2>Client</h2>
-            <div class="search-bar">
-                <form method="GET" action="index.php">
-                    <input type="text" name="search" placeholder="Rechercher par nom..." value="<?php echo htmlspecialchars($search); ?>">
-                    <button type="submit">Rechercher</button>
-                </form>
+            <div class="option">
+                <div>
+                    <button onclick="location.href='add.php'" class="btn" type="button">+ Ajouter un client</button>
+                </div>
+                <div class="search-bar">
+                    <form method="GET" action="index.php">
+                        <input type="text" name="search" placeholder="Rechercher par nom..." value="<?php echo htmlspecialchars($search); ?>">
+                        <button type="submit">Rechercher</button>
+                    </form>
+                </div>
             </div>
             <?php require '../include/message.php'; ?>
             <div class="tab-container">
@@ -81,7 +86,7 @@ $totalPages = ceil($totalCommandes / $limit);
                         $stmt->execute();
                         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                             echo "<tr>";
-                            echo "<td>{$row['id']}</td>";
+                            echo "<td><a class='id' href='../pages/fiche-client.php?id={$row['id']}'>{$row['id']}</a></td>";
                             echo "<td>{$row['nom']}</td>";
                             echo "<td>{$row['prenom']}</td>";
                             echo "<td>{$row['mail']}</td>";

@@ -78,8 +78,6 @@
                             <label for="name">Nom</label>
                             <input type="text" id="name" name="name" class="input-field" required>
                         </div>
-                    </div>
-                    <div class="form-row">
                         <div class="form-group">
                             <label for="price">Prix (en €)</label>
                             <input type="number" id="price" name="price" class="input-field" step="0.01" required>
