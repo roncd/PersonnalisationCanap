@@ -56,13 +56,32 @@ h1 {
     background: #F4F1F1;
     border-radius: 12px;
     padding: 1rem;
+    display: flow;
 }
 
 .info-card h2 {
-    font-size: 18px;
+    font-size: 24px;
     font-weight: bold;
     margin-bottom: 15px;
     font-family: 'Be Vietnam Pro', sans-serif;
+    margin-top: 10px;
+}
+
+.info-card h2 {
+    gap: 15px;
+    display: flex;
+    align-items: flex-end;
+}
+
+.info-card h2 a {
+    font-size: small;
+    color: black;
+    cursor: pointer;
+    text-decoration: none;
+}
+.info-card h2 a:hover {
+    text-decoration: underline;
+    cursor: pointer;
 
 }
 

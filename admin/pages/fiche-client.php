@@ -11,6 +11,37 @@
     <link rel="stylesheet" href="../../styles/admin/fiche-client.css">
 
 </head>
+<?php
+session_start();
+if (!isset($_SESSION['id'])) {
+    $_SESSION['redirect_to'] = $_SERVER['REQUEST_URI'];
+    header("Location: ../index.php"); // Redirection vers la page de connexion
+    exit();
+}
+
+$id = $_GET['id'] ?? null;
+
+if (!$id) {
+    $_SESSION['message'] = 'ID client manquant.';
+    $_SESSION['message_type'] = 'error';
+    header("Location: ../client/index.php");
+    exit();
+}
+require '../config.php';
+
+$stmt = $pdo->prepare("SELECT * FROM client WHERE id = ?");
+$stmt->execute([$id]);
+$client = $stmt->fetch(PDO::FETCH_ASSOC);
+
+if (!$client) {
+    $_SESSION['message'] = 'Client introuvable.';
+    $_SESSION['message_type'] = 'error';
+    header("Location: index.php");
+    exit();
+}
+
+$limit = 5;
+?>
 
 <body>
     <header>
@@ -19,66 +50,77 @@
     <main>
         <div class="container">
             <h1>Fiche client</h1>
+            <?php if ($client): ?>
+                <div class="client-grid">
+                    <!-- Bloc identité -->
+                    <section class="info-card">
+                        <h2>
+                            <?= htmlspecialchars($client['nom']) . ' ' . htmlspecialchars($client['prenom']) . ' [' . htmlspecialchars($client['id']) . ']' ?>
+                        </h2>
+                        <p>
+                            Titre de civilité : <?= ($client['civilite']) ?> <br>
+                            Âge : ans (date de naissance : <?= ($client['date_naissance']) ?> )<br>
+                            Date d'inscription : <?= htmlspecialchars($client['date_creation']) ?><br>
+                        </p>
+                    </section>
 
-            <div class="client-grid">
+                    <!-- Bloc commandes -->
+                    <section class="info-card commandes-card block-commandes">
+                        <h2>5 DERNIÈRE COMMANDES <?= "<a href='../commande-detail/index.php?search=" . urlencode($client['id']) . "'>Voir plus</a>"; ?></h2>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Date</th>
+                                    <th>Statut</th>
+                                    <th>Montant</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php
 
-                <!-- Bloc identité -->
-                <section class="info-card block-identite">
-                    <h2>NOM PRÉNOM [ID]</h2>
-                    <p>Titre de civilité : <br>
-                        Âge : X ans (date de naissance : )<br>
-                        Date d'inscription : <br>
-                        Langue : </p>
-                </section>
+                                $stmt = $pdo->prepare("SELECT id, id_client, date, prix, statut FROM commande_detail WHERE id_client = :id_client ORDER BY id DESC LIMIT :limit");
+                                $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
+                                $stmt->bindValue(':id_client', $id, PDO::PARAM_INT);
+                                $stmt->execute();
+                                $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-                <!-- Bloc commandes -->
-                <section class="info-card commandes-card block-commandes">
-                    <h2>COMMANDES</h2>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Date</th>
-                                <th>Statut</th>
-                                <th>Montant</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td colspan="4" style="height: 30px;"></td>
-                            </tr>
-                            <tr>
-                                <td colspan="4" style="height: 30px;"></td>
-                            </tr>
-                            <tr>
-                                <td colspan="4" style="height: 30px;"></td>
-                            </tr>
-                            <tr>
-                                <td colspan="4" style="height: 30px;"></td>
-                            </tr>
-                            <tr>
-                                <td colspan="4" style="height: 30px;"></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </section>
+                                if (!empty($results)) {
+                                    foreach ($results as $commande) {
+                                        echo "<tr>";
+                                        echo "<td style='height: 30px;'>{$commande['id']}</td>";
+                                        echo "<td style='height: 30px;'>{$commande['date']}</td>";
+                                        echo "<td style='height: 30px;'>{$commande['statut']}</td>";
+                                        echo "<td style='height: 30px;'>{$commande['prix']}€</td>";
+                                        echo "</tr>";
+                                    }
+                                } else {
+                                    echo "<tr><td colspan='4'>Aucune commande trouvée pour ce client.</td></tr>";
 
-                <!-- Bloc contact -->
-                <section class="info-card block-contact">
-                    <h2>CONTACT</h2>
-                    <p>Adresse mail :<br>
-                        Téléphone :</p>
-                </section>
+                                }
+                                ?>
+                            </tbody>
+                        </table>
+                    </section>
 
-                <!-- Bloc adresse -->
-                <section class="info-card block-adresse">
-                    <h2>ADRESSE</h2>
-                    <p>Adresse :<br>
-                        Code postale :<br>
-                        Info sup :</p>
-                </section>
+                    <!-- Bloc contact -->
+                    <section class="info-card block-contact">
+                        <h2>CONTACT</h2>
+                        <p>Adresse mail : <?= htmlspecialchars($client['mail']) ?><br>
+                            Téléphone : <?= htmlspecialchars($client['tel']) ?></p>
+                    </section>
 
-            </div>
+                    <!-- Bloc adresse -->
+                    <section class="info-card block-adresse">
+                        <h2>ADRESSE</h2>
+                        <p>Adresse : <?= htmlspecialchars($client['adresse']) ?><br>
+                            Code postale : <?= htmlspecialchars($client['codepostal']) ?><br>
+                            Informations supplémentaires : <?= ($client['info']) ?></p>
+                    </section>
+                <?php else: ?>
+                    <p>Utilisateur non trouvé.</p>
+                <?php endif; ?>
+                </div>
         </div>
     </main>
     <footer>

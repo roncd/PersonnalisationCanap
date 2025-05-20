@@ -69,7 +69,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </header>
     <main>
         <div class="container">
-            <h2>Modifie un utilisateur</h2>
+            <h2>Modifie un membre</h2>
             <?php require '../include/message.php'; ?>
             <div class="form">
                 <form action="edit.php?id=<?php echo $utilisateur['id']; ?>" method="POST" enctype="multipart/form-data" class="formulaire-creation-compte">
@@ -78,14 +78,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <label for="email">Mail</label>
                             <input type="email" id="email" name="mail" class="input-field" value="<?php echo htmlspecialchars($utilisateur['mail']); ?>" required>
                         </div>
-                    </div>
-                    <div class="form-row">
                         <div class="form-group">
                             <label for="mdp">Mot de passe</label>
                             <input type="password" id="mdp" class="input-field" name="mdp" value="<?php echo htmlspecialchars($utilisateur['mdp']); ?>" required>
                         </div>
                     </div>
-                    <div class="footer">
+                    <div class="button-section">
                         <div class="buttons">
                             <button type="button" class="btn-retour" onclick="history.go(-1)">Retour</button>
                             <input type="submit" class="btn-valider" value="Mettre à jour"></input>

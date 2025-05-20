@@ -11,6 +11,22 @@
     <link rel="stylesheet" href="../../styles/admin/fiche-client.css">
 
 </head>
+<?php
+session_start();
+if (!isset($_SESSION['id'])) {
+    $_SESSION['redirect_to'] = $_SERVER['REQUEST_URI'];
+    header("Location: ../index.php"); // Redirection vers la page de connexion
+    exit();
+}
+require '../config.php';
+
+$id = $_SESSION['id'];
+
+$stmt = $pdo->prepare("SELECT * FROM utilisateur WHERE id = ?");
+$stmt->execute([$id]);
+$user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+?>
 
 <body>
     <header>
@@ -20,23 +36,35 @@
         <div class="container">
             <h1>Mon compte</h1>
             <div class="bouton">
-            <button class="btn" type="button">Modifier les informations</button>
+            <?php  echo " <a href='../utilisateur/edit.php?id={$user['id']}' class='btn'>Modifier les informations</a>"?>
             </div>
-            <div class="account-grid">
-                <!-- Bloc identité -->
-                <section class="info-card">
-                    <h2>NOM PRÉNOM [ID]</h2>
-                    <p>Titre de civilité : <br>
-                        Date d'inscription : <br>
-                        Profil : </p>
-                </section>
-                <!-- Bloc contact -->
-                <section class="info-card">
-                    <h2>CONTACT</h2>
-                    <p>Adresse mail :<br>
-                        Téléphone :</p>
-                </section>
-            </div>
+            <?php if ($user): ?>
+                <div class="account-grid">
+                    <!-- Bloc identité -->
+                    <section class="info-card">
+                        <h2>
+                            <?= htmlspecialchars($user['nom']) . ' ' . htmlspecialchars($user['prenom']) . ' [' . htmlspecialchars($user['id']) . ']' ?>
+                        </h2>
+                        <p>
+                            Titre de civilité :  <?= htmlspecialchars($user['civilite']) ?><br>
+                            Date d'inscription :  <?= htmlspecialchars($user['date_creation']) ?><br>
+                            Profil : <?= htmlspecialchars($user['profil']) ?>
+                        </p>
+                    </section>
+
+                    <!-- Bloc contact -->
+                    <section class="info-card">
+                        <h2>CONTACT</h2>
+                        <p>
+                            Adresse mail : <?= htmlspecialchars($user['mail']) ?><br>
+                            Téléphone : <?= ($user['tel']) ?>
+                        </p>
+                    </section>
+                </div>
+            <?php else: ?>
+                <p>Utilisateur non trouvé.</p>
+            <?php endif; ?>
+        </div>
         </div>
     </main>
     <footer>

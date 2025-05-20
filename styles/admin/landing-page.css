@@ -32,6 +32,22 @@ p {
     padding: 1rem;
 }
 
+.table-box h2 {
+    gap: 15px;
+    display: flex;
+    align-items: flex-end;
+}
+
+.table-box h2 a {
+    font-size: small;
+    color: black;
+}
+.table-box h2 a:hover {
+    text-decoration: underline;
+
+}
+
+
 .table-box.client {
     max-width: 30%;
 }
@@ -88,4 +104,15 @@ tr:nth-of-type(even) {
     border-radius: 8px;
     font-weight: bold;
     cursor: pointer;
+    border: none;
+}
+
+@media screen and (max-width: 945px) {
+    .tables {
+        display: flex;
+        flex-direction: column;
+    }
+    .table-box.client {
+        max-width: none;
+    }
 }
