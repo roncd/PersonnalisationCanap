@@ -13,9 +13,27 @@
 
 <body>
   <?php
-  // Déterminez la page actuelle
   $currentPage = basename($_SERVER['REQUEST_URI']);
   $currentPath = $_SERVER['REQUEST_URI'];
+
+  // Active si on est dans ajouter, editer ou visualiser hors client/equipe
+  $isCataloguePage = (
+      strpos($currentPage, 'add.php') !== false &&
+      strpos($currentPath, '/client/') === false &&
+      strpos($currentPath, '/utilisateur/') === false ||
+
+      strpos($currentPage, 'visualiser.php') !== false &&
+      strpos($currentPath, '/client/') === false &&
+      strpos($currentPath, '/utilisateur/') === false ||
+
+      strpos($currentPage, 'edit.php') !== false &&
+      strpos($currentPath, '/client/') === false &&
+      strpos($currentPath, '/utilisateur/') === false   
+  );
+
+  // Cas spécifiques pour les autres menus
+  $isClientPage = strpos($currentPath, '/client/') !== false;
+  $isEquipePage = strpos($currentPath, '/utilisateur/') !== false;
   ?>
   <aside>
     <div class="menu-section">
@@ -30,32 +48,31 @@
       </nav>
       <nav class="space-nav">
         <span><strong>ADMINISTRATION</strong></span>
-        <a href="../client/index.php" class="menu-link <?= strpos($currentPath, '/client/index.php') !== false ? 'active' : '' ?>" data-icon="client">
+        <a href="../client/visualiser.php" class="menu-link <?=  (strpos($currentPage, 'fiche-client') !== false || $isClientPage  || strpos($currentPath, '/commande-detail/index.php') !== false)  ? 'active' : '' ?>" data-icon="client">
           <img src="../../assets/menu/client.svg" alt="" width="20" height="20">
           <span>Clients</span>
         </a>
-        <a href="../pages/commande.php" class="menu-link <?= $currentPage == 'commande.php' ? 'active' : '' ?>" data-icon="commande">
+        <a href="../pages/commande.php" class="menu-link <?= strpos($currentPage, 'commande') !== false  ? 'active' : '' ?>" data-icon="commande">
           <img src="../../assets/menu/commande.svg" alt="" width="20" height="20">
           <span>Commandes</span>
         </a>
 
         <div class="menu-group">
-          <a href="#" class="menu-link catalogue <?= ($currentPage == 'visualiser.php' || $currentPage == 'ajouter.php') ? 'active' : '' ?>" data-icon="catalogue">
+          <a href="#" class="menu-link catalogue <?= $isCataloguePage ? 'active' : '' ?>" data-icon="catalogue">
             <img src="../../assets/menu/catalogue.svg" alt="" width="20" height="20">
             <span>Catalogue</span>
             <span class="arrow">▾</span>
           </a>
           <div class="submenu">
-            <a href="../pages/ajouter.php" class="<?= $currentPage == 'ajouter.php' ? 'active' : '' ?>">Ajouter des options</a>
-            <a href="../pages/visualiser.php" class="<?= $currentPage == 'visualiser.php' ? 'active' : '' ?>">Visualiser des options</a>
+            <a href="../pages/add.php"class="<?= $isCataloguePage && strpos($currentPage, 'add.php') !== false ? 'active' : '' ?>">Ajouter des options</a>
+            <a href="../pages/visualiser.php" class="<?= $isCataloguePage && strpos($currentPage, 'visualiser.php') !== false  ||  $isCataloguePage && strpos($currentPage, 'edit.php') !== false ? 'active' : '' ?>">Visualiser des options</a>
           </div>
         </div>
-
       </nav>
 
       <nav class="space-nav">
         <span><strong>PARAMÈTRES</strong></span>
-        <a href="../utilisateur/index.php" class="menu-link <?= strpos($currentPath, '/utilisateur/index.php') !== false ? 'active' : '' ?>" data-icon="equipe">
+        <a href="../utilisateur/visualiser.php" class="menu-link <?= $isEquipePage ? 'active' : '' ?>" data-icon="equipe">
           <img src="../../assets/menu/equipe.svg" alt="" width="20" height="20">
           <span>Équipe</span>
         </a>

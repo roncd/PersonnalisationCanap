@@ -12,7 +12,7 @@ $id = $_GET['id'] ?? null;
 if (!$id) {
     $_SESSION['message'] = 'ID de l\'accoudoir en tissu manquant.';
     $_SESSION['message_type'] = 'error';
-    header("Location: index.php");
+    header("Location: visualiser.php");
     exit();
 }
 
@@ -25,7 +25,7 @@ $accoudoirtissu = $stmt->fetch(PDO::FETCH_ASSOC);
 if (!$accoudoirtissu) {
     $_SESSION['message'] = 'Accoudoir en tissu introuvable.';
     $_SESSION['message_type'] = 'error';
-    header("index.php");
+    header("visualiser.php");
     exit();
 }
 
@@ -64,7 +64,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt->execute([$nom, $price, $fileName, $id]);
             $_SESSION['message'] = 'L\'accoudoir en tissu a été mise à jour avec succès !';
             $_SESSION['message_type'] = 'success';
-            header("Location: index.php");
+            header("Location: visualiser.php");
             exit();
         }
     }
@@ -81,6 +81,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link rel="stylesheet" href="../../styles/admin/ajout.css">
     <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
     <link rel="stylesheet" href="../../styles/message.css">
+    <script src="../../script/previewImage.js"></script>
 </head>
 
 <body>
@@ -109,8 +110,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <div class="form-row">
                         <div class="form-group">
                             <label for="img">Image (Laissez vide pour conserver l'image actuelle)</label>
-                            <input type="file" id="img" name="img" class="input-field" accept="image/*">
-                        </div>
+                            <input type="file" id="img" name="img" class="input-field" accept="image/*" onchange="loadFile(event)" >
+                            <img class="preview-img" src="../uploads/accoudoirs-tissu/<?php echo htmlspecialchars($accoudoirtissu['img']); ?>" id="output" />
+                         </div>
                     </div>
                     <div class="button-section">
                         <div class="buttons">

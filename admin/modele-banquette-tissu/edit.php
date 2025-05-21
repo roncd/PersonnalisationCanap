@@ -10,22 +10,22 @@ if (!isset($_SESSION['id'])) {
 $id = $_GET['id'] ?? null;
 
 if (!$id) {
-    $_SESSION['message'] = 'ID du motif manquant.';
+    $_SESSION['message'] = 'ID du modele manquant.';
     $_SESSION['message_type'] = 'error';
-    header("Location: index.php");
+    header("Location: visualiser.php");
     exit();
 }
 
-// Récupérer les données actuelles du motif de tissu
+// Récupérer les données actuelles du modele de tissu
 $stmt = $pdo->prepare("SELECT * FROM modele WHERE  id = :id");
 $stmt->bindValue(':id', $id, PDO::PARAM_INT);
 $stmt->execute();
-$motif = $stmt->fetch(PDO::FETCH_ASSOC);
+$modele = $stmt->fetch(PDO::FETCH_ASSOC);
 
-if (!$motif) {
-    $_SESSION['message'] = 'Motif introuvable.';
+if (!$modele) {
+    $_SESSION['message'] = 'modele introuvable.';
     $_SESSION['message_type'] = 'error';
-    header("Location: index.php");
+    header("Location: visualiser.php");
     exit();
 }
 
@@ -39,14 +39,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $_SESSION['message_type'] = 'error';
     } else {
         // Garder l'image actuelle si aucune nouvelle image n'est téléchargée
-        $fileName = $motif['img'];
+        $fileName = $modele['img'];
         if (!empty($img['name'])) {
             $allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/jpg'];
             if (!in_array($img['type'], $allowedTypes)) {
                 $_SESSION['message'] = 'Seuls les fichiers JPEG, PNG et GIF sont autorisés.';
                 $_SESSION['message_type'] = 'error';
             } else {
-                $uploadDir = '../uploads/modele/'; // Dossier pour les motifs de tissu
+                $uploadDir = '../uploads/modele/'; // Dossier pour les modeles de tissu
                 if (!is_dir($uploadDir)) {
                     mkdir($uploadDir, 0777, true);
                 }
@@ -62,9 +62,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (!isset($_SESSION['message'])) {
             $stmt = $pdo->prepare("UPDATE modele SET nom = ?, prix = ?, img = ? WHERE id = ?");
             $stmt->execute([$nom, $prix, $fileName, $id]);
-            $_SESSION['message'] = 'Motif mis à jour avec succès!';
+            $_SESSION['message'] = 'modele mis à jour avec succès!';
             $_SESSION['message_type'] = 'success';
-            header("Location: index.php");
+            header("Location: visualiser.php");
             exit();
         }
     }
@@ -76,11 +76,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Modifier le Motif de Tissu</title>
+    <title>Modifier le modèle de banquette</title>
     <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../../styles/admin/ajout.css">
     <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
     <link rel="stylesheet" href="../../styles/message.css">
+    <script src="../../script/previewImage.js"></script>
 </head>
 
 <body>
@@ -98,18 +99,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <div class="form-row">
                         <div class="form-group">
                             <label for="name">Nom</label>
-                            <input type="text" id="name" name="name" class="input-field" value="<?= htmlspecialchars($motif['nom']); ?>" required>
+                            <input type="text" id="name" name="name" class="input-field" value="<?= htmlspecialchars($modele['nom']); ?>" required>
                         </div>
                         <div class="form-group">
                             <label for="prix">Prix</label>
-                            <input type="text" id="prix" name="prix" class="input-field" value="<?= htmlspecialchars($motif['prix']); ?>" required>
+                            <input type="text" id="prix" name="prix" class="input-field" value="<?= htmlspecialchars($modele['prix']); ?>" required>
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group">
                             <label for="img">Image (Laissez vide pour conserver l'image actuelle)</label>
-                            <input type="file" id="img" name="img" class="input-field" accept="image/*">
-                        </div>
+                            <input type="file" id="img" name="img" class="input-field" accept="image/*" onchange="loadFile(event)" >
+                            <img class="preview-img" src="../uploads/modele/<?php echo htmlspecialchars($modele['img']); ?>" id="output" />
+                         </div>
                     </div>
                     <div class="button-section">
                         <div class="buttons">

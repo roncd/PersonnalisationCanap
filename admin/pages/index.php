@@ -62,7 +62,7 @@ $assocData[$table] = array_column($data[$table], 'nom', 'id');
             </div>
             <div class="tables">
                 <div class="table-box client">
-                    <h2>5 DERNIER CLIENTS <a href="../client/index.php">Voir plus</a></h2>
+                    <h2>5 DERNIER CLIENTS <a href="../client/visualiser.php">Voir plus</a></h2>
                     <table>
                         <thead>
                             <tr>
@@ -123,7 +123,7 @@ $assocData[$table] = array_column($data[$table], 'nom', 'id');
                         <h2>VISUALISER DES DONNÉES</h2>
                     </div>
                 </a>
-                <a href="../pages/ajouter.php">
+                <a href="../pages/add.php">
                     <div class="table-box img2">
                         <h2>AJOUTER DES DONNÉES</h2>
                     </div>

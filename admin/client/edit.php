@@ -12,7 +12,7 @@ $id = $_GET['id'] ?? null;
 if (!$id) {
     $_SESSION['message'] = 'ID du client manquant.';
     $_SESSION['message_type'] = 'error';
-    header("Location: index.php");
+    header("Location: visualiser.php");
     exit();
 }
 
@@ -25,7 +25,7 @@ $client = $stmt->fetch(PDO::FETCH_ASSOC);
 if (!$client) {
     $_SESSION['message'] = 'Client introuvable.';
     $_SESSION['message_type'] = 'error';
-    header("Location: index.php");
+    header("Location: visualiser.php");
     exit();
 }
 
@@ -51,7 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($stmt->execute([$nom, $prenom, $mail, $tel, $mdp, $adresse, $info, $codepostal, $ville, $date, $id])) {
             $_SESSION['message'] = 'Le client a été mise à jour avec succès !';
             $_SESSION['message_type'] = 'success';
-            header("Location: index.php");
+            header("Location: visualiser.php");
             exit();
         } else {
             $_SESSION['message'] = 'Erreur lors de la mise à jour du client.';

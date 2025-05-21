@@ -28,6 +28,11 @@ main.collapsed-menu {
     margin-left: 100px;
   }
   
+
+.footer.collapsed-menu {
+    margin-left: 44%;
+  }
+  
 /* Réduit les textes */
 aside.collapsed .menu-link {
     justify-content: center;
@@ -154,7 +159,7 @@ aside.collapsed .close-icone img {
 
 .footer {
     margin-top: 20px;
-    margin-bottom: 5px;
+    margin-bottom: 20px;
     margin-left: 50%;
     padding-top: 2rem;
     font-size: small;

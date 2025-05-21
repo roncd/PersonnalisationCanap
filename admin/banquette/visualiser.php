@@ -6,7 +6,6 @@ if (!isset($_SESSION['id'])) {
     header("Location: ../index.php");
     exit();
 }
-
 $search = $_GET['search'] ?? '';
 
 // Paramètres de pagination
@@ -15,7 +14,7 @@ $limit = 10; // Nombre de commandes par page
 $offset = ($page - 1) * $limit;
 
 // Compter le nombre total de commandes pour ce statut
-$stmtCount = $pdo->prepare("SELECT COUNT(*) AS total FROM client");
+$stmtCount = $pdo->prepare("SELECT COUNT(*) AS total FROM type_banquette");
 $stmtCount->execute();
 $totalCommandes = $stmtCount->fetchColumn();
 
@@ -27,7 +26,7 @@ $totalPages = ceil($totalCommandes / $limit);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Client</title>
+    <title>Type de banquette</title>
     <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../../styles/admin/tab.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
@@ -43,17 +42,12 @@ $totalPages = ceil($totalCommandes / $limit);
     </header>
     <main>
         <div class="container">
-            <h2>Client</h2>
-            <div class="option">
-                <div>
-                    <button onclick="location.href='add.php'" class="btn" type="button">+ Ajouter un client</button>
-                </div>
-                <div class="search-bar">
-                    <form method="GET" action="index.php">
-                        <input type="text" name="search" placeholder="Rechercher par nom..." value="<?php echo htmlspecialchars($search); ?>">
-                        <button type="submit">Rechercher</button>
-                    </form>
-                </div>
+            <h2>Type de banquette</h2>
+            <div class="search-bar">
+                <form method="GET" action="visualiser.php">
+                    <input type="text" name="search" placeholder="Rechercher par nom..." value="<?php echo htmlspecialchars($search); ?>">
+                    <button type="submit">Rechercher</button>
+                </form>
             </div>
             <?php require '../include/message.php'; ?>
             <div class="tab-container">
@@ -62,43 +56,29 @@ $totalPages = ceil($totalCommandes / $limit);
                         <tr>
                             <th>ID</th>
                             <th>NOM</th>
-                            <th>PRENOM</th>
-                            <th>MAIL</th>
-                            <th>TELEPHONE</th>
-                            <th>ADRESSE</th>
-                            <th>INFO_SUP</th>
-                            <th>CODE_POSTAL</th>
-                            <th>VILLE</th>
-                            <th>DATE_CREATION</th>
+                            <th>IMAGE</th>
                             <th class="sticky-col">ACTION</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php
                         if ($search) {
-                            $stmt = $pdo->prepare("SELECT * FROM client WHERE nom LIKE :search ORDER BY id DESC");
+                            $stmt = $pdo->prepare("SELECT * FROM type_banquette WHERE nom LIKE :search ORDER BY id DESC");
                             $stmt->bindValue(':search', '%' . $search . '%', PDO::PARAM_STR);
                         } else {
-                            $stmt = $pdo->prepare("SELECT * FROM client ORDER BY id DESC LIMIT :limit OFFSET :offset");
+                            $stmt = $pdo->prepare("SELECT * FROM type_banquette ORDER BY id DESC LIMIT :limit OFFSET :offset");
                             $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
                             $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
                         }
                         $stmt->execute();
                         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                             echo "<tr>";
-                            echo "<td><a class='id' href='../pages/fiche-client.php?id={$row['id']}'>{$row['id']}</a></td>";
+                            echo "<td>{$row['id']}</td>";
                             echo "<td>{$row['nom']}</td>";
-                            echo "<td>{$row['prenom']}</td>";
-                            echo "<td>{$row['mail']}</td>";
-                            echo "<td>{$row['tel']}</td>";
-                            echo "<td>{$row['adresse']}</td>";
-                            echo "<td>{$row['info']}</td>";
-                            echo "<td>{$row['codepostal']}</td>";
-                            echo "<td>{$row['ville']}</td>";
-                            echo "<td>{$row['date_creation']}</td>";
+                            echo "<td><img src='../uploads/banquette/{$row['img']}' alt='{$row['nom']}' style='width:50px; height:auto;'></td>";
                             echo "<td class='actions'>";
                             echo "<a href='edit.php?id={$row['id']}' class='edit-action actions vert' title='Modifier'>EDIT</a>";
-                            echo "<a href='delete.php?id={$row['id']}' class='delete-action actions rouge' title='Supprimer' onclick='return confirm(\"Voulez-vous vraiment supprimer ce client ?\");'>DELETE</a>";
+                            echo "<a href='delete.php?id={$row['id']}' class='delete-action actions rouge' title='Supprimer' onclick='return confirm(\"Voulez-vous vraiment supprimer ce type de banquette ?\");'>DELETE</a>";
                             echo "</td>";
                             echo "</tr>";
                         }
@@ -109,9 +89,9 @@ $totalPages = ceil($totalCommandes / $limit);
             <?php require '../include/pagination.php'; ?>
         </div>
     </main>
+    <footer>
+        <?php require '../squelette/footer.php'; ?>
+    </footer>
 </body>
-<footer>
-    <?php require '../squelette/footer.php'; ?>
-</footer>
 
 </html>

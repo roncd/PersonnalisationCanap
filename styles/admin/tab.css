@@ -32,6 +32,7 @@ a {
     font-size: 0.9em;
     min-width: 600px;
     width: 100%;
+    position: relative;
 }
 
 .styled-table thead tr {
@@ -50,7 +51,7 @@ a {
 
 .styled-table th,
 .styled-table td {
-    padding: 12px 15px;
+    padding: 20px 15px;
     text-align: center;
     white-space: nowrap;
     border: none;
@@ -74,8 +75,8 @@ a {
 .styled-table td:last-child {
     position: sticky;
     right: 0;
-    background-color: inherit;
-    z-index: 2;
+    background-color: #F4F1F1;
+    z-index: 10;
     min-width: 120px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
@@ -83,15 +84,7 @@ a {
 .styled-table th.sticky-col {
     position: sticky;
     right: 0;
-}
-
-.styled-table td.actions {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
-    padding: 32px;
-    margin-left: auto;
+    background-color: #545353;
 }
 
 .actions a,
@@ -107,6 +100,7 @@ a {
     cursor: pointer;
     transition: transform 0.2s ease, background-color 0.3s ease;
     text-decoration: none;
+    margin: auto 5px;
 }
 
 .actions .vert:hover {

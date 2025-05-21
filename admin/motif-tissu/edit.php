@@ -12,7 +12,7 @@ $id = $_GET['id'] ?? null;
 if (!$id) {
     $_SESSION['message'] = 'ID du motif manquant.';
     $_SESSION['message_type'] = 'error';
-    header("Location: index.php");
+    header("Location: visualiser.php");
     exit();
 }
 
@@ -31,7 +31,7 @@ $motif = $stmt->fetch(PDO::FETCH_ASSOC);
 if (!$motif) {
     $_SESSION['message'] = 'Motif introuvable.';
     $_SESSION['message_type'] = 'error';
-    header("Location: index.php");
+    header("Location: visualiser.php");
     exit();
 }
 
@@ -71,7 +71,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt->execute([$nom, $prix, $fileName, $id_couleur, $id]);
             $_SESSION['message'] = 'Motif mis à jour avec succès!';
             $_SESSION['message_type'] = 'success';
-            header("Location: index.php");
+            header("Location: visualiser.php");
             exit();
         }
     }
@@ -88,6 +88,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link rel="stylesheet" href="../../styles/admin/ajout.css">
     <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
     <link rel="stylesheet" href="../../styles/message.css">
+    <script src="../../script/previewImage.js"></script>
 </head>
 
 <body>
@@ -114,12 +115,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <div class="form-row">
                         <div class="form-group">
                             <label for="img">Image (Laissez vide pour conserver l'image actuelle)</label>
-                            <input type="file" id="img" name="img" class="input-field" accept="image/*">
-                        </div>
+                            <input type="file" id="img" name="img" class="input-field" accept="image/*" onchange="loadFile(event)" >
+                            <img class="preview-img" src="../uploads/motif-tissu/<?php echo htmlspecialchars($motif['img']); ?>" id="output" />
+                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="id_couleur">Id couleur tissu</label>
+                            <label for="id_couleur">Couleur tissu associé</label>
                             <select class="input-field" id="id_couleur" name="id_couleur">
                                 <option value="">-- Sélectionnez une couleur --</option>
                                 <?php foreach ($couleurs as $couleur): ?>

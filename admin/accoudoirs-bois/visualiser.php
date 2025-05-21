@@ -6,6 +6,7 @@ if (!isset($_SESSION['id'])) {
     header("Location: ../index.php");
     exit();
 }
+
 $search = $_GET['search'] ?? '';
 
 // Paramètres de pagination
@@ -14,7 +15,7 @@ $limit = 10; // Nombre de commandes par page
 $offset = ($page - 1) * $limit;
 
 // Compter le nombre total de commandes pour ce statut
-$stmtCount = $pdo->prepare("SELECT COUNT(*) AS total FROM decoration");
+$stmtCount = $pdo->prepare("SELECT COUNT(*) AS total FROM accoudoir_bois");
 $stmtCount->execute();
 $totalCommandes = $stmtCount->fetchColumn();
 
@@ -26,11 +27,11 @@ $totalPages = ceil($totalCommandes / $limit);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Décoration</title>
+    <title>Accoudoir bois</title>
+    <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
     <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../../styles/admin/tab.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
-    <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
     <link rel="stylesheet" href="../../styles/message.css">
     <link rel="stylesheet" href="../../styles/pagination.css">
 </head>
@@ -42,13 +43,13 @@ $totalPages = ceil($totalCommandes / $limit);
     </header>
     <main>
         <div class="container">
-            <h2>Décoration</h2>
+            <h2>Accoudoir bois</h2>
             <div class="option">
                 <div>
-                    <button onclick="location.href='add.php'" class="btn" type="button">+ Ajouter une décoration</button>
+                    <button onclick="location.href='add.php'" class="btn" type="button">+ Ajouter un accoudoir</button>
                 </div>
                 <div class="search-bar">
-                    <form method="GET" action="index.php">
+                    <form method="GET" action="visualiser.php">
                         <input type="text" name="search" placeholder="Rechercher par nom..." value="<?php echo htmlspecialchars($search); ?>">
                         <button type="submit">Rechercher</button>
                     </form>
@@ -69,10 +70,10 @@ $totalPages = ceil($totalCommandes / $limit);
                     <tbody>
                         <?php
                         if ($search) {
-                            $stmt = $pdo->prepare("SELECT * FROM decoration WHERE nom LIKE :search ORDER BY id DESC");
+                            $stmt = $pdo->prepare("SELECT * FROM accoudoir_bois WHERE nom LIKE :search ORDER BY id DESC");
                             $stmt->bindValue(':search', '%' . $search . '%', PDO::PARAM_STR);
                         } else {
-                            $stmt = $pdo->prepare("SELECT * FROM decoration ORDER BY id DESC LIMIT :limit OFFSET :offset");
+                            $stmt = $pdo->prepare("SELECT * FROM accoudoir_bois ORDER BY id DESC LIMIT :limit OFFSET :offset");
                             $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
                             $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
                         }
@@ -82,10 +83,10 @@ $totalPages = ceil($totalCommandes / $limit);
                             echo "<td>{$row['id']}</td>";
                             echo "<td>{$row['nom']}</td>";
                             echo "<td>{$row['prix']}</td>";
-                            echo "<td><img src='../uploads/decoration/{$row['img']}' alt='{$row['nom']}' style='width:50px; height:auto;'></td>";
+                            echo "<td><img src='../uploads/accoudoirs-bois/{$row['img']}' alt='{$row['nom']}' style='width:50px; height:auto;'></td>";
                             echo "<td class='actions'>";
                             echo "<a href='edit.php?id={$row['id']}' class='edit-action actions vert' title='Modifier'>EDIT</a>";
-                            echo "<a href='delete.php?id={$row['id']}' class='delete-action actions rouge' title='Supprimer' onclick='return confirm(\"Voulez-vous vraiment supprimer cette décoration ?\");'>DELETE</a>";
+                            echo "<a href='delete.php?id={$row['id']}' class='delete-action actions rouge' title='Supprimer' onclick='return confirm(\"Voulez-vous vraiment supprimer cet accoudoir ?\");'>DELETE</a>";
                             echo "</td>";
                             echo "</tr>";
                         }
