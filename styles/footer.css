@@ -1,8 +1,15 @@
 /* Footer styles */
 .ft {
-  background-color: #E3D1C8; 
-  padding: 16px 0;
-  margin-top: 100px;
+    background-color: #997765;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 30px;
+    width: 95%; /* Augmente la largeur */
+    max-width: 1800px; /* Ajustement de la largeur maximale */
+    margin: 0 auto;
+    padding: 0 20px;
+    margin-bottom: 25px;
 }
 
 .ft-container {
@@ -13,7 +20,7 @@
 
 .ft-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr); /* 3 colonnes sur grand écran */
+  grid-template-columns: repeat(5, 1fr); /* 3 colonnes sur grand écran */
   align-items: center;
   gap: 20px; /* Espacement entre les colonnes */
   width: 100%;
@@ -24,7 +31,6 @@
 .ft-logo {
   width: 250px;
   height: auto;
-  margin-right: 40px;
 }
 
 /* Contact section */
@@ -33,11 +39,19 @@
   font-weight: bold;
   font-size: 0.875rem; 
   margin: 0 auto;
-  text-align: center; 
+  text-align: left; 
+  align-items: left;
+  justify-content: left;
 }
 
 .ft-text {
   margin: 24px 0; 
+  color: #ffffff;
+  text-decoration: none;
+  font-family: "Baloo 2", sans-serif;
+  font-weight: 700;
+  font-size: 15px;
+  position: relative;
 }
 
 .ft-email {
@@ -50,7 +64,10 @@
   font-weight: bold;
   font-size: 0.875rem; 
   margin: 0 auto;
-  text-align: center; 
+  text-align: left; 
+  align-items: left;
+  justify-content: left;
+
 }
 
 .ft-nav ol {
@@ -59,32 +76,49 @@
 }
 
 .ft-nav-item {
-  margin: 24px 0; 
+  margin: 10px 0; 
 }
-
 .ft-nav-item a {
-  color: #000000;
+   white-space: normal; /* Permet le retour à la ligne */
+  word-break: break-word; /* Coupe les mots longs si nécessaire */
+  color: #ffffff;
   text-decoration: none;
-  font-family: 'Be Vietnam Pro', sans-serif;
+  font-family: "Baloo 2", sans-serif;
   font-weight: 700;
-  font-size: 14px;
+  font-size: 15px;
   position: relative;
+  display: inline-block;
+
+  /* Ajout du padding dès l’état normal */
+  padding: 8px 24px;
+
+  /* Fond transparent par défaut */
+  background-color: transparent;
+
+  border-radius: 20px;
+
+  /* Transition fluide pour toutes les propriétés importantes */
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease,
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
 }
 
-.ft-nav-item a::after {
-  content: '';
-  position: absolute;
-  left: 0;
-  bottom: -2px; /* Positionne le soulignement juste en dessous du texte */
-  width: 0;
-  height: 1px;
-  background-color: #000000;
-  transition: width 0.3s ease;
+
+
+.ft-nav-item a:hover {
+  background-color: rgba(227, 209, 200, 0.9);
+  color: black;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transform: scale(1.03);
 }
 
-.ft-nav-item a:hover::after {
-  width: 100%; /* Le soulignement prend toute la largeur */
+p {
+  color: #000000;
+  margin-bottom: 30px;
 }
+
 
 /* Mentions légales */
 .ft-legal {
@@ -93,33 +127,73 @@
   font-size: 0.75rem; 
 }
 
+.ft-map {
+  width: 100%;
+  max-width: 500px; /* ajuste selon la largeur souhaitée */
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  margin-top: 10px;
+  margin-bottom: 10px;
+  margin-left: -30px;
+  min-width: 250px; /* ou 350px selon ton besoin */
+
+
+
+}
+
+
 /* Responsive Design */
-@media screen and (max-width: 768px) {
+@media (max-width: 1024px) {
   .ft-grid {
-    grid-template-columns: 1fr; /* Une seule colonne sur petits écrans */
-    text-align: center; /* Centre tous les éléments */
+    grid-template-columns: repeat(3, 1fr); /* 2 colonnes sur tablette */
+    gap: 16px;
   }
 
   .ft-logo {
-    margin: 0 auto 20px; /* Centre le logo */
-    width: 200px; /* Réduit la taille du logo */
-  }
-
-  .ft-contact, .ft-nav {
-    margin: 20px 0; /* Ajoute de l'espacement entre les sections */
+    width: 180px;
+    margin-right: 0;
   }
 }
 
-@media screen and (max-width: 480px) {
+@media (max-width: 768px) {
+  .ft {
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    
+  }
+
+  .ft-grid {
+    grid-template-columns: 1fr; /* 1 colonne sur mobile */
+    gap: 20px;
+    text-align: center;
+  }
+
+  .ft-nav {
+    text-align: center;
+  }
+
+  .ft-nav-item {
+    margin: 8px 0;
+  }
+
+  .ft-nav-item a {
+    padding: 12px 32px; /* Plus gros padding sur mobile */
+    font-size: 17px;     /* Liens plus visibles */
+  }
+
+  .ft-contact {
+    text-align: center;
+  }
+
   .ft-logo {
-    width: 150px; /* Réduit encore la taille du logo */
+    margin-bottom: 20px;
   }
-
-  .ft-contact, .ft-nav {
-    font-size: 0.75rem; /* Réduit légèrement la taille du texte */
-  }
-
-  .ft-text {
-    margin: 16px 0; /* Réduit l'espacement vertical */
-  }
+.ft-map {
+  grid-column: 1 / -1;
+  margin-top: -10px;
+  margin-left: auto;   /* annule le -30px */
+  margin-right: auto;  /* centre la map */
+}
 }
