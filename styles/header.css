@@ -1,58 +1,102 @@
-/* Reset CSS */
-html, body {
-    margin: 0;
-    padding-top: 80px;
-    box-sizing: border-box;
-}
 
 *, *:before, *:after {
     box-sizing: inherit;
+    box-sizing: border-box;
+
 }
 
-/* Header Container */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    overflow-x: hidden;
+}
+
+h1 {
+    padding-top: 100px; /* ou la hauteur exacte de ton header */
+}
+
+h2 {
+    padding-top: 70px; /* ou la hauteur exacte de ton header */
+}
+/* Conteneur général */
+
+/* Header */
 header {
     width: 100%;
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-end; /* Aligner tout à droite */
     align-items: center;
-    padding: 20px 40px;
-    background-color: #E3D1C8;
-    position: fixed; 
+    padding: 20px 0;
+    position: fixed;
     top: 0;
-    left: 0; 
+    left: 0;
     z-index: 1000;
     transition: all 0.3s ease;
 }
 
-/* Logo Styles */
-.logo {
-    flex-shrink: 0;
-    margin-right: auto;
+.header-content {
+    background-color: #997765;
+    display: flex;
+    backdrop-filter: blur(4px); /* effet de flou */
+    -webkit-backdrop-filter: blur(4px); /* support Safari */
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 20px;
+    width: 90%; /* Augmente la largeur */
+    max-width: 1800px; /* Ajustement de la largeur maximale */
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.panier {
+    display: flex;
+    align-items: center;
+    margin-left: auto; /* Pousse le panier complètement à droite */
+}
+
+.panier a {
+    display: flex;
+    align-items: center;
+}
+
+.panier img {
+    height: 30px;
+    cursor: pointer;
+}
+
+.hamburger {
+    display: none; /* Bouton hamburger caché par défaut */
+    flex-direction: column;
+    cursor: pointer;
+}
+
+.hamburger span {
+    height: 3px;
+    width: 25px;
+    background: white;
+    margin: 4px 0;
+    border-radius: 5px;
 }
 
 .logo img {
-    width: 130px;
-    height: auto;
-    display: block;
-    transition: transform 0.3s ease;
+    height: 50px; /* Ajustement de la taille du logo */
 }
-
-.logo img:hover {
-    transform: scale(1.05);
-}
-
-/* Navigation Base Styles */
 nav {
-    margin-left: auto;
+    flex-grow: 1;
+    display: flex;
+    justify-content: center; /* Centre le menu */
 }
 
 nav ul {
     list-style: none;
-    margin: 0;
-    padding: 0;
     display: flex;
-    gap: 40px;
-    justify-content: flex-end;
+    gap: 20px;
+    padding: 0;
+    margin: 0;
 }
 
 nav ul li {
@@ -60,77 +104,100 @@ nav ul li {
 }
 
 nav ul li a {
-    color: #000000;
+    color: white;
     text-decoration: none;
-    font-family: 'Be Vietnam Pro', sans-serif;
-    font-weight: 600;
-    font-size: 15px;
-    padding: 8px 0;
-    display: block;
-    position: relative;
-    transition: all 0.3s ease;
+    font-weight: bold;
+    padding: 8px 24px; /* Taille fixe */
+    border-radius: 20px;
+    font-family: "Baloo 2", sans-serif;
+    transition: 
+        background-color 0.3s ease,
+        color 0.3s ease,
+        transform 0.3s ease,
+        box-shadow 0.3s ease;
+    display: inline-block;
+    white-space: nowrap;
 }
 
-/* Link Hover Effect */
-nav ul li a::after {
-    content: '';
-    position: absolute;
-    left: 0;
-    bottom: -2px;
-    width: 0;
-    height: 2px;
-    background-color: #000000;
-    transition: width 0.3s ease;
-    transform-origin: left;
+nav ul li a:hover,
+nav ul li a.active {
+    background-color: rgba(227, 209, 200, 0.9);
+    color: black;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transform: scale(1.03);
 }
 
-nav ul li a:hover {
-    color: #444444;
-}
-
-nav ul li a:hover::after,
-nav ul li a.active::after {
-    width: 100%;
-}
 
 /* Dropdown Menu */
-.dropdown-menu {
-    display: none;
+.dropdown {
+    position: relative;
+}
+
+.dropdown > a {
+    position: relative;
+    padding-right: 25px;
+}
+
+.dropdown > a::after {
+    content: "▾";
     position: absolute;
-    top: calc(100% + 10px);
-    right: 0;
-    min-width: 220px;
-    background-color: #ffffff;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 0.7em;
+    pointer-events: none;
+}
+
+/* Menu déroulant */
+.dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    margin-top: 10px;
+    background: white;
+    padding-bottom: 10px;
     border-radius: 12px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-    padding: 12px 0;
-    z-index: 1000;
-    transform: translateY(10px);
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+    overflow: hidden;
+    min-width: 200px;
     opacity: 0;
-    transition: all 0.3s ease;
+    visibility: hidden;
+    transform: translateY(10px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    z-index: 999;
 }
 
+/* Liens du dropdown */
 .dropdown-menu li {
-    padding: 0;
-    margin: 0;
+    width: 100%; /* Assure que chaque élément occupe toute la largeur */
 }
-
-.dropdown-menu a {
-    padding: 12px 24px;
-    font-size: 14px;
-    white-space: nowrap;
-    transition: all 0.3s ease;
-}
-
-.dropdown-menu a:hover {
-    background-color: rgba(227, 209, 200, 0.4);
-    padding-left: 28px;
-}
-
-.dropdown:hover .dropdown-menu {
+.dropdown-menu li a {
     display: block;
-    transform: translateY(0);
+    width: 100%;
+    padding: 12px 20px;
+    box-sizing: border-box;
+    text-align: center;
+    background-color: transparent;
+    color: #000;
+}
+
+.dropdown-menu li a:hover {
+    background-color: rgba(227, 209, 200, 0.9);
+    color: #000000;
+    /* padding-left: 25px; <-- on enlève ça */
+    
+    /* Pour décaler le texte sans changer la taille du conteneur : */
+    transform: translateY(5px);
+}
+
+
+/* Affichage au clic */
+.dropdown.active .dropdown-menu {
     opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
 }
 
 /* Hamburger Menu */
@@ -138,31 +205,25 @@ nav ul li a.active::after {
     display: none;
     cursor: pointer;
     flex-direction: column;
-    gap: 6px;
     padding: 12px;
     z-index: 1100;
     background: transparent;
     border: none;
-    border-radius: 8px;
     transition: all 0.3s ease;
-}
-
-.hamburger:hover {
-    background-color: rgba(255, 255, 255, 0.1);
 }
 
 .hamburger span {
     display: block;
     width: 25px;
     height: 2px;
-    background: #000000;
+    background: #ffffff;
     border-radius: 4px;
     transition: all 0.3s ease-in-out;
 }
 
 /* Hamburger Animation */
 .hamburger.active span:nth-child(1) {
-    transform: rotate(45deg) translate(5px, 5px);
+    transform: rotate(45deg) translate(11px, 3px);
 }
 
 .hamburger.active span:nth-child(2) {
@@ -170,80 +231,151 @@ nav ul li a.active::after {
 }
 
 .hamburger.active span:nth-child(3) {
-    transform: rotate(-45deg) translate(5px, -5px);
+    transform: rotate(-45deg) translate(11px, -3px);
 }
 
+
+/* Styles par défaut */
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+    width: 90%;
+    max-width: 1800px;
+}
+
+body.menu-open::before {
+    content: '';
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw;
+    height: 100vh;
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    z-index: 999;
+    pointer-events: none;
+}
+
+
+
 /* Responsive Design */
-@media screen and (max-width: 768px) {
-    header {
-        padding: 15px 20px;
+@media screen and (max-width: 1024px) {
+    .header-content {
+        justify-content: center; /* Centre le logo */
+        position: relative;
+    }
+
+    .hamburger {
+        display: flex; /* Affichage du menu burger */
+        position: absolute;
+        left: 10px;
+        z-index: 1100;
+    }
+
+    .panier {
+        position: absolute;
+        right: 10px;
+        z-index: 10000; /* plus que nav (9999) */
+
     }
 
     .logo {
-        order: 1;
+        z-index: 10000; /* plus que nav (9999) */
     }
 
     nav {
-        display: none;
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100vh;
-        background: rgba(227, 209, 200, 0.98);
-        backdrop-filter: blur(10px);
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        padding: 60px 20px;
-        z-index: 999;
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background-color: rgba(153, 119, 101, 0.7); /* moins opaque */
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 20px;
+    z-index: 9999; /* au-dessus de tout */
+    overflow: hidden; /* important pour le pseudo-élément */
     }
 
+    /* Ajout de la classe active pour afficher la modal au clic */
     nav.active {
         display: flex;
         animation: fadeIn 0.3s ease;
     }
 
-    nav ul {
-        flex-direction: column;
-        gap: 30px;
-        text-align: center;
-        width: 100%;
-    }
+nav ul {
+    flex-direction: column;
+    align-items: center; /* ✅ centre horizontalement */
+    justify-content: center;
+    width: 100%;
+    gap: 30px;
+}
 
     nav ul li {
-        width: 100%;
+        width: 90%;
+        border-radius: 25px;
+        justify-content: center;
+        align-items: center;
+        background-color: rgba(227, 209, 200, 0.9);
+        color: black;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        text-align: center;
     }
 
     nav ul li a {
         font-size: 18px;
         padding: 15px;
+        color: black;
+
     }
 
-    .dropdown-menu {
-        position: static;
-        box-shadow: none;
-        background: transparent;
-        transform: none;
-        padding: 15px 0;
-        opacity: 1;
-        display: none;
-        width: 100%;
-    }
+    nav ul li a:hover,
+    nav ul li a.active {
+    background-color: transparent;
+    color: black;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0);
+    transform: none;
+}
 
-    .dropdown-menu a {
-        font-size: 16px;
-        padding: 15px 30px;
-    }
+nav ul.dropdown-menu li {
+    background-color: transparent !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0);
+}
 
-    .dropdown.active .dropdown-menu {
-        display: block;
-    }
+.dropdown-menu {
+    border-radius: 20px;
+}
+
+.dropdown-menu li a:hover {
+    background-color: transparent;
+    transform: none;
+}
+
 
     .hamburger {
         display: flex;
         order: 3;
         margin-left: 20px;
+        cursor: pointer;
+        z-index: 10000; /* plus que nav (9999) */
+
+    }
+
+    body.menu-open .header-content {
+        background-color: transparent;
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+    }
+
+
+    body.menu-open {
+        position: fixed;
+        width: 100vw;
+        height: 100vh;
+        overflow: hidden; /* Empêche tout défilement */
     }
 }
 
@@ -276,4 +408,28 @@ nav ul li a.active::after {
     nav ul li a {
         font-size: 16px;
     }
+
+    
+.dropdown-menu li a {
+    display: block;
+    width: 100%;
+    padding: 12px 20px;
+    box-sizing: border-box;
+    text-align: center;
+    background-color: transparent;
+    color: #000;
+}
+
+    body.menu-open .header-content {
+    background-color: transparent;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    }
+
+body.menu-open {
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden; /* Empêche tout défilement */
+}
 }
