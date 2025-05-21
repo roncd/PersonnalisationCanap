@@ -3,7 +3,7 @@ require '../config.php';
 session_start();
 
 if (!isset($_SESSION['id'])) {
-    header("Location: ../index.php");
+    header("Location: ../visualiser.php");
     exit();
 }
 
@@ -12,7 +12,7 @@ $id = $_GET['id'] ?? null;
 if (!$id) {
     $_SESSION['message'] = 'ID de l\'accoudoir en bois manquant.';
     $_SESSION['message_type'] = 'error';
-    header("Location: index.php");
+    header("Location: visualiser.php");
     exit();
 }
 
@@ -25,7 +25,7 @@ $accoudoirbois = $stmt->fetch(PDO::FETCH_ASSOC);
 if (!$accoudoirbois) {
     $_SESSION['message'] = 'Accoudoir en bois introuvable.';
     $_SESSION['message_type'] = 'error';
-    header("Location: index.php");
+    header("Location: visualiser.php");
     exit();
 }
 
@@ -46,7 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $_SESSION['message'] = 'Seuls les fichiers JPEG, PNG et GIF sont autorisés.';
                 $_SESSION['message_type'] = 'error';
             } else {
-                $uploadDir = '../uploads/accoudoirs-bois/'; // Dossier pour les motifs de tissu
+                $uploadDir = '../uploads/accoudoirs-bois/'; 
                 if (!is_dir($uploadDir)) {
                     mkdir($uploadDir, 0777, true);
                 }
@@ -63,7 +63,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt->execute([$nom, $price, $fileName, $id]);
             $_SESSION['message'] = 'L\'accoudoir en bois a été mise à jour avec succès !';
             $_SESSION['message_type'] = 'success';
-            header("Location: index.php");
+            header("Location: visualiser.php");
             exit();
         }
     }
@@ -80,6 +80,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../../styles/admin/ajout.css">
     <link rel="stylesheet" href="../../styles/message.css">
+    <script src="../../script/previewImage.js"></script>
 </head>
 
 <body>
@@ -108,7 +109,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <div class="form-row">
                         <div class="form-group">
                             <label for="img">Image (Laissez vide pour conserver l'image actuelle)</label>
-                            <input type="file" id="img" name="img" class="input-field" accept="image/*">
+                            <input type="file" id="img" name="img" class="input-field" accept="image/*" onchange="loadFile(event)" >
+                            <img class="preview-img" src="../uploads/accoudoirs-bois/<?php echo htmlspecialchars($accoudoirbois['img']); ?>" id="output" />
                         </div>
                     </div>
                     <div class="button-section">

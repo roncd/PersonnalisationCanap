@@ -12,7 +12,7 @@ $id = $_GET['id'] ?? null;
 if (!$id) {
     $_SESSION['message'] = 'ID de l\'utilisateur manquant.';
     $_SESSION['message_type'] = 'error';
-    header("Location: index.php");
+    header("Location: visualiser.php");
     exit();
 }
 
@@ -25,7 +25,7 @@ $utilisateur = $stmt->fetch(PDO::FETCH_ASSOC);
 if (!$utilisateur) {
     $_SESSION['message'] = 'Utilisateur introuvable.';
     $_SESSION['message_type'] = 'error';
-    header("Location: index.php");
+    header("Location: visualiser.php");
     exit();
 }
 
@@ -44,7 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $_SESSION['message'] = 'Utilisateur mise à jour avec succès!';
         $_SESSION['message_type'] = 'success';
-        header("Location: index.php");
+        header("Location: visualiser.php");
         exit();
     }
 }

@@ -64,6 +64,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link rel="stylesheet" href="../../styles/admin/ajout.css">
     <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
     <link rel="stylesheet" href="../../styles/message.css">
+    <script src="../../script/previewImage.js"></script>
 </head>
 
 <body>
@@ -90,7 +91,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <div class="form-row">
                         <div class="form-group">
                             <label for="img">Image</label>
-                            <input type="file" id="img" name="img" class="input-field" required accept="image/*">
+                            <input type="file" id="img" name="img" class="input-field" accept="image/*" onchange="loadFile(event)" required>
+                            <img class="preview-img" id="output" />                        
                         </div>
                     </div>
                     <div class="button-section">

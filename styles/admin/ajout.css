@@ -88,7 +88,6 @@ select.input-field {
 /* button section */
 .button-section {
     font-size: 18px;
-    margin-top: 20px;
     display: flex;
     flex-direction: row;
     align-items: flex-start;
@@ -177,4 +176,10 @@ select.input-field {
 .btn-connexion:hover {
     transform: scale(1.1);
     transition: transform 0.2s;
+}
+
+.preview-img {
+    border-radius: 8px;
+    max-width: 100%;
+    margin: 20px;
 }
