@@ -24,7 +24,7 @@ $id = $_GET['id'] ?? null;
 if (!$id) {
     $_SESSION['message'] = 'ID client manquant.';
     $_SESSION['message_type'] = 'error';
-    header("Location: ../client/index.php");
+    header("Location: ../client/visualiser.php");
     exit();
 }
 require '../config.php';
@@ -36,7 +36,7 @@ $client = $stmt->fetch(PDO::FETCH_ASSOC);
 if (!$client) {
     $_SESSION['message'] = 'Client introuvable.';
     $_SESSION['message_type'] = 'error';
-    header("Location: index.php");
+    header("Location: ../client/visualiser.php");
     exit();
 }
 

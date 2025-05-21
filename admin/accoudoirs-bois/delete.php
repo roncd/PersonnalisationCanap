@@ -3,7 +3,7 @@ require '../config.php';
 session_start();
 
 if (!isset($_SESSION['id'])) {
-    header("Location: ../index.php");
+    header("Location: ../visualiser.php");
     exit();
 }
 
@@ -12,7 +12,7 @@ $id = $_GET['id'] ?? null;
 if (!$id) {
     $_SESSION['message'] = 'ID de l\'accoudoir en bois manquant.';
     $_SESSION['message_type'] = 'error';
-    header("Location: index.php");
+    header("Location: visualiser.php");
     exit();
 }
 
@@ -33,5 +33,5 @@ try {
     $_SESSION['message_type'] = 'error';
 }
 
-header("Location: index.php");
+header("Location: visualiser.php");
 exit();

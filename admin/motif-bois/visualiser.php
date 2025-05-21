@@ -68,7 +68,7 @@ $totalPages = ceil($totalCommandes / $limit);
                     <button onclick="location.href='add.php'" class="btn" type="button">+ Ajouter un motif</button>
                 </div>
                 <div class="search-bar">
-                    <form method="GET" action="index.php">
+                    <form method="GET" action="visualiser.php">
                         <input type="text" name="search" placeholder="Rechercher par nom..." value="<?php echo htmlspecialchars($search); ?>">
                         <button type="submit">Rechercher</button>
                     </form>

@@ -37,42 +37,42 @@ if (!isset($_SESSION['id'])) {
                 <!-- <section class="category-block">
                     <h2>Administration</h2>
                     <div class="button-grid">
-                        <a href="../client/index.php" class="btn">Clients</a>
-                        <a href="../utilisateur/index.php" class="btn">Equipe</a>
-                        <a href="../commande-detail/index.php" class="btn">Commandes</a>
+                        <a href="../client/visualiser.php" class="btn">Clients</a>
+                        <a href="../utilisateur/visualiser.php" class="btn">Equipe</a>
+                        <a href="../commande-detail/visualiser.php" class="btn">Commandes</a>
                     </div>
                 </section> -->
 
                 <section class="category-block">
                     <h2>Bases canapé</h2>
                     <div class="button-grid">
-                        <a href="../structure/index.php" class="btn">Structure</a>
-                        <a href="../banquette/index.php" class="btn">Banquette</a>
-                        <a href="../mousse/index.php" class="btn">Mousse</a>
+                        <a href="../structure/visualiser.php" class="btn">Structure</a>
+                        <a href="../banquette/visualiser.php" class="btn">Banquette</a>
+                        <a href="../mousse/visualiser.php" class="btn">Mousse</a>
                     </div>
                 </section>
 
                 <section class="category-block">
                     <h2>Canapé en bois</h2>
                     <div class="button-grid">
-                        <a href="../couleur-banquette-bois/index.php" class="btn">Couleur bois</a>
-                        <a href="../decoration/index.php" class="btn">Décoration</a>
-                        <a href="../accoudoirs-bois/index.php" class="btn">Accoudoirs</a>
-                        <a href="../dossier-bois/index.php" class="btn">Dossier</a>
+                        <a href="../couleur-banquette-bois/visualiser.php" class="btn">Couleur bois</a>
+                        <a href="../decoration/visualiser.php" class="btn">Décoration</a>
+                        <a href="../accoudoirs-bois/visualiser.php" class="btn">Accoudoirs</a>
+                        <a href="../dossier-bois/visualiser.php" class="btn">Dossier</a>
                         <a href="#" class="btn">Couleur tissu</a>
-                        <a href="../couleur-tissu-bois/index.php" class="btn">Motif tissu</a>
-                        <a href="../motif-bois/index.php" class="btn">Motif coussin</a>
+                        <a href="../couleur-tissu-bois/visualiser.php" class="btn">Motif tissu</a>
+                        <a href="../motif-bois/visualiser.php" class="btn">Motif coussin</a>
                     </div>
                 </section>
 
                 <section class="category-block">
                     <h2>Canapé en tissu</h2>
                     <div class="button-grid">
-                        <a href="../modele-banquette-tissu/index.php" class="btn">Modèle</a>
-                        <a href="../accoudoirs-tissu/index.php" class="btn">Accoudoirs</a>
-                        <a href="../dossier-tissu/index.php" class="btn">Dossier</a>
-                        <a href="../couleur-tissu-tissu/index.php" class="btn">Couleur tissu</a>
-                        <a href="../motif-tissu/index.php" class="btn">Motif coussin</a>
+                        <a href="../modele-banquette-tissu/visualiser.php" class="btn">Modèle</a>
+                        <a href="../accoudoirs-tissu/visualiser.php" class="btn">Accoudoirs</a>
+                        <a href="../dossier-tissu/visualiser.php" class="btn">Dossier</a>
+                        <a href="../couleur-tissu-tissu/visualiser.php" class="btn">Couleur tissu</a>
+                        <a href="../motif-tissu/visualiser.php" class="btn">Motif coussin</a>
                     </div>
                 </section>
             </div>

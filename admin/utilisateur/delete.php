@@ -12,7 +12,7 @@ $id = $_GET['id'] ?? null;
 if (!$id) {
     $_SESSION['message'] = 'ID de l\'utilisateur manquant.';
     $_SESSION['message_type'] = 'error';
-    header("Location: index.php");
+    header("Location: visualiser.php");
     exit();
 }
 
@@ -33,6 +33,6 @@ try {
     $_SESSION['message_type'] = 'error';
 }
 
-header("Location: index.php");
+header("Location: visualiser.php");
 exit();
 ?>
