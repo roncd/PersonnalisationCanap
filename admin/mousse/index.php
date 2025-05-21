@@ -46,12 +46,16 @@ $totalPages = ceil($totalCommandes / $limit);
     <main>
         <div class="container">
             <h2>Type de Mousse</h2>
-            <!-- Barre de recherche -->
-            <div class="search-bar">
-                <form method="GET" action="index.php">
-                    <input type="text" name="search" placeholder="Rechercher par nom..." value="<?php echo htmlspecialchars($search); ?>">
-                    <button type="submit">Rechercher</button>
-                </form>
+            <div class="option">
+                <div>
+                    <button onclick="location.href='add.php'" class="btn" type="button">+ Ajouter une mousse</button>
+                </div>
+                <div class="search-bar">
+                    <form method="GET" action="index.php">
+                        <input type="text" name="search" placeholder="Rechercher par nom..." value="<?php echo htmlspecialchars($search); ?>">
+                        <button type="submit">Rechercher</button>
+                    </form>
+                </div>
             </div>
             <?php require '../include/message.php'; ?>
             <div class="tab-container">

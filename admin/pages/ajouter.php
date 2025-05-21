@@ -66,9 +66,9 @@ if (!isset($_SESSION['id'])) {
                     <h2>Canapé en tissu</h2>
                     <div class="button-grid">
                         <a href="../modele-banquette-tissu/add.php" class="btn">Modèle</a>
-                        <a href="../couleur-tissu-tissu/add.php" class="btn">Accoudoirs</a>
+                        <a href="../accoudoirs-tissu/add.php" class="btn">Accoudoirs</a>
                         <a href="../dossier-tissu/add.php" class="btn">Dossier</a>
-                        <a href="../accoudoirs-tissu/add.php" class="btn">Couleur tissu</a>
+                        <a href="../couleur-tissu-tissu/add.php" class="btn">Couleur tissu</a>
                         <a href="../motif-tissu/add.php" class="btn">Motif coussin</a>
                     </div>
                 </section>

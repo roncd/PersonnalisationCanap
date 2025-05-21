@@ -24,7 +24,11 @@ aside.collapsed {
     width: 70px;
 }
 
-/* Réduit les textes dans les liens */
+main.collapsed-menu {
+    margin-left: 100px;
+  }
+  
+/* Réduit les textes */
 aside.collapsed .menu-link {
     justify-content: center;
     position: relative;
@@ -117,9 +121,9 @@ aside.collapsed .close-icone img {
 }
 
 .menu-link.catalogue .arrow {
-    margin-left: auto;
     font-size: 20px;
     transition: transform 0.3s ease;
+    margin-left: auto;
 }
 
 .menu-group.open .menu-link.catalogue .arrow {

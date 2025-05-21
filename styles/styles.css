@@ -416,6 +416,10 @@ header {
   .about-content { flex-direction: column; gap: 2rem; }
   .about-image { max-width: 100%; }
   .about-text { text-align: center; }
+  .about-button {
+        padding: 10px 20px;
+        font-size: 14px;
+    }
 }
 @media (max-width: 480px) {
   .about-content { padding: 1rem; }
@@ -423,6 +427,15 @@ header {
   .about-title { font-size: 2rem; }
   .about-description,
   .about-mission { font-size: 1rem; }
+  .about-button {
+        padding: 8px 16px;
+        font-size: 13px;
+        width: 80%;
+        max-width: 200px;
+        display: block;
+        margin: 20px auto 0;
+        text-align: center;
+    }
 }
 
 /* Section Devis */

@@ -78,8 +78,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <label for="nom">Nom</label>
                             <input type="name" id="nom" name="name" class="input-field" required>
                         </div>
-                    </div>
-                    <div class="form-row">
                         <div class="form-group">
                             <label for="prenom">Prénom</label>
                             <input type="name" id="prenom" name="prenom" class="input-field" required>
@@ -90,8 +88,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <label for="email">Mail</label>
                             <input type="email" id="email" name="email" class="input-field" required>
                         </div>
-                    </div>
-                    <div class="form-row">
                         <div class="form-group">
                             <label for="tel">Téléphone</label>
                             <input type="phone" id="tel" name="tel" class="input-field" required>
@@ -102,8 +98,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <label for="mdp">Mot de passe</label>
                             <input type="password" id="mdp" name="mdp" class="input-field" required>
                         </div>
-                    </div>
-                    <div class="form-row">
                         <div class="form-group">
                             <label for="adresse">Adresse</label>
                             <input type="text" id="adresse" name="adresse" class="input-field" required>
@@ -114,8 +108,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <label for="info">Info suplémentaire</label>
                             <input type="text" id="info" name="info" class="input-field">
                         </div>
-                    </div>
-                    <div class="form-row">
                         <div class="form-group">
                             <label for="codepostal">Code postal</label>
                             <input type="codepostal" name="codepostal" id="codepostal" class="input-field" required>
@@ -126,14 +118,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <label for="ville">Ville</label>
                             <input type="ville" id="ville" name="ville" class="input-field" required>
                         </div>
-                    </div>
-                    <div class="form-row">
                         <div class="form-group">
                             <label for="date">Date de création</label>
                             <input type="datetime-local" id="date" name="date" class="input-field" required>
                         </div>
                     </div>
-
                     <div class="button-section">
                         <div class="buttons">
                             <button type="button" class="btn-retour" onclick="history.go(-1)">Retour</button>

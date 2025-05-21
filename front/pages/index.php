@@ -165,6 +165,9 @@ session_start();
                     chaleureux,
                     en alliant confort, élégance et culture.
                 </p>
+                <a href="apropos.php" class="about-button">
+                                En savoir plus
+                            </a>
             </div>
             <div class="about-image">
                 <img src="../../medias/salon-maroc.jpg" alt="Salon marocain" class="about-img">

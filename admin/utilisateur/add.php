@@ -51,7 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </header>
     <main>
         <div class="container">
-            <h2>Ajoute un utilisateur</h2>
+            <h2>Ajoute un membre de l'administration</h2>
             <?php require '../include/message.php'; ?>
             <div class="form">
                 <form class="formulaire-creation-compte" action="" method="POST" enctype="multipart/form-data">
@@ -60,8 +60,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <label for="email">Mail</label>
                             <input type="email" id="email" name="email" class="input-field" required>
                         </div>
-                    </div>
-                    <div class="form-row">
                         <div class="form-group">
                             <label for="mdp">Mot de passe</label>
                             <input type="password" id="mdp" name="mdp" class="input-field" required>

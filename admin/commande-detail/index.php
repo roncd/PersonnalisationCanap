@@ -100,7 +100,6 @@ $triURL = '?' . http_build_query($params);
     <main>
         <div class="container">
             <h2>Commande</h2>
-
             <div class="search-bar">
                 <form method="GET" action="index.php">
                     <input type="text" name="search" placeholder="Rechercher par nom ou ID..." value="<?php echo htmlspecialchars($search); ?>">
@@ -148,45 +147,51 @@ $triURL = '?' . http_build_query($params);
                             $stmt = $pdo->prepare("SELECT cd.*, c.id AS id_client, c.nom, c.prenom
                                                     FROM commande_detail AS cd
                                                     INNER JOIN client AS c ON cd.id_client = c.id
-                                                    WHERE c.nom LIKE :search OR cd.id LIKE :search
+                                                    WHERE c.nom LIKE :search OR c.id LIKE :search
                                                     ORDER BY id $order
                                                     ");
-                            $stmt->bindValue(':search', '%' . $search . '%', PDO::PARAM_STR);
+                            $stmt->bindValue(':search', $search, PDO::PARAM_STR);
                         } else {
                             $stmt = $pdo->prepare("SELECT * FROM commande_detail ORDER BY id $order LIMIT :limit OFFSET :offset");
                             $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
                             $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
                         }
                         $stmt->execute();
-                        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                            echo "<tr>";
-                            echo "<td>{$row['id']}</td>";
-                            echo "<td>" . htmlspecialchars($assocData['client'][$row['id_client']] ?? '-') . "</td>";
-                            echo "<td>{$row['prix']}</td>";
-                            echo "<td>{$row['commentaire']}</td>";
-                            echo "<td>{$row['date']}</td>";
-                            echo "<td>{$row['statut']}</td>";
-                            echo "<td>" . htmlspecialchars($assocData['structure'][$row['id_structure']] ?? '-') . "</td>";
-                            $dimensions = htmlspecialchars($assocData['commande_detail'][$row['id']]['dimensions'] ?? '-');
-                            echo "<td>{$dimensions}</td>";
-                            echo "<td>" . htmlspecialchars($assocData['type_banquette'][$row['id_banquette']] ?? '-') . "</td>";
-                            echo "<td>" . htmlspecialchars($assocData['mousse'][$row['id_mousse']] ?? '-') . "</td>";
-                            echo "<td>" . htmlspecialchars($assocData['couleur_bois'][$row['id_couleur_bois']] ?? '-') . "</td>";
-                            echo "<td>" . htmlspecialchars($assocData['decoration'][$row['id_decoration']] ?? '-') . "</td>";
-                            echo "<td>" . htmlspecialchars($assocData['accoudoir_bois'][$row['id_accoudoir_bois']] ?? '-') . "</td>";
-                            echo "<td>" . htmlspecialchars($assocData['dossier_bois'][$row['id_dossier_bois']] ?? '-') . "</td>";
-                            echo "<td>" . htmlspecialchars($assocData['couleur_tissu_bois'][$row['id_couleur_tissu_bois']] ?? '-') . "</td>";
-                            echo "<td>" . htmlspecialchars($assocData['motif_bois'][$row['id_motif_bois']] ?? '-') . "</td>";
-                            echo "<td>" . htmlspecialchars($assocData['modele'][$row['id_modele']] ?? '-') . "</td>";
-                            echo "<td>" . htmlspecialchars($assocData['couleur_tissu'][$row['id_couleur_tissu']] ?? '-') . "</td>";
-                            echo "<td>" . htmlspecialchars($assocData['motif_tissu'][$row['id_motif_tissu']] ?? '-') . "</td>";
-                            echo "<td>" . htmlspecialchars($assocData['dossier_tissu'][$row['id_dossier_tissu']] ?? '-') . "</td>";
-                            echo "<td>" . htmlspecialchars($assocData['accoudoir_tissu'][$row['id_accoudoir_tissu']] ?? '-') . "</td>";
-                            echo "<td class='actions'>";
-                            echo "<a href='edit.php?id={$row['id']}' class='edit-action actions vert' title='Modifier'>EDIT</a>";
-                            echo "<a href='delete.php?id={$row['id']}' class='delete-action actions rouge' title='Supprimer' onclick='return confirm(\"Voulez-vous vraiment supprimer cette commande ?\");'>DELETE</a>";
-                            echo "</td>";
-                            echo "</tr>";
+                        $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+                        if (!empty($results)) {
+                            foreach ($results as $row) {
+                                echo "<tr>";
+                                echo "<td>{$row['id']}</td>";
+                                echo "<td>" . htmlspecialchars($assocData['client'][$row['id_client']] ?? '-') . "</td>";
+                                echo "<td>{$row['prix']}</td>";
+                                echo "<td>{$row['commentaire']}</td>";
+                                echo "<td>{$row['date']}</td>";
+                                echo "<td>{$row['statut']}</td>";
+                                echo "<td>" . htmlspecialchars($assocData['structure'][$row['id_structure']] ?? '-') . "</td>";
+                                $dimensions = htmlspecialchars($assocData['commande_detail'][$row['id']]['dimensions'] ?? '-');
+                                echo "<td>{$dimensions}</td>";
+                                echo "<td>" . htmlspecialchars($assocData['type_banquette'][$row['id_banquette']] ?? '-') . "</td>";
+                                echo "<td>" . htmlspecialchars($assocData['mousse'][$row['id_mousse']] ?? '-') . "</td>";
+                                echo "<td>" . htmlspecialchars($assocData['couleur_bois'][$row['id_couleur_bois']] ?? '-') . "</td>";
+                                echo "<td>" . htmlspecialchars($assocData['decoration'][$row['id_decoration']] ?? '-') . "</td>";
+                                echo "<td>" . htmlspecialchars($assocData['accoudoir_bois'][$row['id_accoudoir_bois']] ?? '-') . "</td>";
+                                echo "<td>" . htmlspecialchars($assocData['dossier_bois'][$row['id_dossier_bois']] ?? '-') . "</td>";
+                                echo "<td>" . htmlspecialchars($assocData['couleur_tissu_bois'][$row['id_couleur_tissu_bois']] ?? '-') . "</td>";
+                                echo "<td>" . htmlspecialchars($assocData['motif_bois'][$row['id_motif_bois']] ?? '-') . "</td>";
+                                echo "<td>" . htmlspecialchars($assocData['modele'][$row['id_modele']] ?? '-') . "</td>";
+                                echo "<td>" . htmlspecialchars($assocData['couleur_tissu'][$row['id_couleur_tissu']] ?? '-') . "</td>";
+                                echo "<td>" . htmlspecialchars($assocData['motif_tissu'][$row['id_motif_tissu']] ?? '-') . "</td>";
+                                echo "<td>" . htmlspecialchars($assocData['dossier_tissu'][$row['id_dossier_tissu']] ?? '-') . "</td>";
+                                echo "<td>" . htmlspecialchars($assocData['accoudoir_tissu'][$row['id_accoudoir_tissu']] ?? '-') . "</td>";
+                                echo "<td class='actions'>";
+                                echo "<a href='edit.php?id={$row['id']}' class='edit-action actions vert' title='Modifier'>EDIT</a>";
+                                echo "<a href='delete.php?id={$row['id']}' class='delete-action actions rouge' title='Supprimer' onclick='return confirm(\"Voulez-vous vraiment supprimer cette commande ?\");'>DELETE</a>";
+                                echo "</td>";
+                                echo "</tr>";
+                            }
+                        } else {
+                            echo "<tr><td colspan='22' style='text-align:left;'>Aucune commande trouvée.</td></tr>";
                         }
                         ?>
                     </tbody>

@@ -7,24 +7,8 @@
     <title>Admin - Connexion</title>
     <link rel="icon" type="image/x-icon" href="../medias/favicon.png">
     <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../styles/ajout.css">
-    <style>
-        .message {
-            padding: 10px;
-            margin: 10px 0;
-            border-radius: 5px;
-        }
-
-        .success {
-            background-color: #d4edda;
-            color: #155724;
-        }
-
-        .error {
-            background-color: #f8d7da;
-            color: #721c24;
-        }
-    </style>
+    <link rel="stylesheet" href="../styles/admin/ajout.css">
+    <link rel="stylesheet" href="../styles/message.css">
 </head>
 
 <body>
@@ -92,7 +76,7 @@
                             <input type="password" id="mdp" name="mdp" class="input-field" require>
                         </div>
                     </div>
-                    <div class="footer">
+                    <div class="button-section">
                         <p>Revenir sur <span><a href="../front/pages/index.php" class="link-connect">Deco du monde</a></span></p>
                         <div class="buttons">
                             <button type="submit" name="connecter" class="btn-connexion">SE CONNECTER</button>

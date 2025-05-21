@@ -89,8 +89,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <label for="nom">Nom</label>
                             <input type="name" id="nom" name="nom" class="input-field" value="<?php echo htmlspecialchars($client['nom']); ?>" required>
                         </div>
-                    </div>
-                    <div class="form-row">
                         <div class="form-group">
                             <label for="prenom">Prénom</label>
                             <input type="name" id="prenom" name="prenom" class="input-field" value="<?php echo htmlspecialchars($client['prenom']); ?>" required>
@@ -101,8 +99,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <label for="email">Mail</label>
                             <input type="email" id="email" name="mail" class="input-field" value="<?php echo htmlspecialchars($client['mail']); ?>" required>
                         </div>
-                    </div>
-                    <div class="form-row">
                         <div class="form-group">
                             <label for="tel">Téléphone</label>
                             <input type="phone" id="tel" name="tel" class="input-field" value="<?php echo htmlspecialchars($client['tel']); ?>" required>
@@ -113,8 +109,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <label for="mdp">Mot de passe</label>
                             <input type="password" id="mdp" class="input-field" name="mdp" value="<?php echo htmlspecialchars($client['mdp']); ?>" required>
                         </div>
-                    </div>
-                    <div class="form-row">
                         <div class="form-group">
                             <label for="adresse">Adresse</label>
                             <input type="text" id="adresse" class="input-field" name="adresse" value="<?php echo htmlspecialchars($client['adresse']); ?>" required>
@@ -125,8 +119,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <label for="info">Info suplémentaire</label>
                             <input type="text" id="info" class="input-field" name="info" value="<?php echo htmlspecialchars($client['info']); ?>">
                         </div>
-                    </div>
-                    <div class="form-row">
                         <div class="form-group">
                             <label for="codepostal">Code postal</label>
                             <input type="codepostal" id="codepostal" class="input-field" name="codepostal" value="<?php echo htmlspecialchars($client['codepostal']); ?>" required>
@@ -137,14 +129,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <label for="ville">Ville</label>
                             <input type="ville" id="ville" class="input-field" name="ville" value="<?php echo htmlspecialchars($client['ville']); ?>" required>
                         </div>
-                    </div>
-                    <div class="form-row">
                         <div class="form-group">
                             <label for="date">Date de création</label>
                             <input type="datetime-local" id="date" class="input-field" name="date" value="<?php echo htmlspecialchars($client['date_creation']); ?>" required>
                         </div>
                     </div>
-                    <div class="footer">
+                    <div class="button-section">
                         <div class="buttons">
                             <button type="button" class="btn-retour" onclick="history.go(-1)">Retour</button>
                             <input type="submit" class="btn-valider" value="Mettre à jour"></input>

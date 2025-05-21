@@ -21,6 +21,23 @@ if ($user) {
 } else {
     $prenom = 'Utilisateur';
 }
+
+$limit = 5;
+
+$table = 'client';
+
+function fetchData($pdo, $table)
+{
+    $stmt = $pdo->prepare("SELECT id, nom FROM $table");
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+$assocData = [];
+$data[$table] = fetchData($pdo, $table);
+// Convertir en tableau associatif clé=id, valeur=nom
+$assocData[$table] = array_column($data[$table], 'nom', 'id');
+
 ?>
 
 <head>
@@ -45,7 +62,7 @@ if ($user) {
             </div>
             <div class="tables">
                 <div class="table-box client">
-                    <h2>5 DERNIER CLIENTS</h2>
+                    <h2>5 DERNIER CLIENTS <a href="../client/index.php">Voir plus</a></h2>
                     <table>
                         <thead>
                             <tr>
@@ -55,59 +72,52 @@ if ($user) {
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td colspan="3" style="height: 30px;"></td>
-                            </tr>
-                            <tr>
-                                <td colspan="3" style="height: 30px;"></td>
-                            </tr>
-                            <tr>
-                                <td colspan="3" style="height: 30px;"></td>
-                            </tr>
-                            <tr>
-                                <td colspan="3" style="height: 30px;"></td>
-                            </tr>
-                            <tr>
-                                <td colspan="3" style="height: 30px;"></td>
-                            </tr>
+                            <?php
+                            $stmt = $pdo->prepare("SELECT id, nom, prenom FROM client ORDER BY id DESC LIMIT :limit");
+                            $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
+                            $stmt->execute();
+                            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                                echo "<tr>";
+                                echo "<td style='height: 30px;'>{$row['id']}</td>";
+                                echo "<td style='height: 30px;'>{$row['nom']}</td>";
+                                echo "<td style='height: 30px;'>{$row['prenom']}</td>";
+                                echo "</tr>";
+                            }
+                            ?>
                         </tbody>
                     </table>
                 </div>
                 <div class="table-box">
-                    <h2>5 DERNIÈRE COMMANDES</h2>
+                    <h2>5 DERNIÈRE COMMANDES <a href="commande.php">Voir plus</a></h2>
                     <table>
                         <thead>
                             <tr>
                                 <th>ID</th>
                                 <th>Nom</th>
-                                <th>Prénom</th>
                                 <th>Date</th>
                                 <th>Montant</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td colspan="5" style="height: 30px;"></td>
-                            </tr>
-                            <tr>
-                                <td colspan="5" style="height: 30px;"></td>
-                            </tr>
-                            <tr>
-                                <td colspan="5" style="height: 30px;"></td>
-                            </tr>
-                            <tr>
-                                <td colspan="5" style="height: 30px;"></td>
-                            </tr>
-                            <tr>
-                                <td colspan="5" style="height: 30px;"></td>
-                            </tr>
-
+                            <?php
+                            $stmt = $pdo->prepare("SELECT id, id_client, date, prix FROM commande_detail ORDER BY id DESC LIMIT :limit");
+                            $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
+                            $stmt->execute();
+                            while ($commande = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                                echo "<tr>";
+                                echo "<td style='height: 30px;'>{$commande['id']}</td>";
+                                echo "<td>" . htmlspecialchars($assocData['client'][$commande['id_client']] ?? '-') . "</td>";
+                                echo "<td style='height: 30px;'>{$commande['date']}</td>";
+                                echo "<td style='height: 30px;'>{$commande['prix']}€</td>";
+                                echo "</tr>";
+                            }
+                            ?>
                         </tbody>
                     </table>
                 </div>
             </div>
 
-            <div class="tables">
+            <!-- <div class="tables">
                 <a href="../pages/visualiser.php">
                     <div class="table-box img1">
                         <h2>VISUALISER DES DONNÉES</h2>
@@ -118,7 +128,7 @@ if ($user) {
                         <h2>AJOUTER DES DONNÉES</h2>
                     </div>
                 </a>
-            </div>
+            </div> -->
         </div>
     </main>
     <footer>
