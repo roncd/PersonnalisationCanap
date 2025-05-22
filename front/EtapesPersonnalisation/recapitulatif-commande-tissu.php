@@ -284,9 +284,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['comment'])) {
           <h3>Étape 7 : Choisi ta mousse</h3>
           <?php
           echo '<div class="option">
-          <img src="../../admin/uploads/mousse/' . htmlspecialchars($assocData['mousse'][$commande['id_mousse_bois']]['img'] ?? '-') . '" 
-              alt="' . htmlspecialchars($assocData['mousse'][$commande['id_mousse_bois']]['nom'] ?? '-') . '">
-          <p>' . htmlspecialchars($assocData['mousse'][$commande['id_mousse_bois']]['nom'] ?? '-') . '</p>
+          <img src="../../admin/uploads/mousse/' . htmlspecialchars($assocData['mousse'][$commande['id_mousse']]['img'] ?? '-') . '" 
+              alt="' . htmlspecialchars($assocData['mousse'][$commande['id_mousse']]['nom'] ?? '-') . '">
+          <p>' . htmlspecialchars($assocData['mousse'][$commande['id_mousse']]['nom'] ?? '-') . '</p>
         </div>';
           ?> 
         </section>
