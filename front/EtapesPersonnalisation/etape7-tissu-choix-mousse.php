@@ -16,7 +16,7 @@ $mousse = $stmt->fetchAll(PDO::FETCH_ASSOC);
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {    
  
     $id_client = $_SESSION['user_id'];
-    $id_mousse_bois = $_POST['mousse_id']; // ou 'id_mousse_bois' si ton champ s'appelle comme ça dans le HTML
+    $id_mousse = $_POST['mousse_id']; // ou 'id_mousse' si ton champ s'appelle comme ça dans le HTML
     $prix_total = isset($_POST['total_price']) ? floatval($_POST['total_price']) : 0;
 
     // Vérifier si une commande temporaire existe déjà pour cet utilisateur
@@ -25,11 +25,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $existing_order = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if ($existing_order) {
-        $stmt = $pdo->prepare("UPDATE commande_temporaire SET id_mousse_bois = ?, prix = ? WHERE id_client = ?");
-        $stmt->execute([$id_mousse_bois, $prix_total, $id_client]);
+        $stmt = $pdo->prepare("UPDATE commande_temporaire SET id_mousse = ?, prix = ? WHERE id_client = ?");
+        $stmt->execute([$id_mousse, $prix_total, $id_client]);
     } else {
-        $stmt = $pdo->prepare("INSERT INTO commande_temporaire (id_client, id_mousse_bois, prix) VALUES (?, ?, ?)");
-        $stmt->execute([$id_client, $id_mousse_bois, $prix_total]);
+        $stmt = $pdo->prepare("INSERT INTO commande_temporaire (id_client, id_mousse, prix) VALUES (?, ?, ?)");
+        $stmt->execute([$id_client, $id_mousse, $prix_total]);
     }
 
     // Rediriger vers l'étape suivante
