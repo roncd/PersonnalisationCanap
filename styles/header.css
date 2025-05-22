@@ -19,8 +19,12 @@ h1 {
     padding-top: 100px; /* ou la hauteur exacte de ton header */
 }
 
-h2 {
+.h2 {
     padding-top: 70px; /* ou la hauteur exacte de ton header */
+}
+
+.h2-commande {
+    padding-top: 120px; /* ou la hauteur exacte de ton header */
 }
 /* Conteneur général */
 

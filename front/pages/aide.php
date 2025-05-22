@@ -22,7 +22,7 @@ session_start();
         <div class="container">
             <!-- Colonne de gauche -->
             <div class="left-column">
-                <h2>Besoin d'aide ?</h2>
+                <h2 class="h2">Besoin d'aide ?</h2>
                 <p>Si tu as besoin d’un renseignement ou de l’aide tu peux appeler un vendeur : </p>
                 <p>Tél : 01 48 22 98 05</p>
                 <p>ou remplir ce formulaire :</p><br>

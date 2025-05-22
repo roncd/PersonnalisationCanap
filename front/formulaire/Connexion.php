@@ -59,7 +59,7 @@ if (isset($_GET['message']) && $_GET['message'] == 'success') {
     <main>
         <div class="container">
             <div class="left-column">
-                <h2>Connexion</h2>
+                <h2 class="h2">Connexion</h2>
                 <?php if (!empty($message)) {
                     echo $message;
                 } ?>
