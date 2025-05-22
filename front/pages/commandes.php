@@ -70,7 +70,7 @@ foreach ($commandes as $commande) {
     <main>
         <div class="container">
             <!-- Colonne de gauche -->
-            <h2>Mes commandes</h2>
+            <h2 class="h2-commande">Mes commandes</h2>
             <div class="tableau">
                 <div class="tabs">
                     <button onclick="location.href='?statut=validation'" class="tab <?= ($statut === 'validation') ? 'active' : '' ?>">En attente de validation</button>
