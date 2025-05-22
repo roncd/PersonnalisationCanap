@@ -1,4 +1,6 @@
 /* Footer styles */
+@import url('https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,100..900;1,100..900&display=swap');
+
 .ft {
     background-color: #997765;
     display: flex;
@@ -9,6 +11,7 @@
     max-width: 1800px; /* Ajustement de la largeur maximale */
     margin: 0 auto;
     padding: 0 20px;
+    margin-top: 25px;
     margin-bottom: 25px;
 }
 
@@ -117,6 +120,8 @@
 p {
   color: #000000;
   margin-bottom: 30px;
+  font-family: "Be Vietnam Pro", sans-serif;
+
 }
 
 
@@ -125,6 +130,8 @@ p {
   text-align: center;
   margin-top: 16px;
   font-size: 0.75rem; 
+  font-family: "Be Vietnam Pro", sans-serif;
+
 }
 
 .ft-map {
