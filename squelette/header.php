@@ -83,7 +83,7 @@
           <!-- Panier à droite -->
         <div class="panier">
             <a href="../pages/panier.php">
-                <img src="../../medias/icone-panier.png" alt="Logo Panier">
+                <img src="../../assets/icone-panier.svg" alt="Logo Panier">
             </a>
         </div>
          
