@@ -26,6 +26,7 @@ h1 {
 .h2-commande {
     padding-top: 120px; /* ou la hauteur exacte de ton header */
 }
+
 /* Conteneur général */
 
 /* Header */
@@ -50,16 +51,18 @@ header {
     justify-content: space-between;
     align-items: center;
     border-radius: 20px;
-    width: 90%; /* Augmente la largeur */
-    max-width: 1800px; /* Ajustement de la largeur maximale */
+    width: 94%; /* Augmente la largeur */
+    max-width: 2000px; /* Ajustement de la largeur maximale */
     margin: 0 auto;
     padding: 0 20px;
 }
+
 
 .panier {
     display: flex;
     align-items: center;
     margin-left: auto; /* Pousse le panier complètement à droite */
+    padding-right: 30px;
 }
 
 .panier a {
@@ -68,7 +71,7 @@ header {
 }
 
 .panier img {
-    height: 30px;
+    height: 22px;
     cursor: pointer;
 }
 
@@ -236,17 +239,6 @@ nav ul li a.active {
 
 .hamburger.active span:nth-child(3) {
     transform: rotate(-45deg) translate(11px, -3px);
-}
-
-
-/* Styles par défaut */
-.header-content {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 20px;
-    width: 90%;
-    max-width: 1800px;
 }
 
 body.menu-open::before {
