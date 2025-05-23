@@ -53,7 +53,7 @@
                             $stmt = $pdo->prepare("INSERT INTO modele (nom, prix, img) VALUES (?, ?, ?)");
                             $stmt->execute([$nom, $prix, $fileName]);
 
-                            $_SESSION['message'] = 'Le modèle de banquette tissu a été ajouté avec succès !';
+                            $_SESSION['message'] = 'Le modèle de banquette a été ajouté avec succès !';
                             $_SESSION['message_type'] = 'success';
                         } catch (Exception $e) {
                             $_SESSION['message'] = 'Erreur lors de l\'ajout : ' . $e->getMessage();

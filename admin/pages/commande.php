@@ -10,14 +10,22 @@ if (!isset($_SESSION['id'])) {
 
 $search = $_GET['search'] ?? '';
 
-// Paramètres de pagination
-$page = isset($_GET['page']) && is_numeric($_GET['page']) && $_GET['page'] > 0 ? (int)$_GET['page'] : 1;
-$limit = 10; // Nombre de commandes par page
-$offset = ($page - 1) * $limit;
-
 $statut = isset($_GET['statut']) && in_array($_GET['statut'], ['validation', 'construction', 'final'])
     ? $_GET['statut']
     : 'validation';
+
+// Paramètres de pagination
+$page = isset($_GET['page']) && is_numeric($_GET['page']) && $_GET['page'] > 0 ? (int)$_GET['page'] : 1;
+$limit = 10; // Nombre de commandes par page
+// Compte le nombre total de commandes pour ce statut
+$stmtCount = $pdo->prepare("SELECT COUNT(*) FROM commande_detail WHERE statut = :statut");
+$stmtCount->bindValue(':statut', $statut, PDO::PARAM_STR);
+$stmtCount->execute();
+$totalCommandes = $stmtCount->fetchColumn();
+
+$totalPages = ceil($totalCommandes / $limit); 
+
+$offset = ($page - 1) * $limit;
 
 $order = (isset($_GET['order']) && $_GET['order'] === 'asc') ? 'ASC' : 'DESC';
 $next  = ($order === 'ASC') ? 'desc' : 'asc';
@@ -31,36 +39,27 @@ $params['order'] = $next;
 $triURL = '?' . http_build_query($params);
 
 if ($search) {
-    $stmt = $pdo->prepare("SELECT cd.id, cd.date, cd.statut, cl.id 
-    AS id_client, cl.nom, cl.prenom 
+    $stmt = $pdo->prepare("SELECT cd.id, cd.date, cd.statut, cl.id AS id_client, cl.nom, cl.prenom 
     FROM commande_detail cd
-    JOIN client cl 
-    ON cd.id_client = cl.id 
-    WHERE cd.statut = :statut AND cl.nom LIKE :search OR cd.id LIKE :search ORDER BY cd.id $order ");
+    JOIN client cl ON cd.id_client = cl.id 
+    WHERE cd.statut = :statut AND (cl.nom LIKE :search OR cd.id LIKE :search)
+    ORDER BY cd.id $order");
     $stmt->bindValue(':statut', $statut, PDO::PARAM_STR);
     $stmt->bindValue(':search', '%' . $search . '%', PDO::PARAM_STR);
 } else {
     // Récupérer les commandes pour le statut et la page actuels
-    $stmt = $pdo->prepare("SELECT cd.id, cd.date, cd.statut, cl.id 
-    AS id_client, cl.nom, cl.prenom 
+    $stmt = $pdo->prepare("SELECT cd.id, cd.date, cd.statut, cl.id AS id_client, cl.nom, cl.prenom 
     FROM commande_detail cd
-    JOIN client cl 
-    ON cd.id_client = cl.id 
-    WHERE cd.statut = :statut ORDER BY cd.id $order LIMIT :limit OFFSET :offset");
+    JOIN client cl ON cd.id_client = cl.id 
+    WHERE cd.statut = :statut 
+    ORDER BY cd.id $order 
+    LIMIT :limit OFFSET :offset");
     $stmt->bindValue(':statut', $statut, PDO::PARAM_STR);
     $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
     $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
 }
 $stmt->execute();
 $commandes = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-// Compter le nombre total de commandes pour ce statut
-$stmtCount = $pdo->prepare("SELECT COUNT(*) AS total FROM commande_detail WHERE statut = :statut");
-$stmtCount->bindValue(':statut', $statut, PDO::PARAM_STR);
-$stmtCount->execute();
-$totalCommandes = $stmtCount->fetchColumn();
-
-$totalPages = ceil($totalCommandes / $limit);
 
 ?>
 
@@ -155,7 +154,6 @@ $totalPages = ceil($totalCommandes / $limit);
                             <p>Aucune commande trouvée pour ce statut.</p>
                         <?php endif; ?>
                     </div>
-                    <?php require '../include/pagination-commande.php'; ?>
                 </div>
                 <div class="tab-content <?= $statut === 'construction' ? 'active' : '' ?>" id="construction">
                     <div id="commandes-container">
@@ -179,7 +177,6 @@ $totalPages = ceil($totalCommandes / $limit);
                             <p>Aucune commande trouvée pour ce statut.</p>
                         <?php endif; ?>
                     </div>
-                    <?php require '../include/pagination-commande.php'; ?>
                 </div>
 
                 <div class="tab-content <?= $statut === 'final' ? 'active' : '' ?>" id="final">
@@ -203,8 +200,8 @@ $totalPages = ceil($totalCommandes / $limit);
                             <p>Aucune commande trouvée pour ce statut.</p>
                         <?php endif; ?>
                     </div>
-                    <?php require '../include/pagination-commande.php'; ?>
                 </div>
+                <?php require '../include/pagination-commande.php'; ?>
             </div>
     </main>
     <footer>

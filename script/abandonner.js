@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   if (btnAbandonner && popup && btnNo && btnYes) {
     btnAbandonner.addEventListener('click', () => {
-      popup.style.display = 'block';
+      popup.style.display = 'flex';
     });
 
     btnNo.addEventListener('click', () => {
@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (data.success) {
           sessionStorage.clear();
           localStorage.clear();
-          window.location.href = '../pages'; // change ça si nécessaire
+          window.location.href = '../pages'; 
         } else {
           alert("Erreur : " + data.message);
         }

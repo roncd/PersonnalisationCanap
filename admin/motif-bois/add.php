@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ajoute un motif bois</title>
+    <title>Ajoute un motif de coussin - bois</title>
     <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../../styles/admin/ajout.css">
     <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
@@ -60,10 +60,10 @@
                             $stmt = $pdo->prepare("INSERT INTO motif_bois (nom, prix, img, id_couleur_tissu) VALUES (?, ?, ?, ?)");
                             $stmt->execute([$nom, $prix, $fileName, $id_couleur]);
 
-                            $_SESSION['message'] = 'Le motif bois a été ajouté avec succès !';
+                            $_SESSION['message'] = 'Le motif du coussin a été ajouté avec succès !';
                             $_SESSION['message_type'] = 'success';
                         } catch (Exception $e) {
-                            $_SESSION['message'] = 'Erreur lors de l\'ajout du motif bois : ' . $e->getMessage();
+                            $_SESSION['message'] = 'Erreur lors de l\'ajout du motif du coussin : ' . $e->getMessage();
                             $_SESSION['message_type'] = 'error';
                         }
                     } else {
@@ -76,7 +76,7 @@
         ?>
 
         <div class="container">
-            <h2>Ajouter un motif - bois</h2>
+            <h2>Ajouter un motif de coussin - bois</h2>
             <?php require '../include/message.php'; ?>
             <div class="form">
                 <form method="POST" enctype="multipart/form-data" class="formulaire-creation-compte">
@@ -99,9 +99,9 @@
                     </div>
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="id_couleur">Id couleur tissu bois</label>
+                            <label for="id_couleur">Motif de banquette associé</label>
                             <select class="input-field" id="id_couleur" name="id_couleur">
-                                <option value="">-- Sélectionnez une couleur --</option>
+                                <option value="">-- Sélectionnez un motif --</option>
                                 <?php foreach ($couleurs as $couleur): ?>
                                     <option value="<?= htmlspecialchars($couleur['id']) ?>">
                                         <?= htmlspecialchars($couleur['nom']) ?>

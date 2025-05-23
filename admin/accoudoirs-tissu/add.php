@@ -41,7 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt->bindValue(':img', $fileName, PDO::PARAM_STR);
             $stmt->execute();
 
-            $_SESSION['message'] = 'L\'accoudoir en tissu a été ajoutée avec succès !';
+            $_SESSION['message'] = 'L\'accoudoir en tissu a été ajouté avec succès !';
             $_SESSION['message_type'] = 'success';
         } catch (Exception $e) {
             $_SESSION['message'] = 'Erreur lors de l\'ajout de l\'accoudoir en tissu : ' . $e->getMessage();

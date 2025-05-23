@@ -10,7 +10,7 @@ if (!isset($_SESSION['id'])) {
 $id = $_GET['id'] ?? null;
 
 if (!$id) {
-    $_SESSION['message'] = 'ID de l\'utilisateur manquant.';
+    $_SESSION['message'] = 'ID du membre manquant.';
     $_SESSION['message_type'] = 'error';
     header("Location: visualiser.php");
     exit();
@@ -23,7 +23,7 @@ $stmt->execute();
 $utilisateur = $stmt->fetch(PDO::FETCH_ASSOC);
 
 if (!$utilisateur) {
-    $_SESSION['message'] = 'Utilisateur introuvable.';
+    $_SESSION['message'] = 'Membre introuvable.';
     $_SESSION['message_type'] = 'error';
     header("Location: visualiser.php");
     exit();
@@ -33,16 +33,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Récupérer et valider les données
     $mail = trim($_POST['mail']);
     $mdp = password_hash($_POST['mdp'], PASSWORD_BCRYPT);
+    $nom = trim($_POST['nom']);
+    $prenom = trim($_POST['prenom']);
+    $civilite = trim($_POST['civilite']);
+    $profil = trim($_POST['profil']);
+    $tel = trim($_POST['tel']);
 
-    if (empty($mail) || empty($mdp)) {
+    if (empty($nom) || empty($prenom) || empty($mail) || empty($mdp)) {
         $_SESSION['message'] = 'Tous les champs requis doivent être remplis.';
         $_SESSION['message_type'] = 'error';
     } else {
         // Mettre à jour de l'utilisateur dans la base de données
-        $stmt = $pdo->prepare("UPDATE utilisateur SET mail = ?, mdp = ? WHERE id = ?");
-        $stmt->execute([$mail, $mdp, $id]);
+        $stmt = $pdo->prepare("UPDATE utilisateur SET mail = ?, mdp = ?, nom = ?, prenom = ?, civilite = ?, profil = ?, tel = ? WHERE id = ?");
+        $stmt->execute([$mail, $mdp, $nom, $prenom, $civilite, $profil, $tel, $id]);
 
-        $_SESSION['message'] = 'Utilisateur mise à jour avec succès!';
+        $_SESSION['message'] = 'Membre mis à jour avec succès!';
         $_SESSION['message_type'] = 'success';
         header("Location: visualiser.php");
         exit();
@@ -55,7 +60,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Modifie un utilisateur</title>
+    <title>Modifie un membre</title>
     <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../../styles/admin/ajout.css">
     <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
@@ -69,10 +74,38 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </header>
     <main>
         <div class="container">
-            <h2>Modifie un membre</h2>
+            <h2>Modifie un membre de l'équipe</h2>
             <?php require '../include/message.php'; ?>
             <div class="form">
                 <form action="edit.php?id=<?php echo $utilisateur['id']; ?>" method="POST" enctype="multipart/form-data" class="formulaire-creation-compte">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="civilite">Titre de civilité</label>
+                            <select class="input-field" id="civilite" name="civilite">
+                                <option value="<?php echo htmlspecialchars($utilisateur['civilite']); ?>"><?php echo htmlspecialchars($utilisateur['civilite']); ?></option>
+                                <?php
+                                $options = ["Mme." => "Madame", "M." => "Monsieur", "Pas précisé" => "Ne souhaite pas préciser"];
+
+                                // Boucle pour afficher uniquement les options différentes
+                                foreach ($options as $value => $label) {
+                                    if ($value !== $utilisateur['civilite']) {
+                                        echo "<option value=\"$value\">$label</option>";
+                                    }
+                                }
+                                ?>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="nom">Nom</label>
+                            <input type="name" id="nom" name="nom" class="input-field" value="<?php echo htmlspecialchars($utilisateur['nom']); ?>" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="prenom">Prénom</label>
+                            <input type="name" id="prenom" name="prenom" class="input-field" value="<?php echo htmlspecialchars($utilisateur['prenom']); ?>" required>
+                        </div>
+                    </div>
                     <div class="form-row">
                         <div class="form-group">
                             <label for="email">Mail</label>
@@ -81,6 +114,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <div class="form-group">
                             <label for="mdp">Mot de passe</label>
                             <input type="password" id="mdp" class="input-field" name="mdp" value="<?php echo htmlspecialchars($utilisateur['mdp']); ?>" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                    <div class="form-group">
+                            <label for="tel">Téléphone</label>
+                            <input type="phone" id="tel" name="tel" class="input-field" value="<?php echo ($utilisateur['tel']); ?>">
+                        </div>
+                        <div class="form-group">
+                            <label for="profil">Profil</label>
+                            <select class="input-field" id="profil" name="profil">
+                                <option value="<?php echo htmlspecialchars($utilisateur['profil']); ?>"><?php echo htmlspecialchars($utilisateur['profil']); ?></option>
+                                <?php
+                                $options = ["Administrateur" => "Administrateur" , "Commercial" => "Commercial"];
+
+                                // Boucle pour afficher uniquement les options différentes
+                                foreach ($options as $value => $label) {
+                                    if ($value !== $utilisateur['profil']) {
+                                        echo "<option value=\"$value\">$label</option>";
+                                    }
+                                }
+                                ?>
+                            </select>
                         </div>
                     </div>
                     <div class="button-section">

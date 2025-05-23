@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ajoute un motif tissu</title>
+    <title>Ajoute un motif de coussin - tissu</title>
     <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../../styles/admin/ajout.css">
     <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
@@ -59,10 +59,10 @@
                             $stmt = $pdo->prepare("INSERT INTO motif_tissu (nom, prix, img, id_couleur_tissu) VALUES (?, ?, ?, ?)");
                             $stmt->execute([$nom, $prix, $fileName, $id_couleur]);
 
-                            $_SESSION['message'] = 'Le motif tissu a été ajouté avec succès !';
+                            $_SESSION['message'] = 'Le motif du coussin a été ajouté avec succès !';
                             $_SESSION['message_type'] = 'success';
                         } catch (Exception $e) {
-                            $_SESSION['message'] = 'Erreur lors de l\'ajout du motif tissu : ' . $e->getMessage();
+                            $_SESSION['message'] = 'Erreur lors de l\'ajout du motif : ' . $e->getMessage();
                             $_SESSION['message_type'] = 'error';
                         }
                     } else {
@@ -98,7 +98,7 @@
                     </div>
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="id_couleur">Id couleur tissu</label>
+                            <label for="id_couleur">Couleur du tissu associé</label>
                             <select class="input-field" id="id_couleur" name="id_couleur">
                                 <option value="">-- Sélectionnez une couleur --</option>
                                 <?php foreach ($couleurs as $couleur): ?>

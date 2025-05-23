@@ -10,7 +10,7 @@ if (!isset($_SESSION['id'])) {
 $id = $_GET['id'] ?? null;
 
 if (!$id) {
-    $_SESSION['message'] = 'ID du modele manquant.';
+    $_SESSION['message'] = 'ID du modèle manquant.';
     $_SESSION['message_type'] = 'error';
     header("Location: visualiser.php");
     exit();
@@ -23,7 +23,7 @@ $stmt->execute();
 $modele = $stmt->fetch(PDO::FETCH_ASSOC);
 
 if (!$modele) {
-    $_SESSION['message'] = 'modele introuvable.';
+    $_SESSION['message'] = 'Modèle introuvable.';
     $_SESSION['message_type'] = 'error';
     header("Location: visualiser.php");
     exit();
@@ -62,7 +62,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (!isset($_SESSION['message'])) {
             $stmt = $pdo->prepare("UPDATE modele SET nom = ?, prix = ?, img = ? WHERE id = ?");
             $stmt->execute([$nom, $prix, $fileName, $id]);
-            $_SESSION['message'] = 'modele mis à jour avec succès!';
+            $_SESSION['message'] = 'Modèle mis à jour avec succès!';
             $_SESSION['message_type'] = 'success';
             header("Location: visualiser.php");
             exit();

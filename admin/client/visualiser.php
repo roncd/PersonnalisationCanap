@@ -61,10 +61,12 @@ $totalPages = ceil($totalCommandes / $limit);
                     <thead>
                         <tr>
                             <th>ID</th>
+                            <th>CIVILITÉ</th>
                             <th>NOM</th>
                             <th>PRENOM</th>
                             <th>MAIL</th>
                             <th>TELEPHONE</th>
+                            <th>DATE_NAISSANCE</th>
                             <th>ADRESSE</th>
                             <th>INFO_SUP</th>
                             <th>CODE_POSTAL</th>
@@ -87,10 +89,12 @@ $totalPages = ceil($totalCommandes / $limit);
                         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                             echo "<tr>";
                             echo "<td><a class='id' href='../pages/fiche-client.php?id={$row['id']}'>{$row['id']}</a></td>";
+                            echo "<td>{$row['civilite']}</td>";
                             echo "<td>{$row['nom']}</td>";
                             echo "<td>{$row['prenom']}</td>";
                             echo "<td>{$row['mail']}</td>";
                             echo "<td>{$row['tel']}</td>";
+                            echo "<td>{$row['date_naissance']}</td>";
                             echo "<td>{$row['adresse']}</td>";
                             echo "<td>{$row['info']}</td>";
                             echo "<td>{$row['codepostal']}</td>";

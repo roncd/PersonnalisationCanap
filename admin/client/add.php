@@ -18,6 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $codepostal = trim($_POST['codepostal']);
     $ville = trim($_POST['ville']);
     $date = trim($_POST['date']);
+    $civilite = trim($_POST['civilite']);
 
     // Validation des champs obligatoires
     if (empty($nom) || empty($prenom) || empty($email) || empty($tel) || empty($mdp) || empty($adresse) || empty($codepostal) || empty($ville) || empty($date)) {
@@ -27,7 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Tentative d'insertion dans la base de données
     try {
-        $stmt = $pdo->prepare("INSERT INTO client (nom, prenom, mail, tel, mdp, adresse, info, codepostal, ville, date_creation) VALUES (:nom, :prenom, :mail, :tel, :mdp, :adresse, :info, :codepostal, :ville, :date_creation)");
+        $stmt = $pdo->prepare("INSERT INTO client (nom, prenom, mail, tel, mdp, adresse, info, codepostal, ville, date_naissance, civilite) VALUES (:nom, :prenom, :mail, :tel, :mdp, :adresse, :info, :codepostal, :ville, :date_naissance, :civilite)");
         $stmt->bindValue(':nom', $nom, PDO::PARAM_STR);
         $stmt->bindValue(':prenom', $prenom, PDO::PARAM_STR);
         $stmt->bindValue(':mail', $email, PDO::PARAM_STR);
@@ -37,7 +38,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->bindValue(':info', $info, PDO::PARAM_STR);
         $stmt->bindValue(':codepostal', $codepostal, PDO::PARAM_STR);
         $stmt->bindValue(':ville', $ville, PDO::PARAM_STR);
-        $stmt->bindValue(':date_creation', $date, PDO::PARAM_STR);
+        $stmt->bindValue(':date_naissance', $date, PDO::PARAM_STR);
+        $stmt->bindValue(':civilite', $civilite, PDO::PARAM_STR);
         $stmt->execute();
 
         $_SESSION['message'] = 'Le client a été ajouté avec succès !';
@@ -73,6 +75,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <?php require '../include/message.php'; ?>
             <div class="form">
                 <form class="formulaire-creation-compte" action="" method="POST" enctype="multipart/form-data">
+                <div class="form-row">
+                        <div class="form-group">
+                            <label for="civilite">Titre de civilité</label>
+                            <select class="input-field" id="civilite" name="civilite">
+                                <option value="">-- Sélectionnez une option --</option>
+                                <option value="Mme.">Madame</option>
+                                <option value="M.">Monsieur</option>
+                                <option value="Pas précisé">Ne souhaite pas préciser</option>
+                            </select>
+                        </div>
+                    </div>
                     <div class="form-row">
                         <div class="form-group">
                             <label for="nom">Nom</label>
@@ -119,8 +132,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <input type="ville" id="ville" name="ville" class="input-field" required>
                         </div>
                         <div class="form-group">
-                            <label for="date">Date de création</label>
-                            <input type="datetime-local" id="date" name="date" class="input-field" required>
+                            <label for="date">Date de naissance</label>
+                            <input type="date" id="date" name="date" class="input-field" required>
                         </div>
                     </div>
                     <div class="button-section">

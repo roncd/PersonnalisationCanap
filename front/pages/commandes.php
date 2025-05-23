@@ -97,47 +97,6 @@ foreach ($commandes as $commande) {
                             <p>Aucune commande trouvée pour ce statut.</p>
                         <?php endif; ?>
                     </div>
-                    <nav class="nav" aria-label="pagination">
-                        <ul class="pagination">
-                            <?php if ($page > 1): ?>
-                                <li><a href="?page=<?= $page - 1 ?>&statut=<?= $statut ?>">Précédent</a></li>
-                            <?php endif; ?>
-
-                            <?php
-                            $max_links = 3;
-                            $start = max(1, $page - floor($max_links / 2));
-                            $end = min($totalPages, $start + $max_links - 1);
-
-                            if ($end - $start + 1 < $max_links) {
-                                $start = max(1, $end - $max_links + 1);
-                            }
-
-                            if ($start > 1):
-                            ?>
-                                <li><a href="?page=1&statut=<?= $statut ?>">1</a></li>
-                                <?php if ($start > 2): ?>
-                                    <li><span>…</span></li>
-                                <?php endif; ?>
-                            <?php endif; ?>
-
-                            <?php for ($i = $start; $i <= $end; $i++): ?>
-                                <li>
-                                    <a class="<?= $i == $page ? 'active' : '' ?>" href="?page=<?= $i ?>&statut=<?= $statut ?>"><?= $i ?></a>
-                                </li>
-                            <?php endfor; ?>
-
-                            <?php if ($end < $totalPages): ?>
-                                <?php if ($end < $totalPages - 1): ?>
-                                    <li><span>…</span></li>
-                                <?php endif; ?>
-                                <li><a href="?page=<?= $totalPages ?>&statut=<?= $statut ?>"><?= $totalPages ?></a></li>
-                            <?php endif; ?>
-
-                            <?php if ($page < $totalPages): ?>
-                                <li><a href="?page=<?= $page + 1 ?>&statut=<?= $statut ?>">Suivant</a></li>
-                            <?php endif; ?>
-                        </ul>
-                    </nav>
                 </div>
 
                 <div class="tab-content <?= $statut === 'construction' ? 'active' : '' ?>" id="construction">
@@ -160,47 +119,6 @@ foreach ($commandes as $commande) {
                             <p>Aucune commande trouvée pour ce statut.</p>
                         <?php endif; ?>
                     </div>
-                    <nav class="nav" aria-label="pagination">
-                        <ul class="pagination">
-                            <?php if ($page > 1): ?>
-                                <li><a href="?page=<?= $page - 1 ?>&statut=<?= $statut ?>">Précédent</a></li>
-                            <?php endif; ?>
-
-                            <?php
-                            $max_links = 3;
-                            $start = max(1, $page - floor($max_links / 2));
-                            $end = min($totalPages, $start + $max_links - 1);
-
-                            if ($end - $start + 1 < $max_links) {
-                                $start = max(1, $end - $max_links + 1);
-                            }
-
-                            if ($start > 1):
-                            ?>
-                                <li><a href="?page=1&statut=<?= $statut ?>">1</a></li>
-                                <?php if ($start > 2): ?>
-                                    <li><span>…</span></li>
-                                <?php endif; ?>
-                            <?php endif; ?>
-
-                            <?php for ($i = $start; $i <= $end; $i++): ?>
-                                <li>
-                                    <a class="<?= $i == $page ? 'active' : '' ?>" href="?page=<?= $i ?>&statut=<?= $statut ?>"><?= $i ?></a>
-                                </li>
-                            <?php endfor; ?>
-
-                            <?php if ($end < $totalPages): ?>
-                                <?php if ($end < $totalPages - 1): ?>
-                                    <li><span>…</span></li>
-                                <?php endif; ?>
-                                <li><a href="?page=<?= $totalPages ?>&statut=<?= $statut ?>"><?= $totalPages ?></a></li>
-                            <?php endif; ?>
-
-                            <?php if ($page < $totalPages): ?>
-                                <li><a href="?page=<?= $page + 1 ?>&statut=<?= $statut ?>">Suivant</a></li>
-                            <?php endif; ?>
-                        </ul>
-                    </nav>
                 </div>
 
                 <div class="tab-content <?= $statut === 'final' ? 'active' : '' ?>" id="final">
@@ -223,48 +141,48 @@ foreach ($commandes as $commande) {
                             <p>Aucune commande trouvée pour ce statut.</p>
                         <?php endif; ?>
                     </div>
-                    <nav class="nav" aria-label="pagination">
-                        <ul class="pagination">
-                            <?php if ($page > 1): ?>
-                                <li><a href="?page=<?= $page - 1 ?>&statut=<?= $statut ?>">Précédent</a></li>
-                            <?php endif; ?>
-
-                            <?php
-                            $max_links = 3;
-                            $start = max(1, $page - floor($max_links / 2));
-                            $end = min($totalPages, $start + $max_links - 1);
-
-                            if ($end - $start + 1 < $max_links) {
-                                $start = max(1, $end - $max_links + 1);
-                            }
-
-                            if ($start > 1):
-                            ?>
-                                <li><a href="?page=1&statut=<?= $statut ?>">1</a></li>
-                                <?php if ($start > 2): ?>
-                                    <li><span>…</span></li>
-                                <?php endif; ?>
-                            <?php endif; ?>
-
-                            <?php for ($i = $start; $i <= $end; $i++): ?>
-                                <li>
-                                    <a class="<?= $i == $page ? 'active' : '' ?>" href="?page=<?= $i ?>&statut=<?= $statut ?>"><?= $i ?></a>
-                                </li>
-                            <?php endfor; ?>
-
-                            <?php if ($end < $totalPages): ?>
-                                <?php if ($end < $totalPages - 1): ?>
-                                    <li><span>…</span></li>
-                                <?php endif; ?>
-                                <li><a href="?page=<?= $totalPages ?>&statut=<?= $statut ?>"><?= $totalPages ?></a></li>
-                            <?php endif; ?>
-
-                            <?php if ($page < $totalPages): ?>
-                                <li><a href="?page=<?= $page + 1 ?>&statut=<?= $statut ?>">Suivant</a></li>
-                            <?php endif; ?>
-                        </ul>
-                    </nav>
                 </div>
+                <nav class="nav" aria-label="pagination">
+                    <ul class="pagination">
+                        <?php if ($page > 1): ?>
+                            <li><a href="?page=<?= $page - 1 ?>&statut=<?= $statut ?>">Précédent</a></li>
+                        <?php endif; ?>
+
+                        <?php
+                        $max_links = 3;
+                        $start = max(1, $page - floor($max_links / 2));
+                        $end = min($totalPages, $start + $max_links - 1);
+
+                        if ($end - $start + 1 < $max_links) {
+                            $start = max(1, $end - $max_links + 1);
+                        }
+
+                        if ($start > 1):
+                        ?>
+                            <li><a href="?page=1&statut=<?= $statut ?>">1</a></li>
+                            <?php if ($start > 2): ?>
+                                <li><span>…</span></li>
+                            <?php endif; ?>
+                        <?php endif; ?>
+
+                        <?php for ($i = $start; $i <= $end; $i++): ?>
+                            <li>
+                                <a class="<?= $i == $page ? 'active' : '' ?>" href="?page=<?= $i ?>&statut=<?= $statut ?>"><?= $i ?></a>
+                            </li>
+                        <?php endfor; ?>
+
+                        <?php if ($end < $totalPages): ?>
+                            <?php if ($end < $totalPages - 1): ?>
+                                <li><span>…</span></li>
+                            <?php endif; ?>
+                            <li><a href="?page=<?= $totalPages ?>&statut=<?= $statut ?>"><?= $totalPages ?></a></li>
+                        <?php endif; ?>
+
+                        <?php if ($page < $totalPages): ?>
+                            <li><a href="?page=<?= $page + 1 ?>&statut=<?= $statut ?>">Suivant</a></li>
+                        <?php endif; ?>
+                    </ul>
+                </nav>
             </div>
         </div>
 

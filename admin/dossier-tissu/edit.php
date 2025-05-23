@@ -22,7 +22,7 @@ $stmt->execute();
 $dossier = $stmt->fetch(PDO::FETCH_ASSOC);
 
 if (!$dossier) {
-    $_SESSION['message'] = 'dossier introuvable.';
+    $_SESSION['message'] = 'Dossier introuvable.';
     $_SESSION['message_type'] = 'error';
     header("Location: visualiser.php");
     exit();
@@ -61,7 +61,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (!isset($_SESSION['message'])) {
             $stmt = $pdo->prepare("UPDATE dossier_tissu SET nom = ?, prix = ?, img = ? WHERE id = ?");
             $stmt->execute([$nom, $prix, $fileName, $id]);
-            $_SESSION['message'] = 'dossier mis à jour avec succès!';
+            $_SESSION['message'] = 'Dossier mis à jour avec succès!';
             $_SESSION['message_type'] = 'success';
             header("Location: visualiser.php");
             exit();

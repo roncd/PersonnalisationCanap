@@ -10,7 +10,7 @@ if (!isset($_SESSION['id'])) {
 $id = $_GET['id'] ?? null;
 
 if (!$id) {
-    $_SESSION['message'] = 'ID du motif manquant.';
+    $_SESSION['message'] = 'ID du motif de coussin manquant.';
     $_SESSION['message_type'] = 'error';
     header("Location: visualiser.php");
     exit();
@@ -23,10 +23,10 @@ try {
     $stmt->execute();
 
     if ($stmt->rowCount() > 0) {
-        $_SESSION['message'] = 'Le motif a été supprimée avec succès !';
+        $_SESSION['message'] = 'Le motif du coussin a été supprimée avec succès !';
         $_SESSION['message_type'] = 'success';
     } else {
-        $_SESSION['message'] = 'Motif introuvable.';
+        $_SESSION['message'] = 'Motif du coussin introuvable.';
         $_SESSION['message_type'] = 'error';
     }
 } catch (Exception $e) {

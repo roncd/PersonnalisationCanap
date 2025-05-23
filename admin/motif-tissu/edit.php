@@ -10,7 +10,7 @@ if (!isset($_SESSION['id'])) {
 $id = $_GET['id'] ?? null;
 
 if (!$id) {
-    $_SESSION['message'] = 'ID du motif manquant.';
+    $_SESSION['message'] = 'ID du motif du coussin manquant.';
     $_SESSION['message_type'] = 'error';
     header("Location: visualiser.php");
     exit();
@@ -29,7 +29,7 @@ $stmt->execute();
 $motif = $stmt->fetch(PDO::FETCH_ASSOC);
 
 if (!$motif) {
-    $_SESSION['message'] = 'Motif introuvable.';
+    $_SESSION['message'] = 'Motif du coussin introuvable.';
     $_SESSION['message_type'] = 'error';
     header("Location: visualiser.php");
     exit();
@@ -69,7 +69,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (!isset($_SESSION['message'])) {
             $stmt = $pdo->prepare("UPDATE motif_tissu SET nom = ?, prix = ?, img = ?, id_couleur_tissu = ? WHERE id = ?");
             $stmt->execute([$nom, $prix, $fileName, $id_couleur, $id]);
-            $_SESSION['message'] = 'Motif mis à jour avec succès!';
+            $_SESSION['message'] = 'Motif du coussin mis à jour avec succès!';
             $_SESSION['message_type'] = 'success';
             header("Location: visualiser.php");
             exit();
@@ -83,7 +83,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Modifier le Motif de Tissu</title>
+    <title>Modifier le motif de coussin - tissu</title>
     <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../../styles/admin/ajout.css">
     <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
@@ -121,7 +121,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </div>
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="id_couleur">Couleur tissu associé</label>
+                            <label for="id_couleur">Couleur du tissu associé</label>
                             <select class="input-field" id="id_couleur" name="id_couleur">
                                 <option value="">-- Sélectionnez une couleur --</option>
                                 <?php foreach ($couleurs as $couleur): ?>

@@ -45,7 +45,7 @@ $totalPages = ceil($totalCommandes / $limit);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Motifs de coussins - Bois</title>
+    <title>Motifs des coussins - bois</title>
     <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../../styles/admin/tab.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
@@ -83,7 +83,7 @@ $totalPages = ceil($totalCommandes / $limit);
                             <th>NOM</th>
                             <th>PRIX</th>
                             <th>IMAGE</th>
-                            <th>ID_COULEUR_TISSU</th>
+                            <th>MOTIF_BANQUETTE_ASSOCIÉ</th>
                             <th class="sticky-col">ACTION</th>
                         </tr>
                     </thead>

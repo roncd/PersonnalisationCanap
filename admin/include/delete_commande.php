@@ -25,7 +25,7 @@ if (isset($data['id'])) {
         $pdo->commit();
         echo json_encode([
             'success' => true,
-            'message' => 'Commande supprimé avec succès.'
+            'message' => 'Commande supprimé avec succès !'
         ]);
     } catch (PDOException $e) {
         // Annuler la transaction en cas d'erreur

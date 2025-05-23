@@ -62,7 +62,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (!isset($_SESSION['message'])) {
             $stmt = $pdo->prepare("UPDATE accoudoir_tissu SET nom = ?, prix = ?, img = ? WHERE id = ?");
             $stmt->execute([$nom, $price, $fileName, $id]);
-            $_SESSION['message'] = 'L\'accoudoir en tissu a été mise à jour avec succès !';
+            $_SESSION['message'] = 'L\'accoudoir en tissu a été mis à jour avec succès !';
             $_SESSION['message_type'] = 'success';
             header("Location: visualiser.php");
             exit();

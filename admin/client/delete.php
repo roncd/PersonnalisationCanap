@@ -22,10 +22,10 @@ try {
     $stmt->execute();
 
     if ($stmt->rowCount() > 0) {
-        $_SESSION['message'] = 'Le client a été supprimée avec succès !';
+        $_SESSION['message'] = 'Le client a été supprimé avec succès !';
         $_SESSION['message_type'] = 'success';
     } else {
-        $_SESSION['message'] = 'Client en tissu introuvable.';
+        $_SESSION['message'] = 'Client introuvable.';
         $_SESSION['message_type'] = 'error';
     }
 } catch (Exception $e) {

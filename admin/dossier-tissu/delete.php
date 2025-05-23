@@ -9,7 +9,7 @@ if (!isset($_SESSION['id'])) {
 $id = $_GET['id'] ?? null;
 
 if (!$id) {
-    $_SESSION['message'] = 'ID du dossier tissu manquant.';
+    $_SESSION['message'] = 'ID du dossier manquant.';
     $_SESSION['message_type'] = 'error';
     header("Location: visualiser.php");
     exit();
@@ -22,14 +22,14 @@ try {
     $stmt->execute();
 
     if ($stmt->rowCount() > 0) {
-        $_SESSION['message'] = 'Le dossier tissu a été supprimée avec succès !';
+        $_SESSION['message'] = 'Le dossier a été supprimé avec succès !';
         $_SESSION['message_type'] = 'success';
     } else {
-        $_SESSION['message'] = 'dossier tissu introuvable.';
+        $_SESSION['message'] = 'Dossier introuvable.';
         $_SESSION['message_type'] = 'error';
     }
 } catch (Exception $e) {
-    $_SESSION['message'] = 'Erreur lors de la suppression du dossier tissu : ' . $e->getMessage();
+    $_SESSION['message'] = 'Erreur lors de la suppression du dossier : ' . $e->getMessage();
     $_SESSION['message_type'] = 'error';
 }
 

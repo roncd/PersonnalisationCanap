@@ -18,7 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     // Dossier d'upload
-    $uploadDir = '../uploads/couleur-tissu-bois/';
+    $uploadDir = '../uploads/motif-banquette-bois/';
     if (!is_dir($uploadDir)) {
         mkdir($uploadDir, 0777, true); // Crée le dossier s'il n'existe pas
     }
@@ -38,10 +38,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt = $pdo->prepare("INSERT INTO couleur_tissu_bois (nom, img) VALUES (?, ?)");
             $stmt->execute([$nom, $fileName]);
 
-            $_SESSION['message'] = 'La couleur du tissu a été ajoutée avec succès !';
+            $_SESSION['message'] = 'Le motif du tissu a été ajouté avec succès !';
             $_SESSION['message_type'] = 'success';
         } catch (Exception $e) {
-            $_SESSION['message'] = 'Erreur lors de l\'ajout de la couleur du tissu : ' . $e->getMessage();
+            $_SESSION['message'] = 'Erreur lors de l\'ajout du motif du tissu : ' . $e->getMessage();
             $_SESSION['message_type'] = 'error';
         }
     } else {
@@ -56,7 +56,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ajoute une couleur de tissu bois</title>
+    <title>Ajoute un motif de banquette - bois</title>
     <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../../styles/admin/ajout.css">
     <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
@@ -71,7 +71,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </header>
     <main>
         <div class="container">
-            <h2>Ajoute une couleur de tissu bois</h2>
+            <h2>Ajoute un motif de banquette - bois</h2>
             <?php require '../include/message.php'; ?>
             <div class="form">
                 <form class="formulaire-creation-compte" action="" method="POST" enctype="multipart/form-data">

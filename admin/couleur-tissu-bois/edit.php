@@ -9,20 +9,19 @@ if (!isset($_SESSION['id'])) {
 $id = $_GET['id'] ?? null;
 
 if (!$id) {
-    $_SESSION['message'] = 'ID de la couleur du tissu en bois manquant.';
+    $_SESSION['message'] = 'ID du motif du tissu manquant.';
     $_SESSION['message_type'] = 'error';
     header("Location: visualiser.php");
     exit();
 }
 
-// Récupérer les données actuelles de couleur du tissu en bois
 $stmt = $pdo->prepare("SELECT * FROM couleur_tissu_bois WHERE  id = :id");
 $stmt->bindValue(':id', $id, PDO::PARAM_INT);
 $stmt->execute();
-$couleurTissubois = $stmt->fetch(PDO::FETCH_ASSOC);
+$motifTissuBois = $stmt->fetch(PDO::FETCH_ASSOC);
 
-if (!$couleurTissubois) {
-    $_SESSION['message'] = 'Couleur du tissu en bois introuvable.';
+if (!$motifTissuBois) {
+    $_SESSION['message'] = 'Motif du tissu introuvable.';
     $_SESSION['message_type'] = 'error';
     header("Location: visualiser.php");
     exit();
@@ -38,14 +37,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $_SESSION['message_type'] = 'error';
     } else {
         // Garder l'image actuelle si aucune nouvelle image n'est téléchargée
-        $fileName = $couleurTissubois['img'];
+        $fileName = $motifTissuBois['img'];
         if (!empty($img['name'])) {
             $allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/jpg'];
             if (!in_array($img['type'], $allowedTypes)) {
                 $_SESSION['message'] = 'Seuls les fichiers JPEG, PNG et GIF sont autorisés.';
                 $_SESSION['message_type'] = 'error';
             } else {
-                $uploadDir = '../uploads/couleur-tissu-bois/';
+                $uploadDir = '../uploads/motif-banquette-bois/';
                 if (!is_dir($uploadDir)) {
                     mkdir($uploadDir, 0777, true);
                 }
@@ -60,7 +59,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (!isset($_SESSION['message'])) {
             $stmt = $pdo->prepare("UPDATE couleur_tissu_bois SET nom = ?, prix = ?, img = ? WHERE id = ?");
             $stmt->execute([$nom, $price, $fileName, $id]);
-            $_SESSION['message'] = 'La couleur du tissu en bois a été mise à jour avec succès !';
+            $_SESSION['message'] = 'Le motif a été mis à jour avec succès !';
             $_SESSION['message_type'] = 'success';
             header("Location: visualiser.php");
             exit();
@@ -74,7 +73,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Modifie une couleur de tissu bois</title>
+    <title>Modifie un motif de banquette - bois</title>
     <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../../styles/admin/ajout.css">
     <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
@@ -89,25 +88,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </header>
     <main>
         <div class="container">
-            <h2>Modifie une couleur de tissu bois</h2>
+            <h2>Modifie un motif de banquette - bois</h2>
             <?php require '../include/message.php'; ?>
             <div class="form">
-                <form action="edit.php?id=<?php echo $couleurTissubois['id']; ?>" method="POST" enctype="multipart/form-data" class="formulaire-creation-compte">
+                <form action="edit.php?id=<?php echo $motifTissuBois['id']; ?>" method="POST" enctype="multipart/form-data" class="formulaire-creation-compte">
                     <div class="form-row">
                         <div class="form-group">
                             <label for="name">Nom</label>
-                            <input type="text" id="name" name="name" class="input-field" value="<?php echo htmlspecialchars($couleurTissubois['nom']); ?>" required>
+                            <input type="text" id="name" name="name" class="input-field" value="<?php echo htmlspecialchars($motifTissuBois['nom']); ?>" required>
                         </div>
                         <div class="form-group">
                             <label for="price">Prix (en €)</label>
-                            <input type="number" id="price" name="price" class="input-field" value="<?php echo htmlspecialchars($couleurTissubois['prix']); ?>" required>
+                            <input type="number" id="price" name="price" class="input-field" value="<?php echo htmlspecialchars($motifTissuBois['prix']); ?>" required>
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group">
                             <label for="img">Image (Laissez vide pour conserver l'image actuelle)</label>
                             <input type="file" id="img" name="img" class="input-field" accept="image/*" onchange="loadFile(event)" >
-                            <img class="preview-img" src="../uploads/couleur-tissu-bois/<?php echo htmlspecialchars($couleurTissubois['img']); ?>" id="output" />
+                            <img class="preview-img" src="../uploads/motif-banquette-bois/<?php echo htmlspecialchars($motifTissuBois['img']); ?>" id="output" />
                          </div>
                     </div>
                     <div class="button-section">

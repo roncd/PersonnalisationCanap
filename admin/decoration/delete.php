@@ -25,7 +25,7 @@ try {
         $_SESSION['message'] = 'La décoration a été supprimée avec succès !';
         $_SESSION['message_type'] = 'success';
     } else {
-        $_SESSION['message'] = 'Décoration du tissu en tissu introuvable.';
+        $_SESSION['message'] = 'Décoration introuvable.';
         $_SESSION['message_type'] = 'error';
     }
 } catch (Exception $e) {

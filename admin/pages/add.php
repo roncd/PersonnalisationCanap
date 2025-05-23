@@ -33,13 +33,16 @@ if (!isset($_SESSION['id'])) {
             </div>
 
             <div class="grid-wrapper">
-                <!-- <section class="category-block">
-                    <h2>Administration</h2>
-                    <div class="button-grid">
-                        <a href="../utilisateur/add.php" class="btn">Equipe</a>
-                    </div>
-                </section> -->
 
+            <section class="category-block">
+                    <h2>Produits à l'unité</h2>
+                    <div class="button-grid">
+                        <a href="#" class="btn">Tissu</a>
+                        <a href="#" class="btn">Coussin</a>
+                        <a href="#" class="btn">Mousse</a>
+                    </div>
+                </section>
+                
                 <section class="category-block">
                     <h2>Bases canapé</h2>
                     <div class="button-grid">
@@ -50,20 +53,20 @@ if (!isset($_SESSION['id'])) {
                 </section>
 
                 <section class="category-block">
-                    <h2>Canapé en bois</h2>
+                    <h2>Composants canapé en bois</h2>
                     <div class="button-grid">
                         <a href="../couleur-banquette-bois/add.php" class="btn">Couleur bois</a>
                         <a href="../decoration/add.php" class="btn">Décoration</a>
                         <a href="../accoudoirs-bois/add.php" class="btn">Accoudoirs</a>
                         <a href="../dossier-bois/add.php" class="btn">Dossier</a>
-                        <a href="#" class="btn">Couleur tissu</a>
-                        <a href="../couleur-tissu-bois/add.php" class="btn">Motif tissu</a>
+                        <a href="../couleur/add.php" class="btn">Couleur tissu</a>
+                        <a href="../motif-banquette-bois/add.php" class="btn">Motif banquette</a>
                         <a href="../motif-bois/add.php" class="btn">Motif coussin</a>
                     </div>
                 </section>
 
                 <section class="category-block">
-                    <h2>Canapé en tissu</h2>
+                    <h2>Composants canapé en tissu</h2>
                     <div class="button-grid">
                         <a href="../modele-banquette-tissu/add.php" class="btn">Modèle</a>
                         <a href="../accoudoirs-tissu/add.php" class="btn">Accoudoirs</a>
@@ -72,6 +75,7 @@ if (!isset($_SESSION['id'])) {
                         <a href="../motif-tissu/add.php" class="btn">Motif coussin</a>
                     </div>
                 </section>
+
             </div>
         </div>
     </main>

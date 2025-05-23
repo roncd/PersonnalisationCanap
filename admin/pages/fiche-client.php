@@ -41,6 +41,17 @@ if (!$client) {
 }
 
 $limit = 5;
+
+//Calcul age a part date naissance
+function age($date)
+{
+    $anne = date('Y', strtotime($date));
+    $age = date('Y') - $anne;
+    if (date('md') < date('md', strtotime($date))) {
+        return $age - 1;
+    }
+    return $age;
+}
 ?>
 
 <body>
@@ -59,7 +70,12 @@ $limit = 5;
                         </h2>
                         <p>
                             Titre de civilité : <?= ($client['civilite']) ?> <br>
-                            Âge : ans (date de naissance : <?= ($client['date_naissance']) ?> )<br>
+                            Âge : <?php if (!empty($client['date_naissance'])) : ?>
+                                <?php echo age($client['date_naissance']); ?>
+                                ans (date de naissance : <?= ($client['date_naissance']) ?> )
+                            <?php else: ?>
+                                <span>-</span>
+                            <?php endif; ?><br>
                             Date d'inscription : <?= htmlspecialchars($client['date_creation']) ?><br>
                         </p>
                     </section>
@@ -96,7 +112,6 @@ $limit = 5;
                                     }
                                 } else {
                                     echo "<tr><td colspan='4'>Aucune commande trouvée pour ce client.</td></tr>";
-
                                 }
                                 ?>
                             </tbody>
