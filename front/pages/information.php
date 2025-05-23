@@ -86,7 +86,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <main>
         <div class="container">
             <div class="left-column">
-                <h2>Modifiez vos informations</h2>
+                <h2 class="h2">Modifiez vos informations</h2>
 
                 <?php
                 // Affichage des messages d'alerte (erreur ou succès)

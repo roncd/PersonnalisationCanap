@@ -71,8 +71,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <div class="container">
       <!-- Colonne de gauche -->
       <div class="left-column">
-        <h2>Créer ton compte</h2>
-
+        <h2 class="h2">Créer ton compte</h2>
         <!-- Message dynamique affiché ici -->
         <?php
         if (!empty($message)) {
