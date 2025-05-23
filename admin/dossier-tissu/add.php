@@ -54,7 +54,7 @@
                             $stmt = $pdo->prepare("INSERT INTO dossier_tissu (nom, prix, img) VALUES (?, ?, ?)");
                             $stmt->execute([$nom, $prix, $fileName]);
 
-                            $_SESSION['message'] = 'Le dossier tissu a été ajouté avec succès !';
+                            $_SESSION['message'] = 'Le dossier a été ajouté avec succès !';
                             $_SESSION['message_type'] = 'success';
                         } catch (Exception $e) {
                             $_SESSION['message'] = 'Erreur lors de l\'ajout : ' . $e->getMessage();

@@ -41,15 +41,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $codepostal = trim($_POST['codepostal']);
     $ville = trim($_POST['ville']);
     $date = trim($_POST['date']);
+    $civilite = trim($_POST['civilite']);
 
     if (empty($nom) || empty($prenom) || empty($mail) || empty($tel) || empty($mdp) || empty($adresse) || empty($codepostal) || empty($ville) || empty($date)) {
         $_SESSION['message'] = 'Tous les champs requis doivent être remplis.';
         $_SESSION['message_type'] = 'error';
     } else {
         // Mettre à jour du client dans la base de données
-        $stmt = $pdo->prepare("UPDATE client SET nom = ?, prenom = ?, mail = ?, tel = ?, mdp = ?, adresse = ?, info = ?, codepostal = ?, ville = ?, date_creation = ? WHERE id = ?");
-        if ($stmt->execute([$nom, $prenom, $mail, $tel, $mdp, $adresse, $info, $codepostal, $ville, $date, $id])) {
-            $_SESSION['message'] = 'Le client a été mise à jour avec succès !';
+        $stmt = $pdo->prepare("UPDATE client SET nom = ?, prenom = ?, mail = ?, tel = ?, mdp = ?, adresse = ?, info = ?, codepostal = ?, ville = ?, date_naissance = ?,  civilite = ? WHERE id = ?");
+        if ($stmt->execute([$nom, $prenom, $mail, $tel, $mdp, $adresse, $info, $codepostal, $ville, $date, $civilite, $id])) {
+            $_SESSION['message'] = 'Le client a été mis à jour avec succès !';
             $_SESSION['message_type'] = 'success';
             header("Location: visualiser.php");
             exit();
@@ -84,6 +85,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <?php require '../include/message.php'; ?>
             <div class="form">
                 <form action="edit.php?id=<?php echo $client['id']; ?>" method="POST" enctype="multipart/form-data" class="formulaire-creation-compte">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="civilite">Titre de civilité</label>
+                            <select class="input-field" id="civilite" name="civilite">
+                                <option value="<?php echo htmlspecialchars($client['civilite']); ?>"><?php echo htmlspecialchars($client['civilite']); ?></option>
+                                <?php
+                                $options = ["Mme." => "Madame", "M." => "Monsieur", "Pas précisé" => "Ne souhaite pas préciser"];
+
+                                // Boucle pour afficher uniquement les options différentes
+                                foreach ($options as $value => $label) {
+                                    if ($value !== $client['civilite']) {
+                                        echo "<option value=\"$value\">$label</option>";
+                                    }
+                                }
+                                ?>
+                            </select>
+                        </div>
+                    </div>
                     <div class="form-row">
                         <div class="form-group">
                             <label for="nom">Nom</label>
@@ -130,8 +149,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <input type="ville" id="ville" class="input-field" name="ville" value="<?php echo htmlspecialchars($client['ville']); ?>" required>
                         </div>
                         <div class="form-group">
-                            <label for="date">Date de création</label>
-                            <input type="datetime-local" id="date" class="input-field" name="date" value="<?php echo htmlspecialchars($client['date_creation']); ?>" required>
+                            <label for="date">Date de naissance</label>
+                            <input type="date" id="date" class="input-field" name="date" value="<?php echo htmlspecialchars($client['date_naissance']); ?>" required>
                         </div>
                     </div>
                     <div class="button-section">

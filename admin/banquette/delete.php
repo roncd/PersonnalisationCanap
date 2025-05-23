@@ -25,7 +25,7 @@ try {
         $_SESSION['message'] = 'La banquette a été supprimée avec succès !';
         $_SESSION['message_type'] = 'success';
     } else {
-        $_SESSION['message'] = 'Banquette en tissu introuvable.';
+        $_SESSION['message'] = 'Banquette introuvable.';
         $_SESSION['message_type'] = 'error';
     }
 } catch (Exception $e) {

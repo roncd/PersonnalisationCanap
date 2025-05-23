@@ -10,26 +10,26 @@ if (!isset($_SESSION['id'])) {
 $id = $_GET['id'] ?? null;
 
 if (!$id) {
-    $_SESSION['message'] = 'ID de la couleur du tissu manquant.';
+    $_SESSION['message'] = 'ID de la couleur manquant.';
     $_SESSION['message_type'] = 'error';
     header("Location: visualiser.php");
     exit();
 }
 
 try {
-    $stmt = $pdo->prepare("DELETE FROM couleur_tissu WHERE id = :id");
+    $stmt = $pdo->prepare("DELETE FROM couleur WHERE id = :id");
     $stmt->bindValue(':id', $id, PDO::PARAM_INT);
     $stmt->execute();
 
     if ($stmt->rowCount() > 0) {
-        $_SESSION['message'] = 'La couleur du tissu a été supprimée avec succès !';
+        $_SESSION['message'] = 'La couleur a été supprimée avec succès !';
         $_SESSION['message_type'] = 'success';
     } else {
-        $_SESSION['message'] = 'Couleur du tissu introuvable.';
+        $_SESSION['message'] = 'Couleur introuvable.';
         $_SESSION['message_type'] = 'error';
     }
 } catch (Exception $e) {
-    $_SESSION['message'] = 'Erreur lors de la suppression de la couleur du tissu en tissu : ' . $e->getMessage();
+    $_SESSION['message'] = 'Erreur lors de la suppression de la couleur du tissu : ' . $e->getMessage();
     $_SESSION['message_type'] = 'error';
 }
 

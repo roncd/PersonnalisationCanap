@@ -10,7 +10,7 @@ if (!isset($_SESSION['id'])) {
 $id = $_GET['id'] ?? null;
 
 if (!$id) {
-    $_SESSION['message'] = 'ID du modèle de banquette manquant.';
+    $_SESSION['message'] = 'ID du modèle manquant.';
     $_SESSION['message_type'] = 'error';
     header("Location: visualiser.php");
     exit();
@@ -23,14 +23,14 @@ try {
     $stmt->execute();
 
     if ($stmt->rowCount() > 0) {
-        $_SESSION['message'] = 'Le modèle de banquette a été supprimée avec succès !';
+        $_SESSION['message'] = 'Le modèle a été supprimé avec succès !';
         $_SESSION['message_type'] = 'success';
     } else {
-        $_SESSION['message'] = 'Modèle de banquette introuvable.';
+        $_SESSION['message'] = 'Modèle introuvable.';
         $_SESSION['message_type'] = 'error';
     }
 } catch (Exception $e) {
-    $_SESSION['message'] = 'Erreur lors de la suppression du modèle de banquette : ' . $e->getMessage();
+    $_SESSION['message'] = 'Erreur lors de la suppression du modèle : ' . $e->getMessage();
     $_SESSION['message_type'] = 'error';
 }
 

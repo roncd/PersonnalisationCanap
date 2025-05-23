@@ -60,14 +60,19 @@ $totalPages = ceil($totalCommandes / $limit);
                     <thead>
                         <tr>
                             <th>ID</th>
+                            <th>CIVILITÉ</th>
+                            <th>NOM</th>
+                            <th>PRENOM</th>
                             <th>MAIL</th>
+                            <th>TELEPHONE</th>
+                            <th>PROFIL</th>
                             <th class="sticky-col">ACTION</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php
                         if ($search) {
-                            $stmt = $pdo->prepare("SELECT * FROM utilisateur WHERE mail LIKE :search ORDER BY id DESC");
+                            $stmt = $pdo->prepare("SELECT * FROM utilisateur WHERE nom LIKE :search ORDER BY id DESC");
                             $stmt->bindValue(':search', '%' . $search . '%', PDO::PARAM_STR);
                         } else {
                             $stmt = $pdo->prepare("SELECT * FROM utilisateur ORDER BY id LIMIT :limit OFFSET :offset");
@@ -78,7 +83,12 @@ $totalPages = ceil($totalCommandes / $limit);
                         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                             echo "<tr>";
                             echo "<td>{$row['id']}</td>";
+                            echo "<td>{$row['civilite']}</td>";
+                            echo "<td>{$row['nom']}</td>";
+                            echo "<td>{$row['prenom']}</td>";
                             echo "<td>{$row['mail']}</td>";
+                            echo "<td>{$row['tel']}</td>";
+                            echo "<td>{$row['profil']}</td>";
                             echo "<td class='actions'>";
                             echo "<a href='edit.php?id={$row['id']}' class='edit-action actions vert' title='Modifier'>EDIT</a>";
                             echo "<a href='delete.php?id={$row['id']}' class='delete-action actions rouge' title='Supprimer' onclick='return confirm(\"Voulez-vous vraiment supprimer cet utilisateur ?\");'>DELETE</a>";

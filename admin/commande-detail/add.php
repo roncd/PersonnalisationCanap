@@ -69,7 +69,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt = $pdo->prepare("INSERT INTO commande_detail (prix, commentaire, date, statut, id_client, id_structure, id_dimension, id_banquette, id_mousse, id_couleur_bois, id_decoration, id_accoudoir_bois, id_dossier_bois, id_couleur_tissu_bois, id_motif_bois, id_modele, id_couleur_tissu, id_motif_tissu, id_accoudoir_tissu, id_dossier_tissu) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
         $stmt->execute([$prix, $commentaire, $date, $statut, $idClient, $idStructure, $idDimension, $idBanquette, $idMousse, $idCouleurBois, $idDecoration, $idAccoudoirBois, $idDossierBois, $idTissuBois, $idMotifBois, $idModele, $idCouleurTissu, $idMotifTissu, $idAccoudoirTissu, $idDossierTissu]);
 
-        $_SESSION['message'] = 'La commande a été ajouté avec succès !';
+        $_SESSION['message'] = 'La commande a été ajoutée avec succès !';
         $_SESSION['message_type'] = 'success';
     } catch (Exception $e) {
         $_SESSION['message'] = 'Erreur lors de l\'ajout de la commande : ' . $e->getMessage();

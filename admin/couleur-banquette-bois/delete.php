@@ -10,7 +10,7 @@ if (!isset($_SESSION['id'])) {
 $id = $_GET['id'] ?? null;
 
 if (!$id) {
-    $_SESSION['message'] = 'ID de la couleur banquette en bois manquant.';
+    $_SESSION['message'] = 'ID de la couleur manquant.';
     $_SESSION['message_type'] = 'error';
     header("Location: visualiser.php");
     exit();
@@ -22,14 +22,14 @@ try {
     $stmt->execute();
 
     if ($stmt->rowCount() > 0) {
-        $_SESSION['message'] = 'La couleur banquette en bois a été supprimée avec succès !';
+        $_SESSION['message'] = 'La couleur a été supprimée avec succès !';
         $_SESSION['message_type'] = 'success';
     } else {
-        $_SESSION['message'] = 'Couleur banquette en bois en tissu introuvable.';
+        $_SESSION['message'] = 'Couleur en tissu introuvable.';
         $_SESSION['message_type'] = 'error';
     }
 } catch (Exception $e) {
-    $_SESSION['message'] = 'Erreur lors de la suppression de la couleur banquette en bois : ' . $e->getMessage();
+    $_SESSION['message'] = 'Erreur lors de la suppression de la couleur : ' . $e->getMessage();
     $_SESSION['message_type'] = 'error';
 }
 

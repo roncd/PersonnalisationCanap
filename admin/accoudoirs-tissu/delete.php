@@ -22,7 +22,7 @@ try {
     $stmt->execute();
 
     if ($stmt->rowCount() > 0) {
-        $_SESSION['message'] = 'L\'accoudoir en tissu a été supprimée avec succès !';
+        $_SESSION['message'] = 'L\'accoudoir en tissu a été supprimé avec succès !';
         $_SESSION['message_type'] = 'success';
     } else {
         $_SESSION['message'] = 'Accoudoir en tissu introuvable.';
