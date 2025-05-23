@@ -103,7 +103,7 @@ if (isset($_GET['structure_id'])) {
     <?php require '../../squelette/header.php'; ?>
   </header>
   <main>
-    <div class="fil-ariane-container" aria-label="fil-ariane">
+    <div class="fil-ariane-container h2" aria-label="fil-ariane">
       <ul class="fil-ariane">
         <li><a href="etape1-1-structure.php">Structure</a></li>
         <li><a href="etape1-2-dimension.php" class="active">Dimension</a></li>

@@ -89,7 +89,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['couleur_tissu_bois_id
   </header>
 
   <main>
-    <div class="fil-ariane-container" aria-label="fil-ariane">
+    <div class="fil-ariane-container h2" aria-label="fil-ariane">
       <ul class="fil-ariane">
         <li><a href="etape1-1-structure.php">Structure</a></li>
         <li><a href="etape1-2-dimension.php">Dimension</a></li>
