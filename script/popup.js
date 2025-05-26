@@ -38,9 +38,12 @@ document.addEventListener('DOMContentLoaded', () => {
   const btnYes = document.querySelector('.yes-btn');
 
   if (btnAbandonner && popup && btnNo && btnYes) {
+    let redirectURL = btnAbandonner.dataset.url; // ← récupère la bonne URL
+
     btnAbandonner.addEventListener('click', () => {
       popup.style.display = 'flex';
       console.log('Bouton Abandonner cliqué');
+      redirectURL = btnAbandonner.dataset.url; // ← on la recharge au cas où
     });
 
     btnNo.addEventListener('click', () => {
@@ -64,7 +67,7 @@ document.addEventListener('DOMContentLoaded', () => {
           if (data.success) {
             sessionStorage.clear();
             localStorage.clear();
-            window.location.href = '../pages';
+            window.location.href = redirectURL; // ← utilise l’URL dynamique
           } else {
             alert("Erreur : " + data.message);
           }
