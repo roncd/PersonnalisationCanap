@@ -163,10 +163,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['comment'])) {
     <div class="container">
       <!-- Colonne de gauche -->
       <div class="left-column">
-        <h2>Récapitulatif de la commande</h2>
+        <h2 class="h2">Récapitulatif de la commande</h2>
 
         <section class="color-options">
-          <h3>Étape 1 : Choisi ta structure</h3>
+          <h3>Étape 1.1 : Choisi ta structure</h3>
           <?php
           echo '<div class="option">
           <img src="../../admin/uploads/structure/' . htmlspecialchars($assocData['structure'][$commande['id_structure']]['img'] ?? '-') . '" 
@@ -175,7 +175,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['comment'])) {
         </div>';
           ?>
 
-          <h3>Étape 1 : Choisi tes dimensions</h3>
+          <h3>Étape 1.2 : Choisi tes dimensions</h3>
           <?php
           $longueurB = isset($dim['longueurB']) && !empty(trim($dim['longueurB'])) ? htmlspecialchars($dim['longueurB']) : null;
           $longueurC = isset($dim['longueurC']) && !empty(trim($dim['longueurC'])) ? htmlspecialchars($dim['longueurC']) : null;
@@ -213,7 +213,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['comment'])) {
           <p>' . htmlspecialchars($assocData['modele'][$commande['id_modele']]['nom'] ?? '-') . '</p>
         </div>';
           ?>
-          <h3>Étape 4 : Choisi ta couleur de tissu</h3>
+          <h3>Étape 4.1 : Choisi ta couleur de tissu</h3>
           <?php
           echo '<div class="option">
           <img src="../../admin/uploads/couleur-tissu-tissu/' . htmlspecialchars($assocData['couleur_tissu'][$commande['id_couleur_tissu']]['img'] ?? '-') . '" 
@@ -222,7 +222,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['comment'])) {
         </div>';
           ?>
 
-          <h3>Étape 4 : Choisi ton motif de coussin</h3>
+          <h3>Étape 4.2 : Choisi ton motif de coussin</h3>
           <?php
           echo '<div class="option">
           <img src="../../admin/uploads/motif-tissu/' . htmlspecialchars($assocData['motif_tissu'][$commande['id_motif_tissu']]['img'] ?? '-') . '" 
@@ -264,7 +264,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['comment'])) {
           ?>
         </section>
         <div class="footer-processus">
-          <p>Total : <span>899 €</span></p>
+          <p>Total : <span>0 €</span></p>
           <div class="buttons">
             <button onclick="retourEtapePrecedente()" class="btn-retour transition">Retour</button>
             <button class="btn-generer">Générer un devis</button>
@@ -275,7 +275,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['comment'])) {
       <script>
         function retourEtapePrecedente() {
           // Exemple : tu es sur étape 8, tu veux revenir à étape 7
-          window.location.href = "etape7-tissu-choix-mousse.php";
+          window.location.href = "etape7-tissu-mousse.php";
         }
       </script>
 
@@ -307,8 +307,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['comment'])) {
             </form>
           </section>
 
-           <!-- Popup devis -->
-           <div id="pdf-popup" class="popup">
+          <!-- Popup devis -->
+          <div id="pdf-popup" class="popup">
             <div class="popup-content">
               <h2>Commande finalisé !</h2>
               <p>Votre devis a été créé et envoyé à l'adresse suivante :

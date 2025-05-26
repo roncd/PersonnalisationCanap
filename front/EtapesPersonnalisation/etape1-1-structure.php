@@ -53,24 +53,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
   <title>Étape 1 - Choisi ta structure</title>
 
-  <style>
-    .transition {
-      opacity: 0;
-      transform: translateY(20px);
-      transition: opacity 0.5s ease, transform 0.5s ease;
-    }
-
-    .transition.show {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    .option img.selected {
-      border: 3px solid #997765;
-      border-radius: 5px;
-      box-sizing: border-box;
-    }
-  </style>
 </head>
 
 <body data-user-id="<?php echo $_SESSION['user_id']; ?>">
@@ -90,21 +72,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <div class="container">
       <div class="left-column transition">
         <h2>Étape 1 - Choisi ta structure</h2>
-          
-<section class="color-options">
-  <?php foreach ($structures as $structure): ?>
-    <div class="option transition" data-nb-longueurs="<?php echo htmlspecialchars($structure['nb_longueurs']); ?>">
-      <img src="../../admin/uploads/structure/<?php echo htmlspecialchars($structure['img']); ?>"
-           alt="<?php echo htmlspecialchars($structure['nom']); ?>"
-           data-structure-id="<?php echo $structure['id']; ?>">
-      <p><?php echo htmlspecialchars($structure['nom']); ?></p>
-    </div>
-  <?php endforeach; ?>
-</section>
+
+        <section class="color-options">
+          <?php foreach ($structures as $structure): ?>
+            <div class="option transition" data-nb-longueurs="<?php echo htmlspecialchars($structure['nb_longueurs']); ?>">
+              <img src="../../admin/uploads/structure/<?php echo htmlspecialchars($structure['img']); ?>"
+                alt="<?php echo htmlspecialchars($structure['nom']); ?>"
+                data-structure-id="<?php echo $structure['id']; ?>">
+              <p><?php echo htmlspecialchars($structure['nom']); ?></p>
+            </div>
+          <?php endforeach; ?>
+        </section>
 
 
         <div class="footer">
-          <p>Total : <span>899 €</span></p>
+          <p>Total : <span>0 €</span></p>
           <div class="buttons">
             <form method="POST" action="">
               <input type="hidden" name="structure_id" id="selected-structure">
@@ -150,9 +132,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       </div>
     </div>
 
-    
-<!-- Popup d'erreur si option non selectionnée -->
-<div id="erreur-popup" class="popup transition">
+
+    <!-- Popup d'erreur si option non selectionnée -->
+    <div id="erreur-popup" class="popup transition">
       <div class="popup-content">
         <h2>Veuillez choisir une option avant de continuer.</h2>
         <button class="close-btn">OK</button>
@@ -171,7 +153,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         // Vérification si une sélection existe dans localStorage
         let savedStructureId = localStorage.getItem('selectedStructureId');
-        let selected = savedStructureId!=='';
+        let selected = savedStructureId !== '';
 
         // Appliquer les transitions aux éléments
         document.querySelectorAll('.transition').forEach(element => {
@@ -180,50 +162,50 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         // Restaurer la sélection si elle existe
         options.forEach(img => {
-        if (img.getAttribute('data-structure-id') === savedStructureId) {
-        img.classList.add('selected');
-        mainImage.src = img.src;
-        selectedStructureInput.value = savedStructureId;
-         }
-       });
+          if (img.getAttribute('data-structure-id') === savedStructureId) {
+            img.classList.add('selected');
+            mainImage.src = img.src;
+            selectedStructureInput.value = savedStructureId;
+          }
+        });
 
         // Gestion du clic sur une option
         options.forEach(img => {
-        img.addEventListener('click', () => {
-        options.forEach(opt => opt.classList.remove('selected'));
-        img.classList.add('selected');
-        mainImage.src = img.src;
-        savedStructureId = img.getAttribute('data-structure-id');
-        selectedStructureInput.value = savedStructureId;
-        selected = true;
-        saveSelection();
+          img.addEventListener('click', () => {
+            options.forEach(opt => opt.classList.remove('selected'));
+            img.classList.add('selected');
+            mainImage.src = img.src;
+            savedStructureId = img.getAttribute('data-structure-id');
+            selectedStructureInput.value = savedStructureId;
+            selected = true;
+            saveSelection();
+          });
         });
-     });     
 
-    // Empêcher la soumission du formulaire si rien n'est sélectionné
-    form.addEventListener('submit', (e) => {
-      if (!selectedStructureInput.value) {
-        e.preventDefault();
-        erreurPopup.style.display = 'flex'; // ou 'block' selon ton CSS
-      }
-    });
+        // Empêcher la soumission du formulaire si rien n'est sélectionné
+        form.addEventListener('submit', (e) => {
+          if (!selectedStructureInput.value) {
+            e.preventDefault();
+            erreurPopup.style.display = 'flex'; // ou 'block' selon ton CSS
+          }
+        });
 
-    // Fermer le popup
-    closeErreurBtn.addEventListener('click', () => {
-      erreurPopup.style.display = 'none';
-    });
+        // Fermer le popup
+        closeErreurBtn.addEventListener('click', () => {
+          erreurPopup.style.display = 'none';
+        });
 
-    window.addEventListener('click', (event) => {
-      if (event.target === erreurPopup) {
-        erreurPopup.style.display = 'none';
-      }
-    });
+        window.addEventListener('click', (event) => {
+          if (event.target === erreurPopup) {
+            erreurPopup.style.display = 'none';
+          }
+        });
 
-    function saveSelection() {
-    localStorage.setItem('selectedStructureId', savedStructureId);
-    }
-  });
-    </script>  
+        function saveSelection() {
+          localStorage.setItem('selectedStructureId', savedStructureId);
+        }
+      });
+    </script>
 
     <!-- VARIATION DES PRIX  -->
     <script>
@@ -249,7 +231,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           console.warn("allSelectedOptions n'était pas un tableau. Réinitialisé à []");
         }
 
-        
+
         // Fonction pour mettre à jour le total global
         function updateTotal() {
           // Calculer le total global en prenant en compte les quantités

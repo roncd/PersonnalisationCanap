@@ -51,27 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <script type="module" src="../../script/variationPrix.js"></script>
 
     <title>Étape 5 - Choisi ton dossier</title>
-    <style>
-        /* Transition pour les éléments de la page */
-        .transition {
-            opacity: 0;
-            transform: translateY(20px);
-            transition: opacity 0.5s ease, transform 0.5s ease;
-        }
-
-        .transition.show {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        /* Appliquer les transitions aux images sélectionnées */
-        .option img.selected {
-            border: 3px solid #997765;
-            /* Couleur marron */
-            border-radius: 5px;
-            box-sizing: border-box;
-        }
-    </style>
+  
 </head>
 
 <body data-user-id="<?php echo $_SESSION['user_id']; ?>" data-current-step="5-dossier-tissu">
@@ -81,16 +61,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </header>
 
     <main>
-    <div class="fil-ariane-container h2" aria-label="fil-ariane">
+        <div class="fil-ariane-container h2" aria-label="fil-ariane">
             <ul class="fil-ariane">
                 <li><a href="etape1-1-structure.php">Structure</a></li>
                 <li><a href="etape1-2-dimension.php">Dimension</a></li>
                 <li><a href="etape2-type-banquette.php">Banquette</a></li>
                 <li><a href="etape3-tissu-modele-banquette.php">Modèle</a></li>
-                <li><a href="etape4-1-tissu-choix-tissu.php">Tissu</a></li>
-                <li><a href="etape5-tissu-choix-dossier.php" class="active">Dossier</a></li>
+                <li><a href="etape4-1-tissu-tissu.php">Tissu</a></li>
+                <li><a href="etape5-tissu-dossier.php" class="active">Dossier</a></li>
                 <li><a href="etape6-tissu-accoudoir.php">Accoudoir</a></li>
-                <li><a href="etape7-tissu-choix-mousse.php">Mousse</a></li>
+                <li><a href="etape7-tissu-mousse.php">Mousse</a></li>
             </ul>
         </div>
 
@@ -116,10 +96,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </section>
 
                 <div class="footer">
-                    <p>Total : <span>899 €</span></p>
+                    <p>Total : <span>0 €</span></p>
                     <div class="buttons">
-                    <button onclick="retourEtapePrecedente()" class="btn-retour transition">Retour</button>
-                    <form method="POST" action="">
+                        <button onclick="retourEtapePrecedente()" class="btn-retour transition">Retour</button>
+                        <form method="POST" action="">
                             <input type="hidden" name="dossier_tissu_id" id="selected-dossier_tissu">
                             <button type="submit" class="btn-suivant transition">Suivant</button>
                         </form>
@@ -162,15 +142,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
         </div>
 
-      
-<!-- Popup d'erreur si option non selectionné -->
-<div id="erreur-popup" class="popup transition">
-      <div class="popup-content">
-        <h2>Veuillez choisir une option avant de continuer.</h2>
-        <button class="close-btn">OK</button>
-      </div>
-      </div>
-        
+
+        <!-- Popup d'erreur si option non selectionné -->
+        <div id="erreur-popup" class="popup transition">
+            <div class="popup-content">
+                <h2>Veuillez choisir une option avant de continuer.</h2>
+                <button class="close-btn">OK</button>
+            </div>
+        </div>
+
         <!-- GESTION DES SELECTIONS -->
         <script>
             document.addEventListener('DOMContentLoaded', () => {
@@ -183,87 +163,87 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 // Vérification si une sélection existe dans localStorage
                 let savedDossierTissuId = localStorage.getItem('selectedDossierTissuId');
-                let selected = savedDossierTissuId!=='';
+                let selected = savedDossierTissuId !== '';
 
                 // Affichage des éléments avec la classe "transition"
                 document.querySelectorAll('.transition').forEach(element => {
                     element.classList.add('show');
-                });   
-                
+                });
+
                 // Restaurer la sélection si elle existe
                 options.forEach(img => {
-                if (img.getAttribute('data-dossier-tissu-id') === savedDossierTissuId) {
-                img.classList.add('selected');
-                mainImage.src = img.src;
-                selectedDossierTissuInput.value = savedDossierTissuId;
-               }
-            });
+                    if (img.getAttribute('data-dossier-tissu-id') === savedDossierTissuId) {
+                        img.classList.add('selected');
+                        mainImage.src = img.src;
+                        selectedDossierTissuInput.value = savedDossierTissuId;
+                    }
+                });
 
                 // Gestion du clic sur une option
                 options.forEach(img => {
-                img.addEventListener('click', () => {
-                options.forEach(opt => opt.classList.remove('selected'));
-                img.classList.add('selected');
-                mainImage.src = img.src;
-                savedDossierTissuId = img.getAttribute('data-dossier-tissu-id');
-                selectedDossierTissuInput.value = savedDossierTissuId;
-                selected = true;
-                saveSelection();
-               });
-            });               
-
-                
-              /*  if (savedDossierTissuId) {
-                    options.forEach(img => {
-                        if (img.getAttribute('data-dossier-tissu-id') === savedDossierTissuId) {
-                            img.classList.add('selected');
-                            mainImage.src = img.src;
-                            mainImage.alt = img.alt;
-                            selectedDossierTissuInput.value = savedDossierTissuId;
-                            selected = true;
-                        }
-                    });
-                }
-
-                // Gestion de la sélection des images
-                options.forEach(img => {
                     img.addEventListener('click', () => {
-                        // Retirer la classe "selected" de toutes les images
                         options.forEach(opt => opt.classList.remove('selected'));
-
-                        // Ajouter la classe "selected" à l'image cliquée
                         img.classList.add('selected');
-
-                        // Mettre à jour l'image principale
                         mainImage.src = img.src;
-                        mainImage.alt = img.alt;
-
-                        // Mettre à jour l'input caché avec l'ID du tissu sélectionné
-                        selectedDossierTissuInput.value = img.getAttribute('data-dossier-tissu-id');
-                        selected = true; // Marquer comme sélectionné
-
-                        saveSelection(img.getAttribute('data-dossier-tissu-id'));
+                        savedDossierTissuId = img.getAttribute('data-dossier-tissu-id');
+                        selectedDossierTissuInput.value = savedDossierTissuId;
+                        selected = true;
+                        saveSelection();
                     });
-                });*/
+                });
+
+
+                /*  if (savedDossierTissuId) {
+                      options.forEach(img => {
+                          if (img.getAttribute('data-dossier-tissu-id') === savedDossierTissuId) {
+                              img.classList.add('selected');
+                              mainImage.src = img.src;
+                              mainImage.alt = img.alt;
+                              selectedDossierTissuInput.value = savedDossierTissuId;
+                              selected = true;
+                          }
+                      });
+                  }
+
+                  // Gestion de la sélection des images
+                  options.forEach(img => {
+                      img.addEventListener('click', () => {
+                          // Retirer la classe "selected" de toutes les images
+                          options.forEach(opt => opt.classList.remove('selected'));
+
+                          // Ajouter la classe "selected" à l'image cliquée
+                          img.classList.add('selected');
+
+                          // Mettre à jour l'image principale
+                          mainImage.src = img.src;
+                          mainImage.alt = img.alt;
+
+                          // Mettre à jour l'input caché avec l'ID du tissu sélectionné
+                          selectedDossierTissuInput.value = img.getAttribute('data-dossier-tissu-id');
+                          selected = true; // Marquer comme sélectionné
+
+                          saveSelection(img.getAttribute('data-dossier-tissu-id'));
+                      });
+                  });*/
 
                 form.addEventListener('submit', (e) => {
-      if (!selectedDossierTissuInput.value) {
-        e.preventDefault();
-        erreurPopup.style.display = 'flex'; // ou 'block' selon ton CSS
-      }
-    });
+                    if (!selectedDossierTissuInput.value) {
+                        e.preventDefault();
+                        erreurPopup.style.display = 'flex'; // ou 'block' selon ton CSS
+                    }
+                });
 
-    // Fermer le popup
-    closeErreurBtn.addEventListener('click', () => {
-      erreurPopup.style.display = 'none';
-    });
+                // Fermer le popup
+                closeErreurBtn.addEventListener('click', () => {
+                    erreurPopup.style.display = 'none';
+                });
 
-    window.addEventListener('click', (event) => {
-      if (event.target === erreurPopup) {
-        erreurPopup.style.display = 'none';
-      }
-    });
-              
+                window.addEventListener('click', (event) => {
+                    if (event.target === erreurPopup) {
+                        erreurPopup.style.display = 'none';
+                    }
+                });
+
 
                 function saveSelection(dossierTissuId) {
                     localStorage.setItem('selectedDossierTissuId', savedDossierTissuId);
@@ -271,15 +251,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             });
         </script>
 
-  
-      <!-- BOUTTON RETOUR -->
-      <script>
-       function retourEtapePrecedente() {
-    // Exemple : tu es sur étape 8, tu veux revenir à étape 7
-    window.location.href = "etape4-2-tissu-choix-tissu-coussin.php"; 
-  }
-    </script>
-        
+
+        <!-- BOUTTON RETOUR -->
+        <script>
+            function retourEtapePrecedente() {
+                // Exemple : tu es sur étape 8, tu veux revenir à étape 7
+                window.location.href = "etape4-2-tissu-choix-tissu-coussin.php";
+            }
+        </script>
+
 
 
 

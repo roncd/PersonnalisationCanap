@@ -52,46 +52,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['couleur_tissu_id'])) 
     <script type="module" src="../../script/variationPrix.js"></script>
 
     <title>Étape 4 - Choisi ton tissu</title>
-    <style>
-        /* Transition pour les éléments de la page */
-        .transition {
-            opacity: 0;
-            transform: translateY(20px);
-            transition: opacity 0.5s ease, transform 0.5s ease;
-        }
-
-        .transition.show {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        /* Appliquer les transitions aux images sélectionnées */
-        .option img.selected {
-            border: 3px solid #997765;
-            /* Couleur marron */
-            border-radius: 5px;
-            box-sizing: border-box;
-        }
-    </style>
+    
 </head>
 
-<body data-user-id="<?php echo $_SESSION['user_id']; ?>" data-current-step="4-1couleur-tissu">
+<body data-user-id="<?php echo $_SESSION['user_id']; ?>" data-current-step="4-1-couleur-tissu">
 
     <header>
         <?php require '../../squelette/header.php'; ?>
     </header>
 
     <main>
-    <div class="fil-ariane-container h2" aria-label="fil-ariane">
+        <div class="fil-ariane-container h2" aria-label="fil-ariane">
             <ul class="fil-ariane">
                 <li><a href="etape1-1-structure.php">Structure</a></li>
                 <li><a href="etape1-2-dimension.php">Dimension</a></li>
                 <li><a href="etape2-type-banquette.php">Banquette</a></li>
                 <li><a href="etape3-tissu-modele-banquette.php">Modèle</a></li>
-                <li><a href="etape4-1-tissu-choix-tissu.php" class="active">Tissu</a></li>
-                <li><a href="etape5-tissu-choix-dossier.php">Dossier</a></li>
+                <li><a href="etape4-1-tissu-tissu.php" class="active">Tissu</a></li>
+                <li><a href="etape5-tissu-dossier.php">Dossier</a></li>
                 <li><a href="etape6-tissu-accoudoir.php">Accoudoir</a></li>
-                <li><a href="etape7-tissu-choix-mousse.php">Mousse</a></li>
+                <li><a href="etape7-tissu-mousse.php">Mousse</a></li>
             </ul>
         </div>
 
@@ -112,7 +92,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['couleur_tissu_id'])) 
                     <?php endforeach; ?>
                 </section>
                 <div class="footer">
-                    <p>Total : <span>899 €</span></p>
+                    <p>Total : <span>0 €</span></p>
 
                     <div class="buttons">
                         <button onclick="retourEtapePrecedente()" class="btn-retour transition">Retour</button>

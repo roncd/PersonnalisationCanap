@@ -16,7 +16,7 @@ $modele = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 
 // Vérifier si le formulaire a été soumis
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {  
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
   $id_client = $_SESSION['user_id'];
   $id_modele = $_POST['modele_id'];
@@ -38,7 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 
   // Rediriger vers l'étape suivante
-  header("Location: etape4-1-tissu-choix-tissu.php");
+  header("Location: etape4-1-tissu-tissu.php");
   exit;
 }
 ?>
@@ -60,29 +60,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
   <title>Étape 3 - Choisi ton modèle</title>
 
-
-
-  <style>
-    .transition {
-      opacity: 0;
-      transform: translateY(20px);
-      transition: opacity 0.5s ease, transform 0.5s ease;
-    }
-
-
-    .transition.show {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-
-    .option img.selected {
-      border: 3px solid #997765;
-      border-radius: 5px;
-      box-sizing: border-box;
-    }
-  </style>
-
 </head>
 
 <body data-user-id="<?php echo $_SESSION['user_id']; ?>" data-current-step="3-modele-tissu">
@@ -102,10 +79,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <li><a href="etape1-2-dimension.php">Dimension</a></li>
         <li><a href="etape2-type-banquette.php">Banquette</a></li>
         <li><a href="etape3-tissu-modele-banquette.php" class="active">Modèle</a></li>
-        <li><a href="etape4-1-tissu-choix-tissu.php">Tissu</a></li>
-        <li><a href="etape5-tissu-choix-dossier.php">Dossier</a></li>
+        <li><a href="etape4-1-tissu-tissu.php">Tissu</a></li>
+        <li><a href="etape5-tissu-dossier.php">Dossier</a></li>
         <li><a href="etape6-tissu-accoudoir.php">Accoudoir</a></li>
-        <li><a href="etape7-tissu-choix-mousse.php">Mousse</a></li>
+        <li><a href="etape7-tissu-mousse.php">Mousse</a></li>
       </ul>
     </div>
 
@@ -128,8 +105,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div class="footer">
           <p>Total : <span>0 €</span></p>
           <div class="buttons">
-          <button onclick="retourEtapePrecedente()" class="btn-retour transition">Retour</button>
-          <form method="POST" action="">
+            <button onclick="retourEtapePrecedente()" class="btn-retour transition">Retour</button>
+            <form method="POST" action="">
               <input type="hidden" name="modele_id" id="selected-modele_tissu">
               <button type="submit" class="btn-suivant transition">Suivant</button>
             </form>
@@ -173,8 +150,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
 
 
-<!-- Popup d'erreur si option non selectionnée -->
-<div id="erreur-popup" class="popup transition">
+    <!-- Popup d'erreur si option non selectionnée -->
+    <div id="erreur-popup" class="popup transition">
       <div class="popup-content">
         <h2>Veuillez choisir une option avant de continuer.</h2>
         <button class="close-btn">OK</button>
@@ -192,36 +169,36 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         const form = document.querySelector('form'); // Assure-toi que ton <form> a bien une balise identifiable
 
         let savedModeleTissuId = localStorage.getItem('selectedModeleTissuId');
-        let selected = savedModeleTissuId!=='';
+        let selected = savedModeleTissuId !== '';
 
-        
+
         // Appliquer les transitions aux éléments
         document.querySelectorAll('.transition').forEach(element => {
-            element.classList.add('show');
+          element.classList.add('show');
         });
 
- // Restaurer la sélection si elle existe
- options.forEach(img => {
-                if (img.getAttribute('data-modele-tissu-id') === savedModeleTissuId) {
-                img.classList.add('selected');
-                mainImage.src = img.src;
-                selectedModeleTissuInput.value = savedModeleTissuId;
-               }
-            });
+        // Restaurer la sélection si elle existe
+        options.forEach(img => {
+          if (img.getAttribute('data-modele-tissu-id') === savedModeleTissuId) {
+            img.classList.add('selected');
+            mainImage.src = img.src;
+            selectedModeleTissuInput.value = savedModeleTissuId;
+          }
+        });
 
-                // Gestion du clic sur une option
-                options.forEach(img => {
-                img.addEventListener('click', () => {
-                options.forEach(opt => opt.classList.remove('selected'));
-                img.classList.add('selected');
-                mainImage.src = img.src;
-                savedModeleTissuId = img.getAttribute('data-modele-tissu-id');
-                selectedModeleTissuInput.value = savedModeleTissuId;
-                selected = true;
-                saveSelection();
-               });
-            });
-       
+        // Gestion du clic sur une option
+        options.forEach(img => {
+          img.addEventListener('click', () => {
+            options.forEach(opt => opt.classList.remove('selected'));
+            img.classList.add('selected');
+            mainImage.src = img.src;
+            savedModeleTissuId = img.getAttribute('data-modele-tissu-id');
+            selectedModeleTissuInput.value = savedModeleTissuId;
+            selected = true;
+            saveSelection();
+          });
+        });
+
 
 
 
@@ -256,40 +233,40 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           });
         });
 */
-        
-    // Empêcher la soumission du formulaire si rien n'est sélectionné
-    form.addEventListener('submit', (e) => {
-      if (!selectedModeleTissuInput.value) {
-        e.preventDefault();
-        erreurPopup.style.display = 'flex'; // ou 'block' selon ton CSS
-      }
-    });
 
-    // Fermer le popup
-    closeErreurBtn.addEventListener('click', () => {
-      erreurPopup.style.display = 'none';
-    });
+        // Empêcher la soumission du formulaire si rien n'est sélectionné
+        form.addEventListener('submit', (e) => {
+          if (!selectedModeleTissuInput.value) {
+            e.preventDefault();
+            erreurPopup.style.display = 'flex'; // ou 'block' selon ton CSS
+          }
+        });
 
-    window.addEventListener('click', (event) => {
-      if (event.target === erreurPopup) {
-        erreurPopup.style.display = 'none';
-      }
-    });
+        // Fermer le popup
+        closeErreurBtn.addEventListener('click', () => {
+          erreurPopup.style.display = 'none';
+        });
+
+        window.addEventListener('click', (event) => {
+          if (event.target === erreurPopup) {
+            erreurPopup.style.display = 'none';
+          }
+        });
 
 
 
-    function saveSelection() {
-                    localStorage.setItem('selectedModeleTissuId', savedModeleTissuId);
-                }
-            });
+        function saveSelection() {
+          localStorage.setItem('selectedModeleTissuId', savedModeleTissuId);
+        }
+      });
     </script>
 
-     <!-- BOUTTON RETOUR -->
-     <script>
-       function retourEtapePrecedente() {
-    // Exemple : tu es sur étape 8, tu veux revenir à étape 7
-    window.location.href = "etape2-type-banquette.php"; 
-  }
+    <!-- BOUTTON RETOUR -->
+    <script>
+      function retourEtapePrecedente() {
+        // Exemple : tu es sur étape 8, tu veux revenir à étape 7
+        window.location.href = "etape2-type-banquette.php";
+      }
     </script>
 
   </main>

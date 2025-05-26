@@ -17,7 +17,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
   $id_client = $_SESSION['user_id'];
   $id_mousse = $_POST['mousse_id']; // ou 'id_mousse' si ton champ s'appelle comme ça dans le HTML
-  $prix_total = isset($_POST['total_price']) ? floatval($_POST['total_price']) : 0;
 
   // Vérifier si une commande temporaire existe déjà pour cet utilisateur
   $stmt = $pdo->prepare("SELECT id FROM commande_temporaire WHERE id_client = ?");
@@ -25,15 +24,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $existing_order = $stmt->fetch(PDO::FETCH_ASSOC);
 
   if ($existing_order) {
-    $stmt = $pdo->prepare("UPDATE commande_temporaire SET id_mousse = ?, prix = ? WHERE id_client = ?");
-    $stmt->execute([$id_mousse, $prix_total, $id_client]);
+    $stmt = $pdo->prepare("UPDATE commande_temporaire SET id_mousse = ? WHERE id_client = ?");
+    $stmt->execute([$id_mousse, $id_client]);
   } else {
-    $stmt = $pdo->prepare("INSERT INTO commande_temporaire (id_client, id_mousse, prix) VALUES (?, ?, ?)");
-    $stmt->execute([$id_client, $id_mousse, $prix_total]);
+    $stmt = $pdo->prepare("INSERT INTO commande_temporaire (id_client, id_mousse) VALUES (?, ?)");
+    $stmt->execute([$id_client, $id_mousse]);
   }
 
   // Rediriger vers l'étape suivante
-  header("Location: recapitulatif-commande-tissu.php");
+  header("Location: recapitulatif-commande-bois.php");
   exit;
 }
 ?>
@@ -53,30 +52,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <script type="module" src="../../script/variationPrix.js"></script>
 
   <title>Étape 7 - Choisi ta mousse</title>
-  <style>
-    /* Transition pour les éléments de la page */
-    .transition {
-      opacity: 0;
-      transform: translateY(20px);
-      transition: opacity 0.5s ease, transform 0.5s ease;
-    }
 
-    .transition.show {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    /* Appliquer les transitions aux images sélectionnées */
-    .option img.selected {
-      border: 3px solid #997765;
-      /* Couleur marron */
-      border-radius: 5px;
-      box-sizing: border-box;
-    }
-  </style>
 </head>
 
-<body data-user-id="<?php echo $_SESSION['user_id']; ?>" data-current-step="7-tissu">
+<body data-user-id="<?php echo $_SESSION['user_id']; ?>" data-current-step="8-mousse-bois">
 
   <header>
     <?php require '../../squelette/header.php'; ?>
@@ -84,26 +63,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 
   <main>
-
-
     <div class="fil-ariane-container h2" aria-label="fil-ariane">
       <ul class="fil-ariane">
         <li><a href="etape1-1-structure.php">Structure</a></li>
         <li><a href="etape1-2-dimension.php">Dimension</a></li>
         <li><a href="etape2-type-banquette.php">Banquette</a></li>
-        <li><a href="etape3-tissu-modele-banquette.php">Modèle</a></li>
-        <li><a href="etape4-1-tissu-choix-tissu.php">Tissu</a></li>
-        <li><a href="etape5-tissu-choix-dossier.php">Dossier</a></li>
-        <li><a href="etape6-tissu-accoudoir.php">Accoudoir</a></li>
-        <li><a href="etape7-tissu-choix-mousse.php" class="active">Mousse</a></li>
+        <li><a href="etape3-bois-couleur.php">Couleur</a></li>
+        <li><a href="etape4-bois-decoration.php">Décoration</a></li>
+        <li><a href="etape5-bois-accoudoir.php">Accoudoirs</a></li>
+        <li><a href="etape6-bois-dossier.php">Dossier</a></li>
+        <li><a href="etape7-1-bois-tissu.php">Tissu</a></li>
+        <li><a href="etape8-bois-mousse.php" class="active">Mousse</a></li>
       </ul>
     </div>
-
     <div class="container">
       <!-- Colonne de gauche -->
       <div class="left-column transition">
 
-        <h2>Étape 7 - lol ta mousse</h2>
+        <h2>Étape 7 - Choisi ta mousse</h2>
 
         <section class="color-options">
           <?php if (!empty($mousse)): ?>
@@ -123,7 +100,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </section>
 
         <div class="footer">
-          <p>Total : <span>899 €</span></p>
+          <p>Total : <span>0 €</span></p>
           <div class="buttons">
             <button onclick="retourEtapePrecedente()" class="btn-retour transition">Retour</button>
             <form method="POST" action="">
@@ -134,7 +111,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           </div>
         </div>
       </div>
-
 
       <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -154,7 +130,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           }
         });
       </script>
-
 
       <!-- Colonne de droite -->
       <div class="right-column transition">
@@ -207,7 +182,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         const erreurPopup = document.getElementById('erreur-popup');
         const closeErreurBtn = erreurPopup.querySelector('.close-btn');
         const selectedMousseInput = document.getElementById('selected-mousse');
-        const form = document.querySelector('form');
+        const form = document.querySelector('form'); // Assure-toi que ton <form> a bien une balise identifiable
 
         let selectedMousseId = localStorage.getItem('selectedMousse') || '';
         let selected = selectedMousseId !== '';
@@ -242,7 +217,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         form.addEventListener('submit', (e) => {
           if (!selectedMousseInput.value) {
             e.preventDefault();
-            erreurPopup.style.display = 'flex'; // ou 'block' selon ton CSS
+            erreurPopup.style.display = 'flex'; 
           }
         });
 
@@ -262,10 +237,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
       });
     </script>
+
+
     <!-- BOUTTON RETOUR -->
     <script>
       function retourEtapePrecedente() {
-        window.location.href = "etape6-tissu-accoudoir.php";
+        window.location.href = "etape7-2-bois-coussin.php";
       }
     </script>
 

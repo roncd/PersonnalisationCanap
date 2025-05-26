@@ -128,7 +128,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                     <div class="form-row">
                         <div class="form-group">
-                            <label>Mot de passe</label>
                             <a href="changer_mdp.php" 
                                class="input-field" 
                                style="display: inline-block; text-decoration: none; color: black; text-align: center;">

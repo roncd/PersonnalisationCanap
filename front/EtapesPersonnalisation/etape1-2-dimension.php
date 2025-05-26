@@ -5,8 +5,8 @@ session_start();
 // Vérifier si l'utilisateur est connecté
 if (!isset($_SESSION['user_id'])) {
   header("Location: ../formulaire/Connexion.php");
-  exit; 
-}  
+  exit;
+}
 
 $id_client = $_SESSION['user_id'];
 
@@ -18,22 +18,22 @@ $commande = $stmt->fetch(PDO::FETCH_ASSOC);
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
   // Vérifier si longueurA est bien renseignée (obligatoire)
 
-if (!empty($_POST["longueurA"])) {
-  $longueurA = (int) trim($_POST["longueurA"]);
-  $longueurB = !empty($_POST["longueurB"]) ? (int) trim($_POST["longueurB"]) : null;
-  $longueurC = !empty($_POST["longueurC"]) ? (int) trim($_POST["longueurC"]) : null;
-  $prix_dimensions = !empty($_POST["prix_dimensions"]) ? (float) trim($_POST["prix_dimensions"]) : null;
+  if (!empty($_POST["longueurA"])) {
+    $longueurA = (int) trim($_POST["longueurA"]);
+    $longueurB = !empty($_POST["longueurB"]) ? (int) trim($_POST["longueurB"]) : null;
+    $longueurC = !empty($_POST["longueurC"]) ? (int) trim($_POST["longueurC"]) : null;
+    $prix_dimensions = !empty($_POST["prix_dimensions"]) ? (float) trim($_POST["prix_dimensions"]) : null;
 
-  if ($commande) {
-    $id = $commande['id'];
+    if ($commande) {
+      $id = $commande['id'];
 
-    $stmt = $pdo->prepare("UPDATE commande_temporaire SET longueurA = ?, longueurB = ?, longueurC = ?, prix_dimensions = ? WHERE id = ?");
-    if ($stmt->execute([$longueurA, $longueurB, $longueurC, $prix_dimensions, $id])) {
-      header("Location: etape2-type-banquette.php");
-      exit();
+      $stmt = $pdo->prepare("UPDATE commande_temporaire SET longueurA = ?, longueurB = ?, longueurC = ?, prix_dimensions = ? WHERE id = ?");
+      if ($stmt->execute([$longueurA, $longueurB, $longueurC, $prix_dimensions, $id])) {
+        header("Location: etape2-type-banquette.php");
+        exit();
+      }
     }
   }
-}
 }
 ?>
 
@@ -72,29 +72,7 @@ if (isset($_GET['structure_id'])) {
   <script type="module" src="../../script/popup.js"></script>
 
   <title>Étape 1 - Choisi tes dimensions</title>
-  <style>
-    /* Transition pour les éléments de la page */
-    .transition {
-      opacity: 0;
-      transform: translateY(20px);
-      transition: opacity 0.5s ease, transform 0.5s ease;
-    }
-
-    .transition.show {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    /* Appliquer les transitions aux images sélectionnées */
-    .option img.selected {
-      border: 3px solid #997765;
-      /* Couleur marron */
-      border-radius: 5px;
-      /* Coins légèrement arrondis */
-      box-sizing: border-box;
-      /* Inclure le padding dans les dimensions */
-    }
-  </style>
+ 
 </head>
 
 <body data-user-id="<?php echo $_SESSION['user_id']; ?>" data-current-step="1-dimensions">
@@ -109,7 +87,7 @@ if (isset($_GET['structure_id'])) {
         <li><a href="etape2-type-banquette.php">Banquette</a></li>
       </ul>
     </div>
-    <div class="container"> 
+    <div class="container">
       <!-- Colonne de gauche -->
       <div class="left-column transition">
         <h2>Étape 1 - Choisi tes dimensions</h2>
@@ -134,57 +112,52 @@ if (isset($_GET['structure_id'])) {
             </div>
           </div>
           <div class="footer">
-            <p>Total : <span>899 €</span></p>
+            <p>Total : <span>0 €</span></p>
             <div class="buttons">
-            <button type="button" onclick="retourEtapePrecedente()" class="btn-retour transition">Retour</button>
-            <input type="hidden" name="prix_dimensions" id="prix_dimensions_hidden" value="">
+              <button type="button" onclick="retourEtapePrecedente()" class="btn-retour transition">Retour</button>
+              <input type="hidden" name="prix_dimensions" id="prix_dimensions_hidden" value="">
               <button type="submit" class="btn-suivant transition">Suivant</button>
             </div>
           </div>
         </form>
       </div>
-<script>
-  document.addEventListener('DOMContentLoaded', () => {
-    // Utiliser la variable PHP $nbLongueurs pour afficher les bons champs
-    const nbLongueurs = <?php echo $nbLongueurs; ?>;
-    updateVisibleInputs(nbLongueurs);
+      <script>
+        document.addEventListener('DOMContentLoaded', () => {
+          // Utiliser la variable PHP $nbLongueurs pour afficher les bons champs
+          const nbLongueurs = <?php echo $nbLongueurs; ?>;
+          updateVisibleInputs(nbLongueurs);
 
-    function updateVisibleInputs(nb) {
-      const a = document.getElementById('longueurA').closest('.form-row');
-      const b = document.getElementById('longueurB').closest('.form-row');
-      const c = document.getElementById('longueurC').closest('.form-row');
+          function updateVisibleInputs(nb) {
+            const a = document.getElementById('longueurA').closest('.form-row');
+            const b = document.getElementById('longueurB').closest('.form-row');
+            const c = document.getElementById('longueurC').closest('.form-row');
 
-      a.style.display = nb >= 1 ? 'block' : 'none';
-      b.style.display = nb >= 2 ? 'block' : 'none';
-      c.style.display = nb >= 3 ? 'block' : 'none';
-    }
-  });
-</script>
+            a.style.display = nb >= 1 ? 'block' : 'none';
+            b.style.display = nb >= 2 ? 'block' : 'none';
+            c.style.display = nb >= 3 ? 'block' : 'none';
+          }
+        });
+      </script>
 
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-  const url = new URL(window.location.href);
-  const structureId = url.searchParams.get("structure_id");
+      <script>
+        document.addEventListener("DOMContentLoaded", () => {
+          const url = new URL(window.location.href);
+          const structureId = url.searchParams.get("structure_id");
 
-  if (structureId) {
-    // Sauvegarde l'ID en localStorage
-    localStorage.setItem("selectedStructureId", structureId);
-  } else {
-    // Si pas dans l'URL, on essaie de le récupérer depuis le localStorage
-    const savedStructureId = localStorage.getItem("selectedStructureId");
-    if (savedStructureId) {
-      // Redirige en rajoutant l'id manquant dans l'URL
-      url.searchParams.set("structure_id", savedStructureId);
-      window.location.href = url.toString();
-    }
-  }
-});
-</script>
-
-
-
-
-
+          if (structureId) {
+            // Sauvegarde l'ID en localStorage
+            localStorage.setItem("selectedStructureId", structureId);
+          } else {
+            // Si pas dans l'URL, on essaie de le récupérer depuis le localStorage
+            const savedStructureId = localStorage.getItem("selectedStructureId");
+            if (savedStructureId) {
+              // Redirige en rajoutant l'id manquant dans l'URL
+              url.searchParams.set("structure_id", savedStructureId);
+              window.location.href = url.toString();
+            }
+          }
+        });
+      </script>
       <!-- Colonne de droite -->
       <div class="right-column transition">
         <section class="main-display">
@@ -192,11 +165,11 @@ document.addEventListener("DOMContentLoaded", () => {
             <button class="btn-aide">Besoin d'aide ?</button>
             <button class="btn-abandonner">Abandonner</button>
           </div>
-<?php if (!empty($structure['img'])): ?>
-  <img src="../../admin/uploads/structure/<?php echo htmlspecialchars($structure['img']); ?>" alt="Structure sélectionnée" class="transition">
-<?php else: ?>
-  <img src="../../medias/process-main-image.png" alt="Image par défaut" class="transition">
-<?php endif; ?>
+          <?php if (!empty($structure['img'])): ?>
+            <img src="../../admin/uploads/structure/<?php echo htmlspecialchars($structure['img']); ?>" alt="Structure sélectionnée" class="transition">
+          <?php else: ?>
+            <img src="../../medias/process-main-image.png" alt="Image par défaut" class="transition">
+          <?php endif; ?>
         </section>
       </div>
     </div>
@@ -293,30 +266,33 @@ document.addEventListener("DOMContentLoaded", () => {
           allSelectedOptions = [];
           console.warn("allSelectedOptions n'était pas un tableau. Réinitialisé à []");
         }
-        
+
 
         // Fonction pour ajouter les dimensions au calcul
         function calculateDimensionPrice() {
-  const longueurA = parseFloat(document.getElementById("longueurA").value) || 0;
-  const longueurB = parseFloat(document.getElementById("longueurB").value) || 0;
-  const longueurC = parseFloat(document.getElementById("longueurC").value) || 0;
+          const longueurA = parseFloat(document.getElementById("longueurA").value) || 0;
+          const longueurB = parseFloat(document.getElementById("longueurB").value) || 0;
+          const longueurC = parseFloat(document.getElementById("longueurC").value) || 0;
 
-  const totalMeters = (longueurA + longueurB + longueurC) / 100;
-  const dimensionPrice = totalMeters * 350;
+          const totalMeters = (longueurA + longueurB + longueurC) / 100;
+          const dimensionPrice = totalMeters * 350;
 
-  document.getElementById("dimension-price").textContent = dimensionPrice.toFixed(2);
+          document.getElementById("dimension-price").textContent = dimensionPrice.toFixed(2);
 
-  // Mettre à jour le champ caché
-  document.getElementById("prix_dimensions_hidden").value = dimensionPrice.toFixed(2);
+          // Mettre à jour le champ caché
+          document.getElementById("prix_dimensions_hidden").value = dimensionPrice.toFixed(2);
 
-  // Supprimer les dimensions précédentes pour cette étape
-  allSelectedOptions = allSelectedOptions.filter(opt => !opt.id.startsWith(`${currentStep}_`));
+          // Supprimer les dimensions précédentes pour cette étape
+          allSelectedOptions = allSelectedOptions.filter(opt => !opt.id.startsWith(`${currentStep}_`));
 
-  // Ajouter les dimensions au stockage global
-  allSelectedOptions.push({ id: `${currentStep}_dimensions`, price: dimensionPrice });
+          // Ajouter les dimensions au stockage global
+          allSelectedOptions.push({
+            id: `${currentStep}_dimensions`,
+            price: dimensionPrice
+          });
 
-  sessionStorage.setItem(sessionKey, JSON.stringify(allSelectedOptions));
-}
+          sessionStorage.setItem(sessionKey, JSON.stringify(allSelectedOptions));
+        }
 
 
         // Fonction pour sauvegarder les valeurs des dimensions dans sessionStorage
@@ -325,7 +301,11 @@ document.addEventListener("DOMContentLoaded", () => {
           const longueurB = document.getElementById("longueurB").value || "";
           const longueurC = document.getElementById("longueurC").value || "";
 
-          const dimensions = { longueurA, longueurB, longueurC };
+          const dimensions = {
+            longueurA,
+            longueurB,
+            longueurC
+          };
           sessionStorage.setItem(dimensionKey, JSON.stringify(dimensions));
           console.log("Dimensions sauvegardées :", dimensions);
         }
@@ -350,16 +330,16 @@ document.addEventListener("DOMContentLoaded", () => {
         }
 
         // Empêcher la saisie de plus de 3 chiffres dans les champs de type number
-document.querySelectorAll(".input-field").forEach(input => {
-  input.addEventListener("input", () => {
-    if (input.value.length > 3) {
-      input.value = input.value.slice(0, 3);
-    }
-  });
-});
+        document.querySelectorAll(".input-field").forEach(input => {
+          input.addEventListener("input", () => {
+            if (input.value.length > 3) {
+              input.value = input.value.slice(0, 3);
+            }
+          });
+        });
 
 
-        
+
 
 
         // Pré-remplir les champs avec les dimensions sauvegardées
@@ -382,13 +362,13 @@ document.querySelectorAll(".input-field").forEach(input => {
       });
     </script>
 
-      
-      <!-- BOUTTON RETOUR -->
-      <script>
-       function retourEtapePrecedente() {
-    // Exemple : tu es sur étape 8, tu veux revenir à étape 7
-    window.location.href = "etape1-1-structure.php"; 
-  }
+
+    <!-- BOUTTON RETOUR -->
+    <script>
+      function retourEtapePrecedente() {
+        // Exemple : tu es sur étape 8, tu veux revenir à étape 7
+        window.location.href = "etape1-1-structure.php";
+      }
     </script>
   </main>
   <?php require_once '../../squelette/footer.php' ?>

@@ -4,8 +4,8 @@ session_start();
 
 // Vérifier si l'utilisateur est connecté
 if (!isset($_SESSION['user_id'])) {
-    header("Location: ../formulaire/Connexion.php");
-    exit;
+  header("Location: ../formulaire/Connexion.php");
+  exit;
 }
 
 $id_client = $_SESSION['user_id'];
@@ -16,57 +16,57 @@ $accoudoir_bois = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 // Vérifier si le formulaire a été soumis
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (!isset($_POST['accoudoir_bois_id']) || empty($_POST['accoudoir_bois_id']) || !isset($_POST['nb_accoudoir']) || empty($_POST['nb_accoudoir'])) {
-        echo "Erreur : Aucun accoudoir ou quantité sélectionné.";
-        exit;
-    }
+  if (!isset($_POST['accoudoir_bois_id']) || empty($_POST['accoudoir_bois_id']) || !isset($_POST['nb_accoudoir']) || empty($_POST['nb_accoudoir'])) {
+    echo "Erreur : Aucun accoudoir ou quantité sélectionné.";
+    exit;
+  }
 
-    $id_accoudoirs = explode(',', $_POST['accoudoir_bois_id']);
-    $nb_accoudoirs = explode(',', $_POST['nb_accoudoir']);
+  $id_accoudoirs = explode(',', $_POST['accoudoir_bois_id']);
+  $nb_accoudoirs = explode(',', $_POST['nb_accoudoir']);
 
-    // Vérifier si une commande temporaire existe
-    $stmt = $pdo->prepare("SELECT id FROM commande_temporaire WHERE id_client = ?");
+  // Vérifier si une commande temporaire existe
+  $stmt = $pdo->prepare("SELECT id FROM commande_temporaire WHERE id_client = ?");
+  $stmt->execute([$id_client]);
+  $commande = $stmt->fetch(PDO::FETCH_ASSOC);
+
+  if (!$commande) {
+    // Créer une nouvelle commande temporaire
+    $stmt = $pdo->prepare("INSERT INTO commande_temporaire (id_client) VALUES (?)");
     $stmt->execute([$id_client]);
-    $commande = $stmt->fetch(PDO::FETCH_ASSOC);
+    $commande_id = $pdo->lastInsertId();
+  } else {
+    $commande_id = $commande['id'];
 
-    if (!$commande) {
-        // Créer une nouvelle commande temporaire
-        $stmt = $pdo->prepare("INSERT INTO commande_temporaire (id_client) VALUES (?)");
-        $stmt->execute([$id_client]);
-        $commande_id = $pdo->lastInsertId();
-    } else {
-        $commande_id = $commande['id'];
+    // Supprimer les anciennes entrées de la table pivot
+    $stmt = $pdo->prepare("DELETE FROM commande_temp_accoudoir WHERE id_commande_temporaire = ?");
+    $stmt->execute([$commande_id]);
+  }
 
-        // Supprimer les anciennes entrées de la table pivot
-        $stmt = $pdo->prepare("DELETE FROM commande_temp_accoudoir WHERE id_commande_temporaire = ?");
-        $stmt->execute([$commande_id]);
+  // Insérer les nouveaux accoudoirs sélectionnés
+  $stmt = $pdo->prepare("INSERT INTO commande_temp_accoudoir (id_commande_temporaire, id_accoudoir_bois, nb_accoudoir) VALUES (?, ?, ?)");
+
+  $js_accoudoir_ids = [];
+  $js_nb_accoudoirs = [];
+
+  foreach ($id_accoudoirs as $index => $id_accoudoir) {
+    $nb = (int) $nb_accoudoirs[$index];
+    if ($nb > 0) {
+      $stmt->execute([$commande_id, $id_accoudoir, $nb]);
+      $js_accoudoir_ids[] = $id_accoudoir;
+      $js_nb_accoudoirs[] = $nb;
     }
+  }
 
-    // Insérer les nouveaux accoudoirs sélectionnés
-    $stmt = $pdo->prepare("INSERT INTO commande_temp_accoudoir (id_commande_temporaire, id_accoudoir_bois, nb_accoudoir) VALUES (?, ?, ?)");
+  // Sauvegarder la sélection dans le localStorage via JavaScript
+  $js_ids = implode(',', $js_accoudoir_ids);
+  $js_nbs = implode(',', $js_nb_accoudoirs);
 
-    $js_accoudoir_ids = [];
-    $js_nb_accoudoirs = [];
-
-    foreach ($id_accoudoirs as $index => $id_accoudoir) {
-        $nb = (int) $nb_accoudoirs[$index];
-        if ($nb > 0) {
-            $stmt->execute([$commande_id, $id_accoudoir, $nb]);
-            $js_accoudoir_ids[] = $id_accoudoir;
-            $js_nb_accoudoirs[] = $nb;
-        }
-    }
-
-    // Sauvegarder la sélection dans le localStorage via JavaScript
-    $js_ids = implode(',', $js_accoudoir_ids);
-    $js_nbs = implode(',', $js_nb_accoudoirs);
-
-    echo "<script>
+  echo "<script>
         localStorage.setItem('selectedAccoudoirBois', '$js_ids');
         localStorage.setItem('selectedNbAccoudoirBois', '$js_nbs');
         window.location.href = 'etape6-bois-dossier.php';
     </script>";
-    exit;
+  exit;
 }
 ?>
 
@@ -98,61 +98,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 
   <title>Étape 5 - Ajoute tes accoudoirs</title>
-  <style>
-    /* Transition pour les éléments de la page */
-    .transition {
-      opacity: 0;
-      transform: translateY(20px);
-      transition: opacity 0.5s ease, transform 0.5s ease;
-    }
-
-
-    .transition.show {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-
-    /* Appliquer les transitions aux images sélectionnées */
-    .option img.selected {
-      border: 3px solid #997765;
-      /* Couleur marron */
-      border-radius: 5px;
-      box-sizing: border-box;
-    }
-  </style>
-
-  
-<style>
-  .close-btn-selection {
-    background-color: #997765;
-    color: #fff;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-    padding: 10px 20px;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    font-weight: bold;
-  }
-
-  
-  .close-btn-selection {
-    background-color: #997765;
-    color: #fff;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-    padding: 10px 20px;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    font-weight: bold;
-  }
-
-  .close-btn-selection:hover {
-    transform: scale(1.1);
-    transition: transform .2s;
-  }
-</style>
-
 
 </head>
 
@@ -175,8 +120,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <li><a href="etape4-bois-decoration.php">Décoration</a></li>
         <li><a href="etape5-bois-accoudoir.php" class="active">Accoudoirs</a></li>
         <li><a href="etape6-bois-dossier.php">Dossier</a></li>
-        <li><a href="etape7-bois-mousse.php">Mousse</a></li>
-        <li><a href="etape8-1-bois-tissu.php">Tissu</a></li>
+        <li><a href="etape7-1-bois-tissu.php">Tissu</a></li>
+        <li><a href="etape8-bois-mousse.php">Mousse</a></li>
       </ul>
     </div>
     <div class="container">
@@ -205,14 +150,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           <?php else: ?>
             <p>Aucun accoudoir disponible pour le moment.</p>
           <?php endif; ?>
-        </section> 
+        </section>
 
 
         <div class="footer">
-          <p>Total : <span>899 €</span></p>
+          <p>Total : <span>0 €</span></p>
           <div class="buttons">
-          <button onclick="retourEtapePrecedente()" class="btn-retour transition">Retour</button>
-          <form method="POST" action="">
+            <button onclick="retourEtapePrecedente()" class="btn-retour transition">Retour</button>
+            <form method="POST" action="">
               <input type="hidden" name="accoudoir_bois_id" id="selected-accoudoir_bois">
               <input type="hidden" name="nb_accoudoir" id="selected-nb_accoudoir" required>
               <button type="submit" class="btn-suivant transition">Suivant</button>
@@ -277,103 +222,102 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
 
     <script>
-  document.addEventListener('DOMContentLoaded', () => {
-    const selectionPopup = document.getElementById('selection-popup');
-    const closeSelectionBtn = document.querySelector('#selection-popup .close-btn-selection');
+      document.addEventListener('DOMContentLoaded', () => {
+        const selectionPopup = document.getElementById('selection-popup');
+        const closeSelectionBtn = document.querySelector('#selection-popup .close-btn-selection');
 
-    closeSelectionBtn.addEventListener('click', () => {
-      selectionPopup.style.display = 'none';
-    });
-  });
-</script>
+        closeSelectionBtn.addEventListener('click', () => {
+          selectionPopup.style.display = 'none';
+        });
+      });
+    </script>
 
-<script>
-  // Popup sélection
-document.addEventListener('DOMContentLoaded', () => {
-  const options = document.querySelectorAll('.color-options .option img');
-  const mainImage = document.querySelector('.main-display img');
-  const suivantButton = document.querySelector('.btn-suivant');
-  const selectionPopup = document.getElementById('selection-popup');
-  const closeSelectionBtn = document.querySelector('.close-btn-selection'); // Le bouton OK pour fermer le popup
-  const selectedAccoudoirBoisInput = document.getElementById('selected-accoudoir_bois');
-  let selectedOptions = JSON.parse(localStorage.getItem('selectedOptions')) || {};
+    <script>
+      // Popup sélection
+      document.addEventListener('DOMContentLoaded', () => {
+        const options = document.querySelectorAll('.color-options .option img');
+        const mainImage = document.querySelector('.main-display img');
+        const suivantButton = document.querySelector('.btn-suivant');
+        const selectionPopup = document.getElementById('selection-popup');
+        const closeSelectionBtn = document.querySelector('.close-btn-selection'); // Le bouton OK pour fermer le popup
+        const selectedAccoudoirBoisInput = document.getElementById('selected-accoudoir_bois');
+        let selectedOptions = JSON.parse(localStorage.getItem('selectedOptions')) || {};
 
 
-  
-  // Afficher la transition des éléments
-  document.querySelectorAll('.transition').forEach(element => {
-    element.classList.add('show');
-  });
 
-  // Restaurer les sélections depuis localStorage
-  options.forEach(img => {
-    const boisId = img.getAttribute('data-bois-id');
-    const parentOption = img.closest('.option');
-    let quantityInput = parentOption.querySelector('.quantity-input1');
+        // Afficher la transition des éléments
+        document.querySelectorAll('.transition').forEach(element => {
+          element.classList.add('show');
+        });
 
-    if (selectedOptions[boisId]) {
-      img.classList.add('selected');
-      quantityInput.value = selectedOptions[boisId];
-    }
-  });
+        // Restaurer les sélections depuis localStorage
+        options.forEach(img => {
+          const boisId = img.getAttribute('data-bois-id');
+          const parentOption = img.closest('.option');
+          let quantityInput = parentOption.querySelector('.quantity-input1');
 
-  updateHiddenInputs();
+          if (selectedOptions[boisId]) {
+            img.classList.add('selected');
+            quantityInput.value = selectedOptions[boisId];
+          }
+        });
 
-  // Sélectionner un accoudoir
-  options.forEach(img => {
-    img.addEventListener('click', () => {
-      const boisId = img.getAttribute('data-bois-id');
-      const parentOption = img.closest('.option');
-      let quantityInput = parentOption.querySelector('.quantity-input1');
+        updateHiddenInputs();
 
-      if (selectedOptions[boisId]) {
-        delete selectedOptions[boisId]; // Désélectionner
-        img.classList.remove('selected');
-        quantityInput.value = 0;
-      } else {
-        selectedOptions[boisId] = 1; // Ajouter avec quantité 1 par défaut
-        img.classList.add('selected');
-        quantityInput.value = 1;
-      }
+        // Sélectionner un accoudoir
+        options.forEach(img => {
+          img.addEventListener('click', () => {
+            const boisId = img.getAttribute('data-bois-id');
+            const parentOption = img.closest('.option');
+            let quantityInput = parentOption.querySelector('.quantity-input1');
 
-      updateHiddenInputs();
-      saveSelection();
-    });
-  });
+            if (selectedOptions[boisId]) {
+              delete selectedOptions[boisId]; // Désélectionner
+              img.classList.remove('selected');
+              quantityInput.value = 0;
+            } else {
+              selectedOptions[boisId] = 1; // Ajouter avec quantité 1 par défaut
+              img.classList.add('selected');
+              quantityInput.value = 1;
+            }
 
-  // Vérifier la sélection avant de passer à l'étape suivante
-  suivantButton.addEventListener('click', (event) => {
-    if (Object.keys(selectedOptions).length === 0 || !selectedNbAccoudoirInput.value || selectedNbAccoudoirInput.value === "0") {
-      event.preventDefault();
-      selectionPopup.style.display = 'flex'; // Afficher le popup de sélection
-    }
-  });
+            updateHiddenInputs();
+            saveSelection();
+          });
+        });
 
-  // Fermer le popup avec le bouton "OK"
-  closeSelectionBtn.addEventListener('click', () => {
-    selectionPopup.style.display = 'none'; // Fermer le popup
-  });
+        // Vérifier la sélection avant de passer à l'étape suivante
+        suivantButton.addEventListener('click', (event) => {
+          if (Object.keys(selectedOptions).length === 0 || !selectedNbAccoudoirInput.value || selectedNbAccoudoirInput.value === "0") {
+            event.preventDefault();
+            selectionPopup.style.display = 'flex'; // Afficher le popup de sélection
+          }
+        });
 
-  // Fermer le popup si clic à l'extérieur
-  window.addEventListener('click', (event) => {
-    if (event.target === selectionPopup) {
-      selectionPopup.style.display = 'none'; // Fermer le popup
-    }
-  });
+        // Fermer le popup avec le bouton "OK"
+        closeSelectionBtn.addEventListener('click', () => {
+          selectionPopup.style.display = 'none'; // Fermer le popup
+        });
 
-  // Mettre à jour les champs cachés pour l'envoi du formulaire
-  function updateHiddenInputs() {
-    selectedAccoudoirBoisInput.value = Object.keys(selectedOptions).join(',');
-    selectedNbAccoudoirInput.value = Object.values(selectedOptions).join(',');
-  }
+        // Fermer le popup si clic à l'extérieur
+        window.addEventListener('click', (event) => {
+          if (event.target === selectionPopup) {
+            selectionPopup.style.display = 'none'; // Fermer le popup
+          }
+        });
 
-  // Sauvegarde dans localStorage
-  function saveSelection() {
-    localStorage.setItem('selectedOptions', JSON.stringify(selectedOptions));
-  }
-});
+        // Mettre à jour les champs cachés pour l'envoi du formulaire
+        function updateHiddenInputs() {
+          selectedAccoudoirBoisInput.value = Object.keys(selectedOptions).join(',');
+          selectedNbAccoudoirInput.value = Object.values(selectedOptions).join(',');
+        }
 
-</script>
+        // Sauvegarde dans localStorage
+        function saveSelection() {
+          localStorage.setItem('selectedOptions', JSON.stringify(selectedOptions));
+        }
+      });
+    </script>
 
     <!-- VARIATION DES PRIX  -->
     <script>
@@ -578,16 +522,14 @@ document.addEventListener('DOMContentLoaded', () => {
         // Initialiser le total dès le chargement de la page
         updateTotal();
       });
-
-
     </script>
- 
- <!-- BOUTTON RETOUR -->
- <script>
-       function retourEtapePrecedente() {
-    // Exemple : tu es sur étape 8, tu veux revenir à étape 7
-    window.location.href = "etape4-bois-decoration.php"; 
-  }
+
+    <!-- BOUTTON RETOUR -->
+    <script>
+      function retourEtapePrecedente() {
+        // Exemple : tu es sur étape 8, tu veux revenir à étape 7
+        window.location.href = "etape4-bois-decoration.php";
+      }
     </script>
 
 
@@ -601,4 +543,3 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 </html>
-

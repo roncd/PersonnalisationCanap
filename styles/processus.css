@@ -10,6 +10,22 @@ body {
   margin: 50px;
 }
 
+.transition {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.transition.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.option img.selected {
+  border: 3px solid #997765;
+  border-radius: 5px;
+  box-sizing: border-box;
+}
 
 /* ================== TYPOGRAPHY ================== */
 h2 {
