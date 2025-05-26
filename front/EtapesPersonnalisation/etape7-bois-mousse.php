@@ -49,7 +49,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <link rel="stylesheet" href="../../styles/popup.css">
   <script type="module" src="../../script/popup.js"></script>
   <script type="module" src="../../script/variationPrix.js"></script>
-  <script src="../../script/abandonner.js"></script>
 
   <title>Étape 7 - Choisi ta mousse</title>
   <style>
@@ -176,7 +175,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   document.addEventListener('DOMContentLoaded', () => {
     const options = document.querySelectorAll('.color-options .option img');
     const mainImage = document.querySelector('.main-display img');
-    const selectionPopup = document.getElementById('selection-popup');
     const erreurPopup = document.getElementById('erreur-popup');
     const closeErreurBtn = erreurPopup.querySelector('.close-btn');
     const selectedMousseInput = document.getElementById('selected-mousse');

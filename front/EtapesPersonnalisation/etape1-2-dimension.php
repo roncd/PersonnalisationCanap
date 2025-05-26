@@ -70,9 +70,8 @@ if (isset($_GET['structure_id'])) {
   <link rel="stylesheet" href="../../styles/processus.css">
   <link rel="stylesheet" href="../../styles/popup.css">
   <script type="module" src="../../script/popup.js"></script>
-  <script src="../../script/abandonner.js"></script>
 
-  <title>Étape 1 - Choisi tes mesures</title>
+  <title>Étape 1 - Choisi tes dimensions</title>
   <style>
     /* Transition pour les éléments de la page */
     .transition {
@@ -113,7 +112,7 @@ if (isset($_GET['structure_id'])) {
     <div class="container"> 
       <!-- Colonne de gauche -->
       <div class="left-column transition">
-        <h2>Étape 1 - Choisi te s mesures</h2>
+        <h2>Étape 1 - Choisi tes dimensions</h2>
         <form method="POST" class="formulaire">
           <p>Largeur banquette : <span class="bold">50cm (par défaut) </span> | Prix total des dimensions : <span id="dimension-price">0.00</span> €</p>
           <div class="form-row">
@@ -199,19 +198,6 @@ document.addEventListener("DOMContentLoaded", () => {
   <img src="../../medias/process-main-image.png" alt="Image par défaut" class="transition">
 <?php endif; ?>
         </section>
-      </div>
-    </div>
-
-    <!-- Popup besoin d'aide -->
-    <div id="help-popup" class="popup transition">
-      <div class="popup-content">
-        <h2>Vous avez une question ?</h2>
-        <p>Contactez nous au numéro suivant et un vendeur vous assistera :
-          <br><br>
-          <strong>06 58 47 58 56</strong>
-        </p>
-        <br>
-        <button class="close-btn">Merci !</button>
       </div>
     </div>
 

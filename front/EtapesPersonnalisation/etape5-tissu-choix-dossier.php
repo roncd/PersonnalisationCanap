@@ -49,7 +49,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link rel="stylesheet" href="../../styles/popup.css">
     <script type="module" src="../../script/popup.js"></script>
     <script type="module" src="../../script/variationPrix.js"></script>
-    <script src="../../script/abandonner.js"></script>
 
     <title>Étape 5 - Choisi ton dossier</title>
     <style>
