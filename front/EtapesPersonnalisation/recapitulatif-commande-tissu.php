@@ -190,7 +190,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['comment'])) {
     <div class="container">
       <!-- Colonne de gauche -->
       <div class="left-column">
-        <h2 class="h2">Récapitulatif de la commande</h2>
+        <h2>Récapitulatif de la commande</h2>
 
         <section class="color-options">
           <h3>Étape 1 : Choisi ta structure</h3>
