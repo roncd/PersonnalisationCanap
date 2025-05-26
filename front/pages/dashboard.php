@@ -1,10 +1,28 @@
 <?php
+require '../../admin/config.php';
 session_start();
+
+// 🔐 Vérifier si l'utilisateur est connecté
 if (!isset($_SESSION['user_id'])) {
-    $_SESSION['redirect_to'] = $_SERVER['REQUEST_URI'];
-    header("Location: ../formulaire/Connexion.php"); // Redirection vers la page de connexion
-    exit();
+    header("Location: ../formulaire/Connexion.php");
+    exit;
 }
+
+$id_client = $_SESSION['user_id'];
+
+// 🔄 Réinitialiser la personnalisation si demandé
+if (isset($_GET['reset']) && $_GET['reset'] == 1) {
+    $stmt = $pdo->prepare("DELETE FROM commande_temporaire WHERE id_client = ?");
+    $stmt->execute([$id_client]);
+}
+
+// ✅ Vérifie si une commande temporaire existe pour l'utilisateur
+$stmt = $pdo->prepare("SELECT id FROM commande_temporaire WHERE id_client = ?");
+$stmt->execute([$id_client]);
+$existing_order = $stmt->fetch(PDO::FETCH_ASSOC);
+
+// 🔍 Détermine si on affiche "Commencer" ou "Reprendre / Nouvelle"
+$show_commencer = !$existing_order;
 ?>
 
 <!DOCTYPE html>
@@ -16,7 +34,9 @@ if (!isset($_SESSION['user_id'])) {
     <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&family=Be+Vietnam+Pro&display=swap" rel="stylesheet">
     <title>Dashboard</title>
     <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
+    <link rel="stylesheet" href="../../styles/processus.css">
     <link rel="stylesheet" href="../../styles/dashboard.css">
+<script src="../../ script/abandonner.js"></script>
 
 </head>
 
@@ -25,15 +45,39 @@ if (!isset($_SESSION['user_id'])) {
         <?php require '../../squelette/header.php'; ?>
     </header>
     <main >
-        <!-- SECTION HERO BANNIÈRE -->
-        <section class="hero-banner">
-            <div class="hero-banner__content">
-            <h1>Bienvenue, <?php echo htmlspecialchars($_SESSION['user_name']); ?>!</h1>                
-            <p>
-                Testez notre <strong>configurateur de canapé</strong> et imaginez le meuble qui répond à vos goûts et à l’aménagement de votre salon. De la couleur à la texture du revêtement, vous pouvez faire votre choix parmi des dizaines d’options.
-                </p>
-            </div>
-        </section>
+
+<!-- SECTION HERO BANNIÈRE -->
+<section class="hero-banner">
+    <div class="hero-banner__content">
+        <h1>Bienvenue, <?php echo htmlspecialchars($_SESSION['user_name']); ?>!</h1>                
+        <p>
+            Testez notre <strong>configurateur de canapé</strong> et imaginez le meuble qui répond à vos goûts et à l’aménagement de votre salon.
+        </p>
+
+        <?php if ($show_commencer): ?>
+            <form action="../EtapesPersonnalisation/etape1-1-structure.php" method="get">
+                <button type="submit" class="btn-suivant transition">Commencer la personnalisation</button>
+            </form>
+        <?php else: ?>
+            <form action="../EtapesPersonnalisation/etape1-1-structure.php" method="get">
+                <button type="submit" class="btn-suivant transition">Reprendre la personnalisation</button>
+            </form>
+            <form action="../EtapesPersonnalisation/etape1-1-structure.php?reset=1" method="get">
+<button type="button" class="btn-retour transition btn-abandonner">Nouvelle personnalisation</button>
+            </form>
+        <?php endif; ?>
+    </div>
+</section>
+
+<div id="abandonner-popup" class="popup" style="display: none;">
+  <div class="popup-content">
+    <p>Es-tu sûr(e) de vouloir recommencer une nouvelle personnalisation ?</p>
+    <button class="yes-btn">Oui</button>
+    <button class="no-btn">Non</button>
+  </div>
+</div>
+
+
 
         <!-- SECTION PERSONNALISATION -->
         <section class="customize-section">
