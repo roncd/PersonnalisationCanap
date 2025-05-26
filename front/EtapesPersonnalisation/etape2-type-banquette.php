@@ -60,25 +60,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
   <title>Étape 2 - Choisi ton type de banquette</title>
 
-  <style>
-    .transition {
-      opacity: 0;
-      transform: translateY(20px);
-      transition: opacity 0.5s ease, transform 0.5s ease;
-    }
-
-    .transition.show {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    .option img.selected {
-      border: 3px solid #997765;
-      border-radius: 5px;
-      box-sizing: border-box;
-    }
-  </style>
-
 </head>
 
 <body data-user-id="<?php echo $_SESSION['user_id']; ?>">
@@ -111,14 +92,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </section>
 
         <div class="footer">
-          <p>Total : <span>899 €</span></p>
+          <p>Total : <span>0 €</span></p>
           <div class="buttons">
-          <button onclick="retourEtapePrecedente()" class="btn-retour transition">Retour</button>
-          <form method="POST" action="">
+            <button onclick="retourEtapePrecedente()" class="btn-retour transition">Retour</button>
+            <form method="POST" action="">
               <input type="hidden" name="banquette_id" id="selected-banquette">
               <input type="hidden" name="banquette_type" id="selected-banquette-type">
               <button type="submit" class="btn-suivant transition">Suivant</button>
-          </form>
+            </form>
           </div>
         </div>
       </div>
@@ -158,79 +139,79 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       </div>
     </div>
 
-<!-- Popup d'erreur si option non selectionnée -->
-<div id="erreur-popup" class="popup transition">
+    <!-- Popup d'erreur si option non selectionnée -->
+    <div id="erreur-popup" class="popup transition">
       <div class="popup-content">
         <h2>Veuillez choisir une option avant de continuer.</h2>
         <button class="close-btn">OK</button>
       </div>
     </div>
-    
+
     <!-- GESTION DES SELECTIONS -->
-    <script>document.addEventListener('DOMContentLoaded', () => {
-  const options = document.querySelectorAll('.color-2options .option img');
-  const selectedBanquetteInput = document.getElementById('selected-banquette');
-  const selectedBanquetteTypeInput = document.getElementById('selected-banquette-type');
-  const mainImage = document.getElementById('main-image');
-  const erreurPopup = document.getElementById('erreur-popup');
-  const closeErreurBtn = erreurPopup.querySelector('.close-btn');
-  const form = document.querySelector('form');
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        const options = document.querySelectorAll('.color-2options .option img');
+        const selectedBanquetteInput = document.getElementById('selected-banquette');
+        const selectedBanquetteTypeInput = document.getElementById('selected-banquette-type');
+        const mainImage = document.getElementById('main-image');
+        const erreurPopup = document.getElementById('erreur-popup');
+        const closeErreurBtn = erreurPopup.querySelector('.close-btn');
+        const form = document.querySelector('form');
 
-  let savedBanquetteId = localStorage.getItem('selectedBanquetteId');
-  let savedBanquetteType = localStorage.getItem('selectedBanquetteType');
+        let savedBanquetteId = localStorage.getItem('selectedBanquetteId');
+        let savedBanquetteType = localStorage.getItem('selectedBanquetteType');
 
-  // Appliquer les transitions
-  document.querySelectorAll('.transition').forEach(el => el.classList.add('show'));
+        // Appliquer les transitions
+        document.querySelectorAll('.transition').forEach(el => el.classList.add('show'));
 
-  // Restaurer la sélection si elle existe
-  options.forEach(img => {
-    if (img.getAttribute('data-banquette-id') === savedBanquetteId &&
-        img.getAttribute('data-banquette-type') === savedBanquetteType) {
-      img.classList.add('selected');
-      mainImage.src = img.src;
-      selectedBanquetteInput.value = savedBanquetteId;
-      selectedBanquetteTypeInput.value = savedBanquetteType;
-    }
-  });
+        // Restaurer la sélection si elle existe
+        options.forEach(img => {
+          if (img.getAttribute('data-banquette-id') === savedBanquetteId &&
+            img.getAttribute('data-banquette-type') === savedBanquetteType) {
+            img.classList.add('selected');
+            mainImage.src = img.src;
+            selectedBanquetteInput.value = savedBanquetteId;
+            selectedBanquetteTypeInput.value = savedBanquetteType;
+          }
+        });
 
-  // Gérer le clic sur une option
-  options.forEach(img => {
-    img.addEventListener('click', () => {
-      options.forEach(opt => opt.classList.remove('selected'));
-      img.classList.add('selected');
-      mainImage.src = img.src;
+        // Gérer le clic sur une option
+        options.forEach(img => {
+          img.addEventListener('click', () => {
+            options.forEach(opt => opt.classList.remove('selected'));
+            img.classList.add('selected');
+            mainImage.src = img.src;
 
-      const id = img.getAttribute('data-banquette-id');
-      const type = img.getAttribute('data-banquette-type');
+            const id = img.getAttribute('data-banquette-id');
+            const type = img.getAttribute('data-banquette-type');
 
-      selectedBanquetteInput.value = id;
-      selectedBanquetteTypeInput.value = type;
+            selectedBanquetteInput.value = id;
+            selectedBanquetteTypeInput.value = type;
 
-      localStorage.setItem('selectedBanquetteId', id);
-      localStorage.setItem('selectedBanquetteType', type);
-    });
-  });
+            localStorage.setItem('selectedBanquetteId', id);
+            localStorage.setItem('selectedBanquetteType', type);
+          });
+        });
 
-  // Empêcher la soumission si rien n'est sélectionné
-  form.addEventListener('submit', (e) => {
-    if (!selectedBanquetteInput.value || !selectedBanquetteTypeInput.value) {
-      e.preventDefault();
-      erreurPopup.style.display = 'flex';
-    }
-  });
+        // Empêcher la soumission si rien n'est sélectionné
+        form.addEventListener('submit', (e) => {
+          if (!selectedBanquetteInput.value || !selectedBanquetteTypeInput.value) {
+            e.preventDefault();
+            erreurPopup.style.display = 'flex';
+          }
+        });
 
-  // Fermer le popup
-  closeErreurBtn.addEventListener('click', () => {
-    erreurPopup.style.display = 'none';
-  });
+        // Fermer le popup
+        closeErreurBtn.addEventListener('click', () => {
+          erreurPopup.style.display = 'none';
+        });
 
-  window.addEventListener('click', (event) => {
-    if (event.target === erreurPopup) {
-      erreurPopup.style.display = 'none';
-    }
-  });
-});
- 
+        window.addEventListener('click', (event) => {
+          if (event.target === erreurPopup) {
+            erreurPopup.style.display = 'none';
+          }
+        });
+      });
     </script>
 
 
@@ -293,13 +274,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </script>
 
 
-  
-      <!-- BOUTTON RETOUR -->
-      <script>
-       function retourEtapePrecedente() {
-    // Exemple : tu es sur étape 8, tu veux revenir à étape 7
-    window.location.href = "etape1-2-dimension.php"; 
-  }
+
+    <!-- BOUTTON RETOUR -->
+    <script>
+      function retourEtapePrecedente() {
+        window.location.href = "etape1-2-dimension.php";
+      }
     </script>
   </main>
 

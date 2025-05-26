@@ -53,29 +53,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 
   <title>Étape 3 - Choisi ta couleur</title>
-  <style>
-    /* Transition pour les éléments de la page */
-    .transition {
-      opacity: 0;
-      transform: translateY(20px);
-      transition: opacity 0.5s ease, transform 0.5s ease;
-    }
-
-
-    .transition.show {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-
-    /* Appliquer les transitions aux images sélectionnées */
-    .option img.selected {
-      border: 3px solid #997765;
-      /* Couleur marron */
-      border-radius: 5px;
-      box-sizing: border-box;
-    }
-  </style>
+ 
 </head>
 
 <body data-user-id="<?php echo $_SESSION['user_id']; ?>" data-current-step="3-couleur-bois">
@@ -96,8 +74,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <li><a href="etape4-bois-decoration.php">Décoration</a></li>
         <li><a href="etape5-bois-accoudoir.php">Accoudoirs</a></li>
         <li><a href="etape6-bois-dossier.php">Dossier</a></li>
-        <li><a href="etape7-bois-mousse.php">Mousse</a></li>
-        <li><a href="etape8-1-bois-tissu.php">Tissu</a></li>
+        <li><a href="etape7-1-bois-tissu.php">Tissu</a></li>
+        <li><a href="etape8-bois-mousse.php">Mousse</a></li>
       </ul>
     </div>
 
@@ -116,7 +94,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   data-bois-prix="<?php echo $bois['prix']; ?>">
                 <p><?php echo htmlspecialchars($bois['nom']); ?></p>
                 <p><strong><?php echo htmlspecialchars($bois['prix']); ?> €</strong></p>
-              </div> 
+              </div>
             <?php endforeach; ?>
           <?php else: ?>
             <p>Aucune couleur disponible pour le moment.</p>
@@ -124,10 +102,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </section>
 
         <div class="footer">
-          <p>Total : <span>899 €</span></p>
+          <p>Total : <span>0 €</span></p>
           <div class="buttons">
-          <button onclick="retourEtapePrecedente()" class="btn-retour transition">Retour</button>
-          <form method="POST" action="">
+            <button onclick="retourEtapePrecedente()" class="btn-retour transition">Retour</button>
+            <form method="POST" action="">
               <input type="hidden" name="couleur_bois_id" id="selected-couleur_bois">
               <button type="submit" class="btn-suivant transition">Suivant</button>
             </form>
@@ -135,7 +113,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
       </div>
 
-      
+
       <!-- Colonne de droite -->
       <div class="right-column transition">
         <section class="main-display">
@@ -171,8 +149,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       </div>
     </div>
 
-<!-- Popup d'erreur si les dimensions ne sont pas remplies -->
-<div id="erreur-popup" class="popup transition">
+    <!-- Popup d'erreur si les dimensions ne sont pas remplies -->
+    <div id="erreur-popup" class="popup transition">
       <div class="popup-content">
         <h2>Veuillez choisir une option avant de continuer.</h2>
         <button class="close-btn">OK</button>
@@ -181,78 +159,75 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <!-- GESTION DES SELECTIONS -->
     <script>
-  document.addEventListener('DOMContentLoaded', () => {
-    const options = document.querySelectorAll('.color-options .option img');
-    const mainImage = document.querySelector('.main-display img');
-    const erreurPopup = document.getElementById('erreur-popup');
-    const closeErreurBtn = erreurPopup.querySelector('.close-btn');
-    const selectedCouleurBoisInput = document.getElementById('selected-couleur_bois');
-    const form = document.querySelector('form'); // Assure-toi que ton <form> a bien une balise identifiable
+      document.addEventListener('DOMContentLoaded', () => {
+        const options = document.querySelectorAll('.color-options .option img');
+        const mainImage = document.querySelector('.main-display img');
+        const erreurPopup = document.getElementById('erreur-popup');
+        const closeErreurBtn = erreurPopup.querySelector('.close-btn');
+        const selectedCouleurBoisInput = document.getElementById('selected-couleur_bois');
+        const form = document.querySelector('form'); // Assure-toi que ton <form> a bien une balise identifiable
 
-    let selectedBoisId = localStorage.getItem('selectedCouleurBois') || '';
-    let selected = selectedBoisId !== '';
+        let selectedBoisId = localStorage.getItem('selectedCouleurBois') || '';
+        let selected = selectedBoisId !== '';
 
-    // Animation de transition (facultatif)
-    document.querySelectorAll('.transition').forEach(element => {
-      element.classList.add('show');
-    });
+        // Animation de transition (facultatif)
+        document.querySelectorAll('.transition').forEach(element => {
+          element.classList.add('show');
+        });
 
-    // Restaurer la sélection si elle existe
-    options.forEach(img => {
-      if (img.getAttribute('data-bois-id') === selectedBoisId) {
-        img.classList.add('selected');
-        mainImage.src = img.src;
-        selectedCouleurBoisInput.value = selectedBoisId;
-      }
-    });
+        // Restaurer la sélection si elle existe
+        options.forEach(img => {
+          if (img.getAttribute('data-bois-id') === selectedBoisId) {
+            img.classList.add('selected');
+            mainImage.src = img.src;
+            selectedCouleurBoisInput.value = selectedBoisId;
+          }
+        });
 
-    // Gestion du clic sur une option
-    options.forEach(img => {
-      img.addEventListener('click', () => {
-        options.forEach(opt => opt.classList.remove('selected'));
-        img.classList.add('selected');
-        mainImage.src = img.src;
-        selectedBoisId = img.getAttribute('data-bois-id');
-        selectedCouleurBoisInput.value = selectedBoisId;
-        selected = true;
-        saveSelection();
+        // Gestion du clic sur une option
+        options.forEach(img => {
+          img.addEventListener('click', () => {
+            options.forEach(opt => opt.classList.remove('selected'));
+            img.classList.add('selected');
+            mainImage.src = img.src;
+            selectedBoisId = img.getAttribute('data-bois-id');
+            selectedCouleurBoisInput.value = selectedBoisId;
+            selected = true;
+            saveSelection();
+          });
+        });
+
+        // Empêcher la soumission du formulaire si rien n'est sélectionné
+        form.addEventListener('submit', (e) => {
+          if (!selectedCouleurBoisInput.value) {
+            e.preventDefault();
+            erreurPopup.style.display = 'flex'; // ou 'block' selon ton CSS
+          }
+        });
+
+        // Fermer le popup
+        closeErreurBtn.addEventListener('click', () => {
+          erreurPopup.style.display = 'none';
+        });
+
+        window.addEventListener('click', (event) => {
+          if (event.target === erreurPopup) {
+            erreurPopup.style.display = 'none';
+          }
+        });
+
+        function saveSelection() {
+          localStorage.setItem('selectedCouleurBois', selectedBoisId);
+        }
       });
-    });
+    </script>
 
-    // Empêcher la soumission du formulaire si rien n'est sélectionné
-    form.addEventListener('submit', (e) => {
-      if (!selectedCouleurBoisInput.value) {
-        e.preventDefault();
-        erreurPopup.style.display = 'flex'; // ou 'block' selon ton CSS
+    <!-- BOUTTON RETOUR -->
+    <script>
+      function retourEtapePrecedente() {
+        // Exemple : tu es sur étape 8, tu veux revenir à étape 7
+        window.location.href = "etape2-type-banquette.php";
       }
-    });
-
-    // Fermer le popup
-    closeErreurBtn.addEventListener('click', () => {
-      erreurPopup.style.display = 'none';
-    });
-
-    window.addEventListener('click', (event) => {
-      if (event.target === erreurPopup) {
-        erreurPopup.style.display = 'none';
-      }
-    });
-
-    function saveSelection() {
-      localStorage.setItem('selectedCouleurBois', selectedBoisId);
-    }
-  });
-</script>
-
-
-
-  
-      <!-- BOUTTON RETOUR -->
-      <script>
-       function retourEtapePrecedente() {
-    // Exemple : tu es sur étape 8, tu veux revenir à étape 7
-    window.location.href = "etape2-type-banquette.php"; 
-  }
     </script>
 
   </main>

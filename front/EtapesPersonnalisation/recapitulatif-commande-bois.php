@@ -170,10 +170,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['comment'])) {
     <div class="container">
       <!-- Colonne de gauche -->
       <div class="left-column">
-        <h2>Récapitulatif de la commande</h2>
+        <h2 class="h2">Récapitulatif de la commande</h2>
         <section class="color-options">
 
-          <h3>Étape 1 : Choisi ta structure</h3>
+          <h3>Étape 1.1 : Choisi ta structure</h3>
           <?php
           echo '<div class="option">
           <img src="../../admin/uploads/structure/' . htmlspecialchars($assocData['structure'][$commande['id_structure']]['img'] ?? '-') . '" 
@@ -182,7 +182,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['comment'])) {
         </div>';
           ?>
 
-          <h3>Étape 1 : Choisi tes dimensions</h3>
+          <h3>Étape 1.2 : Choisi tes dimensions</h3>
           <?php
           $longueurB = isset($dim['longueurB']) && !empty(trim($dim['longueurB'])) ? htmlspecialchars($dim['longueurB']) : null;
           $longueurC = isset($dim['longueurC']) && !empty(trim($dim['longueurC'])) ? htmlspecialchars($dim['longueurC']) : null;
@@ -248,17 +248,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['comment'])) {
           <p>' . htmlspecialchars($assocData['dossier_bois'][$commande['id_dossier_bois']]['nom'] ?? '-') . '</p>
         </div>';
           ?>
-
-          <h3>Étape 7 : Choisi ta mousse</h3>
-          <?php
-          echo '<div class="option">
-          <img src="../../admin/uploads/mousse/' . htmlspecialchars($assocData['mousse'][$commande['id_mousse']]['img'] ?? '-') . '" 
-              alt="' . htmlspecialchars($assocData['mousse'][$commande['id_mousse']]['nom'] ?? '-') . '">
-          <p>' . htmlspecialchars($assocData['mousse'][$commande['id_mousse']]['nom'] ?? '-') . '</p>
-        </div>';
-          ?>
-
-          <h3>Étape 8 : Choisi ton tissu</h3>
+          <h3>Étape 7.1 : Choisi ton tissu</h3>
           <?php
           echo '<div class="option">
           <img src="../../admin/uploads/couleur-tissu-bois/' . htmlspecialchars($assocData['couleur_tissu_bois'][$commande['id_couleur_tissu_bois']]['img'] ?? '-') . '" 
@@ -267,7 +257,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['comment'])) {
         </div>';
           ?>
 
-          <h3>Étape 8 : Choisi ton motif de coussin</h3>
+          <h3>Étape 7.2 : Choisi ton motif de coussin</h3>
           <?php
           echo '<div class="option">
           <img src="../../admin/uploads/motif-bois/' . htmlspecialchars($assocData['motif_bois'][$commande['id_motif_bois']]['img'] ?? '-') . '" 
@@ -275,11 +265,22 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['comment'])) {
           <p>' . htmlspecialchars($assocData['motif_bois'][$commande['id_motif_bois']]['nom'] ?? '-') . '</p>
         </div>';
           ?>
+
+          <h3>Étape 8 : Choisi ta mousse</h3>
+          <?php
+          echo '<div class="option">
+          <img src="../../admin/uploads/mousse/' . htmlspecialchars($assocData['mousse'][$commande['id_mousse']]['img'] ?? '-') . '" 
+              alt="' . htmlspecialchars($assocData['mousse'][$commande['id_mousse']]['nom'] ?? '-') . '">
+          <p>' . htmlspecialchars($assocData['mousse'][$commande['id_mousse']]['nom'] ?? '-') . '</p>
+        </div>';
+          ?>
+
+
         </section>
 
 
         <div class="footer-processus">
-          <p>Total : <span>899 €</span></p>
+          <p>Total : <span>0 €</span></p>
           <div class="buttons">
             <button onclick="retourEtapePrecedente()" class="btn-retour transition">Retour</button>
             <button class="btn-generer">Générer un devis</button>
@@ -289,7 +290,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['comment'])) {
 
       <script>
         function retourEtapePrecedente() {
-          window.location.href = "etape8-2-bois-tissu-coussin.php";
+          window.location.href = "etape8-bois-mousse.php";
         }
       </script>
 
