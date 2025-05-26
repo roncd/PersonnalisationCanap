@@ -43,6 +43,15 @@
 }
 
 
+.boutons-container {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: nowrap;
+}
+
+
+
 /* --------------- SECTION PERSONNALISATION --------------- */
 /* section personnalisation */
 .customize-section {
