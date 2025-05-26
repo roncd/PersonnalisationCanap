@@ -50,12 +50,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <link rel="stylesheet" href="../../styles/processus.css">
   <link rel="stylesheet" href="../../styles/popup.css">
   <script type="module" src="../../script/popup.js"></script>
-  <script type="module" src="../../script/button.js"></script>
-  <script src="../../script/abandonner.js"></script>
-
-  
-
-
 
   <title>Étape 1 - Choisi ta structure</title>
 

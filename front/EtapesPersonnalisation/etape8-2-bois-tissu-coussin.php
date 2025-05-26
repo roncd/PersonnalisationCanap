@@ -51,8 +51,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../../styles/processus.css">
   <link rel="stylesheet" href="../../styles/popup.css">
+  <script type="module" src="../../script/popup.js"></script>
   <script type="module" src="../../script/variationPrix.js"></script>
-  <script src="../../script/abandonner.js"></script>
 
 
   <title>Étape 8 - Choisi ton motif de coussin</title>
@@ -210,9 +210,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   document.addEventListener('DOMContentLoaded', () => {
     const options = document.querySelectorAll('.color-options .option img');
     const mainImage = document.querySelector('.main-display img');
-    const suivantButton = document.querySelector('.btn-suivant');
-    const helpPopup = document.getElementById('help-popup');
-    const abandonnerPopup = document.getElementById('abandonner-popup');
     const erreurPopup = document.getElementById('erreur-popup');
     const closeErreurBtn = erreurPopup.querySelector('.close-btn');
     const selectedCouleurBoisInput = document.getElementById('selected-motif_bois'); // Input caché
@@ -246,14 +243,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       });
     });
 
-    suivantButton.addEventListener('click', (event) => {
-      if (!selected) {
-        event.preventDefault();
-        selectionPopup.style.display = 'flex';
-      }
-    });
-
-
     // Empêcher la soumission du formulaire si rien n'est sélectionné
     form.addEventListener('submit', (e) => {
       if (!selectedCouleurBoisInput.value) {
@@ -271,33 +260,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       if (event.target === erreurPopup) {
         erreurPopup.style.display = 'none';
       }
-    });
-
-
-    document.querySelector('.btn-aide').addEventListener('click', () => {
-      helpPopup.style.display = 'flex';
-    });
-
-    document.querySelector('#help-popup .close-btn').addEventListener('click', () => {
-      helpPopup.style.display = 'none';
-    });
-
-    window.addEventListener('click', (event) => {
-      if (event.target === helpPopup) {
-        helpPopup.style.display = 'none';
-      }
-    });
-
-    document.querySelector('.btn-abandonner').addEventListener('click', () => {
-      abandonnerPopup.style.display = 'flex';
-    });
-
-    document.querySelector('#abandonner-popup .yes-btn').addEventListener('click', () => {
-      window.location.href = '../pages/';
-    });
-
-    document.querySelector('#abandonner-popup .no-btn').addEventListener('click', () => {
-      abandonnerPopup.style.display = 'none';
     });
 
     function saveSelection() {
