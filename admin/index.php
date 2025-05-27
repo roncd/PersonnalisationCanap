@@ -8,6 +8,7 @@
     <link rel="icon" type="image/x-icon" href="../medias/favicon.png">
     <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../styles/admin/ajout.css">
+    <link rel="stylesheet" href="../styles/buttons.css">
     <link rel="stylesheet" href="../styles/message.css">
 </head>
 
@@ -79,7 +80,7 @@
                     <div class="button-section">
                         <p>Revenir sur <span><a href="../front/pages/index.php" class="link-connect">Deco du monde</a></span></p>
                         <div class="buttons">
-                            <button type="submit" name="connecter" class="btn-connexion">SE CONNECTER</button>
+                            <button type="submit" name="connecter" class="btn-noir">Se connecter</button>
                         </div>
                     </div>
                 </form>

@@ -62,7 +62,7 @@ $totalPrice += floatval($commande['prix_dimensions'] ?? 0);
   <link rel="stylesheet" href="../../styles/processus.css">
   <link rel="stylesheet" href="../../styles/popup.css">
   <link rel="stylesheet" href="../../styles/canapPrefait.css">
-  <title>Salon Kénitra</title>
+  <title>Choisi tes dimensions</title>
 </head>
 
 <body>
@@ -125,36 +125,34 @@ $totalPrice += floatval($commande['prix_dimensions'] ?? 0);
     </div>
 
 
-    <!-- Popup besoin d'aide -->
-    <div id="help-popup" class="popup transition">
+      <!-- Popup besoin d'aide -->
+      <div id="help-popup" class="popup">
       <div class="popup-content">
         <h2>Vous avez une question ?</h2>
-        <p>Contactez nous au numéro suivant et un vendeur vous assistera :
+        <p>Contactez-nous au numéro suivant et un vendeur vous assistera :
           <br><br>
           <strong>06 58 47 58 56</strong>
         </p>
         <br>
-        <button class="close-btn">Merci !</button>
+        <button class="btn-noir">Merci !</button>
       </div>
     </div>
-
 
     <!-- Popup abandonner -->
-    <div id="abandonner-popup" class="popup transition">
+    <div id="abandonner-popup" class="popup">
       <div class="popup-content">
-        <h2>Êtes vous sûr de vouloir abandonner ?</h2>
+        <h2>Êtes-vous sûr de vouloir abandonner ?</h2>
         <br>
-        <button class="yes-btn">Oui ...</button>
-        <button class="no-btn">Non !</button>
+        <button class="btn-beige">Oui...</button>
+        <button class="btn-noir">Non !</button>
       </div>
     </div>
 
-
-    <div id="selection-popup" class="popup transition">
+    <!-- Popup d'erreur si les dimensions ne sont pas remplies -->
+    <div id="erreur-popup" class="popup ">
       <div class="popup-content">
         <h2>Veuillez choisir une option avant de continuer.</h2>
-        <br>
-        <button class="close-btn">OK</button>
+        <button class="btn-noir">OK</button>
       </div>
     </div>
   </main>

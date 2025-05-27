@@ -51,8 +51,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Changer le mot de passe</title>
+    <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
     <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../../styles/changer_mdp.css">
+    <link rel="stylesheet" href="../../styles/buttons.css">
+    <link rel="stylesheet" href="../../styles/message.css">
 </head>
 <body>
     <header>
@@ -67,15 +70,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <?php endif; ?>
                 <form method="POST">
                     <label for="ancien">Ancien mot de passe :</label>
-                    <input type="password" name="ancien" required>
+                    <input type="password" id="ancien" name="ancien" required>
 
                     <label for="nouveau">Nouveau mot de passe :</label>
-                    <input type="password" name="nouveau" required>
+                    <input type="password" id="nouveau" name="nouveau" required>
 
                     <label for="confirmer">Confirmer le mot de passe :</label>
-                    <input type="password" name="confirmer" required>
+                    <input type="password" id="confirmer" name="confirmer" required>
 
-                    <button type="submit">Mettre à jour</button>
+                    <button class="btn-noir" type="submit">Mettre à jour</button>
                 </form>
             </div>
         </main>

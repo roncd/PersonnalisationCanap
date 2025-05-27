@@ -41,8 +41,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $codepostal = trim($_POST['codepostal']);
     $ville      = trim($_POST['ville']);
 
-    if (empty($nom) || empty($prenom) || empty($mail) || empty($tel) 
-        || empty($adresse) || empty($codepostal) || empty($ville)) {
+    if (
+        empty($nom) || empty($prenom) || empty($mail) || empty($tel)
+        || empty($adresse) || empty($codepostal) || empty($ville)
+    ) {
         $_SESSION['message']      = 'Tous les champs requis doivent être remplis.';
         $_SESSION['message_type'] = 'error';
     } else {
@@ -53,8 +55,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             WHERE id = ?
         ");
         if ($stmt->execute([
-            $nom, $prenom, $mail, $tel, 
-            $adresse, $info, $codepostal, $ville, 
+            $nom,
+            $prenom,
+            $mail,
+            $tel,
+            $adresse,
+            $info,
+            $codepostal,
+            $ville,
             $userId
         ])) {
             $_SESSION['message']      = 'Vos informations ont été mises à jour avec succès !';
@@ -70,6 +78,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 ?>
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -78,7 +87,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../../styles/formulaire.css">
     <link rel="stylesheet" href="../../styles/message.css">
+    <link rel="stylesheet" href="../../styles/buttons.css">
 </head>
+
 <body>
     <header>
         <?php require '../../squelette/header.php'; ?>
@@ -91,8 +102,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <?php
                 // Affichage des messages d'alerte (erreur ou succès)
                 if (isset($_SESSION['message'])) {
-                    echo '<div class="message ' . 
-                         htmlspecialchars($_SESSION['message_type']) . '">';
+                    echo '<div class="message ' .
+                        htmlspecialchars($_SESSION['message_type']) . '">';
                     echo htmlspecialchars($_SESSION['message']);
                     echo '</div>';
                     unset($_SESSION['message'], $_SESSION['message_type']);
@@ -104,12 +115,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <div class="form-group">
                             <label for="nom">Nom</label>
                             <input type="text" id="nom" name="nom" class="input-field"
-                                   value="<?= htmlspecialchars($client['nom']) ?>" required>
+                                value="<?= htmlspecialchars($client['nom']) ?>" required>
                         </div>
                         <div class="form-group">
                             <label for="prenom">Prénom</label>
                             <input type="text" id="prenom" name="prenom" class="input-field"
-                                   value="<?= htmlspecialchars($client['prenom']) ?>" required>
+                                value="<?= htmlspecialchars($client['prenom']) ?>" required>
                         </div>
                     </div>
 
@@ -117,20 +128,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <div class="form-group">
                             <label for="email">Mail</label>
                             <input type="email" id="email" name="mail" class="input-field"
-                                   value="<?= htmlspecialchars($client['mail']) ?>" required>
+                                value="<?= htmlspecialchars($client['mail']) ?>" required>
                         </div>
                         <div class="form-group">
                             <label for="tel">Téléphone</label>
                             <input type="tel" id="tel" name="tel" class="input-field"
-                                   value="<?= htmlspecialchars($client['tel']) ?>" required>
+                                value="<?= htmlspecialchars($client['tel']) ?>" required>
                         </div>
                     </div>
 
                     <div class="form-row">
                         <div class="form-group">
-                            <a href="changer_mdp.php" 
-                               class="input-field" 
-                               style="display: inline-block; text-decoration: none; color: black; text-align: center;">
+                            <a href="changer_mdp.php"
+                                class="input-field"
+                                style="display: inline-block; text-decoration: none; color: black; text-align: center;">
                                 Modifier le mot de passe
                             </a>
                         </div>
@@ -140,12 +151,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <div class="form-group">
                             <label for="adresse">Adresse</label>
                             <input type="text" id="adresse" name="adresse" class="input-field"
-                                   value="<?= htmlspecialchars($client['adresse']) ?>" required>
+                                value="<?= htmlspecialchars($client['adresse']) ?>" required>
                         </div>
                         <div class="form-group">
                             <label for="info">Info supplémentaire</label>
                             <input type="text" id="info" name="info" class="input-field"
-                                   value="<?= htmlspecialchars($client['info']) ?>">
+                                value="<?= htmlspecialchars($client['info']) ?>">
                         </div>
                     </div>
 
@@ -153,21 +164,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <div class="form-group">
                             <label for="codepostal">Code postal</label>
                             <input type="text" id="codepostal" name="codepostal" class="input-field"
-                                   value="<?= htmlspecialchars($client['codepostal']) ?>" required>
+                                value="<?= htmlspecialchars($client['codepostal']) ?>" required>
                         </div>
                         <div class="form-group">
                             <label for="ville">Ville</label>
                             <input type="text" id="ville" name="ville" class="input-field"
-                                   value="<?= htmlspecialchars($client['ville']) ?>" required>
+                                value="<?= htmlspecialchars($client['ville']) ?>" required>
                         </div>
                     </div>
 
                     <div class="footer">
                         <div class="buttons">
-                            <button type="button" class="btn-retour" onclick="history.back()">
-                                ← Retour
+                            <button type="button" id="btn-retour" class="btn-beige" onclick="history.back()">
+                                Retour
                             </button>
-                            <button type="submit" class="btn-valider">
+                            <button type="submit" class="btn-noir">
                                 Mettre à jour
                             </button>
                         </div>
@@ -186,4 +197,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <?php require '../../squelette/footer.php'; ?>
     </footer>
 </body>
+
 </html>

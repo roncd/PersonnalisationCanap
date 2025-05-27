@@ -1,0 +1,105 @@
+/* Section boutons processus */
+.footer .buttons {
+    display: flex;
+    gap: 15px;
+}
+
+/* ================== BUTTONS ================== */
+
+/* Bouton beige */
+.btn-noir,
+.btn-beige {
+    background-color: #997765;
+    color: #fff;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    padding: 10px 20px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: transform 0.3s ease;
+    text-decoration: none;
+}
+
+/* Boutons en noir */
+.btn-noir {
+    background-color: #000;
+    color: #fff;
+}
+
+/* Effet zoom au survol */
+.btn-beige:hover,
+.btn-noir:hover{
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.3);
+    transform: translateY(-3px);
+    transition: all 0.3s ease;
+}
+
+
+/* ADMIN */
+
+/* button section */
+.button-section {
+    font-size: 18px;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: space-between;
+}
+
+.button-section p {
+    font-size: 15px;
+    position: relative;
+    /* Nécessaire pour que ::after utilise .button-section p comme référence */
+}
+
+.button-section span {
+    font-size: 15px;
+    position: relative;
+    /* Nécessaire pour que ::after utilise .button-section p comme référence */
+}
+
+.button-section span::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -2px;
+    /* Position du soulignement juste en dessous du texte */
+    width: 0;
+    height: 1px;
+    background-color: #997765;
+    transition: width 0.3s ease;
+}
+
+.button-section span:hover::after {
+    width: 100%;
+    /* Le soulignement s'étend sur toute la largeur au survol */
+}
+
+
+.button-section .link-connect {
+    color: #997765;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+
+.button-section .buttons {
+    gap: 15px;
+}
+
+.button-section button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.button-section input {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: bold;
+}

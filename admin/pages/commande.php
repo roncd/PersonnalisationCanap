@@ -74,6 +74,7 @@ $commandes = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <link rel="stylesheet" href="../../styles/commandes.css">
     <link rel="stylesheet" href="../../styles/popup.css">
+    <link rel="stylesheet" href="../../styles/buttons.css">
     <link rel="stylesheet" href="../../styles/pagination.css">
     <script src="../../script/commandes.js"></script>
     <script type="module" src="../../script/download.js"></script>
@@ -94,7 +95,7 @@ $commandes = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         <form method="GET" action="">
                             <input type="hidden" name="statut" value="<?php echo htmlspecialchars($statut); ?>">
                             <input type="text" name="search" placeholder="Rechercher par nom ou N°..." value="<?php echo htmlspecialchars($search); ?>">
-                            <button type="submit">Rechercher</button>
+                            <button class ="btn-noir" type="submit">Rechercher</button>
                         </form>
                     </div>
                     <div>
@@ -119,8 +120,8 @@ $commandes = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         <h2>Êtes vous sûr de vouloir supprimer ?</h2>
                         <p>(La commande disparaîtra définitivement)</p>
                         <br>
-                        <button class="yes-btn">Oui</button>
-                        <button class="no-btn">Non</button>
+                        <button class="btn-beige">Oui</button>
+                        <button class="btn-noir">Non</button>
                     </div>
                 </div>
                 <div id="update-popup" class="popup">
@@ -128,8 +129,8 @@ $commandes = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         <h2>Êtes-vous sûr de continuer ?</h2>
                         <p>Cette commande passera au statut suivant</p>
                         <br>
-                        <button class="yes-btn">Oui</button>
-                        <button class="no-btn">Non</button>
+                        <button class="btn-beige">Oui</button>
+                        <button class="btn-noir">Non</button>
                     </div>
                 </div>
                 <div class="tab-content <?= $statut === 'validation' ? 'active' : '' ?>" id="validation">

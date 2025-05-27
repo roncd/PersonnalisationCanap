@@ -206,39 +206,6 @@ span {
   font-size: 25px;
 }
 
-
-.footer .buttons {
-  display: flex;
-  gap: 15px;
-}
-
-.footer-processus .buttons {
-  display: flex;
-  gap: 15px;
-}
-
-.footer button {
-  padding: 10px 20px;
-  border: none;
-  border-radius: 10px;
-  cursor: pointer;
-  font-weight: bold;
-}
-
-
-.footer-processus button {
-  padding: 10px 20px;
-  border: none;
-  border-radius: 10px;
-  cursor: pointer;
-  font-weight: bold;
-}
-
-.btn-retour {
-  background-color: #997765;
-  color: #fff;
-}
-
 /* ================== RIGHT COLUMN ================== */
 .right-column {
   flex: 1;
@@ -309,52 +276,6 @@ span {
   /* Permet de redimensionner verticalement */
   margin-bottom: 10px;
 }
-
-/* ================== BUTTONS ================== */
-.btn-aide,
-.btn-abandonner,
-.btn-submit-com,
-.btn-generer,
-.btn-suivant,
-.btn-retour {
-  background-color: #997765;
-  color: #fff;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-  padding: 10px 20px;
-  border: none;
-  border-radius: 10px;
-  cursor: pointer;
-  font-weight: bold;
-  transition: transform 0.3s ease; /* ✅ Ajoute la transition ici */
-}
-
-/* Boutons en noir */
-.btn-abandonner,
-.btn-submit-com,
-.btn-suivant,
-.btn-generer {
-  background-color: #000;
-}
-
-/* Effet zoom au survol */
-.btn-aide:hover,
-.btn-abandonner:hover,
-.btn-suivant:hover,
-.btn-retour:hover,
-.btn-submit-com:hover,
-.btn-generer:hover {
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3); /* Ombre plus forte */
-  transform: translateY(-3px); /* Légère élévation */
-  transition: all 0.3s ease;
-}
-
-.footer .buttons button:hover,
-.footer-processus .buttons button:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
-}
-
-
 
 /* ================== FORM ================== */
 .formulaire {

@@ -44,13 +44,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
   // Insérer les nouveaux accoudoirs sélectionnés
   $stmt = $pdo->prepare("INSERT INTO commande_temp_accoudoir (id_commande_temporaire, id_accoudoir_bois, nb_accoudoir) VALUES (?, ?, ?)");
+  $check = $pdo->prepare("SELECT COUNT(*) FROM accoudoir_bois WHERE id = ?");
 
   $js_accoudoir_ids = [];
   $js_nb_accoudoirs = [];
 
   foreach ($id_accoudoirs as $index => $id_accoudoir) {
     $nb = (int) $nb_accoudoirs[$index];
-    if ($nb > 0) {
+
+    // Vérifier existence
+    $check->execute([$id_accoudoir]);
+    if ($nb > 0 && $check->fetchColumn() > 0) {
       $stmt->execute([$commande_id, $id_accoudoir, $nb]);
       $js_accoudoir_ids[] = $id_accoudoir;
       $js_nb_accoudoirs[] = $nb;
@@ -70,18 +74,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 ?>
 
-
-
-
-
-
-
-
-
-
-
-
-
 <!DOCTYPE html>
 <html lang="fr">
 
@@ -93,11 +85,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../../styles/processus.css">
   <link rel="stylesheet" href="../../styles/popup.css">
+  <link rel="stylesheet" href="../../styles/buttons.css">
   <script type="module" src="../../script/popup.js"></script>
   <script type="module" src="../../script/variationPrix.js"></script>
 
 
-  <title>Étape 5 - Ajoute tes accoudoirs</title>
+  <title>Étape 5 - Ajoute des accoudoirs</title>
 
 </head>
 
@@ -124,16 +117,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <li><a href="etape8-bois-mousse.php">Mousse</a></li>
       </ul>
     </div>
-    <div class="container">
+    <div class="container transition">
       <!-- Colonne de gauche -->
-      <div class="left-column transition">
-        <h2>Étape 5 - Ajoute tes accoudoirs</h2>
+      <div class="left-column ">
+        <h2>Étape 5 - Ajoute des accoudoirs</h2>
 
 
         <section class="color-options">
           <?php if (!empty($accoudoir_bois)): ?>
             <?php foreach ($accoudoir_bois as $bois): ?>
-              <div class="option transition">
+              <div class="option ">
                 <img src="../../admin/uploads/accoudoirs-bois/<?php echo htmlspecialchars($bois['img']); ?>"
                   alt="<?php echo htmlspecialchars($bois['nom']); ?>" data-bois-id="<?php echo $bois['id']; ?>"
                   data-bois-prix="<?php echo $bois['prix']; ?>">
@@ -152,42 +145,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           <?php endif; ?>
         </section>
 
-
         <div class="footer">
           <p>Total : <span>0 €</span></p>
           <div class="buttons">
-            <button onclick="retourEtapePrecedente()" class="btn-retour transition">Retour</button>
+            <button onclick="retourEtapePrecedente()" class="btn-beige  ">Retour</button>
             <form method="POST" action="">
               <input type="hidden" name="accoudoir_bois_id" id="selected-accoudoir_bois">
               <input type="hidden" name="nb_accoudoir" id="selected-nb_accoudoir" required>
-              <button type="submit" class="btn-suivant transition">Suivant</button>
+              <button type="submit" id="btn-suivant" class="btn-noir">Suivant</button>
             </form>
           </div>
         </div>
       </div>
 
-
-
-
       <!-- Colonne de droite -->
-      <div class="right-column transition">
+      <div class="right-column ">
         <section class="main-display">
-          <div class="buttons transition">
-            <button class="btn-aide">Besoin d'aide ?</button>
-            <button class="btn-abandonner">Abandonner</button>
+          <div class="buttons ">
+            <button id="btn-aide" class="btn-beige">Besoin d'aide ?</button>
+            <button type="button" data-url="../pages/dashboard.php" id="btn-abandonner" class="btn-noir">Abandonner</button>
           </div>
-          <img src="../../medias/process-main-image.png" alt="Armoire" class="transition">
+          <img src="../../medias/process-main-image.png" alt="Armoire">
         </section>
       </div>
     </div>
 
-
-
-
-
-
     <!-- Popup besoin d'aide -->
-    <div id="help-popup" class="popup transition">
+    <div id="help-popup" class="popup ">
       <div class="popup-content">
         <h2>Vous avez une question ?</h2>
         <p>Contactez nous au numéro suivant et un vendeur vous assistera :
@@ -195,59 +179,59 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           <strong>06 58 47 58 56</strong>
         </p>
         <br>
-        <button class="close-btn">Merci !</button>
+        <button class="btn-noir">Merci !</button>
       </div>
     </div>
 
-
-
-
     <!-- Popup abandonner -->
-    <div id="abandonner-popup" class="popup transition">
+    <div id="abandonner-popup" class="popup ">
       <div class="popup-content">
         <h2>Êtes vous sûr de vouloir abandonner ?</h2>
         <br>
-        <button class="yes-btn">Oui ...</button>
-        <button class="no-btn">Non !</button>
+        <button class="btn-beige">Oui...</button>
+        <button class="btn-noir">Non !</button>
       </div>
     </div>
 
-    <!-- Popup selection option -->
-    <div id="selection-popup" class="popup transition">
+    <!-- Popup d'erreur si option non selectionnée -->
+    <div id="erreur-popup" class="popup ">
       <div class="popup-content">
         <h2>Veuillez choisir une option avant de continuer.</h2>
-        <br>
-        <button class="close-btn-selection">OK</button>
+        <button class="btn-noir">OK</button>
       </div>
     </div>
 
-    <script>
-      document.addEventListener('DOMContentLoaded', () => {
-        const selectionPopup = document.getElementById('selection-popup');
-        const closeSelectionBtn = document.querySelector('#selection-popup .close-btn-selection');
-
-        closeSelectionBtn.addEventListener('click', () => {
-          selectionPopup.style.display = 'none';
-        });
-      });
-    </script>
 
     <script>
       // Popup sélection
       document.addEventListener('DOMContentLoaded', () => {
         const options = document.querySelectorAll('.color-options .option img');
         const mainImage = document.querySelector('.main-display img');
-        const suivantButton = document.querySelector('.btn-suivant');
-        const selectionPopup = document.getElementById('selection-popup');
-        const closeSelectionBtn = document.querySelector('.close-btn-selection'); // Le bouton OK pour fermer le popup
+        const suivantButton = document.getElementById('btn-suivant');
+        const form = document.querySelector('form');
+        const erreurPopup = document.getElementById('erreur-popup');
+        const closeErreurBtn = erreurPopup.querySelector('.btn-noir');
         const selectedAccoudoirBoisInput = document.getElementById('selected-accoudoir_bois');
+        const selectedNbAccoudoirInput = document.getElementById('selected-nb_accoudoir');
         let selectedOptions = JSON.parse(localStorage.getItem('selectedOptions')) || {};
 
+        // Empêcher la soumission du formulaire si rien n'est sélectionné
+        form.addEventListener('submit', (e) => {
+          if (!selectedAccoudoirBoisInput.value) {
+            e.preventDefault();
+            erreurPopup.style.display = 'flex';
+          }
+        });
 
+        // Fermer le popup
+        closeErreurBtn.addEventListener('click', () => {
+          erreurPopup.style.display = 'none';
+        });
 
-        // Afficher la transition des éléments
-        document.querySelectorAll('.transition').forEach(element => {
-          element.classList.add('show');
+        window.addEventListener('click', (event) => {
+          if (event.target === erreurPopup) {
+            erreurPopup.style.display = 'none';
+          }
         });
 
         // Restaurer les sélections depuis localStorage
@@ -290,19 +274,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         suivantButton.addEventListener('click', (event) => {
           if (Object.keys(selectedOptions).length === 0 || !selectedNbAccoudoirInput.value || selectedNbAccoudoirInput.value === "0") {
             event.preventDefault();
-            selectionPopup.style.display = 'flex'; // Afficher le popup de sélection
-          }
-        });
-
-        // Fermer le popup avec le bouton "OK"
-        closeSelectionBtn.addEventListener('click', () => {
-          selectionPopup.style.display = 'none'; // Fermer le popup
-        });
-
-        // Fermer le popup si clic à l'extérieur
-        window.addEventListener('click', (event) => {
-          if (event.target === selectionPopup) {
-            selectionPopup.style.display = 'none'; // Fermer le popup
+            erreurPopup.style.display = 'flex'; // Afficher le popup de sélection
           }
         });
 
@@ -373,7 +345,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           });
         }
 
-
         // Fonction pour mettre à jour le total global
         function updateTotal() {
           // Calculer le total global en prenant en compte toutes les options et quantités
@@ -416,11 +387,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             });
           }
 
-
           // Sauvegarder les données globales dans sessionStorage pour cet utilisateur
           sessionStorage.setItem(sessionKey, JSON.stringify(allSelectedOptions));
         }
-
 
         // Fonction pour mettre à jour les champs cachés
         function updateHiddenInputs() {
@@ -503,17 +472,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           });
         });
 
-
         // Vérifier la sélection avant de passer à l'étape suivante
-        const suivantButton = document.querySelector('.btn-suivant');
+        const suivantButton = document.getElementById('btn-suivant');
         suivantButton.addEventListener('click', (event) => {
           if (Object.keys(selectedOptions).length === 0 || !document.getElementById('selected-nb_accoudoir').value || document.getElementById('selected-nb_accoudoir').value === "0") {
             event.preventDefault();
-            const selectionPopup = document.getElementById('selection-popup');
-            selectionPopup.style.display = 'flex';
+            const erreurPopup = document.getElementById('erreur-popup');
+            erreurPopup.style.display = 'flex';
           }
         });
-
 
         // Restaurer les sélections au chargement de la page
         restoreSelections();

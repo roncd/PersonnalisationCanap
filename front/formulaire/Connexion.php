@@ -45,6 +45,8 @@ if (isset($_GET['message']) && $_GET['message'] == 'success') {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../../styles/formulaire.css">
+    <link rel="stylesheet" href="../../styles/buttons.css">
+    <link rel="stylesheet" href="../../styles/message.css">
     <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
     <title>Connexion</title>
 </head>
@@ -65,62 +67,62 @@ if (isset($_GET['message']) && $_GET['message'] == 'success') {
                 } ?>
 
                 <form class="formulaire-creation-compte" method="POST" action="traitement_connexion.php">
-                      <div class="form-row">
+                    <div class="form-row">
                         <div class="form-group">
                             <label for="adresse">Adresse mail</label>
                             <input type="email" id="adresse" name="adresse" class="input-field" required>
                         </div>
                     </div>
-                    
+
                     <div class="form-row">
                         <div class="form-group">
                             <label for="motdepasse">Mot de passe</label>
                             <div class="input-section">
                                 <input type="password" id="motdepasse" name="motdepasse" class="input-field" required>
                                 <img src="../../medias/eye.svg" id="eyeBtn" alt="Afficher/masquer le mot de passe">
-                        </div>
-                                <div class="footer">
-                                    <p><span><a href="reset_password.php" class="link-connect">Mot de passe oublié ?</a></span></p>
-                                </div>
+                            </div>
+                            <div class="footer">
+                                <p><span><a href="reset_password.php" class="link-connect">Mot de passe oublié ?</a></span></p>
+                            </div>
                         </div>
                     </div>
 
 
 
-            
+
                     <div class="footer">
                         <p>Tu n'as pas de compte ? <span><a href="CreationCompte.php" class="link-connect">Inscris-toi</a></span></p>
-                            <div class="buttons">
-                                <button type="submit" class="btn-valider">Valider</button>
-                            </div>
+                        <div class="buttons">
+                            <button type="submit" class="btn-noir">Valider</button>
+                        </div>
                     </div>
                 </form>
 
             </div>
 
-                    <!-- Colonne de droite avec l'image -->
-                    <div class="right-column">
-                        <section class="main-display">
-                            <img src="../../medias/meknes.png" alt="Image d'illustration">
-                        </section>
-                    </div>
+            <!-- Colonne de droite avec l'image -->
+            <div class="right-column">
+                <section class="main-display">
+                    <img src="../../medias/meknes.png" alt="Image d'illustration">
+                </section>
+            </div>
         </div>
     </main>
     <?php require_once '../../squelette/footer.php' ?>
-<script>
-  const input = document.querySelector('#motdepasse');
-  const eyeBtn = document.querySelector('#eyeBtn');
+    <script>
+        const input = document.querySelector('#motdepasse');
+        const eyeBtn = document.querySelector('#eyeBtn');
 
-  eyeBtn.addEventListener('click', () => {
-    if (input.type === 'password') {
-      input.type = 'text';
-      eyeBtn.setAttribute('src', '../../medias/iconmonstr-eye-off-thin.png');
-    } else {
-      input.type = 'password';
-      eyeBtn.setAttribute('src', '../../medias/eye.svg');
-    }
-  });
-</script>
+        eyeBtn.addEventListener('click', () => {
+            if (input.type === 'password') {
+                input.type = 'text';
+                eyeBtn.setAttribute('src', '../../medias/iconmonstr-eye-off-thin.png');
+            } else {
+                input.type = 'password';
+                eyeBtn.setAttribute('src', '../../medias/eye.svg');
+            }
+        });
+    </script>
 
 </body>
 

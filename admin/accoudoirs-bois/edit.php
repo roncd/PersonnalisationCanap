@@ -79,6 +79,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <title>Modifie un accoudoir bois</title>
     <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../../styles/admin/ajout.css">
+    
+    <link rel="stylesheet" href="../../styles/buttons.css">    
     <link rel="stylesheet" href="../../styles/message.css">
     <script src="../../script/previewImage.js"></script>
 </head>
@@ -115,8 +117,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </div>
                     <div class="button-section">
                         <div class="buttons">
-                            <button type="button" class="btn-retour" onclick="history.go(-1)">Retour</button>
-                            <input type="submit" class="btn-valider" value="Mettre à jour">
+                            <button type="button"id="btn-retour" class="btn-beige" onclick="history.go(-1)">Retour</button>
+                            <input type="submit"  class="btn-noir" value="Mettre à jour">
                         </div>
                     </div>
                 </form>

@@ -154,6 +154,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['comment'])) {
   <link rel="stylesheet" href="../../styles/processus.css">
   <link rel="stylesheet" href="../../styles/popup.css">
   <link rel="stylesheet" href="../../styles/message.css">
+  <link rel="stylesheet" href="../../styles/buttons.css">
   <script type="module" src="../../script/popup-bois.js"></script>
   <script type="module" src="../../script/popup.js"></script>
 
@@ -167,7 +168,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['comment'])) {
   </header>
 
   <main>
-    <div class="container">
+    <div class="container transition">
       <!-- Colonne de gauche -->
       <div class="left-column">
         <h2 class="h2">Récapitulatif de la commande</h2>
@@ -282,8 +283,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['comment'])) {
         <div class="footer-processus">
           <p>Total : <span>0 €</span></p>
           <div class="buttons">
-            <button onclick="retourEtapePrecedente()" class="btn-retour transition">Retour</button>
-            <button class="btn-generer">Générer un devis</button>
+            <button onclick="retourEtapePrecedente()" class="btn-beige">Retour</button>
+            <button id="btn-generer" class="btn-noir">Générer un devis</button>
           </div>
         </div>
       </div>
@@ -299,8 +300,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['comment'])) {
       <div class="right-column">
         <section class="main-display-recap">
           <div class="buttons">
-            <button class="btn-aide">Besoin d'aide ?</button>
-            <button class="btn-abandonner">Abandonner</button>
+            <button id="btn-aide" class="btn-beige">Besoin d'aide ?</button>
+            <button type="button" data-url="../pages/dashboard.php" id="btn-abandonner" class="btn-noir">Abandonner</button>
           </div>
           <img src="../../medias/canapekenitra.png" alt="Armoire">
 
@@ -315,57 +316,62 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['comment'])) {
             <h3>Ajoute un commentaire à propos de ta commande :</h3>
             <form action="" method="POST">
               <textarea class="textarea-custom" id="comment" name="comment" rows="5" placeholder="Écris ton commentaire ici..."><?= htmlspecialchars($commentaire) ?></textarea>
-              <button type="submit" class="btn-submit-com">
+              <button type="submit" class="btn-noir">
                 <?= empty($commentaire) ? 'Ajouter' : 'Modifier' ?>
               </button>
             </form>
           </section>
 
-          <!-- Popup besoin d'aide -->
-          <div id="help-popup" class="popup transition">
-            <div class="popup-content">
-              <h2>Vous avez une question ?</h2>
-              <p>Contactez-nous au numéro suivant et un vendeur vous assistera :
-                <br><br>
-                <strong>06 58 47 58 56</strong>
-              </p>
-              <br>
-              <button class="close-btn">Merci !</button>
-            </div>
-          </div>
+      </div>
+    </div>
 
-          <!-- Popup abandonner -->
-          <div id="abandonner-popup" class="popup">
-            <div class="popup-content">
-              <h2>Êtes vous sûr de vouloir abandonner ?</h2>
-              <br>
-              <button class="yes-btn">Oui...</button>
-              <button class="no-btn">Non !</button>
-            </div>
-          </div>
+    <!-- Popup besoin d'aide -->
+    <div id="help-popup" class="popup">
+      <div class="popup-content">
+        <h2>Vous avez une question ?</h2>
+        <p>Contactez-nous au numéro suivant et un vendeur vous assistera :
+          <br><br>
+          <strong>06 58 47 58 56</strong>
+        </p>
+        <br>
+        <button class="btn-noir">Merci !</button>
+      </div>
+    </div>
 
-          <!-- Popup validation generation -->
-          <div id="generer-popup" class="popup">
-            <div class="popup-content">
-              <h2>Êtes vous sûr de vouloir générer un devis ?</h2>
-              <p>Vous ne pourrez plus effectuer de modifictions sur votre commande</p>
-              <button class="btn-close">Non</button>
-              <button class="btn-suivant" name="envoyer" data-id="<?= htmlspecialchars($id) ?>">Oui</button>
-            </div>
-          </div>
+    <!-- Popup abandonner -->
+    <div id="abandonner-popup" class="popup">
+      <div class="popup-content">
+        <h2>Êtes vous sûr de vouloir abandonner ?</h2>
+        <br>
+        <button class="btn-beige">Oui...</button>
+        <button class="btn-noir">Non !</button>
+      </div>
+    </div>
 
-          <!-- Popup devis -->
-          <div id="pdf-popup" class="popup">
-            <div class="popup-content">
-              <h2>Commande finalisé !</h2>
-              <p>Votre devis a été créé et envoyé à l'adresse suivante :
-                </br><?php echo "<strong>" . htmlspecialchars($assocMail['client'][$commande['id_client']]['mail'] ?? '-') . "</strong>"; ?>
-              </p>
-              <br>
-              <button onclick="location.href='../pages/commandes.php'" class="close-btn">Voir mes commandes</button>
-              <button class="pdf-btn">Voir le devis</button>
-            </div>
-          </div>
+    <!-- Popup validation generation -->
+    <div id="generer-popup" class="popup">
+      <div class="popup-content">
+        <h2>Êtes vous sûr de vouloir générer un devis ?</h2>
+        <p>Vous ne pourrez plus effectuer de modifictions sur votre commande</p>
+        <button id="btn-oui" class="btn-beige" name="envoyer" data-id="<?= htmlspecialchars($id) ?>">Oui</button>
+        <button id="btn-close" class="btn-noir">Non</button>
+      </div>
+    </div>
+
+    <!-- Popup devis -->
+    <div id="pdf-popup" class="popup">
+      <div class="popup-content">
+        <h2>Commande finalisé !</h2>
+        <p>Votre devis a été créé et envoyé à l'adresse suivante :
+          </br><?php echo "<strong>" . htmlspecialchars($assocMail['client'][$commande['id_client']]['mail'] ?? '-') . "</strong>"; ?>
+        </p>
+        <br>
+        <button onclick="location.href='../pages/commandes.php'" class="btn-beige">Voir mes commandes</button>
+        <button id="pdf-btn" class="btn-noir">Voir le devis</button>
+      </div>
+    </div>
+    </div>
+
   </main>
   <?php require_once '../../squelette/footer.php'; ?>
 

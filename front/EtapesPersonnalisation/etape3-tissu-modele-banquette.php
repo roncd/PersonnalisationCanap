@@ -54,11 +54,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../../styles/processus.css">
   <link rel="stylesheet" href="../../styles/popup.css">
+  <link rel="stylesheet" href="../../styles/buttons.css">
   <script type="module" src="../../script/popup.js"></script>
   <script type="module" src="../../script/variationPrix.js"></script>
 
 
-  <title>Étape 3 - Choisi ton modèle</title>
+  <title>Étape 3 - Choisi ton modèle de banquette</title>
 
 </head>
 
@@ -87,12 +88,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
 
 
-    <div class="container">
-      <div class="left-column transition">
-        <h2>Étape 3 - Choisis ton modèle</h2>
+    <div class="container transition">
+      <div class="left-column ">
+        <h2>Étape 3 - Choisis ton modèle de banquette</h2>
         <section class="color-2options">
           <?php foreach ($modele as $item): ?>
-            <div class="option transition">
+            <div class="option ">
               <img src="../../admin/uploads/modele/<?php echo htmlspecialchars($item['img']); ?>"
                 alt="<?php echo htmlspecialchars($item['nom']); ?>" data-modele-tissu-id="<?php echo $item['id']; ?>"
                 data-modele-tissu-prix="<?php echo $item['prix']; ?>">
@@ -105,28 +106,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div class="footer">
           <p>Total : <span>0 €</span></p>
           <div class="buttons">
-            <button onclick="retourEtapePrecedente()" class="btn-retour transition">Retour</button>
+            <button onclick="retourEtapePrecedente()" class="btn-beige  ">Retour</button>
             <form method="POST" action="">
               <input type="hidden" name="modele_id" id="selected-modele_tissu">
-              <button type="submit" class="btn-suivant transition">Suivant</button>
+              <button type="submit" id="btn-suivant" class="btn-noir">Suivant</button>
             </form>
           </div>
         </div>
       </div>
 
-      <div class="right-column transition">
+      <div class="right-column ">
         <section class="main-display">
-          <div class="buttons transition">
-            <button class="btn-aide">Besoin d'aide ?</button>
-            <button class="btn-abandonner">Abandonner</button>
+          <div class="buttons ">
+            <button id="btn-aide" class="btn-beige">Besoin d'aide ?</button>
+            <button type="button" data-url="../pages/dashboard.php" id="btn-abandonner" class="btn-noir">Abandonner</button>
           </div>
-          <img id="main-image" src="../../medias/process-main-image.png" alt="Modèle sélectionné" class="transition">
+          <img id="main-image" src="../../medias/process-main-image.png" alt="Modèle sélectionné">
         </section>
       </div>
     </div>
 
     <!-- Popup besoin d'aide -->
-    <div id="help-popup" class="popup transition">
+    <div id="help-popup" class="popup ">
       <div class="popup-content">
         <h2>Vous avez une question ?</h2>
         <p>Contactez nous au numéro suivant et un vendeur vous assistera :
@@ -134,27 +135,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           <strong>06 58 47 58 56</strong>
         </p>
         <br>
-        <button class="close-btn">Merci !</button>
+        <button class="btn-noir">Merci !</button>
       </div>
     </div>
 
 
     <!-- Popup abandonner -->
-    <div id="abandonner-popup" class="popup transition">
+    <div id="abandonner-popup" class="popup ">
       <div class="popup-content">
         <h2>Êtes vous sûr de vouloir abandonner ?</h2>
         <br>
-        <button class="yes-btn">Oui ...</button>
-        <button class="no-btn">Non !</button>
+        <button class="btn-beige">Oui...</button>
+        <button class="btn-noir">Non !</button>
       </div>
     </div>
 
 
     <!-- Popup d'erreur si option non selectionnée -->
-    <div id="erreur-popup" class="popup transition">
+    <div id="erreur-popup" class="popup ">
       <div class="popup-content">
         <h2>Veuillez choisir une option avant de continuer.</h2>
-        <button class="close-btn">OK</button>
+        <button class="btn-noir">OK</button>
       </div>
     </div>
 
@@ -165,17 +166,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         const selectedModeleTissuInput = document.getElementById('selected-modele_tissu');
         const mainImage = document.getElementById('main-image');
         const erreurPopup = document.getElementById('erreur-popup');
-        const closeErreurBtn = erreurPopup.querySelector('.close-btn');
+        const closeErreurBtn = erreurPopup.querySelector('.btn-noir');
         const form = document.querySelector('form'); // Assure-toi que ton <form> a bien une balise identifiable
 
         let savedModeleTissuId = localStorage.getItem('selectedModeleTissuId');
         let selected = savedModeleTissuId !== '';
-
-
-        // Appliquer les transitions aux éléments
-        document.querySelectorAll('.transition').forEach(element => {
-          element.classList.add('show');
-        });
 
         // Restaurer la sélection si elle existe
         options.forEach(img => {

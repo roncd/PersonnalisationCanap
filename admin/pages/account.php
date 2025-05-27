@@ -1,16 +1,3 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mon Compte</title>
-    <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
-    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&display=swap" rel="stylesheet">
-    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-    <link rel="stylesheet" href="../../styles/admin/fiche-client.css">
-
-</head>
 <?php
 session_start();
 if (!isset($_SESSION['id'])) {
@@ -27,6 +14,19 @@ $stmt->execute([$id]);
 $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
 ?>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mon Compte</title>
+    <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&display=swap" rel="stylesheet">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="../../styles/admin/fiche-client.css">
+
+</head>
 
 <body>
     <header>

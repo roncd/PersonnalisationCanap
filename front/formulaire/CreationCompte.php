@@ -57,6 +57,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../../styles/formulaire.css">
   <link rel="stylesheet" href="../../styles/message.css">
+  <link rel="stylesheet" href="../../styles/buttons.css">
   <title>Créer ton compte</title>
   <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
 </head>
@@ -131,7 +132,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           <div class="footer">
             <p>Tu as déjà un compte ? <span><a href="Connexion.php" class="link-connect">Connecte-toi</a></span></p>
             <div class="buttons">
-              <button type="submit" class="btn-valider">Valider</button>
+              <button type="submit" class="btn-noir">Valider</button>
             </div>
           </div>
         </form>

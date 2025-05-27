@@ -4,8 +4,8 @@ window.updateStatus = function (button) {
     const commandId = commandDiv.getAttribute('data-id');
     const popup = document.getElementById('update-popup'); // Récupère le popup
     const currentStatut = commandDiv.getAttribute('data-statut'); // Récupère le statut actuel
-    const yesButton = popup.querySelector('.yes-btn');
-    const noButton = popup.querySelector('.no-btn');
+    const yesButton = popup.querySelector('.btn-beige');
+    const noButton = popup.querySelector('.btn-noir');
 
     // Afficher le popup
     popup.style.display = 'flex';
@@ -79,8 +79,8 @@ window.removeCommand = function (button) {
     const commandDiv = button.closest('.commande'); // Récupère la commande liée
     const commandId = commandDiv.getAttribute('data-id'); // Récupère l'ID de la commande
     const popup = document.getElementById('supprimer-popup'); // Récupère le popup
-    const yesButton = popup.querySelector('.yes-btn');
-    const noButton = popup.querySelector('.no-btn');
+    const yesButton = popup.querySelector('.btn-beige');
+    const noButton = popup.querySelector('.btn-noir');
 
     // Afficher le popup
     popup.style.display = 'flex';

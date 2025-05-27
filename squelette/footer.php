@@ -57,4 +57,4 @@
   </div>
 </footer>
 <!-- Mention légale -->
-  <p class="ft-legal">© 2024 Deco du Monde - Tous droits réservés</p>
+  <p class="ft-legal">© 2025 Deco du Monde - Tous droits réservés</p>

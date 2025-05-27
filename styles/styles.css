@@ -63,23 +63,13 @@ body {
   text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.6);
 }
 
-.hero-button {
-  background-color: black;
-  color: white;
-  font-weight: 700;
+.hero-content button {
   padding: 0.75rem 2rem;
   font-size: 1rem;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  text-transform: uppercase;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-.hero-button:hover {
+.hero-content button:hover {
   transform: scale(1.05);
-  background-color: #1a1a1a;
 }
 
 /* Hero Responsive */
@@ -92,7 +82,7 @@ body {
   .hero-section { height: 50vh; }
   .hero-title { font-size: 1.75rem; }
   .hero-description { font-size: 0.9rem; }
-  .hero-button { padding: 0.6rem 1.5rem; font-size: 0.9rem; }
+  .hero-content button{ padding: 0.6rem 1.5rem; font-size: 0.9rem; }
 }
 
 /* Titres de section */
@@ -434,26 +424,9 @@ body {
   line-height: 1.75;
 }
 
-.devis-button {
-  background-color: black;
-  color: white;
-  font-weight: 700;
-  padding: 0.75rem 1.75rem;
-  border-radius: 10px;
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s ease;
-}
-
-.devis-button:hover {
-  transform: scale(1.05);
-}
-
-.devis-button:focus {
-  outline: 2px solid rgba(0, 0, 0, 0.2);
-}
 
 @media (max-width: 480px) {
   .devis-title { font-size: 2rem; }
   .devis-description { font-size: 1rem; padding: 0 1rem; }
-  .devis-button { padding: 0.6rem 1.2rem; font-size: 0.9rem; }
+  .devis-container button { padding: 0.6rem 1.2rem; font-size: 0.9rem; }
 }

@@ -62,6 +62,7 @@ $totalPrice += floatval($commande['prix_dimensions'] ?? 0);
   <link rel="stylesheet" href="../../styles/processus.css">
   <link rel="stylesheet" href="../../styles/popup.css">
   <link rel="stylesheet" href="../../styles/canapPrefait.css">
+  <link rel="stylesheet" href="../../styles/buttons.css">
   <title>Salon Kénitra</title>
 </head>
 
@@ -75,7 +76,7 @@ $totalPrice += floatval($commande['prix_dimensions'] ?? 0);
 
   <main>
 
- 
+
     <div class="container">
       <!-- Colonne de gauche -->
       <div class="left-column">
@@ -113,7 +114,7 @@ $totalPrice += floatval($commande['prix_dimensions'] ?? 0);
                 <p><?php echo htmlspecialchars($details['nom'] ?? $details['valeur'] ?? 'Non spécifié'); ?></p>
                 <?php if (!empty($details['prix'])): ?>
                   <p><strong><?php echo htmlspecialchars($details['prix']); ?> €</strong></p>
-                <?php endif; ?> 
+                <?php endif; ?>
               </div>
             <?php endforeach; ?>
           <?php else: ?>
@@ -125,10 +126,10 @@ $totalPrice += floatval($commande['prix_dimensions'] ?? 0);
         <div class="footer">
           <p>Total : <span id="total-price"><?php echo number_format($totalPrice, 2, ',', ' '); ?> €</span></p>
           <div class="buttons">
-            <button class="btn-retour " onclick="history.go(-1)">Retour</button>
+            <button type="button" id="btn-retour" class="btn-beige" onclick="history.go(-1)">Retour</button>
             <form method="POST" action="">
               <input type="hidden" name="couleur_bois_id" id="selected-couleur_bois">
-              <button type="submit" class="btn-suivant">Suivant</button>
+              <button type="submit" id="btn-suivant" class="btn-noir">Suivant</button>
             </form>
           </div>
         </div>
@@ -144,51 +145,40 @@ $totalPrice += floatval($commande['prix_dimensions'] ?? 0);
     </div>
 
 
+
     <!-- Popup besoin d'aide -->
-    <div id="help-popup" class="popup transition">
+    <div id="help-popup" class="popup ">
       <div class="popup-content">
         <h2>Vous avez une question ?</h2>
-        <p>Contactez nous au numéro suivant et un vendeur vous assistera :
+        <p>Contactez-nous au numéro suivant et un vendeur vous assistera :
           <br><br>
           <strong>06 58 47 58 56</strong>
         </p>
         <br>
-        <button class="close-btn">Merci !</button>
+        <button class="btn-noir">Merci !</button>
       </div>
     </div>
-
 
     <!-- Popup abandonner -->
-    <div id="abandonner-popup" class="popup transition">
+    <div id="abandonner-popup" class="popup ">
       <div class="popup-content">
-        <h2>Êtes vous sûr de vouloir abandonner ?</h2>
+        <h2>Êtes-vous sûr de vouloir abandonner ?</h2>
         <br>
-        <button class="yes-btn">Oui ...</button>
-        <button class="no-btn">Non !</button>
+        <button class="btn-beige">Oui...</button>
+        <button class="btn-noir">Non !</button>
       </div>
     </div>
 
 
-    <div id="selection-popup" class="popup transition">
-      <div class="popup-content">
-        <h2>Veuillez choisir une option avant de continuer.</h2>
-        <br>
-        <button class="close-btn">OK</button>
-      </div>
-    </div>
-  </main>
+    <?php require_once '../../squelette/footer.php'; ?>
 
 
-
-  <?php require_once '../../squelette/footer.php'; ?>
-
-  
-<script>
-  document.querySelector(".btn-suivant").addEventListener("click", function(event) {
-    event.preventDefault(); // Empêche l'envoi du formulaire si ce n'est pas nécessaire
-    window.location.href = "choix-dimension.php"; // Remplace par l’URL correcte
-  });
-</script>
+    <script>
+      document.getElementById("btn-suivant").addEventListener("click", function(event) {
+        event.preventDefault(); // Empêche l'envoi du formulaire si ce n'est pas nécessaire
+        window.location.href = "choix-dimension.php"; // Remplace par l’URL correcte
+      });
+    </script>
 
 
 </body>

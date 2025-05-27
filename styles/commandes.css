@@ -67,6 +67,10 @@ h2 {
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
+.commande:nth-of-type(even) {
+  background-color: #f2e9e3;
+}
+
 .info p {
   margin: 5px 0;
 }

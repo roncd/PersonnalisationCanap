@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const suivantBtn = document.querySelector('.btn-suivant');
+    const suivantBtn = document.getElementById('btn-suivant');
     const userId = document.body.getAttribute('data-user-id');
     const currentStep = document.body.getAttribute('data-current-step');
 

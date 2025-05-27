@@ -5,17 +5,13 @@
     transition: opacity 0.5s ease, transform 0.5s ease;
 }
 
-
 .transition.show {
     opacity: 1;
     transform: translateY(0);
 }
 
-
-/* Appliquer les transitions aux images sélectionnées */
 .option img.selected {
     border: 3px solid #997765;
-    /* Couleur marron */
     border-radius: 5px;
     box-sizing: border-box;
 }
@@ -23,8 +19,6 @@
 .container {
     display: flex;
     flex-direction: row-reverse;
-    /* Inverse l'ordre des colonnes */
-
 }
 
 /* Style général pour la zone contenant les dimensions et autres éléments */
