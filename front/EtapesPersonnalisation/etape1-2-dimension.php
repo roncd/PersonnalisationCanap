@@ -69,9 +69,10 @@ if (isset($_GET['structure_id'])) {
   <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../../styles/processus.css">
   <link rel="stylesheet" href="../../styles/popup.css">
+  <link rel="stylesheet" href="../../styles/buttons.css">
   <script type="module" src="../../script/popup.js"></script>
 
-  <title>Étape 1 - Choisi tes dimensions</title>
+  <title>Étape 1.2 - Choisi tes dimensions</title>
  
 </head>
 
@@ -87,10 +88,10 @@ if (isset($_GET['structure_id'])) {
         <li><a href="etape2-type-banquette.php">Banquette</a></li>
       </ul>
     </div>
-    <div class="container">
+    <div class="container transition">
       <!-- Colonne de gauche -->
-      <div class="left-column transition">
-        <h2>Étape 1 - Choisi tes dimensions</h2>
+      <div class="left-column ">
+        <h2>Étape 1.2 - Choisi tes dimensions</h2>
         <form method="POST" class="formulaire">
           <p>Largeur banquette : <span class="bold">50cm (par défaut) </span> | Prix total des dimensions : <span id="dimension-price">0.00</span> €</p>
           <div class="form-row">
@@ -114,9 +115,9 @@ if (isset($_GET['structure_id'])) {
           <div class="footer">
             <p>Total : <span>0 €</span></p>
             <div class="buttons">
-              <button type="button" onclick="retourEtapePrecedente()" class="btn-retour transition">Retour</button>
+              <button type="button" onclick="retourEtapePrecedente()" class="btn-beige  ">Retour</button>
               <input type="hidden" name="prix_dimensions" id="prix_dimensions_hidden" value="">
-              <button type="submit" class="btn-suivant transition">Suivant</button>
+              <button type="submit"id="btn-suivant" class="btn-noir">Suivant</button>
             </div>
           </div>
         </form>
@@ -159,47 +160,47 @@ if (isset($_GET['structure_id'])) {
         });
       </script>
       <!-- Colonne de droite -->
-      <div class="right-column transition">
+      <div class="right-column ">
         <section class="main-display">
-          <div class="buttons transition">
-            <button class="btn-aide">Besoin d'aide ?</button>
-            <button class="btn-abandonner">Abandonner</button>
+          <div class="buttons ">
+            <button id="btn-aide" class="btn-beige">Besoin d'aide ?</button>
+            <button type="button" data-url="../pages/dashboard.php" id="btn-abandonner" class="btn-noir">Abandonner</button>
           </div>
           <?php if (!empty($structure['img'])): ?>
-            <img src="../../admin/uploads/structure/<?php echo htmlspecialchars($structure['img']); ?>" alt="Structure sélectionnée" class="transition">
+            <img src="../../admin/uploads/structure/<?php echo htmlspecialchars($structure['img']); ?>" alt="Structure sélectionnée">
           <?php else: ?>
-            <img src="../../medias/process-main-image.png" alt="Image par défaut" class="transition">
+            <img src="../../medias/process-main-image.png" alt="Image par défaut">
           <?php endif; ?>
         </section>
       </div>
     </div>
 
     <!-- Popup d'erreur si les dimensions ne sont pas remplies -->
-    <div id="erreur-popup" class="popup transition">
+    <div id="erreur-popup" class="popup ">
       <div class="popup-content">
         <h2>Veuillez choisir une option avant de continuer.</h2>
-        <button class="close-btn">OK</button>
+        <button class="btn-noir">OK</button>
       </div>
     </div>
 
     <!-- Popup besoin d'aide -->
-    <div id="help-popup" class="popup transition">
+    <div id="help-popup" class="popup ">
       <div class="popup-content">
         <h2>Vous avez une question ?</h2>
         <p>Contactez-nous au numéro suivant et un vendeur vous assistera :</p>
         <strong>06 58 47 58 56</strong>
         <br><br>
-        <button class="close-btn">Merci !</button>
+        <button class="btn-noir">Merci !</button>
       </div>
     </div>
 
     <!-- Popup abandon -->
-    <div id="abandonner-popup" class="popup transition">
+    <div id="abandonner-popup" class="popup ">
       <div class="popup-content">
         <h2>Êtes-vous sûr de vouloir abandonner ?</h2>
         <br>
-        <button class="yes-btn">Oui ...</button>
-        <button class="no-btn">Non !</button>
+        <button class="btn-beige">Oui...</button>
+        <button class="btn-noir">Non !</button>
       </div>
     </div>
 
@@ -209,7 +210,7 @@ if (isset($_GET['structure_id'])) {
         // Sélection des éléments
         const form = document.querySelector('.formulaire');
         const erreurPopup = document.getElementById('erreur-popup');
-        const closeErreurBtn = erreurPopup.querySelector('.close-btn');
+        const closeErreurBtn = erreurPopup.querySelector('.btn-noir');
         const longueurAInput = document.getElementById('longueurA');
 
         form.addEventListener('submit', (event) => {

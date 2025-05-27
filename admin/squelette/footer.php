@@ -12,7 +12,7 @@
 
 <body>
   <div class="footer">
-    © 2024 Deco du Monde – Tous droits réservés
+    © 2025 Deco du Monde – Tous droits réservés
   </div>
 </body>
 

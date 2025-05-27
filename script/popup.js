@@ -1,8 +1,8 @@
 //Pop up aide
 document.addEventListener('DOMContentLoaded', () => {
-  const openButton = document.querySelector('.btn-aide'); // Bouton pour ouvrir le popup
+  const openButton = document.getElementById('btn-aide'); // Bouton pour ouvrir le popup
   const popup = document.getElementById('help-popup');
-  const closeButton = popup.querySelector('.close-btn'); // Bouton "Merci !" pour fermer le popup
+  const closeButton = popup.querySelector('.btn-noir'); // Bouton "Merci !" pour fermer le popup
 
   // Afficher le popup
   openButton.addEventListener('click', () => {
@@ -32,10 +32,10 @@ document.querySelectorAll('.transition').forEach(element => {
 
 //Popup abandonner
 document.addEventListener('DOMContentLoaded', () => {
-  const btnAbandonner = document.querySelector('.btn-abandonner');
+  const btnAbandonner = document.getElementById('btn-abandonner');
   const popup = document.getElementById('abandonner-popup');
-  const btnNo = document.querySelector('.no-btn');
-  const btnYes = document.querySelector('.yes-btn');
+  const btnNo = popup.querySelector('.btn-noir');
+  const btnYes = popup.querySelector('.btn-beige');
 
   if (btnAbandonner && popup && btnNo && btnYes) {
     let redirectURL = btnAbandonner.dataset.url; // ← récupère la bonne URL

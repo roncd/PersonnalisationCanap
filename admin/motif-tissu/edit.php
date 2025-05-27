@@ -88,6 +88,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link rel="stylesheet" href="../../styles/admin/ajout.css">
     <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
     <link rel="stylesheet" href="../../styles/message.css">
+    
+    <link rel="stylesheet" href="../../styles/buttons.css">
     <script src="../../script/previewImage.js"></script>
 </head>
 
@@ -135,8 +137,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </div>
                     <div class="button-section">
                         <div class="buttons">
-                            <button type="button" class="btn-retour" onclick="history.go(-1)">Retour</button>
-                            <input type="submit" class="btn-valider" value="Mettre à jour">
+                            <button type="button" id="btn-retour" class="btn-beige" onclick="history.go(-1)">Retour</button>
+                            <input type="submit"  class="btn-noir" value="Mettre à jour">
                         </div>
                     </div>
                 </form>

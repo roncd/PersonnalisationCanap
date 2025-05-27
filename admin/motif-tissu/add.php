@@ -1,3 +1,58 @@
+<?php
+require '../config.php';
+session_start();
+
+if (!isset($_SESSION['id'])) {
+    header("Location: ../index.php");
+    exit();
+}
+
+$stmt = $pdo->prepare("SELECT id, nom FROM couleur_tissu");
+$stmt->execute();
+$couleurs = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $nom = trim($_POST['name']);
+    $prix = trim($_POST['price']);
+    $img = $_FILES['img'];
+    $id_couleur = ($_POST['id_couleur']);
+
+    if (empty($nom) || empty($prix) || empty($img['name']) || empty($id_couleur)) {
+        $_SESSION['message'] = 'Tous les champs sont requis !';
+        $_SESSION['message_type'] = 'error';
+    } else {
+        $uploadDir = '../uploads/motif-tissu/';
+        if (!is_dir($uploadDir)) {
+            mkdir($uploadDir, 0777, true);
+        }
+
+        $allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/jpg'];
+        if (!in_array($img['type'], $allowedTypes)) {
+            $_SESSION['message'] = 'Seuls les fichiers JPEG, PNG et GIF sont autorisés.';
+            $_SESSION['message_type'] = 'error';
+        } else {
+            $fileName = basename($img['name']);
+            $uploadPath = $uploadDir . $fileName;
+
+            if (move_uploaded_file($img['tmp_name'], $uploadPath)) {
+                try {
+                    $stmt = $pdo->prepare("INSERT INTO motif_tissu (nom, prix, img, id_couleur_tissu) VALUES (?, ?, ?, ?)");
+                    $stmt->execute([$nom, $prix, $fileName, $id_couleur]);
+
+                    $_SESSION['message'] = 'Le motif du coussin a été ajouté avec succès !';
+                    $_SESSION['message_type'] = 'success';
+                } catch (Exception $e) {
+                    $_SESSION['message'] = 'Erreur lors de l\'ajout du motif : ' . $e->getMessage();
+                    $_SESSION['message_type'] = 'error';
+                }
+            } else {
+                $_SESSION['message'] = 'Erreur lors de l\'upload de l\'image.';
+                $_SESSION['message_type'] = 'error';
+            }
+        }
+    }
+}
+?>
 <!DOCTYPE html>
 <html lang="fr">
 
@@ -9,6 +64,8 @@
     <link rel="stylesheet" href="../../styles/admin/ajout.css">
     <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
     <link rel="stylesheet" href="../../styles/message.css">
+    
+    <link rel="stylesheet" href="../../styles/buttons.css">
     <script src="../../script/previewImage.js"></script>
 </head>
 
@@ -18,62 +75,6 @@
     </header>
 
     <main>
-        <?php
-        require '../config.php';
-        session_start();
-
-        if (!isset($_SESSION['id'])) {
-            header("Location: ../index.php");
-            exit();
-        }
-
-        $stmt = $pdo->prepare("SELECT id, nom FROM couleur_tissu");
-        $stmt->execute();
-        $couleurs = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $nom = trim($_POST['name']);
-            $prix = trim($_POST['price']);
-            $img = $_FILES['img'];
-            $id_couleur = ($_POST['id_couleur']);
-
-            if (empty($nom) || empty($prix) || empty($img['name']) || empty($id_couleur)) {
-                $_SESSION['message'] = 'Tous les champs sont requis !';
-                $_SESSION['message_type'] = 'error';
-            } else {
-                $uploadDir = '../uploads/motif-tissu/';
-                if (!is_dir($uploadDir)) {
-                    mkdir($uploadDir, 0777, true);
-                }
-
-                $allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/jpg'];
-                if (!in_array($img['type'], $allowedTypes)) {
-                    $_SESSION['message'] = 'Seuls les fichiers JPEG, PNG et GIF sont autorisés.';
-                    $_SESSION['message_type'] = 'error';
-                } else {
-                    $fileName = basename($img['name']);
-                    $uploadPath = $uploadDir . $fileName;
-
-                    if (move_uploaded_file($img['tmp_name'], $uploadPath)) {
-                        try {
-                            $stmt = $pdo->prepare("INSERT INTO motif_tissu (nom, prix, img, id_couleur_tissu) VALUES (?, ?, ?, ?)");
-                            $stmt->execute([$nom, $prix, $fileName, $id_couleur]);
-
-                            $_SESSION['message'] = 'Le motif du coussin a été ajouté avec succès !';
-                            $_SESSION['message_type'] = 'success';
-                        } catch (Exception $e) {
-                            $_SESSION['message'] = 'Erreur lors de l\'ajout du motif : ' . $e->getMessage();
-                            $_SESSION['message_type'] = 'error';
-                        }
-                    } else {
-                        $_SESSION['message'] = 'Erreur lors de l\'upload de l\'image.';
-                        $_SESSION['message_type'] = 'error';
-                    }
-                }
-            }
-        }
-        ?>
-
         <div class="container">
             <h2>Ajouter un motif de coussin - tissu</h2>
             <?php require '../include/message.php'; ?>
@@ -111,8 +112,8 @@
                     </div>
                     <div class="button-section">
                         <div class="buttons">
-                            <button type="button" class="btn-retour" onclick="history.go(-1)">Retour</button>
-                            <input type="submit" class="btn-valider" value="Ajouter">
+                            <button type="button" id="btn-retour" class="btn-beige" onclick="history.go(-1)">Retour</button>
+                            <input type="submit" class="btn-noir" value="Ajouter">
                         </div>
                     </div>
                 </form>

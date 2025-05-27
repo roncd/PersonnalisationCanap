@@ -1,8 +1,7 @@
 //Pop up generer devis + envoi du devis par mail
-document.querySelectorAll('.btn-suivant').forEach(button => {
-  button.addEventListener('click', function () {
-    let idCommande = this.getAttribute('data-id'); // Récupérer l'ID stocké    
-    if (!idCommande) return;
+document.getElementById('btn-oui').addEventListener('click', function () {
+  let idCommande = this.getAttribute('data-id'); // Récupérer l'ID stocké    
+  if (!idCommande) return;
 
     // Étape 1 : Transfert de commande tempo -> commande detail dans bdd
     fetch('../generate-pdf/transfer-tissu.php', {
@@ -20,7 +19,7 @@ document.querySelectorAll('.btn-suivant').forEach(button => {
 
           // Afficher le pop-up et stocker l’ID dans le bouton
           document.getElementById('pdf-popup').style.display = 'flex';
-          document.querySelector('.pdf-btn').setAttribute('data-id', newCommandeId);
+          document.getElementById('pdf-btn').setAttribute('data-id', newCommandeId);
 
           // Étape 2 : envoi du devis par mail avec le nouvel ID de commande detail
           fetch('../generate-pdf/send-pdf.php', {
@@ -38,7 +37,6 @@ document.querySelectorAll('.btn-suivant').forEach(button => {
       })
       .catch(error => console.error('Erreur:', error));
   });
-});
 
 // document.querySelector('.btn-suivant').addEventListener('click', function () {
 //   let idCommande = this.getAttribute('data-id'); // Récupérer l'ID stocké    
@@ -68,7 +66,7 @@ document.querySelectorAll('.btn-suivant').forEach(button => {
 // });
 
 //Bouton pour voir pdf sur navigateur (lien temporaire)
-document.querySelector('.pdf-btn').addEventListener('click', function () {
+document.getElementById('pdf-btn').addEventListener('click', function () {
   let newCommandeId = this.getAttribute('data-id'); // Récupérer l'ID stocké dans le bouton
   console.log("Nouvel ID de commande :", newCommandeId);
 
@@ -104,15 +102,10 @@ window.addEventListener('click', (event) => {
 
 //Popup validation genreration
 document.addEventListener('DOMContentLoaded', () => {
-  const openButton = document.querySelector('.btn-generer'); // Bouton pour ouvrir le popup
+  const openButton = document.getElementById('btn-generer'); // Bouton pour ouvrir le popup
   const popup = document.getElementById('generer-popup');
-  const yesButton = document.querySelector('.btn-suivant'); // Bouton "Oui ..." pour redirection
-  const noButton = document.querySelector('.btn-close'); // Bouton "Non !" pour fermer le popup
-
-
-  document.querySelectorAll('.transition').forEach(element => {
-    element.classList.add('show');
-  });
+  const yesButton = document.getElementById('btn-oui'); // Bouton "Oui..." pour redirection
+  const noButton = document.getElementById('btn-close'); // Bouton "Non !" pour fermer le popup
 
   // Afficher le popup
   openButton.addEventListener('click', () => {

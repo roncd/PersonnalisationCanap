@@ -19,23 +19,28 @@
   inset: 0;
   background: rgba(0, 0, 0, 0.3);
 }
-.hero-banner__content {
+.hero-banner-content {
   position: relative;
   text-align: center;
   color: #fff;
   max-width: 600px;
   padding: 2rem;
 }
-.hero-banner__content h1 {
+.hero-banner-content h1 {
   font-size: 3rem;
   margin-bottom: 1rem;
   font-family: 'Baloo 2', sans-serif;
 }
-.hero-banner__content p {
+.hero-banner-content p {
   font-size: 1.125rem;
   line-height: 1.6;
   font-family: 'Be Vietnam Pro', sans-serif;
 }
+
+.hero-banner-content button {
+  font-size: 14px;
+}
+
 .feature-icon {
   width: 24px;
   height: 24px;
@@ -48,6 +53,7 @@
     justify-content: center;
     gap: 20px;
     flex-wrap: nowrap;
+    margin-top: 2rem;
 }
 
 

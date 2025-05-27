@@ -9,6 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../../styles/formulaire.css">
     <link rel="stylesheet" href="../../styles/modif-pswd.css">
+    <link rel="stylesheet" href="../../styles/buttons.css">
 </head>
 
 <body>
@@ -49,14 +50,16 @@
                             <input type="email" id="adresse" name="adresse" class="input-field" required>
                         </div>
                     </div>
-                    <div class="buttons">
-                        <button type="submit" class="btn-connexion">Envoyer</button>
+                    <div class="button-section">
+                        <p>Revenir sur <span><a href="../pages/index.php" class="link-connect">Deco du monde</a></span></p>
+                        <div class="buttons">
+                            <button type="submit" class="btn-noir">Valider</button>
+                        </div>
                     </div>
                 </form>
             </div>
-            <div class="footer">
-                <p>Revenir sur <span><a href="../pages/index.php" class="link-connect">Deco du monde</a></span></p>
-            </div>
+
+        </div>
         </div>
     </main>
 </body>

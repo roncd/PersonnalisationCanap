@@ -3,7 +3,7 @@
 }
 
 body {
-    font-family: 'Be Vietnam Pro', sans-serif;
+    font-family: 'Arial', sans-serif;
     background-color: #fff;
     margin: 0;
     padding: 0;
@@ -29,21 +29,22 @@ body {
 }
 
 .password-page h2 {
+    font-family: 'Be Vietnam Pro', sans-serif;
     text-align: center;
     font-size: 28px;
-    margin-bottom: 30px;
+    margin-bottom: 20px;
     color: #000;
 }
 
 .password-page form {
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 15px;
 }
 
 .password-page label {
     font-size: 16px;
-    color: #333;
+    margin-top: 15px;
 }
 
 .password-page input[type="password"] {
@@ -51,54 +52,16 @@ body {
     background-color: #e9d6cc;
     border: none;
     border-radius: 10px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
     font-size: 16px;
     width: 100%;
 }
 
 .password-page button {
     padding: 12px;
-    margin-bottom: 1.5rem;
-    border: none;
-    border-radius: 10px;
-    background-color: black;
-    color: white;
-    font-size: 16px;
-    cursor: pointer;
-    width: 100%;
-    transition: background-color 0.3s ease;
+    margin-top: 1rem;
 }
 
 .password-page button:hover {
-    background-color: #333;
-}
-
-.password-page .message {
-    text-align: center;
-    font-size: 14px;
-    margin-bottom: 10px;
-}
-
-.password-page .success {
-    color: #155724;
-    background-color: #d4edda;
-    padding: 10px;
-    border-radius: 8px;
-}
-
-.password-page .error {
-    color: #721c24;
-    background-color: #f8d7da;
-    padding: 10px;
-    border-radius: 8px;
-}
-
-.password-page a {
-    color: #5c4435;
-    text-decoration: none;
-    font-weight: bold;
-}
-
-.password-page a:hover {
-    text-decoration: underline;
+    transform: none;
 }

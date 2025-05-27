@@ -11,6 +11,7 @@ session_start();
     <title>Accueil</title>
     <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
     <link rel="stylesheet" href="../../styles/styles.css">
+    <link rel="stylesheet" href="../../styles/buttons.css">
     <script src="../../node_modules/@preline/carousel/index.js"></script>
 </head>
 
@@ -35,7 +36,7 @@ session_start();
                         La couleur, le tissu, la forme... faites ce qui vous ressemble pour un prix raisonnable.
                     </p>
                     <a href="dashboard.php">
-                        <button class="hero-button">PERSONNALISER</button>
+                        <button class="btn-noir">PERSONNALISER</button>
                     </a>
                 </div>
             </div>
@@ -186,7 +187,7 @@ session_start();
                         ressemble.
                     </p>
                     <a href="dashboard.php">
-                        <button class="devis-button">
+                        <button class="btn-noir">
                             Commencer mon devis
                         </button>
                     </a>

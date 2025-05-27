@@ -147,6 +147,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['comment'])) {
   <link rel="stylesheet" href="../../styles/processus.css">
   <link rel="stylesheet" href="../../styles/popup.css">
   <link rel="stylesheet" href="../../styles/message.css">
+  <link rel="stylesheet" href="../../styles/buttons.css">
   <script type="module" src="../../script/popup-tissu.js"></script>
   <script type="module" src="../../script/popup.js"></script>
 
@@ -160,7 +161,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['comment'])) {
   </header>
 
   <main>
-    <div class="container">
+    <div class="container transition">
       <!-- Colonne de gauche -->
       <div class="left-column">
         <h2 class="h2">Récapitulatif de la commande</h2>
@@ -172,7 +173,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['comment'])) {
           <img src="../../admin/uploads/structure/' . htmlspecialchars($assocData['structure'][$commande['id_structure']]['img'] ?? '-') . '" 
               alt="' . htmlspecialchars($assocData['structure'][$commande['id_structure']]['nom'] ?? '-') . '">
           <p>' . htmlspecialchars($assocData['structure'][$commande['id_structure']]['nom'] ?? '-') . '</p>
-        </div>';
+          </div>';
           ?>
 
           <h3>Étape 1.2 : Choisi tes dimensions</h3>
@@ -182,7 +183,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['comment'])) {
 
           echo '<div class="dimension-container">
           <p class="input-field">Longueur banquette A : ' . htmlspecialchars($dim['longueurA'] ?? '-') . ' cm</p>
-        </div>';
+          </div>';
           if ($longueurB !== null) {
             echo '<div class="dimension-container">
               <p class="input-field">Longueur banquette B : ' . $longueurB . ' cm</p>
@@ -201,8 +202,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['comment'])) {
           <img src="../../admin/uploads/banquette/' . htmlspecialchars($assocData['type_banquette'][$commande['id_banquette']]['img'] ?? '-') . '" 
               alt="' . htmlspecialchars($assocData['type_banquette'][$commande['id_banquette']]['nom'] ?? '-') . '">
           <p>' . htmlspecialchars($assocData['type_banquette'][$commande['id_banquette']]['nom'] ?? '-') . '</p>
-        
-        </div>';
+          </div>';
           ?>
 
           <h3>Étape 3 : Choisi ton modèle</h3>
@@ -211,7 +211,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['comment'])) {
           <img src="../../admin/uploads/modele/' . htmlspecialchars($assocData['modele'][$commande['id_modele']]['img'] ?? '-') . '" 
               alt="' . htmlspecialchars($assocData['modele'][$commande['id_modele']]['nom'] ?? '-') . '">
           <p>' . htmlspecialchars($assocData['modele'][$commande['id_modele']]['nom'] ?? '-') . '</p>
-        </div>';
+          </div>';
           ?>
           <h3>Étape 4.1 : Choisi ta couleur de tissu</h3>
           <?php
@@ -219,7 +219,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['comment'])) {
           <img src="../../admin/uploads/couleur-tissu-tissu/' . htmlspecialchars($assocData['couleur_tissu'][$commande['id_couleur_tissu']]['img'] ?? '-') . '" 
               alt="' . htmlspecialchars($assocData['couleur_tissu'][$commande['id_couleur_tissu']]['nom'] ?? '-') . '">
           <p>' . htmlspecialchars($assocData['couleur_tissu'][$commande['id_couleur_tissu']]['nom'] ?? '-') . '</p>
-        </div>';
+          </div>';
           ?>
 
           <h3>Étape 4.2 : Choisi ton motif de coussin</h3>
@@ -228,7 +228,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['comment'])) {
           <img src="../../admin/uploads/motif-tissu/' . htmlspecialchars($assocData['motif_tissu'][$commande['id_motif_tissu']]['img'] ?? '-') . '" 
               alt="' . htmlspecialchars($assocData['motif_tissu'][$commande['id_motif_tissu']]['nom'] ?? '-') . '">
           <p>' . htmlspecialchars($assocData['motif_tissu'][$commande['id_motif_tissu']]['nom'] ?? '-') . '</p>
-        </div>';
+          </div>';
           ?>
 
           <h3>Étape 5 : Choisi ton dossier</h3>
@@ -237,7 +237,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['comment'])) {
           <img src="../../admin/uploads/dossier-tissu/' . htmlspecialchars($assocData['dossier_tissu'][$commande['id_dossier_tissu']]['img'] ?? '-') . '" 
               alt="' . htmlspecialchars($assocData['dossier_tissu'][$commande['id_dossier_tissu']]['nom'] ?? '-') . '">
           <p>' . htmlspecialchars($assocData['dossier_tissu'][$commande['id_dossier_tissu']]['nom'] ?? '-') . '</p>
-        </div>';
+          </div>';
           ?>
 
           <h3>Étape 6 : Choisi tes accoudoirs</h3>
@@ -246,11 +246,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['comment'])) {
           $quantite_accoudoir = htmlspecialchars($commande['id_nb_accoudoir'] ?? '-'); // Récupère la quantité si elle existe
 
           echo '<div class="option">
-        <img src="../../admin/uploads/accoudoirs-tissu/' . htmlspecialchars($assocData['accoudoir_tissu'][$commande['id_accoudoir_tissu']]['img'] ?? '-') . '" 
+          <img src="../../admin/uploads/accoudoirs-tissu/' . htmlspecialchars($assocData['accoudoir_tissu'][$commande['id_accoudoir_tissu']]['img'] ?? '-') . '" 
             alt="' . htmlspecialchars($assocData['accoudoir_tissu'][$commande['id_accoudoir_tissu']]['nom'] ?? '-') . '">
-        <p>' . htmlspecialchars($assocData['accoudoir_tissu'][$commande['id_accoudoir_tissu']]['nom'] ?? '-') . '</p>
-        <p>Quantité : ' . $quantite_accoudoir . '</p> <!-- Affichage de la quantité -->
-      </div>';
+          <p>' . htmlspecialchars($assocData['accoudoir_tissu'][$commande['id_accoudoir_tissu']]['nom'] ?? '-') . '</p>
+          <p>Quantité : ' . $quantite_accoudoir . '</p> <!-- Affichage de la quantité -->
+          </div>';
           ?>
 
 
@@ -260,14 +260,14 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['comment'])) {
           <img src="../../admin/uploads/mousse/' . htmlspecialchars($assocData['mousse'][$commande['id_mousse']]['img'] ?? '-') . '" 
               alt="' . htmlspecialchars($assocData['mousse'][$commande['id_mousse']]['nom'] ?? '-') . '">
           <p>' . htmlspecialchars($assocData['mousse'][$commande['id_mousse']]['nom'] ?? '-') . '</p>
-        </div>';
+          </div>';
           ?>
         </section>
         <div class="footer-processus">
           <p>Total : <span>0 €</span></p>
           <div class="buttons">
-            <button onclick="retourEtapePrecedente()" class="btn-retour transition">Retour</button>
-            <button class="btn-generer">Générer un devis</button>
+            <button onclick="retourEtapePrecedente()" class="btn-beige">Retour</button>
+            <button id="btn-generer" class="btn-noir">Générer un devis</button>
           </div>
         </div>
       </div>
@@ -284,8 +284,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['comment'])) {
       <div class="right-column">
         <section class="main-display-recap">
           <div class="buttons">
-            <button class="btn-aide">Besoin d'aide ?</button>
-            <button class="btn-abandonner">Abandonner</button>
+            <button id="btn-aide" class="btn-beige">Besoin d'aide ?</button>
+            <button type="button" data-url="../pages/dashboard.php" id="btn-abandonner" class="btn-noir">Abandonner</button>
           </div>
           <img src="../../medias/canapekenitra.png" alt="Armoire">
 
@@ -301,22 +301,23 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['comment'])) {
             <h3>Ajoute un commentaire à propos de ta commande :</h3>
             <form action="" method="POST">
               <textarea class="textarea-custom" id="comment" name="comment" rows="5" placeholder="Écris ton commentaire ici..."><?= htmlspecialchars($commentaire) ?></textarea>
-              <button type="submit" class="btn-submit-com">
+              <button type="submit" class="btn-noir">
                 <?= empty($commentaire) ? 'Ajouter' : 'Modifier' ?>
               </button>
             </form>
           </section>
-
-          <!-- Popup devis -->
-          <div id="pdf-popup" class="popup">
+      </div>
+    </div>
+    <!-- Popup devis -->
+    <div id="pdf-popup" class="popup">
             <div class="popup-content">
               <h2>Commande finalisé !</h2>
               <p>Votre devis a été créé et envoyé à l'adresse suivante :
                 </br><?php echo "<strong>" . htmlspecialchars($assocMail['client'][$commande['id_client']]['mail'] ?? '-') . "</strong>"; ?>
               </p>
               <br>
-              <button onclick="location.href='../pages/commandes.php'" class="close-btn">Voir mes commandes</button>
-              <button class="pdf-btn">Voir le devis</button>
+              <button onclick="location.href='../pages/commandes.php'" class="btn-beige">Voir mes commandes</button>
+              <button id="pdf-btn" class="btn-noir">Voir le devis</button>
             </div>
           </div>
 
@@ -329,7 +330,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['comment'])) {
                 <strong>06 58 47 58 56</strong>
               </p>
               <br>
-              <button class="close-btn">Merci !</button>
+              <button class="btn-noir">Merci !</button>
             </div>
           </div>
 
@@ -338,8 +339,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['comment'])) {
             <div class="popup-content">
               <h2>Êtes vous sûr de vouloir abandonner ?</h2>
               <br>
-              <button class="yes-btn">Oui ...</button>
-              <button class="no-btn">Non !</button>
+              <button class="btn-beige">Oui...</button>
+              <button class="btn-noir">Non !</button>
             </div>
           </div>
 
@@ -348,8 +349,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['comment'])) {
             <div class="popup-content">
               <h2>Êtes vous sûr de vouloir générer un devis ?</h2>
               <p>Vous ne pourrez plus effectuer de modifictions sur votre commande</p>
-              <button class="btn-close">Non</button>
-              <button class="btn-suivant" name="envoyer" data-id="<?= htmlspecialchars($id) ?>">Oui</button>
+              <button id="btn-oui" class="btn-beige" name="envoyer" data-id="<?= htmlspecialchars($id) ?>">Oui</button>
+              <button id="btn-close" class="btn-noir">Non</button>
             </div>
           </div>
   </main>

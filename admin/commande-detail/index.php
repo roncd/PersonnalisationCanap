@@ -90,6 +90,7 @@ $triURL = '?' . http_build_query($params);
     <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
     <link rel="stylesheet" href="../../styles/message.css">
     <link rel="stylesheet" href="../../styles/pagination.css">
+    <link rel="stylesheet" href="../../styles/buttons.css">
 </head>
 
 <body>
@@ -103,7 +104,7 @@ $triURL = '?' . http_build_query($params);
             <div class="search-bar">
                 <form method="GET" action="index.php">
                     <input type="text" name="search" placeholder="Rechercher par nom ou ID..." value="<?php echo htmlspecialchars($search); ?>">
-                    <button type="submit">Rechercher</button>
+                    <button class ="btn-noir" type="submit">Rechercher</button>
                 </form>
             </div>
             <?php require '../include/message.php'; ?>

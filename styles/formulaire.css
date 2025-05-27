@@ -116,38 +116,12 @@ label {
     gap: 15px;
 }
 
-.footer button {
-    padding: 10px 20px;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    font-weight: bold;
-}
-
 .footer input {
     padding: 10px 20px;
     border: none;
     border-radius: 10px;
     cursor: pointer;
     font-weight: bold;
-}
-
-.btn-retour {
-    background-color: #997765;
-    color: #fff;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-}
-
-.btn-valider {
-    background-color: #000000;
-    color: #fff;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-}
-
-.btn-retour:hover,
-.btn-valider:hover {
-    transform: scale(1.1);
-    transition: transform 0.2s;
 }
 
 /* Colonne de droite */

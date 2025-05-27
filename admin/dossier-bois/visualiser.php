@@ -34,6 +34,7 @@ $totalPages = ceil($totalCommandes / $limit);
     <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
     <link rel="stylesheet" href="../../styles/message.css">
     <link rel="stylesheet" href="../../styles/pagination.css">
+    <link rel="stylesheet" href="../../styles/buttons.css">
 </head>
 
 <body>
@@ -49,9 +50,9 @@ $totalPages = ceil($totalCommandes / $limit);
                     <button onclick="location.href='add.php'" class="btn" type="button">+ Ajouter un dossier</button>
                 </div>
                 <div class="search-bar">
-                    <form method="GET" action="visualiser.php">
+                    <form method="GET" action="">
                         <input type="text" name="search" placeholder="Rechercher par nom..." value="<?php echo htmlspecialchars($search); ?>">
-                        <button type="submit">Rechercher</button>
+                        <button class ="btn-noir" type="submit">Rechercher</button>
                     </form>
                 </div>
             </div>

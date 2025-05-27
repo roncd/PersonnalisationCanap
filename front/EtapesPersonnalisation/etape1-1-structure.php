@@ -49,9 +49,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../../styles/processus.css">
   <link rel="stylesheet" href="../../styles/popup.css">
+  <link rel="stylesheet" href="../../styles/buttons.css">
   <script type="module" src="../../script/popup.js"></script>
 
-  <title>Étape 1 - Choisi ta structure</title>
+  <title>Étape 1.1 - Choisi ta structure</title>
 
 </head>
 
@@ -69,13 +70,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <li><a href="etape2-type-banquette.php">Banquette</a></li>
       </ul>
     </div>
-    <div class="container">
-      <div class="left-column transition">
-        <h2>Étape 1 - Choisi ta structure</h2>
+    <div class="container transition">
+      <div class="left-column ">
+        <h2>Étape 1.1 - Choisi ta structure</h2>
 
         <section class="color-options">
           <?php foreach ($structures as $structure): ?>
-            <div class="option transition" data-nb-longueurs="<?php echo htmlspecialchars($structure['nb_longueurs']); ?>">
+            <div class="option " data-nb-longueurs="<?php echo htmlspecialchars($structure['nb_longueurs']); ?>">
               <img src="../../admin/uploads/structure/<?php echo htmlspecialchars($structure['img']); ?>"
                 alt="<?php echo htmlspecialchars($structure['nom']); ?>"
                 data-structure-id="<?php echo $structure['id']; ?>">
@@ -90,27 +91,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           <div class="buttons">
             <form method="POST" action="">
               <input type="hidden" name="structure_id" id="selected-structure">
-              <button type="submit" class="btn-suivant transition">Suivant</button>
+              <button type="submit" id="btn-suivant" class="btn-noir">Suivant</button>
             </form>
           </div>
         </div>
       </div>
 
-      <div class="right-column transition">
+      <div class="right-column ">
         <section class="main-display">
-          <div class="buttons transition">
-            <button class="btn-aide">Besoin d'aide ?</button>
-            <button class="btn-abandonner">Abandonner</button>
+          <div class="buttons ">
+            <button id="btn-aide" class="btn-beige">Besoin d'aide ?</button>
+            <button type="button" data-url="../pages/dashboard.php" id="btn-abandonner" class="btn-noir">Abandonner</button>
           </div>
-          <img id="main-image" src="../../medias/process-main-image.png" alt="Banquette sélectionnée"
-            class="transition">
+          <img id="main-image" src="../../medias/process-main-image.png" alt="Banquette sélectionnée">
         </section>
       </div>
     </div>
 
 
     <!-- POPUP BESOIN D'AIDE -->
-    <div id="help-popup" class="popup transition">
+    <div id="help-popup" class="popup ">
       <div class="popup-content">
         <h2>Vous avez une question ?</h2>
         <p>Contactez nous au numéro suivant et un vendeur vous assistera :
@@ -118,26 +118,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           <strong>06 58 47 58 56</strong>
         </p>
         <br>
-        <button class="close-btn">Merci !</button>
+        <button class="btn-noir">Merci !</button>
       </div>
     </div>
 
     <!-- POPUP ABANDONNER -->
-    <div id="abandonner-popup" class="popup transition">
+    <div id="abandonner-popup" class="popup ">
       <div class="popup-content">
         <h2>Êtes vous sûr de vouloir abandonner ?</h2>
         <br>
-        <button class="yes-btn">Oui ...</button>
-        <button class="no-btn">Non !</button>
+        <button class="btn-beige">Oui...</button>
+        <button class="btn-noir">Non !</button>
       </div>
     </div>
 
 
     <!-- Popup d'erreur si option non selectionnée -->
-    <div id="erreur-popup" class="popup transition">
+    <div id="erreur-popup" class="popup ">
       <div class="popup-content">
         <h2>Veuillez choisir une option avant de continuer.</h2>
-        <button class="close-btn">OK</button>
+        <button class="btn-noir">OK</button>
       </div>
     </div>
 
@@ -148,17 +148,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         const selectedStructureInput = document.getElementById('selected-structure');
         const mainImage = document.getElementById('main-image');
         const erreurPopup = document.getElementById('erreur-popup');
-        const closeErreurBtn = erreurPopup.querySelector('.close-btn');
+        const closeErreurBtn = erreurPopup.querySelector('.btn-noir');
         const form = document.querySelector('form'); // Assure-toi que ton <form> a bien une balise identifiable
 
         // Vérification si une sélection existe dans localStorage
         let savedStructureId = localStorage.getItem('selectedStructureId');
         let selected = savedStructureId !== '';
-
-        // Appliquer les transitions aux éléments
-        document.querySelectorAll('.transition').forEach(element => {
-          element.classList.add('show');
-        });
 
         // Restaurer la sélection si elle existe
         options.forEach(img => {

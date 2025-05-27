@@ -9,6 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../../styles/formulaire.css">
     <link rel="stylesheet" href="../../styles/modif-pswd.css">
+    <link rel="stylesheet" href="../../styles/buttons.css">
 </head>
 
 <body>
@@ -53,13 +54,13 @@
                     <label for="new_password">Nouveau mot de passe :</label>
                     <input type="password" id="new_password" name="new_password" class="input-field" required>
                 </div>
-                <div class="buttons">
-                    <button type="submit" class="btn-connexion">Mettre à jour</button>
+                <div class="button-section">
+                    <p>Revenir sur <span><a href="../pages/index.php" class="link-connect">Deco du monde</a></span></p>
+                    <div class="buttons">
+                        <button type="submit" class="btn-noir">Mettre à jour</button>
+                    </div>
                 </div>
             </form>
-            <div class="footer">
-                <p>Revenir sur <span><a href="../pages/index.php" class="link-connect">Deco du monde</a></span></p>
-            </div>
         </div>
     </main>
 </body>

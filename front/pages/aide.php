@@ -12,6 +12,7 @@ session_start();
     <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
     <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../../styles/formulaire.css">
+    <link rel="stylesheet" href="../../styles/buttons.css">
     <link rel="stylesheet" href="../../styles/message.css">
 </head>
 
@@ -85,7 +86,7 @@ session_start();
                     </div>
                     <div class="footer">
                         <div class="buttons">
-                            <input type="submit" name="envoyer" class="btn-valider" value="Envoyer">
+                            <input type="submit" name="envoyer" class="btn-noir" value="Envoyer">
                         </div>
                     </div>
                 </form>
