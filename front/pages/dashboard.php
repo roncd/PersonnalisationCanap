@@ -36,7 +36,9 @@ $show_commencer = !$existing_order;
     <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
     <link rel="stylesheet" href="../../styles/processus.css">
     <link rel="stylesheet" href="../../styles/dashboard.css">
-<script src="../../ script/abandonner.js"></script>
+    <link rel="stylesheet" href="../../styles/popup.css">
+
+  <script type="module" src="../../script/popup.js"></script>
 
 </head>
 
@@ -58,26 +60,25 @@ $show_commencer = !$existing_order;
             <form action="../EtapesPersonnalisation/etape1-1-structure.php" method="get">
                 <button type="submit" class="btn-suivant transition">Commencer la personnalisation</button>
             </form>
-        <?php else: ?>
-            <form action="../EtapesPersonnalisation/etape1-1-structure.php" method="get">
-                <button type="submit" class="btn-suivant transition">Reprendre la personnalisation</button>
-            </form>
-            <form action="../EtapesPersonnalisation/etape1-1-structure.php?reset=1" method="get">
-<button type="button" class="btn-retour transition btn-abandonner">Nouvelle personnalisation</button>
-            </form>
-        <?php endif; ?>
+ <?php else: ?>
+<div class="boutons-container">
+    <form action="../EtapesPersonnalisation/etape1-1-structure.php" method="get">
+        <button type="submit" class="btn-aide transition">Reprendre la personnalisation</button>
+    </form>
+    <form>
+        <button 
+            type="button" 
+            class="btn-retour transition btn-abandonner" 
+            data-url="../EtapesPersonnalisation/etape1-1-structure.php">
+            Nouvelle personnalisation
+        </button>
+    </form>
+</div>
+<?php endif; ?>
+
+
     </div>
 </section>
-
-<div id="abandonner-popup" class="popup" style="display: none;">
-  <div class="popup-content">
-    <p>Es-tu sûr(e) de vouloir recommencer une nouvelle personnalisation ?</p>
-    <button class="yes-btn">Oui</button>
-    <button class="no-btn">Non</button>
-  </div>
-</div>
-
-
 
         <!-- SECTION PERSONNALISATION -->
         <section class="customize-section">
@@ -266,6 +267,19 @@ $show_commencer = !$existing_order;
     </div>
   </div>
 </section>
+
+
+    <!-- POPUP ABANDONNER -->
+    <div id="abandonner-popup" class="popup transition">
+      <div class="popup-content">
+        <h2>Êtes-vous sûr ?</h2>
+        <p>Si vous commencez votre une nouvelle personnalisation,</p> <p>l'ancienne sera supprimer définitevement.</p>
+        <br>
+        <button class="yes-btn">Oui ...</button>
+        <button class="no-btn">Non !</button>
+      </div>
+    </div>
+
 
 
 
