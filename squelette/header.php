@@ -46,6 +46,20 @@
                         Personalisation
                     </a>
                 </li>
+                                <li class="dropdown">
+                    <a href="#" 
+                       class="dropdown-toggle <?= strpos($_SERVER['REQUEST_URI'], 'information.php') !== false ||
+                                               strpos($_SERVER['REQUEST_URI'], 'commandes.php') !== false ? 'active' : '' ?>">
+                        Catalogue
+                    </a>
+                    <ul class="dropdown-menu">
+                        <div class="drop">
+                            <li><a href="../pages/noscanapes.php">Nos Canapés</a></li>
+                            <li><a href="../pages/nosproduits.php">Nos Produits</a></li>
+
+                        </div>
+                    </ul>
+                </li>
                 <li>
                     <a href="../pages/apropos.php" 
                        class="<?= $currentPage == 'apropos.php' ? 'active' : '' ?>">
@@ -152,5 +166,4 @@ document.addEventListener('DOMContentLoaded', () => {
 });
     </script>
 </body>
-
 </html>
