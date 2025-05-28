@@ -1,5 +1,6 @@
 <?php
 require '../../admin/config.php';
+
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
@@ -31,13 +32,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["envoyer"])) {
             $mail->Port       = 587;
 
             // From = Aligné avec SMTP
-            $mail->setFrom($env['SMTP_USER'], 'Deco du Monde');
+            $mail->setFrom($env['SMTP_USER'], mb_convert_encoding('Déco du Monde', "ISO-8859-1", "UTF-8"));
             $mail->addReplyTo($to, "$prenom $nom");
 
             // Mail vers l’utilisateur
             $mail->addAddress($to);
             $mail->isHTML(true);
-            $mail->Subject = 'Message envoyé via le formulaire avec succès';
+            $mail->Subject = 'Confirmation de l\'envoie du message';
             $mail->Body = "<h2>Merci pour votre message</h2>
                 <p><strong>Nom :</strong> $nom<br>
                 <strong>Prénom :</strong> $prenom<br>
@@ -49,8 +50,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["envoyer"])) {
 
             // Mail vers l'admin
             $mail->clearAddresses();
-            $mail->addAddress('decodumonde.alternance@gmail.com');
-            $mail->Subject = 'Nouveau message via le formulaire';
+            $mail->addAddress($env['SMTP_USER']);
+            $mail->Subject = mb_convert_encoding('Nouveau message via le formulaire', "ISO-8859-1", "UTF-8");
             $mail->Body = "<h2>Message reçu via le formulaire</h2>
                 <p><strong>Nom :</strong> $nom<br>
                 <strong>Prénom :</strong> $prenom<br>
@@ -63,7 +64,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["envoyer"])) {
             $_SESSION['success'] = 'Votre message a été envoyé avec succès.';
             header("Location: " . $_SERVER['REQUEST_URI']);
             exit;
-
         } catch (Exception $e) {
             $_SESSION['error'] = 'Une erreur s’est produite : ' . $mail->ErrorInfo;
             header("Location: " . $_SERVER['REQUEST_URI']);
@@ -72,7 +72,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["envoyer"])) {
     }
 }
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -84,6 +83,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["envoyer"])) {
     <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
     <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../../styles/formulaire.css">
+    <link rel="stylesheet" href="../../styles/buttons.css">
+    <link rel="stylesheet" href="../../styles/message.css">
 </head>
 
 <body>
@@ -91,50 +92,50 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["envoyer"])) {
         <?php require '../../squelette/header.php'; ?>
     </header>
     <main>
-        <?php
-if (isset($_SESSION['success'])) {
-    echo '<div class="banniere-succes">' . $_SESSION['success'] . '</div>';
-    unset($_SESSION['success']);
-}
-if (isset($_SESSION['error'])) {
-    echo '<div class="banniere-erreur">' . $_SESSION['error'] . '</div>';
-    unset($_SESSION['error']);
-}
-?>
 
         <div class="container">
             <div class="left-column">
-                <h2>Besoin d'aide ?</h2>
+                <h2 class="h2">Besoin d'aide ?</h2>
                 <p>Si tu as besoin d’un renseignement ou de l’aide tu peux appeler un vendeur : </p>
                 <p>Tél : 01 48 22 98 05</p>
                 <p>ou remplir ce formulaire :</p><br>
+                <?php
+                if (isset($_SESSION['success'])) {
+                    echo '<div class="message success">' . $_SESSION['success'] . '</div>';
+                    unset($_SESSION['success']);
+                }
+                if (isset($_SESSION['error'])) {
+                    echo '<div class="message error">' . $_SESSION['error'] . '</div>';
+                    unset($_SESSION['error']);
+                }
+                ?>
                 <form action="" method="POST" class="formulaire-creation-compte">
                     <div class="form-row">
                         <div class="form-group">
                             <label for="nom">Nom</label>
-                            <input type="text" id="nom" name="nom" class="input-field" required>
+                            <input type="text" id="nom" name="nom" class="input-field" >
 
                         </div>
                         <div class="form-group">
                             <label for="prenom">Prénom</label>
-                            <input type="text" id="prenom" name="prenom" class="input-field" required>
+                            <input type="text" id="prenom" name="prenom" class="input-field" >
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group">
                             <label for="mail">Adresse mail</label>
-                            <input type="email" id="mail" name="mail" class="input-field" required>
+                            <input type="email" id="mail" name="mail" class="input-field" >
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group">
                             <label for="message">Message</label>
-                            <textarea id="message" class="input-field" name="message" required></textarea>
+                            <textarea id="message" class="input-field" name="message" ></textarea>
                         </div>
                     </div>
                     <div class="footer">
                         <div class="buttons">
-                            <input type="submit" name="envoyer" class="btn-valider" value="Envoyer">
+                            <input type="submit" name="envoyer" class="btn-noir" value="Envoyer">
                         </div>
                     </div>
                 </form>

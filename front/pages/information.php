@@ -139,7 +139,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                     <div class="form-row">
                         <div class="form-group">
-                            <a href="changer_mdp.php"
+                            <a href="../formulaire/changer_mdp.php"
                                 class="input-field"
                                 style="display: inline-block; text-decoration: none; color: black; text-align: center;">
                                 Modifier le mot de passe

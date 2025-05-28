@@ -20,7 +20,7 @@ if (!$user) {
 $stmt = $pdo->prepare("UPDATE client SET verified = 1, token = NULL WHERE id = ?");
 $stmt->execute([$user['id']]);
 
-// Afficher un message stylisé avant la redirection
+// Afficher un message avant la redirection
 echo "<!DOCTYPE html>
 <html lang='fr'>
 <head>

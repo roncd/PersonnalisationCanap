@@ -58,10 +58,5 @@ body {
 }
 
 .password-page button {
-    padding: 12px;
     margin-top: 1rem;
-}
-
-.password-page button:hover {
-    transform: none;
 }

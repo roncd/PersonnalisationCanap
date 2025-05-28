@@ -47,6 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 ?>
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -57,34 +58,43 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link rel="stylesheet" href="../../styles/buttons.css">
     <link rel="stylesheet" href="../../styles/message.css">
 </head>
+
 <body>
     <header>
         <?php require '../../squelette/header.php'; ?>
     </header>
-    
-        <main class="password-page">
-            <div class="container">
-                <h2>Changer le mot de passe</h2>
-                <?php if (isset($message)): ?>
-                    <div class="message <?= $messageType ?? '' ?>"><?= htmlspecialchars($message) ?></div>
-                <?php endif; ?>
-                <form method="POST">
-                    <label for="ancien">Ancien mot de passe :</label>
-                    <input type="password" id="ancien" name="ancien" required>
 
-                    <label for="nouveau">Nouveau mot de passe :</label>
-                    <input type="password" id="nouveau" name="nouveau" required>
+    <main class="password-page">
+        <div class="container">
+            <h2>Changer le mot de passe</h2>
+            <?php if (isset($message)): ?>
+                <div class="message <?= $messageType ?? '' ?>"><?= htmlspecialchars($message) ?></div>
+            <?php endif; ?>
+            <form method="POST">
+                <label for="ancien">Ancien mot de passe :</label>
+                <input type="password" id="ancien" name="ancien" required>
 
-                    <label for="confirmer">Confirmer le mot de passe :</label>
-                    <input type="password" id="confirmer" name="confirmer" required>
+                <label for="nouveau">Nouveau mot de passe :</label>
+                <input type="password" id="nouveau" name="nouveau" required>
 
-                    <button class="btn-noir" type="submit">Mettre à jour</button>
-                </form>
-            </div>
-        </main>
+                <label for="confirmer">Confirmer le mot de passe :</label>
+                <input type="password" id="confirmer" name="confirmer" required>
 
-        <footer>
-             <?php require '../../squelette/footer.php'; ?>
-         </footer>
+                <div class="button-footer">
+                    <button type="button" id="btn-retour" class="btn-beige" onclick="location.href='../pages/information.php'">
+                        Retour
+                    </button>
+                    <button type="submit" class="btn-noir">
+                        Mettre à jour
+                    </button>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <footer>
+        <?php require '../../squelette/footer.php'; ?>
+    </footer>
 </body>
+
 </html>
