@@ -192,3 +192,121 @@ label {
 #eyeBtn {
   cursor: pointer;
 }
+
+/* ----------- RESPONSIVE DESIGN ----------- */
+
+@media screen and (max-width: 1024px) {
+    .container {
+        margin: 30px;
+    }
+
+   .main-display img {
+         height: 500px;
+        width: 100%;
+        object-fit: cover; /* Changed from contain to cover */
+        object-position: center; /* Added to ensure image is centered */
+    }
+
+    h2 {
+        font-size: 32px;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .container {
+        flex-direction: column;
+        margin: 20px;
+        gap: 30px;
+    }
+
+    .right-column {
+        justify-content: center;
+        padding-right: 0;
+    }
+
+    .main-display {
+        align-items: center;
+        margin-top: 30px;
+    }
+
+    .main-display img {
+        height: 400px;
+    }
+
+    .form-row {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    h2 {
+        font-size: 28px;
+        text-align: center;
+    }
+
+    .footer {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .footer .buttons {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .btn-retour,
+    .btn-valider {
+        width: 100%;
+        max-width: 200px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .container {
+        margin: 15px;
+    }
+
+    .main-display img {
+        height: 300px;
+        width: 100%;
+        object-fit: cover;
+    }
+
+    .input-field {
+        padding: 10px;
+        font-size: 14px;
+    }
+
+    h2 {
+        font-size: 24px;
+    }
+
+    .footer {
+        font-size: 16px;
+    }
+
+    .footer span,
+    .footer p {
+        font-size: 14px;
+    }
+
+    .error,
+    .success {
+        font-size: 14px;
+        padding: 8px;
+    }
+}
+
+/* Ajout pour les très petits écrans */
+@media screen and (max-width: 320px) {
+    .container {
+        margin: 10px;
+    }
+
+    .main-display img {
+        height: 250px;
+    }
+
+    h2 {
+        font-size: 20px;
+    }
+}
