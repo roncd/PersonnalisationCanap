@@ -28,3 +28,63 @@
   font-size: 16px;
   margin: 0 0 10px;
 }
+
+/* ============ RESPONSIVE POPUP ============ */
+@media (max-width: 768px) {
+  .popup-content {
+    width: 90%;
+    padding: 15px;
+    border-radius: 15px;
+  }
+
+  .popup-content h2 {
+    font-size: 18px;
+  }
+
+  .popup-content p {
+    font-size: 14px;
+  }
+
+  .close-btn,
+  .close-btn-selection,
+  .btn-close,
+  .close-erreur-btn,
+  .yes-btn,
+  .no-btn,
+  .pdf-btn {
+    font-size: 14px;
+    padding: 8px 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .popup-content {
+    width: 95%;
+    padding: 10px;
+    border-radius: 10px;
+  }
+
+  .popup-content h2 {
+    font-size: 16px;
+  }
+
+  .popup-content p {
+    font-size: 13px;
+  }
+
+  .close-btn,
+  .close-btn-selection,
+  .btn-close,
+  .close-erreur-btn,
+  .yes-btn,
+  .no-btn,
+  .pdf-btn {
+    font-size: 12px;
+    padding: 6px 12px;
+  }
+
+  .yes-btn,
+  .no-btn {
+    margin: 8px;
+  }
+}
