@@ -66,3 +66,111 @@
     border-radius: 5px;
     margin-bottom: 10px;
 }
+
+/* ----------- RESPONSIVE DESIGN ----------- */
+
+/* Large devices (desktops) */
+@media (max-width: 1024px) {
+    .search-bar {
+        width: 90%;
+        margin: 15px auto;
+    }
+    
+    .search-bar input {
+        width: 250px;
+    }
+}
+
+/* Medium devices (tablets) */
+@media (max-width: 768px) {
+    .message {
+        font-size: 16px;
+        padding: 12px;
+        margin: 12px 0;
+    }
+
+    .search-bar {
+        padding: 8px;
+    }
+
+    .search-bar input {
+        width: 200px;
+    }
+
+    .search-bar button {
+        padding: 8px 10px;
+    }
+}
+
+/* Small devices (landscape phones) */
+@media (max-width: 600px) {
+    .message {
+        font-size: 15px;
+        padding: 8px;
+        margin: 8px 0;
+    }
+
+    .search-bar {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
+        padding: 6px;
+        width: 100%;
+    }
+
+    .search-bar input {
+        width: 100%;
+        font-size: 15px;
+        padding: 8px;
+    }
+
+    .search-bar button {
+        width: 100%;
+        font-size: 15px;
+        padding: 10px;
+        margin-left: 0;
+    }
+
+    .php-message-success,
+    .php-message-error {
+        font-size: 15px;
+        padding: 8px;
+        margin-bottom: 8px;
+    }
+}
+
+/* Extra small devices (phones) */
+@media (max-width: 480px) {
+    .message {
+        font-size: 14px;
+        padding: 6px;
+        margin: 6px 0;
+    }
+
+    .search-bar {
+        gap: 6px;
+        padding: 4px;
+    }
+
+    .search-bar input {
+        padding: 6px;
+        font-size: 14px;
+    }
+
+    .search-bar button {
+        padding: 8px;
+        font-size: 14px;
+    }
+
+    .php-message-success,
+    .php-message-error {
+        font-size: 14px;
+        padding: 6px;
+        margin-bottom: 6px;
+    }
+
+    .footer p {
+        margin-bottom: 15px;
+        font-size: 14px;
+    }
+}

@@ -432,3 +432,152 @@ label {
   border: none;
   border-radius: 5px;
 }
+
+/* ============ RESPONSIVE TABLETTE ============ */
+@media (max-width: 1024px) {
+  .container {
+    flex-direction: column;
+    margin: 30px 20px;
+    gap: 40px;
+  }
+
+  .right-column,
+  .left-column {
+     justify-content: center;
+    padding-right: 0;
+  }
+
+  .main-display img {
+    width: 100%;
+    height: auto;
+  }
+
+   .main-display {
+    align-items: center;
+    margin-top: 30px;
+  }
+
+  .main-display-recap img {
+    width: 100%;
+    max-width: 450px;
+    height: auto;
+  }
+
+  .color-options,
+  .color-2options {
+    grid-template-columns: repeat(2, 1fr);
+    padding-right: 0;
+  }
+
+  .form-row {
+    flex-direction: column;
+  }
+
+  .footer,
+  .footer-processus {
+    flex-direction: column;
+    gap: 20px;
+    align-items: flex-start;
+  }
+
+  .footer .buttons,
+  .footer-processus .buttons {
+    justify-content: flex-start;
+    flex-wrap: wrap;
+  }
+}
+
+/* RESPONSIVE MOBILE */
+@media (max-width: 768px) {
+  h2 {
+    font-size: 24px;
+  }
+
+  .color-options,
+  .color-2options {
+    grid-template-columns: 1fr;
+  }
+
+  .color-options .option img,
+  .color-2options .option img {
+    width: 100%;
+    max-width: 220px;
+    height: auto;
+  }
+
+  .main-display img,
+  .main-display-recap img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  .textarea-custom {
+    min-width: 100%;
+    max-width: 100%;
+  }
+
+  .quantity-selector,
+  .quantity-selector1 {
+    flex-direction: row;
+    gap: 20px;
+  }
+
+  .fil-ariane-container {
+    margin: 20px 10px;
+  }
+}
+
+/* TRÈS PETITS ÉCRANS  */
+@media (max-width: 480px) {
+  body {
+    margin: 0 10px;
+  }
+
+  h2 {
+    font-size: 20px;
+  }
+
+  .container {
+    margin: 20px 10px;
+    gap: 30px;
+  }
+
+  .color-options h3,
+  .color-2options h3 {
+    font-size: 1.2em;
+    padding-left: 5px;
+  }
+
+  .footer p,
+  .footer-processus p {
+    font-size: 18px;
+  }
+
+  .btn-aide,
+  .btn-abandonner,
+  .btn-submit-com,
+  .btn-generer,
+  .btn-suivant,
+  .btn-retour {
+    font-size: 14px;
+    padding: 8px 16px;
+  }
+
+  .quantity-selector,
+  .quantity-selector1 {
+    gap: 10px;
+  }
+
+  .quantity-selector button,
+  .quantity-selector1 button {
+    width: 25px;
+    height: 25px;
+    font-size: 16px;
+  }
+
+  .quantity-selector input,
+  .quantity-selector1 input {
+    width: 30px;
+    font-size: 14px;
+  }
+} 

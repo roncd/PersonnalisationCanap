@@ -165,3 +165,103 @@ h2 {
 .filtre .search-bar {
   margin-bottom: 0px;
 }
+
+/* ----------- RESPONSIVE DESIGN ----------- */
+
+@media screen and (max-width: 768px) {
+    .container {
+        width: 100%;
+        margin: 20px;
+    }
+
+    .tabs {
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .tab {
+        padding: 8px 16px;
+        font-size: 14px;
+    }
+
+    .commande {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .actions {
+        align-self: flex-end;
+        font-size: 1.6rem;
+    }
+
+    .pagination {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 5px;
+    }
+
+    .pagination a {
+        padding: 0.4em 0.8em;
+        font-size: 14px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .container {
+        margin: 10px;
+    }
+
+    h2 {
+        font-size: 24px;
+    }
+
+    .tab {
+        padding: 6px 12px;
+        font-size: 13px;
+        flex: 1;
+        text-align: center;
+        min-width: 45%;
+    }
+
+    .commande {
+        padding: 10px;
+    }
+
+    .info p {
+        font-size: 14px;
+    }
+
+    .actions {
+        font-size: 1.4rem;
+    }
+
+    .actions .img,
+    .actions .img-admin {
+        width: 16px;
+    }
+
+    .nav {
+        font-size: 1em;
+    }
+
+    .pagination a {
+        padding: 0.3em 0.6em;
+        font-size: 13px;
+    }
+}
+
+@media screen and (max-width: 320px) {
+    .tab {
+        min-width: 100%;
+    }
+
+    .pagination {
+        gap: 3px;
+    }
+
+    .pagination a {
+        padding: 0.2em 0.5em;
+        font-size: 12px;
+    }
+}
