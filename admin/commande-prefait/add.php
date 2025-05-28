@@ -76,6 +76,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             $_SESSION['message'] = 'La commande préfaite a été ajoutée avec succès.';
             $_SESSION['message_type'] = 'success';
+            header("Location: visualiser.php");
         } catch (Exception $e) {
             $_SESSION['message'] = 'Erreur : ' . $e->getMessage();
             $_SESSION['message_type'] = 'error';
