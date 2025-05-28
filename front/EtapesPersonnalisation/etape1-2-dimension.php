@@ -71,6 +71,7 @@ if (isset($_GET['structure_id'])) {
   <link rel="stylesheet" href="../../styles/popup.css">
   <link rel="stylesheet" href="../../styles/buttons.css">
   <script type="module" src="../../script/popup.js"></script>
+  <script type="module" src="../../script/keydown.js"></script>
 
   <title>Étape 1.2 - Choisi tes dimensions</title>
  
