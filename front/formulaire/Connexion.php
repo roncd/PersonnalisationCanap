@@ -1,6 +1,13 @@
 <?php
 require '../../admin/config.php';
 session_start();
+if (!isset($_SESSION['user_id'])) {
+    $currentPage = $_SERVER['HTTP_REFERER'] ?? '/index.php'; // Page précédente, ou accueil si absent
+    // On évite de sauvegarder la page de connexion elle-même
+    if (!isset($_SESSION['redirect_after_login']) && strpos($currentPage, 'Connexion.php') === false) {
+        $_SESSION['redirect_after_login'] = $currentPage;
+    }
+}
 
 // Initialiser la variable du message
 $message = '';
@@ -95,10 +102,18 @@ if (isset($_GET['message']) && $_GET['message'] == 'success') {
                             <div class="input-section">
                                 <input type="password" id="motdepasse" name="motdepasse" class="input-field" required>
                                 <img src="../../medias/eye.svg" id="eyeBtn" alt="Afficher/masquer le mot de passe">
-                            </div>
-                            <div class="footer">
-                                <p><span><a href="reset_password.php" class="link-connect">Mot de passe oublié ?</a></span></p>
-                            </div>
+                        </div>
+                        <div id="caps-lock-warning" style="display:none; color: gris; font-size: 0.95em; margin-top: 4px;">
+                            ⚠️ Attention : Verr Maj est activé !
+                        </div>
+                        <div id="shift-warning" style="display:none; color: gris; font-size: 0.95em; margin-top: 4px;">
+                            ⚠️ Attention : La touche Maj (Shift) est maintenue !
+                        </div>
+
+
+                                <div class="footer">
+                                    <p><span><a href="reset_password.php" class="link-connect">Mot de passe oublié ?</a></span></p>
+                                </div>
                         </div>
                     </div>
                     <div class="footer">
@@ -120,21 +135,9 @@ if (isset($_GET['message']) && $_GET['message'] == 'success') {
         </div>
     </main>
     <?php require_once '../../squelette/footer.php' ?>
-    <script>
-        const input = document.querySelector('#motdepasse');
-        const eyeBtn = document.querySelector('#eyeBtn');
 
-        eyeBtn.addEventListener('click', () => {
-            if (input.type === 'password') {
-                input.type = 'text';
-                eyeBtn.setAttribute('src', '../../medias/iconmonstr-eye-off-thin.png');
-            } else {
-                input.type = 'password';
-                eyeBtn.setAttribute('src', '../../medias/eye.svg');
-            }
-        });
-    </script>
-
+<script src="../../script/toucheMaj.js"></script>
+<script src="../../script/eye.js"></script>
 </body>
 
 
