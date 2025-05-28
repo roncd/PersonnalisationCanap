@@ -78,7 +78,7 @@ try {
     $mailClient->SMTPSecure = 'tls';
     $mailClient->Port       = 587;
 
-    $mailClient->setFrom('decodumonde.alternance@gmail.com', mb_convert_encoding('Déco du Monde', "ISO-8859-1", "UTF-8"));    
+    $mailClient->setFrom($env['SMTP_USER'], mb_convert_encoding('Déco du Monde', "ISO-8859-1", "UTF-8"));    
     $mailClient->addAddress($client['mail'], $client['prenom'] . ' ' . $client['nom']);
 
     $mailClient->Subject = mb_convert_encoding('Devis n°' . $idCommande, "ISO-8859-1", "UTF-8");    
@@ -131,8 +131,8 @@ try {
     $mailEntreprise->SMTPSecure = 'tls';
     $mailEntreprise->Port       = 587;
 
-    $mailEntreprise->setFrom('decodumonde.alternance@gmail.com', mb_convert_encoding('Déco du Monde', "ISO-8859-1", "UTF-8"));
-    $mailEntreprise->addAddress('rosalie.nicaud@gmail.com', 'Déco du Monde');
+    $mailEntreprise->setFrom($env['SMTP_USER'], mb_convert_encoding('Déco du Monde', "ISO-8859-1", "UTF-8"));
+    $mailEntreprise->addAddress($env['SMTP_USER'], mb_convert_encoding('Déco du Monde', "ISO-8859-1", "UTF-8"));
 
     $mailEntreprise->Subject = mb_convert_encoding('Nouvelle commande reçue - Devis n°' . $idCommande, "ISO-8859-1", "UTF-8");    
     $mailEntreprise->Body    = "Une nouvelle commande a été passée par " . $client['prenom'] . " " . $client['nom'] . ". Veuillez trouver ci-joint le devis correspondant.\n\nNuméro de commande : " . $idCommande . "\nDate de commande : " . $commande['date'] . "\nEmail client : " . $client['mail'] . "\n\nDéco du Monde";

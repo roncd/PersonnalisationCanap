@@ -7,23 +7,41 @@ $message = '';
 
 // Vérifier si le formulaire a été soumis
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $mail = $_POST['adresse'];
+    $email = $_POST['adresse'];
     $password = $_POST['motdepasse'];
 
-    // Vérifier si l'email existe dans la base de données
+    // Ligne de débogage
+    echo 'Email : ' . htmlspecialchars($email) . '<br>';
+    echo 'Mot de passe : ' . htmlspecialchars($password) . '<br>';
+
     $stmt = $pdo->prepare("SELECT * FROM client WHERE mail = :mail");
-    $stmt->execute(['mail' => $mail]);
+    $stmt->execute(['mail' => $email]);
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    if ($user && password_verify($password, $user['mdp'])) {
-        // Définir les variables de session
-        $_SESSION['user_id'] = $user['id'];
-        header("Location: index.php");
-        exit();
+    if ($user) {
+        // Ligne de débogage
+        echo 'Hash stocké : ' . htmlspecialchars($user['mdp']) . '<br>';
+
+        if (password_verify($password, $user['mdp'])) {
+            $_SESSION['user_id'] = $user['id'];
+            $_SESSION['user_name'] = $user['prenom'];
+            if (!empty($_SESSION['redirect_to'])) {
+                $redirect_to = $_SESSION['redirect_to'];
+                unset($_SESSION['redirect_to']);
+                header("Location: $redirect_to");
+            } else {
+                header("Location: ../pages/index.php");
+            }
+            exit;
+        } else {
+            echo 'La vérification du mot de passe a échoué.<br>';
+            header("Location: Connexion.php?erreur=1");
+            exit;
+        }
     } else {
-        // Email ou mot de passe incorrect
+        echo 'Utilisateur non trouvé.<br>';
         header("Location: Connexion.php?erreur=1");
-        exit();
+        exit;
     }
 }
 
@@ -56,8 +74,6 @@ if (isset($_GET['message']) && $_GET['message'] == 'success') {
     <header>
         <?php require '../../squelette/header.php'; ?>
     </header>
-
-
     <main>
         <div class="container">
             <div class="left-column">
@@ -65,8 +81,7 @@ if (isset($_GET['message']) && $_GET['message'] == 'success') {
                 <?php if (!empty($message)) {
                     echo $message;
                 } ?>
-
-                <form class="formulaire-creation-compte" method="POST" action="traitement_connexion.php">
+                <form class="formulaire-creation-compte" method="POST" action="">
                     <div class="form-row">
                         <div class="form-group">
                             <label for="adresse">Adresse mail</label>
@@ -86,10 +101,6 @@ if (isset($_GET['message']) && $_GET['message'] == 'success') {
                             </div>
                         </div>
                     </div>
-
-
-
-
                     <div class="footer">
                         <p>Tu n'as pas de compte ? <span><a href="CreationCompte.php" class="link-connect">Inscris-toi</a></span></p>
                         <div class="buttons">

@@ -249,31 +249,26 @@ span {
 
 .comment-section {
   width: 100%;
-  /* Prend toute la largeur disponible */
   text-align: left;
-  /* Aligne le texte et le contenu à gauche */
-  margin-top: -10px;
-  /* Ajoute un peu d'espace au-dessus */
+  margin-top: 20px;
 }
 
-/* Style du textarea */
+.comment-section h3 {
+  margin-bottom: 10px;
+}
+
 .textarea-custom {
   width: 100%;
-  /* Utilise 100% de la largeur de son parent */
   max-width: 700px;
-  /* Limite la largeur à 600px */
   min-width: 400px;
-  /* Définit une largeur minimale de 300px */
   height: 70px;
   padding: 10px;
   background-color: rgba(227, 209, 200, 0.71);
-  /* Beige avec opacité */
   border-radius: 8px;
   font-size: 1em;
   border-color: rgba(227, 209, 200, 0.71);
   line-height: 1.5;
   resize: vertical;
-  /* Permet de redimensionner verticalement */
   margin-bottom: 10px;
 }
 
@@ -325,6 +320,11 @@ label {
   background-color: rgba(227, 209, 200, 0.71);
   transition: all 0.3s ease;
   margin-bottom: 10px;
+  appearance: none;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='black'><path d='M5 7l5 5 5-5H5z'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 15px;
 }
 
 .select-field:focus {
@@ -378,10 +378,6 @@ label {
 }
 
 /* ================== COMPTEURS ================== */
-
-
-
-
 .quantity-selector {
   display: flex;
   align-items: center;

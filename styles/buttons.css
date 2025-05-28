@@ -19,6 +19,7 @@
     font-weight: bold;
     transition: transform 0.3s ease;
     text-decoration: none;
+    font-size: 14px;
 }
 
 /* Boutons en noir */
@@ -29,7 +30,7 @@
 
 /* Effet zoom au survol */
 .btn-beige:hover,
-.btn-noir:hover{
+.btn-noir:hover {
     box-shadow: 0 6px 10px rgba(0, 0, 0, 0.3);
     transform: translateY(-3px);
     transition: all 0.3s ease;
@@ -102,4 +103,8 @@
     border-radius: 10px;
     cursor: pointer;
     font-weight: bold;
+}
+
+.button-footer {
+    text-align: right;
 }

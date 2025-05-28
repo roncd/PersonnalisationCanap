@@ -296,7 +296,6 @@ if (isset($_GET['structure_id'])) {
           sessionStorage.setItem(sessionKey, JSON.stringify(allSelectedOptions));
         }
 
-
         // Fonction pour sauvegarder les valeurs des dimensions dans sessionStorage
         function saveDimensions() {
           const longueurA = document.getElementById("longueurA").value || "";
@@ -339,11 +338,7 @@ if (isset($_GET['structure_id'])) {
             }
           });
         });
-
-
-
-
-
+        
         // Pré-remplir les champs avec les dimensions sauvegardées
         document.getElementById("longueurA").value = savedDimensions.longueurA;
         document.getElementById("longueurB").value = savedDimensions.longueurB;
