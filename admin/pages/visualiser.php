@@ -54,7 +54,7 @@ if (!isset($_SESSION['id'])) {
                 </section>
 
                 <section class="category-block">
-                    <h2>Composants canapé en bois</h2>
+                    <h2>Options canapé en bois</h2>
                     <div class="button-grid">
                         <a href="../couleur-banquette-bois/visualiser.php" class="btn">Couleur bois</a>
                         <a href="../decoration/visualiser.php" class="btn">Décoration</a>
@@ -67,13 +67,20 @@ if (!isset($_SESSION['id'])) {
                 </section>
 
                 <section class="category-block">
-                    <h2>Composants canapé en tissu</h2>
+                    <h2>Options canapé en tissu</h2>
                     <div class="button-grid">
                         <a href="../modele-banquette-tissu/visualiser.php" class="btn">Modèle</a>
                         <a href="../accoudoirs-tissu/visualiser.php" class="btn">Accoudoirs</a>
                         <a href="../dossier-tissu/visualiser.php" class="btn">Dossier</a>
                         <a href="../couleur-tissu-tissu/visualiser.php" class="btn">Couleur tissu</a>
                         <a href="../motif-tissu/visualiser.php" class="btn">Motif coussin</a>
+                    </div>
+                </section>
+
+                <section class="category-block">
+                    <h2>Canapé préfait</h2>
+                    <div class="button-grid">
+                        <a href="../commande-prefait/visualiser.php" class="btn">Voir un canapé</a>
                     </div>
                 </section>
 
