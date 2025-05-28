@@ -186,206 +186,229 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
         </div>
 
-        <!-- Sélections dynamiques (exemple pour structure) -->
+    <!-- Sélections dynamiques (exemple pour structure) -->
+<div class="form-row">
+    <div class="form-group">
+        <label for="structure">Structure</label>
+        <select id="structure" name="structure" class="input-field" required>
+            <option value="">-- Choisir une structure --</option>
+            <?php foreach ($structures as $s): ?>
+                <option value="<?= $s['id'] ?>" <?= ($commande['id_structure'] == $s['id']) ? 'selected' : '' ?>>
+                    <?= htmlspecialchars($s['nom']) ?>
+                </option>
+            <?php endforeach; ?>
+        </select>
+    </div>
+</div>
+
+<div class="form-row">
+    <div class="form-group">
+        <label for="banquette">Type de banquette</label>
+        <select id="banquette" name="banquette" class="input-field">
+            <option value="">-- Choisir --</option>
+            <?php foreach ($banquettes as $b): ?>
+                <option value="<?= htmlspecialchars($b['id']) ?>"
+                    <?= (isset($commande['id_banquette']) && (string)$commande['id_banquette'] === (string)$b['id']) ? 'selected' : '' ?>>
+                    <?= htmlspecialchars($b['nom']) ?>
+                </option>
+            <?php endforeach; ?>
+        </select>
+    </div>
+</div>
+
+<div class="form-row">
+    <div class="form-group">
+        <label for="mousse">Mousse</label>
+        <select id="mousse" name="mousse" class="input-field">
+            <option value="">-- Choisir --</option>
+            <?php foreach ($mousses as $item): ?>
+                <option value="<?= htmlspecialchars($item['id']) ?>"
+                    <?= (isset($commande['id_mousse']) && (string)$commande['id_mousse'] === (string)$item['id']) ? 'selected' : '' ?>>
+                    <?= htmlspecialchars($item['nom']) ?>
+                </option>
+            <?php endforeach; ?>
+        </select>
+    </div>
+</div>
+
+<div class="form-row">
+    <div class="form-group">
+        <label for="couleurbois">Couleur du bois</label>
+        <select id="couleurbois" name="couleurbois" class="input-field">
+            <option value="">-- Choisir --</option>
+            <?php foreach ($couleursbois as $item): ?>
+                <option value="<?= htmlspecialchars($item['id']) ?>"
+                    <?= (isset($commande['id_couleur_bois']) && (string)$commande['id_couleur_bois'] === (string)$item['id']) ? 'selected' : '' ?>>
+                    <?= htmlspecialchars($item['nom']) ?>
+                </option>
+            <?php endforeach; ?>
+        </select>
+    </div>
+</div>
+
+
+<div class="form-row">
+    <div class="form-group">
+        <label for="decoration">Décoration</label>
+        <select id="decoration" name="decoration" class="input-field">
+            <option value="">-- Choisir --</option>
+            <?php foreach ($decorations as $item): ?>
+                <option value="<?= htmlspecialchars($item['id']) ?>"
+                    <?= (isset($commande['id_decoration']) && (string)$commande['id_decoration'] === (string)$item['id']) ? 'selected' : '' ?>>
+                    <?= htmlspecialchars($item['nom']) ?>
+                </option>
+            <?php endforeach; ?>
+        </select>
+    </div>
+</div>
+
+
+<div class="form-row">
+    <div class="form-group">
+        <label for="accoudoirbois">Accoudoir bois</label>
+        <select id="accoudoirbois" name="accoudoirbois" class="input-field">
+            <option value="">-- Choisir --</option>
+            <?php foreach ($accoudoirsbois as $item): ?>
+                <option value="<?= htmlspecialchars($item['id']) ?>"
+                    <?= (isset($commande['id_accoudoir_bois']) && (string)$commande['id_accoudoir_bois'] === (string)$item['id']) ? 'selected' : '' ?>>
+                    <?= htmlspecialchars($item['nom']) ?>
+                </option>
+            <?php endforeach; ?>
+        </select>
+    </div>
+</div>
+
+<div class="form-row">
+    <div class="form-group">
+        <label for="dossierbois">Dossier bois</label>
+        <select id="dossierbois" name="dossierbois" class="input-field">
+            <option value="">-- Choisir --</option>
+            <?php foreach ($dossiersbois as $item): ?>
+                <option value="<?= htmlspecialchars($item['id']) ?>"
+                    <?= (isset($commande['id_dossier_bois']) && (string)$commande['id_dossier_bois'] === (string)$item['id']) ? 'selected' : '' ?>>
+                    <?= htmlspecialchars($item['nom']) ?>
+                </option>
+            <?php endforeach; ?>
+        </select>
+    </div>
+</div>
+
+<div class="form-row">
+    <div class="form-group">
+        <label for="couleurtissubois">Couleur tissu (bois)</label>
+        <select id="couleurtissubois" name="couleurtissubois" class="input-field">
+            <option value="">-- Choisir --</option>
+            <?php foreach ($couleurstissubois as $item): ?>
+                <option value="<?= htmlspecialchars($item['id']) ?>"
+                    <?= (isset($commande['id_couleur_tissu_bois']) && (string)$commande['id_couleur_tissu_bois'] === (string)$item['id']) ? 'selected' : '' ?>>
+                    <?= htmlspecialchars($item['nom']) ?>
+                </option>
+            <?php endforeach; ?>
+        </select>
+    </div>
+</div>
+
+<div class="form-row">
+    <div class="form-group">
+        <label for="motifbois">Motif bois</label>
+        <select id="motifbois" name="motifbois" class="input-field">
+            <option value="">-- Choisir --</option>
+            <?php foreach ($motifsbois as $item): ?>
+                <option value="<?= htmlspecialchars($item['id']) ?>"
+                    <?= (isset($commande['id_motif_bois']) && (string)$commande['id_motif_bois'] === (string)$item['id']) ? 'selected' : '' ?>>
+                    <?= htmlspecialchars($item['nom']) ?>
+                </option>
+            <?php endforeach; ?>
+        </select>
+    </div>
+</div>
+
+
+<div class="form-row">
+    <div class="form-group">
+        <label for="modele">Modèle</label>
+        <select id="modele" name="modele" class="input-field">
+            <option value="">-- Choisir --</option>
+            <?php foreach ($modeles as $item): ?>
+                <option value="<?= htmlspecialchars($item['id']) ?>"
+                    <?= (isset($commande['id_modele']) && (string)$commande['id_modele'] === (string)$item['id']) ? 'selected' : '' ?>>
+                    <?= htmlspecialchars($item['nom']) ?>
+                </option>
+            <?php endforeach; ?>
+        </select>
+    </div>
+</div>
+
+<div class="form-row">
+    <div class="form-group">
+        <label for="couleurtissu">Couleur tissu</label>
+        <select id="couleurtissu" name="couleurtissu" class="input-field">
+            <option value="">-- Choisir --</option>
+            <?php foreach ($couleurstissu as $item): ?>
+                <option value="<?= htmlspecialchars($item['id']) ?>"
+                    <?= (isset($commande['id_couleur_tissu']) && (string)$commande['id_couleur_tissu'] === (string)$item['id']) ? 'selected' : '' ?>>
+                    <?= htmlspecialchars($item['nom']) ?>
+                </option>
+            <?php endforeach; ?>
+        </select>
+    </div>
+</div>
+
+<div class="form-row">
+    <div class="form-group">
+        <label for="motiftissu">Motif tissu</label>
+        <select id="motiftissu" name="motiftissu" class="input-field">
+            <option value="">-- Choisir --</option>
+            <?php foreach ($motifstissu as $item): ?>
+                <option value="<?= htmlspecialchars($item['id']) ?>"
+                    <?= (isset($commande['id_motif_tissu']) && (string)$commande['id_motif_tissu'] === (string)$item['id']) ? 'selected' : '' ?>>
+                    <?= htmlspecialchars($item['nom']) ?>
+                </option>
+            <?php endforeach; ?>
+        </select>
+    </div>
+</div>
+
+<div class="form-row">
+    <div class="form-group">
+        <label for="accoudoirtissu">Accoudoir tissu</label>
+        <select id="accoudoirtissu" name="accoudoirtissu" class="input-field">
+            <option value="">-- Choisir --</option>
+            <?php foreach ($accoudoirstissu as $item): ?>
+                <option value="<?= htmlspecialchars($item['id']) ?>"
+                    <?= (isset($commande['id_accoudoir_tissu']) && (string)$commande['id_accoudoir_tissu'] === (string)$item['id']) ? 'selected' : '' ?>>
+                    <?= htmlspecialchars($item['nom']) ?>
+                </option>
+            <?php endforeach; ?>
+        </select>
+    </div>
+</div>
+
+<div class="form-row">
+    <div class="form-group">
+        <label for="dossiertissu">Dossier tissu</label>
+        <select id="dossiertissu" name="dossiertissu" class="input-field">
+            <option value="">-- Choisir --</option>
+            <?php foreach ($dossierstissu as $item): ?>
+                <option value="<?= htmlspecialchars($item['id']) ?>"
+                    <?= (isset($commande['id_dossier_tissu']) && (string)$commande['id_dossier_tissu'] === (string)$item['id']) ? 'selected' : '' ?>>
+                    <?= htmlspecialchars($item['nom']) ?>
+                </option>
+            <?php endforeach; ?>
+        </select>
+    </div>
+</div>
+
+<div class="form-row">
+    <div class="form-group">
+        <label for="nb_accoudoir">Nombre d'accoudoirs</label>
+        <input type="number" id="nb_accoudoir" name="nb_accoudoir" class="input-field"
+            value="<?= isset($commande['id_nb_accoudoir']) ? htmlspecialchars($commande['id_nb_accoudoir']) : '' ?>">
+    </div>
+</div>
+
         <div class="form-row">
-            <div class="form-group">
-                <label for="structure">Structure</label>
-                <select id="structure" name="structure" class="input-field" required>
-                    <option value="">-- Choisir une structure --</option>
-                    <?php foreach ($structures as $s): ?>
-                        <option value="<?= $s['id'] ?>"><?= htmlspecialchars($s['nom']) ?></option>
-                    <?php endforeach; ?>
-                </select>
-            </div>
-        </div>
-
-        <div class="form-row">
-            <div class="form-group">
-                <label for="banquette">Type de banquette</label>
-                <select id="banquette" name="banquette" class="input-field">
-                    <option value="">-- Choisir --</option>
-                    <?php foreach ($banquettes as $b): ?>
-                        <option value="<?= $b['id'] ?>"><?= htmlspecialchars($b['nom']) ?></option>
-                    <?php endforeach; ?>
-                </select>
-            </div>
-        </div>
-
-        <div class="form-row">
-            <div class="form-group">
-                <label for="mousse">Mousse</label>
-                <select id="mousse" name="mousse" class="input-field">
-                    <option value="">-- Choisir --</option>
-                    <?php foreach ($mousses as $item): ?>
-                        <option value="<?= $item['id'] ?>"><?= htmlspecialchars($item['nom']) ?></option>
-                    <?php endforeach; ?>
-                </select>
-            </div>
-        </div>
-
-
-<!-- Couleur bois -->
-<div class="form-row">
-<div class="form-group">
-    <label for="couleurbois">Couleur du bois</label>
-    <select id="couleurbois" name="couleurbois" class="input-field">
-        <option value="">-- Choisir --</option>
-        <?php foreach ($couleursbois as $item): ?>
-            <option value="<?= $item['id'] ?>"><?= htmlspecialchars($item['nom']) ?></option>
-        <?php endforeach; ?>
-    </select>
-</div>
-</div>
-
-
-<!-- Décoration -->
-<div class="form-row">
-<div class="form-group">
-    <label for="decoration">Décoration</label>
-    <select id="decoration" name="decoration" class="input-field">
-        <option value="">-- Choisir --</option>
-        <?php foreach ($decorations as $item): ?>
-            <option value="<?= $item['id'] ?>"><?= htmlspecialchars($item['nom']) ?></option>
-        <?php endforeach; ?>
-    </select>
-</div>
-</div>
-
-
-<!-- Accoudoir bois -->
-<div class="form-row">
-<div class="form-group">
-    <label for="accoudoirbois">Accoudoir bois</label>
-    <select id="accoudoirbois" name="accoudoirbois" class="input-field">
-        <option value="">-- Choisir --</option>
-        <?php foreach ($accoudoirsbois as $item): ?>
-            <option value="<?= $item['id'] ?>"><?= htmlspecialchars($item['nom']) ?></option>
-        <?php endforeach; ?>
-    </select>
-</div>
-</div>
-
-
-<!-- Dossier bois -->
-<div class="form-row">
-<div class="form-group">
-    <label for="dossierbois">Dossier bois</label>
-    <select id="dossierbois" name="dossierbois" class="input-field">
-        <option value="">-- Choisir --</option>
-        <?php foreach ($dossiersbois as $item): ?>
-            <option value="<?= $item['id'] ?>"><?= htmlspecialchars($item['nom']) ?></option>
-        <?php endforeach; ?>
-    </select>
-</div>
-</div>
-
-
-<!-- Couleur tissu bois -->
-<div class="form-row">
-<div class="form-group">
-    <label for="couleurtissubois">Couleur tissu (bois)</label>
-    <select id="couleurtissubois" name="couleurtissubois" class="input-field">
-        <option value="">-- Choisir --</option>
-        <?php foreach ($couleurstissubois as $item): ?>
-            <option value="<?= $item['id'] ?>"><?= htmlspecialchars($item['nom']) ?></option>
-        <?php endforeach; ?>
-    </select>
-</div>
-</div>
-
-
-<!-- Motif bois -->
-<div class="form-row">
-<div class="form-group">
-    <label for="motifbois">Motif bois</label>
-    <select id="motifbois" name="motifbois" class="input-field">
-        <option value="">-- Choisir --</option>
-        <?php foreach ($motifsbois as $item): ?>
-            <option value="<?= $item['id'] ?>"><?= htmlspecialchars($item['nom']) ?></option>
-        <?php endforeach; ?>
-    </select>
-</div>
-</div>
-
-
-<!-- Modèle -->
-<div class="form-row">
-<div class="form-group">
-    <label for="modele">Modèle</label>
-    <select id="modele" name="modele" class="input-field">
-        <option value="">-- Choisir --</option>
-        <?php foreach ($modeles as $item): ?>
-            <option value="<?= $item['id'] ?>"><?= htmlspecialchars($item['nom']) ?></option>
-        <?php endforeach; ?>
-    </select>
-</div>
-</div>
-
-
-<!-- Couleur tissu -->
-<div class="form-row">
-<div class="form-group">
-    <label for="couleurtissu">Couleur tissu</label>
-    <select id="couleurtissu" name="couleurtissu" class="input-field">
-        <option value="">-- Choisir --</option>
-        <?php foreach ($couleurstissu as $item): ?>
-            <option value="<?= $item['id'] ?>"><?= htmlspecialchars($item['nom']) ?></option>
-        <?php endforeach; ?>
-    </select>
-</div>
-</div>
-
-
-<!-- Motif tissu -->
-<div class="form-row">
-<div class="form-group">
-    <label for="motiftissu">Motif tissu</label>
-    <select id="motiftissu" name="motiftissu" class="input-field">
-        <option value="">-- Choisir --</option>
-        <?php foreach ($motifstissu as $item): ?>
-            <option value="<?= $item['id'] ?>"><?= htmlspecialchars($item['nom']) ?></option>
-        <?php endforeach; ?>
-    </select>
-</div>
-</div>
-
-
-<!-- Accoudoir tissu -->
-<div class="form-row">
-<div class="form-group">
-    <label for="accoudoirtissu">Accoudoir tissu</label>
-    <select id="accoudoirtissu" name="accoudoirtissu" class="input-field">
-        <option value="">-- Choisir --</option>
-        <?php foreach ($accoudoirstissu as $item): ?>
-            <option value="<?= $item['id'] ?>"><?= htmlspecialchars($item['nom']) ?></option>
-        <?php endforeach; ?>
-    </select>
-</div>
-</div>
-
-
-<!-- Dossier tissu -->
-<div class="form-row">
-<div class="form-group">
-    <label for="dossiertissu">Dossier tissu</label>
-    <select id="dossiertissu" name="dossiertissu" class="input-field">
-        <option value="">-- Choisir --</option>
-        <?php foreach ($dossierstissu as $item): ?>
-            <option value="<?= $item['id'] ?>"><?= htmlspecialchars($item['nom']) ?></option>
-        <?php endforeach; ?>
-    </select>
-</div>
-</div>
-    
-        <div class="form-row">
-            <div class="form-group">
-                <label for="nb_accoudoir">Nombre d'accoudoirs</label>
-                <input type="number" id="nb_accoudoir" name="nb_accoudoir" class="input-field">
-            </div>
-        </div>
-
-        <div class="form-row">
-            <button type="submit" class="btn">Ajouter</button>
+            <button type="submit" class="btn">Modifier</button>
         </div>
     </form>
 </div>
