@@ -25,7 +25,7 @@ $totalPages = ceil($totalCommandes / $limit);
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
+<head> 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Structure</title>
@@ -46,6 +46,8 @@ $totalPages = ceil($totalCommandes / $limit);
     <main>
         <div class="container">
             <h2>Structure</h2>
+            <?php require '../include/message.php'; ?>
+
             <div class="option">
                 <div>
                     <button onclick="location.href='add.php'" class="btn" type="button">+ Ajouter une structure</button>

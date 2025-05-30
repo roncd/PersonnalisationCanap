@@ -9,30 +9,37 @@ if (!isset($_SESSION['id'])) {
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nom = trim($_POST['name']);
-    $price = ($_POST['price']);
+    $price = trim($_POST['price']); // Tu le récupères mais tu ne l'utilises pas ? à voir si c'est volontaire
     $img = $_FILES['img'];
 
+    // Validation des champs requis
     if (empty($nom) || empty($price) || empty($img['name'])) {
         $_SESSION['message'] = 'Tous les champs sont requis !';
         $_SESSION['message_type'] = 'error';
+        header("Location: visualiser.php");
+        exit();
     }
 
     // Dossier d'upload
     $uploadDir = '../uploads/motif-banquette-bois/';
     if (!is_dir($uploadDir)) {
-        mkdir($uploadDir, 0777, true); // Crée le dossier s'il n'existe pas
+        mkdir($uploadDir, 0777, true);
     }
 
+    // Types d'images autorisés
     $allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/jpg'];
     if (!in_array($img['type'], $allowedTypes)) {
         $_SESSION['message'] = 'Seuls les fichiers JPEG, PNG et GIF sont autorisés.';
         $_SESSION['message_type'] = 'error';
+        header("Location: visualiser.php");
+        exit();
     }
 
-    // Garder le nom original de l'image
+    // Nom du fichier
     $fileName = basename($img['name']);
     $uploadPath = $uploadDir . $fileName;
 
+    // Upload du fichier
     if (move_uploaded_file($img['tmp_name'], $uploadPath)) {
         try {
             $stmt = $pdo->prepare("INSERT INTO couleur_tissu_bois (nom, img) VALUES (?, ?)");
@@ -40,16 +47,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             $_SESSION['message'] = 'Le motif du tissu a été ajouté avec succès !';
             $_SESSION['message_type'] = 'success';
+            header("Location: visualiser.php");
+            exit();
         } catch (Exception $e) {
             $_SESSION['message'] = 'Erreur lors de l\'ajout du motif du tissu : ' . $e->getMessage();
             $_SESSION['message_type'] = 'error';
+            header("Location: visualiser.php");
+            exit();
         }
     } else {
         $_SESSION['message'] = 'Erreur lors de l\'upload de l\'image.';
         $_SESSION['message_type'] = 'error';
+        header("Location: visualiser.php");
+        exit();
     }
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 

@@ -10,12 +10,12 @@ if (!isset($_SESSION['id'])) {
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nom = trim($_POST['name']);
 
-
-
-    // Validation des champs obligatoires
+    // Validation du champ obligatoire
     if (empty($nom)) {
-        $_SESSION['message'] = 'Tous les champs sont requis !';
+        $_SESSION['message'] = 'Le champ nom est requis !';
         $_SESSION['message_type'] = 'error';
+        header("Location: visualiser.php");
+        exit();
     }
 
     // Tentative d'insertion dans la base de données
@@ -25,12 +25,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $_SESSION['message'] = 'La couleur a été ajoutée avec succès !';
         $_SESSION['message_type'] = 'success';
+        header("Location: visualiser.php");
+        exit();
     } catch (Exception $e) {
         $_SESSION['message'] = 'Erreur lors de l\'ajout de la couleur : ' . $e->getMessage();
         $_SESSION['message_type'] = 'error';
+        header("Location: visualiser.php");
+        exit();
     }
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 
