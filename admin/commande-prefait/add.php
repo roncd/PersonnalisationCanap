@@ -56,32 +56,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (empty($prix) || empty($prixDimensions) || empty($longueurA)) {
         $_SESSION['message'] = 'Les champs obligatoires doivent être remplis.';
         $_SESSION['message_type'] = 'error';
-    } else {
-        try {
-            $stmt = $pdo->prepare("INSERT INTO commande_prefait (
-                prix, prix_dimensions, id_structure, longueurA, longueurB, longueurC,
-                id_banquette, id_mousse, id_couleur_bois, id_decoration,
-                id_accoudoir_bois, id_dossier_bois, id_couleur_tissu_bois, id_motif_bois,
-                id_modele, id_couleur_tissu, id_motif_tissu, id_dossier_tissu, id_accoudoir_tissu,
-                id_nb_accoudoir, nom
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+    } 
 
-            $stmt->execute([
-                $prix, $prixDimensions, $idStructure, $longueurA, $longueurB, $longueurC,
-                $idBanquette, $idMousse, $idCouleurBois, $idDecoration,
-                $idAccoudoirBois, $idDossierBois, $idTissuBois, $idMotifBois,
-                $idModele, $idCouleurTissu, $idMotifTissu, $idDossierTissu, $idAccoudoirTissu,
-                $nbAccoudoir, $nom
-            ]);
+    try {
+    $stmt = $pdo->prepare("INSERT INTO commande_prefait (
+        prix, prix_dimensions, id_structure, longueurA, longueurB, longueurC,
+        id_banquette, id_mousse, id_couleur_bois, id_decoration,
+        id_accoudoir_bois, id_dossier_bois, id_couleur_tissu_bois, id_motif_bois,
+        id_modele, id_couleur_tissu, id_motif_tissu, id_dossier_tissu, id_accoudoir_tissu,
+        id_nb_accoudoir, nom
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
-            $_SESSION['message'] = 'La commande préfaite a été ajoutée avec succès.';
-            $_SESSION['message_type'] = 'success';
-            header("Location: visualiser.php");
-        } catch (Exception $e) {
-            $_SESSION['message'] = 'Erreur : ' . $e->getMessage();
-            $_SESSION['message_type'] = 'error';
-        }
-    }
+    $stmt->execute([
+        $prix, $prixDimensions, $idStructure, $longueurA, $longueurB, $longueurC,
+        $idBanquette, $idMousse, $idCouleurBois, $idDecoration,
+        $idAccoudoirBois, $idDossierBois, $idTissuBois, $idMotifBois,
+        $idModele, $idCouleurTissu, $idMotifTissu, $idDossierTissu, $idAccoudoirTissu,
+        $nbAccoudoir, $nom
+    ]);
+$_SESSION['message'] = 'La commande préfaite a été ajoutée avec succès.';
+$_SESSION['message_type'] = 'success';
+header('Location: visualiser.php'); // ou vers la page souhaitée
+exit();
+} catch (Exception $e) {
+           $_SESSION['message'] = 'Erreur lors de l\'ajout du canapé pré personnaliser: ' . $e->getMessage();
+           $_SESSION['message_type'] = 'error';
+}
+
 }
 ?>
 
@@ -96,6 +97,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link rel="stylesheet" href="../../styles/admin/ajout.css">
     <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
     <link rel="stylesheet" href="../../styles/message.css">
+    <link rel="stylesheet" href="../../styles/buttons.css">
+
 </head>
 
 <body>

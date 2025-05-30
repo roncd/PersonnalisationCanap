@@ -7,6 +7,7 @@ if (!isset($_SESSION['id'])) {
     exit();
 }
 
+
 $search = $_GET['search'] ?? '';
 
 $tables = [
@@ -94,13 +95,15 @@ $pagedCommandes = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Commande</title>
+    <title>Canapé Pré-Personnalisé</title>
     <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../../styles/admin/tab.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
     <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
     <link rel="stylesheet" href="../../styles/message.css">
     <link rel="stylesheet" href="../../styles/pagination.css">
+    <link rel="stylesheet" href="../../styles/buttons.css">
+
 </head>
 
 <body>
@@ -110,19 +113,20 @@ $pagedCommandes = $stmt->fetchAll(PDO::FETCH_ASSOC);
     </header>
     <main>
         <div class="container">
-            <h2>Commande</h2>
+            <h2>Canapé Pré-Personnalisé</h2>
+            <?php require '../include/message.php'; ?>
+
             <div class="option">
                 <div>
-                    <button onclick="location.href='add.php'" class="btn" type="button">+ Ajouter une commande préfaite </button>
+                    <button onclick="location.href='add.php'" class="btn" type="button">+ Ajouter un canapé pré-personnalisé</button>
                 </div>
             <div class="search-bar">
                 <form method="GET" action="index.php">
                     <input type="text" name="search" placeholder="Rechercher par nom ou ID..." value="<?php echo htmlspecialchars($search); ?>">
-                    <button type="submit">Rechercher</button>
+                    <button class="btn-noir" type="submit">Rechercher</button>
                 </form>
             </div>
         </div>
-            <?php require '../include/message.php'; ?>
 <div class="tab-container">
     <table class="styled-table">
         <thead>
