@@ -46,7 +46,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $_SESSION['message'] = 'Erreur lors de l\'upload de l\'image.';
         $_SESSION['message_type'] = 'error';
     }
+          // Redirection vers visualiser.php après traitement
+    header("Location: visualiser.php");
+    exit();
 }
+
 ?>
 <!DOCTYPE html>
 <html lang="fr">

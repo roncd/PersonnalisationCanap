@@ -45,6 +45,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         }
     }
+      // Redirection vers visualiser.php après traitement
+    header("Location: visualiser.php");
+    exit();
 }
 ?>
 <!DOCTYPE html>

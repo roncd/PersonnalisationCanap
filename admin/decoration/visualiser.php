@@ -44,6 +44,8 @@ $totalPages = ceil($totalCommandes / $limit);
     <main>
         <div class="container">
             <h2>Décoration</h2>
+            <?php require '../include/message.php'; ?>
+
             <div class="option">
                 <div>
                     <button onclick="location.href='add.php'" class="btn" type="button">+ Ajouter une décoration</button>
