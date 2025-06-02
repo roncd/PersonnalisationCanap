@@ -44,6 +44,7 @@ $totalPages = ceil($totalCommandes / $limit);
     <main>
         <div class="container">
             <h2>Type de banquette</h2>
+            <?php require '../include/message.php'; ?>
             <div class="search-bar">
                 <form method="GET" action="">
                     <input type="text" name="search" placeholder="Rechercher par nom..." value="<?php echo htmlspecialchars($search); ?>">

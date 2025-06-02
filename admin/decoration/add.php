@@ -15,6 +15,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (empty($nom) || empty($price) || empty($img['name'])) {
         $_SESSION['message'] = 'Tous les champs sont requis !';
         $_SESSION['message_type'] = 'error';
+        header("Location: visualiser.php");
+        exit();
     }
 
     // Dossier d'upload
@@ -27,6 +29,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!in_array($img['type'], $allowedTypes)) {
         $_SESSION['message'] = 'Seuls les fichiers JPEG, PNG et GIF sont autorisés.';
         $_SESSION['message_type'] = 'error';
+        header("Location: visualiser.php");
+        exit();
     }
 
     // Garder le nom original de l'image
@@ -48,8 +52,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $_SESSION['message'] = 'Erreur lors de l\'upload de l\'image.';
         $_SESSION['message_type'] = 'error';
     }
+
+    header("Location: visualiser.php");
+    exit();
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 

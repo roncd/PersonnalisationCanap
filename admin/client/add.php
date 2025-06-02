@@ -21,18 +21,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $civilite = trim($_POST['civilite']);
 
     // Validation des champs obligatoires
-    if (empty($nom) || empty($prenom) || empty($email) || empty($tel) || empty($mdp) || empty($adresse) || empty($codepostal) || empty($ville) || empty($date)) {
+    if (empty($nom) || empty($prenom) || empty($email) || empty($tel) || empty($_POST['mdp']) || empty($adresse) || empty($codepostal) || empty($ville) || empty($date)) {
         $_SESSION['message'] = 'Tous les champs sont requis !';
         $_SESSION['message_type'] = 'error';
+        header("Location: visualiser.php");
+        exit();
     }
 
-    // Tentative d'insertion dans la base de données
     try {
         $stmt = $pdo->prepare("INSERT INTO client (nom, prenom, mail, tel, mdp, adresse, info, codepostal, ville, date_naissance, civilite) VALUES (:nom, :prenom, :mail, :tel, :mdp, :adresse, :info, :codepostal, :ville, :date_naissance, :civilite)");
         $stmt->bindValue(':nom', $nom, PDO::PARAM_STR);
         $stmt->bindValue(':prenom', $prenom, PDO::PARAM_STR);
         $stmt->bindValue(':mail', $email, PDO::PARAM_STR);
-        $stmt->bindValue(':tel', $tel, PDO::PARAM_INT);
+        $stmt->bindValue(':tel', $tel, PDO::PARAM_STR); // STRING si tu veux garder les 0 initiaux
         $stmt->bindValue(':mdp', $mdp, PDO::PARAM_STR);
         $stmt->bindValue(':adresse', $adresse, PDO::PARAM_STR);
         $stmt->bindValue(':info', $info, PDO::PARAM_STR);
@@ -44,12 +45,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $_SESSION['message'] = 'Le client a été ajouté avec succès !';
         $_SESSION['message_type'] = 'success';
+        header("Location: visualiser.php");
+        exit();
     } catch (Exception $e) {
         $_SESSION['message'] = 'Erreur lors de l\'ajout du client : ' . $e->getMessage();
         $_SESSION['message_type'] = 'error';
+        header("Location: visualiser.php");
+        exit();
     }
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">

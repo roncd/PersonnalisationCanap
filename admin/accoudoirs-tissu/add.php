@@ -9,27 +9,33 @@ if (!isset($_SESSION['id'])) {
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nom = trim($_POST['name']);
-    $price = ($_POST['price']);
+    $price = $_POST['price'];
     $img = $_FILES['img'];
 
+    // Vérification des champs requis
     if (empty($nom) || empty($price) || empty($img['name'])) {
         $_SESSION['message'] = 'Tous les champs sont requis !';
         $_SESSION['message_type'] = 'error';
+        header("Location: visualiser.php");
+        exit();
     }
 
     // Dossier d'upload
     $uploadDir = '../uploads/accoudoirs-tissu/';
     if (!is_dir($uploadDir)) {
-        mkdir($uploadDir, 0777, true); // Crée le dossier s'il n'existe pas
+        mkdir($uploadDir, 0777, true);
     }
 
+    // Vérification du type de fichier
     $allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/jpg'];
     if (!in_array($img['type'], $allowedTypes)) {
         $_SESSION['message'] = 'Seuls les fichiers JPEG, PNG et GIF sont autorisés.';
         $_SESSION['message_type'] = 'error';
+        header("Location: visualiser.php");
+        exit();
     }
 
-    // Garder le nom original de l'image
+    // Traitement de l'image
     $fileName = basename($img['name']);
     $uploadPath = $uploadDir . $fileName;
 
@@ -43,16 +49,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             $_SESSION['message'] = 'L\'accoudoir en tissu a été ajouté avec succès !';
             $_SESSION['message_type'] = 'success';
+            header("Location: visualiser.php");
+            exit();
         } catch (Exception $e) {
             $_SESSION['message'] = 'Erreur lors de l\'ajout de l\'accoudoir en tissu : ' . $e->getMessage();
             $_SESSION['message_type'] = 'error';
+            header("Location: visualiser.php");
+            exit();
         }
     } else {
         $_SESSION['message'] = 'Erreur lors de l\'upload de l\'image.';
         $_SESSION['message_type'] = 'error';
+        header("Location: visualiser.php");
+        exit();
     }
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 

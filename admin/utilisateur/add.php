@@ -34,6 +34,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $_SESSION['message'] = 'Erreur lors de l\'ajout du membre : ' . $e->getMessage();
         $_SESSION['message_type'] = 'error';
     }
+          // Redirection vers visualiser.php après traitement
+    header("Location: visualiser.php");
+    exit();
 }
 ?>
 
