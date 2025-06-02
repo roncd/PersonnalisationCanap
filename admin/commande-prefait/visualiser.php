@@ -159,6 +159,8 @@ $pagedCommandes = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <th>DOSSIER_TISSU</th>
             <th>ACCOUDOIR_TISSU</th>
             <th>NB_ACCOUDOIR</th>
+            <th>IMAGE</th>
+
 
             <th class="sticky-col">ACTION</th>
         </thead>
@@ -203,6 +205,7 @@ $pagedCommandes = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     echo "<td>" . htmlspecialchars($assocData['dossier_tissu'][$row['id_dossier_tissu']] ?? '-') . "</td>";
                     echo "<td>" . htmlspecialchars($assocData['accoudoir_tissu'][$row['id_accoudoir_tissu']] ?? '-') . "</td>";
                     echo "<td>{$row['id_nb_accoudoir']}</td>";
+                    echo "<td>{$row['img']}</td>";
                     echo "<td class='actions'>";
                     echo "<a href='edit.php?id={$row['id']}' class='edit-action actions vert' title='Modifier'>EDIT</a>";
                     echo "<a href='delete.php?id={$row['id']}' class='delete-action actions rouge' title='Supprimer' onclick='return confirm(\"Voulez-vous vraiment supprimer cette commande ?\");'>DELETE</a>";

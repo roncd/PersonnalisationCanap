@@ -75,12 +75,49 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $idDossierTissu = trim($_POST['dossiertissu']) ?: null;
     $nbAccoudoir = trim($_POST['nb_accoudoir']) ?: null;
     $nom = trim($_POST['nom']) ?: null;
+   $imagePath = $commande['image']; // Valeur par défaut : garder l’ancienne image
+
+if (isset($_FILES['img']) && $_FILES['img']['error'] === 0) {
+    $uploadDir = '../uploads/canape-prefait/';
+    if (!is_dir($uploadDir)) {
+        mkdir($uploadDir, 0777, true);
+    }
+
+    $tmpName = $_FILES['img']['tmp_name'];
+    $originalName = basename($_FILES['img']['name']);
+    $extension = strtolower(pathinfo($originalName, PATHINFO_EXTENSION));
+    $allowedExtensions = ['jpg', 'jpeg', 'png', 'webp'];
+
+    if (in_array($extension, $allowedExtensions)) {
+        $baseName = pathinfo($originalName, PATHINFO_FILENAME);
+        $imageName = $baseName . '_' . time() . '.' . $extension;
+        $destination = $uploadDir . $imageName;
+
+        if (move_uploaded_file($tmpName, $destination)) {
+            // Optionnel : supprimer l’ancienne image
+            // if ($commande['image'] && file_exists($uploadDir . $commande['image'])) {
+            //     unlink($uploadDir . $commande['image']);
+            // }
+
+            $imagePath = $imageName;
+        } else {
+            $_SESSION['message'] = 'Erreur lors du téléchargement de l\'image.';
+            $_SESSION['message_type'] = 'error';
+        }
+    } else {
+        $_SESSION['message'] = 'Format de fichier non autorisé.';
+        $_SESSION['message_type'] = 'error';
+    }
+}
+// Sinon on garde simplement $imagePath = $commande['image']
+
+
 
     if (empty($prix) || empty($prixDimensions) || empty($longueurA)) {
         $_SESSION['message'] = 'Les champs obligatoires doivent être remplis.';
         $_SESSION['message_type'] = 'error';
     } else {
-        $stmt = $pdo->prepare("UPDATE commande_prefait SET prix = ?, prix_dimensions = ?, id_structure = ?, longueurA = ?, longueurB = ?, longueurC = ?, id_banquette = ?, id_mousse = ?, id_couleur_bois = ?, id_decoration = ?, id_accoudoir_bois = ?, id_dossier_bois = ?, id_couleur_tissu_bois = ?, id_motif_bois = ?, id_modele = ?, id_couleur_tissu = ?,  id_motif_tissu = ?, id_dossier_tissu = ?, id_accoudoir_tissu = ?, id_nb_accoudoir = ?, nom = ?
+        $stmt = $pdo->prepare("UPDATE commande_prefait SET prix = ?, prix_dimensions = ?, id_structure = ?, longueurA = ?, longueurB = ?, longueurC = ?, id_banquette = ?, id_mousse = ?, id_couleur_bois = ?, id_decoration = ?, id_accoudoir_bois = ?, id_dossier_bois = ?, id_couleur_tissu_bois = ?, id_motif_bois = ?, id_modele = ?, id_couleur_tissu = ?,  id_motif_tissu = ?, id_dossier_tissu = ?, id_accoudoir_tissu = ?, id_nb_accoudoir = ?, nom = ?, img = ?
          WHERE id = ?");
  if ($stmt->execute([
     $prix,
@@ -104,6 +141,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $idAccoudoirTissu,
     $nbAccoudoir,
     $nom,
+    $imagePath,
     $id
 ])) {
 
@@ -131,6 +169,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link rel="stylesheet" href="../../styles/admin/ajout.css">
     <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
     <link rel="stylesheet" href="../../styles/message.css">
+    <link rel="stylesheet" href="../../styles/buttons.css">
+    <script src="../../script/previewImage.js"></script>
+
 </head>
 
 <body>
@@ -150,6 +191,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <input type="text" id="nom" name="nom" class="input-field" value="<?= htmlspecialchars($commande['nom']) ?>">
             </div>
         </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="img">Image (Laissez vide pour conserver l'image actuelle)</label>
+                            <input type="file" id="img" name="img" class="input-field" accept="image/*" onchange="loadFile(event)" >
+                            <img class="preview-img" src="../uploads/canape-prefait/<?php echo htmlspecialchars($commande['img']); ?>" id="output" />
+                         </div>
+                    </div>
 
         <div class="form-row">
             <div class="form-group">
@@ -408,7 +457,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </div>
 
         <div class="form-row">
-            <button type="submit" class="btn">Modifier</button>
+            <button type="submit" class="btn-noir">Modifier</button>
         </div>
     </form>
 </div>

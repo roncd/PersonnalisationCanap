@@ -52,37 +52,68 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $idDossierTissu = trim($_POST['dossiertissu']) ?: null;
     $nbAccoudoir = trim($_POST['nb_accoudoir']) ?: null;
     $nom = trim($_POST['nom']) ?: null;
+ 
+ $imagePath = null; // Déclarer AVANT le bloc
+
+if (isset($_FILES['img']) && $_FILES['img']['error'] === 0) {
+    $uploadDir = '../uploads/canape-prefait/';
+    if (!is_dir($uploadDir)) {
+        mkdir($uploadDir, 0777, true);
+    }
+
+    $tmpName = $_FILES['img']['tmp_name'];
+    $originalName = basename($_FILES['img']['name']);
+    $extension = strtolower(pathinfo($originalName, PATHINFO_EXTENSION));
+    $allowedExtensions = ['jpg', 'jpeg', 'png', 'webp'];
+
+    if (in_array($extension, $allowedExtensions)) {
+        $baseName = pathinfo($originalName, PATHINFO_FILENAME);
+        $imageName = $baseName . '_' . time() . '.' . $extension;
+        $destination = $uploadDir . $imageName;
+
+        if (move_uploaded_file($tmpName, $destination)) {
+            $imagePath = $imageName; // 👈 C’est ça qui manquait
+        } else {
+            $_SESSION['message'] = 'Erreur lors du téléchargement de l\'image.';
+            $_SESSION['message_type'] = 'error';
+        }
+    } else {
+        $_SESSION['message'] = 'Format de fichier non autorisé.';
+        $_SESSION['message_type'] = 'error';
+    }
+}
+
 
     if (empty($prix) || empty($prixDimensions) || empty($longueurA)) {
         $_SESSION['message'] = 'Les champs obligatoires doivent être remplis.';
         $_SESSION['message_type'] = 'error';
-    } 
+    } else {
+        try {
+            $stmt = $pdo->prepare("INSERT INTO commande_prefait (
+                prix, prix_dimensions, id_structure, longueurA, longueurB, longueurC,
+                id_banquette, id_mousse, id_couleur_bois, id_decoration,
+                id_accoudoir_bois, id_dossier_bois, id_couleur_tissu_bois, id_motif_bois,
+                id_modele, id_couleur_tissu, id_motif_tissu, id_dossier_tissu, id_accoudoir_tissu,
+                id_nb_accoudoir, nom, img
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
-    try {
-    $stmt = $pdo->prepare("INSERT INTO commande_prefait (
-        prix, prix_dimensions, id_structure, longueurA, longueurB, longueurC,
-        id_banquette, id_mousse, id_couleur_bois, id_decoration,
-        id_accoudoir_bois, id_dossier_bois, id_couleur_tissu_bois, id_motif_bois,
-        id_modele, id_couleur_tissu, id_motif_tissu, id_dossier_tissu, id_accoudoir_tissu,
-        id_nb_accoudoir, nom
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+            $stmt->execute([
+                $prix, $prixDimensions, $idStructure, $longueurA, $longueurB, $longueurC,
+                $idBanquette, $idMousse, $idCouleurBois, $idDecoration,
+                $idAccoudoirBois, $idDossierBois, $idTissuBois, $idMotifBois,
+                $idModele, $idCouleurTissu, $idMotifTissu, $idDossierTissu, $idAccoudoirTissu,
+                $nbAccoudoir, $nom, $imagePath
+            ]);
 
-    $stmt->execute([
-        $prix, $prixDimensions, $idStructure, $longueurA, $longueurB, $longueurC,
-        $idBanquette, $idMousse, $idCouleurBois, $idDecoration,
-        $idAccoudoirBois, $idDossierBois, $idTissuBois, $idMotifBois,
-        $idModele, $idCouleurTissu, $idMotifTissu, $idDossierTissu, $idAccoudoirTissu,
-        $nbAccoudoir, $nom
-    ]);
-$_SESSION['message'] = 'La commande préfaite a été ajoutée avec succès.';
-$_SESSION['message_type'] = 'success';
-header('Location: visualiser.php'); // ou vers la page souhaitée
-exit();
-} catch (Exception $e) {
-           $_SESSION['message'] = 'Erreur lors de l\'ajout du canapé pré personnaliser: ' . $e->getMessage();
-           $_SESSION['message_type'] = 'error';
-}
-
+            $_SESSION['message'] = 'La commande préfaite a été ajoutée avec succès.';
+            $_SESSION['message_type'] = 'success';
+            header('Location: visualiser.php');
+            exit();
+        } catch (Exception $e) {
+            $_SESSION['message'] = 'Erreur lors de l\'ajout du canapé pré-personnalisé : ' . $e->getMessage();
+            $_SESSION['message_type'] = 'error';
+        }
+    }
 }
 ?>
 
@@ -98,6 +129,8 @@ exit();
     <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
     <link rel="stylesheet" href="../../styles/message.css">
     <link rel="stylesheet" href="../../styles/buttons.css">
+    <script src="../../script/previewImage.js"></script>
+
 
 </head>
 
@@ -106,18 +139,27 @@ exit();
     <header>
         <?php require '../squelette/header.php'; ?>
     </header>
-    <main>
+    <main> 
         <div class="container">
-            <h2>Ajoute une commande préfaite</h2>
+            <h2>Ajoute une commande gregrgrpréfaite</h2>
 <?php require '../include/message.php'; ?>
 <div class="form">
-    <form class="formulaire-creation-compte" action="" method="POST">
+    <form class="formulaire-creation-compte" action="" method="POST" enctype="multipart/form-data">
         <div class="form-row">
             <div class="form-group">
                 <label for="nom">Nom de la commande</label>
                 <input type="text" id="nom" name="nom" class="input-field">
             </div>
         </div>
+
+         <!-- Champ de fichier si tu veux permettre un upload d'image (ex: image principale) -->
+   <div class="form-row">
+        <div class="form-group">
+                <label for="img">Image</label>
+                <input type="file" id="img" name="img" class="input-field" accept="image/*" onchange="loadFile(event)" required>
+                <img class="preview-img" id="output" />
+            </div>
+    </div>
 
         <div class="form-row">
             <div class="form-group">
@@ -353,7 +395,7 @@ exit();
         </div>
 
         <div class="form-row">
-            <button type="submit" class="btn">Ajouter</button>
+            <button type="submit" class="btn-noir">Ajouter</button>
         </div>
     </form>
 </div>
