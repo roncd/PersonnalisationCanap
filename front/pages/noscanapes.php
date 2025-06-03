@@ -1,13 +1,16 @@
 <?php
 require '../../admin/config.php';
 session_start();
+
 $sql = "SELECT cp.*, tb.nom as type_nom 
         FROM commande_prefait cp
-        LEFT JOIN type_banquette tb ON cp.type = tb.id";
+        LEFT JOIN type_banquette tb ON cp.id_banquette = tb.id";
+
 $stmt = $pdo->prepare($sql);
 $stmt->execute();
 $commandes = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
+
 
 <!DOCTYPE html>
 <html lang="fr">
@@ -19,7 +22,7 @@ $commandes = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
     <link rel="stylesheet" href="../../styles/catalogue-prefait.css">
     <link rel="stylesheet" href="../../styles/buttons.css">
-    <link href="../../dist/output.css" rel="stylesheet">
+    <link href="../../dist/output.css" rel="stylesheet">  
 </head>
 
 <body class="be-vietnam-pro-regular">
@@ -34,12 +37,12 @@ $commandes = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <div class="hero-content">
                     <br><br><br>
                     <h1 class="hero-title h2">
-                        Nos Canapés Pré-Personnaliser !   
+                        Nos Canapés Pré-Personnaliser
                     </h1>
                    
                     <p class="hero-description">   
                     Nos canapés marocains pré-personnalisés allient tradition et modernité pour sublimer votre salon.
-Choisissez votre style, réservez votre modèle et récupérez-le directement en boutique.
+Choisissez votre style, réservez votre modèle favoris et récupérez-le directement en boutique.
                     </p>
                 </div>
             </div>
@@ -64,9 +67,11 @@ Choisissez votre style, réservez votre modèle et récupérez-le directement en
             <div class="product-info">
                 <h3><?php echo htmlspecialchars($commande['nom'] ?? 'Nom non disponible', ENT_QUOTES); ?></h3>
                 <p class="price"><?php echo htmlspecialchars($commande['prix'] ?? '0', ENT_QUOTES); ?> €</p>
-                <button class="btn-beige" onclick="openReservationModal('<?php echo htmlspecialchars($commande['nom'] ?? 'Produit', ENT_QUOTES); ?>')">
-                    Personnaliser
+                <button class="btn-beige"
+                  onclick="window.location.href = '../CanapePrefait/canapPrefait.php?id=<?php echo (int)$commande['id']; ?>'">
+                  Personnaliser
                 </button>
+
             </div>
         </div>
     <?php endforeach; ?>

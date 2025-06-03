@@ -2,7 +2,10 @@
 require '../../admin/config.php';
 
 // Récupère la commande pré-faite (exemple avec l'ID 1, adapte-le dynamiquement si besoin)
-$id_commande_prefait = 1;
+if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
+    die("ID invalide ou non fourni.");
+}
+$id_commande_prefait = intval($_GET['id']);
 
 $stmt = $pdo->prepare("SELECT * FROM commande_prefait WHERE id = ?");
 $stmt->execute([$id_commande_prefait]);
@@ -33,7 +36,6 @@ $elements = [
   'id_motif_tissu' => 'motif_tissu',
   'id_dossier_tissu' => 'dossier_tissu',
   'id_accoudoir_tissu' => 'accoudoir_tissu',
-  'id_nb_accoudoir' => 'nb_accoudoir'
 ];
 foreach ($elements as $colonne => $table) {
   if (!empty($commande[$colonne])) {
@@ -63,10 +65,22 @@ $totalPrice += floatval($commande['prix_dimensions'] ?? 0);
   <link rel="stylesheet" href="../../styles/popup.css">
   <link rel="stylesheet" href="../../styles/canapPrefait.css">
   <link rel="stylesheet" href="../../styles/buttons.css">
-  <title>Salon Kénitra</title>
+
+  <title><?php echo htmlspecialchars($commande['nom']); ?></title>
 </head>
 
+
 <body>
+
+<style>
+  .primary-img {
+  width: 700px;
+  height: 500px; /* Augmente la hauteur */
+  border-radius: 10px;
+  object-fit: cover; /* Pour éviter les déformations */
+}
+
+</style>
 
 
   <header>
@@ -80,7 +94,7 @@ $totalPrice += floatval($commande['prix_dimensions'] ?? 0);
     <div class="container">
       <!-- Colonne de gauche -->
       <div class="left-column">
-        <h2 class="h2">Composition du Salon Kénitra </h2>
+        <h2 class="h2">Composition du <?php echo htmlspecialchars($commande['nom']); ?></h2>
         <section class="color-options">
           <!-- Afficher Longueur A uniquement si elle a une valeur -->
           <?php if (!empty($commande['longueurA'])): ?>
@@ -100,14 +114,36 @@ $totalPrice += floatval($commande['prix_dimensions'] ?? 0);
               <p><strong>Longueur C :</strong> <?php echo htmlspecialchars($commande['longueurC']); ?> cm</p>
             </div>
           <?php endif; ?>
-          <br>
 
           <!-- Afficher la composition des autres éléments -->
           <?php if (!empty($composition)): ?>
             <?php foreach ($composition as $nomTable => $details): ?>
+              
+          <?php
+// Mapping entre nom de table et nom de dossier upload
+$dossierUploadMap = [
+  'structure' => 'structure',
+  'type_banquette' => 'banquette',
+  'mousse' => 'mousse',
+  'couleur_bois' => 'couleur-banquette-bois',
+  'decoration' => 'decoration',
+  'accoudoir_bois' => 'accoudoirs-bois',
+  'dossier_bois' => 'dossier-bois',
+  'couleur_tissu_bois' => 'couleur-tissu-bois',
+  'motif_bois' => 'motif-bois',
+  'modele' => 'modele',
+  'couleur_tissu' => 'couleur-tissu-tissu',
+  'motif_tissu' => 'motif-tissu',
+  'dossier_tissu' => 'dossier-tissu',
+  'accoudoir_tissu' => 'accoudoirs-tissu',
+];
+
+$dossier = $dossierUploadMap[$nomTable] ?? $nomTable;
+?>
+
               <div class="option">
                 <?php if (!empty($details['img'])): ?>
-                  <img src="../../admin/uploads/<?php echo htmlspecialchars($nomTable) . '/' . htmlspecialchars($details['img']); ?>"
+                    <img src="../../admin/uploads/<?php echo htmlspecialchars($dossier) . '/' . htmlspecialchars($details['img']); ?>"
                     alt="<?php echo htmlspecialchars($details['nom'] ?? ''); ?>"
                     data-id="<?php echo htmlspecialchars($details['id'] ?? ''); ?>">
                 <?php endif; ?>
@@ -122,28 +158,61 @@ $totalPrice += floatval($commande['prix_dimensions'] ?? 0);
           <?php endif; ?>
         </section>
 
+<?php
+$totalPrice = 0;
 
-        <div class="footer">
-          <p>Total : <span id="total-price"><?php echo number_format($totalPrice, 2, ',', ' '); ?> €</span></p>
-          <div class="buttons">
-            <button type="button" id="btn-retour" class="btn-beige" onclick="history.go(-1)">Retour</button>
-            <form method="POST" action="">
-              <input type="hidden" name="couleur_bois_id" id="selected-couleur_bois">
-              <button type="submit" id="btn-suivant" class="btn-noir">Suivant</button>
-            </form>
-          </div>
-        </div>
-      </div>
+// Prix par centimètre (350 € le mètre => 3.5 € le centimètre)
+$prixParCm = 3.5;
+
+// Ajouter le prix des longueurs A, B et C
+if (!empty($commande['longueurA'])) {
+    $totalPrice += (float)$commande['longueurA'] * $prixParCm;
+}
+if (!empty($commande['longueurB'])) {
+    $totalPrice += (float)$commande['longueurB'] * $prixParCm;
+}
+if (!empty($commande['longueurC'])) {
+    $totalPrice += (float)$commande['longueurC'] * $prixParCm;
+}
+
+// Ajouter le prix des éléments de composition
+if (!empty($composition)) {
+    foreach ($composition as $details) {
+        if (!empty($details['prix'])) {
+            $totalPrice += (float)$details['prix'];
+        }
+    }
+}
+?>
+
+<div class="footer">
+  <p>Total : <span id="total-price"><?php echo number_format($totalPrice, 2, ',', ' '); ?> €</span></p>
+  <div class="buttons">
+    <button onclick="retourEtapePrecedente()" class="btn-beige">Retour</button>
+    <form method="POST" action="">
+      <input type="hidden" name="couleur_bois_id" id="selected-couleur_bois">
+      <button type="submit" id="btn-suivant" class="btn-noir">Personnaliser</button>
+    </form>
+  </div>
+</div>
+</div>
+
 
 
       <!-- Colonne de droite -->
       <div class="right-column h2 ">
         <section class="main-display2">
-          <img src="../../medias/meknes.png" alt="Armoire" class="">
+<?php
+$imgFile = !empty($commande['img']) ? htmlspecialchars($commande['img'], ENT_QUOTES) : 'default.jpg';
+?>
+<img 
+  src="../../admin/uploads/canape-prefait/<?php echo $imgFile; ?>" 
+  alt="<?php echo htmlspecialchars($commande['nom'] ?? 'Canapé préfait', ENT_QUOTES); ?>" 
+  class="primary-img"
+>
         </section>
       </div>
-    </div>
-
+    </div>    
 
 
     <!-- Popup besoin d'aide -->
@@ -173,12 +242,22 @@ $totalPrice += floatval($commande['prix_dimensions'] ?? 0);
     <?php require_once '../../squelette/footer.php'; ?>
 
 
+<script>
+  document.getElementById("btn-suivant").addEventListener("click", function(event) {
+    event.preventDefault();
+    const id = <?php echo json_encode($id_commande_prefait); ?>;
+    window.location.href = "choix-dimension.php?id=" + id;
+  });
+</script>
+
+
+        <!-- BOUTTON RETOUR -->
     <script>
-      document.getElementById("btn-suivant").addEventListener("click", function(event) {
-        event.preventDefault(); // Empêche l'envoi du formulaire si ce n'est pas nécessaire
-        window.location.href = "choix-dimension.php"; // Remplace par l’URL correcte
-      });
-    </script>
+      function retourEtapePrecedente() {
+        // Exemple : tu es sur étape 8, tu veux revenir à étape 7
+        window.location.href = "../pages/noscanapes.php";
+      }
+    </script>  
 
 
 </body>
