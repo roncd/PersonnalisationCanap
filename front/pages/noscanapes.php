@@ -1,18 +1,24 @@
 <?php
 require '../../admin/config.php';
 session_start();
+$sql = "SELECT cp.*, tb.nom as type_nom 
+        FROM commande_prefait cp
+        LEFT JOIN type_banquette tb ON cp.type = tb.id";
+$stmt = $pdo->prepare($sql);
+$stmt->execute();
+$commandes = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
+
 <!DOCTYPE html>
 <html lang="fr">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nos Produits</title>
+    <title>Nos Canapés</title>
     <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
     <link rel="stylesheet" href="../../styles/catalogue-prefait.css">
     <link rel="stylesheet" href="../../styles/buttons.css">
-    <link rel="stylesheet" href="../../styles/header.css">
     <link href="../../dist/output.css" rel="stylesheet">
 </head>
 
@@ -28,11 +34,12 @@ session_start();
                 <div class="hero-content">
                     <br><br><br>
                     <h1 class="hero-title h2">
-                        Nos Canapés Pré-Personnaliser
+                        Nos Canapés Pré-Personnaliser !   
                     </h1>
-                    <p class="hero-description">
-                        Découvrez notre sélection de mousses et tissus de qualité. 
-                Ces produits sont disponibles uniquement sur réservation et pick-up en boutique !
+                   
+                    <p class="hero-description">   
+                    Nos canapés marocains pré-personnalisés allient tradition et modernité pour sublimer votre salon.
+Choisissez votre style, réservez votre modèle et récupérez-le directement en boutique.
                     </p>
                 </div>
             </div>
@@ -42,162 +49,67 @@ session_start();
         <!-- Filtres -->
         <div class="filters">
              <button class="filter-btn active" data-category="all">Tous</button>
-             <button class="filter-btn" data-category="mousse">Bois</button>
+             <button class="filter-btn" data-category="bois">Bois</button>
              <button class="filter-btn" data-category="tissu">Tissus</button>
              
         </div>
 
-        <!-- Grille de produits -->
-        <div class="products-grid">
-            <!-- Mousses -->
-            <div class="product-card" data-category="mousse">
-                <img src="../../medias/mousse-produit.jpg" alt="Mousse haute densité">
-                <div class="product-info">
-                    <h3>Mousse Haute Densité</h3>
-                    <p>Idéale pour l'assise, densité 35kg/m³</p>
-                    <p class="price">25€/m²</p>
-                    <button class="btn-beige" onclick="openReservationModal('Mousse Haute Densité')">Personnaliser</button>
-                </div>
-            </div>
-
-            <div class="product-card" data-category="mousse">
-                <img src="../../medias/mousse-produit.jpg" alt="Mousse moyenne densité">
-                <div class="product-info">
-                    <h3>Mousse Medium</h3>
-                    <p>Pour dossier, densité 25kg/m³</p>
-                    <p class="price">20€/m²</p>
-                    <button class="btn-beige" onclick="openReservationModal('Mousse Medium')">Personnaliser</button>
-                </div>
-            </div>
-
-               <div class="product-card" data-category="mousse">
-                <img src="../../medias/mousse-produit.jpg" alt="Mousse moyenne densité">
-                <div class="product-info">
-                    <h3>Mousse Soft</h3>
-                    <p>Pour le couché, densité  20kg/m³</p>
-                    <p class="price">18€/m²</p>
-                    <button class="btn-beige"  onclick="openReservationModal('Mousse Soft')">Personnaliser</button>
-                </div>
-            </div>
-
-            <!-- Tissus -->
-            <div class="product-card" data-category="tissu">
-                <img src="../../medias/velours-produit.jpg" alt="Tissu velours">
-                <div class="product-info">
-                    <h3>Velours Premium</h3>
-                    <p>Velours doux et résistant</p>
-                    <p class="price">35€/m²</p>
-                    <button class="btn-beige"  onclick="openReservationModal('Velours Premium')">Personnaliser</button>
-                </div>
-            </div>
-
-            <div class="product-card" data-category="tissu">
-                <img src="../../medias/salon-marocain.jpg" alt="Tissu coton">
-                <div class="product-info">
-                    <h3>Coton Traditionnel</h3>
-                    <p>Coton tissé traditionnel marocain</p>
-                    <p class="price">1750 €</p>
-                    <button class="btn-beige"  onclick="openReservationModal('Coton Traditionnel')">Personnaliser</button>
-                </div>
-            </div>
-
-            <!-- Section Coussins-->
-    <div class="product-card" data-category="accessoire">
-        <img src="../../medias/canapekenitra.png" alt="Coussin 40x40">
-        <div class="product-info">
-            <h3>Coussin 40x40</h3>
-            <p>Petit coussin décoratif ou de conforts</p>
-            <p class="price">15€ l'unité</p>
-            <button class="btn-beige"  onclick="openReservationModal('Coussin 40x40')">Personnaliser</button>
-        </div>
-    </div>
-
-    <div class="product-card" data-category="accessoire">
-        <img src="../../medias/caccoudoirs-produits.jpg" alt="Traversin">
-        <div class="product-info">
-            <h3>Traversin</h3>
-            <p>Coussin cylindrique pour accoudoirs ou dossiers</p>
-            <p class="price">20€ l'unité</p>
-            <button class="btn-beige"  onclick="openReservationModal('Traversin')">Personnaliser</button>
-        </div>
-    </div>
-
-        </div>
-
-        <!-- Modal de réservation -->
-        <div id="reservation-modal" class="modal">
-            <div class="modal-content">
-                <span class="close-modal">&times;</span>
-                <h2>Personnaliser un canapé déjà fait</h2>
-                <form id="reservation-form" action="process-reservation.php" method="POST">
-                    <input type="hidden" id="product-name" name="product">
-                    <div class="form-group">
-                        <label for="quantity">Quantité (en m²)</label>
-                        <input type="number" id="quantity" name="quantity" min="1" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="name">Nom</label>
-                        <input type="text" id="name" name="name" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="email">Email</label>
-                        <input type="email" id="email" name="email" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="phone">Téléphone</label>
-                        <input type="tel" id="phone" name="phone" required>
-                    </div>
-                    <button type="submit" class="submit-btn">Envoyer la demande</button>
-                </form>
+ <div class="products-grid">
+    <?php foreach ($commandes as $commande): ?>
+        <div class="product-card" data-type="<?php echo htmlspecialchars($commande['type_nom'] ?? 'inconnu', ENT_QUOTES); ?>">
+            <img 
+                src="../../admin/uploads/canape-prefait/<?php echo htmlspecialchars($commande['img'] ?? 'default.jpg', ENT_QUOTES); ?>" 
+                alt="<?php echo htmlspecialchars($commande['nom'] ?? 'Canapé préfait', ENT_QUOTES); ?>"
+            >
+            <div class="product-info">
+                <h3><?php echo htmlspecialchars($commande['nom'] ?? 'Nom non disponible', ENT_QUOTES); ?></h3>
+                <p class="price"><?php echo htmlspecialchars($commande['prix'] ?? '0', ENT_QUOTES); ?> €</p>
+                <button class="btn-beige" onclick="openReservationModal('<?php echo htmlspecialchars($commande['nom'] ?? 'Produit', ENT_QUOTES); ?>')">
+                    Personnaliser
+                </button>
             </div>
         </div>
+    <?php endforeach; ?>
+</div>
+
+
     </main>
 
     <footer>
         <?php require '../../squelette/footer.php'; ?>
     </footer>
 
-    <script>
-        // Filtrage des produits
-        const filterBtns = document.querySelectorAll('.filter-btn');
-        const products = document.querySelectorAll('.product-card');
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const filterButtons = document.querySelectorAll('.filter-btn');
+    const products = document.querySelectorAll('.product-card');
 
-        filterBtns.forEach(btn => {
-            btn.addEventListener('click', () => {
-                // Gestion active state
-                filterBtns.forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
+    filterButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            // Enlever la classe active de tous les boutons
+            filterButtons.forEach(btn => btn.classList.remove('active'));
+            // Ajouter la classe active au bouton cliqué
+            button.classList.add('active');
 
-                // Filtrage
-                const category = btn.dataset.category;
-                products.forEach(product => {
-                    if (category === 'all' || product.dataset.category === category) {
+            const category = button.getAttribute('data-category');
+
+            products.forEach(product => {
+                if (category === 'all') {
+                    product.style.display = 'block';
+                } else {
+                    // Récupère la data-type du produit
+                    const type = product.getAttribute('data-type').toLowerCase();
+                    if (type === category.toLowerCase()) {
                         product.style.display = 'block';
                     } else {
                         product.style.display = 'none';
                     }
-                });
+                }
             });
         });
+    });
+});
+</script>
 
-        // Gestion du modal
-        const modal = document.getElementById('reservation-modal');
-        const productNameInput = document.getElementById('product-name');
-
-        function openReservationModal(productName) {
-            modal.style.display = 'block';
-            productNameInput.value = productName;
-        }
-
-        document.querySelector('.close-modal').onclick = () => {
-            modal.style.display = 'none';
-        }
-
-        window.onclick = (event) => {
-            if (event.target === modal) {
-                modal.style.display = 'none';
-            }
-        }
-    </script>
 </body>
 </html>
