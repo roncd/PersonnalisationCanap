@@ -1,16 +1,34 @@
 <?php
 require '../../admin/config.php';
+session_start();
 
-// Récupère la commande pré-faite (exemple avec l'ID 1, adapte-le dynamiquement si besoin)
-$id_commande_prefait = 1;
+
+// Vérifier si l'utilisateur est connecté
+if (!isset($_SESSION['user_id'])) {
+  $_SESSION['redirect_to'] = $_SERVER['REQUEST_URI'];
+  header("Location: ../formulaire/Connexion.php");
+  exit;
+}
+
+
+if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
+    die("ID invalide ou manquant.");
+}
+
+$id_commande = intval($_GET['id']);
 
 $stmt = $pdo->prepare("SELECT * FROM commande_prefait WHERE id = ?");
-$stmt->execute([$id_commande_prefait]);
+$stmt->execute([$id_commande]);
 $commande = $stmt->fetch(PDO::FETCH_ASSOC);
 
 if (!$commande) {
   die("Aucune commande pré-faite trouvée.");
 }
+
+
+$longueurA = $commande['longueurA'] ?? '';
+$longueurB = $commande['longueurB'] ?? '';
+$longueurC = $commande['longueurC'] ?? '';
 
 // Initialisation du tableau de composition
 $composition = [];
@@ -33,7 +51,6 @@ $elements = [
   'id_motif_tissu' => 'motif_tissu',
   'id_dossier_tissu' => 'dossier_tissu',
   'id_accoudoir_tissu' => 'accoudoir_tissu',
-  'id_nb_accoudoir' => 'nb_accoudoir'
 ];
 foreach ($elements as $colonne => $table) {
   if (!empty($commande[$colonne])) {
@@ -46,6 +63,8 @@ foreach ($elements as $colonne => $table) {
     }
   }
 }
+
+$nbLongueurs = isset($composition['structure']['nb_longueurs']) ? (int) $composition['structure']['nb_longueurs'] : 0;
 
 // Ajouter aussi le prix de dimensions (si pertinent)
 $totalPrice += floatval($commande['prix_dimensions'] ?? 0);
@@ -62,10 +81,24 @@ $totalPrice += floatval($commande['prix_dimensions'] ?? 0);
   <link rel="stylesheet" href="../../styles/processus.css">
   <link rel="stylesheet" href="../../styles/popup.css">
   <link rel="stylesheet" href="../../styles/canapPrefait.css">
+  <link rel="stylesheet" href="../../styles/buttons.css">
+
   <title>Choisi tes dimensions</title>
 </head>
 
 <body>
+
+
+<style>
+  .primary-img {
+  width: 700px;
+  height: 500px; /* Augmente la hauteur */
+  border-radius: 10px;
+  object-fit: cover; /* Pour éviter les déformations */
+}
+
+</style>
+
 
 
   <header>
@@ -73,56 +106,150 @@ $totalPrice += floatval($commande['prix_dimensions'] ?? 0);
   </header>
 
 
-  <main>
+  <main> 
 
  
     <div class="container">
       <!-- Colonne de gauche -->
       <div class="left-column">
-        <h2 class="h2">Choisi tes dimensions </h2>
+        <h2 class="h2">Choisi tes dimensions</h2>
         
-        <form method="POST" class="formulaire">
-          <p>Largeur banquette : <span class="bold">50cm (par défaut) </span> | Prix total des dimensions : <span id="dimension-price">0.00</span> €</p>
-          <div class="form-row">
-            <div class="form-group">
-              <label for="longueurA">Longueur banquette A (en cm) :</label>
-              <input type="number" id="longueurA" name="longueurA" class="input-field" placeholder="Ex: 150">
-            </div>
-          </div>
-          <div class="form-row">
-            <div class="form-group">
-              <label for="longueurB">Longueur banquette B (en cm) :</label>
-              <input type="number" id="longueurB" name="longueurB" class="input-field" placeholder="Ex: 350">
-            </div>
-          </div>
-          <div class="form-row">
-            <div class="form-group">
-              <label for="longueurC">Longueur banquette C (en cm) :</label>
-              <input type="number" id="longueurC" name="longueurC" class="input-field" placeholder="Ex: 350">
-            </div>
-          </div>
-        </form>
+<p>Largeur banquette : <span class="bold">50cm (par défaut)</span> | Prix total des dimensions : <span id="dimension-price"><?= number_format($prixDimensions, 2, ',', ' ') ?> €</span></p>
 
-        <div class="footer">
-          <p>Total : <span id="total-price"><?php echo number_format($totalPrice, 2, ',', ' '); ?> €</span></p>
-          <div class="buttons">
-            <button class="btn-retour " onclick="history.go(-1)">Retour</button>
-            <form method="POST" action="">
-              <input type="hidden" name="couleur_bois_id" id="selected-couleur_bois">
-              <button type="submit" class="btn-suivant">Suivant</button>
-            </form>
-          </div>
-        </div>
-      </div>
-
-
-      <!-- Colonne de droite -->
-      <div class="right-column h2 ">
-        <section class="main-display2">
-          <img src="../../medias/meknes.png" alt="Armoire" class="">
-        </section>
+<!-- Formulaire avec inputs longueur -->
+<form method="POST" class="formulaire">
+  <?php if ($nbLongueurs >= 1): ?>
+    <div class="form-row">
+      <div class="form-group">
+        <label for="longueurA">Longueur banquette A (en cm) :</label>
+        <input type="number" id="longueurA" name="longueurA" class="input-field" placeholder="Ex: 150" value="<?= htmlspecialchars($longueurA) ?>">
       </div>
     </div>
+  <?php endif; ?>
+
+  <?php if ($nbLongueurs >= 2): ?>
+    <div class="form-row">
+      <div class="form-group">
+        <label for="longueurB">Longueur banquette B (en cm) :</label>
+        <input type="number" id="longueurB" name="longueurB" class="input-field" placeholder="Ex: 350" value="<?= htmlspecialchars($longueurB) ?>">
+      </div>
+    </div>
+  <?php endif; ?>
+
+  <?php if ($nbLongueurs >= 3): ?>
+    <div class="form-row">
+      <div class="form-group">
+        <label for="longueurC">Longueur banquette C (en cm) :</label>
+        <input type="number" id="longueurC" name="longueurC" class="input-field" placeholder="Ex: 350" value="<?= htmlspecialchars($longueurC) ?>">
+      </div>
+    </div>
+  <?php endif; ?>
+</form>
+<?php
+// Prix par centimètre (350 € le mètre => 3.5 € le centimètre)
+$prixParCm = 3.5;
+
+// Calcul des longueurs depuis la commande ou variables
+$longueurA = isset($commande['longueurA']) ? (float)$commande['longueurA'] : 0;
+$longueurB = isset($commande['longueurB']) ? (float)$commande['longueurB'] : 0;
+$longueurC = isset($commande['longueurC']) ? (float)$commande['longueurC'] : 0;
+
+// Calcul prix dimensions
+$prixDimensions = ($longueurA + $longueurB + $longueurC) * $prixParCm;
+
+// Calcul prix options (composition)
+$totalOptions = 0;
+if (!empty($composition)) {
+    foreach ($composition as $details) {
+        if (!empty($details['prix'])) {
+            $totalOptions += (float)$details['prix'];
+        }
+    }
+}
+
+// Total final
+$totalPrix = $totalOptions + $prixDimensions;
+?>
+
+
+
+<div class="footer">
+  <p>Total : <span id="total-price"><?= number_format($totalPrix, 2, ',', ' ') ?> €</span></p>
+  <div class="buttons">
+    <button onclick="retourEtapePrecedente()" class="btn-beige">Retour</button>
+    <form method="POST" action="creer_commande_temporaire.php">
+      <input type="hidden" name="id_commande_prefait" value="<?= htmlspecialchars($commande['id']) ?>">
+        <input type="hidden" name="longueurA" value="" id="input-longueurA">
+        <input type="hidden" name="longueurB" value="" id="input-longueurB">
+        <input type="hidden" name="longueurC" value="" id="input-longueurC">
+        <input type="hidden" name="prix_dimensions" value="" id="input-prix-dimensions">
+      <button type="submit" class="btn-noir">Suivant</button>
+    </form>
+  </div>
+</div>
+</div>
+
+<script>
+  const form = document.querySelector('form[action="creer_commande_temporaire.php"]');
+
+  form.addEventListener('submit', function () {
+    document.getElementById('input-longueurA').value = longueurAInput ? longueurAInput.value : 0;
+    document.getElementById('input-longueurB').value = longueurBInput ? longueurBInput.value : 0;
+    document.getElementById('input-longueurC').value = longueurCInput ? longueurCInput.value : 0;
+
+    const prixDimensions = ((+longueurAInput?.value || 0) + (+longueurBInput?.value || 0) + (+longueurCInput?.value || 0)) * prixParCm;
+    document.getElementById('input-prix-dimensions').value = prixDimensions.toFixed(2);
+  });
+</script>
+
+
+<script>
+  const prixParCm = <?= json_encode($prixParCm); ?>;
+  const totalOptions = <?= json_encode($totalOptions); ?>;
+
+  const longueurAInput = document.getElementById('longueurA');
+  const longueurBInput = document.getElementById('longueurB');
+  const longueurCInput = document.getElementById('longueurC');
+
+  const dimensionPriceSpan = document.getElementById('dimension-price');
+  const totalPriceSpan = document.getElementById('total-price');
+
+  function calculePrix() {
+    const longueurA = Number(longueurAInput ? longueurAInput.value : 0);
+    const longueurB = Number(longueurBInput ? longueurBInput.value : 0);
+    const longueurC = Number(longueurCInput ? longueurCInput.value : 0);
+
+    const prixDimensions = (longueurA + longueurB + longueurC) * prixParCm;
+    dimensionPriceSpan.textContent = prixDimensions.toFixed(2).replace('.', ',') + ' €';
+
+    const total = totalOptions + prixDimensions;
+    totalPriceSpan.textContent = total.toFixed(2).replace('.', ',') + ' €';
+  }
+
+  [longueurAInput, longueurBInput, longueurCInput].forEach(input => {
+    if (input) {
+      input.addEventListener('input', calculePrix);
+      input.addEventListener('change', calculePrix);
+    }
+  });
+
+  window.addEventListener('DOMContentLoaded', calculePrix);
+</script>
+
+
+  <!-- Colonne de droite -->
+      <div class="right-column h2 ">
+        <section class="main-display2">
+<?php if (!empty($composition['structure']['img'])): ?>
+  <img 
+    src="../../admin/uploads/structure/<?php echo htmlspecialchars($composition['structure']['img'], ENT_QUOTES); ?>" 
+    alt="Structure du canapé"
+    class="primary-img"
+  >
+<?php endif; ?>
+        </section>
+      </div>
+    </div>    
 
 
       <!-- Popup besoin d'aide -->
@@ -163,6 +290,18 @@ $totalPrice += floatval($commande['prix_dimensions'] ?? 0);
     event.preventDefault(); // Empêche l'envoi du formulaire si ce n'est pas nécessaire
     window.location.href = "choix-mousse.php"; // Remplace par l’URL correcte
   });
+</script>
+
+        <!-- BOUTTON RETOUR -->
+<script>
+  function retourEtapePrecedente() {
+    const id = new URLSearchParams(window.location.search).get('id');
+    if (id) {
+      window.location.href = `canapPrefait.php?id=${id}`;
+    } else {
+      alert("ID introuvable dans l'URL.");
+    }
+  }
 </script>
 
 
