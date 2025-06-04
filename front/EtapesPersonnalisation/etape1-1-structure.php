@@ -151,11 +151,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         const mainImage = document.getElementById('main-image');
         const erreurPopup = document.getElementById('erreur-popup');
         const closeErreurBtn = erreurPopup.querySelector('.btn-noir');
-        const form = document.querySelector('form'); // Assure-toi que ton <form> a bien une balise identifiable
+        const form = document.querySelector('form');
 
         // Vérification si une sélection existe dans localStorage
         let savedStructureId = localStorage.getItem('selectedStructureId');
         let selected = savedStructureId !== '';
+
+        function saveSelection() {
+          localStorage.setItem('selectedStructureId', savedStructureId);
+        }
 
         // Restaurer la sélection si elle existe
         options.forEach(img => {
@@ -183,7 +187,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         form.addEventListener('submit', (e) => {
           if (!selectedStructureInput.value) {
             e.preventDefault();
-            erreurPopup.style.display = 'flex'; // ou 'block' selon ton CSS
+            erreurPopup.style.display = 'flex';
           }
         });
 
@@ -197,10 +201,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             erreurPopup.style.display = 'none';
           }
         });
-
-        function saveSelection() {
-          localStorage.setItem('selectedStructureId', savedStructureId);
-        }
       });
     </script>
 
@@ -209,25 +209,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       document.addEventListener('DOMContentLoaded', () => {
         let totalPrice = 0; // Total global pour toutes les étapes
 
-        // Charger l'ID utilisateur depuis une variable PHP intégrée dans le HTML
-        const userId = document.body.getAttribute('data-user-id'); // Ex. <body data-user-id="<?php echo $_SESSION['user_id']; ?>">
+        // Charge l'ID utilisateur depuis une variable PHP intégrée dans le HTML
+        const userId = document.body.getAttribute('data-user-id');
+        <?php echo $_SESSION['user_id']; ?>
         if (!userId) {
           console.error("ID utilisateur non trouvé. Vérifiez que 'data-user-id' est bien défini dans le HTML.");
           return;
         }
 
-        // Charger toutes les options sélectionnées depuis sessionStorage (par utilisateur)
+        // Charge toutes les options sélectionnées depuis sessionStorage 
         const sessionKey = `allSelectedOptions_${userId}`;
         const selectedKey = `selectedOptions_${userId}`;
         let allSelectedOptions = JSON.parse(sessionStorage.getItem(sessionKey)) || [];
-        let selectedOptions = JSON.parse(sessionStorage.getItem(selectedKey)) || {}; // Charger `selectedOptions` pour cet utilisateur
+        let selectedOptions = JSON.parse(sessionStorage.getItem(selectedKey)) || {};
 
-        // Vérifier si `allSelectedOptions` est un tableau
+        // Verifie si `allSelectedOptions` est un tableau
         if (!Array.isArray(allSelectedOptions)) {
           allSelectedOptions = [];
           console.warn("allSelectedOptions n'était pas un tableau. Réinitialisé à []");
         }
-
 
         // Fonction pour mettre à jour le total global
         function updateTotal() {
@@ -238,7 +238,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             return sum + (price * quantity);
           }, 0);
 
-
+          // Sauvegarder les données mises à jour dans sessionStorage
+          function saveData() {
+            sessionStorage.setItem(sessionKey, JSON.stringify(allSelectedOptions));
+            sessionStorage.setItem(selectedKey, JSON.stringify(selectedOptions));
+          }
           // Mettre à jour le total dans l'interface
           const totalElement = document.querySelector(".footer p span");
           if (totalElement) {
@@ -247,16 +251,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             console.error("L'élément '.footer p span' est introuvable !");
           }
         }
-
-        // Sauvegarder les données mises à jour dans sessionStorage
-        function saveData() {
-          sessionStorage.setItem(sessionKey, JSON.stringify(allSelectedOptions));
-          sessionStorage.setItem(selectedKey, JSON.stringify(selectedOptions));
-        }
-
         // Initialiser le total dès le chargement de la page
         updateTotal();
-
         // Sauvegarder les données au chargement de la page (au cas où elles sont modifiées)
         saveData();
       });

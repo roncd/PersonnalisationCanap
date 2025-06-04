@@ -53,7 +53,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <script type="module" src="../../script/keydown.js"></script>
 
     <title>Étape 5 - Choisi ton dossier</title>
-  
+
 </head>
 
 <body data-user-id="<?php echo $_SESSION['user_id']; ?>" data-current-step="5-dossier-tissu">
@@ -144,7 +144,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
         </div>
 
-
         <!-- Popup d'erreur si option non selectionné -->
         <div id="erreur-popup" class="popup ">
             <div class="popup-content">
@@ -161,11 +160,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 const mainImage = document.querySelector('.main-display img');
                 const erreurPopup = document.getElementById('erreur-popup');
                 const closeErreurBtn = erreurPopup.querySelector('.btn-noir');
-                const form = document.querySelector('form'); // Assure-toi que ton <form> a bien une balise identifiable
+                const form = document.querySelector('form');
 
                 // Vérification si une sélection existe dans localStorage
                 let savedDossierTissuId = localStorage.getItem('selectedDossierTissuId');
                 let selected = savedDossierTissuId !== '';
+
+                function saveSelection(dossierTissuId) {
+                    localStorage.setItem('selectedDossierTissuId', savedDossierTissuId);
+                }
 
                 // Restaurer la sélection si elle existe
                 options.forEach(img => {
@@ -189,44 +192,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     });
                 });
 
-
-                /*  if (savedDossierTissuId) {
-                      options.forEach(img => {
-                          if (img.getAttribute('data-dossier-tissu-id') === savedDossierTissuId) {
-                              img.classList.add('selected');
-                              mainImage.src = img.src;
-                              mainImage.alt = img.alt;
-                              selectedDossierTissuInput.value = savedDossierTissuId;
-                              selected = true;
-                          }
-                      });
-                  }
-
-                  // Gestion de la sélection des images
-                  options.forEach(img => {
-                      img.addEventListener('click', () => {
-                          // Retirer la classe "selected" de toutes les images
-                          options.forEach(opt => opt.classList.remove('selected'));
-
-                          // Ajouter la classe "selected" à l'image cliquée
-                          img.classList.add('selected');
-
-                          // Mettre à jour l'image principale
-                          mainImage.src = img.src;
-                          mainImage.alt = img.alt;
-
-                          // Mettre à jour l'input caché avec l'ID du tissu sélectionné
-                          selectedDossierTissuInput.value = img.getAttribute('data-dossier-tissu-id');
-                          selected = true; // Marquer comme sélectionné
-
-                          saveSelection(img.getAttribute('data-dossier-tissu-id'));
-                      });
-                  });*/
-
                 form.addEventListener('submit', (e) => {
                     if (!selectedDossierTissuInput.value) {
                         e.preventDefault();
-                        erreurPopup.style.display = 'flex'; 
+                        erreurPopup.style.display = 'flex';
                     }
                 });
 
@@ -240,25 +209,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         erreurPopup.style.display = 'none';
                     }
                 });
-
-
-                function saveSelection(dossierTissuId) {
-                    localStorage.setItem('selectedDossierTissuId', savedDossierTissuId);
-                }
             });
         </script>
-
 
         <!-- BOUTTON RETOUR -->
         <script>
             function retourEtapePrecedente() {
-                // Exemple : tu es sur étape 8, tu veux revenir à étape 7
                 window.location.href = "etape4-2-tissu-choix-tissu-coussin.php";
             }
         </script>
-
-
-
 
     </main>
 

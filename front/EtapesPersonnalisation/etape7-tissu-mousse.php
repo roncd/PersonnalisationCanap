@@ -194,7 +194,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         let selectedMousseId = localStorage.getItem('selectedMousse') || '';
         let selected = selectedMousseId !== '';
 
-
+        function saveSelection() {
+          localStorage.setItem('selectedMousse', selectedMousseId);
+        }
+        
         // Restaurer la sélection si elle existe
         options.forEach(img => {
           if (img.getAttribute('data-mousse-bois-id') === selectedMousseId) {
@@ -234,10 +237,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             erreurPopup.style.display = 'none';
           }
         });
-
-        function saveSelection() {
-          localStorage.setItem('selectedMousse', selectedMousseId);
-        }
       });
     </script>
     <!-- BOUTTON RETOUR -->

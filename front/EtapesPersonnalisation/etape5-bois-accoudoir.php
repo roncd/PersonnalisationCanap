@@ -87,7 +87,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <link rel="stylesheet" href="../../styles/popup.css">
   <link rel="stylesheet" href="../../styles/buttons.css">
   <script type="module" src="../../script/popup.js"></script>
-  <script type="module" src="../../script/variationPrix.js"></script>
   <script type="module" src="../../script/keydown.js"></script>
 
 
@@ -98,11 +97,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <body data-user-id="<?php echo $_SESSION['user_id']; ?>" data-current-step="5-accoudoir-bois">
 
-
   <header>
     <?php require '../../squelette/header.php'; ?>
   </header>
-
 
   <main>
     <div class="fil-ariane-container h2" aria-label="fil-ariane">
@@ -127,7 +124,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <section class="color-options">
           <?php if (!empty($accoudoir_bois)): ?>
             <?php foreach ($accoudoir_bois as $bois): ?>
-              <div class="option ">
+              <div class="option">
                 <img src="../../admin/uploads/accoudoirs-bois/<?php echo htmlspecialchars($bois['img']); ?>"
                   alt="<?php echo htmlspecialchars($bois['nom']); ?>" data-bois-id="<?php echo $bois['id']; ?>"
                   data-bois-prix="<?php echo $bois['prix']; ?>">
@@ -135,9 +132,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <p><strong><?php echo htmlspecialchars($bois['prix']); ?> €</strong></p>
                 <!-- Compteur de quantité -->
                 <div class="quantity-selector1">
-                  <button class="btn-decrease" onclick="updateQuantity(this, -1)">-</button>
+                  <button class="btn-decrease">-</button>
                   <input type="text" class="quantity-input1" value="0" readonly>
-                  <button class="btn-increase" onclick="updateQuantity(this, 1)">+</button>
+                  <button class="btn-increase">+</button>
                 </div>
               </div>
             <?php endforeach; ?>
@@ -204,7 +201,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 
     <script>
-      // Popup sélection
       document.addEventListener('DOMContentLoaded', () => {
         const options = document.querySelectorAll('.color-options .option img');
         const mainImage = document.querySelector('.main-display img');
@@ -214,172 +210,38 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         const closeErreurBtn = erreurPopup.querySelector('.btn-noir');
         const selectedAccoudoirBoisInput = document.getElementById('selected-accoudoir_bois');
         const selectedNbAccoudoirInput = document.getElementById('selected-nb_accoudoir');
-        let selectedOptions = JSON.parse(localStorage.getItem('selectedOptions')) || {};
+        const currentStep = "5-accoudoir-bois";
 
-        // Empêcher la soumission du formulaire si rien n'est sélectionné
-        form.addEventListener('submit', (e) => {
-          if (!selectedAccoudoirBoisInput.value) {
-            e.preventDefault();
-            erreurPopup.style.display = 'flex';
-          }
-        });
+        const userId = document.body.getAttribute('data-user-id');
+        if (!userId) {
+          console.error("ID utilisateur non trouvé.");
+          return;
+        }
 
-        // Fermer le popup
-        closeErreurBtn.addEventListener('click', () => {
-          erreurPopup.style.display = 'none';
-        });
+        const selectedKey = `selectedOptions_${userId}`;
+        const sessionKey = `allSelectedOptions_${userId}`;
 
-        window.addEventListener('click', (event) => {
-          if (event.target === erreurPopup) {
-            erreurPopup.style.display = 'none';
-          }
-        });
+        let selectedOptions = JSON.parse(sessionStorage.getItem(selectedKey)) || {};
+        let allSelectedOptions = JSON.parse(sessionStorage.getItem(sessionKey)) || [];
+        let totalPrice = 0;
 
-        // Restaurer les sélections depuis localStorage
-        options.forEach(img => {
-          const boisId = img.getAttribute('data-bois-id');
-          const parentOption = img.closest('.option');
-          let quantityInput = parentOption.querySelector('.quantity-input1');
+        if (!Array.isArray(allSelectedOptions)) {
+          allSelectedOptions = [];
+        }
 
-          if (selectedOptions[boisId]) {
-            img.classList.add('selected');
-            quantityInput.value = selectedOptions[boisId];
-          }
-        });
-
-        updateHiddenInputs();
-
-        // Sélectionner un accoudoir
-        options.forEach(img => {
-          img.addEventListener('click', () => {
-            const boisId = img.getAttribute('data-bois-id');
-            const parentOption = img.closest('.option');
-            let quantityInput = parentOption.querySelector('.quantity-input1');
-
-            if (selectedOptions[boisId]) {
-              delete selectedOptions[boisId]; // Désélectionner
-              img.classList.remove('selected');
-              quantityInput.value = 0;
-            } else {
-              selectedOptions[boisId] = 1; // Ajouter avec quantité 1 par défaut
-              img.classList.add('selected');
-              quantityInput.value = 1;
-            }
-
-            updateHiddenInputs();
-            saveSelection();
-          });
-        });
-
-        // Vérifier la sélection avant de passer à l'étape suivante
-        suivantButton.addEventListener('click', (event) => {
-          if (Object.keys(selectedOptions).length === 0 || !selectedNbAccoudoirInput.value || selectedNbAccoudoirInput.value === "0") {
-            event.preventDefault();
-            erreurPopup.style.display = 'flex'; // Afficher le popup de sélection
-          }
-        });
-
-        // Mettre à jour les champs cachés pour l'envoi du formulaire
+        // Déclaration des fonctions
         function updateHiddenInputs() {
           selectedAccoudoirBoisInput.value = Object.keys(selectedOptions).join(',');
           selectedNbAccoudoirInput.value = Object.values(selectedOptions).join(',');
         }
 
-        // Sauvegarde dans localStorage
         function saveSelection() {
-          localStorage.setItem('selectedOptions', JSON.stringify(selectedOptions));
-        }
-      });
-    </script>
-
-    <!-- VARIATION DES PRIX  -->
-    <script>
-      document.addEventListener('DOMContentLoaded', () => {
-        let totalPrice = 0; // Total global pour toutes les étapes
-
-
-        // Identifier l'étape actuelle
-        const currentStep = "5-accoudoir-bois"; // Étape spécifique
-
-
-        // Charger l'ID utilisateur depuis une variable PHP intégrée dans le HTML
-        const userId = document.body.getAttribute('data-user-id'); // Ex. <body data-user-id="<?php echo $_SESSION['user_id']; ?>">
-        if (!userId) {
-          console.error("ID utilisateur non trouvé. Vérifiez que 'data-user-id' est bien défini dans le HTML.");
-          return;
-        }
-        console.log("ID utilisateur récupéré :", userId);
-
-
-        // Charger toutes les options sélectionnées depuis sessionStorage (par utilisateur)
-        const sessionKey = `allSelectedOptions_${userId}`;
-        const selectedKey = `selectedOptions_${userId}`;
-        let allSelectedOptions = JSON.parse(sessionStorage.getItem(sessionKey)) || [];
-        let selectedOptions = JSON.parse(sessionStorage.getItem(selectedKey)) || {};
-        console.log("Données globales récupérées depuis sessionStorage :", allSelectedOptions);
-
-
-        // Vérifier si `allSelectedOptions` est un tableau
-        if (!Array.isArray(allSelectedOptions)) {
-          allSelectedOptions = [];
-          console.warn("allSelectedOptions n'était pas un tableau. Réinitialisé à []");
+          sessionStorage.setItem(selectedKey, JSON.stringify(selectedOptions));
         }
 
-
-        // Restaurer les sélections (style "selected" et quantités)
-        function restoreSelections() {
-          document.querySelectorAll('.color-options .option img').forEach(img => {
-            const boisId = img.getAttribute('data-bois-id');
-            const parentOption = img.closest('.option');
-            const quantityInput = parentOption.querySelector('.quantity-input1');
-
-
-            if (selectedOptions[boisId]) {
-              // Appliquer le style "selected" et restaurer la quantité
-              img.classList.add('selected');
-              quantityInput.value = selectedOptions[boisId];
-            } else {
-              // Réinitialiser si non sélectionné
-              img.classList.remove('selected');
-              quantityInput.value = 0;
-            }
-          });
-        }
-
-        // Fonction pour mettre à jour le total global
-        function updateTotal() {
-          // Calculer le total global en prenant en compte toutes les options et quantités
-          totalPrice = allSelectedOptions.reduce((sum, option) => {
-            const price = option.price || 0; // S'assurer que le prix est valide
-            const quantity = option.quantity || 1; // Par défaut, quantité = 1
-            return sum + (price * quantity);
-          }, 0);
-
-
-          console.log("Total global mis à jour :", totalPrice);
-
-
-          // Mettre à jour le total dans l'interface
-          const totalElement = document.querySelector(".footer p span");
-          if (totalElement) {
-            totalElement.textContent = `${totalPrice.toFixed(2)} €`;
-          } else {
-            console.error("L'élément '.footer p span' est introuvable !");
-          }
-        }
-
-
-        // Fonction pour sauvegarder les options sélectionnées
         function saveSelectedOption(optionId, price, quantity) {
-          // Créer un identifiant unique basé sur l'étape actuelle
           const uniqueId = `${currentStep}_${optionId}`;
-
-
-          // Supprimer l'option actuelle du stockage global
           allSelectedOptions = allSelectedOptions.filter(opt => opt.id !== uniqueId);
-
-
-          // Ajouter ou mettre à jour l'option avec la nouvelle quantité et prix si quantité > 0
           if (quantity > 0) {
             allSelectedOptions.push({
               id: uniqueId,
@@ -387,124 +249,180 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
               quantity: quantity
             });
           }
-
-          // Sauvegarder les données globales dans sessionStorage pour cet utilisateur
           sessionStorage.setItem(sessionKey, JSON.stringify(allSelectedOptions));
         }
 
-        // Fonction pour mettre à jour les champs cachés
-        function updateHiddenInputs() {
-          const selectedAccoudoirBoisInput = document.getElementById('selected-accoudoir_bois');
-          const selectedNbAccoudoirInput = document.getElementById('selected-nb_accoudoir');
-          selectedAccoudoirBoisInput.value = Object.keys(selectedOptions).join(',');
-          selectedNbAccoudoirInput.value = Object.values(selectedOptions).join(',');
+        function updateTotal() {
+          totalPrice = allSelectedOptions.reduce((sum, opt) => sum + (opt.price || 0) * (opt.quantity || 1), 0);
+          const totalElement = document.querySelector(".footer p span");
+          if (totalElement) {
+            totalElement.textContent = `${totalPrice.toFixed(2)} €`;
+          }
         }
 
-
-        // Fonction pour sauvegarder les sélections
-        function saveSelection() {
-          sessionStorage.setItem(selectedKey, JSON.stringify(selectedOptions));
-        }
-
-
-        // Sélectionner ou désélectionner un accoudoir
-        document.querySelectorAll('.color-options .option img').forEach(img => {
-          img.addEventListener('click', () => {
+        function restoreSelections() {
+          options.forEach(img => {
             const boisId = img.getAttribute('data-bois-id');
-            const parentOption = img.closest('.option');
-            const quantityInput = parentOption.querySelector('.quantity-input1');
-            const price = parseFloat(img.getAttribute('data-bois-prix')) || 0;
-
+            const parent = img.closest('.option');
+            const quantityInput = parent.querySelector('.quantity-input1');
+            const quantitySelector = parent.querySelector('.quantity-selector1');
+            const decreaseBtn = parent.querySelector('.btn-decrease');
 
             if (selectedOptions[boisId]) {
-              // Désélectionner l'accoudoir
-              delete selectedOptions[boisId];
+              img.classList.add('selected');
+              quantityInput.value = selectedOptions[boisId];
+              if (quantitySelector) quantitySelector.style.display = "block";
+              if (parseInt(quantityInput.value) === 1 && decreaseBtn) {
+                decreaseBtn.classList.add('btn-opacity');
+              }
+            } else {
               img.classList.remove('selected');
               quantityInput.value = 0;
-              saveSelectedOption(boisId, price, 0); // Supprimer dans allSelectedOptions
-            } else {
-              // Sélectionner l'accoudoir avec quantité 1
-              selectedOptions[boisId] = 1;
-              img.classList.add('selected');
-              quantityInput.value = 1;
-              saveSelectedOption(boisId, price, 1); // Ajouter dans allSelectedOptions
+              if (quantitySelector) quantitySelector.style.display = "none";
             }
-
-
-            updateHiddenInputs();
-            saveSelection();
-            updateTotal();
           });
-        });
 
+          const lastSelected = localStorage.getItem('lastSelectedAccoudoir');
+          if (lastSelected) {
+            const lastImg = document.querySelector(`.color-options .option img[data-bois-id="${lastSelected}"]`);
+            if (lastImg) {
+              mainImage.src = lastImg.src;
+              mainImage.alt = lastImg.alt;
+            }
+          }
+        }
 
-        // Gérer les clics sur les boutons d'augmentation et de diminution
-        document.querySelectorAll('.btn-increase, .btn-decrease').forEach(button => {
-          button.addEventListener('click', (event) => {
-            const parentOption = event.target.closest('.option');
-            const boisId = parentOption.querySelector('img').getAttribute('data-bois-id');
-            const quantityInput = parentOption.querySelector('.quantity-input1');
-            const price = parseFloat(parentOption.querySelector('img').getAttribute('data-bois-prix')) || 0;
+        // Sélection / désélection sur image
+        options.forEach(img => {
+          img.addEventListener('click', () => {
+            const boisId = img.getAttribute('data-bois-id');
+            const price = parseFloat(img.getAttribute('data-bois-prix')) || 0;
+            const parent = img.closest('.option');
+            const quantityInput = parent.querySelector('.quantity-input1');
+            const quantitySelector = parent.querySelector('.quantity-selector1');
+            const decreaseBtn = parent.querySelector('.btn-decrease');
 
-
-            if (!selectedOptions[boisId]) return; // Si non sélectionné, ne rien faire
-
-
-            let newQuantity = parseInt(quantityInput.value || "0") + (event.target.classList.contains('btn-increase') ? 1 : -1);
-            newQuantity = Math.max(newQuantity, 0); // Empêcher les quantités négatives
-            quantityInput.value = newQuantity;
-
-
-            if (newQuantity === 0) {
-              // Supprimer si quantité = 0
+            if (img.classList.contains('selected')) {
+              img.classList.remove('selected');
+              quantityInput.value = 0;
               delete selectedOptions[boisId];
-              parentOption.querySelector('img').classList.remove('selected');
+              if (quantitySelector) quantitySelector.style.display = "none";
+              localStorage.removeItem('lastSelectedAccoudoir');
               saveSelectedOption(boisId, price, 0);
             } else {
-              // Mettre à jour la quantité
-              selectedOptions[boisId] = newQuantity;
-              saveSelectedOption(boisId, price, newQuantity);
+              img.classList.add('selected');
+              quantityInput.value = 1;
+              selectedOptions[boisId] = 1;
+              if (quantitySelector) quantitySelector.style.display = "block";
+              localStorage.setItem('lastSelectedAccoudoir', boisId);
+              mainImage.src = img.src;
+              mainImage.alt = img.alt;
+              saveSelectedOption(boisId, price, 1);
+              if (parseInt(quantityInput.value) === 1 && decreaseBtn) {
+                decreaseBtn.classList.add('btn-opacity');
+              }
             }
-
-
             updateHiddenInputs();
             saveSelection();
             updateTotal();
+
           });
         });
 
-        // Vérifier la sélection avant de passer à l'étape suivante
-        const suivantButton = document.getElementById('btn-suivant');
-        suivantButton.addEventListener('click', (event) => {
-          if (Object.keys(selectedOptions).length === 0 || !document.getElementById('selected-nb_accoudoir').value || document.getElementById('selected-nb_accoudoir').value === "0") {
-            event.preventDefault();
-            const erreurPopup = document.getElementById('erreur-popup');
+        // Incrémentation button
+        document.querySelectorAll('.btn-increase').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            const parent = e.target.closest('.option');
+            const img = parent.querySelector('img');
+            const boisId = img.getAttribute('data-bois-id');
+            const price = parseFloat(img.getAttribute('data-bois-prix')) || 0;
+            const quantityInput = parent.querySelector('.quantity-input1');
+            const decreaseBtn = parent.querySelector('.btn-decrease');
+
+            let quantity = parseInt(quantityInput.value) || 0;
+            if (quantity < 1) return;
+            quantity++;
+            quantityInput.value = quantity;
+
+            selectedOptions[boisId] = quantity;
+            saveSelectedOption(boisId, price, quantity);
+            saveSelection();
+            updateHiddenInputs();
+            updateTotal();
+            if (quantity > 1) {
+              decreaseBtn.classList.remove('btn-opacity');
+            }
+          });
+        });
+
+        // Décrémentation button
+        document.querySelectorAll('.btn-decrease').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            const parent = e.target.closest('.option');
+            const img = parent.querySelector('img');
+            const boisId = img.getAttribute('data-bois-id');
+            const price = parseFloat(img.getAttribute('data-bois-prix')) || 0;
+            const quantityInput = parent.querySelector('.quantity-input1');
+
+            let quantity = parseInt(quantityInput.value) || 0;
+            if (quantity > 1) {
+              quantity--;
+              quantityInput.value = quantity;
+              selectedOptions[boisId] = quantity;
+              saveSelectedOption(boisId, price, quantity);
+              saveSelection();
+              updateHiddenInputs();
+              updateTotal();
+            }
+            if (quantity === 1) {
+              btn.classList.add('btn-opacity');
+            }
+          });
+        });
+
+        // Etape suivante
+        suivantButton.addEventListener('click', (e) => {
+          e.preventDefault();
+          const hasSelection = Object.keys(selectedOptions).length > 0;
+          const hasValidQuantity = Object.values(selectedOptions).some(q => parseInt(q) > 0);
+          if (!hasSelection || !hasValidQuantity) {
             erreurPopup.style.display = 'flex';
+            return;
+          }
+          updateHiddenInputs();
+          saveSelection();
+          form.submit();
+        });
+
+        // Validation du formulaire + affichage pop up
+        form.addEventListener('submit', (e) => {
+          if (Object.keys(selectedOptions).length === 0) {
+            e.preventDefault();
+            erreurPopup.style.display = 'flex';
+          } else {
+            updateHiddenInputs();
           }
         });
 
-        // Restaurer les sélections au chargement de la page
+        // Fermer le popup erreur
+        closeErreurBtn.addEventListener('click', () => erreurPopup.style.display = 'none');
+        window.addEventListener('click', (e) => {
+          if (e.target === erreurPopup) erreurPopup.style.display = 'none';
+        });
         restoreSelections();
-
-
-        // Initialiser le total dès le chargement de la page
         updateTotal();
       });
     </script>
 
+
     <!-- BOUTTON RETOUR -->
     <script>
       function retourEtapePrecedente() {
-        // Exemple : tu es sur étape 8, tu veux revenir à étape 7
         window.location.href = "etape4-bois-decoration.php";
       }
     </script>
 
-
-
-
   </main>
-
 
   <?php require_once '../../squelette/footer.php' ?>
 </body>

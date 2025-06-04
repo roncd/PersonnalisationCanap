@@ -17,6 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
   $id_client = $_SESSION['user_id'];
   $id_mousse = $_POST['mousse_id']; // ou 'id_mousse' si ton champ s'appelle comme ça dans le HTML
+  $prix_total = isset($_POST['total_price']) ? floatval($_POST['total_price']) : 0;
 
   // Vérifier si une commande temporaire existe déjà pour cet utilisateur
   $stmt = $pdo->prepare("SELECT id FROM commande_temporaire WHERE id_client = ?");
@@ -24,11 +25,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $existing_order = $stmt->fetch(PDO::FETCH_ASSOC);
 
   if ($existing_order) {
-    $stmt = $pdo->prepare("UPDATE commande_temporaire SET id_mousse = ? WHERE id_client = ?");
-    $stmt->execute([$id_mousse, $id_client]);
+    $stmt = $pdo->prepare("UPDATE commande_temporaire SET id_mousse = ? , prix = ? WHERE id_client = ?");
+    $stmt->execute([$id_mousse, $prix_total, $id_client]);
   } else {
-    $stmt = $pdo->prepare("INSERT INTO commande_temporaire (id_client, id_mousse) VALUES (?, ?)");
-    $stmt->execute([$id_client, $id_mousse]);
+    $stmt = $pdo->prepare("INSERT INTO commande_temporaire (id_client, id_mousse, prix) VALUES (?, ?, ?)");
+    $stmt->execute([$id_client, $prix_total, $id_mousse]);
   }
 
   // Rediriger vers l'étape suivante
@@ -117,7 +118,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       <script>
         document.addEventListener('DOMContentLoaded', () => {
           const totalElement = document.querySelector(".footer p span");
-          const totalPriceInput = document.querySelector("#total-price");
+          const totalPriceInput = document.getElementById("total-price");
 
           function updateTotalPriceInput() {
             if (totalElement && totalPriceInput) {
@@ -184,10 +185,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         const erreurPopup = document.getElementById('erreur-popup');
         const closeErreurBtn = erreurPopup.querySelector('.btn-noir');
         const selectedMousseInput = document.getElementById('selected-mousse');
-        const form = document.querySelector('form'); // Assure-toi que ton <form> a bien une balise identifiable
+        const form = document.querySelector('form'); 
 
         let selectedMousseId = localStorage.getItem('selectedMousse') || '';
         let selected = selectedMousseId !== '';
+
+        function saveSelection() {
+          localStorage.setItem('selectedMousse', selectedMousseId);
+        }
 
         // Restaurer la sélection si elle existe
         options.forEach(img => {
@@ -228,10 +233,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             erreurPopup.style.display = 'none';
           }
         });
-
-        function saveSelection() {
-          localStorage.setItem('selectedMousse', selectedMousseId);
-        }
       });
     </script>
 

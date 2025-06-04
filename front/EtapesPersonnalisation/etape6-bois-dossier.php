@@ -171,9 +171,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         const erreurPopup = document.getElementById('erreur-popup');
         const closeErreurBtn = erreurPopup.querySelector('.btn-noir');
         const selectedDossierBoisInput = document.getElementById('selected-dossier_bois');
-        const form = document.querySelector('form'); // Assure-toi que ton <form> a bien une balise identifiable
+        const form = document.querySelector('form'); 
+        
         let selectedBoisId = localStorage.getItem('selectedDossierBois') || '';
         let selected = selectedBoisId !== '';
+
+        function saveSelection() {
+          localStorage.setItem('selectedDossierBois', selectedBoisId);
+        }
 
         // Restaurer la sélection si elle existe
         options.forEach(img => {
@@ -204,8 +209,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           }
         });
 
-
-
         // Fermer le popup
         closeErreurBtn.addEventListener('click', () => {
           erreurPopup.style.display = 'none';
@@ -216,19 +219,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             erreurPopup.style.display = 'none';
           }
         });
-
-
-        function saveSelection() {
-          localStorage.setItem('selectedDossierBois', selectedBoisId);
-        }
       });
     </script>
-
 
     <!-- BOUTTON RETOUR -->
     <script>
       function retourEtapePrecedente() {
-        // Exemple : tu es sur étape 8, tu veux revenir à étape 7
         window.location.href = "etape5-bois-accoudoir.php";
       }
     </script>

@@ -21,7 +21,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
   $id_client = $_SESSION['user_id'];
   $id_motif_bois = $_POST['motif_bois_id'];
-  $prix_total = isset($_POST['total_price']) ? floatval($_POST['total_price']) : 0;
 
   // Vérifier si une commande temporaire existe déjà pour cet utilisateur
   $stmt = $pdo->prepare("SELECT id FROM commande_temporaire WHERE id_client = ?");
@@ -29,11 +28,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $existing_order = $stmt->fetch(PDO::FETCH_ASSOC);
 
   if ($existing_order) {
-    $stmt = $pdo->prepare("UPDATE commande_temporaire SET id_motif_bois = ?, prix = ? WHERE id_client = ?");
-    $stmt->execute([$id_motif_bois, $prix_total, $id_client]);
+    $stmt = $pdo->prepare("UPDATE commande_temporaire SET id_motif_bois = ? WHERE id_client = ?");
+    $stmt->execute([$id_motif_bois, $id_client]);
   } else {
-    $stmt = $pdo->prepare("INSERT INTO commande_temporaire (id_client, id_motif_bois, prix) VALUES (?, ?, ?)");
-    $stmt->execute([$id_client, $id_motif_bois, $prix_total]);
+    $stmt = $pdo->prepare("INSERT INTO commande_temporaire (id_client, id_motif_bois) VALUES (?, ?)");
+    $stmt->execute([$id_client, $id_motif_bois]);
   }
 
   // Rediriger vers l'étape suivante
@@ -176,11 +175,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         const erreurPopup = document.getElementById('erreur-popup');
         const closeErreurBtn = erreurPopup.querySelector('.btn-noir');
         const selectedCouleurBoisInput = document.getElementById('selected-motif_bois'); // Input caché
-        const form = document.querySelector('form'); // Assure-toi que ton <form> a bien une balise identifiable
+        const form = document.querySelector('form'); 
 
         let selectedMotifBoisId = localStorage.getItem('selectedMotifBois') || '';
         let selected = selectedMotifBoisId !== '';
 
+        function saveSelection() {
+          localStorage.setItem('selectedMotifBois', selectedMotifBoisId);
+        }
+        
         // Restaurer la sélection si elle existe
         options.forEach(img => {
           if (img.getAttribute('data-bois-id') === selectedMotifBoisId) {
@@ -220,10 +223,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             erreurPopup.style.display = 'none';
           }
         });
-
-        function saveSelection() {
-          localStorage.setItem('selectedMotifBois', selectedMotifBoisId);
-        }
       });
     </script>
 

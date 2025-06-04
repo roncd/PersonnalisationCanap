@@ -12,7 +12,7 @@ $id = $_GET['id'] ?? null;
 if (!$id) {
     $_SESSION['message'] = 'ID de la commande manquant.';
     $_SESSION['message_type'] = 'error';
-    header("Location: visualiser.php");
+    header("Location: index.php");
     exit();
 }
 
@@ -25,7 +25,7 @@ $commande = $stmt->fetch(PDO::FETCH_ASSOC);
 if (!$commande) {
     $_SESSION['message'] = 'Commande introuvable.';
     $_SESSION['message_type'] = 'error';
-    header("Location: visualiser.php");
+    header("Location: index.php");
     exit();
 }
 
@@ -111,7 +111,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         ])) {
             $_SESSION['message'] = 'La commande a été mise à jour avec succès !';
             $_SESSION['message_type'] = 'success';
-            header("Location: visualiser.php");
+            header("Location: index.php");
             exit();
         } else {
             $_SESSION['message'] = 'Erreur lors de la mise à jour de la commande.';
