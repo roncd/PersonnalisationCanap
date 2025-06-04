@@ -56,7 +56,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <script type="module" src="../../script/variationPrix.js"></script>
   <script type="module" src="../../script/keydown.js"></script>
 
-
   <title>Étape 4 - Décore ta banquette</title>
 
 </head>
@@ -170,10 +169,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         const erreurPopup = document.getElementById('erreur-popup');
         const closeErreurBtn = erreurPopup.querySelector('.btn-noir');
         const selectedDecorationInput = document.getElementById('selected-decoration');
-        const form = document.querySelector('form'); // Assure-toi que ton <form> a bien une balise identifiable
+        const form = document.querySelector('form'); 
 
         let selectedDecoId = localStorage.getItem('selectedDecoration') || '';
         let selected = selectedDecoId !== '';
+
+        function saveSelection() {
+          localStorage.setItem('selectedDecoration', selectedDecoId);
+        }
 
         // Restaurer la sélection si elle existe
         options.forEach(img => {
@@ -214,19 +217,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             erreurPopup.style.display = 'none';
           }
         });
-
-
-
-        function saveSelection() {
-          localStorage.setItem('selectedDecoration', selectedDecoId);
-        }
       });
     </script>
 
     <!-- BOUTTON RETOUR -->
     <script>
       function retourEtapePrecedente() {
-        // Exemple : tu es sur étape 8, tu veux revenir à étape 7
         window.location.href = "etape3-bois-couleur.php";
       }
     </script>

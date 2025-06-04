@@ -160,11 +160,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['couleur_tissu_id'])) 
                 const mainImage = document.querySelector('.main-display img');
                 const erreurPopup = document.getElementById('erreur-popup');
                 const closeErreurBtn = erreurPopup.querySelector('.btn-noir');
-                const form = document.querySelector('form'); // Assure-toi que ton <form> a bien une balise identifiable
+                const form = document.querySelector('form'); 
 
                 // Vérification si une sélection existe dans localStorage
                 let savedCouleurTissuId = localStorage.getItem('selectedCouleurTissuId');
                 let selected = savedCouleurTissuId !== '';
+
+                function saveSelection() {
+                    localStorage.setItem('selectedCouleurTissuId', savedCouleurTissuId);
+                }
 
                 // Restaurer la sélection si elle existe
                 options.forEach(img => {
@@ -188,12 +192,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['couleur_tissu_id'])) 
                     });
                 });
 
-
                 // Empêcher la soumission du formulaire si rien n'est sélectionné
                 form.addEventListener('submit', (e) => {
                     if (!selectedCouleurTissuInput.value) {
                         e.preventDefault();
-                        erreurPopup.style.display = 'flex'; // ou 'block' selon ton CSS
+                        erreurPopup.style.display = 'flex'; 
                     }
                 });
 
@@ -206,15 +209,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['couleur_tissu_id'])) 
                     if (event.target === erreurPopup) {
                         erreurPopup.style.display = 'none';
                     }
-                });
-
-                function saveSelection() {
-                    localStorage.setItem('selectedCouleurTissuId', savedCouleurTissuId);
-                }
+                });        
             });
-
-
-
             document.querySelectorAll('.color-options .option img').forEach(option => {
                 option.addEventListener('click', () => {
                     const id = option.getAttribute('data-couleur-tissu-id');

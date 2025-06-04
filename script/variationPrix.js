@@ -9,7 +9,6 @@ if (!userId || !currentStep) return;
 
 const isTissu = currentStep.includes('tissu');
 const isBois = currentStep.includes('bois');
-const stepKey = currentStep.split('-')[0];
 
 console.log(`🔍 Étape actuelle : ${currentStep}`);
 console.log(`🔁 Chemin détecté : ${isTissu ? 'TISSU' : isBois ? 'BOIS' : 'INCONNU'}`);
@@ -98,5 +97,3 @@ imgElements.forEach(option => {
 clearOtherPathOptions();
 updateTotal();
 });
-
-

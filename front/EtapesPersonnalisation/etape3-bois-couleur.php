@@ -168,12 +168,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         const erreurPopup = document.getElementById('erreur-popup');
         const closeErreurBtn = erreurPopup.querySelector('.btn-noir');
         const selectedCouleurBoisInput = document.getElementById('selected-couleur_bois');
-        const form = document.querySelector('form'); // Assure-toi que ton <form> a bien une balise identifiable
+        const form = document.querySelector('form'); 
 
         let selectedBoisId = localStorage.getItem('selectedCouleurBois') || '';
         let selected = selectedBoisId !== '';
 
-
+        function saveSelection() {
+          localStorage.setItem('selectedCouleurBois', selectedBoisId);
+        }
+        
         // Restaurer la sélection si elle existe
         options.forEach(img => {
           if (img.getAttribute('data-bois-id') === selectedBoisId) {
@@ -200,7 +203,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         form.addEventListener('submit', (e) => {
           if (!selectedCouleurBoisInput.value) {
             e.preventDefault();
-            erreurPopup.style.display = 'flex'; // ou 'block' selon ton CSS
+            erreurPopup.style.display = 'flex'; 
           }
         });
 
@@ -214,17 +217,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             erreurPopup.style.display = 'none';
           }
         });
-
-        function saveSelection() {
-          localStorage.setItem('selectedCouleurBois', selectedBoisId);
-        }
       });
     </script>
 
     <!-- BOUTTON RETOUR -->
     <script>
       function retourEtapePrecedente() {
-        // Exemple : tu es sur étape 8, tu veux revenir à étape 7
         window.location.href = "etape2-type-banquette.php";
       }
     </script>

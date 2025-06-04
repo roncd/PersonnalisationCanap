@@ -167,11 +167,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         const mainImage = document.getElementById('main-image');
         const erreurPopup = document.getElementById('erreur-popup');
         const closeErreurBtn = erreurPopup.querySelector('.btn-noir');
-        const form = document.querySelector('form'); // Assure-toi que ton <form> a bien une balise identifiable
+        const form = document.querySelector('form'); 
 
         let savedModeleTissuId = localStorage.getItem('selectedModeleTissuId');
         let selected = savedModeleTissuId !== '';
 
+        function saveSelection() {
+          localStorage.setItem('selectedModeleTissuId', savedModeleTissuId);
+        }
+        
         // Restaurer la sélection si elle existe
         options.forEach(img => {
           if (img.getAttribute('data-modele-tissu-id') === savedModeleTissuId) {
@@ -194,46 +198,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           });
         });
 
-
-
-
-        /*if (savedModeleId && savedModeleType) {
-          options.forEach(img => {
-            if (img.getAttribute('data-modele-tissu-id') === savedModeleId && img.getAttribute('data-modele-tissu-type') === savedModeleType) {
-              img.classList.add('selected');
-              mainImage.src = img.src;
-              mainImage.alt = img.alt;
-              selectedModeleInput.value = savedModeleId;
-              selectedModeleTypeInput.value = savedModeleType;
-              selected = true;
-            }
-          });
-
-          
-        }
-
-        options.forEach(img => {
-          img.addEventListener('click', () => {
-            options.forEach(opt => opt.classList.remove('selected'));
-            img.classList.add('selected');
-            selectedModeleInput.value = img.getAttribute('data-modele-tissu-id');
-            selectedModeleTypeInput.value = img.getAttribute('data-modele-tissu-type');
-
-            // Mise à jour de l'image principale
-            mainImage.src = img.src;
-            mainImage.alt = img.alt;
-
-            selected = true;
-            saveSelection(img.getAttribute('data-modele-tissu-id'), img.getAttribute('data-modele-tissu-type'));
-          });
-        });
-*/
-
         // Empêcher la soumission du formulaire si rien n'est sélectionné
         form.addEventListener('submit', (e) => {
           if (!selectedModeleTissuInput.value) {
             e.preventDefault();
-            erreurPopup.style.display = 'flex'; // ou 'block' selon ton CSS
+            erreurPopup.style.display = 'flex'; 
           }
         });
 
@@ -247,19 +216,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             erreurPopup.style.display = 'none';
           }
         });
-
-
-
-        function saveSelection() {
-          localStorage.setItem('selectedModeleTissuId', savedModeleTissuId);
-        }
       });
     </script>
 
     <!-- BOUTTON RETOUR -->
     <script>
       function retourEtapePrecedente() {
-        // Exemple : tu es sur étape 8, tu veux revenir à étape 7
         window.location.href = "etape2-type-banquette.php";
       }
     </script>

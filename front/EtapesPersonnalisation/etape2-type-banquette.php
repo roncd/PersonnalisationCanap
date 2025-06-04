@@ -266,8 +266,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         // Initialiser le total dès le chargement de la page
         updateTotal();
-
-        // Sauvegarder les données au chargement de la page (au cas où elles sont modifiées)
         saveData();
       });
     </script>

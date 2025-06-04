@@ -401,9 +401,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['comment'])) {
       }
 
       function updateTotal() {
-        // Vérifier le contenu de allSelectedOptions
-        console.log("Contenu actuel de allSelectedOptions :", allSelectedOptions);
-
         // Calculer le total global
         totalPrice = allSelectedOptions.reduce((sum, option) => {
           const price = parseFloat(option.price || 0); // Vérifie que le prix est un nombre
@@ -430,8 +427,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['comment'])) {
 
       // Initialiser le total dès le chargement de la page
       updateTotal();
-
-      // Sauvegarder les données au chargement de la page (au cas où elles sont modifiées)
       saveData();
     });
   </script>

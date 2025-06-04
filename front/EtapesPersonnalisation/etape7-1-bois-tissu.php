@@ -186,10 +186,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['couleur_tissu_bois_id
         const selectedCouleurBoisInput = document.getElementById('selected-couleur_tissu_bois');
         const erreurPopup = document.getElementById('erreur-popup');
         const closeErreurBtn = erreurPopup.querySelector('.btn-noir');
-        const form = document.querySelector('form'); // Assure-toi que ton <form> a bien une balise identifiable
+        const form = document.querySelector('form'); 
 
         let selectedCouleurTissuBoisId = localStorage.getItem('selectedCouleurTissuBois') || '';
         let selected = selectedCouleurTissuBoisId !== '';
+
+        function saveSelection() {
+          localStorage.setItem('selectedCouleurTissuBois', selectedCouleurTissuBoisId);
+        }
 
         // Restaurer la sélection si elle existe
         options.forEach(img => {
@@ -212,7 +216,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['couleur_tissu_bois_id
           });
         });
 
-
         // Empêcher la soumission du formulaire si rien n'est sélectionné
         form.addEventListener('submit', (e) => {
           if (!selectedCouleurBoisInput.value) {
@@ -231,10 +234,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['couleur_tissu_bois_id
             erreurPopup.style.display = 'none';
           }
         });
-
-        function saveSelection() {
-          localStorage.setItem('selectedCouleurTissuBois', selectedCouleurTissuBoisId);
-        }
       });
 
       document.querySelectorAll('.color-options .option img').forEach(option => {
@@ -249,7 +248,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['couleur_tissu_bois_id
     <!-- BOUTTON RETOUR -->
     <script>
       function retourEtapePrecedente() {
-        // Exemple : tu es sur étape 8, tu veux revenir à étape 7
         window.location.href = "etape6-bois-dossier.php";
       }
     </script>

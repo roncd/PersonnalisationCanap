@@ -12,7 +12,7 @@ $id = $_GET['id'] ?? null;
 if (!$id) {
     $_SESSION['message'] = 'ID de la commande manquant.';
     $_SESSION['message_type'] = 'error';
-    header("Location: visualiser.php");
+    header("Location: index.php");
     exit();
 }
 
@@ -33,5 +33,5 @@ try {
     $_SESSION['message_type'] = 'error';
 }
 
-header("Location: visualiser.php");
+header("Location: index.php");
 exit();

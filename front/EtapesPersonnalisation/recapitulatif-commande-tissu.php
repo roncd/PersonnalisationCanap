@@ -272,14 +272,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['comment'])) {
         </div>
       </div>
 
-      <script>
-        function retourEtapePrecedente() {
-          // Exemple : tu es sur étape 8, tu veux revenir à étape 7
-          window.location.href = "etape7-tissu-mousse.php";
-        }
-      </script>
-
-
       <!-- Colonne de droite -->
       <div class="right-column">
         <section class="main-display-recap">
@@ -383,9 +375,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['comment'])) {
       }
 
       function updateTotal() {
-        // Vérifier le contenu de allSelectedOptions
-        console.log("Contenu actuel de allSelectedOptions :", allSelectedOptions);
-
         // Calculer le total global
         totalPrice = allSelectedOptions.reduce((sum, option) => {
           const price = parseFloat(option.price || 0); // Vérifie que le prix est un nombre
@@ -412,8 +401,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['comment'])) {
 
       // Initialiser le total dès le chargement de la page
       updateTotal();
-
-      // Sauvegarder les données au chargement de la page (au cas où elles sont modifiées)
       saveData();
     });
   </script>
@@ -425,13 +412,16 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['comment'])) {
       if (msg) {
         msg.style.transition = "opacity 1s ease";
         msg.style.opacity = "0";
-
-        // Optionnel : supprimer complètement du DOM après animation
         setTimeout(() => msg.remove(), 100);
       }
-    }, 5000); // 20 secondes
+    }, 5000);
   </script>
 
+<script>
+        function retourEtapePrecedente() {
+          window.location.href = "etape7-tissu-mousse.php";
+        }
+      </script>
 </body>
 
 </html>

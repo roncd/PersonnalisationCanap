@@ -379,7 +379,7 @@ label {
 
 /* ================== COMPTEURS ================== */
 .quantity-selector {
-  display: flex;
+  display: none;
   align-items: center;
   justify-content: center;
   gap: 60px;
@@ -397,6 +397,10 @@ label {
   border-radius: 10px;
 }
 
+.quantity-selector .btn-opacity {
+  opacity: 60%;
+}
+
 .quantity-selector input {
   width: 40px;
   text-align: center;
@@ -407,7 +411,7 @@ label {
 
 
 .quantity-selector1 {
-  display: flex;
+  display: none;
   align-items: center;
   justify-content: center;
   gap: 25px;
@@ -423,6 +427,10 @@ label {
   font-size: 18px;
   cursor: pointer;
   border-radius: 10px;
+}
+
+.quantity-selector1 .btn-opacity {
+  opacity: 60%;
 }
 
 .quantity-selector1 input {
