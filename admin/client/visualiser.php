@@ -53,7 +53,6 @@ $totalPages = ceil($totalCommandes / $limit);
     <main>
         <div class="container">
             <h2>Client</h2>
-            <?php require '../include/message.php'; ?>
 
             <div class="option">
                 <div>

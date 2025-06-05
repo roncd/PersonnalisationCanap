@@ -18,15 +18,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Tentative d'insertion dans la base de données
     try {
-        $stmt = $pdo->prepare("INSERT INTO couleur (nom) VALUES (?)");
+        $stmt = $pdo->prepare("INSERT INTO categorie (nom) VALUES (?)");
         $stmt->execute([$nom]);
 
-        $_SESSION['message'] = 'La couleur a été ajoutée avec succès !';
+        $_SESSION['message'] = 'La catégorie a été ajoutée avec succès !';
         $_SESSION['message_type'] = 'success';
         header("Location: visualiser.php");
         exit();
     } catch (Exception $e) {
-        $_SESSION['message'] = 'Erreur lors de l\'ajout de la couleur : ' . $e->getMessage();
+        $_SESSION['message'] = 'Erreur lors de l\'ajout de la catégorie : ' . $e->getMessage();
         $_SESSION['message_type'] = 'error';
     }
     header("Location: add.php");
@@ -40,7 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ajoute une couleur de tissu - bois</title>
+    <title>Ajoute une categorie de produit</title>
     <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../../styles/admin/ajout.css">
     <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
@@ -57,7 +57,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </header>
     <main>
         <div class="container">
-            <h2>Ajoute une couleur de tissu - bois</h2>
+            <h2>Ajoute une categorie de produit</h2>
             <?php require '../include/message.php'; ?>
             <div class="form">
                 <form class="formulaire-creation-compte" action="" method="POST" enctype="multipart/form-data">

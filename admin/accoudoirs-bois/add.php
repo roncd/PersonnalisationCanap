@@ -15,8 +15,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (empty($nom) || empty($price) || empty($img['name'])) {
         $_SESSION['message'] = 'Tous les champs sont requis !';
         $_SESSION['message_type'] = 'error';
-        header("Location: visualiser.php");
-        exit();
     } else {
         $uploadDir = '../uploads/accoudoirs-bois/';
         if (!is_dir($uploadDir)) {
@@ -27,8 +25,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (!in_array($img['type'], $allowedTypes)) {
             $_SESSION['message'] = 'Seuls les fichiers JPEG, PNG et GIF sont autorisés.';
             $_SESSION['message_type'] = 'error';
-            header("Location: visualiser.php");
-            exit();
         } else {
             $fileName = basename($img['name']);
             $uploadPath = $uploadDir . $fileName;
@@ -48,17 +44,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 } catch (Exception $e) {
                     $_SESSION['message'] = 'Erreur lors de l\'ajout de l\'accoudoir en bois: ' . $e->getMessage();
                     $_SESSION['message_type'] = 'error';
-                    header("Location: visualiser.php");
-                    exit();
                 }
             } else {
                 $_SESSION['message'] = 'Erreur lors de l\'upload de l\'image.';
                 $_SESSION['message_type'] = 'error';
-                header("Location: visualiser.php");
-                exit();
             }
         }
     }
+    header("Location: add.php");
+    exit();
 }
 ?>
 
@@ -71,7 +65,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <title>Ajoute un accoudoir bois</title>
     <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../../styles/admin/ajout.css">
-    
+
     <link rel="stylesheet" href="../../styles/buttons.css">
     <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
     <link rel="stylesheet" href="../../styles/message.css">
@@ -91,17 +85,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <form class="formulaire-creation-compte" action="" method="POST" enctype="multipart/form-data">
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="name">Nom</label>
+                            <label for="name">Nom <span class="required">*</span></label>
                             <input type="text" id="name" name="name" class="input-field" required>
                         </div>
                         <div class="form-group">
-                            <label for="price">Prix (en €)</label>
+                            <label for="price">Prix (en €) <span class="required">*</span></label>
                             <input type="number" id="price" name="price" class="input-field" required>
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="img">Image</label>
+                            <label for="img">Image <span class="required">*</span></label>
                             <input type="file" id="img" name="img" class="input-field" accept="image/*" onchange="loadFile(event)" required>
                             <img class="preview-img" id="output" />
                         </div>

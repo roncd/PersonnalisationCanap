@@ -25,8 +25,6 @@ $accoudoirbois = $stmt->fetch(PDO::FETCH_ASSOC);
 if (!$accoudoirbois) {
     $_SESSION['message'] = 'Accoudoir en bois introuvable.';
     $_SESSION['message_type'] = 'error';
-    header("Location: visualiser.php");
-    exit();
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -98,19 +96,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <form action="edit.php?id=<?php echo $accoudoirbois['id']; ?>" method="POST" enctype="multipart/form-data" class="formulaire-creation-compte">
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="name">Nom</label>
+                            <label for="name">Nom <span class="required">*</span></label>
                             <input type="text" id="name" name="name" class="input-field" value="<?php echo htmlspecialchars($accoudoirbois['nom']); ?>" required>
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="price">Prix (en €)</label>
+                            <label for="price">Prix (en €) <span class="required">*</span></label>
                             <input type="number" id="price" name="price" class="input-field" value="<?php echo htmlspecialchars($accoudoirbois['prix']); ?>" required>
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="img">Image (Laissez vide pour conserver l'image actuelle)</label>
+                            <label for="img">Image (Laissez vide pour conserver l'image actuelle) <span class="required">*</span></label>
                             <input type="file" id="img" name="img" class="input-field" accept="image/*" onchange="loadFile(event)" >
                             <img class="preview-img" src="../uploads/accoudoirs-bois/<?php echo htmlspecialchars($accoudoirbois['img']); ?>" id="output" />
                         </div>

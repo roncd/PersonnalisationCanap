@@ -38,6 +38,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             $_SESSION['message'] = 'La structure a été ajoutée avec succès !';
             $_SESSION['message_type'] = 'success';
+            header("Location: visualiser.php");
+            exit();
         } catch (Exception $e) {
             $_SESSION['message'] = 'Erreur lors de l\'ajout de la structure: ' . $e->getMessage();
             $_SESSION['message_type'] = 'error';
@@ -46,8 +48,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $_SESSION['message'] = 'Erreur lors de l\'upload de l\'image.';
         $_SESSION['message_type'] = 'error';
     }
-          // Redirection vers visualiser.php après traitement
-    header("Location: visualiser.php");
+    header("Location: add.php");
     exit();
 }
 
@@ -63,7 +64,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link rel="stylesheet" href="../../styles/admin/ajout.css">
     <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
     <link rel="stylesheet" href="../../styles/message.css">
-    
+
     <link rel="stylesheet" href="../../styles/buttons.css">
     <script src="../../script/previewImage.js"></script>
 </head>
@@ -81,13 +82,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <form action="" method="POST" enctype="multipart/form-data" class="formulaire-creation-compte">
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="name">Nom</label>
+                            <label for="name">Nom <span class="required">*</span></label>
                             <input type="text" id="name" name="name" class="input-field" required>
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="img">Image</label>
+                            <label for="img">Image <span class="required">*</span></label>
                             <input type="file" id="img" name="img" class="input-field" accept="image/*" onchange="loadFile(event)" required>
                             <img class="preview-img" id="output" />
                         </div>
@@ -95,7 +96,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <div class="button-section">
                         <div class="buttons">
                             <button type="button" id="btn-retour" class="btn-beige" onclick="history.go(-1)">Retour</button>
-                            <input type="submit"  class="btn-noir" value="Ajouter">
+                            <input type="submit" class="btn-noir" value="Ajouter">
                         </div>
                     </div>
                 </form>

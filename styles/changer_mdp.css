@@ -56,3 +56,7 @@ body {
 .password-page button {
     margin-top: 1rem;
 }
+
+.password-page .required {
+    color: red;
+}

@@ -100,21 +100,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </div>
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="nom">Nom</label>
+                            <label for="nom">Nom <span class="required">*</span></label>
                             <input type="name" id="nom" name="nom" class="input-field" value="<?php echo htmlspecialchars($utilisateur['nom']); ?>" required>
                         </div>
                         <div class="form-group">
-                            <label for="prenom">Prénom</label>
+                            <label for="prenom">Prénom <span class="required">*</span></label>
                             <input type="name" id="prenom" name="prenom" class="input-field" value="<?php echo htmlspecialchars($utilisateur['prenom']); ?>" required>
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="email">Mail</label>
+                            <label for="email">Mail <span class="required">*</span></label>
                             <input type="email" id="email" name="mail" class="input-field" value="<?php echo htmlspecialchars($utilisateur['mail']); ?>" required>
                         </div>
                         <div class="form-group">
-                        <label for="mdp">Mot de passe</label>
+                        <label for="mdp">Mot de passe <span class="required">*</span></label>
                             <a href="../include/changer_mdp.php?id=<?php echo $utilisateur['id']; ?>"
                                 class="input-field"
                                 style=" text-decoration: none; color: black; text-align: center;">

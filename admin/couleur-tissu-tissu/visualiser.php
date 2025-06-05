@@ -52,8 +52,6 @@ $totalPages = ceil($totalCommandes / $limit);
     <main>
         <div class="container">
             <h2>Couleur tissu</h2>
-            <?php require '../include/message.php'; ?>
-
             <div class="option">
                 <div class="section-button">
                     <div>

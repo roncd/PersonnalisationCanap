@@ -72,13 +72,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <div class="message <?= $messageType ?? '' ?>"><?= htmlspecialchars($message) ?></div>
                 <?php endif; ?>
                 <form method="POST">
-                    <label for="ancien">Ancien mot de passe :</label>
+                    <label for="ancien">Ancien mot de passe <span class="required">*</span></label>
                     <input type="password" id="ancien" name="ancien" required>
 
-                    <label for="nouveau">Nouveau mot de passe :</label>
+                    <label for="nouveau">Nouveau mot de passe <span class="required">*</span></label>
                     <input type="password" id="nouveau" name="nouveau" required>
 
-                    <label for="confirmer">Confirmer le mot de passe :</label>
+                    <label for="confirmer">Confirmer le mot de passe <span class="required">*</span></label>
                     <input type="password" id="confirmer" name="confirmer" required>
 
                     <div class="button-footer">

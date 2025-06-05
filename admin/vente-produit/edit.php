@@ -10,26 +10,24 @@ if (!isset($_SESSION['id'])) {
 $id = $_GET['id'] ?? null;
 
 if (!$id) {
-    $_SESSION['message'] = 'ID du motif du coussin manquant.';
+    $_SESSION['message'] = 'ID du produit manquant.';
     $_SESSION['message_type'] = 'error';
     header("Location: visualiser.php");
     exit();
 }
 
-$stmt = $pdo->prepare("SELECT id, nom FROM couleur_tissu");
+$stmt = $pdo->prepare("SELECT id, nom FROM categorie");
 $stmt->execute();
-$couleurs = $stmt->fetchAll(PDO::FETCH_ASSOC);
+$categories = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-
-
-// Récupérer les données actuelles du motif de tissu
-$stmt = $pdo->prepare("SELECT * FROM motif_tissu WHERE  id = :id");
+// Récupérer les données actuelles du produit
+$stmt = $pdo->prepare("SELECT * FROM vente_produit WHERE  id = :id");
 $stmt->bindValue(':id', $id, PDO::PARAM_INT);
 $stmt->execute();
-$motif = $stmt->fetch(PDO::FETCH_ASSOC);
+$produit = $stmt->fetch(PDO::FETCH_ASSOC);
 
-if (!$motif) {
-    $_SESSION['message'] = 'Motif du coussin introuvable.';
+if (!$produit) {
+    $_SESSION['message'] = 'Produit introuvable.';
     $_SESSION['message_type'] = 'error';
     header("Location: visualiser.php");
     exit();
@@ -39,21 +37,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nom = trim($_POST['name']);
     $prix = trim($_POST['prix']);
     $img = $_FILES['img'];
-    $id_couleur = trim($_POST['id_couleur']);
+    $id_categorie = trim($_POST['id_categorie']);
 
     if (empty($nom)) {
         $_SESSION['message'] = 'Le nom est requis.';
         $_SESSION['message_type'] = 'error';
     } else {
         // Garder l'image actuelle si aucune nouvelle image n'est téléchargée
-        $fileName = $motif['img'];
+        $fileName = $produit['img'];
         if (!empty($img['name'])) {
             $allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/jpg'];
             if (!in_array($img['type'], $allowedTypes)) {
                 $_SESSION['message'] = 'Seuls les fichiers JPEG, PNG et GIF sont autorisés.';
                 $_SESSION['message_type'] = 'error';
             } else {
-                $uploadDir = '../uploads/motif-tissu/'; // Dossier pour les motifs de tissu
+                $uploadDir = '../uploads/produit/'; // Dossier pour les prdouits 
                 if (!is_dir($uploadDir)) {
                     mkdir($uploadDir, 0777, true);
                 }
@@ -67,9 +65,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         if (!isset($_SESSION['message'])) {
-            $stmt = $pdo->prepare("UPDATE motif_tissu SET nom = ?, prix = ?, img = ?, id_couleur_tissu = ? WHERE id = ?");
-            $stmt->execute([$nom, $prix, $fileName, $id_couleur, $id]);
-            $_SESSION['message'] = 'Motif du coussin mis à jour avec succès!';
+            $stmt = $pdo->prepare("UPDATE vente_produit SET nom = ?, prix = ?, img = ?, id_categorie = ? WHERE id = ?");
+            $stmt->execute([$nom, $prix, $fileName, $id_categorie, $id]);
+            $_SESSION['message'] = 'Produit mis à jour avec succès!';
             $_SESSION['message_type'] = 'success';
             header("Location: visualiser.php");
             exit();
@@ -83,7 +81,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Modifier le motif de coussin - tissu</title>
+    <title>Modifier le produit </title>
     <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../../styles/admin/ajout.css">
     <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
@@ -94,41 +92,42 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 
 <body>
+
     <header>
         <?php require '../squelette/header.php'; ?>
     </header>
 
     <main>
         <div class="container">
-            <h2>Modifier le Motif de coussin - tissu</h2>
+            <h2>Modifier le produit</h2>
             <?php require '../include/message.php'; ?>
             <div class="form">
                 <form action="edit.php?id=<?= $id ?>" method="POST" enctype="multipart/form-data" class="formulaire-creation-compte">
                     <div class="form-row">
                         <div class="form-group">
                             <label for="name">Nom <span class="required">*</span></label>
-                            <input type="text" id="name" name="name" class="input-field" value="<?= htmlspecialchars($motif['nom']); ?>" required>
+                            <input type="text" id="name" name="name" class="input-field" value="<?= htmlspecialchars($produit['nom']); ?>" required>
                         </div>
                         <div class="form-group">
                             <label for="prix">Prix <span class="required">*</span></label>
-                            <input type="text" id="prix" name="prix" class="input-field" value="<?= htmlspecialchars($motif['prix']); ?>" required>
+                            <input type="text" id="prix" name="prix" class="input-field" value="<?= htmlspecialchars($produit['prix']); ?>" required>
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group">
                             <label for="img">Image (Laissez vide pour conserver l'image actuelle) <span class="required">*</span></label>
                             <input type="file" id="img" name="img" class="input-field" accept="image/*" onchange="loadFile(event)" >
-                            <img class="preview-img" src="../uploads/motif-tissu/<?php echo htmlspecialchars($motif['img']); ?>" id="output" />
+                            <img class="preview-img" src="../uploads/produit/<?php echo htmlspecialchars($produit['img']); ?>" id="output" />
                          </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="id_couleur">Couleur du tissu associé</label>
-                            <select class="input-field" id="id_couleur" name="id_couleur">
-                                <?php foreach ($couleurs as $couleur): ?>
-                                    <option value="<?= htmlspecialchars($couleur['id']) ?>"
-                                        <?= ($couleur['id'] == $motif['id_couleur_tissu']) ? 'selected' : '' ?>>
-                                        <?= htmlspecialchars($couleur['nom']) ?>
+                            <label for="id_categorie">Catégorie du produit <span class="required">*</span></label>
+                            <select class="input-field" id="id_categorie" name="id_categorie">
+                                <?php foreach ($categories as $categorie): ?>
+                                    <option value="<?= htmlspecialchars($categorie['id']) ?>"
+                                        <?= ($categorie['id'] == $produit['id_categorie']) ? 'selected' : '' ?>>
+                                        <?= htmlspecialchars($categorie['nom']) ?>
                                     </option>
                                 <?php endforeach; ?>
                             </select>

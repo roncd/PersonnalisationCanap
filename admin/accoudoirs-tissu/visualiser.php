@@ -52,7 +52,6 @@ $totalPages = ceil($totalCommandes / $limit);
     <main>
         <div class="container">
             <h2>Accoudoir tissu</h2>
-            <?php require '../include/message.php'; ?>
             <div class="option">
                 <div class="section-button">
                     <div>

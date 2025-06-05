@@ -113,12 +113,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <form action="" method="POST" class="formulaire-creation-compte">
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="nom">Nom</label>
+                            <label for="nom">Nom <span class="required">*</span></label>
                             <input type="text" id="nom" name="nom" class="input-field"
                                 value="<?= htmlspecialchars($client['nom']) ?>" required>
                         </div>
                         <div class="form-group">
-                            <label for="prenom">Prénom</label>
+                            <label for="prenom">Prénom <span class="required">*</span></label>
                             <input type="text" id="prenom" name="prenom" class="input-field"
                                 value="<?= htmlspecialchars($client['prenom']) ?>" required>
                         </div>
@@ -126,12 +126,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="email">Mail</label>
+                            <label for="email">Mail <span class="required">*</span></label>
                             <input type="email" id="email" name="mail" class="input-field"
                                 value="<?= htmlspecialchars($client['mail']) ?>" required>
                         </div>
                         <div class="form-group">
-                            <label for="tel">Téléphone</label>
+                            <label for="tel">Téléphone <span class="required">*</span></label>
                             <input type="tel" id="tel" name="tel" class="input-field"
                                 value="<?= htmlspecialchars($client['tel']) ?>" required>
                         </div>
@@ -149,7 +149,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="adresse">Adresse</label>
+                            <label for="adresse">Adresse de livraison <span class="required">*</span></label>
                             <input type="text" id="adresse" name="adresse" class="input-field"
                                 value="<?= htmlspecialchars($client['adresse']) ?>" required>
                         </div>
@@ -162,12 +162,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="codepostal">Code postal</label>
+                            <label for="codepostal">Code postal <span class="required">*</span></label>
                             <input type="text" id="codepostal" name="codepostal" class="input-field"
                                 value="<?= htmlspecialchars($client['codepostal']) ?>" required>
                         </div>
                         <div class="form-group">
-                            <label for="ville">Ville</label>
+                            <label for="ville">Ville <span class="required">*</span></label>
                             <input type="text" id="ville" name="ville" class="input-field"
                                 value="<?= htmlspecialchars($client['ville']) ?>" required>
                         </div>
