@@ -6,9 +6,10 @@
 
 /* ================== BUTTONS ================== */
 
-/* Bouton beige */
+/* Bouton */
 .btn-noir,
-.btn-beige {
+.btn-beige,
+.btn-grey {
     background-color: #997765;
     color: #fff;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
@@ -28,9 +29,14 @@
     color: #fff;
 }
 
+.btn-grey {
+    background-color: #f4f1f1;
+    color: black;
+}
 /* Effet zoom au survol */
 .btn-beige:hover,
-.btn-noir:hover {
+.btn-noir:hover,
+.btn-grey:hover {
     box-shadow: 0 6px 10px rgba(0, 0, 0, 0.3);
     transform: translateY(-3px);
     transition: all 0.3s ease;

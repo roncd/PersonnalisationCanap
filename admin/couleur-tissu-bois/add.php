@@ -21,7 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     // Dossier d'upload
-    $uploadDir = '../uploads/motif-banquette-bois/';
+    $uploadDir = '../uploads/couleur-tissu-bois/';
     if (!is_dir($uploadDir)) {
         mkdir($uploadDir, 0777, true);
     }

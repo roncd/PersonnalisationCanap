@@ -60,7 +60,7 @@ if (!isset($_SESSION['id'])) {
                         <a href="../accoudoirs-bois/add.php" class="btn">Accoudoirs</a>
                         <a href="../dossier-bois/add.php" class="btn">Dossier</a>
                         <a href="../couleur/add.php" class="btn">Couleur tissu</a>
-                        <a href="../motif-banquette-bois/add.php" class="btn">Motif banquette</a>
+                        <a href="../couleur-tissu-bois/add.php" class="btn">Motif tissu</a>
                         <a href="../motif-bois/add.php" class="btn">Motif coussin</a>
                     </div>
                 </section>

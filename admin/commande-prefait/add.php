@@ -52,36 +52,36 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $idDossierTissu = trim($_POST['dossiertissu']) ?: null;
     $nbAccoudoir = trim($_POST['nb_accoudoir']) ?: null;
     $nom = trim($_POST['nom']) ?: null;
- 
- $imagePath = null; // Déclarer AVANT le bloc
 
-if (isset($_FILES['img']) && $_FILES['img']['error'] === 0) {
-    $uploadDir = '../uploads/canape-prefait/';
-    if (!is_dir($uploadDir)) {
-        mkdir($uploadDir, 0777, true);
-    }
+    $imagePath = null; // Déclarer AVANT le bloc
 
-    $tmpName = $_FILES['img']['tmp_name'];
-    $originalName = basename($_FILES['img']['name']);
-    $extension = strtolower(pathinfo($originalName, PATHINFO_EXTENSION));
-    $allowedExtensions = ['jpg', 'jpeg', 'png', 'webp'];
+    if (isset($_FILES['img']) && $_FILES['img']['error'] === 0) {
+        $uploadDir = '../uploads/canape-prefait/';
+        if (!is_dir($uploadDir)) {
+            mkdir($uploadDir, 0777, true);
+        }
 
-    if (in_array($extension, $allowedExtensions)) {
-        $baseName = pathinfo($originalName, PATHINFO_FILENAME);
-        $imageName = $baseName . '_' . time() . '.' . $extension;
-        $destination = $uploadDir . $imageName;
+        $tmpName = $_FILES['img']['tmp_name'];
+        $originalName = basename($_FILES['img']['name']);
+        $extension = strtolower(pathinfo($originalName, PATHINFO_EXTENSION));
+        $allowedExtensions = ['jpg', 'jpeg', 'png', 'webp'];
 
-        if (move_uploaded_file($tmpName, $destination)) {
-            $imagePath = $imageName; // 👈 C’est ça qui manquait
+        if (in_array($extension, $allowedExtensions)) {
+            $baseName = pathinfo($originalName, PATHINFO_FILENAME);
+            $imageName = $baseName . '_' . time() . '.' . $extension;
+            $destination = $uploadDir . $imageName;
+
+            if (move_uploaded_file($tmpName, $destination)) {
+                $imagePath = $imageName; // 👈 C’est ça qui manquait
+            } else {
+                $_SESSION['message'] = 'Erreur lors du téléchargement de l\'image.';
+                $_SESSION['message_type'] = 'error';
+            }
         } else {
-            $_SESSION['message'] = 'Erreur lors du téléchargement de l\'image.';
+            $_SESSION['message'] = 'Format de fichier non autorisé.';
             $_SESSION['message_type'] = 'error';
         }
-    } else {
-        $_SESSION['message'] = 'Format de fichier non autorisé.';
-        $_SESSION['message_type'] = 'error';
     }
-}
 
 
     if (empty($prix) || empty($prixDimensions) || empty($longueurA)) {
@@ -98,11 +98,28 @@ if (isset($_FILES['img']) && $_FILES['img']['error'] === 0) {
             ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
             $stmt->execute([
-                $prix, $prixDimensions, $idStructure, $longueurA, $longueurB, $longueurC,
-                $idBanquette, $idMousse, $idCouleurBois, $idDecoration,
-                $idAccoudoirBois, $idDossierBois, $idTissuBois, $idMotifBois,
-                $idModele, $idCouleurTissu, $idMotifTissu, $idDossierTissu, $idAccoudoirTissu,
-                $nbAccoudoir, $nom, $imagePath
+                $prix,
+                $prixDimensions,
+                $idStructure,
+                $longueurA,
+                $longueurB,
+                $longueurC,
+                $idBanquette,
+                $idMousse,
+                $idCouleurBois,
+                $idDecoration,
+                $idAccoudoirBois,
+                $idDossierBois,
+                $idTissuBois,
+                $idMotifBois,
+                $idModele,
+                $idCouleurTissu,
+                $idMotifTissu,
+                $idDossierTissu,
+                $idAccoudoirTissu,
+                $nbAccoudoir,
+                $nom,
+                $imagePath
             ]);
 
             $_SESSION['message'] = 'La commande préfaite a été ajoutée avec succès.';
@@ -139,267 +156,206 @@ if (isset($_FILES['img']) && $_FILES['img']['error'] === 0) {
     <header>
         <?php require '../squelette/header.php'; ?>
     </header>
-    <main> 
+    <main>
         <div class="container">
-            <h2>Ajoute une commande gregrgrpréfaite</h2>
-<?php require '../include/message.php'; ?>
-<div class="form">
-    <form class="formulaire-creation-compte" action="" method="POST" enctype="multipart/form-data">
-        <div class="form-row">
-            <div class="form-group">
-                <label for="nom">Nom de la commande</label>
-                <input type="text" id="nom" name="nom" class="input-field">
+            <h2>Ajoute une commande préfaite</h2>
+            <?php require '../include/message.php'; ?>
+            <div class="form">
+                <form class="formulaire-creation-compte" action="" method="POST" enctype="multipart/form-data">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="nom">Nom du salon</label>
+                            <input type="text" id="nom" name="nom" class="input-field">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="img">Image</label>
+                            <input type="file" id="img" name="img" class="input-field" accept="image/*" onchange="loadFile(event)" required>
+                            <img class="preview-img" id="output" />
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="prix">Prix (€)</label>
+                            <input type="number" step="0.01" id="prix" name="prix" class="input-field" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="prix_dimensions">Prix dimensions (€)</label>
+                            <input type="number" step="0.01" id="prix_dimensions" name="prix_dimensions" class="input-field" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="structure">Référence Structure</label>
+                            <select id="structure" name="structure" class="input-field" required>
+                                <option value="">-- Choisir une structure --</option>
+                                <?php foreach ($structures as $s): ?>
+                                    <option value="<?= $s['id'] ?>"><?= htmlspecialchars($s['nom']) ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="banquette">Référence Type de banquette</label>
+                            <select id="banquette" name="banquette" class="input-field">
+                                <option value="">-- Choisir --</option>
+                                <?php foreach ($banquettes as $b): ?>
+                                    <option value="<?= $b['id'] ?>"><?= htmlspecialchars($b['nom']) ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="mousse">Référence Mousse</label>
+                            <select id="mousse" name="mousse" class="input-field">
+                                <option value="">-- Choisir --</option>
+                                <?php foreach ($mousses as $item): ?>
+                                    <option value="<?= $item['id'] ?>"><?= htmlspecialchars($item['nom']) ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="couleurbois">Référence Couleur banquette - bois</label>
+                            <select id="couleurbois" name="couleurbois" class="input-field">
+                                <option value="">-- Choisir --</option>
+                                <?php foreach ($couleursbois as $item): ?>
+                                    <option value="<?= $item['id'] ?>"><?= htmlspecialchars($item['nom']) ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="decoration">Référence Décoration - bois</label>
+                            <select id="decoration" name="decoration" class="input-field">
+                                <option value="">-- Choisir --</option>
+                                <?php foreach ($decorations as $item): ?>
+                                    <option value="<?= $item['id'] ?>"><?= htmlspecialchars($item['nom']) ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="accoudoirbois">Référence Accoudoir - bois</label>
+                            <select id="accoudoirbois" name="accoudoirbois" class="input-field">
+                                <option value="">-- Choisir --</option>
+                                <?php foreach ($accoudoirsbois as $item): ?>
+                                    <option value="<?= $item['id'] ?>"><?= htmlspecialchars($item['nom']) ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="dossierbois">Référence Dossier - bois</label>
+                            <select id="dossierbois" name="dossierbois" class="input-field">
+                                <option value="">-- Choisir --</option>
+                                <?php foreach ($dossiersbois as $item): ?>
+                                    <option value="<?= $item['id'] ?>"><?= htmlspecialchars($item['nom']) ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="couleurtissubois">Référence Motif tissu - bois</label>
+                            <select id="couleurtissubois" name="couleurtissubois" class="input-field">
+                                <option value="">-- Choisir --</option>
+                                <?php foreach ($couleurstissubois as $item): ?>
+                                    <option value="<?= $item['id'] ?>"><?= htmlspecialchars($item['nom']) ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="motifbois">Référence Motif coussin - bois</label>
+                            <select id="motifbois" name="motifbois" class="input-field">
+                                <option value="">-- Choisir --</option>
+                                <?php foreach ($motifsbois as $item): ?>
+                                    <option value="<?= $item['id'] ?>"><?= htmlspecialchars($item['nom']) ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="modele">Référence Modèle banquette - tissu</label>
+                            <select id="modele" name="modele" class="input-field">
+                                <option value="">-- Choisir --</option>
+                                <?php foreach ($modeles as $item): ?>
+                                    <option value="<?= $item['id'] ?>"><?= htmlspecialchars($item['nom']) ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="couleurtissu">Référence Couleur banquette - tissu</label>
+                            <select id="couleurtissu" name="couleurtissu" class="input-field">
+                                <option value="">-- Choisir --</option>
+                                <?php foreach ($couleurstissu as $item): ?>
+                                    <option value="<?= $item['id'] ?>"><?= htmlspecialchars($item['nom']) ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="motiftissu">Référence Motif coussin - tissu</label>
+                            <select id="motiftissu" name="motiftissu" class="input-field">
+                                <option value="">-- Choisir --</option>
+                                <?php foreach ($motifstissu as $item): ?>
+                                    <option value="<?= $item['id'] ?>"><?= htmlspecialchars($item['nom']) ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="accoudoirtissu">Référence Accoudoir - tissu</label>
+                            <select id="accoudoirtissu" name="accoudoirtissu" class="input-field">
+                                <option value="">-- Choisir --</option>
+                                <?php foreach ($accoudoirstissu as $item): ?>
+                                    <option value="<?= $item['id'] ?>"><?= htmlspecialchars($item['nom']) ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="dossiertissu">Référence Dossier - tissu</label>
+                            <select id="dossiertissu" name="dossiertissu" class="input-field">
+                                <option value="">-- Choisir --</option>
+                                <?php foreach ($dossierstissu as $item): ?>
+                                    <option value="<?= $item['id'] ?>"><?= htmlspecialchars($item['nom']) ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="nb_accoudoir">Nombre d'accoudoirs</label>
+                            <input type="number" id="nb_accoudoir" name="nb_accoudoir" class="input-field">
+                        </div>
+                    </div>
+
+                    <div class="button-section">
+                        <div class="buttons">
+                            <button type="button" id="btn-retour" class="btn-beige" onclick="history.go(-1)">Retour</button>
+                            <input type="submit" class="btn-noir" value="Ajouter"></input>
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
-
-         <!-- Champ de fichier si tu veux permettre un upload d'image (ex: image principale) -->
-   <div class="form-row">
-        <div class="form-group">
-                <label for="img">Image</label>
-                <input type="file" id="img" name="img" class="input-field" accept="image/*" onchange="loadFile(event)" required>
-                <img class="preview-img" id="output" />
-            </div>
-    </div>
-
-        <div class="form-row">
-            <div class="form-group">
-                <label for="prix">Prix (€)</label>
-                <input type="number" step="0.01" id="prix" name="prix" class="input-field" required>
-            </div>
-        </div>
-
-        <div class="form-row">
-            <div class="form-group">
-                <label for="prix_dimensions">Prix dimensions (€)</label>
-                <input type="number" step="0.01" id="prix_dimensions" name="prix_dimensions" class="input-field" required>
-            </div>
-        </div>
-
-        <div class="form-row">
-            <div class="form-group">
-                <label for="longueurA">Longueur A</label>
-                <input type="number" id="longueurA" name="longueurA" class="input-field" required>
-            </div>
-        </div>
-
-        <div class="form-row">
-            <div class="form-group">
-                <label for="longueurB">Longueur B</label>
-                <input type="number" id="longueurB" name="longueurB" class="input-field">
-            </div>
-        </div>
-
-        <div class="form-row">
-            <div class="form-group">
-                <label for="longueurC">Longueur C</label>
-                <input type="number" id="longueurC" name="longueurC" class="input-field">
-            </div>
-        </div>
-
-        <!-- Sélections dynamiques (exemple pour structure) -->
-        <div class="form-row">
-            <div class="form-group">
-                <label for="structure">Structure</label>
-                <select id="structure" name="structure" class="input-field" required>
-                    <option value="">-- Choisir une structure --</option>
-                    <?php foreach ($structures as $s): ?>
-                        <option value="<?= $s['id'] ?>"><?= htmlspecialchars($s['nom']) ?></option>
-                    <?php endforeach; ?>
-                </select>
-            </div>
-        </div>
-
-        <div class="form-row">
-            <div class="form-group">
-                <label for="banquette">Type de banquette</label>
-                <select id="banquette" name="banquette" class="input-field">
-                    <option value="">-- Choisir --</option>
-                    <?php foreach ($banquettes as $b): ?>
-                        <option value="<?= $b['id'] ?>"><?= htmlspecialchars($b['nom']) ?></option>
-                    <?php endforeach; ?>
-                </select>
-            </div>
-        </div>
-
-        <div class="form-row">
-            <div class="form-group">
-                <label for="mousse">Mousse</label>
-                <select id="mousse" name="mousse" class="input-field">
-                    <option value="">-- Choisir --</option>
-                    <?php foreach ($mousses as $item): ?>
-                        <option value="<?= $item['id'] ?>"><?= htmlspecialchars($item['nom']) ?></option>
-                    <?php endforeach; ?>
-                </select>
-            </div>
-        </div>
-
-
-<!-- Couleur bois -->
-<div class="form-row">
-<div class="form-group">
-    <label for="couleurbois">Couleur du bois</label>
-    <select id="couleurbois" name="couleurbois" class="input-field">
-        <option value="">-- Choisir --</option>
-        <?php foreach ($couleursbois as $item): ?>
-            <option value="<?= $item['id'] ?>"><?= htmlspecialchars($item['nom']) ?></option>
-        <?php endforeach; ?>
-    </select>
-</div>
-</div>
-
-
-<!-- Décoration -->
-<div class="form-row">
-<div class="form-group">
-    <label for="decoration">Décoration</label>
-    <select id="decoration" name="decoration" class="input-field">
-        <option value="">-- Choisir --</option>
-        <?php foreach ($decorations as $item): ?>
-            <option value="<?= $item['id'] ?>"><?= htmlspecialchars($item['nom']) ?></option>
-        <?php endforeach; ?>
-    </select>
-</div>
-</div>
-
-
-<!-- Accoudoir bois -->
-<div class="form-row">
-<div class="form-group">
-    <label for="accoudoirbois">Accoudoir bois</label>
-    <select id="accoudoirbois" name="accoudoirbois" class="input-field">
-        <option value="">-- Choisir --</option>
-        <?php foreach ($accoudoirsbois as $item): ?>
-            <option value="<?= $item['id'] ?>"><?= htmlspecialchars($item['nom']) ?></option>
-        <?php endforeach; ?>
-    </select>
-</div>
-</div>
-
-
-<!-- Dossier bois -->
-<div class="form-row">
-<div class="form-group">
-    <label for="dossierbois">Dossier bois</label>
-    <select id="dossierbois" name="dossierbois" class="input-field">
-        <option value="">-- Choisir --</option>
-        <?php foreach ($dossiersbois as $item): ?>
-            <option value="<?= $item['id'] ?>"><?= htmlspecialchars($item['nom']) ?></option>
-        <?php endforeach; ?>
-    </select>
-</div>
-</div>
-
-
-<!-- Couleur tissu bois -->
-<div class="form-row">
-<div class="form-group">
-    <label for="couleurtissubois">Couleur tissu (bois)</label>
-    <select id="couleurtissubois" name="couleurtissubois" class="input-field">
-        <option value="">-- Choisir --</option>
-        <?php foreach ($couleurstissubois as $item): ?>
-            <option value="<?= $item['id'] ?>"><?= htmlspecialchars($item['nom']) ?></option>
-        <?php endforeach; ?>
-    </select>
-</div>
-</div>
-
-
-<!-- Motif bois -->
-<div class="form-row">
-<div class="form-group">
-    <label for="motifbois">Motif bois</label>
-    <select id="motifbois" name="motifbois" class="input-field">
-        <option value="">-- Choisir --</option>
-        <?php foreach ($motifsbois as $item): ?>
-            <option value="<?= $item['id'] ?>"><?= htmlspecialchars($item['nom']) ?></option>
-        <?php endforeach; ?>
-    </select>
-</div>
-</div>
-
-
-<!-- Modèle -->
-<div class="form-row">
-<div class="form-group">
-    <label for="modele">Modèle</label>
-    <select id="modele" name="modele" class="input-field">
-        <option value="">-- Choisir --</option>
-        <?php foreach ($modeles as $item): ?>
-            <option value="<?= $item['id'] ?>"><?= htmlspecialchars($item['nom']) ?></option>
-        <?php endforeach; ?>
-    </select>
-</div>
-</div>
-
-
-<!-- Couleur tissu -->
-<div class="form-row">
-<div class="form-group">
-    <label for="couleurtissu">Couleur tissu</label>
-    <select id="couleurtissu" name="couleurtissu" class="input-field">
-        <option value="">-- Choisir --</option>
-        <?php foreach ($couleurstissu as $item): ?>
-            <option value="<?= $item['id'] ?>"><?= htmlspecialchars($item['nom']) ?></option>
-        <?php endforeach; ?>
-    </select>
-</div>
-</div>
-
-
-<!-- Motif tissu -->
-<div class="form-row">
-<div class="form-group">
-    <label for="motiftissu">Motif tissu</label>
-    <select id="motiftissu" name="motiftissu" class="input-field">
-        <option value="">-- Choisir --</option>
-        <?php foreach ($motifstissu as $item): ?>
-            <option value="<?= $item['id'] ?>"><?= htmlspecialchars($item['nom']) ?></option>
-        <?php endforeach; ?>
-    </select>
-</div>
-</div>
-
-
-<!-- Accoudoir tissu -->
-<div class="form-row">
-<div class="form-group">
-    <label for="accoudoirtissu">Accoudoir tissu</label>
-    <select id="accoudoirtissu" name="accoudoirtissu" class="input-field">
-        <option value="">-- Choisir --</option>
-        <?php foreach ($accoudoirstissu as $item): ?>
-            <option value="<?= $item['id'] ?>"><?= htmlspecialchars($item['nom']) ?></option>
-        <?php endforeach; ?>
-    </select>
-</div>
-</div>
-
-
-<!-- Dossier tissu -->
-<div class="form-row">
-<div class="form-group">
-    <label for="dossiertissu">Dossier tissu</label>
-    <select id="dossiertissu" name="dossiertissu" class="input-field">
-        <option value="">-- Choisir --</option>
-        <?php foreach ($dossierstissu as $item): ?>
-            <option value="<?= $item['id'] ?>"><?= htmlspecialchars($item['nom']) ?></option>
-        <?php endforeach; ?>
-    </select>
-</div>
-</div>
-    
-        <div class="form-row">
-            <div class="form-group">
-                <label for="nb_accoudoir">Nombre d'accoudoirs</label>
-                <input type="number" id="nb_accoudoir" name="nb_accoudoir" class="input-field">
-            </div>
-        </div>
-
-        <div class="form-row">
-            <button type="submit" class="btn-noir">Ajouter</button>
-        </div>
-    </form>
-</div>
-</div>
     </main>
 </body>
 <footer>

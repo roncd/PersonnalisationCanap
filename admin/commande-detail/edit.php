@@ -148,7 +148,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <form action="edit.php?id=<?php echo $commande['id']; ?>" method="POST" enctype="multipart/form-data" class="formulaire-creation-compte">
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="client">ID Client</label>
+                            <label for="client">Référence Client</label>
                             <select class="input-field" id="client" name="client">
                                 <option value="">-- Sélectionnez un client --</option>
                                 <?php foreach ($clients as $client): ?>
@@ -159,8 +159,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 <?php endforeach; ?>
                             </select>
                         </div>
-                    </div>
-                    <div class="form-row">
                         <div class="form-group">
                             <label for="prix">Prix total (en €)</label>
                             <input type="number" id="prix" name="prix" class="input-field" value="<?php echo htmlspecialchars($commande['prix']); ?>" required>
@@ -177,8 +175,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <label for="date">Date de création</label>
                             <input type="datetime-local" id="date" name="date" value="<?php echo htmlspecialchars($commande['date']); ?>" class="input-field" required>
                         </div>
-                    </div>
-                    <div class="form-row">
                         <div class="form-group">
                             <label for="statut">Statut de la commande</label>
                             <select class="input-field" id="statut" name="statut">
@@ -190,7 +186,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </div>
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="structure">ID Structure</label>
+                            <label for="structure">Référence Structure</label>
                             <select class="input-field" id="structure" name="structure">
                                 <option value="">-- Sélectionnez une structure --</option>
                                 <?php foreach ($structures as $structure): ?>
@@ -201,28 +197,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 <?php endforeach; ?>
                             </select>
                         </div>
-                    </div>
-                    <div class="form-row">
                         <div class="form-group">
-                            <label for="longueurA">Longueur A :</label>
+                            <label for="longueurA">Longueur banquette A :</label>
                             <input type="number" id="longueurA" name="longueurA" class="input-field" value="<?php echo htmlspecialchars($commande['longueurA']); ?>" required>
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="longueurB">Longueur B :</label>
+                            <label for="longueurB">Longueur banquette B :</label>
                             <input type="number" id="longueurB" name="longueurB" class="input-field" value="<?php echo htmlspecialchars($commande['longueurB']); ?>">
                         </div>
-                    </div>
-                    <div class="form-row">
                         <div class="form-group">
-                            <label for="longueurC">Longueur C :</label>
+                            <label for="longueurC">Longueur banquette C :</label>
                             <input type="number" id="longueurC" name="longueurC" class="input-field" value="<?php echo htmlspecialchars($commande['longueurC']); ?>">
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="banquette">ID Type banquette</label>
+                            <label for="banquette">Référence Type banquette</label>
                             <select class="input-field" id="banquette" name="banquette">
                                 <option value="">-- Sélectionnez une banquette --</option>
                                 <?php foreach ($banquettes as $banquette): ?>
@@ -233,10 +225,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 <?php endforeach; ?>
                             </select>
                         </div>
-                    </div>
-                    <div class="form-row">
                         <div class="form-group">
-                            <label for="mousse">ID Mousse</label>
+                            <label for="mousse">Référence Mousse</label>
                             <select class="input-field" id="mousse" name="mousse">
                                 <option value="">-- Sélectionnez une mousse --</option>
                                 <?php foreach ($mousses as $mousse): ?>
@@ -250,7 +240,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </div>
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="couleurbois">ID Couleur bois</label>
+                            <label for="couleurbois">Référence Couleur banquette - bois</label>
                             <select class="input-field" id="couleurbois" name="couleurbois">
                                 <option value="">-- Sélectionnez une couleur de bois --</option>
                                 <?php foreach ($couleursbois as $couleurbois): ?>
@@ -261,10 +251,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 <?php endforeach; ?>
                             </select>
                         </div>
-                    </div>
-                    <div class="form-row">
                         <div class="form-group">
-                            <label for="decoration">ID Décoration bois</label>
+                            <label for="decoration">Référence Décoration - bois</label>
                             <select class="input-field" id="decoration" name="decoration">
                                 <option value="">-- Sélectionnez une decoration --</option>
                                 <?php foreach ($decorations as $decoration): ?>
@@ -278,7 +266,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </div>
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="accoudoirbois">ID Accoudoir bois</label>
+                            <label for="accoudoirbois">Référence Accoudoir - bois</label>
                             <select class="input-field" id="accoudoirbois" name="accoudoirbois">
                                 <option value="">-- Sélectionnez un accoudoir en bois --</option>
                                 <?php foreach ($accoudoirsbois as $accoudoirbois): ?>
@@ -289,10 +277,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 <?php endforeach; ?>
                             </select>
                         </div>
-                    </div>
-                    <div class="form-row">
                         <div class="form-group">
-                            <label for="dossierbois">ID Dossier bois</label>
+                            <label for="dossierbois">Référence Dossier - bois</label>
                             <select class="input-field" id="dossierbois" name="dossierbois">
                                 <option value="">-- Sélectionnez un dossier en bois --</option>
                                 <?php foreach ($dossiersbois as $dossierbois): ?>
@@ -306,7 +292,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </div>
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="couleurtissubois">ID Couleur tissu bois</label>
+                            <label for="couleurtissubois">Référence Motif tissu - bois</label>
                             <select class="input-field" id="couleurtissubois" name="couleurtissubois">
                                 <option value="">-- Sélectionnez une couleur du tissu en bois --</option>
                                 <?php foreach ($couleurstissubois as $couleurtissubois): ?>
@@ -317,10 +303,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 <?php endforeach; ?>
                             </select>
                         </div>
-                    </div>
-                    <div class="form-row">
                         <div class="form-group">
-                            <label for="motifbois">ID Motif bois</label>
+                            <label for="motifbois">Référence Motif coussin - bois</label>
                             <select class="input-field" id="motifbois" name="motifbois">
                                 <option value="">-- Sélectionnez un motif de bois --</option>
                                 <?php foreach ($motifsbois as $motifbois): ?>
@@ -334,7 +318,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </div>
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="modele">ID Modèle banquette tissu</label>
+                            <label for="modele">Référence Modèle banquette - tissu</label>
                             <select class="input-field" id="modele" name="modele">
                                 <option value="">-- Sélectionnez un modele --</option>
                                 <?php foreach ($modeles as $modele): ?>
@@ -345,10 +329,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 <?php endforeach; ?>
                             </select>
                         </div>
-                    </div>
-                    <div class="form-row">
                         <div class="form-group">
-                            <label for="couleurtissu">ID Couleur tissu</label>
+                            <label for="couleurtissu">Référence Couleur banquette - tissu</label>
                             <select class="input-field" id="couleurtissu" name="couleurtissu">
                                 <option value="">-- Sélectionnez une couleur de tissu --</option>
                                 <?php foreach ($couleurstissu as $couleurtissu): ?>
@@ -362,7 +344,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </div>
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="motiftissu">ID Motif tissu</label>
+                            <label for="motiftissu">Référence Motif coussin - tissu</label>
                             <select class="input-field" id="motiftissu" name="motiftissu">
                                 <option value="">-- Sélectionnez une motif en tissu --</option>
                                 <?php foreach ($motifstissu as $motiftissu): ?>
@@ -373,10 +355,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 <?php endforeach; ?>
                             </select>
                         </div>
-                    </div>
-                    <div class="form-row">
                         <div class="form-group">
-                            <label for="dossiertissu">ID Dossier tissu</label>
+                            <label for="dossiertissu">Référence Dossier - tissu</label>
                             <select class="input-field" id="dossiertissu" name="dossiertissu">
                                 <option value="">-- Sélectionnez une dossier en tissu --</option>
                                 <?php foreach ($dossierstissu as $dossiertissu): ?>
@@ -390,7 +370,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </div>
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="accoudoirtissu">ID Accoudoir tissu</label>
+                            <label for="accoudoirtissu">Référence Accoudoir - tissu</label>
                             <select class="input-field" id="accoudoirtissu" name="accoudoirtissu">
                                 <option value="">-- Sélectionnez un accoudoir en tissu --</option>
                                 <?php foreach ($accoudoirstissu as $accoudoirtissu): ?>
