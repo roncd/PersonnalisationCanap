@@ -43,13 +43,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $date = trim($_POST['date']);
     $civilite = trim($_POST['civilite']);
 
-    if (empty($nom) || empty($prenom) || empty($mail) || empty($tel) || empty($mdp) || empty($adresse) || empty($codepostal) || empty($ville) || empty($date)) {
+    if (empty($nom) || empty($prenom) || empty($mail) || empty($tel) || empty($adresse) || empty($codepostal) || empty($ville) || empty($date)) {
         $_SESSION['message'] = 'Tous les champs requis doivent être remplis.';
         $_SESSION['message_type'] = 'error';
     } else {
         // Mettre à jour du client dans la base de données
-        $stmt = $pdo->prepare("UPDATE client SET nom = ?, prenom = ?, mail = ?, tel = ?, mdp = ?, adresse = ?, info = ?, codepostal = ?, ville = ?, date_naissance = ?,  civilite = ? WHERE id = ?");
-        if ($stmt->execute([$nom, $prenom, $mail, $tel, $mdp, $adresse, $info, $codepostal, $ville, $date, $civilite, $id])) {
+        $stmt = $pdo->prepare("UPDATE client SET nom = ?, prenom = ?, mail = ?, tel = ?, adresse = ?, info = ?, codepostal = ?, ville = ?, date_naissance = ?,  civilite = ? WHERE id = ?");
+        if ($stmt->execute([$nom, $prenom, $mail, $tel, $adresse, $info, $codepostal, $ville, $date, $civilite, $id])) {
             $_SESSION['message'] = 'Le client a été mis à jour avec succès !';
             $_SESSION['message_type'] = 'success';
             header("Location: visualiser.php");
@@ -127,29 +127,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </div>
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="mdp">Mot de passe</label>
-                            <input type="password" id="mdp" class="input-field" name="mdp" value="<?php echo htmlspecialchars($client['mdp']); ?>" required>
-                        </div>
-                        <div class="form-group">
                             <label for="adresse">Adresse</label>
                             <input type="text" id="adresse" class="input-field" name="adresse" value="<?php echo htmlspecialchars($client['adresse']); ?>" required>
                         </div>
-                    </div>
-                    <div class="form-row">
                         <div class="form-group">
                             <label for="info">Info suplémentaire</label>
                             <input type="text" id="info" class="input-field" name="info" value="<?php echo htmlspecialchars($client['info']); ?>">
                         </div>
+                        </div>
+                        <div class="form-row">
                         <div class="form-group">
                             <label for="codepostal">Code postal</label>
                             <input type="codepostal" id="codepostal" class="input-field" name="codepostal" value="<?php echo htmlspecialchars($client['codepostal']); ?>" required>
                         </div>
-                    </div>
-                    <div class="form-row">
                         <div class="form-group">
                             <label for="ville">Ville</label>
                             <input type="ville" id="ville" class="input-field" name="ville" value="<?php echo htmlspecialchars($client['ville']); ?>" required>
                         </div>
+                        </div>
+                        <div class="form-row">
                         <div class="form-group">
                             <label for="date">Date de naissance</label>
                             <input type="date" id="date" class="input-field" name="date" value="<?php echo htmlspecialchars($client['date_naissance']); ?>" required>

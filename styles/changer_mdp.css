@@ -1,7 +1,3 @@
-* {
-    box-sizing: border-box;
-}
-
 body {
     font-family: 'Arial', sans-serif;
     background-color: #fff;
@@ -13,7 +9,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 6rem 2rem 1rem 2rem;
+    padding: 2rem 2rem 1rem 2rem;
     min-height: 100vh;
     box-sizing: border-box;
 }
@@ -54,7 +50,7 @@ body {
     border-radius: 10px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
     font-size: 16px;
-    width: 100%;
+
 }
 
 .password-page button {

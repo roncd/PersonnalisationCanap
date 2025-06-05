@@ -38,6 +38,14 @@ h2 {
     margin: 20px auto;
 }
 
+.formulaire-connexion {
+    display: flex;
+    flex-direction: column;
+    width: 90%;
+    max-width: 800px;
+    margin: 20px auto;
+}
+
 .form-row {
     display: flex;
     gap: 20px;
@@ -89,4 +97,34 @@ select.input-field {
     border-radius: 8px;
     max-width: 100%;
     margin: 20px;
+}
+
+.footer p {
+    font-size: 15px;
+    position: relative;
+}
+
+.footer span {
+    font-size: 15px;
+    position: relative;
+}
+
+.footer span::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -2px;
+    width: 0;
+    height: 1px;
+    background-color: #997765;
+    transition: width 0.3s ease;
+}
+
+.footer span:hover::after {
+    width: 100%;
+}
+
+.footer .link-connect {
+    color: #997765;
+    text-decoration: none;
 }

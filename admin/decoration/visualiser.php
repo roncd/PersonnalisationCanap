@@ -13,7 +13,15 @@ $page = isset($_GET['page']) && is_numeric($_GET['page']) && $_GET['page'] > 0 ?
 $limit = 10; // Nombre de commandes par page
 $offset = ($page - 1) * $limit;
 
-// Compter le nombre total de commandes pour ce statut
+// Tri
+$order = (isset($_GET['order']) && $_GET['order'] === 'asc') ? 'ASC' : 'DESC';
+$next  = ($order === 'ASC') ? 'desc' : 'asc';
+$icon  = ($order === 'ASC') ? '../../assets/sort-dsc.svg' : '../../assets/sort-asc.svg';
+
+$params = $_GET;
+$params['order'] = $next;
+$triURL = '?' . http_build_query($params);
+
 $stmtCount = $pdo->prepare("SELECT COUNT(*) AS total FROM decoration");
 $stmtCount->execute();
 $totalCommandes = $stmtCount->fetchColumn();
@@ -47,13 +55,18 @@ $totalPages = ceil($totalCommandes / $limit);
             <?php require '../include/message.php'; ?>
 
             <div class="option">
-                <div>
-                    <button onclick="location.href='add.php'" class="btn" type="button">+ Ajouter une décoration</button>
+                <div class="section-button">
+                    <div>
+                        <button onclick="location.href='../pages/visualiser.php'" class="btn-grey" type="button">Retourner aux options</button>
+                    </div>
+                    <div>
+                        <button onclick="location.href='add.php'" class="btn-noir" type="button">+ Ajouter une décoration</button>
+                    </div>
                 </div>
                 <div class="search-bar">
                     <form method="GET" action="">
                         <input type="text" name="search" placeholder="Rechercher par nom..." value="<?php echo htmlspecialchars($search); ?>">
-                        <button class ="btn-noir" type="submit">Rechercher</button>
+                        <button class="btn-noir" type="submit">Rechercher</button>
                     </form>
                 </div>
             </div>
@@ -62,7 +75,14 @@ $totalPages = ceil($totalCommandes / $limit);
                 <table class="styled-table">
                     <thead>
                         <tr>
-                            <th>ID</th>
+                            <th class="btn-order">
+                                <a
+                                    href="<?= $triURL ?>"
+                                    title="Trier <?= $order === 'ASC' ? 'du plus récent au plus ancien' : 'du plus ancien au plus récent' ?>">
+                                    <img src="<?= $icon ?>" alt="" width="20" height="20">
+                                </a>
+                                ID
+                            </th>
                             <th>NOM</th>
                             <th>PRIX</th>
                             <th>IMAGE</th>
@@ -72,10 +92,10 @@ $totalPages = ceil($totalCommandes / $limit);
                     <tbody>
                         <?php
                         if ($search) {
-                            $stmt = $pdo->prepare("SELECT * FROM decoration WHERE nom LIKE :search ORDER BY id DESC");
+                            $stmt = $pdo->prepare("SELECT * FROM decoration WHERE nom LIKE :search ORDER BY id $order");
                             $stmt->bindValue(':search', '%' . $search . '%', PDO::PARAM_STR);
                         } else {
-                            $stmt = $pdo->prepare("SELECT * FROM decoration ORDER BY id DESC LIMIT :limit OFFSET :offset");
+                            $stmt = $pdo->prepare("SELECT * FROM decoration ORDER BY id $order LIMIT :limit OFFSET :offset");
                             $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
                             $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
                         }

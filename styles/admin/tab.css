@@ -132,9 +132,14 @@ a {
 .option {
     display: flex;
     justify-content: space-between;
-    margin-top: 15px;
+    margin-top: 35px;
+    align-items: center;
 }
 
+.option .section-button {
+    display: flex;
+    gap: 5px;
+}
 .btn {
     margin-top: 10px;
     background-color: black;

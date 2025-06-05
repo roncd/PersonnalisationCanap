@@ -44,7 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $_SESSION['message'] = 'Seuls les fichiers JPEG, PNG et GIF sont autorisés.';
                 $_SESSION['message_type'] = 'error';
             } else {
-                $uploadDir = '../uploads/motif-banquette-bois/';
+                $uploadDir = '../uploads/couleur-tissu-bois/';
                 if (!is_dir($uploadDir)) {
                     mkdir($uploadDir, 0777, true);
                 }
@@ -108,7 +108,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <div class="form-group">
                             <label for="img">Image (Laissez vide pour conserver l'image actuelle)</label>
                             <input type="file" id="img" name="img" class="input-field" accept="image/*" onchange="loadFile(event)" >
-                            <img class="preview-img" src="../uploads/motif-banquette-bois/<?php echo htmlspecialchars($motifTissuBois['img']); ?>" id="output" />
+                            <img class="preview-img" src="../uploads/couleur-tissu-bois/<?php echo htmlspecialchars($motifTissuBois['img']); ?>" id="output" />
                          </div>
                     </div>
                     <div class="button-section">

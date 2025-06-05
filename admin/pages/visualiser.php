@@ -61,7 +61,7 @@ if (!isset($_SESSION['id'])) {
                         <a href="../accoudoirs-bois/visualiser.php" class="btn">Accoudoirs</a>
                         <a href="../dossier-bois/visualiser.php" class="btn">Dossier</a>
                         <a href="../couleur/visualiser.php" class="btn">Couleur tissu</a>
-                        <a href="../motif-banquette-bois/visualiser.php" class="btn">Motif banquette</a>
+                        <a href="../couleur-tissu-bois/visualiser.php" class="btn">Motif tissu</a>
                         <a href="../motif-bois/visualiser.php" class="btn">Motif coussin</a>
                     </div>
                 </section>

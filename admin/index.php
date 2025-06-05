@@ -7,9 +7,9 @@
     <title>Admin - Connexion</title>
     <link rel="icon" type="image/x-icon" href="../medias/favicon.png">
     <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../styles/admin/ajout.css">
     <link rel="stylesheet" href="../styles/buttons.css">
     <link rel="stylesheet" href="../styles/message.css">
+    <link rel="stylesheet" href="../styles/admin/ajout.css">
 </head>
 
 <body>
@@ -64,7 +64,7 @@
             }
             ?>
             <div class="form">
-                <form action="" method="POST" class="formulaire-creation-compte">
+                <form action="" method="POST" class="formulaire-connexion">
                     <div class="form-row">
                         <div class="form-group">
                             <label for="login">Adresse mail</label>
@@ -76,6 +76,9 @@
                             <label for="mdp">Mot de passe</label>
                             <input type="password" id="mdp" name="mdp" class="input-field" require>
                         </div>
+                    </div>
+                    <div class="footer">
+                        <p><span><a href="include/reset_pswd.php" class="link-connect">Mot de passe oublié ?</a></span></p>
                     </div>
                     <div class="button-section">
                         <p>Revenir sur <span><a href="../front/pages/index.php" class="link-connect">Deco du monde</a></span></p>
