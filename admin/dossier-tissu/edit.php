@@ -99,17 +99,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <form action="edit.php?id=<?= $id ?>" method="POST" enctype="multipart/form-data" class="formulaire-creation-compte">
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="name">Nom</label>
+                            <label for="name">Nom <span class="required">*</span></label>
                             <input type="text" id="name" name="name" class="input-field" value="<?= htmlspecialchars($dossier['nom']); ?>" required>
                         </div>
                         <div class="form-group">
-                            <label for="prix">Prix</label>
+                            <label for="prix">Prix <span class="required">*</span></label>
                             <input type="text" id="prix" name="prix" class="input-field" value="<?= htmlspecialchars($dossier['prix']); ?>" required>
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="img">Image (Laissez vide pour conserver l'image actuelle)</label>
+                            <label for="img">Image (Laissez vide pour conserver l'image actuelle) <span class="required">*</span></label>
                             <input type="file" id="img" name="img" class="input-field" accept="image/*" onchange="loadFile(event)" >
                             <img class="preview-img" src="../uploads/dossier-tissu/<?php echo htmlspecialchars($dossier['img']); ?>" id="output" />
                          </div>

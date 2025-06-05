@@ -164,20 +164,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <form class="formulaire-creation-compte" action="" method="POST" enctype="multipart/form-data">
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="nom">Nom du salon</label>
+                            <label for="nom">Nom du salon <span class="required">*</span></label>
                             <input type="text" id="nom" name="nom" class="input-field">
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="img">Image</label>
+                            <label for="img">Image <span class="required">*</span></label>
                             <input type="file" id="img" name="img" class="input-field" accept="image/*" onchange="loadFile(event)" required>
                             <img class="preview-img" id="output" />
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="prix">Prix (€)</label>
+                            <label for="prix">Prix (€) <span class="required">*</span></label>
                             <input type="number" step="0.01" id="prix" name="prix" class="input-field" required>
                         </div>
 
@@ -191,7 +191,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <div class="form-group">
                             <label for="structure">Référence Structure</label>
                             <select id="structure" name="structure" class="input-field" required>
-                                <option value="">-- Choisir une structure --</option>
+                                <option value="">-- Choisir une structure -- <span class="required">*</span></option>
                                 <?php foreach ($structures as $s): ?>
                                     <option value="<?= $s['id'] ?>"><?= htmlspecialchars($s['nom']) ?></option>
                                 <?php endforeach; ?>
@@ -200,7 +200,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </div>
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="banquette">Référence Type de banquette</label>
+                            <label for="banquette">Référence Type de banquette <span class="required">*</span></label>
                             <select id="banquette" name="banquette" class="input-field">
                                 <option value="">-- Choisir --</option>
                                 <?php foreach ($banquettes as $b): ?>
@@ -210,7 +210,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         </div>
 
                         <div class="form-group">
-                            <label for="mousse">Référence Mousse</label>
+                            <label for="mousse">Référence Mousse <span class="required">*</span></label>
                             <select id="mousse" name="mousse" class="input-field">
                                 <option value="">-- Choisir --</option>
                                 <?php foreach ($mousses as $item): ?>

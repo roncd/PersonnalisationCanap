@@ -51,7 +51,7 @@
 
             <form method="POST" class="form">
                 <div class="form-group">
-                    <label for="new_password">Nouveau mot de passe :</label>
+                    <label for="new_password">Nouveau mot de passe <span class="required">*</span></label>
                     <input type="password" id="new_password" name="new_password" class="input-field" required>
                 </div>
                 <div class="button-section">

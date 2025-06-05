@@ -24,8 +24,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (empty($nom) || empty($prenom) || empty($email) || empty($tel) || empty($_POST['mdp']) || empty($adresse) || empty($codepostal) || empty($ville) || empty($date)) {
         $_SESSION['message'] = 'Tous les champs sont requis !';
         $_SESSION['message_type'] = 'error';
-        header("Location: visualiser.php");
-        exit();
     }
 
     try {
@@ -33,7 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->bindValue(':nom', $nom, PDO::PARAM_STR);
         $stmt->bindValue(':prenom', $prenom, PDO::PARAM_STR);
         $stmt->bindValue(':mail', $email, PDO::PARAM_STR);
-        $stmt->bindValue(':tel', $tel, PDO::PARAM_STR); // STRING si tu veux garder les 0 initiaux
+        $stmt->bindValue(':tel', $tel, PDO::PARAM_STR);
         $stmt->bindValue(':mdp', $mdp, PDO::PARAM_STR);
         $stmt->bindValue(':adresse', $adresse, PDO::PARAM_STR);
         $stmt->bindValue(':info', $info, PDO::PARAM_STR);
@@ -50,9 +48,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } catch (Exception $e) {
         $_SESSION['message'] = 'Erreur lors de l\'ajout du client : ' . $e->getMessage();
         $_SESSION['message_type'] = 'error';
-        header("Location: visualiser.php");
-        exit();
+
     }
+    header("Location: add.php");
+    exit();
 }
 ?>
 
@@ -96,31 +95,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </div>
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="nom">Nom</label>
+                            <label for="nom">Nom <span class="required">*</span></label>
                             <input type="name" id="nom" name="name" class="input-field" required>
                         </div>
                         <div class="form-group">
-                            <label for="prenom">Prénom</label>
+                            <label for="prenom">Prénom <span class="required">*</span></label>
                             <input type="name" id="prenom" name="prenom" class="input-field" required>
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="email">Mail</label>
+                            <label for="email">Mail <span class="required">*</span></label>
                             <input type="email" id="email" name="email" class="input-field" required>
                         </div>
                         <div class="form-group">
-                            <label for="tel">Téléphone</label>
+                            <label for="tel">Téléphone <span class="required">*</span></label>
                             <input type="phone" id="tel" name="tel" class="input-field" required>
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="mdp">Mot de passe</label>
+                            <label for="mdp">Mot de passe <span class="required">*</span></label>
                             <input type="password" id="mdp" name="mdp" class="input-field" required>
                         </div>
                         <div class="form-group">
-                            <label for="adresse">Adresse</label>
+                            <label for="adresse">Adresse <span class="required">*</span></label>
                             <input type="text" id="adresse" name="adresse" class="input-field" required>
                         </div>
                     </div>
@@ -130,17 +129,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <input type="text" id="info" name="info" class="input-field">
                         </div>
                         <div class="form-group">
-                            <label for="codepostal">Code postal</label>
+                            <label for="codepostal">Code postal <span class="required">*</span></label>
                             <input type="codepostal" name="codepostal" id="codepostal" class="input-field" required>
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="ville">Ville</label>
+                            <label for="ville">Ville <span class="required">*</span></label>
                             <input type="ville" id="ville" name="ville" class="input-field" required>
                         </div>
                         <div class="form-group">
-                            <label for="date">Date de naissance</label>
+                            <label for="date">Date de naissance <span class="required">*</span></label>
                             <input type="date" id="date" name="date" class="input-field" required>
                         </div>
                     </div>

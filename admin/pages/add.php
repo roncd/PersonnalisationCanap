@@ -37,9 +37,8 @@ if (!isset($_SESSION['id'])) {
             <section class="category-block">
                     <h2>Produits à l'unité</h2>
                     <div class="button-grid">
-                        <a href="#" class="btn">Tissu</a>
-                        <a href="#" class="btn">Coussin</a>
-                        <a href="#" class="btn">Mousse</a>
+                    <a href="../vente-produit/add.php" class="btn">Produit</a>
+                    <a href="../categorie/add.php" class="btn">Catégorie</a>
                     </div>
                 </section>
                 

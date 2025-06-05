@@ -30,12 +30,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $_SESSION['message'] = 'Le membre a été ajouté avec succès !';
         $_SESSION['message_type'] = 'success';
+        header("Location: visualiser.php");
+        exit();
     } catch (Exception $e) {
         $_SESSION['message'] = 'Erreur lors de l\'ajout du membre : ' . $e->getMessage();
         $_SESSION['message_type'] = 'error';
     }
-          // Redirection vers visualiser.php après traitement
-    header("Location: visualiser.php");
+    header("Location: add.php");
     exit();
 }
 ?>
@@ -51,7 +52,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link rel="stylesheet" href="../../styles/admin/ajout.css">
     <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
     <link rel="stylesheet" href="../../styles/message.css">
-    
+
     <link rel="stylesheet" href="../../styles/buttons.css">
 </head>
 
@@ -66,7 +67,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <?php require '../include/message.php'; ?>
             <div class="form">
                 <form class="formulaire-creation-compte" action="" method="POST" enctype="multipart/form-data">
-                <div class="form-row">
+                    <div class="form-row">
                         <div class="form-group">
                             <label for="civilite">Titre de civilité</label>
                             <select class="input-field" id="civilite" name="civilite">
@@ -79,26 +80,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </div>
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="nom">Nom</label>
+                            <label for="nom">Nom <span class="required">*</span></label>
                             <input type="name" id="nom" name="name" class="input-field" required>
                         </div>
                         <div class="form-group">
-                            <label for="prenom">Prénom</label>
+                            <label for="prenom">Prénom <span class="required">*</span></label>
                             <input type="name" id="prenom" name="prenom" class="input-field" required>
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="email">Mail</label>
+                            <label for="email">Mail <span class="required">*</span></label>
                             <input type="email" id="email" name="email" class="input-field" required>
                         </div>
                         <div class="form-group">
-                            <label for="mdp">Mot de passe</label>
+                            <label for="mdp">Mot de passe <span class="required">*</span></label>
                             <input type="password" id="mdp" name="mdp" class="input-field" required>
                         </div>
                     </div>
                     <div class="form-row">
-                    <div class="form-group">
+                        <div class="form-group">
                             <label for="tel">Téléphone</label>
                             <input type="phone" id="tel" name="tel" class="input-field">
                         </div>
@@ -114,7 +115,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <div class="button-section">
                         <div class="buttons">
                             <button type="button" id="btn-retour" class="btn-beige" onclick="history.go(-1)">Retour</button>
-                            <input type="submit"  class="btn-noir" value="Ajouter"></input>
+                            <input type="submit" class="btn-noir" value="Ajouter"></input>
                         </div>
                     </div>
                 </form>

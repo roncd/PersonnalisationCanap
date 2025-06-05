@@ -6,8 +6,26 @@ if (!isset($_SESSION['id'])) {
     header("Location: ../index.php");
     exit();
 }
+
 // Traitement de la recherche
 $search = $_GET['search'] ?? '';
+
+$tables = ['categorie'];
+
+function fetchData($pdo, $table)
+{
+    $stmt = $pdo->prepare("SELECT id, nom FROM $table");
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+$data = [];
+$assocData = [];
+
+foreach ($tables as $table) {
+    $data[$table] = fetchData($pdo, $table);
+    $assocData[$table] = array_column($data[$table], 'nom', 'id');
+}
 
 // Paramètres de pagination
 $page = isset($_GET['page']) && is_numeric($_GET['page']) && $_GET['page'] > 0 ? (int)$_GET['page'] : 1;
@@ -23,7 +41,7 @@ $params = $_GET;
 $params['order'] = $next;
 $triURL = '?' . http_build_query($params);
 
-$stmtCount = $pdo->prepare("SELECT COUNT(*) AS total FROM mousse");
+$stmtCount = $pdo->prepare("SELECT COUNT(*) AS total FROM vente_produit");
 $stmtCount->execute();
 $totalCommandes = $stmtCount->fetchColumn();
 
@@ -35,7 +53,7 @@ $totalPages = ceil($totalCommandes / $limit);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Type de Mousse</title>
+    <title>Produits vendu à l'unité</title>
     <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../../styles/admin/tab.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
@@ -51,17 +69,16 @@ $totalPages = ceil($totalCommandes / $limit);
         <?php require '../squelette/header.php'; ?>
     </header>
 
-
     <main>
         <div class="container">
-            <h2>Type de Mousse</h2>
+            <h2>Produits vendu à l'unité</h2>
             <div class="option">
                 <div class="section-button">
                     <div>
                         <button onclick="location.href='../pages/visualiser.php'" class="btn-grey" type="button">Retourner aux options</button>
                     </div>
                     <div>
-                        <button onclick="location.href='add.php'" class="btn-noir" type="button">+ Ajouter une mousse</button>
+                        <button onclick="location.href='add.php'" class="btn-noir" type="button">+ Ajouter un produit</button>
                     </div>
                 </div>
                 <div class="search-bar">
@@ -87,16 +104,17 @@ $totalPages = ceil($totalCommandes / $limit);
                             <th>NOM</th>
                             <th>PRIX</th>
                             <th>IMAGE</th>
+                            <th>CATÉGORIE</th>
                             <th class="sticky-col">ACTION</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php
                         if ($search) {
-                            $stmt = $pdo->prepare("SELECT * FROM mousse WHERE nom LIKE :search ORDER BY id $order");
+                            $stmt = $pdo->prepare("SELECT * FROM vente_produit WHERE nom LIKE :search ORDER BY id $order");
                             $stmt->bindValue(':search', '%' . $search . '%', PDO::PARAM_STR);
                         } else {
-                            $stmt = $pdo->prepare("SELECT * FROM mousse ORDER BY id $order LIMIT :limit OFFSET :offset");
+                            $stmt = $pdo->prepare("SELECT * FROM vente_produit ORDER BY id $order LIMIT :limit OFFSET :offset");
                             $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
                             $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
                         }
@@ -106,10 +124,11 @@ $totalPages = ceil($totalCommandes / $limit);
                             echo "<td>{$row['id']}</td>";
                             echo "<td>{$row['nom']}</td>";
                             echo "<td>{$row['prix']}</td>";
-                            echo "<td><img src='../uploads/mousse/{$row['img']}' alt='{$row['nom']}' style='width:50px; height:auto;'></td>";
+                            echo "<td><img src='../uploads/produit/{$row['img']}' alt='{$row['nom']}' style='width:50px; height:auto;'></td>";
+                            echo "<td>" . htmlspecialchars($assocData['categorie'][$row['id_categorie']]) . "</td>";
                             echo "<td class='actions'>";
                             echo "<a href='edit.php?id={$row['id']}' class='edit-action actions vert' title='Modifier'>EDIT</a>";
-                            echo "<a href='delete.php?id={$row['id']}' class='delete-action actions rouge' title='Supprimer' onclick='return confirm(\"Voulez-vous vraiment supprimer cette mousse ?\");'>DELETE</a>";
+                            echo "<a href='delete.php?id={$row['id']}' class='delete-action actions rouge' title='Supprimer' onclick='return confirm(\"Voulez-vous vraiment supprimer ce motif de coussin ?\");'>DELETE</a>";
                             echo "</td>";
                             echo "</tr>";
                         }
@@ -120,11 +139,9 @@ $totalPages = ceil($totalCommandes / $limit);
             <?php require '../include/pagination.php'; ?>
         </div>
     </main>
-
     <footer>
         <?php require '../squelette/footer.php'; ?>
     </footer>
-
 </body>
 
 </html>

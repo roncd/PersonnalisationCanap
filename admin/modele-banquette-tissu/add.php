@@ -35,6 +35,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                     $_SESSION['message'] = 'Le modèle de banquette a été ajouté avec succès !';
                     $_SESSION['message_type'] = 'success';
+                    header("Location: visualiser.php");
+                    exit();
                 } catch (Exception $e) {
                     $_SESSION['message'] = 'Erreur lors de l\'ajout : ' . $e->getMessage();
                     $_SESSION['message_type'] = 'error';
@@ -45,8 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         }
     }
-      // Redirection vers visualiser.php après traitement
-    header("Location: visualiser.php");
+    header("Location: add.php");
     exit();
 }
 ?>
@@ -61,7 +62,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link rel="stylesheet" href="../../styles/admin/ajout.css">
     <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
     <link rel="stylesheet" href="../../styles/message.css">
-    
+
     <link rel="stylesheet" href="../../styles/buttons.css">
     <script src="../../script/previewImage.js"></script>
 </head>
@@ -79,11 +80,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <form method="POST" enctype="multipart/form-data" class="formulaire-creation-compte">
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="name">Nom</label>
+                            <label for="name">Nom <span class="required">*</span></label>
                             <input type="text" id="name" name="name" class="input-field" required>
                         </div>
                         <div class="form-group">
-                            <label for="price">Prix (en €)</label>
+                            <label for="price">Prix (en €) <span class="required">*</span></label>
                             <input type="number" id="price" name="price" class="input-field" step="0.01" required>
                         </div>
                     </div>

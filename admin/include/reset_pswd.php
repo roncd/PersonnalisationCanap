@@ -77,7 +77,7 @@
                 <form method="POST" class="formulaire-creation-compte">
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="adresse">Entrez votre adresse e-mail :</label>
+                            <label for="adresse">Entrez votre adresse e-mail <span class="required">*</span></label>
                             <input type="email" id="adresse" name="adresse" class="input-field" required>
                         </div>
                     </div>

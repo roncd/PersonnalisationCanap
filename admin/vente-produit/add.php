@@ -7,16 +7,21 @@ if (!isset($_SESSION['id'])) {
     exit();
 }
 
+$stmt = $pdo->prepare("SELECT id, nom FROM categorie");
+$stmt->execute();
+$categories = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nom = trim($_POST['name']);
     $prix = trim($_POST['price']);
     $img = $_FILES['img'];
+    $id_categorie = ($_POST['id_categorie']);
 
-    if (empty($nom) || empty($prix) || empty($img['name'])) {
+    if (empty($nom) || empty($prix) || empty($img['name']) || empty($id_categorie)) {
         $_SESSION['message'] = 'Tous les champs sont requis !';
         $_SESSION['message_type'] = 'error';
     } else {
-        $uploadDir = '../uploads/dossier-tissu/';
+        $uploadDir = '../uploads/produit/';
         if (!is_dir($uploadDir)) {
             mkdir($uploadDir, 0777, true);
         }
@@ -25,22 +30,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (!in_array($img['type'], $allowedTypes)) {
             $_SESSION['message'] = 'Seuls les fichiers JPEG, PNG et GIF sont autorisés.';
             $_SESSION['message_type'] = 'error';
+
         } else {
             $fileName = basename($img['name']);
             $uploadPath = $uploadDir . $fileName;
 
             if (move_uploaded_file($img['tmp_name'], $uploadPath)) {
                 try {
-                    $stmt = $pdo->prepare("INSERT INTO dossier_tissu (nom, prix, img) VALUES (?, ?, ?)");
-                    $stmt->execute([$nom, $prix, $fileName]);
+                    $stmt = $pdo->prepare("INSERT INTO vente_produit (nom, prix, img, id_categorie) VALUES (?, ?, ?, ?)");
+                    $stmt->execute([$nom, $prix, $fileName, $id_categorie]);
 
-                    $_SESSION['message'] = 'Le dossier a été ajouté avec succès !';
+                    $_SESSION['message'] = 'Le produit a été ajouté avec succès !';
                     $_SESSION['message_type'] = 'success';
                     header("Location: visualiser.php");
                     exit();
                 } catch (Exception $e) {
-                    $_SESSION['message'] = 'Erreur lors de l\'ajout : ' . $e->getMessage();
+                    $_SESSION['message'] = 'Erreur lors de l\'ajout du produit : ' . $e->getMessage();
                     $_SESSION['message_type'] = 'error';
+
                 }
             } else {
                 $_SESSION['message'] = 'Erreur lors de l\'upload de l\'image.';
@@ -52,15 +59,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     exit();
 }
 ?>
-
-
 <!DOCTYPE html>
 <html lang="fr">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ajoute un dossier tissu</title>
+    <title>Ajoute un produit vendu à l'unité</title>
     <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../../styles/admin/ajout.css">
     <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
@@ -77,7 +82,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <main>
         <div class="container">
-            <h2>Ajoute un dossier tissu</h2>
+            <h2>Ajoute un produit vendu à l'unité</h2>
             <?php require '../include/message.php'; ?>
             <div class="form">
                 <form method="POST" enctype="multipart/form-data" class="formulaire-creation-compte">
@@ -87,7 +92,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <input type="text" id="name" name="name" class="input-field" required>
                         </div>
                         <div class="form-group">
-                            <label for="price">Prix (en €) <span class="required">*</span></label>
+                            <label for="price">Prix (en €)</label>
                             <input type="number" id="price" name="price" class="input-field" step="0.01" required>
                         </div>
                     </div>
@@ -96,6 +101,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <label for="img">Image <span class="required">*</span></label>
                             <input type="file" id="img" name="img" class="input-field" accept="image/*" onchange="loadFile(event)" required>
                             <img class="preview-img" id="output" />
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="id_categorie">Catégorie du produit <span class="required">*</span></label>
+                            <select class="input-field" id="id_categorie" name="id_categorie">
+                                <option value="">-- Sélectionnez une catégorie --</option>
+                                <?php foreach ($categories as $categorie): ?>
+                                    <option value="<?= htmlspecialchars($categorie['id']) ?>">
+                                        <?= htmlspecialchars($categorie['nom']) ?>
+                                    </option>
+                                <?php endforeach; ?>
+                            </select>
                         </div>
                     </div>
                     <div class="button-section">
@@ -108,6 +126,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
         </div>
     </main>
+
     <footer>
         <?php require '../squelette/footer.php'; ?>
     </footer>

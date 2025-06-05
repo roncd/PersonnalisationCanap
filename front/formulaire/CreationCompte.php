@@ -94,33 +94,33 @@ require '../../vendor/autoload.php'; // adapte le chemin si besoin
         <form class="formulaire-creation-compte" method="POST" action="">
           <div class="form-row">
             <div class="form-group">
-              <label for="nom">Nom</label>
+              <label for="nom">Nom <span class="required">*</span></label>
               <input type="text" id="nom" name="nom" class="input-field" required>
             </div>
             <div class="form-group">
-              <label for="prenom">Prénom</label>
+              <label for="prenom">Prénom <span class="required">*</span></label>
               <input type="text" id="prenom" name="prenom" class="input-field" required>
             </div>
           </div>
           <div class="form-row">
             <div class="form-group">
-              <label for="adresse">Adresse mail</label>
+              <label for="adresse">Adresse mail <span class="required">*</span></label>
               <input type="email" id="adresse" name="adresse" class="input-field" required>
             </div>
             <div class="form-group">
-              <label for="telephone">Téléphone</label>
+              <label for="telephone">Téléphone <span class="required">*</span></label>
               <input type="text" id="telephone" name="telephone" class="input-field" required>
             </div>
           </div>
           <div class="form-row">
             <div class="form-group">
-              <label for="motdepasse">Mot de passe</label>
+              <label for="motdepasse">Mot de passe <span class="required">*</span></label>
               <input type="password" id="motdepasse" name="motdepasse" class="input-field" required>
             </div>
           </div>
           <div class="form-row">
             <div class="form-group">
-              <label for="adresse-livraison">Adresse de livraison</label>
+              <label for="adresse-livraison">Adresse de livraison <span class="required">*</span></label>
               <input type="text" id="adresse-livraison" name="adresse-livraison" class="input-field">
             </div>
             <div class="form-group">
@@ -130,11 +130,11 @@ require '../../vendor/autoload.php'; // adapte le chemin si besoin
           </div>
           <div class="form-row">
             <div class="form-group">
-              <label for="code-postal">Code postal</label>
+              <label for="code-postal">Code postal <span class="required">*</span></label>
               <input type="text" id="code-postal" name="code-postal" class="input-field" required>
             </div>
             <div class="form-group">
-              <label for="ville">Ville</label>
+              <label for="ville">Ville <span class="required">*</span></label>
               <input type="text" id="ville" name="ville" class="input-field" required>
             </div>
           </div>

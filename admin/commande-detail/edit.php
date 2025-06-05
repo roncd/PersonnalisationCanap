@@ -148,7 +148,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <form action="edit.php?id=<?php echo $commande['id']; ?>" method="POST" enctype="multipart/form-data" class="formulaire-creation-compte">
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="client">Référence Client</label>
+                            <label for="client">Référence Client <span class="required">*</span></label>
                             <select class="input-field" id="client" name="client">
                                 <option value="">-- Sélectionnez un client --</option>
                                 <?php foreach ($clients as $client): ?>
@@ -160,7 +160,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             </select>
                         </div>
                         <div class="form-group">
-                            <label for="prix">Prix total (en €)</label>
+                            <label for="prix">Prix total (en €) <span class="required">*</span></label>
                             <input type="number" id="prix" name="prix" class="input-field" value="<?php echo htmlspecialchars($commande['prix']); ?>" required>
                         </div>
                     </div>
@@ -172,7 +172,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </div>
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="date">Date de création</label>
+                            <label for="date">Date de création <span class="required">*</span></label>
                             <input type="datetime-local" id="date" name="date" value="<?php echo htmlspecialchars($commande['date']); ?>" class="input-field" required>
                         </div>
                         <div class="form-group">
@@ -186,7 +186,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </div>
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="structure">Référence Structure</label>
+                            <label for="structure">Référence Structure <span class="required">*</span></label>
                             <select class="input-field" id="structure" name="structure">
                                 <option value="">-- Sélectionnez une structure --</option>
                                 <?php foreach ($structures as $structure): ?>
@@ -198,7 +198,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             </select>
                         </div>
                         <div class="form-group">
-                            <label for="longueurA">Longueur banquette A :</label>
+                            <label for="longueurA">Longueur banquette A : <span class="required">*</span></label>
                             <input type="number" id="longueurA" name="longueurA" class="input-field" value="<?php echo htmlspecialchars($commande['longueurA']); ?>" required>
                         </div>
                     </div>
@@ -214,7 +214,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </div>
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="banquette">Référence Type banquette</label>
+                            <label for="banquette">Référence Type banquette <span class="required">*</span></label>
                             <select class="input-field" id="banquette" name="banquette">
                                 <option value="">-- Sélectionnez une banquette --</option>
                                 <?php foreach ($banquettes as $banquette): ?>
@@ -226,7 +226,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             </select>
                         </div>
                         <div class="form-group">
-                            <label for="mousse">Référence Mousse</label>
+                            <label for="mousse">Référence Mousse <span class="required">*</span></label>
                             <select class="input-field" id="mousse" name="mousse">
                                 <option value="">-- Sélectionnez une mousse --</option>
                                 <?php foreach ($mousses as $mousse): ?>
