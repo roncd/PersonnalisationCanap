@@ -56,9 +56,6 @@ $decorations = fetchData($pdo, 'decoration');
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $prix = trim($_POST['prix']);
     $prixDimensions = trim($_POST['prix_dimensions']);
-    $longueurA = trim($_POST['longueurA']);
-    $longueurB = trim($_POST['longueurB']) ?: null;
-    $longueurC = trim($_POST['longueurC']) ?: null;
     $idStructure = trim($_POST['structure']);
     $idBanquette = trim($_POST['banquette']) ?: null;
     $idMousse = trim($_POST['mousse']) ?: null;
@@ -75,10 +72,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $idDossierTissu = trim($_POST['dossiertissu']) ?: null;
     $nbAccoudoir = trim($_POST['nb_accoudoir']) ?: null;
     $nom = trim($_POST['nom']) ?: null;
-    $imagePath = $commande['image']; // Valeur par défaut : garder l’ancienne image
+    $imagePath = isset($commande['img']) ? $commande['img'] : null; // Vérifie que l'image existe
 
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_FILES['img']) && $_FILES['img']['error'] === 0) {
         $uploadDir = '../uploads/canape-prefait/';
+        
+        // Vérifier si le dossier d'upload existe, sinon le créer
         if (!is_dir($uploadDir)) {
             mkdir($uploadDir, 0777, true);
         }
@@ -89,31 +89,40 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $allowedExtensions = ['jpg', 'jpeg', 'png', 'webp'];
 
         if (in_array($extension, $allowedExtensions)) {
+            // Générer un nom unique pour éviter les conflits
             $baseName = pathinfo($originalName, PATHINFO_FILENAME);
             $imageName = $baseName . '_' . time() . '.' . $extension;
             $destination = $uploadDir . $imageName;
 
             if (move_uploaded_file($tmpName, $destination)) {
-                // Optionnel : supprimer l’ancienne image
-                // if ($commande['image'] && file_exists($uploadDir . $commande['image'])) {
-                //     unlink($uploadDir . $commande['image']);
-                // }
+                // Optionnel : Supprimer l'ancienne image si elle existe
+                if (!empty($commande['img']) && file_exists($uploadDir . $commande['img'])) {
+                    unlink($uploadDir . $commande['img']);
+                }
 
-                $imagePath = $imageName;
+                $imagePath = $imageName; // Mettre à jour l'image
             } else {
-                $_SESSION['message'] = 'Erreur lors du téléchargement de l\'image.';
-                $_SESSION['message_type'] = 'error';
+                $_SESSION['message'] = "Erreur lors du téléchargement de l'image.";
+                $_SESSION['message_type'] = "error";
             }
         } else {
-            $_SESSION['message'] = 'Format de fichier non autorisé.';
-            $_SESSION['message_type'] = 'error';
+            $_SESSION['message'] = "Format de fichier non autorisé.";
+            $_SESSION['message_type'] = "error";
         }
     }
-    // Sinon on garde simplement $imagePath = $commande['image']
+
+    // Si aucun fichier n'est uploadé, conserver l'image actuelle
+    if (empty($imagePath)) {
+        $imagePath = isset($commande['img']) ? $commande['img'] : null;
+    }
+
+    // Mettre à jour l'image dans la base de données
+    $stmt = $pdo->prepare("UPDATE commande_prefait SET img = ? WHERE id = ?");
+    $stmt->execute([$imagePath, $commande['id']]);
+}
 
 
-
-    if (empty($prix) || empty($prixDimensions) || empty($longueurA)) {
+    if (empty($prix)) {
         $_SESSION['message'] = 'Les champs obligatoires doivent être remplis.';
         $_SESSION['message_type'] = 'error';
     } else {
