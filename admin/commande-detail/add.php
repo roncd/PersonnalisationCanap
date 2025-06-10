@@ -88,6 +88,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
     <link rel="stylesheet" href="../../styles/message.css">
     <link rel="stylesheet" href="../../styles/buttons.css">
+    <script src="../../script/displayInput.js"></script>
 </head>
 
 <body>
@@ -151,20 +152,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             </select>
                         </div>
                         <div class="form-group">
-                            <label for="banquette">Référence Type banquette <span class="required">*</span></label>
-                            <select class="input-field" id="banquette" name="banquette">
-                                <option value="">-- Sélectionnez un banquette --</option>
-                                <?php foreach ($banquettes as $banquette): ?>
-                                    <option value="<?= htmlspecialchars($banquette['id']) ?>">
-                                        <?= htmlspecialchars($banquette['nom']) ?>
-                                    </option>
-                                <?php endforeach; ?>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="mousse">Référence Mousse <span class="required">*</span></label>
+                        <label for="mousse">Référence Mousse <span class="required">*</span></label>
                             <select class="input-field" id="mousse" name="mousse">
                                 <option value="">-- Sélectionnez un mousse --</option>
                                 <?php foreach ($mousses as $mousse): ?>
@@ -172,140 +160,158 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                         <?= htmlspecialchars($mousse['nom']) ?>
                                     </option>
                                 <?php endforeach; ?>
-                            </select>
+                            </select> 
                         </div>
+                    </div>
+                    <div class="form-row">
                         <div class="form-group">
-                            <label for="couleurbois">Référence Couleur banquette - bois</label>
-                            <select class="input-field" id="couleurbois" name="couleurbois">
-                                <option value="">-- Sélectionnez un couleur de bois --</option>
-                                <?php foreach ($couleursbois as $couleurbois): ?>
-                                    <option value="<?= htmlspecialchars($couleurbois['id']) ?>">
-                                        <?= htmlspecialchars($couleurbois['nom']) ?>
+                        <label for="banquette">Référence Type banquette <span class="required">*</span></label>
+                            <select class="input-field" id="banquette" name="banquette">
+                                <option value="">-- Sélectionnez un banquette --</option>
+                                <?php foreach ($banquettes as $banquette): ?>
+                                    <option value="<?= htmlspecialchars($banquette['id']) ?>"
+                                        data-type="<?= htmlspecialchars($banquette['nom']) ?>">
+                                        <?= htmlspecialchars($banquette['nom']) ?>
                                     </option>
                                 <?php endforeach; ?>
                             </select>
                         </div>
                     </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="decoration">Référence Décoration - bois</label>
-                            <select class="input-field" id="decoration" name="decoration">
-                                <option value="">-- Sélectionnez un decoration --</option>
-                                <?php foreach ($decorations as $decoration): ?>
-                                    <option value="<?= htmlspecialchars($decoration['id']) ?>">
-                                        <?= htmlspecialchars($decoration['nom']) ?>
-                                    </option>
-                                <?php endforeach; ?>
-                            </select>
+                    <div class="bois">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="couleurbois">Référence Couleur banquette - bois</label>
+                                <select class="input-field" id="couleurbois" name="couleurbois">
+                                    <option value="">-- Sélectionnez un couleur de bois --</option>
+                                    <?php foreach ($couleursbois as $couleurbois): ?>
+                                        <option value="<?= htmlspecialchars($couleurbois['id']) ?>">
+                                            <?= htmlspecialchars($couleurbois['nom']) ?>
+                                        </option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="decoration">Référence Décoration - bois</label>
+                                <select class="input-field" id="decoration" name="decoration">
+                                    <option value="">-- Sélectionnez un decoration --</option>
+                                    <?php foreach ($decorations as $decoration): ?>
+                                        <option value="<?= htmlspecialchars($decoration['id']) ?>">
+                                            <?= htmlspecialchars($decoration['nom']) ?>
+                                        </option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label for="accoudoirbois">Référence Accoudoir - bois</label>
-                            <select class="input-field" id="accoudoirbois" name="accoudoirbois">
-                                <option value="">-- Sélectionnez un accoudoir en bois --</option>
-                                <?php foreach ($accoudoirsbois as $accoudoirbois): ?>
-                                    <option value="<?= htmlspecialchars($accoudoirbois['id']) ?>">
-                                        <?= htmlspecialchars($accoudoirbois['nom']) ?>
-                                    </option>
-                                <?php endforeach; ?>
-                            </select>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="accoudoirbois">Référence Accoudoir - bois</label>
+                                <select class="input-field" id="accoudoirbois" name="accoudoirbois">
+                                    <option value="">-- Sélectionnez un accoudoir en bois --</option>
+                                    <?php foreach ($accoudoirsbois as $accoudoirbois): ?>
+                                        <option value="<?= htmlspecialchars($accoudoirbois['id']) ?>">
+                                            <?= htmlspecialchars($accoudoirbois['nom']) ?>
+                                        </option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="dossierbois">Référence Dossier - bois</label>
+                                <select class="input-field" id="dossierbois" name="dossierbois">
+                                    <option value="">-- Sélectionnez un dossier en bois --</option>
+                                    <?php foreach ($dossiersbois as $dossierbois): ?>
+                                        <option value="<?= htmlspecialchars($dossierbois['id']) ?>">
+                                            <?= htmlspecialchars($dossierbois['nom']) ?>
+                                        </option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="dossierbois">Référence Dossier - bois</label>
-                            <select class="input-field" id="dossierbois" name="dossierbois">
-                                <option value="">-- Sélectionnez un dossier en bois --</option>
-                                <?php foreach ($dossiersbois as $dossierbois): ?>
-                                    <option value="<?= htmlspecialchars($dossierbois['id']) ?>">
-                                        <?= htmlspecialchars($dossierbois['nom']) ?>
-                                    </option>
-                                <?php endforeach; ?>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="couleurtissubois">Référence Motif tissu - bois</label>
-                            <select class="input-field" id="couleurtissubois" name="couleurtissubois">
-                                <option value="">-- Sélectionnez une couleur de tissu en bois --</option>
-                                <?php foreach ($couleurstissubois as $couleurtissubois): ?>
-                                    <option value="<?= htmlspecialchars($couleurtissubois['id']) ?>">
-                                        <?= htmlspecialchars($couleurtissubois['nom']) ?>
-                                    </option>
-                                <?php endforeach; ?>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="motifbois">Référence Motif coussin - bois</label>
-                            <select class="input-field" id="motifbois" name="motifbois">
-                                <option value="">-- Sélectionnez un motif en bois --</option>
-                                <?php foreach ($motifsbois as $motifbois): ?>
-                                    <option value="<?= htmlspecialchars($motifbois['id']) ?>">
-                                        <?= htmlspecialchars($motifbois['nom']) ?>
-                                    </option>
-                                <?php endforeach; ?>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="modele">Référence Modèle banquette - tissu</label>
-                            <select class="input-field" id="modele" name="modele">
-                                <option value="">-- Sélectionnez un modele en tissu --</option>
-                                <?php foreach ($modeles as $modele): ?>
-                                    <option value="<?= htmlspecialchars($modele['id']) ?>">
-                                        <?= htmlspecialchars($modele['nom']) ?>
-                                    </option>
-                                <?php endforeach; ?>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="couleurtissu">Référence Couleur banquette - tissu</label>
-                            <select class="input-field" id="couleurtissu" name="couleurtissu">
-                                <option value="">-- Sélectionnez une couleur de tissu --</option>
-                                <?php foreach ($couleurstissu as $couleurtissu): ?>
-                                    <option value="<?= htmlspecialchars($couleurtissu['id']) ?>">
-                                        <?= htmlspecialchars($couleurtissu['nom']) ?>
-                                    </option>
-                                <?php endforeach; ?>
-                            </select>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="couleurtissubois">Référence Motif tissu - bois</label>
+                                <select class="input-field" id="couleurtissubois" name="couleurtissubois">
+                                    <option value="">-- Sélectionnez une couleur de tissu en bois --</option>
+                                    <?php foreach ($couleurstissubois as $couleurtissubois): ?>
+                                        <option value="<?= htmlspecialchars($couleurtissubois['id']) ?>">
+                                            <?= htmlspecialchars($couleurtissubois['nom']) ?>
+                                        </option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="motifbois">Référence Motif coussin - bois</label>
+                                <select class="input-field" id="motifbois" name="motifbois">
+                                    <option value="">-- Sélectionnez un motif en bois --</option>
+                                    <?php foreach ($motifsbois as $motifbois): ?>
+                                        <option value="<?= htmlspecialchars($motifbois['id']) ?>">
+                                            <?= htmlspecialchars($motifbois['nom']) ?>
+                                        </option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
                         </div>
                     </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="motiftissu">Référence Motif coussin -tissu</label>
-                            <select class="input-field" id="motiftissu" name="motiftissu">
-                                <option value="">-- Sélectionnez un motif en tissu --</option>
-                                <?php foreach ($motifstissu as $motiftissu): ?>
-                                    <option value="<?= htmlspecialchars($motiftissu['id']) ?>">
-                                        <?= htmlspecialchars($motiftissu['nom']) ?>
-                                    </option>
-                                <?php endforeach; ?>
-                            </select>
+                    <div class="tissu">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="modele">Référence Modèle banquette - tissu</label>
+                                <select class="input-field" id="modele" name="modele">
+                                    <option value="">-- Sélectionnez un modele en tissu --</option>
+                                    <?php foreach ($modeles as $modele): ?>
+                                        <option value="<?= htmlspecialchars($modele['id']) ?>">
+                                            <?= htmlspecialchars($modele['nom']) ?>
+                                        </option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="couleurtissu">Référence Couleur banquette - tissu</label>
+                                <select class="input-field" id="couleurtissu" name="couleurtissu">
+                                    <option value="">-- Sélectionnez une couleur de tissu --</option>
+                                    <?php foreach ($couleurstissu as $couleurtissu): ?>
+                                        <option value="<?= htmlspecialchars($couleurtissu['id']) ?>">
+                                            <?= htmlspecialchars($couleurtissu['nom']) ?>
+                                        </option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label for="dossiertissu">Référence Dossier - tissu</label>
-                            <select class="input-field" id="dossiertissu" name="dossiertissu">
-                                <option value="">-- Sélectionnez un dossier en tissu --</option>
-                                <?php foreach ($dossierstissu as $dossiertissu): ?>
-                                    <option value="<?= htmlspecialchars($dossiertissu['id']) ?>">
-                                        <?= htmlspecialchars($dossiertissu['nom']) ?>
-                                    </option>
-                                <?php endforeach; ?>
-                            </select>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="motiftissu">Référence Motif coussin - tissu</label>
+                                <select class="input-field" id="motiftissu" name="motiftissu">
+                                    <option value="">-- Sélectionnez un motif en tissu --</option>
+                                    <?php foreach ($motifstissu as $motiftissu): ?>
+                                        <option value="<?= htmlspecialchars($motiftissu['id']) ?>">
+                                            <?= htmlspecialchars($motiftissu['nom']) ?>
+                                        </option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="dossiertissu">Référence Dossier - tissu</label>
+                                <select class="input-field" id="dossiertissu" name="dossiertissu">
+                                    <option value="">-- Sélectionnez un dossier en tissu --</option>
+                                    <?php foreach ($dossierstissu as $dossiertissu): ?>
+                                        <option value="<?= htmlspecialchars($dossiertissu['id']) ?>">
+                                            <?= htmlspecialchars($dossiertissu['nom']) ?>
+                                        </option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="accoudoirtissu">Référence Accoudoir - tissu</label>
-                            <select class="input-field" id="accoudoirtissu" name="accoudoirtissu">
-                                <option value="">-- Sélectionnez un accoudoir en tissu --</option>
-                                <?php foreach ($accoudoirstissu as $accoudoirtissu): ?>
-                                    <option value="<?= htmlspecialchars($accoudoirtissu['id']) ?>">
-                                        <?= htmlspecialchars($accoudoirtissu['nom']) ?>
-                                    </option>
-                                <?php endforeach; ?>
-                            </select>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="accoudoirtissu">Référence Accoudoir - tissu</label>
+                                <select class="input-field" id="accoudoirtissu" name="accoudoirtissu">
+                                    <option value="">-- Sélectionnez un accoudoir en tissu --</option>
+                                    <?php foreach ($accoudoirstissu as $accoudoirtissu): ?>
+                                        <option value="<?= htmlspecialchars($accoudoirtissu['id']) ?>">
+                                            <?= htmlspecialchars($accoudoirtissu['nom']) ?>
+                                        </option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
                         </div>
                     </div>
                     <div class="button-section">
