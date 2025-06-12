@@ -1,9 +1,11 @@
 <?php
 session_start();
+require '../../admin/include/session_expiration.php';
 require '../../admin/config.php';
 
 // 1. Vérification de l’authentification
 if (!isset($_SESSION['user_id'])) {
+    $_SESSION['redirect_to'] = $_SERVER['REQUEST_URI'];
     header('Location: ../formulaire/Connexion.php');
     exit;
 }

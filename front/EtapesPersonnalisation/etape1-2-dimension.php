@@ -1,9 +1,11 @@
 <?php
 require '../../admin/config.php';
 session_start();
+require '../../admin/include/session_expiration.php';
 
 // Vérifier si l'utilisateur est connecté
 if (!isset($_SESSION['user_id'])) {
+  $_SESSION['redirect_to'] = $_SERVER['REQUEST_URI'];
   header("Location: ../formulaire/Connexion.php");
   exit;
 }
@@ -219,11 +221,11 @@ if (isset($_GET['structure_id'])) {
 
           if (!longueurA) {
             event.preventDefault(); // Empêche le formulaire d'être soumis
-            erreurPopup.style.display = 'flex'; 
+            erreurPopup.style.display = 'flex'; // Afficher le popup d'erreur
           }
         });
 
-        // Fermer le popup d'erreur 
+        // Fermer le popup d'erreur lorsque le bouton "OK" est cliqué
         closeErreurBtn.addEventListener('click', () => {
           erreurPopup.style.display = 'none';
         });
@@ -243,10 +245,11 @@ if (isset($_GET['structure_id'])) {
       document.addEventListener('DOMContentLoaded', () => {
         let totalPrice = 0; // Total global pour toutes les étapes
 
-        const currentStep = "1-dimensions"; 
+        // Identifier l'étape actuelle (par exemple, "1-dimensions")
+        const currentStep = "1-dimensions"; // Changez cette valeur pour chaque étape (par exemple "1-dimensions", "4-2", etc.)
 
         // Charger l'ID utilisateur depuis une variable PHP intégrée dans le HTML
-        const userId = document.body.getAttribute('data-user-id'); <?php echo $_SESSION['user_id']; ?>
+        const userId = document.body.getAttribute('data-user-id'); // Ex. <body data-user-id="<?php echo $_SESSION['user_id']; ?>">
         if (!userId) {
           console.error("ID utilisateur non trouvé. Vérifiez que 'data-user-id' est bien défini dans le HTML.");
           return;
@@ -269,7 +272,7 @@ if (isset($_GET['structure_id'])) {
         }
 
 
-        // Fonction pour calculer le prix des dimensions
+        // Fonction pour ajouter les dimensions au calcul
         function calculateDimensionPrice() {
           const longueurA = parseFloat(document.getElementById("longueurA").value) || 0;
           const longueurB = parseFloat(document.getElementById("longueurB").value) || 0;
@@ -279,6 +282,8 @@ if (isset($_GET['structure_id'])) {
           const dimensionPrice = totalMeters * 350;
 
           document.getElementById("dimension-price").textContent = dimensionPrice.toFixed(2);
+
+          // Mettre à jour le champ caché
           document.getElementById("prix_dimensions_hidden").value = dimensionPrice.toFixed(2);
 
           // Supprimer les dimensions précédentes pour cette étape

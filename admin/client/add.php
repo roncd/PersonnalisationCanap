@@ -1,8 +1,10 @@
 <?php
 require '../config.php';
 session_start();
+require '../include/session_expiration.php';
 
 if (!isset($_SESSION['id'])) {
+    $_SESSION['redirect_to'] = $_SERVER['REQUEST_URI'];
     header("Location: ../index.php");
     exit();
 }
@@ -21,7 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $civilite = trim($_POST['civilite']);
 
     // Validation des champs obligatoires
-    if (empty($nom) || empty($prenom) || empty($email) || empty($tel) || empty($_POST['mdp']) || empty($adresse) || empty($codepostal) || empty($ville) || empty($date)) {
+    if (empty($nom) || empty($prenom) || empty($email) || empty($tel) || empty($_POST['mdp']) || empty($adresse) || empty($codepostal) || empty($ville)) {
         $_SESSION['message'] = 'Tous les champs sont requis !';
         $_SESSION['message_type'] = 'error';
     }
@@ -139,8 +141,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <input type="ville" id="ville" name="ville" class="input-field" required>
                         </div>
                         <div class="form-group">
-                            <label for="date">Date de naissance <span class="required">*</span></label>
-                            <input type="date" id="date" name="date" class="input-field" required>
+                            <label for="date">Date de naissance </label>
+                            <input type="date" id="date" name="date" class="input-field">
                         </div>
                     </div>
                     <div class="button-section">
