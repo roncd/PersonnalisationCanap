@@ -1,9 +1,11 @@
 <?php
 require '../../admin/config.php';
 session_start();
+require '../../admin/include/session_expiration.php';
 
 // Vérifier si l'utilisateur est connecté
 if (!isset($_SESSION['user_id'])) {
+  $_SESSION['redirect_to'] = $_SERVER['REQUEST_URI'];
   header("Location: ../formulaire/Connexion.php");
   exit;
 }
@@ -105,7 +107,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <!-- Compteur de quantité (maintenant à l'intérieur de .option) -->
                 <div class="quantity-selector">
                   <button class="decrease-btn">-</button>
-                  <input type="text" class="quantity-input" value="0" readonly>
+                  <input type="text" class="quantity-input" value="2" readonly>
                   <button class="increase-btn">+</button>
 
                 </div>
@@ -203,7 +205,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         function updateTotal() {
           totalPrice = allSelectedOptions.reduce((sum, option) => {
-            return sum + ((option.price || 0) * (option.quantity || 1));
+            return sum + (option.price * 2);
           }, 0);
           if (totalElement) totalElement.textContent = `${totalPrice.toFixed(2)} €`;
         }
@@ -232,8 +234,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             const quantityInput = parentOption.querySelector('.quantity-input');
             const quantitySelector = parentOption.querySelector('.quantity-selector');
             const decreaseBtn = parentOption.querySelector('.decrease-btn');
+            const increaseBtn = parentOption.querySelector('.increase-btn');
 
             const storedQuantity = selectedOptions[accoudoirId] || 0;
+
+            if (quantityInput) {
+              quantityInput.value = 2;
+              quantityInput.readOnly = true;
+            }
 
             if (storedQuantity > 0) {
               img.classList.add('selected');
@@ -243,8 +251,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 mainImage.src = img.src;
                 mainImage.alt = img.alt;
               }
-              if (parseInt(quantityInput.value) === 1 && decreaseBtn) {
+              if (parseInt(quantityInput.value) === 2 && decreaseBtn) {
                 decreaseBtn.classList.add('btn-opacity');
+              }
+              if (parseInt(quantityInput.value) === 2 && increaseBtn) {
+                increaseBtn.classList.add('btn-opacity');
               }
             } else {
               img.classList.remove('selected');
@@ -265,6 +276,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             const quantityInput = parentOption.querySelector('.quantity-input');
             const quantitySelector = parentOption.querySelector('.quantity-selector');
             const decreaseBtn = parentOption.querySelector('.decrease-btn');
+            const increaseBtn = parentOption.querySelector('.increase-btn');
 
             // Supprimer la sélection sur tous les autres accoudoirs
             options.forEach(opt => {
@@ -273,6 +285,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
               const quantityOpt = parentOpt.querySelector('.quantity-input');
               const quantitySelectorOpt = parentOpt.querySelector('.quantity-selector');
               const decreaseBtnOpt = parentOpt.querySelector('.decrease-btn');
+              const increaseBtnOpt = parentOpt.querySelector('.increase-btn');
 
               if (quantityOpt) {
                 quantityOpt.value = 0;
@@ -282,6 +295,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
               }
               if (decreaseBtnOpt) {
                 decreaseBtnOpt.classList.remove('btn-opacity');
+              }
+              if (increaseBtnOpt) {
+                increaseBtnOpt.classList.remove('btn-opacity');
               }
             });
 
@@ -296,18 +312,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
               allSelectedOptions = allSelectedOptions.filter(opt => !opt.id.startsWith(`${currentStep}_`));
               selectedOptions = {};
               // Sélectionner uniquement l'accoudoir cliqué
-              selectedOptions[accoudoirId] = 1;
+              selectedOptions[accoudoirId] = 2;
               img.classList.add('selected');
-              quantityInput.value = 1;
+              quantityInput.value = 2;
+              quantityInput.readOnly = true;
               if (quantitySelector) quantitySelector.style.display = "block";
-              saveSelectedOption(accoudoirId, price, 1);
+              saveSelectedOption(accoudoirId, price, 2);
               // Image mise à jour
               if (mainImage) {
                 mainImage.src = img.src;
                 mainImage.alt = img.alt;
               }
-              if (parseInt(quantityInput.value) === 1 && decreaseBtn) {
+              if (parseInt(quantityInput.value) === 2 && decreaseBtn) {
                 decreaseBtn.classList.add('btn-opacity');
+              }
+              if (parseInt(quantityInput.value) === 2 && increaseBtn) {
+                increaseBtn.classList.add('btn-opacity');
               }
             }
             updateHiddenInputs();
@@ -324,21 +344,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             const accoudoirId = img.getAttribute('data-accoudoir-id');
             const price = parseFloat(img.getAttribute('data-accoudoir-prix')) || 0;
             const quantityInput = parentOption.querySelector('.quantity-input');
-            const decreaseBtn = parentOption.querySelector('.decrease-btn');
 
             let quantity = parseInt(quantityInput.value) || 0;
             if (quantity < 1) return;
-            quantity++;
             quantityInput.value = quantity;
-
             selectedOptions[accoudoirId] = quantity;
 
             saveSelectedOption(accoudoirId, price, quantity);
             saveSelection();
             updateHiddenInputs();
-            updateTotal();
-            if (quantity > 1) {
-              decreaseBtn.classList.remove('btn-opacity');
+
+            if (quantity === 2) {
+              button.classList.add('btn-opacity');
             }
           });
         });
@@ -351,19 +368,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             const accoudoirId = img.getAttribute('data-accoudoir-id');
             const price = parseFloat(img.getAttribute('data-accoudoir-prix')) || 0;
             const quantityInput = parentOption.querySelector('.quantity-input');
+            const increaseBtn = parentOption.querySelector('.increase-btn');
 
             let quantity = parseInt(quantityInput.value) || 0;
             if (quantity > 1) {
-              quantity--;
               quantityInput.value = quantity;
               selectedOptions[accoudoirId] = quantity;
 
               saveSelectedOption(accoudoirId, price, quantity);
               saveSelection();
               updateHiddenInputs();
-              updateTotal();
+
             }
-            if (quantity === 1) {
+            if (quantity === 2) {
               button.classList.add('btn-opacity');
             }
           });
