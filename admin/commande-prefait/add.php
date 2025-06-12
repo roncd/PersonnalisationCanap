@@ -33,9 +33,6 @@ $decorations = fetchData($pdo, 'decoration');
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $prix = trim($_POST['prix']);
     $prixDimensions = trim($_POST['prix_dimensions']);
-    $longueurA = trim($_POST['longueurA']);
-    $longueurB = trim($_POST['longueurB']) ?: null;
-    $longueurC = trim($_POST['longueurC']) ?: null;
     $idStructure = trim($_POST['structure']);
     $idBanquette = trim($_POST['banquette']) ?: null;
     $idMousse = trim($_POST['mousse']) ?: null;
@@ -84,7 +81,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
 
-    if (empty($prix) || empty($prixDimensions) || empty($longueurA)) {
+    if (empty($prix)) {
         $_SESSION['message'] = 'Les champs obligatoires doivent être remplis.';
         $_SESSION['message_type'] = 'error';
     } else {

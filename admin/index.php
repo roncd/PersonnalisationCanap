@@ -7,9 +7,9 @@
     <title>Admin - Connexion</title>
     <link rel="icon" type="image/x-icon" href="../medias/favicon.png">
     <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../styles/admin/ajout.css">
     <link rel="stylesheet" href="../styles/buttons.css">
     <link rel="stylesheet" href="../styles/message.css">
-    <link rel="stylesheet" href="../styles/admin/ajout.css">
 </head>
 
 <body>
@@ -63,32 +63,65 @@
                 unset($_SESSION['error_message']); // Supprime le message après l'avoir affiché
             }
             ?>
-            <div class="form">
-                <form action="" method="POST" class="formulaire-connexion">
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="login">Adresse mail</label>
-                            <input type="email" id="login" name="login" class="input-field" require>
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="mdp">Mot de passe</label>
-                            <input type="password" id="mdp" name="mdp" class="input-field" require>
-                        </div>
-                    </div>
-                    <div class="footer">
-                        <p><span><a href="include/reset_pswd.php" class="link-connect">Mot de passe oublié ?</a></span></p>
-                    </div>
-                    <div class="button-section">
-                        <p>Revenir sur <span><a href="../front/pages/index.php" class="link-connect">Deco du monde</a></span></p>
-                        <div class="buttons">
-                            <button type="submit" name="connecter" class="btn-noir">Se connecter</button>
-                        </div>
-                    </div>
-                </form>
+ <div class="form">
+    <form action="" method="POST" class="formulaire-creation-compte">
+        <div class="form-row">
+            <div class="form-group">
+                <label for="login">Adresse mail</label>
+                <input type="email" id="login" name="login" class="input-field" required>
             </div>
         </div>
+        <div class="form-row">
+            <div class="form-group">
+                <label for="mdp">Mot de passe</label>
+                    <input type="password" id="mdp" name="mdp" class="input-field" required>
+                <div id="caps-lock-warning" style="display:none; color: grey; font-size: 0.95em; margin-top: 4px;">
+                    ⚠️ Attention : Verr Maj est activé !
+                </div>
+                <div id="shift-warning" style="display:none; color: grey; font-size: 0.95em; margin-top: 4px;">
+                    ⚠️ Attention : La touche Maj (Shift) est maintenue !
+                </div>
+            </div>
+        </div>
+        <div class="button-section">
+            <p>Revenir sur <span><a href="../front/pages/index.php" class="link-connect">Deco du monde</a></span></p>
+            <div class="buttons">
+                <button type="submit" name="connecter" class="btn-noir">Se connecter</button>
+            </div>
+        </div>
+    </form>
+</div>
+</div>
+
+<script>
+    const passwordInput = document.getElementById('mdp');
+    const capsLockWarning = document.getElementById('caps-lock-warning');
+    const shiftWarning = document.getElementById('shift-warning');
+
+    passwordInput.addEventListener('keydown', function (event) {
+        if (event.getModifierState && event.getModifierState('CapsLock')) {
+            capsLockWarning.style.display = 'block';
+        } else {
+            capsLockWarning.style.display = 'none';
+        }
+
+        if (event.shiftKey) {
+            shiftWarning.style.display = 'block';
+        } else {
+            shiftWarning.style.display = 'none';
+        }
+    });
+
+    passwordInput.addEventListener('keyup', function (event) {
+        if (!(event.getModifierState && event.getModifierState('CapsLock'))) {
+            capsLockWarning.style.display = 'none';
+        }
+
+        if (!event.shiftKey) {
+            shiftWarning.style.display = 'none';
+        }
+    });
+</script>
     </main>
 </body>
 
