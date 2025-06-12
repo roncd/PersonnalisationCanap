@@ -1,8 +1,10 @@
 <?php
 require '../config.php';
 session_start();
+require '../include/session_expiration.php';
 
 if (!isset($_SESSION['id'])) {
+    $_SESSION['redirect_to'] = $_SERVER['REQUEST_URI'];
     header("Location: ../index.php");
     exit();
 }
@@ -21,7 +23,21 @@ try {
     $stmt->bindValue(':id', $id, PDO::PARAM_INT);
     $stmt->execute();
 
+    // Récupérer le nom du fichier image associé
+    $stmt = $pdo->prepare("SELECT img FROM accoudoir_tissu WHERE id = :id");
+    $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+    $stmt->execute();
+    $image = $stmt->fetchColumn();
+
     if ($stmt->rowCount() > 0) {
+        // Supprimer le fichier image du serveur
+        if ($image) {
+            $imagePath = '../uploads/accoudoirs-tissu/' . $image;
+            if (file_exists($imagePath)) {
+                unlink($imagePath);
+            }
+        }
+
         $_SESSION['message'] = 'L\'accoudoir en tissu a été supprimé avec succès !';
         $_SESSION['message_type'] = 'success';
     } else {
