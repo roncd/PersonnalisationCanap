@@ -1,8 +1,10 @@
 <?php
 require '../config.php';
 session_start();
+require '../include/session_expiration.php';
 
 if (!isset($_SESSION['id'])) {
+    $_SESSION['redirect_to'] = $_SERVER['REQUEST_URI'];
     header("Location: ../index.php");
     exit();
 }
@@ -14,6 +16,9 @@ if (!$id) {
     header("Location: visualiser.php");
     exit();
 }
+$stmt = $pdo->prepare("SELECT id, nom FROM couleur");
+$stmt->execute();
+$couleurs = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 $stmt = $pdo->prepare("SELECT * FROM couleur_tissu_bois WHERE  id = :id");
 $stmt->bindValue(':id', $id, PDO::PARAM_INT);
@@ -31,6 +36,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nom = trim($_POST['name']);
     $price = ($_POST['price']);
     $img = $_FILES['img'];
+    $id_couleur = trim($_POST['id_couleur']);
+
 
     if (empty($nom)) {
         $_SESSION['message'] = 'Le nom est requis.';
@@ -57,8 +64,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         }
         if (!isset($_SESSION['message'])) {
-            $stmt = $pdo->prepare("UPDATE couleur_tissu_bois SET nom = ?, prix = ?, img = ? WHERE id = ?");
-            $stmt->execute([$nom, $price, $fileName, $id]);
+            $stmt = $pdo->prepare("UPDATE couleur_tissu_bois SET nom = ?, prix = ?, img = ?, couleur_id = ? WHERE id = ?");
+            $stmt->execute([$nom, $price, $fileName, $id_couleur, $id]);
             $_SESSION['message'] = 'Le motif a été mis à jour avec succès !';
             $_SESSION['message_type'] = 'success';
             header("Location: visualiser.php");
@@ -78,7 +85,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link rel="stylesheet" href="../../styles/admin/ajout.css">
     <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
     <link rel="stylesheet" href="../../styles/message.css">
-    
     <link rel="stylesheet" href="../../styles/buttons.css">
     <script src="../../script/previewImage.js"></script>
 </head>
@@ -110,6 +116,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <input type="file" id="img" name="img" class="input-field" accept="image/*" onchange="loadFile(event)" >
                             <img class="preview-img" src="../uploads/couleur-tissu-bois/<?php echo htmlspecialchars($motifTissuBois['img']); ?>" id="output" />
                          </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="id_couleur">Couleur associé au motif <span class="required">*</span></label>
+                            <select class="input-field" id="id_couleur" name="id_couleur">
+                                <?php foreach ($couleurs as $couleur): ?>
+                                    <option value="<?= htmlspecialchars($couleur['id']) ?>"
+                                        <?= ($couleur['id'] == $motifTissuBois['couleur_id']) ? 'selected' : '' ?>>
+                                        <?= htmlspecialchars($couleur['nom']) ?>
+                                    </option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
                     </div>
                     <div class="button-section">
                         <div class="buttons">
