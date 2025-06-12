@@ -14,7 +14,7 @@ $commande = $stmt->fetch(PDO::FETCH_ASSOC);
 if (!$commande) {
   die("Aucune commande pré-faite trouvée.");
 }
-
+ 
 // Initialisation du tableau de composition
 $composition = [];
 $totalPrice = 0;
