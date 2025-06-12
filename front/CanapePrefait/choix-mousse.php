@@ -42,7 +42,6 @@ if ($selectedMousseId) {
 
 // Récupération du prix de la mousse existante (ou 0 si aucune)
 $oldMoussePrice = !empty($composition['mousse']['prix']) ? (float) $composition['mousse']['prix'] : 0;
-
 // Traitement du formulaire
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $id_mousse = $_POST['mousse_id'] ?? null;
@@ -60,17 +59,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt = $pdo->prepare("INSERT INTO commande_temporaire (
                 commentaire, date, statut, id_client, id_commande_prefait, id_structure, id_mousse, prix
             ) VALUES (?, NOW(), ?, ?, ?, ?, ?, ?)");
-
             $stmt->execute(['', 'en cours', $_SESSION['user_id'], $id_commande_prefait, $selected['id_structure'], $id_mousse, $prix]);
         }
 
-        header("Location: recapitulatif-commande-tissu.php?id=" . $id_commande_prefait);
+        // Récupérer le type de banquette pour choisir la redirection
+        $stmt = $pdo->prepare("SELECT tb.nom
+                               FROM commande_temporaire ct
+                               JOIN type_banquette tb ON ct.id_banquette = tb.id
+                               WHERE ct.id_client = ? AND ct.id_commande_prefait = ?");
+        $stmt->execute([$_SESSION['user_id'], $id_commande_prefait]);
+        $typeBanquette = $stmt->fetchColumn();
+
+        if ($typeBanquette === 'Bois') {
+            header("Location: recapitulatif-commande-bois.php?id=" . $id_commande_prefait);
+        } elseif ($typeBanquette === 'Tissu') {
+            header("Location: recapitulatif-commande-tissu.php?id=" . $id_commande_prefait);
+        } else {
+            die("Type de banquette inconnu : " . htmlspecialchars($typeBanquette));
+        }
         exit;
     } else {
         $error = "Veuillez sélectionner une mousse.";
     }
 }
 ?>
+
 
 <script>
   const ancienPrixMousse = <?= json_encode($oldMoussePrice) ?>;
