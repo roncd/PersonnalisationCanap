@@ -1,5 +1,6 @@
 <?php
 session_start();
+require '../../admin/include/session_expiration.php';
 require '../../admin/config.php';
 
 // --- Flash message depuis changer_mdp.php ---
@@ -40,10 +41,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $info       = trim($_POST['info']);
     $codepostal = trim($_POST['codepostal']);
     $ville      = trim($_POST['ville']);
+    $date = trim($_POST['date']);
+    $civilite = trim($_POST['civilite']);
 
     if (
         empty($nom) || empty($prenom) || empty($mail) || empty($tel)
-        || empty($adresse) || empty($codepostal) || empty($ville)
+        || empty($adresse) || empty($codepostal) || empty($ville) 
     ) {
         $_SESSION['message']      = 'Tous les champs requis doivent être remplis.';
         $_SESSION['message_type'] = 'error';
@@ -51,7 +54,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Mettre à jour le client dans la base de données
         $stmt = $pdo->prepare("
             UPDATE client 
-            SET nom = ?, prenom = ?, mail = ?, tel = ?, adresse = ?, info = ?, codepostal = ?, ville = ? 
+            SET nom = ?, prenom = ?, mail = ?, tel = ?, adresse = ?, info = ?, codepostal = ?, ville = ?, date_naissance = ?,  civilite = ? 
             WHERE id = ?
         ");
         if ($stmt->execute([
@@ -63,6 +66,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $info,
             $codepostal,
             $ville,
+            $date,
+            $civilite,
             $userId
         ])) {
             $_SESSION['message']      = 'Vos informations ont été mises à jour avec succès !';
@@ -123,7 +128,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 value="<?= htmlspecialchars($client['prenom']) ?>" required>
                         </div>
                     </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="civilite">Titre de civilité</label>
+                            <select class="input-field" id="civilite" name="civilite">
+                                <option value="<?php echo htmlspecialchars($client['civilite']); ?>"><?php echo htmlspecialchars($client['civilite']); ?></option>
+                                <?php
+                                $options = ["Mme." => "Madame", "M." => "Monsieur", "Pas précisé" => "Ne souhaite pas préciser"];
 
+                                // Boucle pour afficher uniquement les options différentes
+                                foreach ($options as $value => $label) {
+                                    if ($value !== $client['civilite']) {
+                                        echo "<option value=\"$value\">$label</option>";
+                                    }
+                                }
+                                ?>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="date">Date de naissance</label>
+                            <input type="date" id="date" class="input-field" name="date" value="<?php echo htmlspecialchars($client['date_naissance']); ?>">
+                        </div>
+                    </div>
                     <div class="form-row">
                         <div class="form-group">
                             <label for="email">Mail <span class="required">*</span></label>

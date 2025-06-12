@@ -1,9 +1,11 @@
 <?php
 require '../../admin/config.php';
 session_start();
+require '../../admin/include/session_expiration.php';
 
 // Vérifier si l'utilisateur est connecté
 if (!isset($_SESSION['user_id'])) {
+  $_SESSION['redirect_to'] = $_SERVER['REQUEST_URI'];
   header("Location: ../formulaire/Connexion.php");
   exit;
 }
@@ -146,7 +148,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div class="footer">
           <p>Total : <span>0 €</span></p>
           <div class="buttons">
-            <button onclick="retourEtapePrecedente()" class="btn-beige  ">Retour</button>
+            <button onclick="retourEtapePrecedente()" class="btn-beige">Retour</button>
             <form method="POST" action="">
               <input type="hidden" name="accoudoir_bois_id" id="selected-accoudoir_bois">
               <input type="hidden" name="nb_accoudoir" id="selected-nb_accoudoir" required>
@@ -157,7 +159,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       </div>
 
       <!-- Colonne de droite -->
-      <div class="right-column ">
+      <div class="right-column">
         <section class="main-display">
           <div class="buttons ">
             <button id="btn-aide" class="btn-beige">Besoin d'aide ?</button>
@@ -169,7 +171,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
 
     <!-- Popup besoin d'aide -->
-    <div id="help-popup" class="popup ">
+    <div id="help-popup" class="popup">
       <div class="popup-content">
         <h2>Vous avez une question ?</h2>
         <p>Contactez nous au numéro suivant et un vendeur vous assistera :
@@ -182,7 +184,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
 
     <!-- Popup abandonner -->
-    <div id="abandonner-popup" class="popup ">
+    <div id="abandonner-popup" class="popup">
       <div class="popup-content">
         <h2>Êtes vous sûr de vouloir abandonner ?</h2>
         <br>
@@ -192,9 +194,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
 
     <!-- Popup d'erreur si option non selectionnée -->
-    <div id="erreur-popup" class="popup ">
+    <div id="erreur-popup" class="popup">
       <div class="popup-content">
         <h2>Veuillez choisir une option avant de continuer.</h2>
+        <button class="btn-noir">OK</button>
+      </div>
+    </div>
+
+    <!-- Popup maximum 2 accoudoirs -->
+    <div id="accoudoir-popup" class="popup">
+      <div class="popup-content">
+        <h2>Vous devez choisir maximum 2 accoudoirs.</h2>
         <button class="btn-noir">OK</button>
       </div>
     </div>
@@ -208,6 +218,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         const form = document.querySelector('form');
         const erreurPopup = document.getElementById('erreur-popup');
         const closeErreurBtn = erreurPopup.querySelector('.btn-noir');
+        const accoudoirPopup = document.getElementById('accoudoir-popup');
+        const closeBtn = accoudoirPopup.querySelector('.btn-noir');
         const selectedAccoudoirBoisInput = document.getElementById('selected-accoudoir_bois');
         const selectedNbAccoudoirInput = document.getElementById('selected-nb_accoudoir');
         const currentStep = "5-accoudoir-bois";
@@ -223,13 +235,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         let selectedOptions = JSON.parse(sessionStorage.getItem(selectedKey)) || {};
         let allSelectedOptions = JSON.parse(sessionStorage.getItem(sessionKey)) || [];
-        let totalPrice = 0;
 
         if (!Array.isArray(allSelectedOptions)) {
           allSelectedOptions = [];
         }
 
         // Déclaration des fonctions
+        function getTotalAccoudoirs() {
+          const currentAccoudoirIds = Array.from(document.querySelectorAll('.option img[data-bois-id]'))
+            .map(img => img.getAttribute('data-bois-id'));
+
+          return currentAccoudoirIds.reduce((total, boisId) => {
+            const qty = parseInt(selectedOptions[boisId]) || 0;
+            return total + qty;
+          }, 0);
+        }
+
         function updateHiddenInputs() {
           selectedAccoudoirBoisInput.value = Object.keys(selectedOptions).join(',');
           selectedNbAccoudoirInput.value = Object.values(selectedOptions).join(',');
@@ -245,19 +266,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           if (quantity > 0) {
             allSelectedOptions.push({
               id: uniqueId,
-              price: price,
-              quantity: quantity
+              price,
+              quantity
             });
           }
           sessionStorage.setItem(sessionKey, JSON.stringify(allSelectedOptions));
         }
 
         function updateTotal() {
-          totalPrice = allSelectedOptions.reduce((sum, opt) => sum + (opt.price || 0) * (opt.quantity || 1), 0);
+          const total = allSelectedOptions.reduce((sum, opt) => sum + (opt.price || 0) * (opt.quantity || 1), 0);
           const totalElement = document.querySelector(".footer p span");
-          if (totalElement) {
-            totalElement.textContent = `${totalPrice.toFixed(2)} €`;
-          }
+          if (totalElement) totalElement.textContent = `${total.toFixed(2)} €`;
         }
 
         function restoreSelections() {
@@ -266,15 +285,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             const parent = img.closest('.option');
             const quantityInput = parent.querySelector('.quantity-input1');
             const quantitySelector = parent.querySelector('.quantity-selector1');
-            const decreaseBtn = parent.querySelector('.btn-decrease');
 
             if (selectedOptions[boisId]) {
               img.classList.add('selected');
               quantityInput.value = selectedOptions[boisId];
               if (quantitySelector) quantitySelector.style.display = "block";
-              if (parseInt(quantityInput.value) === 1 && decreaseBtn) {
-                decreaseBtn.classList.add('btn-opacity');
-              }
             } else {
               img.classList.remove('selected');
               quantityInput.value = 0;
@@ -292,6 +307,35 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           }
         }
 
+        function updateAllIncreaseButtons() {
+          const totalAccoudoirs = getTotalAccoudoirs();
+
+          document.querySelectorAll('.option').forEach(option => {
+            const img = option.querySelector('img');
+            const boisId = img.getAttribute('data-bois-id');
+            const increaseBtn = option.querySelector('.btn-increase');
+            const decreaseBtn = option.querySelector('.btn-decrease');
+            const quantityInput = option.querySelector('.quantity-input1');
+            const quantity = parseInt(quantityInput.value) || 0;
+
+            // Gestion bouton +
+            if (totalAccoudoirs >= 2 && quantity < 2) {
+              increaseBtn.classList.add('btn-opacity');
+            } else if (quantity >= 2) {
+              increaseBtn.classList.add('btn-opacity');
+            } else {
+              increaseBtn.classList.remove('btn-opacity');
+            }
+
+            // Gestion bouton -
+            if (quantity <= 1) {
+              decreaseBtn.classList.add('btn-opacity');
+            } else {
+              decreaseBtn.classList.remove('btn-opacity');
+            }
+          });
+        }
+
         // Sélection / désélection sur image
         options.forEach(img => {
           img.addEventListener('click', () => {
@@ -301,6 +345,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             const quantityInput = parent.querySelector('.quantity-input1');
             const quantitySelector = parent.querySelector('.quantity-selector1');
             const decreaseBtn = parent.querySelector('.btn-decrease');
+            const increaseBtn = parent.querySelector('.btn-increase');
 
             if (img.classList.contains('selected')) {
               img.classList.remove('selected');
@@ -310,6 +355,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
               localStorage.removeItem('lastSelectedAccoudoir');
               saveSelectedOption(boisId, price, 0);
             } else {
+              const totalAccoudoirs = getTotalAccoudoirs();
+              if (totalAccoudoirs >= 2) {
+                accoudoirPopup.style.display = 'flex';
+                // Fermer le popup accoudoir
+              closeBtn.addEventListener('click', () => {
+                accoudoirPopup.style.display = 'none';
+              });
+
+              window.addEventListener('click', (event) => {
+                if (event.target === accoudoirPopup) {
+                  accoudoirPopup.style.display = 'none';
+                }
+              });
+                return;
+              }
+              
               img.classList.add('selected');
               quantityInput.value = 1;
               selectedOptions[boisId] = 1;
@@ -318,14 +379,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
               mainImage.src = img.src;
               mainImage.alt = img.alt;
               saveSelectedOption(boisId, price, 1);
-              if (parseInt(quantityInput.value) === 1 && decreaseBtn) {
-                decreaseBtn.classList.add('btn-opacity');
+
+              if (decreaseBtn) decreaseBtn.classList.add('btn-opacity');
+              if (increaseBtn && parseInt(quantityInput.value) === 2) {
+                increaseBtn.classList.add('btn-opacity');
               }
             }
             updateHiddenInputs();
             saveSelection();
             updateTotal();
-
+            updateAllIncreaseButtons();
           });
         });
 
@@ -339,21 +402,39 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             const quantityInput = parent.querySelector('.quantity-input1');
             const decreaseBtn = parent.querySelector('.btn-decrease');
 
-            let quantity = parseInt(quantityInput.value) || 0;
-            if (quantity < 1) return;
-            quantity++;
-            quantityInput.value = quantity;
+            let currentQuantity = parseInt(quantityInput.value) || 0;
+            const totalAccoudoirs = getTotalAccoudoirs();
 
-            selectedOptions[boisId] = quantity;
-            saveSelectedOption(boisId, price, quantity);
-            saveSelection();
-            updateHiddenInputs();
-            updateTotal();
-            if (quantity > 1) {
-              decreaseBtn.classList.remove('btn-opacity');
+            // Calculer la quantité totale si on augmente
+            if (totalAccoudoirs >= 2) {
+              btn.classList.add('btn-opacity');
+              return;
+            }
+
+            if (currentQuantity < 2) {
+              currentQuantity++;
+              quantityInput.value = currentQuantity;
+              selectedOptions[boisId] = currentQuantity;
+              saveSelectedOption(boisId, price, currentQuantity);
+              saveSelection();
+              updateHiddenInputs();
+              updateTotal();
+              updateAllIncreaseButtons();
+
+              // Gestion de la classe sur button
+              if (currentQuantity === 2 || getTotalAccoudoirs() === 2) {
+                btn.classList.add('btn-opacity');
+              } else {
+                btn.classList.remove('btn-opacity');
+              }
+
+              if (currentQuantity > 1) {
+                decreaseBtn.classList.remove('btn-opacity');
+              }
             }
           });
         });
+
 
         // Décrémentation button
         document.querySelectorAll('.btn-decrease').forEach(btn => {
@@ -363,19 +444,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             const boisId = img.getAttribute('data-bois-id');
             const price = parseFloat(img.getAttribute('data-bois-prix')) || 0;
             const quantityInput = parent.querySelector('.quantity-input1');
+            const increaseBtn = parent.querySelector('.btn-increase');
 
-            let quantity = parseInt(quantityInput.value) || 0;
-            if (quantity > 1) {
-              quantity--;
-              quantityInput.value = quantity;
-              selectedOptions[boisId] = quantity;
-              saveSelectedOption(boisId, price, quantity);
+            let currentQuantity = parseInt(quantityInput.value) || 0;
+
+            if (currentQuantity > 1) {
+              currentQuantity--;
+              quantityInput.value = currentQuantity;
+              selectedOptions[boisId] = currentQuantity;
+              saveSelectedOption(boisId, price, currentQuantity);
               saveSelection();
               updateHiddenInputs();
               updateTotal();
-            }
-            if (quantity === 1) {
-              btn.classList.add('btn-opacity');
+              updateAllIncreaseButtons();
+
+              // Gestion des classes
+              if (currentQuantity === 1) {
+                btn.classList.add('btn-opacity');
+              }
+              increaseBtn.classList.remove('btn-opacity');
             }
           });
         });
@@ -383,9 +470,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Etape suivante
         suivantButton.addEventListener('click', (e) => {
           e.preventDefault();
-          const hasSelection = Object.keys(selectedOptions).length > 0;
-          const hasValidQuantity = Object.values(selectedOptions).some(q => parseInt(q) > 0);
-          if (!hasSelection || !hasValidQuantity) {
+          const total = getTotalAccoudoirs();
+          if (total === 0) {
             erreurPopup.style.display = 'flex';
             return;
           }
@@ -396,7 +482,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         // Validation du formulaire + affichage pop up
         form.addEventListener('submit', (e) => {
-          if (Object.keys(selectedOptions).length === 0) {
+          if (getTotalAccoudoirs() === 0) {
             e.preventDefault();
             erreurPopup.style.display = 'flex';
           } else {
@@ -405,12 +491,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         });
 
         // Fermer le popup erreur
-        closeErreurBtn.addEventListener('click', () => erreurPopup.style.display = 'none');
-        window.addEventListener('click', (e) => {
-          if (e.target === erreurPopup) erreurPopup.style.display = 'none';
+        closeErreurBtn.addEventListener('click', () => {
+          erreurPopup.style.display = 'none';
         });
+
+        window.addEventListener('click', (event) => {
+          if (event.target === erreurPopup) {
+            erreurPopup.style.display = 'none';
+          }
+        });
+
         restoreSelections();
         updateTotal();
+        updateAllIncreaseButtons();
       });
     </script>
 

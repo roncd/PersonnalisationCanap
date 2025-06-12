@@ -41,7 +41,13 @@
                         if (password_verify($mdp, $utilisateur['mdp'])) {
                             $_SESSION['mail'] = $utilisateur['mail'];
                             $_SESSION['id'] = $utilisateur['id'];
-                            header('Location: pages/index.php'); //redirection vers l'accueil de l'administration
+                            if (!empty($_SESSION['redirect_to'])) {
+                                $redirect_to = $_SESSION['redirect_to'];
+                                unset($_SESSION['redirect_to']);
+                                header("Location: $redirect_to");
+                            } else {
+                                header("Location: pages/index.php");
+                            }
                             exit();
                         } else {
                             //login inexistant et/ou mot de passe incorrect
@@ -56,7 +62,6 @@
                 header("Location: " . $_SERVER['PHP_SELF']);
                 exit();
             }
-
 
             if (isset($_SESSION['error_message'])) {
                 echo "<div class='message error'>" . htmlspecialchars($_SESSION['error_message']) . "</div>";

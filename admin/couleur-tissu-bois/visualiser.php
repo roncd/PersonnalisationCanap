@@ -1,12 +1,32 @@
 <?php
 require '../config.php';
 session_start();
+require '../include/session_expiration.php';
 
 if (!isset($_SESSION['id'])) {
+    $_SESSION['redirect_to'] = $_SERVER['REQUEST_URI'];
     header("Location: ../index.php");
     exit();
 }
 $search = $_GET['search'] ?? '';
+
+$tables = ['couleur'];
+
+function fetchData($pdo, $table)
+{
+    $stmt = $pdo->prepare("SELECT id, nom FROM $table");
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+$data = [];
+$assocData = [];
+
+foreach ($tables as $table) {
+    $data[$table] = fetchData($pdo, $table);
+    $assocData[$table] = array_column($data[$table], 'nom', 'id');
+}
+
 
 // Paramètres de pagination
 $page = isset($_GET['page']) && is_numeric($_GET['page']) && $_GET['page'] > 0 ? (int)$_GET['page'] : 1;
@@ -42,6 +62,8 @@ $totalPages = ceil($totalCommandes / $limit);
     <link rel="stylesheet" href="../../styles/message.css">
     <link rel="stylesheet" href="../../styles/pagination.css">
     <link rel="stylesheet" href="../../styles/buttons.css">
+    <link rel="stylesheet" href="../../styles/popup.css">
+    <script src="../../script/deleteRow.js"></script>
 </head>
 
 <body>
@@ -84,6 +106,7 @@ $totalPages = ceil($totalCommandes / $limit);
                             <th>NOM</th>
                             <th>PRIX</th>
                             <th>IMAGE</th>
+                            <th>COULEUR ASSOCIÉ</th>
                             <th class="sticky-col">ACTION</th>
                         </tr>
                     </thead>
@@ -104,9 +127,10 @@ $totalPages = ceil($totalCommandes / $limit);
                             echo "<td>{$row['nom']}</td>";
                             echo "<td>{$row['prix']}</td>";
                             echo "<td><img src='../uploads/couleur-tissu-bois/{$row['img']}' alt='{$row['nom']}' style='width:50px; height:auto;'></td>";
+                            echo "<td>" . htmlspecialchars($assocData['couleur'][$row['couleur_id']] ?? 'N/A') . "</td>";
                             echo "<td class='actions'>";
                             echo "<a href='edit.php?id={$row['id']}' class='edit-action actions vert' title='Modifier'>EDIT</a>";
-                            echo "<a href='delete.php?id={$row['id']}' class='delete-action actions rouge' title='Supprimer' onclick='return confirm(\"Voulez-vous vraiment supprimer ce motif de banquette ?\");'>DELETE</a>";
+                            echo "<a href='delete.php?id={$row['id']}' class='delete-action actions rouge' data-id='{$row['id']}' title='Supprimer'>DELETE</a>";
                             echo "</td>";
                             echo "</tr>";
                         }
@@ -115,6 +139,15 @@ $totalPages = ceil($totalCommandes / $limit);
                 </table>
             </div>
             <?php require '../include/pagination.php'; ?>
+        </div>
+        <div id="supprimer-popup" class="popup">
+            <div class="popup-content">
+                <h2>Êtes-vous sûr de vouloir supprimer ?</h2>
+                <p>(L'élément sera supprimé définitivement)</p>
+                <br>
+                <button id="confirm-delete" class="btn-beige">Oui</button>
+                <button id="cancel-delete" class="btn-noir">Non</button>
+            </div>
         </div>
     </main>
     <footer>
