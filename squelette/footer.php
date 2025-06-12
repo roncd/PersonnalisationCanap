@@ -39,7 +39,7 @@
         <ol>
           <li class="ft-nav-item"><a href="../pages/index.php">Accueil</a></li>
           <li class="ft-nav-item"><a href="../EtapesPersonnalisation/etape1-1-structure.php">Personnalisation</a></li>
-          <li class="ft-nav-item"><a href="../EtapesPersonnalisation/etape1-1-structure.php">À Propos</a></li>
+          <li class="ft-nav-item"><a href="../pages/apropos.php">À Propos</a></li>
           <li class="ft-nav-item"><a href="../pages/commandes.php">Mes Commandes</a></li>
         </ol>
       </nav>
