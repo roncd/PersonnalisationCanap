@@ -1,9 +1,11 @@
 <?php
 require '../config.php';
 session_start();
+require '../include/session_expiration.php';
 
 // Vérification si l'utilisateur est connecté
 if (!isset($_SESSION['id'])) {
+    $_SESSION['redirect_to'] = $_SERVER['REQUEST_URI'];
     header("Location: ../index.php");
     exit();
 }
@@ -72,14 +74,14 @@ $commandes = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <title>Commandes</title>
     <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&display=swap" rel="stylesheet">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
     <link rel="stylesheet" href="../../styles/commandes.css">
     <link rel="stylesheet" href="../../styles/popup.css">
     <link rel="stylesheet" href="../../styles/buttons.css">
     <link rel="stylesheet" href="../../styles/pagination.css">
+    <link rel="stylesheet" href="../../styles/message.css">
     <script src="../../script/commandes.js"></script>
     <script type="module" src="../../script/download.js"></script>
-    <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
-    <link rel="stylesheet" href="../../styles/message.css">
 </head>
 
 <body>

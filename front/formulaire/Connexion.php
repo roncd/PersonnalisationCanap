@@ -1,6 +1,7 @@
 <?php
 require '../../admin/config.php';
 session_start();
+require '../../admin/include/session_expiration.php';
 if (!isset($_SESSION['user_id'])) {
     $currentPage = $_SERVER['HTTP_REFERER'] ?? '/index.php'; // Page précédente, ou accueil si absent
     // On évite de sauvegarder la page de connexion elle-même

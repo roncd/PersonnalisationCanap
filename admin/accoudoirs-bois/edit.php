@@ -1,8 +1,10 @@
 <?php
 require '../config.php';
 session_start();
+require '../include/session_expiration.php';
 
 if (!isset($_SESSION['id'])) {
+    $_SESSION['redirect_to'] = $_SERVER['REQUEST_URI'];
     header("Location: ../visualiser.php");
     exit();
 }

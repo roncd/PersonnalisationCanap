@@ -1,8 +1,10 @@
 <?php
 require '../config.php';
 session_start();
+require '../include/session_expiration.php';
 
 if (!isset($_SESSION['id'])) {
+    $_SESSION['redirect_to'] = $_SERVER['REQUEST_URI'];
     header("Location: ../index.php");
     exit();
 }
@@ -43,7 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $date = trim($_POST['date']);
     $civilite = trim($_POST['civilite']);
 
-    if (empty($nom) || empty($prenom) || empty($mail) || empty($tel) || empty($adresse) || empty($codepostal) || empty($ville) || empty($date)) {
+    if (empty($nom) || empty($prenom) || empty($mail) || empty($tel) || empty($adresse) || empty($codepostal) || empty($ville)) {
         $_SESSION['message'] = 'Tous les champs requis doivent être remplis.';
         $_SESSION['message_type'] = 'error';
     } else {
@@ -147,8 +149,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         </div>
                         <div class="form-row">
                         <div class="form-group">
-                            <label for="date">Date de naissance <span class="required">*</span></label>
-                            <input type="date" id="date" class="input-field" name="date" value="<?php echo htmlspecialchars($client['date_naissance']); ?>" required>
+                            <label for="date">Date de naissance </label>
+                            <input type="date" id="date" class="input-field" name="date" value="<?php echo htmlspecialchars($client['date_naissance']); ?>">
                         </div>
                     </div>
                     <div class="button-section">

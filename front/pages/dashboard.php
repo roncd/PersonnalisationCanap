@@ -1,8 +1,10 @@
 <?php
 require '../../admin/config.php';
 session_start();
+require '../../admin/include/session_expiration.php';
 
 if (!isset($_SESSION['user_id'])) {
+  $_SESSION['redirect_to'] = $_SERVER['REQUEST_URI'];
   header("Location: ../formulaire/Connexion.php");
   exit;
 }
