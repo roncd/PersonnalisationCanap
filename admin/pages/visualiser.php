@@ -1,8 +1,10 @@
 <?php
 require '../config.php';
 session_start();
+require '../include/session_expiration.php';
 
 if (!isset($_SESSION['id'])) {
+    $_SESSION['redirect_to'] = $_SERVER['REQUEST_URI'];
     header("Location: ../index.php");
     exit();
 }
@@ -82,7 +84,6 @@ if (!isset($_SESSION['id'])) {
                         <a href="../commande-prefait/visualiser.php" class="btn">Voir un canapé</a>
                     </div>
                 </section>
-
             </div>
         </div>
     </main>
