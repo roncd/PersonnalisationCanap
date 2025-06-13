@@ -178,6 +178,20 @@ $dossier = $dossierUploadMap[$nomTable] ?? $nomTable;
             <?php endif; ?>
           </div>
         <?php endforeach; ?>
+
+      <?php elseif ($nomTable === 'accoudoir_tissu'): ?>
+        <div class="option">
+          <?php if (!empty($details['img'])): ?>
+            <img src="../../admin/uploads/accoudoirs-tissu/<?php echo htmlspecialchars($details['img']); ?>"
+                 alt="<?php echo htmlspecialchars($details['nom']); ?>">
+          <?php endif; ?>
+          <p><?php echo htmlspecialchars($details['nom']); ?></p>
+          <p>Quantité : 2</p>
+          <?php if (!empty($details['prix'])): ?>
+            <p><strong><?php echo htmlspecialchars($details['prix']); ?> € (unité)</strong></p>
+          <?php endif; ?>
+        </div>
+
       <?php else: ?>
         <div class="option">
           <?php if (!empty($details['img'])): ?>
@@ -217,20 +231,25 @@ if (!empty($commande['longueurC'])) {
 // Ajouter le prix des éléments de composition
 if (!empty($composition)) {
     foreach ($composition as $nomTable => $details) {
-        if ($nomTable === 'accoudoirs_bois_multiples') {
-            // Parcourir chaque accoudoir
-            foreach ($details as $accoudoir) {
-                if (!empty($accoudoir['prix'])) {
-                    $totalPrice += (float)$accoudoir['prix'];
-                }
+    if ($nomTable === 'accoudoirs_bois_multiples') {
+        foreach ($details as $accoudoir) {
+            if (!empty($accoudoir['prix'])) {
+                $totalPrice += (float)$accoudoir['prix'];
             }
-        } else {
-            if (!empty($details['prix'])) {
-                $totalPrice += (float)$details['prix'];
-            }
+        }
+    } elseif ($nomTable === 'accoudoir_tissu') {
+        if (!empty($details['prix'])) {
+            $totalPrice += (float)$details['prix'] * 2;
+        }
+    } else {
+        if (!empty($details['prix'])) {
+            $totalPrice += (float)$details['prix'];
         }
     }
 }
+}
+
+
 
 ?>
 
