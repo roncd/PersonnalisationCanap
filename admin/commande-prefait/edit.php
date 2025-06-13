@@ -1,10 +1,8 @@
 <?php
 require '../config.php';
 session_start();
-require '../include/session_expiration.php';
 
 if (!isset($_SESSION['id'])) {
-    $_SESSION['redirect_to'] = $_SERVER['REQUEST_URI'];
     header("Location: ../index.php");
     exit();
 }
@@ -57,7 +55,9 @@ $decorations = fetchData($pdo, 'decoration');
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $prix = trim($_POST['prix']);
-    $prixDimensions = trim($_POST['prix_dimensions']);
+    $longueurA = trim($_POST['longueurA']);
+    $longueurB = trim($_POST['longueurB']) ?: null;
+    $longueurC = trim($_POST['longueurC']) ?: null;
     $idStructure = trim($_POST['structure']);
     $idBanquette = trim($_POST['banquette']) ?: null;
     $idMousse = trim($_POST['mousse']) ?: null;
@@ -223,6 +223,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <input type="number" step="0.01" id="prix_dimensions" name="prix_dimensions" class="input-field" required value="<?= htmlspecialchars($commande['prix_dimensions']) ?>">
                         </div>
                     </div>
+
+                      <div class="form-row">
+            <div class="form-group">
+                <label for="longueurA">Longueur A</label>
+                <input type="number" id="longueurA" name="longueurA" class="input-field" required value="<?= htmlspecialchars($commande['longueurA']) ?>">
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label for="longueurB">Longueur B</label>
+                <input type="number" id="longueurB" name="longueurB" class="input-field" value="<?= htmlspecialchars($commande['longueurB']) ?>">
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label for="longueurC">Longueur C</label>
+                <input type="number" id="longueurC" name="longueurC" class="input-field" value="<?= htmlspecialchars($commande['longueurC']) ?>">
+            </div>
+        </div>
 
                     <div class="form-row">
                         <div class="form-group">
