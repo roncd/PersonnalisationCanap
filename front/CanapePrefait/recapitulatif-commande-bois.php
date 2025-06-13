@@ -12,7 +12,7 @@ $id_client = $_SESSION['user_id'];
 
 $id_commande_prefait = $_GET['id'] ?? null;
 if (!$id_commande_prefait) {
-  die("ID de la commande non fouvfvfdvgfrni.");
+  die("ID de la commande non fourni.");
 }
 
 
@@ -90,13 +90,15 @@ foreach ($data['commande_temporaire'] as $dim) {
   ];
 }
 
-// Récupérer les accoudoirs associés à la commande temporaire
-$stmt = $pdo->prepare("SELECT cta.id_accoudoir_bois, cta.nb_accoudoir, ab.nom, ab.img
-                       FROM commande_temp_accoudoir cta
-                       JOIN accoudoir_bois ab ON cta.id_accoudoir_bois = ab.id
-                       WHERE cta.id_commande_temporaire = ?");
-$stmt->execute([$commande['id']]);
+$stmt = $pdo->prepare("SELECT cpa.id_accoudoir_bois, cpa.nb_accoudoir, ab.nom, ab.img
+                       FROM commande_prefait_accoudoir cpa
+                       JOIN accoudoir_bois ab ON cpa.id_accoudoir_bois = ab.id
+                       WHERE cpa.id_commande_prefait = ?");
+$stmt->execute([$id_commande_prefait]);
 $accoudoirs = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+
+
 
 /*if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['comment'])) {
   // Vérifier si un commentaire a été saisi
@@ -178,7 +180,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['comment'])) {
     <div class="container transition">
       <!-- Colonne de gauche -->
       <div class="left-column">
-        <h2 class="h2">Récapitulatif de la commande</h2>
+        <h2 class="h2">Récapitulatif de la commande préfaite</h2>
         <section class="color-options">
 
           <h3>Étape 1.1 : Choisi ta structure</h3>
@@ -256,6 +258,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['comment'])) {
           <p>' . htmlspecialchars($assocData['dossier_bois'][$commande['id_dossier_bois']]['nom'] ?? '-') . '</p>
         </div>';
           ?>
+          
           <h3>Étape 7.1 : Choisi ton tissu</h3>
           <?php
           echo '<div class="option">
