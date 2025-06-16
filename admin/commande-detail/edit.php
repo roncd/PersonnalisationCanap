@@ -31,15 +31,14 @@ if (!$commande) {
     exit();
 }
 
-function fetchData($pdo, $table)
-{
-    $stmt = $pdo->prepare("SELECT id, nom FROM $table");
+function fetchData($pdo, $table, $columns = ['id', 'nom']) {
+    $cols = implode(', ', $columns);
+    $stmt = $pdo->prepare("SELECT $cols FROM $table");
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
 $clients = fetchData($pdo, 'client');
-$structures = fetchData($pdo, 'structure');
 $banquettes = fetchData($pdo, 'type_banquette');
 $mousses = fetchData($pdo, 'mousse');
 $couleursbois = fetchData($pdo, 'couleur_bois');
@@ -53,6 +52,12 @@ $motifstissu = fetchData($pdo, 'motif_tissu');
 $accoudoirstissu = fetchData($pdo, 'accoudoir_tissu');
 $dossierstissu = fetchData($pdo, 'dossier_tissu');
 $decorations = fetchData($pdo, 'decoration');
+
+$stmt = $pdo->prepare("SELECT id, nom, nb_longueurs FROM structure");
+$stmt->execute();
+
+$structures = fetchData($pdo, 'structure', ['id', 'nom', 'nb_longueurs']);
+
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Récupérer et valider les données
@@ -121,7 +126,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 }
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -152,8 +156,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <div class="form-row">
                         <div class="form-group">
                             <label for="client">Référence Client <span class="required">*</span></label>
-                            <select class="input-field" id="client" name="client">
-                                <option value="">-- Sélectionnez un client --</option>
+                            <select class="input-field" id="client" name="client" required>
+                                <option value="">-- Sélectionnez une option --</option>
                                 <?php foreach ($clients as $client): ?>
                                     <option value="<?= htmlspecialchars($client['id']) ?>"
                                         <?= ($client['id'] == $commande['id_client']) ? 'selected' : '' ?>>
@@ -190,36 +194,39 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <div class="form-row">
                         <div class="form-group">
                             <label for="structure">Référence Structure <span class="required">*</span></label>
-                            <select class="input-field" id="structure" name="structure">
-                                <option value="">-- Sélectionnez une structure --</option>
+                            <select class="input-field" id="structure" name="structure" required>
+                                <option value="">-- Sélectionnez une option --</option>
                                 <?php foreach ($structures as $structure): ?>
                                     <option value="<?= htmlspecialchars($structure['id']) ?>"
-                                        <?= ($structure['id'] == $commande['id_structure']) ? 'selected' : '' ?>>
+                                        <?= ($structure['id'] == $commande['id_structure']) ? 'selected' : '' ?>
+                                        data-nb-longueurs="<?= ($structure['nb_longueurs']) ?>">
                                         <?= htmlspecialchars($structure['nom']) ?>
                                     </option>
                                 <?php endforeach; ?>
                             </select>
                         </div>
+
                         <div class="form-group">
-                            <label for="longueurA">Longueur banquette A : <span class="required">*</span></label>
+                            <label for="longueurA">Longueur banquette A <span class="required">*</span></label>
                             <input type="number" id="longueurA" name="longueurA" class="input-field" value="<?php echo htmlspecialchars($commande['longueurA']); ?>" required>
                         </div>
                     </div>
                     <div class="form-row">
+                            <div class="form-group">
+                                <label for="longueurB">Longueur banquette B <span class="required">*</span></label>
+                                <input type="number" id="longueurB" name="longueurB" class="input-field" value="<?php echo htmlspecialchars($commande['longueurB']); ?>">
+                            </div>
+                  
                         <div class="form-group">
-                            <label for="longueurB">Longueur banquette B :</label>
-                            <input type="number" id="longueurB" name="longueurB" class="input-field" value="<?php echo htmlspecialchars($commande['longueurB']); ?>">
-                        </div>
-                        <div class="form-group">
-                            <label for="longueurC">Longueur banquette C :</label>
+                            <label for="longueurC">Longueur banquette C <span class="required">*</span></label>
                             <input type="number" id="longueurC" name="longueurC" class="input-field" value="<?php echo htmlspecialchars($commande['longueurC']); ?>">
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group">
                             <label for="mousse">Référence Mousse <span class="required">*</span></label>
-                            <select class="input-field" id="mousse" name="mousse">
-                                <option value="">-- Sélectionnez une mousse --</option>
+                            <select class="input-field" id="mousse" name="mousse" required>
+                                <option value="">-- Sélectionnez une option --</option>
                                 <?php foreach ($mousses as $mousse): ?>
                                     <option value="<?= htmlspecialchars($mousse['id']) ?>"
                                         <?= ($mousse['id'] == $commande['id_mousse']) ? 'selected' : '' ?>>
@@ -230,8 +237,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         </div>
                         <div class="form-group">
                             <label for="banquette">Référence Type banquette <span class="required">*</span></label>
-                            <select class="input-field" id="banquette" name="banquette">
-                                <option value="">-- Sélectionnez une banquette --</option>
+                            <select class="input-field" id="banquette" name="banquette" required>
+                                <option value="">-- Sélectionnez une option --</option>
                                 <?php foreach ($banquettes as $banquette): ?>
                                     <option value="<?= htmlspecialchars($banquette['id']) ?>"
                                         <?= ($banquette['id'] == $commande['id_banquette']) ? 'selected' : '' ?>
@@ -247,7 +254,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <div class="form-group">
                                 <label for="couleurbois">Référence Couleur banquette - bois</label>
                                 <select class="input-field" id="couleurbois" name="couleurbois">
-                                    <option value="">-- Sélectionnez une couleur de bois --</option>
+                                    <option value="">-- Sélectionnez une option --</option>
                                     <?php foreach ($couleursbois as $couleurbois): ?>
                                         <option value="<?= htmlspecialchars($couleurbois['id']) ?>"
                                             <?= ($couleurbois['id'] == $commande['id_couleur_bois']) ? 'selected' : '' ?>>
@@ -259,7 +266,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <div class="form-group">
                                 <label for="decoration">Référence Décoration - bois</label>
                                 <select class="input-field" id="decoration" name="decoration">
-                                    <option value="">-- Sélectionnez une decoration --</option>
+                                    <option value="">-- Sélectionnez une option --</option>
                                     <?php foreach ($decorations as $decoration): ?>
                                         <option value="<?= htmlspecialchars($decoration['id']) ?>"
                                             <?= ($decoration['id'] == $commande['id_decoration']) ? 'selected' : '' ?>>
@@ -273,7 +280,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <div class="form-group">
                                 <label for="accoudoirbois">Référence Accoudoir - bois</label>
                                 <select class="input-field" id="accoudoirbois" name="accoudoirbois">
-                                    <option value="">-- Sélectionnez un accoudoir en bois --</option>
+                                    <option value="">-- Sélectionnez une option --</option>
                                     <?php foreach ($accoudoirsbois as $accoudoirbois): ?>
                                         <option value="<?= htmlspecialchars($accoudoirbois['id']) ?>"
                                             <?= ($accoudoirbois['id'] == $commande['id_accoudoir_bois']) ? 'selected' : '' ?>>
@@ -285,7 +292,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <div class="form-group">
                                 <label for="dossierbois">Référence Dossier - bois</label>
                                 <select class="input-field" id="dossierbois" name="dossierbois">
-                                    <option value="">-- Sélectionnez un dossier en bois --</option>
+                                    <option value="">-- Sélectionnez une option --</option>
                                     <?php foreach ($dossiersbois as $dossierbois): ?>
                                         <option value="<?= htmlspecialchars($dossierbois['id']) ?>"
                                             <?= ($dossierbois['id'] == $commande['id_dossier_bois']) ? 'selected' : '' ?>>
@@ -299,7 +306,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <div class="form-group">
                                 <label for="couleurtissubois">Référence Motif tissu - bois</label>
                                 <select class="input-field" id="couleurtissubois" name="couleurtissubois">
-                                    <option value="">-- Sélectionnez une couleur du tissu en bois --</option>
+                                    <option value="">-- Sélectionnez une option --</option>
                                     <?php foreach ($couleurstissubois as $couleurtissubois): ?>
                                         <option value="<?= htmlspecialchars($couleurtissubois['id']) ?>"
                                             <?= ($couleurtissubois['id'] == $commande['id_couleur_tissu_bois']) ? 'selected' : '' ?>>
@@ -311,7 +318,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <div class="form-group">
                                 <label for="motifbois">Référence Motif coussin - bois</label>
                                 <select class="input-field" id="motifbois" name="motifbois">
-                                    <option value="">-- Sélectionnez un motif de bois --</option>
+                                    <option value="">-- Sélectionnez une option --</option>
                                     <?php foreach ($motifsbois as $motifbois): ?>
                                         <option value="<?= htmlspecialchars($motifbois['id']) ?>"
                                             <?= ($motifbois['id'] == $commande['id_motif_bois']) ? 'selected' : '' ?>>
@@ -327,7 +334,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <div class="form-group">
                                 <label for="modele">Référence Modèle banquette - tissu</label>
                                 <select class="input-field" id="modele" name="modele">
-                                    <option value="">-- Sélectionnez un modele --</option>
+                                    <option value="">-- Sélectionnez une option --</option>
                                     <?php foreach ($modeles as $modele): ?>
                                         <option value="<?= htmlspecialchars($modele['id']) ?>"
                                             <?= ($modele['id'] == $commande['id_modele']) ? 'selected' : '' ?>>
@@ -339,7 +346,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <div class="form-group">
                                 <label for="couleurtissu">Référence Couleur banquette - tissu</label>
                                 <select class="input-field" id="couleurtissu" name="couleurtissu">
-                                    <option value="">-- Sélectionnez une couleur de tissu --</option>
+                                    <option value="">-- Sélectionnez une option --</option>
                                     <?php foreach ($couleurstissu as $couleurtissu): ?>
                                         <option value="<?= htmlspecialchars($couleurtissu['id']) ?>"
                                             <?= ($couleurtissu['id'] == $commande['id_couleur_tissu']) ? 'selected' : '' ?>>
@@ -353,7 +360,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <div class="form-group">
                                 <label for="motiftissu">Référence Motif coussin - tissu</label>
                                 <select class="input-field" id="motiftissu" name="motiftissu">
-                                    <option value="">-- Sélectionnez une motif en tissu --</option>
+                                    <option value="">-- Sélectionnez une option --</option>
                                     <?php foreach ($motifstissu as $motiftissu): ?>
                                         <option value="<?= htmlspecialchars($motiftissu['id']) ?>"
                                             <?= ($motiftissu['id'] == $commande['id_motif_tissu']) ? 'selected' : '' ?>>
@@ -365,7 +372,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <div class="form-group">
                                 <label for="dossiertissu">Référence Dossier - tissu</label>
                                 <select class="input-field" id="dossiertissu" name="dossiertissu">
-                                    <option value="">-- Sélectionnez une dossier en tissu --</option>
+                                    <option value="">-- Sélectionnez une option --</option>
                                     <?php foreach ($dossierstissu as $dossiertissu): ?>
                                         <option value="<?= htmlspecialchars($dossiertissu['id']) ?>"
                                             <?= ($dossiertissu['id'] == $commande['id_dossier_tissu']) ? 'selected' : '' ?>>
@@ -379,7 +386,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <div class="form-group">
                                 <label for="accoudoirtissu">Référence Accoudoir - tissu</label>
                                 <select class="input-field" id="accoudoirtissu" name="accoudoirtissu">
-                                    <option value="">-- Sélectionnez un accoudoir en tissu --</option>
+                                    <option value="">-- Sélectionnez une option --</option>
                                     <?php foreach ($accoudoirstissu as $accoudoirtissu): ?>
                                         <option value="<?= htmlspecialchars($accoudoirtissu['id']) ?>"
                                             <?= ($accoudoirtissu['id'] == $commande['id_accoudoir_tissu']) ? 'selected' : '' ?>>

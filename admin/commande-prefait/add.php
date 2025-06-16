@@ -9,15 +9,15 @@ if (!isset($_SESSION['id'])) {
     exit();
 }
 
-function fetchData($pdo, $table)
+function fetchData($pdo, $table, $columns = ['id', 'nom'])
 {
-    $stmt = $pdo->prepare("SELECT id, nom FROM $table");
+    $cols = implode(', ', $columns);
+    $stmt = $pdo->prepare("SELECT $cols FROM $table");
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
 // Chargement des données
-$structures = fetchData($pdo, 'structure');
 $banquettes = fetchData($pdo, 'type_banquette');
 $mousses = fetchData($pdo, 'mousse');
 $couleursbois = fetchData($pdo, 'couleur_bois');
@@ -31,6 +31,11 @@ $motifstissu = fetchData($pdo, 'motif_tissu');
 $accoudoirstissu = fetchData($pdo, 'accoudoir_tissu');
 $dossierstissu = fetchData($pdo, 'dossier_tissu');
 $decorations = fetchData($pdo, 'decoration');
+
+$stmt = $pdo->prepare("SELECT id, nom, nb_longueurs FROM structure");
+$stmt->execute();
+
+$structures = fetchData($pdo, 'structure', ['id', 'nom', 'nb_longueurs']);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $prix = trim($_POST['prix']);
@@ -85,15 +90,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
-    
-
     if (empty($prix)) {
         $_SESSION['message'] = 'Les champs obligatoires doivent être remplis.';
         $_SESSION['message_type'] = 'error';
     } else {
         try {
-    // 1. Insertion de la commande pré-faite
-    $stmt = $pdo->prepare("INSERT INTO commande_prefait (
+            // 1. Insertion de la commande pré-faite
+            $stmt = $pdo->prepare("INSERT INTO commande_prefait (
         prix, prix_dimensions, id_structure, longueurA, longueurB, longueurC,
         id_banquette, id_mousse, id_couleur_bois, id_decoration,
         id_accoudoir_bois, id_dossier_bois, id_couleur_tissu_bois, id_motif_bois,
@@ -101,58 +104,56 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         id_nb_accoudoir, nom, img
     ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
-    $stmt->execute([
-        $prix,
-        $prixDimensions,
-        $idStructure,
-        $longueurA,
-        $longueurB,
-        $longueurC,
-        $idBanquette,
-        $idMousse,
-        $idCouleurBois,
-        $idDecoration,
-        $idAccoudoirBois,
-        $idDossierBois,
-        $idTissuBois,
-        $idMotifBois,
-        $idModele,
-        $idCouleurTissu,
-        $idMotifTissu,
-        $idDossierTissu,
-        $idAccoudoirTissu,
-        $nbAccoudoir,
-        $nom,
-        $imagePath
-    ]);
+            $stmt->execute([
+                $prix,
+                $prixDimensions,
+                $idStructure,
+                $longueurA,
+                $longueurB,
+                $longueurC,
+                $idBanquette,
+                $idMousse,
+                $idCouleurBois,
+                $idDecoration,
+                $idAccoudoirBois,
+                $idDossierBois,
+                $idTissuBois,
+                $idMotifBois,
+                $idModele,
+                $idCouleurTissu,
+                $idMotifTissu,
+                $idDossierTissu,
+                $idAccoudoirTissu,
+                $nbAccoudoir,
+                $nom,
+                $imagePath
+            ]);
 
-    // 2. Récupérer l'ID de la commande insérée
-    $idCommande = $pdo->lastInsertId();
+            // 2. Récupérer l'ID de la commande insérée
+            $idCommande = $pdo->lastInsertId();
 
-    // 3. Insérer les accoudoirs bois (si type BOIS)
-    $acc1 = $_POST['accoudoir1'] ?? null;
-    $acc2 = $_POST['accoudoir2'] ?? null;
+            // 3. Insérer les accoudoirs bois (si type BOIS)
+            $acc1 = $_POST['accoudoir1'] ?? null;
+            $acc2 = $_POST['accoudoir2'] ?? null;
 
-    if (!empty($acc1)) {
-        $stmtAcc1 = $pdo->prepare("INSERT INTO commande_prefait_accoudoir (id_commande_prefait, id_accoudoir_bois, nb_accoudoir) VALUES (?, ?, 1)");
-        $stmtAcc1->execute([$idCommande, intval($acc1)]);
-    }
+            if (!empty($acc1)) {
+                $stmtAcc1 = $pdo->prepare("INSERT INTO commande_prefait_accoudoir (id_commande_prefait, id_accoudoir_bois, nb_accoudoir) VALUES (?, ?, 1)");
+                $stmtAcc1->execute([$idCommande, intval($acc1)]);
+            }
 
-    if (!empty($acc2)) {
-        $stmtAcc2 = $pdo->prepare("INSERT INTO commande_prefait_accoudoir (id_commande_prefait, id_accoudoir_bois, nb_accoudoir) VALUES (?, ?, 1)");
-        $stmtAcc2->execute([$idCommande, intval($acc2)]);
-    }
+            if (!empty($acc2)) {
+                $stmtAcc2 = $pdo->prepare("INSERT INTO commande_prefait_accoudoir (id_commande_prefait, id_accoudoir_bois, nb_accoudoir) VALUES (?, ?, 1)");
+                $stmtAcc2->execute([$idCommande, intval($acc2)]);
+            }
 
-    $_SESSION['message'] = 'La commande préfaite a été ajoutée avec succès.';
-    $_SESSION['message_type'] = 'success';
-    header('Location: visualiser.php');
-    exit();
-
-} catch (Exception $e) {
-    $_SESSION['message'] = 'Erreur lors de l\'ajout du canapé pré-personnalisé : ' . $e->getMessage();
-    $_SESSION['message_type'] = 'error';
-}
-
+            $_SESSION['message'] = 'La commande préfaite a été ajoutée avec succès.';
+            $_SESSION['message_type'] = 'success';
+            header('Location: visualiser.php');
+            exit();
+        } catch (Exception $e) {
+            $_SESSION['message'] = 'Erreur lors de l\'ajout du canapé pré-personnalisé : ' . $e->getMessage();
+            $_SESSION['message_type'] = 'error';
+        }
     }
 }
 ?>
@@ -189,7 +190,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <div class="form-row">
                         <div class="form-group">
                             <label for="nom">Nom du salon <span class="required">*</span></label>
-                            <input type="text" id="nom" name="nom" class="input-field">
+                            <input type="text" id="nom" name="nom" class="input-field" required>
                         </div>
                     </div>
                     <div class="form-row">
@@ -206,52 +207,50 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         </div>
                     </div>
 
-                            <div class="form-row">
-            <div class="form-group">
-                <label for="longueurA">Longueur A</label>
-                <input type="number" id="longueurA" name="longueurA" class="input-field" required>
-            </div>
-        </div>
-
-        <div class="form-row">
-            <div class="form-group">
-                <label for="longueurB">Longueur B</label>
-                <input type="number" id="longueurB" name="longueurB" class="input-field">
-            </div>
-        </div>
-
-        <div class="form-row">
-            <div class="form-group">
-                <label for="longueurC">Longueur C</label>
-                <input type="number" id="longueurC" name="longueurC" class="input-field">
-            </div>
-        </div>
-
                     <div class="form-row">
                         <div class="form-group">
                             <label for="structure">Référence Structure <span class="required">*</span></label>
                             <select id="structure" name="structure" class="input-field" required>
-                                <option value="">-- Choisir une structure -- </option>
+                                <option value="">-- Sélectionnez une option -- </option>
                                 <?php foreach ($structures as $s): ?>
-                                    <option value="<?= $s['id'] ?>"><?= htmlspecialchars($s['nom']) ?></option>
+                                    <option value="<?= htmlspecialchars($s['id']) ?>"
+                                        data-nb-longueurs="<?= ($s['nb_longueurs']) ?>">
+                                        <?= htmlspecialchars($s['nom']) ?>
+                                    </option>
                                 <?php endforeach; ?>
                             </select>
                         </div>
                         <div class="form-group">
+                            <label for="longueurA">Longueur A <span class="required">*</span></label>
+                            <input type="number" id="longueurA" name="longueurA" class="input-field" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="longueurB">Longueur B <span class="required">*</span></label>
+                            <input type="number" id="longueurB" name="longueurB" class="input-field">
+                        </div>
+                        <div class="form-group">
+                            <label for="longueurC">Longueur C <span class="required">*</span></label>
+                            <input type="number" id="longueurC" name="longueurC" class="input-field">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
                             <label for="mousse">Référence Mousse <span class="required">*</span></label>
-                            <select id="mousse" name="mousse" class="input-field">
-                                <option value="">-- Choisir --</option>
+                            <select id="mousse" name="mousse" class="input-field" required>
+                                <option value="">-- Sélectionnez une option --</option>
                                 <?php foreach ($mousses as $item): ?>
                                     <option value="<?= $item['id'] ?>"><?= htmlspecialchars($item['nom']) ?></option>
                                 <?php endforeach; ?>
                             </select>
                         </div>
-                    </div>
-                    <div class="form-row">
                         <div class="form-group">
                             <label for="banquette">Référence Type de banquette <span class="required">*</span></label>
-                            <select id="banquette" name="banquette" class="input-field">
-                                <option value="">-- Choisir --</option>
+                            <select id="banquette" name="banquette" class="input-field" required>
+                                <option value="">-- Sélectionnez une option --</option>
                                 <?php foreach ($banquettes as $b): ?>
                                     <option value="<?= $b['id'] ?>"
                                         data-type="<?= htmlspecialchars($b['nom']) ?>">
@@ -263,9 +262,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <div class="bois">
                         <div class="form-row">
                             <div class="form-group">
-                                <label for="couleurbois">Référence Couleur banquette - bois</label>
+                                <label for="couleurbois">Référence Couleur banquette - bois <span class="required">*</span></label>
                                 <select id="couleurbois" name="couleurbois" class="input-field">
-                                    <option value="">-- Choisir --</option>
+                                    <option value="">-- Sélectionnez une option --</option>
                                     <?php foreach ($couleursbois as $item): ?>
                                         <option value="<?= $item['id'] ?>"><?= htmlspecialchars($item['nom']) ?></option>
                                     <?php endforeach; ?>
@@ -273,9 +272,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             </div>
 
                             <div class="form-group">
-                                <label for="decoration">Référence Décoration - bois</label>
+                                <label for="decoration">Référence Décoration - bois <span class="required">*</span></label>
                                 <select id="decoration" name="decoration" class="input-field">
-                                    <option value="">-- Choisir --</option>
+                                    <option value="">-- Sélectionnez une option --</option>
                                     <?php foreach ($decorations as $item): ?>
                                         <option value="<?= $item['id'] ?>"><?= htmlspecialchars($item['nom']) ?></option>
                                     <?php endforeach; ?>
@@ -285,9 +284,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                         <div class="form-row">
                             <div class="form-group">
-                                <label for="accoudoirbois">Référence Accoudoir - bois</label>
+                                <label for="accoudoirbois">Référence Accoudoir - bois <span class="required">*</span></label>
                                 <select id="accoudoirbois" name="accoudoirbois" class="input-field">
-                                    <option value="">-- Choisir --</option>
+                                    <option value="">-- Sélectionnez une option --</option>
                                     <?php foreach ($accoudoirsbois as $item): ?>
                                         <option value="<?= $item['id'] ?>"><?= htmlspecialchars($item['nom']) ?></option>
                                     <?php endforeach; ?>
@@ -295,9 +294,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             </div>
 
                             <div class="form-group">
-                                <label for="dossierbois">Référence Dossier - bois</label>
+                                <label for="dossierbois">Référence Dossier - bois <span class="required">*</span></label>
                                 <select id="dossierbois" name="dossierbois" class="input-field">
-                                    <option value="">-- Choisir --</option>
+                                    <option value="">-- Sélectionnez une option --</option>
                                     <?php foreach ($dossiersbois as $item): ?>
                                         <option value="<?= $item['id'] ?>"><?= htmlspecialchars($item['nom']) ?></option>
                                     <?php endforeach; ?>
@@ -307,9 +306,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                         <div class="form-row">
                             <div class="form-group">
-                                <label for="couleurtissubois">Référence Motif tissu - bois</label>
+                                <label for="couleurtissubois">Référence Motif tissu - bois <span class="required">*</span></label>
                                 <select id="couleurtissubois" name="couleurtissubois" class="input-field">
-                                    <option value="">-- Choisir --</option>
+                                    <option value="">-- Sélectionnez une option --</option>
                                     <?php foreach ($couleurstissubois as $item): ?>
                                         <option value="<?= $item['id'] ?>"><?= htmlspecialchars($item['nom']) ?></option>
                                     <?php endforeach; ?>
@@ -317,59 +316,58 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             </div>
 
                             <div class="form-group">
-                                <label for="motifbois">Référence Motif coussin - bois</label>
+                                <label for="motifbois">Référence Motif coussin - bois <span class="required">*</span></label>
                                 <select id="motifbois" name="motifbois" class="input-field">
-                                    <option value="">-- Choisir --</option>
+                                    <option value="">-- Sélectionnez une option --</option>
                                     <?php foreach ($motifsbois as $item): ?>
                                         <option value="<?= $item['id'] ?>"><?= htmlspecialchars($item['nom']) ?></option>
                                     <?php endforeach; ?>
                                 </select>
                             </div>
-                                                        </div>
-
-                            <div class="form-group">
-    <label for="nb_accoudoir">Nombre d'accoudoirs</label>
-    <select id="nb_accoudoir" name="nb_accoudoir" class="input-field" onchange="toggleAccoudoirs()">
-        <option value="1">1</option>
-        <option value="2">2</option>
-    </select>
-</div>
-
-<div class="form-group">
-    <label for="accoudoir1">Accoudoir Bois 1 (Obligatoire)</label>
-    <select id="accoudoir1" name="accoudoir1" class="input-field">
-        <option value="">-- Choisir --</option>
-        <?php foreach ($accoudoirsbois as $item): ?>
-            <option value="<?= $item['id'] ?>"><?= htmlspecialchars($item['nom']) ?></option>
-        <?php endforeach; ?>
-    </select>
-</div>
-
-<div style="display:none; class="form-group" id="accoudoir2-group" style="display:none;">
-    <label for="accoudoir2">Accoudoir Bois 2 (Facultatif)</label>
-    <select id="accoudoir2" name="accoudoir2" class="input-field">
-        <option value="">-- Choisir --</option>
-        <?php foreach ($accoudoirsbois as $item): ?>
-            <option value="<?= $item['id'] ?>"><?= htmlspecialchars($item['nom']) ?></option>
-        <?php endforeach; ?>
-    </select>
-</div>     
-
-<script> 
-function toggleAccoudoirs() {
-    const nb = document.getElementById("nb_accoudoir").value;
-    document.getElementById("accoudoir2-group").style.display = (nb == "2") ? "block" : "none";
-}
-</script>
-
                         </div>
+
+                        <div class="form-group">
+                            <label for="nb_accoudoir">Nombre d'accoudoirs <span class="required">*</span></label>
+                            <select id="nb_accoudoir" name="nb_accoudoir" class="input-field" onchange="toggleAccoudoirs()">
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="accoudoir1">Accoudoir Bois 1 <span class="required">*</span></label>
+                            <select id="accoudoir1" name="accoudoir1" class="input-field">
+                                <option value="">-- Sélectionnez une option --</option>
+                                <?php foreach ($accoudoirsbois as $item): ?>
+                                    <option value="<?= $item['id'] ?>"><?= htmlspecialchars($item['nom']) ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+
+                        <div style="display:none;" class="form-group" id="accoudoir2-group">
+                            <label for="accoudoir2">Accoudoir Bois 2 (Facultatif)</label>
+                            <select id="accoudoir2" name="accoudoir2" class="input-field">
+                                <option value="">-- Sélectionnez une option --</option>
+                                <?php foreach ($accoudoirsbois as $item): ?>
+                                    <option value="<?= $item['id'] ?>"><?= htmlspecialchars($item['nom']) ?></option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+
+                        <script>
+                            function toggleAccoudoirs() {
+                                const nb = document.getElementById("nb_accoudoir").value;
+                                document.getElementById("accoudoir2-group").style.display = (nb == "2") ? "flex" : "none";
+                            }
+                        </script>
+
                     </div>
                     <div class="tissu">
                         <div class="form-row">
                             <div class="form-group">
-                                <label for="modele">Référence Modèle banquette - tissu</label>
+                                <label for="modele">Référence Modèle banquette - tissu <span class="required">*</span></label>
                                 <select id="modele" name="modele" class="input-field">
-                                    <option value="">-- Choisir --</option>
+                                    <option value="">-- Sélectionnez une option --</option>
                                     <?php foreach ($modeles as $item): ?>
                                         <option value="<?= $item['id'] ?>"><?= htmlspecialchars($item['nom']) ?></option>
                                     <?php endforeach; ?>
@@ -377,9 +375,9 @@ function toggleAccoudoirs() {
                             </div>
 
                             <div class="form-group">
-                                <label for="couleurtissu">Référence Couleur banquette - tissu</label>
+                                <label for="couleurtissu">Référence Couleur banquette - tissu <span class="required">*</span></label>
                                 <select id="couleurtissu" name="couleurtissu" class="input-field">
-                                    <option value="">-- Choisir --</option>
+                                    <option value="">-- Sélectionnez une option --</option>
                                     <?php foreach ($couleurstissu as $item): ?>
                                         <option value="<?= $item['id'] ?>"><?= htmlspecialchars($item['nom']) ?></option>
                                     <?php endforeach; ?>
@@ -389,9 +387,9 @@ function toggleAccoudoirs() {
 
                         <div class="form-row">
                             <div class="form-group">
-                                <label for="motiftissu">Référence Motif coussin - tissu</label>
+                                <label for="motiftissu">Référence Motif coussin - tissu <span class="required">*</span></label>
                                 <select id="motiftissu" name="motiftissu" class="input-field">
-                                    <option value="">-- Choisir --</option>
+                                    <option value="">-- Sélectionnez une option --</option>
                                     <?php foreach ($motifstissu as $item): ?>
                                         <option value="<?= $item['id'] ?>"><?= htmlspecialchars($item['nom']) ?></option>
                                     <?php endforeach; ?>
@@ -399,9 +397,9 @@ function toggleAccoudoirs() {
                             </div>
 
                             <div class="form-group">
-                                <label for="accoudoirtissu">Référence Accoudoir - tissu</label>
+                                <label for="accoudoirtissu">Référence Accoudoir - tissu <span class="required">*</span></label>
                                 <select id="accoudoirtissu" name="accoudoirtissu" class="input-field">
-                                    <option value="">-- Choisir --</option>
+                                    <option value="">-- Sélectionnez une option --</option>
                                     <?php foreach ($accoudoirstissu as $item): ?>
                                         <option value="<?= $item['id'] ?>"><?= htmlspecialchars($item['nom']) ?></option>
                                     <?php endforeach; ?>
@@ -411,16 +409,16 @@ function toggleAccoudoirs() {
 
                         <div class="form-row">
                             <div class="form-group">
-                                <label for="dossiertissu">Référence Dossier - tissu</label>
+                                <label for="dossiertissu">Référence Dossier - tissu <span class="required">*</span></label>
                                 <select id="dossiertissu" name="dossiertissu" class="input-field">
-                                    <option value="">-- Choisir --</option>
+                                    <option value="">-- Sélectionnez une option --</option>
                                     <?php foreach ($dossierstissu as $item): ?>
                                         <option value="<?= $item['id'] ?>"><?= htmlspecialchars($item['nom']) ?></option>
                                     <?php endforeach; ?>
                                 </select>
-                            </div> 
+                            </div>
                             <div class="form-group">
-                                <label for="nb_accoudoir">Nombre d'accoudoirs</label>
+                                <label for="nb_accoudoir">Nombre d'accoudoirs <span class="required">*</span></label>
                                 <input type="number" id="nb_accoudoir" name="nb_accoudoir" class="input-field">
                             </div>
                         </div>
