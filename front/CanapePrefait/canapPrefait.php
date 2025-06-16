@@ -10,11 +10,11 @@ $id_commande_prefait = intval($_GET['id']);
 $stmt = $pdo->prepare("SELECT * FROM commande_prefait WHERE id = ?");
 $stmt->execute([$id_commande_prefait]);
 $commande = $stmt->fetch(PDO::FETCH_ASSOC);
-
+ 
 if (!$commande) {
   die("Aucune commande pré-faite trouvée.");
 }
-
+ 
 // Initialisation du tableau de composition
 $composition = [];
 $totalPrice = 0;
@@ -47,6 +47,27 @@ foreach ($elements as $colonne => $table) {
       $totalPrice += floatval($composition[$table]['prix']);
     }
   }
+
+  // Récupération des accoudoirs multiples
+$stmt = $pdo->prepare("SELECT ab.id, ab.nom, ab.img, ab.prix, cpa.nb_accoudoir
+                       FROM commande_prefait_accoudoir cpa
+                       JOIN accoudoir_bois ab ON cpa.id_accoudoir_bois = ab.id
+                       WHERE cpa.id_commande_prefait = ?");
+$stmt->execute([$id_commande_prefait]);
+$accoudoirs = $stmt->fetchAll(PDO::FETCH_ASSOC);  
+
+// On les ajoute à la composition sous une clé spéciale (car il peut y en avoir plusieurs)
+if ($accoudoirs) {
+  $composition['accoudoirs_bois_multiples'] = $accoudoirs;
+
+  // On ajoute les prix au total
+  foreach ($accoudoirs as $acc) {
+    if (!empty($acc['prix']) && !empty($acc['nb_accoudoir'])) {
+      $totalPrice += floatval($acc['prix']) * intval($acc['nb_accoudoir']);
+    }
+  }
+}
+
 }
 
 // Ajouter aussi le prix de dimensions (si pertinent)
@@ -141,21 +162,53 @@ $dossierUploadMap = [
 $dossier = $dossierUploadMap[$nomTable] ?? $nomTable;
 ?>
 
-              <div class="option">
-                <?php if (!empty($details['img'])): ?>
-                    <img src="../../admin/uploads/<?php echo htmlspecialchars($dossier) . '/' . htmlspecialchars($details['img']); ?>"
-                    alt="<?php echo htmlspecialchars($details['nom'] ?? ''); ?>"
-                    data-id="<?php echo htmlspecialchars($details['id'] ?? ''); ?>">
-                <?php endif; ?>
-                <p><?php echo htmlspecialchars($details['nom'] ?? $details['valeur'] ?? 'Non spécifié'); ?></p>
-                <?php if (!empty($details['prix'])): ?>
-                  <p><strong><?php echo htmlspecialchars($details['prix']); ?> €</strong></p>
-                <?php endif; ?>
-              </div>
-            <?php endforeach; ?>
-          <?php else: ?>
-            <p>Aucune composition sélectionnée.</p>
+
+
+ <?php if ($nomTable === 'accoudoirs_bois_multiples'): ?>
+        <?php foreach ($details as $accoudoir): ?>
+          <div class="option">
+            <?php if (!empty($accoudoir['img'])): ?>
+              <img src="../../admin/uploads/accoudoirs-bois/<?php echo htmlspecialchars($accoudoir['img']); ?>"
+                   alt="<?php echo htmlspecialchars($accoudoir['nom']); ?>">
+            <?php endif; ?>
+            <p><?php echo htmlspecialchars($accoudoir['nom']); ?></p>
+            <p>Quantité : <?php echo htmlspecialchars($accoudoir['nb_accoudoir']); ?></p>
+            <?php if (!empty($accoudoir['prix'])): ?>
+              <p><strong><?php echo htmlspecialchars($accoudoir['prix']); ?> €</strong></p>
+            <?php endif; ?>
+          </div>
+        <?php endforeach; ?>
+
+      <?php elseif ($nomTable === 'accoudoir_tissu'): ?>
+        <div class="option">
+          <?php if (!empty($details['img'])): ?>
+            <img src="../../admin/uploads/accoudoirs-tissu/<?php echo htmlspecialchars($details['img']); ?>"
+                 alt="<?php echo htmlspecialchars($details['nom']); ?>">
           <?php endif; ?>
+          <p><?php echo htmlspecialchars($details['nom']); ?></p>
+          <p>Quantité : 2</p>
+          <?php if (!empty($details['prix'])): ?>
+            <p><strong><?php echo htmlspecialchars($details['prix']); ?> € (unité)</strong></p>
+          <?php endif; ?>
+        </div>
+
+      <?php else: ?>
+        <div class="option">
+          <?php if (!empty($details['img'])): ?>
+            <img src="../../admin/uploads/<?php echo htmlspecialchars($dossier); ?>/<?php echo htmlspecialchars($details['img']); ?>"
+                 alt="<?php echo htmlspecialchars($details['nom'] ?? ''); ?>">
+          <?php endif; ?>
+          <p><?php echo htmlspecialchars($details['nom'] ?? $details['valeur'] ?? 'Non spécifié'); ?></p>
+          <?php if (!empty($details['prix'])): ?>
+            <p><strong><?php echo htmlspecialchars($details['prix']); ?> €</strong></p>
+          <?php endif; ?>
+        </div>
+      <?php endif; ?>
+    <?php endforeach; ?>
+  </section>
+<?php else: ?>
+  <p>Aucune composition sélectionnée.</p>
+<?php endif; ?>
         </section>
 
 <?php
@@ -177,12 +230,27 @@ if (!empty($commande['longueurC'])) {
 
 // Ajouter le prix des éléments de composition
 if (!empty($composition)) {
-    foreach ($composition as $details) {
+    foreach ($composition as $nomTable => $details) {
+    if ($nomTable === 'accoudoirs_bois_multiples') {
+        foreach ($details as $accoudoir) {
+            if (!empty($accoudoir['prix'])) {
+                $totalPrice += (float)$accoudoir['prix'];
+            }
+        }
+    } elseif ($nomTable === 'accoudoir_tissu') {
+        if (!empty($details['prix'])) {
+            $totalPrice += (float)$details['prix'] * 2;
+        }
+    } else {
         if (!empty($details['prix'])) {
             $totalPrice += (float)$details['prix'];
         }
     }
 }
+}
+
+
+
 ?>
 
 <div class="footer">

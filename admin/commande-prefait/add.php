@@ -34,6 +34,9 @@ $decorations = fetchData($pdo, 'decoration');
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $prix = trim($_POST['prix']);
+    $longueurA = trim($_POST['longueurA']);
+    $longueurB = trim($_POST['longueurB']) ?: null;
+    $longueurC = trim($_POST['longueurC']) ?: null;
     $prixDimensions = trim($_POST['prix_dimensions']);
     $idStructure = trim($_POST['structure']);
     $idBanquette = trim($_POST['banquette']) ?: null;
@@ -82,53 +85,74 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
+    
 
     if (empty($prix)) {
         $_SESSION['message'] = 'Les champs obligatoires doivent être remplis.';
         $_SESSION['message_type'] = 'error';
     } else {
         try {
-            $stmt = $pdo->prepare("INSERT INTO commande_prefait (
-                prix, prix_dimensions, id_structure, longueurA, longueurB, longueurC,
-                id_banquette, id_mousse, id_couleur_bois, id_decoration,
-                id_accoudoir_bois, id_dossier_bois, id_couleur_tissu_bois, id_motif_bois,
-                id_modele, id_couleur_tissu, id_motif_tissu, id_dossier_tissu, id_accoudoir_tissu,
-                id_nb_accoudoir, nom, img
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+    // 1. Insertion de la commande pré-faite
+    $stmt = $pdo->prepare("INSERT INTO commande_prefait (
+        prix, prix_dimensions, id_structure, longueurA, longueurB, longueurC,
+        id_banquette, id_mousse, id_couleur_bois, id_decoration,
+        id_accoudoir_bois, id_dossier_bois, id_couleur_tissu_bois, id_motif_bois,
+        id_modele, id_couleur_tissu, id_motif_tissu, id_dossier_tissu, id_accoudoir_tissu,
+        id_nb_accoudoir, nom, img
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
-            $stmt->execute([
-                $prix,
-                $prixDimensions,
-                $idStructure,
-                $longueurA,
-                $longueurB,
-                $longueurC,
-                $idBanquette,
-                $idMousse,
-                $idCouleurBois,
-                $idDecoration,
-                $idAccoudoirBois,
-                $idDossierBois,
-                $idTissuBois,
-                $idMotifBois,
-                $idModele,
-                $idCouleurTissu,
-                $idMotifTissu,
-                $idDossierTissu,
-                $idAccoudoirTissu,
-                $nbAccoudoir,
-                $nom,
-                $imagePath
-            ]);
+    $stmt->execute([
+        $prix,
+        $prixDimensions,
+        $idStructure,
+        $longueurA,
+        $longueurB,
+        $longueurC,
+        $idBanquette,
+        $idMousse,
+        $idCouleurBois,
+        $idDecoration,
+        $idAccoudoirBois,
+        $idDossierBois,
+        $idTissuBois,
+        $idMotifBois,
+        $idModele,
+        $idCouleurTissu,
+        $idMotifTissu,
+        $idDossierTissu,
+        $idAccoudoirTissu,
+        $nbAccoudoir,
+        $nom,
+        $imagePath
+    ]);
 
-            $_SESSION['message'] = 'La commande préfaite a été ajoutée avec succès.';
-            $_SESSION['message_type'] = 'success';
-            header('Location: visualiser.php');
-            exit();
-        } catch (Exception $e) {
-            $_SESSION['message'] = 'Erreur lors de l\'ajout du canapé pré-personnalisé : ' . $e->getMessage();
-            $_SESSION['message_type'] = 'error';
-        }
+    // 2. Récupérer l'ID de la commande insérée
+    $idCommande = $pdo->lastInsertId();
+
+    // 3. Insérer les accoudoirs bois (si type BOIS)
+    $acc1 = $_POST['accoudoir1'] ?? null;
+    $acc2 = $_POST['accoudoir2'] ?? null;
+
+    if (!empty($acc1)) {
+        $stmtAcc1 = $pdo->prepare("INSERT INTO commande_prefait_accoudoir (id_commande_prefait, id_accoudoir_bois, nb_accoudoir) VALUES (?, ?, 1)");
+        $stmtAcc1->execute([$idCommande, intval($acc1)]);
+    }
+
+    if (!empty($acc2)) {
+        $stmtAcc2 = $pdo->prepare("INSERT INTO commande_prefait_accoudoir (id_commande_prefait, id_accoudoir_bois, nb_accoudoir) VALUES (?, ?, 1)");
+        $stmtAcc2->execute([$idCommande, intval($acc2)]);
+    }
+
+    $_SESSION['message'] = 'La commande préfaite a été ajoutée avec succès.';
+    $_SESSION['message_type'] = 'success';
+    header('Location: visualiser.php');
+    exit();
+
+} catch (Exception $e) {
+    $_SESSION['message'] = 'Erreur lors de l\'ajout du canapé pré-personnalisé : ' . $e->getMessage();
+    $_SESSION['message_type'] = 'error';
+}
+
     }
 }
 ?>
@@ -181,6 +205,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <input type="number" step="0.01" id="prix" name="prix" class="input-field" required>
                         </div>
                     </div>
+
+                            <div class="form-row">
+            <div class="form-group">
+                <label for="longueurA">Longueur A</label>
+                <input type="number" id="longueurA" name="longueurA" class="input-field" required>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label for="longueurB">Longueur B</label>
+                <input type="number" id="longueurB" name="longueurB" class="input-field">
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label for="longueurC">Longueur C</label>
+                <input type="number" id="longueurC" name="longueurC" class="input-field">
+            </div>
+        </div>
 
                     <div class="form-row">
                         <div class="form-group">
@@ -280,6 +325,43 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                     <?php endforeach; ?>
                                 </select>
                             </div>
+                                                        </div>
+
+                            <div class="form-group">
+    <label for="nb_accoudoir">Nombre d'accoudoirs</label>
+    <select id="nb_accoudoir" name="nb_accoudoir" class="input-field" onchange="toggleAccoudoirs()">
+        <option value="1">1</option>
+        <option value="2">2</option>
+    </select>
+</div>
+
+<div class="form-group">
+    <label for="accoudoir1">Accoudoir Bois 1 (Obligatoire)</label>
+    <select id="accoudoir1" name="accoudoir1" class="input-field">
+        <option value="">-- Choisir --</option>
+        <?php foreach ($accoudoirsbois as $item): ?>
+            <option value="<?= $item['id'] ?>"><?= htmlspecialchars($item['nom']) ?></option>
+        <?php endforeach; ?>
+    </select>
+</div>
+
+<div style="display:none; class="form-group" id="accoudoir2-group" style="display:none;">
+    <label for="accoudoir2">Accoudoir Bois 2 (Facultatif)</label>
+    <select id="accoudoir2" name="accoudoir2" class="input-field">
+        <option value="">-- Choisir --</option>
+        <?php foreach ($accoudoirsbois as $item): ?>
+            <option value="<?= $item['id'] ?>"><?= htmlspecialchars($item['nom']) ?></option>
+        <?php endforeach; ?>
+    </select>
+</div>     
+
+<script> 
+function toggleAccoudoirs() {
+    const nb = document.getElementById("nb_accoudoir").value;
+    document.getElementById("accoudoir2-group").style.display = (nb == "2") ? "block" : "none";
+}
+</script>
+
                         </div>
                     </div>
                     <div class="tissu">
@@ -336,7 +418,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                         <option value="<?= $item['id'] ?>"><?= htmlspecialchars($item['nom']) ?></option>
                                     <?php endforeach; ?>
                                 </select>
-                            </div>
+                            </div> 
                             <div class="form-group">
                                 <label for="nb_accoudoir">Nombre d'accoudoirs</label>
                                 <input type="number" id="nb_accoudoir" name="nb_accoudoir" class="input-field">
