@@ -9,12 +9,18 @@ if (!isset($_SESSION['id'])) {
     exit();
 }
 
+$stmt = $pdo->prepare("SELECT id, nom FROM couleur_bois");
+$stmt->execute();
+$couleurs = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nom = trim($_POST['name']);
     $price = ($_POST['price']);
     $img = $_FILES['img'];
+    $id_couleur = ($_POST['id_couleur']);
 
-    if (empty($nom) || empty($price) || empty($img['name'])) {
+
+    if (empty($nom) || empty($price) || empty($img['name']) || empty($id_couleur)) {
         $_SESSION['message'] = 'Tous les champs sont requis !';
         $_SESSION['message_type'] = 'error';
         header("Location: visualiser.php");
@@ -39,8 +45,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (move_uploaded_file($img['tmp_name'], $uploadPath)) {
         try {
-            $stmt = $pdo->prepare("INSERT INTO decoration (nom, prix, img) VALUES (?, ?, ?)");
-            $stmt->execute([$nom, $price, $fileName]);
+            $stmt = $pdo->prepare("INSERT INTO decoration (nom, prix, img, id_couleur_bois) VALUES (?, ?, ?, ?)");
+            $stmt->execute([$nom, $price, $fileName, $id_couleur]);
 
             $_SESSION['message'] = 'La décoration a été ajoutée avec succès !';
             $_SESSION['message_type'] = 'success';
@@ -104,7 +110,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <img class="preview-img" id="output" />
                         </div>
                     </div>
-
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="id_couleur">Couleur du bois associé à la décoration <span class="required">*</span></label>
+                            <select class="input-field" id="id_couleur" name="id_couleur">
+                                <option value="">-- Sélectionnez une couleur --</option>
+                                <?php foreach ($couleurs as $couleur): ?>
+                                    <option value="<?= htmlspecialchars($couleur['id']) ?>">
+                                        <?= htmlspecialchars($couleur['nom']) ?>
+                                    </option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+                    </div>
                     <div class="button-section">
                         <div class="buttons">
                             <button type="button" id="btn-retour" class="btn-beige" onclick="history.go(-1)">Retour</button>

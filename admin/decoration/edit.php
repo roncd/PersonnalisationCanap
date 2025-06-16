@@ -18,6 +18,10 @@ if (!$id) {
     exit();
 }
 
+$stmt = $pdo->prepare("SELECT id, nom FROM couleur_bois");
+$stmt->execute();
+$couleurs = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
 // Récupérer les données actuelles de la decoration
 $stmt = $pdo->prepare("SELECT * FROM decoration WHERE  id = :id");
 $stmt->bindValue(':id', $id, PDO::PARAM_INT);
@@ -35,6 +39,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nom = trim($_POST['name']);
     $price = ($_POST['price']);
     $img = $_FILES['img'];
+    $id_couleur = trim($_POST['id_couleur']);
+
 
     if (empty($nom)) {
         $_SESSION['message'] = 'Le nom est requis.';
@@ -61,9 +67,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         }
         if (!isset($_SESSION['message'])) {
-            $stmt = $pdo->prepare("UPDATE decoration SET nom = ?, prix = ?, img = ? WHERE id = ?");
-            $stmt->execute([$nom, $price, $fileName, $id]);
-            $_SESSION['message'] = 'La decoration a été mise à jour avec succès !';
+            $stmt = $pdo->prepare("UPDATE decoration SET nom = ?, prix = ?, img = ?, id_couleur_bois = ? WHERE id = ?");
+            $stmt->execute([$nom, $price, $fileName,  $id_couleur, $id]);
+            $_SESSION['message'] = 'La décoration a été mise à jour avec succès !';
             $_SESSION['message_type'] = 'success';
             header("Location: visualiser.php");
             exit();
@@ -82,7 +88,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link rel="stylesheet" href="../../styles/admin/ajout.css">
     <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
     <link rel="stylesheet" href="../../styles/message.css">
-    
     <link rel="stylesheet" href="../../styles/buttons.css">
     <script src="../../script/previewImage.js"></script>
 </head>
@@ -97,7 +102,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <h2>Modifie une décoration</h2>
             <?php require '../include/message.php'; ?>
             <div class="form">
-                <form action="edit.php?id=<?php echo $couleurbois['id']; ?>" method="POST" enctype="multipart/form-data" class="formulaire-creation-compte">
+                <form action="edit.php?id=<?php echo $decoration['id']; ?>" method="POST" enctype="multipart/form-data" class="formulaire-creation-compte">
                     <div class="form-row">
                         <div class="form-group">
                             <label for="name">Nom <span class="required">*</span></label>
@@ -111,14 +116,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <div class="form-row">
                         <div class="form-group">
                             <label for="img">Image (Laissez vide pour conserver l'image actuelle) <span class="required">*</span></label>
-                            <input type="file" id="img" name="img" class="input-field" accept="image/*" onchange="loadFile(event)" >
+                            <input type="file" id="img" name="img" class="input-field" accept="image/*" onchange="loadFile(event)">
                             <img class="preview-img" src="../uploads/decoration/<?php echo htmlspecialchars($decoration['img']); ?>" id="output" />
-                         </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="id_couleur">Couleur du bois associé à la décoration <span class="required">*</span></label>
+                            <select class="input-field" id="id_couleur" name="id_couleur">
+                                <?php foreach ($couleurs as $couleur): ?>
+                                    <option value="<?= htmlspecialchars($couleur['id']) ?>"
+                                        <?= ($couleur['id'] == $decoration['id_couleur_bois']) ? 'selected' : '' ?>>
+                                        <?= htmlspecialchars($couleur['nom']) ?>
+                                    </option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
                     </div>
                     <div class="button-section">
                         <div class="buttons">
                             <button type="button" id="btn-retour" class="btn-beige" onclick="history.go(-1)">Retour</button>
-                            <input type="submit"  class="btn-noir" value="Mettre à jour">
+                            <input type="submit" class="btn-noir" value="Mettre à jour">
                         </div>
                     </div>
                 </form>

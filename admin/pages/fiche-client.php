@@ -1,4 +1,5 @@
 <?php
+require '../config.php';
 session_start();
 require '../include/session_expiration.php';
 if (!isset($_SESSION['id'])) {
@@ -15,7 +16,6 @@ if (!$id) {
     header("Location: ../client/visualiser.php");
     exit();
 }
-require '../config.php';
 
 $stmt = $pdo->prepare("SELECT * FROM client WHERE id = ?");
 $stmt->execute([$id]);
@@ -30,13 +30,21 @@ if (!$client) {
 
 $limit = 5;
 
-//Calcul age a part date naissance
+//Calcul age a partir date naissance
 function age($date)
 {
-    $anne = date('Y', strtotime($date));
-    $age = date('Y') - $anne;
-    if (date('md') < date('md', strtotime($date))) {
-        return $age - 1;
+    if ($date === '0000-00-00' || empty($date)) {
+        return null; 
+    }
+    $timestamp = strtotime($date);
+    if (!$timestamp) {
+        return null;
+    }
+    $annee = date('Y', $timestamp);
+    $age = date('Y') - $annee;
+
+    if (date('md') < date('md', $timestamp)) {
+        $age--;
     }
     return $age;
 }
@@ -71,9 +79,11 @@ function age($date)
                         </h2>
                         <p>
                             Titre de civilité : <?= ($client['civilite']) ?> <br>
-                            Âge : <?php if (!empty($client['date_naissance'])) : ?>
-                                <?php echo age($client['date_naissance']); ?>
-                                ans (date de naissance : <?= ($client['date_naissance']) ?> )
+                            <?php
+                            $age = age($client['date_naissance']);
+                            ?>
+                            Âge : <?php if ($age !== null) : ?>
+                                <?php echo $age; ?> ans (date de naissance : <?= htmlspecialchars($client['date_naissance']) ?>)
                             <?php else: ?>
                                 <span>-</span>
                             <?php endif; ?><br>

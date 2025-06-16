@@ -15,7 +15,7 @@ session_start();
     <link rel="stylesheet" href="../../styles/mentions.css">
 </head>
 
-<body class="be-vietnam-pro-regular">
+<body>
     <header>
         <?php require '../../squelette/header.php'; ?>
     </header>
