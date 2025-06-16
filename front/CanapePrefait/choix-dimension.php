@@ -1,7 +1,6 @@
 <?php
 require '../../admin/config.php';
 session_start();
-require '../../admin/include/session_expiration.php';
 
 // Vérifier si l'utilisateur est connecté
 if (!isset($_SESSION['user_id'])) {
@@ -21,7 +20,7 @@ $id_commande = intval($_GET['id']);
 $stmt = $pdo->prepare("SELECT * FROM commande_prefait WHERE id = ?");
 $stmt->execute([$id_commande]);
 $commande = $stmt->fetch(PDO::FETCH_ASSOC);
-
+ 
 if (!$commande) {
     die("Aucune commande pré-faite trouvée.");
 }
@@ -116,6 +115,8 @@ header("Expires: 0");
   <link rel="stylesheet" href="../../styles/popup.css">
   <link rel="stylesheet" href="../../styles/canapPrefait.css">
   <link rel="stylesheet" href="../../styles/buttons.css">
+  <script type="module" src="../../script/popup.js"></script>
+
 
   <title>Choisi tes dimensions</title>
 </head>
@@ -145,7 +146,18 @@ header("Expires: 0");
     <div class="container">
       <!-- Colonne de gauche -->
       <div class="left-column">
-        <h2 class="h2">Choisi tes dimensions</h2>
+    <div class="fil-ariane-container-prefait h2" aria-label="fil-ariane">
+      <ul class="fil-ariane">
+        <?php
+$id = $_GET['id'] ?? null;
+?>
+        <li><a href="./choix-dimension.php?id=<?= $id ?>" class="active">Dimension</a></li>
+        <li><a href="./choix-mousse.php?id=<?= $id ?>">Mousse</a></li>
+      </ul>
+    </div>
+
+        <h2>Choisi tes dimensions</h2>
+
         
 <p>Largeur banquette : <span class="bold">50cm (par défaut)</span> | Prix total des dimensions : <span id="dimension-price"><?= number_format($prixDimensions, 2, ',', ' ') ?> €</span></p>
 
@@ -289,6 +301,10 @@ form.addEventListener('submit', function () {
   <!-- Colonne de droite -->
       <div class="right-column h2 ">
         <section class="main-display2">
+                            <div class="buttons">
+            <button id="btn-aide" class="btn-beige">Besoin d'aide ?</button>
+          </div>
+          <br>
 <?php if (!empty($composition['structure']['img'])): ?>
   <img 
     src="../../admin/uploads/structure/<?php echo htmlspecialchars($composition['structure']['img'], ENT_QUOTES); ?>" 

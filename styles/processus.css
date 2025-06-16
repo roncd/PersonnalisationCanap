@@ -345,6 +345,11 @@ label {
   margin: 40px 0 -40px 50px;
 }
 
+.fil-ariane-container-prefait {
+  font-size: 14px;
+  margin: 40px 0 -40px 50px;
+}
+
 .fil-ariane {
   display: flex;
   list-style: none;
