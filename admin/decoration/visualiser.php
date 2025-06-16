@@ -10,6 +10,23 @@ if (!isset($_SESSION['id'])) {
 }
 $search = $_GET['search'] ?? '';
 
+$tables = ['couleur_bois'];
+
+function fetchData($pdo, $table)
+{
+    $stmt = $pdo->prepare("SELECT id, nom FROM $table");
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+$data = [];
+$assocData = [];
+
+foreach ($tables as $table) {
+    $data[$table] = fetchData($pdo, $table);
+    $assocData[$table] = array_column($data[$table], 'nom', 'id');
+}
+
 // Paramètres de pagination
 $page = isset($_GET['page']) && is_numeric($_GET['page']) && $_GET['page'] > 0 ? (int)$_GET['page'] : 1;
 $limit = 10; // Nombre de commandes par page
@@ -88,6 +105,7 @@ $totalPages = ceil($totalCommandes / $limit);
                             <th>NOM</th>
                             <th>PRIX</th>
                             <th>IMAGE</th>
+                            <th>COULEUR ASSOCIÉ</th>
                             <th class="sticky-col">ACTION</th>
                         </tr>
                     </thead>
@@ -108,6 +126,7 @@ $totalPages = ceil($totalCommandes / $limit);
                             echo "<td>{$row['nom']}</td>";
                             echo "<td>{$row['prix']}</td>";
                             echo "<td><img src='../uploads/decoration/{$row['img']}' alt='{$row['nom']}' style='width:50px; height:auto;'></td>";
+                            echo "<td>" . htmlspecialchars($assocData['couleur_bois'][$row['id_couleur_bois']] ?? 'N/A') . "</td>";
                             echo "<td class='actions'>";
                             echo "<a href='edit.php?id={$row['id']}' class='edit-action actions vert' title='Modifier'>EDIT</a>";
                             echo "<a href='delete.php?id={$row['id']}' class='delete-action actions rouge' data-id='{$row['id']}' title='Supprimer'>DELETE</a>";

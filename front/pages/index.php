@@ -15,7 +15,7 @@ session_start();
     <script src="../../node_modules/@preline/carousel/index.js"></script>
 </head>
 
-<body class="be-vietnam-pro-regular">
+<body>
     <header>
         <?php require '../../squelette/header.php'; ?>
     </header>
@@ -149,33 +149,33 @@ session_start();
 
 
             <!-- Section Qui sommes-nous -->
-<section class="about-section">
-    <div class="about-container">
-        <div class="about-content">
-            <div class="about-text">
-                <h2 class="about-title">Qui sommes-nous ?</h2>
-                <p class="about-description">
-                    Chez Déco du Monde, chaque salon marocain est pensé comme une œuvre unique,
-                    façonnée selon vos envies, vos goûts et vos traditions. Du choix des tissus à la finition
-                    des détails,
-                    nous mettons notre passion et notre savoir-faire au service d'un mobilier qui vous
-                    ressemble.
-                </p>
-                <p class="about-mission">
-                    Notre mission : faire vivre l'artisanat marocain dans des intérieurs modernes et
-                    chaleureux,
-                    en alliant confort, élégance et culture.
-                </p>
-                <a href="apropos.php" class="about-button">
+            <section class="about-section">
+                <div class="about-container">
+                    <div class="about-content">
+                        <div class="about-text">
+                            <h2 class="about-title">Qui sommes-nous ?</h2>
+                            <p class="about-description">
+                                Chez Déco du Monde, chaque salon marocain est pensé comme une œuvre unique,
+                                façonnée selon vos envies, vos goûts et vos traditions. Du choix des tissus à la finition
+                                des détails,
+                                nous mettons notre passion et notre savoir-faire au service d'un mobilier qui vous
+                                ressemble.
+                            </p>
+                            <p class="about-mission">
+                                Notre mission : faire vivre l'artisanat marocain dans des intérieurs modernes et
+                                chaleureux,
+                                en alliant confort, élégance et culture.
+                            </p>
+                            <a href="apropos.php" class="about-button">
                                 En savoir plus
                             </a>
-            </div>
-            <div class="about-image">
-                <img src="../../medias/salon-maroc.jpg" alt="Salon marocain" class="about-img">
-            </div>
-        </div>
-    </div>
-</section>
+                        </div>
+                        <div class="about-image">
+                            <img src="../../medias/salon-maroc.jpg" alt="Salon marocain" class="about-img">
+                        </div>
+                    </div>
+                </div>
+            </section>
 
             <!-- Section Commencer un devis -->
             <section class="devis-section">

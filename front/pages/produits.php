@@ -14,7 +14,7 @@ session_start();
     <link href="../../dist/output.css" rel="stylesheet">
 </head>
 
-<body class="be-vietnam-pro-regular">
+<body>
     <header>
         <?php require '../../squelette/header.php'; ?>
     </header>
@@ -24,19 +24,19 @@ session_start();
         <section class="products-header">
             <h1>Nos Produits</h1>
             <p class="products-description">
-                Découvrez notre sélection de mousses et tissus de qualité. 
+                Découvrez notre sélection de mousses et tissus de qualité.
                 Ces produits sont disponibles uniquement sur réservation et pick-up en boutique.
             </p>
         </section>
 
         <!-- Filtres -->
         <div class="filters">
-             <button class="filter-btn active" data-category="all">Tous</button>
-    <button class="filter-btn" data-category="mousse">Mousses</button>
-    <button class="filter-btn" data-category="tissu">Tissus</button>
-    <button class="filter-btn" data-category="accessoire">Coussins</button>
-        <button class="filter-btn" data-category="accessoire">n</button>
-</div>
+            <button class="filter-btn active" data-category="all">Tous</button>
+            <button class="filter-btn" data-category="mousse">Mousses</button>
+            <button class="filter-btn" data-category="tissu">Tissus</button>
+            <button class="filter-btn" data-category="accessoire">Coussins</button>
+            <button class="filter-btn" data-category="accessoire">n</button>
+        </div>
 
         <!-- Grille de produits -->
         <div class="products-grid">
@@ -61,7 +61,7 @@ session_start();
                 </div>
             </div>
 
-               <div class="product-card" data-category="mousse">
+            <div class="product-card" data-category="mousse">
                 <img src="../../medias/mousse-produit.jpg" alt="Mousse moyenne densité">
                 <div class="product-info">
                     <h3>Mousse Soft</h3>
@@ -93,25 +93,25 @@ session_start();
             </div>
 
             <!-- Section Coussins-->
-    <div class="product-card" data-category="accessoire">
-        <img src="../../medias/groscoussins-produits.jpg" alt="Coussin 40x40">
-        <div class="product-info">
-            <h3>Coussin 40x40</h3>
-            <p>Petit coussin décoratif ou de confort</p>
-            <p class="price">15€ l'unité</p>
-            <button class="reserve-btn" onclick="openReservationModal('Coussin 40x40')">Réserver</button>
-        </div>
-    </div>
+            <div class="product-card" data-category="accessoire">
+                <img src="../../medias/groscoussins-produits.jpg" alt="Coussin 40x40">
+                <div class="product-info">
+                    <h3>Coussin 40x40</h3>
+                    <p>Petit coussin décoratif ou de confort</p>
+                    <p class="price">15€ l'unité</p>
+                    <button class="reserve-btn" onclick="openReservationModal('Coussin 40x40')">Réserver</button>
+                </div>
+            </div>
 
-    <div class="product-card" data-category="accessoire">
-        <img src="../../medias/caccoudoirs-produits.jpg" alt="Traversin">
-        <div class="product-info">
-            <h3>Traversin</h3>
-            <p>Coussin cylindrique pour accoudoirs ou dossiers</p>
-            <p class="price">20€ l'unité</p>
-            <button class="reserve-btn" onclick="openReservationModal('Traversin')">Réserver</button>
-        </div>
-    </div>
+            <div class="product-card" data-category="accessoire">
+                <img src="../../medias/caccoudoirs-produits.jpg" alt="Traversin">
+                <div class="product-info">
+                    <h3>Traversin</h3>
+                    <p>Coussin cylindrique pour accoudoirs ou dossiers</p>
+                    <p class="price">20€ l'unité</p>
+                    <button class="reserve-btn" onclick="openReservationModal('Traversin')">Réserver</button>
+                </div>
+            </div>
 
         </div>
 
@@ -191,4 +191,5 @@ session_start();
         }
     </script>
 </body>
+
 </html>
