@@ -168,8 +168,6 @@ $pagedCommandes = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         <th>ACCOUDOIR_TISSU</th>
                         <th>NB_ACCOUDOIR</th>
                         <th>IMAGE</th>
-
-
                         <th class="sticky-col">ACTION</th>
                     </thead>
                     <tbody>
@@ -221,7 +219,7 @@ $pagedCommandes = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                 echo "</tr>";
                             }
                         } else {
-                            echo "<tr><td colspan='22' style='text-align:left;'>Aucune commande trouvée.</td></tr>";
+                            echo "<tr><td colspan='24' style='text-align:left;'>Aucune commande trouvée.</td></tr>";
                         }
                         ?>
                     </tbody>
