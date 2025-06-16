@@ -116,6 +116,8 @@ header("Expires: 0");
   <link rel="stylesheet" href="../../styles/canapPrefait.css">
   <link rel="stylesheet" href="../../styles/buttons.css">
   <script type="module" src="../../script/popup.js"></script>
+  <script type="module" src="../../script/keydown.js"></script>
+
 
 
   <title>Choisi tes dimensions</title>
@@ -143,7 +145,7 @@ header("Expires: 0");
   <main> 
 
  
-    <div class="container">
+    <div class="container transition">
       <!-- Colonne de gauche -->
       <div class="left-column">
     <div class="fil-ariane-container-prefait h2" aria-label="fil-ariane">

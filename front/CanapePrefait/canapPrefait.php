@@ -87,6 +87,8 @@ $totalPrice += floatval($commande['prix_dimensions'] ?? 0);
   <link rel="stylesheet" href="../../styles/canapPrefait.css">
   <link rel="stylesheet" href="../../styles/buttons.css">
   <script type="module" src="../../script/popup.js"></script>
+  <script type="module" src="../../script/keydown.js"></script>
+
 
 
   <title><?php echo htmlspecialchars($commande['nom']); ?></title>
@@ -114,7 +116,7 @@ $totalPrice += floatval($commande['prix_dimensions'] ?? 0);
   <main>
 
 
-    <div class="container">
+    <div class="container transition">
       <!-- Colonne de gauche -->
       <div class="left-column">
         <h2 class="h2">Composition du <?php echo htmlspecialchars($commande['nom']); ?></h2>
