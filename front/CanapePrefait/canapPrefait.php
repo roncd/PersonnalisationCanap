@@ -114,7 +114,7 @@ $totalPrice += floatval($commande['prix_dimensions'] ?? 0);
   <main>
 
 
-    <div class="container">
+    <div class="container transition">
       <!-- Colonne de gauche -->
       <div class="left-column">
         <h2 class="h2">Composition du <?php echo htmlspecialchars($commande['nom']); ?></h2>

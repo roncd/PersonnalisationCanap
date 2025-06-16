@@ -143,7 +143,7 @@ header("Expires: 0");
   <main> 
 
  
-    <div class="container">
+    <div class="container transition">
       <!-- Colonne de gauche -->
       <div class="left-column">
     <div class="fil-ariane-container-prefait h2" aria-label="fil-ariane">
