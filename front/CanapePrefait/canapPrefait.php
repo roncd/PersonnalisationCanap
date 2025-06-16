@@ -86,6 +86,10 @@ $totalPrice += floatval($commande['prix_dimensions'] ?? 0);
   <link rel="stylesheet" href="../../styles/popup.css">
   <link rel="stylesheet" href="../../styles/canapPrefait.css">
   <link rel="stylesheet" href="../../styles/buttons.css">
+  <script type="module" src="../../script/popup.js"></script>
+  <script type="module" src="../../script/keydown.js"></script>
+
+
 
   <title><?php echo htmlspecialchars($commande['nom']); ?></title>
 </head>
@@ -112,7 +116,7 @@ $totalPrice += floatval($commande['prix_dimensions'] ?? 0);
   <main>
 
 
-    <div class="container">
+    <div class="container transition">
       <!-- Colonne de gauche -->
       <div class="left-column">
         <h2 class="h2">Composition du <?php echo htmlspecialchars($commande['nom']); ?></h2>
@@ -270,6 +274,10 @@ if (!empty($composition)) {
       <!-- Colonne de droite -->
       <div class="right-column h2 ">
         <section class="main-display2">
+                  <div class="buttons">
+            <button id="btn-aide" class="btn-beige">Besoin d'aide ?</button>
+          </div>
+       <br>
 <?php
 $imgFile = !empty($commande['img']) ? htmlspecialchars($commande['img'], ENT_QUOTES) : 'default.jpg';
 ?>
@@ -282,12 +290,11 @@ $imgFile = !empty($commande['img']) ? htmlspecialchars($commande['img'], ENT_QUO
       </div>
     </div>    
 
-
-    <!-- Popup besoin d'aide -->
+    <!-- POPUP BESOIN D'AIDE -->
     <div id="help-popup" class="popup ">
       <div class="popup-content">
         <h2>Vous avez une question ?</h2>
-        <p>Contactez-nous au numéro suivant et un vendeur vous assistera :
+        <p>Contactez nous au numéro suivant et un vendeur vous assistera :
           <br><br>
           <strong>06 58 47 58 56</strong>
         </p>
@@ -296,10 +303,10 @@ $imgFile = !empty($commande['img']) ? htmlspecialchars($commande['img'], ENT_QUO
       </div>
     </div>
 
-    <!-- Popup abandonner -->
+    <!-- POPUP ABANDONNER -->
     <div id="abandonner-popup" class="popup ">
       <div class="popup-content">
-        <h2>Êtes-vous sûr de vouloir abandonner ?</h2>
+        <h2>Êtes vous sûr de vouloir abandonner ?</h2>
         <br>
         <button class="btn-beige">Oui...</button>
         <button class="btn-noir">Non !</button>

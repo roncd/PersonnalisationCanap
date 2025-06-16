@@ -111,7 +111,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <form method="POST" action="">
               <input type="hidden" name="mousse_id" id="selected-mousse">
               <input type="hidden" name="total_price" id="total-price"> <!-- Ajout pour envoyer le prix -->
-              <button type="submit" id="btn-suivant" class="btn-noir">Suivant</button>
+              <button type="submit" id="btn-suivant" class="btn-noir">Terminer</button>
             </form>
           </div>
         </div>

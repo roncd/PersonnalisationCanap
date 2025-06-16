@@ -1,7 +1,6 @@
 <?php
 require '../../admin/config.php';
 session_start();
-require '../../admin/include/session_expiration.php';
 
 // Vérifier que l'utilisateur est connecté
 if (!isset($_SESSION['user_id'])) {
@@ -19,7 +18,7 @@ $id_commande_prefait = (int) $_GET['id']; // Sécurisation de l'entrée
 // Récupérer les types de mousse (pour afficher tous les choix)
 $stmt = $pdo->query("SELECT * FROM mousse");
 $mousse = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
+ 
 // Récupérer l'id de la mousse sélectionnée dans la commande pré-faite
 $selectedMousseId = null;
 $stmt = $pdo->prepare("SELECT id_mousse FROM commande_prefait WHERE id = ?");
@@ -105,6 +104,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <link rel="stylesheet" href="../../styles/popup.css">
   <link rel="stylesheet" href="../../styles/canapPrefait.css">
   <link rel="stylesheet" href="../../styles/buttons.css">
+  <script type="module" src="../../script/popup.js"></script>
+  <script type="module" src="../../script/keydown.js"></script>
+
 
   <title>Choisi ta mousse</title>
 </head>
@@ -134,10 +136,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
  
 
-    <div class="container">
+    <div class="container transition">
       <!-- Colonne de gauche -->
       <div class="left-column">
-        <h2 class="h2">Choisi ta mousse</h2>
+    <div class="fil-ariane-container-prefait h2" aria-label="fil-ariane">
+      <ul class="fil-ariane">
+        <?php
+$id = $_GET['id'] ?? null;
+?>
+        <li><a href="./choix-dimension.php?id=<?= $id ?>">Dimension</a></li>
+        <li><a href="./choix-mousse.php?id=<?= $id ?>" class="active">Mousse</a></li>
+      </ul>
+    </div>
+        <h2>Choisi ta mousse</h2> 
+                
+
        
       <section class="color-options">
  <?php if (!empty($mousse)): ?>
@@ -170,7 +183,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <form method="POST" action="">
               <input type="hidden" name="mousse_id" id="selected-mousse">
               <input type="hidden" name="prix" id="input-prix-total">
-              <button type="submit" class="btn-noir">Suivant</button>
+              <button type="submit" class="btn-noir">Terminer</button>
             </form>
           </div>
         </div>
@@ -181,6 +194,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <!-- Colonne de droite -->
       <div class="right-column h2 ">
         <section class="main-display2">
+                            <div class="buttons">
+            <button id="btn-aide" class="btn-beige">Besoin d'aide ?</button>
+            <button type="button" data-url="../pages/noscanapes.php" id="btn-abandonner" class="btn-noir">Abandonner</button>
+          </div>
+                    <br>
+
 <?php if (!empty($composition['mousse']['img'])): ?>
   <img 
     src="../../admin/uploads/mousse/<?php echo htmlspecialchars($composition['mousse']['img'], ENT_QUOTES); ?>" 

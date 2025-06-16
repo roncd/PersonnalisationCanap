@@ -1,7 +1,6 @@
 <?php
 require '../../admin/config.php';
 session_start();
-require '../../admin/include/session_expiration.php';
 
 // Vérifier si l'utilisateur est connecté
 if (!isset($_SESSION['user_id'])) {
@@ -17,7 +16,7 @@ if (!isset($_POST['id_commande_prefait']) || !is_numeric($_POST['id_commande_pre
 
 $id_prefait = intval($_POST['id_commande_prefait']);
 $id_client = $_SESSION['user_id'];
-
+ 
 // Récupérer les longueurs et le prix des dimensions depuis le formulaire
 $longueurA = isset($_POST['longueurA']) ? floatval($_POST['longueurA']) : 0;
 $longueurB = isset($_POST['longueurB']) ? floatval($_POST['longueurB']) : 0;
