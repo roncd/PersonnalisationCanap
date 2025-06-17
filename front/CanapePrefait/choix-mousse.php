@@ -39,6 +39,8 @@ if ($selectedMousseId) {
     $composition['mousse'] = null;
 }
 
+
+
 // Récupération du prix de la mousse existante (ou 0 si aucune)
 $oldMoussePrice = !empty($composition['mousse']['prix']) ? (float) $composition['mousse']['prix'] : 0;
 // Traitement du formulaire
@@ -106,6 +108,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <link rel="stylesheet" href="../../styles/buttons.css">
   <script type="module" src="../../script/popup.js"></script>
   <script type="module" src="../../script/keydown.js"></script>
+
 
 
   <title>Choisi ta mousse</title>

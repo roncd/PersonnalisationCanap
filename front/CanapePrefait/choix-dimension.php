@@ -43,7 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
     
     // Recharger les nouvelles valeurs depuis la BDD
-    $stmt = $pdo->prepare("SELECT * FROM commande_temporaire WHERE id_client = ? AND id_structure = ?  = ? AND id_commande_prefait = ?");
+    $stmt = $pdo->prepare("SELECT * FROM commande_temporaire WHERE id_client = ? AND id_structure = ? AND id_commande_prefait = ?");
     $stmt->execute([$_SESSION['user_id'], $commande['id_structure']]);
     $commandeTemp = $stmt->fetch(PDO::FETCH_ASSOC);
 }
@@ -93,6 +93,25 @@ $nbLongueurs = isset($composition['structure']['nb_longueurs']) ? (int) $composi
 
 // Ajouter aussi le prix des dimensions
 $totalPrice += floatval($prixDimensions);
+
+$stmt = $pdo->prepare("SELECT ab.id, ab.nom, ab.img, ab.prix, cpa.nb_accoudoir
+                       FROM commande_prefait_accoudoir cpa
+                       JOIN accoudoir_bois ab ON cpa.id_accoudoir_bois = ab.id
+                       WHERE cpa.id_commande_prefait = ?");
+$stmt->execute([$id_commande]);
+$accoudoirs = $stmt->fetchAll(PDO::FETCH_ASSOC);  
+
+if ($accoudoirs) {
+    $composition['accoudoirs_bois_multiples'] = $accoudoirs;
+
+    // On les ajoute au prix total
+    foreach ($accoudoirs as $acc) {
+        if (!empty($acc['prix']) && !empty($acc['nb_accoudoir'])) {
+            $totalPrice += floatval($acc['prix']) * intval($acc['nb_accoudoir']);
+        }
+    }
+}
+
 
 // Empêcher le cache navigateur
 header("Cache-Control: no-cache, no-store, must-revalidate");
@@ -192,13 +211,11 @@ $id = $_GET['id'] ?? null;
     </div>
   <?php endif; ?>
 </form>
-
-
 <?php
 // Prix par centimètre (350 € le mètre => 3.5 € le centimètre)
 $prixParCm = 3.5;
 
-// Calcul des longueurs depuis la commande ou variables
+// Calcul des longueurs depuis la commande
 $longueurA = isset($commande['longueurA']) ? (float)$commande['longueurA'] : 0;
 $longueurB = isset($commande['longueurB']) ? (float)$commande['longueurB'] : 0;
 $longueurC = isset($commande['longueurC']) ? (float)$commande['longueurC'] : 0;
@@ -206,12 +223,28 @@ $longueurC = isset($commande['longueurC']) ? (float)$commande['longueurC'] : 0;
 // Calcul prix dimensions
 $prixDimensions = ($longueurA + $longueurB + $longueurC) * $prixParCm;
 
-// Calcul prix options (composition)
+// Calcul prix options
 $totalOptions = 0;
 if (!empty($composition)) {
-    foreach ($composition as $details) {
-        if (!empty($details['prix'])) {
-            $totalOptions += (float)$details['prix'];
+    foreach ($composition as $nomTable => $details) {
+        // Accoudoirs en bois multiples (liste de plusieurs objets)
+        if ($nomTable === 'accoudoirs_bois_multiples' && is_array($details)) {
+            foreach ($details as $acc) {
+                if (!empty($acc['prix']) && !empty($acc['nb_accoudoir'])) {
+                    $totalOptions += (float)$acc['prix'] * (int)$acc['nb_accoudoir'];
+                }
+            }
+        }
+        // Autres options
+        elseif (!empty($details['prix'])) {
+            $prix = (float)$details['prix'];
+
+            // Si c’est un accoudoir tissu, on double le prix
+            if ($nomTable === 'accoudoir_tissu') {
+                $prix *= 2;
+            }
+
+            $totalOptions += $prix;
         }
     }
 }
