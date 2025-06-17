@@ -36,7 +36,7 @@ $totalPages = ceil($totalCommandes / $limit);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Catégorie</title>
+    <title>Catégorie des produits à l'unité</title>
     <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../../styles/admin/tab.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
@@ -55,7 +55,7 @@ $totalPages = ceil($totalCommandes / $limit);
     </header>
     <main>
         <div class="container">
-            <h2>Catégorie</h2>
+            <h2>Catégorie des produits à l'unité</h2>
             <div class="option">
                 <div class="section-button">
                     <div>
