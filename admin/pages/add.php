@@ -37,10 +37,11 @@ if (!isset($_SESSION['id'])) {
             <div class="grid-wrapper">
 
             <section class="category-block">
-                    <h2>Produits à l'unité</h2>
-                    <div class="button-grid">
+            <h2>Produits à l'unité / Canapé Pré-personnalisé</h2>
+            <div class="button-grid">
                     <a href="../vente-produit/add.php" class="btn">Produit</a>
-                    <a href="../categorie/add.php" class="btn">Catégorie</a>
+                    <a href="../categorie/add.php" class="btn">Catégorie prduits</a>
+                    <a href="../commande-prefait/add.php" class="btn">Canapé Pré-fait</a>
                     </div>
                 </section>
                 
@@ -74,13 +75,6 @@ if (!isset($_SESSION['id'])) {
                         <a href="../dossier-tissu/add.php" class="btn">Dossier</a>
                         <a href="../couleur-tissu-tissu/add.php" class="btn">Couleur tissu</a>
                         <a href="../motif-tissu/add.php" class="btn">Motif coussin</a>
-                    </div>
-                </section>
-
-                <section class="category-block">
-                    <h2>Canapé préfait</h2>
-                    <div class="button-grid">
-                        <a href="../commande-prefait/add.php" class="btn">Créer un canapé</a>
                     </div>
                 </section>
 

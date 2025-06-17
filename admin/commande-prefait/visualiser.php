@@ -17,7 +17,6 @@ $tables = [
     'type_banquette',
     'mousse',
     'couleur_bois',
-    'accoudoir_bois',
     'dossier_bois',
     'couleur_tissu_bois',
     'motif_bois',
@@ -44,22 +43,6 @@ foreach ($tables as $table) {
     $assocData[$table] = array_column($data[$table], 'nom', 'id');
 }
 
-// Récupération des commandes préfaites avec dimensions
-$stmt = $pdo->prepare("SELECT id, nom, longueurA, longueurB, longueurC, prix, prix_dimensions, id_structure FROM commande_prefait ORDER BY id DESC");
-$stmt->execute();
-$data['commande_prefait'] = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-// Association des dimensions
-$assocData['commande_prefait'] = [];
-foreach ($data['commande_prefait'] as $cmd) {
-    $assocData['commande_prefait'][$cmd['id']] = [
-        'nom' => $cmd['nom'],
-        'prix' => $cmd['prix'],
-        'prix_dimensions' => $cmd['prix_dimensions'],
-        'dimensions' => trim("{$cmd['longueurA']} x {$cmd['longueurB']} x {$cmd['longueurC']}", " x"),
-        'structure' => $assocData['structure'][$cmd['id_structure']] ?? 'N/A',
-    ];
-}
 
 // Pagination
 $page = isset($_GET['page']) && is_numeric($_GET['page']) && $_GET['page'] > 0 ? (int)$_GET['page'] : 1;
@@ -81,13 +64,6 @@ $icon  = ($order === 'ASC') ? '../../assets/sort-dsc.svg' : '../../assets/sort-a
 $params = $_GET;
 $params['order'] = $next;
 $triURL = '?' . http_build_query($params);
-
-// Chargement des commandes 
-$stmt = $pdo->prepare("SELECT * FROM commande_prefait ORDER BY id $order LIMIT :limit OFFSET :offset");
-$stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
-$stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
-$stmt->execute();
-$pagedCommandes = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 
@@ -130,7 +106,7 @@ $pagedCommandes = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 </div>
                 <div class="search-bar">
                     <form method="GET" action="index.php">
-                        <input type="text" name="search" placeholder="Rechercher par nom ou ID..." value="<?php echo htmlspecialchars($search); ?>">
+                        <input type="text" name="search" placeholder="Rechercher par nom..." value="<?php echo htmlspecialchars($search); ?>">
                         <button class="btn-noir" type="submit">Rechercher</button>
                     </form>
                 </div>
@@ -147,8 +123,6 @@ $pagedCommandes = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             ID
                         </th>
                         <th>NOM</th>
-                        <th>PRIX</th>
-                        <th>PRIX DIMENSION</th>
                         <th>STRUCTURE</th>
                         <th>LONGUEUR_A</th>
                         <th>LONGUEUR_B</th>
@@ -157,16 +131,18 @@ $pagedCommandes = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         <th>MOUSSE</th>
                         <th>COULEUR_BOIS</th>
                         <th>DECORATION_BOIS</th>
-                        <th>ACCOUDOIR_BOIS</th>
+                        <th>ACCOUDOIR_BOIS_1</th>
+                        <th>ACCOUDOIR_BOIS_2</th>
+                        <th>NB_ACCOUDOIR_BOIS</th>
                         <th>DOSSIER_BOIS</th>
                         <th>COULEUR_TISSU_BOIS</th>
                         <th>MOTIF_BOIS</th>
-                        <th>MODELE</th>
+                        <th>MODELE_TISSU</th>
                         <th>COULEUR_TISSU</th>
                         <th>MOTIF_TISSU</th>
                         <th>DOSSIER_TISSU</th>
                         <th>ACCOUDOIR_TISSU</th>
-                        <th>NB_ACCOUDOIR</th>
+                        <th>NB_ACCOUDOIR_TISSU</th>
                         <th>IMAGE</th>
                         <th class="sticky-col">ACTION</th>
                     </thead>
@@ -186,13 +162,21 @@ $pagedCommandes = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         $stmt->execute();
                         $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+                        // Récupérer les accoudoirs bois associés à la commande prefaite
+                        foreach ($results as &$commande) {
+                            $stmt = $pdo->prepare("SELECT cpa.id_accoudoir_bois, cpa.nb_accoudoir, ab.nom, ab.img
+                                FROM commande_prefait_accoudoir cpa
+                                JOIN accoudoir_bois ab ON cpa.id_accoudoir_bois = ab.id
+                                WHERE cpa.id_commande_prefait = ?");
+                            $stmt->execute([$commande['id']]);
+                            $commande['accoudoirs'] = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                        }
+
                         if (!empty($results)) {
                             foreach ($results as $row) {
                                 echo "<tr>";
                                 echo "<td>{$row['id']}</td>";
                                 echo "<td>{$row['nom']}</td>";
-                                echo "<td>{$row['prix']}</td>";
-                                echo "<td>{$row['prix_dimensions']}</td>";
                                 echo "<td>" . htmlspecialchars($assocData['structure'][$row['id_structure']] ?? '-') . "</td>";
                                 echo "<td>{$row['longueurA']}</td>";
                                 echo "<td>{$row['longueurB']}</td>";
@@ -201,7 +185,17 @@ $pagedCommandes = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                 echo "<td>" . htmlspecialchars($assocData['mousse'][$row['id_mousse']] ?? '-') . "</td>";
                                 echo "<td>" . htmlspecialchars($assocData['couleur_bois'][$row['id_couleur_bois']] ?? '-') . "</td>";
                                 echo "<td>" . htmlspecialchars($assocData['decoration'][$row['id_decoration']] ?? '-') . "</td>";
-                                echo "<td>" . htmlspecialchars($assocData['accoudoir_bois'][$row['id_accoudoir_bois']] ?? '-') . "</td>";
+                                if (!empty($row['accoudoirs'])) {
+                                    $accoudoirs = $row['accoudoirs'];
+                                    // Affiche le premier accoudoir
+                                    echo "<td>" . (!empty($accoudoirs[0]) ? htmlspecialchars($accoudoirs[0]['nom']) : '-') . "</td>";
+                                    // Affiche le deuxième accoudoir
+                                    echo "<td>" . (!empty($accoudoirs[1]) ? htmlspecialchars($accoudoirs[1]['nom']) : '-') . "</td>";
+                                } else {
+                                    // Aucun accoudoir = 2 colonnes vides
+                                    echo "<td>-</td><td>-</td>";
+                                }
+                                echo "<td>{$row['nb_accoudoir_bois']}</td>";
                                 echo "<td>" . htmlspecialchars($assocData['dossier_bois'][$row['id_dossier_bois']] ?? '-') . "</td>";
                                 echo "<td>" . htmlspecialchars($assocData['couleur_tissu_bois'][$row['id_couleur_tissu_bois']] ?? '-') . "</td>";
                                 echo "<td>" . htmlspecialchars($assocData['motif_bois'][$row['id_motif_bois']] ?? '-') . "</td>";
@@ -211,7 +205,7 @@ $pagedCommandes = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                 echo "<td>" . htmlspecialchars($assocData['dossier_tissu'][$row['id_dossier_tissu']] ?? '-') . "</td>";
                                 echo "<td>" . htmlspecialchars($assocData['accoudoir_tissu'][$row['id_accoudoir_tissu']] ?? '-') . "</td>";
                                 echo "<td>{$row['id_nb_accoudoir']}</td>";
-                                echo "<td>{$row['img']}</td>";
+                                echo "<td><img src='../uploads/canape-prefait/{$row['img']}' alt='{$row['nom']}' style='width:50px; height:auto;'></td>";
                                 echo "<td class='actions'>";
                                 echo "<a href='edit.php?id={$row['id']}' class='edit-action actions vert' title='Modifier'>EDIT</a>";
                                 echo "<a href='delete.php?id={$row['id']}' class='delete-action actions rouge' data-id='{$row['id']}' title='Supprimer'>DELETE</a>";
@@ -219,7 +213,7 @@ $pagedCommandes = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                 echo "</tr>";
                             }
                         } else {
-                            echo "<tr><td colspan='24' style='text-align:left;'>Aucune commande trouvée.</td></tr>";
+                            echo "<tr><td colspan='24' style='text-align:left;'>Aucune commande préfaite trouvée.</td></tr>";
                         }
                         ?>
                     </tbody>
