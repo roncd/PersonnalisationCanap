@@ -65,6 +65,7 @@ foreach ($commandes as $commande) {
 </head>
 
 <body>
+    <?php include '../cookies/index.html'; ?>
     <header>
         <?php require '../../squelette/header.php'; ?>
     </header>

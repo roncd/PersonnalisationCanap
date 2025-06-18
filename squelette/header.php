@@ -48,8 +48,8 @@
                 </li>
                                 <li class="dropdown">
                     <a href="#" 
-                       class="dropdown-toggle <?= strpos($_SERVER['REQUEST_URI'], 'information.php') !== false ||
-                                               strpos($_SERVER['REQUEST_URI'], 'commandes.php') !== false ? 'active' : '' ?>">
+                       class="dropdown-toggle <?= strpos($_SERVER['REQUEST_URI'], 'noscanapes.php') !== false ||
+                                               strpos($_SERVER['REQUEST_URI'], 'nosproduits.php') !== false ? 'active' : '' ?>">
                         Catalogue
                     </a>
                     <ul class="dropdown-menu">
@@ -79,15 +79,14 @@
                         Mon Compte
                     </a>
                     <ul class="dropdown-menu">
-                        <div class="drop">
+                        <div class="drop">     
+                            <li><a href="../pages/commandes.php">Mes commandes</a></li>
+                            <li><a href="../pages/information.php">Mes informations</a></li>
                             <?php if (isset($_SESSION['user_id'])): ?>
                             <li><a href="../formulaire/logout.php">Déconnexion</a></li>
                             <?php else: ?>
                             <li><a href="../formulaire/Connexion.php">Connexion </a></li>
-                            <?php endif; ?>                            
-                            <li><a href="../pages/commandes.php">Mes commandes</a></li>
-                            <li><a href="../pages/information.php">Mes informations</a></li>
-
+                            <?php endif; ?>       
                         </div>
                     </ul>
                 </li>

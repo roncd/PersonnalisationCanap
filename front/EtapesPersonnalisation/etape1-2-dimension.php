@@ -76,10 +76,11 @@ if (isset($_GET['structure_id'])) {
   <script type="module" src="../../script/keydown.js"></script>
 
   <title>Étape 1.2 - Choisi tes dimensions</title>
- 
+
 </head>
 
 <body data-user-id="<?php echo $_SESSION['user_id']; ?>" data-current-step="1-dimensions">
+  <?php include '../cookies/index.html'; ?>
   <header>
     <?php require '../../squelette/header.php'; ?>
   </header>
@@ -120,7 +121,7 @@ if (isset($_GET['structure_id'])) {
             <div class="buttons">
               <button type="button" onclick="retourEtapePrecedente()" class="btn-beige  ">Retour</button>
               <input type="hidden" name="prix_dimensions" id="prix_dimensions_hidden" value="">
-              <button type="submit"id="btn-suivant" class="btn-noir">Suivant</button>
+              <button type="submit" id="btn-suivant" class="btn-noir">Suivant</button>
             </div>
           </div>
         </form>
@@ -340,7 +341,7 @@ if (isset($_GET['structure_id'])) {
             }
           });
         });
-        
+
         // Pré-remplir les champs avec les dimensions sauvegardées
         document.getElementById("longueurA").value = savedDimensions.longueurA;
         document.getElementById("longueurB").value = savedDimensions.longueurB;

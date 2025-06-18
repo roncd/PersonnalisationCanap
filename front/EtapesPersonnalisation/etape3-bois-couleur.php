@@ -58,12 +58,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 
   <title>Étape 3 - Choisi ta couleur de bois</title>
- 
+
 </head>
 
 <body data-user-id="<?php echo $_SESSION['user_id']; ?>" data-current-step="3-couleur-bois">
 
-
+  <?php include '../cookies/index.html'; ?>
   <header>
     <?php require '../../squelette/header.php'; ?>
   </header>
@@ -170,7 +170,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         const erreurPopup = document.getElementById('erreur-popup');
         const closeErreurBtn = erreurPopup.querySelector('.btn-noir');
         const selectedCouleurBoisInput = document.getElementById('selected-couleur_bois');
-        const form = document.querySelector('form'); 
+        const form = document.querySelector('form');
 
         let selectedBoisId = localStorage.getItem('selectedCouleurBois') || '';
         let selected = selectedBoisId !== '';
@@ -178,7 +178,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         function saveSelection() {
           localStorage.setItem('selectedCouleurBois', selectedBoisId);
         }
-        
+
         // Restaurer la sélection si elle existe
         options.forEach(img => {
           if (img.getAttribute('data-bois-id') === selectedBoisId) {
@@ -205,7 +205,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         form.addEventListener('submit', (e) => {
           if (!selectedCouleurBoisInput.value) {
             e.preventDefault();
-            erreurPopup.style.display = 'flex'; 
+            erreurPopup.style.display = 'flex';
           }
         });
 

@@ -234,8 +234,9 @@ span {
 }
 
 .main-display img {
-  width: 550px;
-  height: 430px;
+  width: 90%;
+  height: 90%;
+  max-height: 500px;
   border-radius: 8px;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
 }
@@ -347,7 +348,6 @@ label {
 
 .fil-ariane-container-prefait {
   font-size: 14px;
-  margin: 40px 0 -40px 50px;
 }
 
 .fil-ariane {
@@ -456,7 +456,7 @@ label {
 
   .right-column,
   .left-column {
-     justify-content: center;
+    justify-content: center;
     padding-right: 0;
   }
 
@@ -465,7 +465,7 @@ label {
     height: auto;
   }
 
-   .main-display {
+  .main-display {
     align-items: center;
     margin-top: 30px;
   }
@@ -593,4 +593,4 @@ label {
     width: 30px;
     font-size: 14px;
   }
-} 
+}

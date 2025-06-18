@@ -64,7 +64,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 
 <body data-user-id="<?php echo $_SESSION['user_id']; ?>" data-current-step="7-2-coussin-bois">
-
+  <?php include '../cookies/index.html'; ?>
   <header>
     <?php require '../../squelette/header.php'; ?>
   </header>
@@ -177,7 +177,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         const erreurPopup = document.getElementById('erreur-popup');
         const closeErreurBtn = erreurPopup.querySelector('.btn-noir');
         const selectedCouleurBoisInput = document.getElementById('selected-motif_bois'); // Input caché
-        const form = document.querySelector('form'); 
+        const form = document.querySelector('form');
 
         let selectedMotifBoisId = localStorage.getItem('selectedMotifBois') || '';
         let selected = selectedMotifBoisId !== '';
@@ -185,7 +185,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         function saveSelection() {
           localStorage.setItem('selectedMotifBois', selectedMotifBoisId);
         }
-        
+
         // Restaurer la sélection si elle existe
         options.forEach(img => {
           if (img.getAttribute('data-bois-id') === selectedMotifBoisId) {
@@ -211,7 +211,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         form.addEventListener('submit', (e) => {
           if (!selectedCouleurBoisInput.value) {
             e.preventDefault();
-            erreurPopup.style.display = 'flex'; 
+            erreurPopup.style.display = 'flex';
           }
         });
 

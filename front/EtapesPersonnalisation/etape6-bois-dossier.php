@@ -63,7 +63,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 
 <body data-user-id="<?php echo $_SESSION['user_id']; ?>" data-current-step="6-dossier-bois">
-
+  <?php include '../cookies/index.html'; ?>
   <header>
     <?php require '../../squelette/header.php'; ?>
   </header>
@@ -125,7 +125,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <button id="btn-aide" class="btn-beige">Besoin d'aide ?</button>
             <button type="button" data-url="../pages/dashboard.php" id="btn-abandonner" class="btn-noir">Abandonner</button>
           </div>
-          <img src="../../medias/process-main-image.png" alt="Armoire" >
+          <img src="../../medias/process-main-image.png" alt="Armoire">
         </section>
       </div>
     </div>
@@ -173,8 +173,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         const erreurPopup = document.getElementById('erreur-popup');
         const closeErreurBtn = erreurPopup.querySelector('.btn-noir');
         const selectedDossierBoisInput = document.getElementById('selected-dossier_bois');
-        const form = document.querySelector('form'); 
-        
+        const form = document.querySelector('form');
+
         let selectedBoisId = localStorage.getItem('selectedDossierBois') || '';
         let selected = selectedBoisId !== '';
 

@@ -164,7 +164,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['comment'])) {
 </head>
 
 <body data-user-id="<?php echo $_SESSION['user_id']; ?>">
-
+  <?php include '../cookies/index.html'; ?>
   <header>
     <?php require '../../squelette/header.php'; ?>
   </header>

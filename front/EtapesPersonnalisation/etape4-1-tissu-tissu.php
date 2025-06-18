@@ -57,11 +57,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['couleur_tissu_id'])) 
 
 
     <title>Étape 4.1 - Choisi ton tissu</title>
-    
+
 </head>
 
 <body data-user-id="<?php echo $_SESSION['user_id']; ?>" data-current-step="4-1-couleur-tissu">
-
+    <?php include '../cookies/index.html'; ?>
     <header>
         <?php require '../../squelette/header.php'; ?>
     </header>
@@ -103,7 +103,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['couleur_tissu_id'])) 
                         <button onclick="retourEtapePrecedente()" class="btn-beige  ">Retour</button>
                         <form method="POST" action="">
                             <input type="hidden" name="couleur_tissu_id" id="selected-couleur_tissu">
-                            <button type="submit"id="btn-suivant" class="btn-noir">Suivant</button>
+                            <button type="submit" id="btn-suivant" class="btn-noir">Suivant</button>
                         </form>
                     </div>
                 </div>
@@ -162,7 +162,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['couleur_tissu_id'])) 
                 const mainImage = document.querySelector('.main-display img');
                 const erreurPopup = document.getElementById('erreur-popup');
                 const closeErreurBtn = erreurPopup.querySelector('.btn-noir');
-                const form = document.querySelector('form'); 
+                const form = document.querySelector('form');
 
                 // Vérification si une sélection existe dans localStorage
                 let savedCouleurTissuId = localStorage.getItem('selectedCouleurTissuId');
@@ -198,7 +198,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['couleur_tissu_id'])) 
                 form.addEventListener('submit', (e) => {
                     if (!selectedCouleurTissuInput.value) {
                         e.preventDefault();
-                        erreurPopup.style.display = 'flex'; 
+                        erreurPopup.style.display = 'flex';
                     }
                 });
 
@@ -211,7 +211,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['couleur_tissu_id'])) 
                     if (event.target === erreurPopup) {
                         erreurPopup.style.display = 'none';
                     }
-                });        
+                });
             });
             document.querySelectorAll('.color-options .option img').forEach(option => {
                 option.addEventListener('click', () => {

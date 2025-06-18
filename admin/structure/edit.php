@@ -33,9 +33,10 @@ if (!$structure) {
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nom = trim($_POST['name']);
+    $nb_banquette = trim($_POST['nb_banquette']);
     $img = $_FILES['img'];
 
-    if (empty($nom)) {
+    if (empty($nom) || empty($nb_banquette)) {
         $_SESSION['message'] = 'Le nom est requis.';
         $_SESSION['message_type'] = 'error';
     } else {
@@ -60,8 +61,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         }
         if (!isset($_SESSION['message'])) {
-            $stmt = $pdo->prepare("UPDATE structure SET nom = ?, img = ? WHERE id = ?");
-            $stmt->execute([$nom, $fileName, $id]);
+            $stmt = $pdo->prepare("UPDATE structure SET nom = ?, img = ?, nb_longueurs = ? WHERE id = ?");
+            $stmt->execute([$nom, $fileName, $nb_banquette, $id]);
             $_SESSION['message'] = 'La structure a été mise à jour avec succès !';
             $_SESSION['message_type'] = 'success';
             header("Location: visualiser.php");
@@ -69,6 +70,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 }
+$selected = (int) $structure['nb_longueurs'];
+$valeurs = [1,2,3];
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -81,7 +84,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link rel="stylesheet" href="../../styles/admin/ajout.css">
     <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
     <link rel="stylesheet" href="../../styles/message.css">
-    
+
     <link rel="stylesheet" href="../../styles/buttons.css">
     <script src="../../script/previewImage.js"></script>
 </head>
@@ -102,18 +105,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <label for="name">Nom</label>
                             <input type="text" id="name" name="name" class="input-field" value="<?php echo htmlspecialchars($structure['nom']); ?>" required>
                         </div>
+                        <div class="form-group">
+                            <label for="nb_banquette">Nombre de banquettes <span class="required">*</span></label>
+                            <select id="nb_banquette" name="nb_banquette" class="input-field" required>
+                                <option value="<?php echo $selected; ?>"><?php echo $selected; ?></option>
+                                <?php foreach ($valeurs as $valeur): ?>
+                                    <?php if ($valeur != $selected): ?>
+                                        <option value="<?php echo $valeur; ?>"><?php echo $valeur; ?></option>
+                                    <?php endif; ?>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group">
                             <label for="img">Image (Laissez vide pour conserver l'image actuelle)</label>
-                            <input type="file" id="img" name="img" class="input-field" accept="image/*" onchange="loadFile(event)" >
+                            <input type="file" id="img" name="img" class="input-field" accept="image/*" onchange="loadFile(event)">
                             <img class="preview-img" src="../uploads/structure/<?php echo htmlspecialchars($structure['img']); ?>" id="output" />
-                         </div>
+                        </div>
                     </div>
                     <div class="button-section">
                         <div class="buttons">
                             <button type="button" id="btn-retour" class="btn-beige" onclick="history.go(-1)">Retour</button>
-                            <input type="submit"  class="btn-noir" value="Mettre à jour">
+                            <input type="submit" class="btn-noir" value="Mettre à jour">
                         </div>
                     </div>
                 </form>

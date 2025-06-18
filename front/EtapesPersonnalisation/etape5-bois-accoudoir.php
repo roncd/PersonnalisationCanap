@@ -98,7 +98,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 
 <body data-user-id="<?php echo $_SESSION['user_id']; ?>" data-current-step="5-accoudoir-bois">
-
+  <?php include '../cookies/index.html'; ?>
   <header>
     <?php require '../../squelette/header.php'; ?>
   </header>
@@ -121,8 +121,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       <!-- Colonne de gauche -->
       <div class="left-column ">
         <h2>Étape 5 - Ajoute des accoudoirs</h2>
-
-
+        <!-- <label for="deco">Voulez vous ajouter la décoration (choisi avant) sur l'accoudoir ?</label>
+        <select class="select-field" id="deco" name="deco">
+          <option value="Non" selected>Non</option>
+          <option value="oui">Oui</option>
+        </select> -->
         <section class="color-options">
           <?php if (!empty($accoudoir_bois)): ?>
             <?php foreach ($accoudoir_bois as $bois): ?>
@@ -359,18 +362,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
               if (totalAccoudoirs >= 2) {
                 accoudoirPopup.style.display = 'flex';
                 // Fermer le popup accoudoir
-              closeBtn.addEventListener('click', () => {
-                accoudoirPopup.style.display = 'none';
-              });
-
-              window.addEventListener('click', (event) => {
-                if (event.target === accoudoirPopup) {
+                closeBtn.addEventListener('click', () => {
                   accoudoirPopup.style.display = 'none';
-                }
-              });
+                });
+
+                window.addEventListener('click', (event) => {
+                  if (event.target === accoudoirPopup) {
+                    accoudoirPopup.style.display = 'none';
+                  }
+                });
                 return;
               }
-              
+
               img.classList.add('selected');
               quantityInput.value = 1;
               selectedOptions[boisId] = 1;

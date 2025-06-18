@@ -1,6 +1,7 @@
 <?php
 require '../../admin/config.php';
 session_start();
+require '../../admin/include/session_expiration.php';
 
 // Vérifier si l'utilisateur est connecté
 if (!isset($_SESSION['user_id'])) {
@@ -98,27 +99,6 @@ $stmt->execute([$id_commande_prefait]);
 $accoudoirs = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 
-
-
-/*if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['comment'])) {
-  // Vérifier si un commentaire a été saisi
-  if (!empty($_POST["comment"])) {
-    $commentaire = trim($_POST["comment"]);
-
-    if ($commande) {
-      // Mettre à jour la commande temporaire avec le commentaire
-      $stmt = $pdo->prepare("UPDATE commande_temporaire SET commentaire = ? WHERE id = ?");
-      $stmt->execute([$commentaire, $id]);
-      $message = '<p class="message success">Commentaire ajouté avec succès !</p>';
-    } else {
-      $message = '<p class="message error">Aucune commande trouvée pour cet utilisateur.</p>';
-    }
-  } else {
-    $message = '<p class="message error">Le commentaire ne peut pas être vide.</p>';
-  }
-}*/
-
-
 // Traitement du formulaire pour ajouter ou modifier un commentaire
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['comment'])) {
   $commentaire_saisi = trim($_POST["comment"]);
@@ -171,7 +151,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['comment'])) {
 </head>
 
 <body data-user-id="<?php echo $_SESSION['user_id']; ?>">
-
+  <?php include '../cookies/index.html'; ?>
   <header>
     <?php require '../../squelette/header.php'; ?>
   </header>
@@ -258,7 +238,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['comment'])) {
           <p>' . htmlspecialchars($assocData['dossier_bois'][$commande['id_dossier_bois']]['nom'] ?? '-') . '</p>
         </div>';
           ?>
-          
+
           <h3>Étape 7.1 : Choisi ton tissu</h3>
           <?php
           echo '<div class="option">
@@ -291,7 +271,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['comment'])) {
 
 
         <div class="footer-processus">
-  <p>Total : <span><?= number_format($prixCommande, 2, ',', ' ') ?> €</span></p>
+          <p>Total : <span><?= number_format($prixCommande, 2, ',', ' ') ?> €</span></p>
           <div class="buttons">
             <button onclick="retourEtapePrecedente()" class="btn-beige">Retour</button>
             <button id="btn-generer" class="btn-noir">Générer un devis</button>
@@ -299,16 +279,16 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['comment'])) {
         </div>
       </div>
 
-<script>
-  function retourEtapePrecedente() {
-    const id = new URLSearchParams(window.location.search).get('id');
-    if (id) {
-      window.location.href = `choix-mousse.php?id=${id}`;
-    } else {
-      alert("ID introuvable dans l'URL.");
-    }
-  }
-</script>
+      <script>
+        function retourEtapePrecedente() {
+          const id = new URLSearchParams(window.location.search).get('id');
+          if (id) {
+            window.location.href = `choix-mousse.php?id=${id}`;
+          } else {
+            alert("ID introuvable dans l'URL.");
+          }
+        }
+      </script>
 
       <!-- Colonne de droite -->
       <div class="right-column">

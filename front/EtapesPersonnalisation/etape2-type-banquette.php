@@ -68,6 +68,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 
 <body data-user-id="<?php echo $_SESSION['user_id']; ?>">
+  <?php include '../cookies/index.html'; ?>
   <header>
     <?php require '../../squelette/header.php'; ?>
   </header>
@@ -113,7 +114,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <section class="main-display">
           <div class="buttons ">
             <button id="btn-aide" class="btn-beige">Besoin d'aide ?</button>
-            <button type="button" data-url="../pages/dashboard.php"  id="btn-abandonner" class="btn-noir">Abandonner</button>
+            <button type="button" data-url="../pages/dashboard.php" id="btn-abandonner" class="btn-noir">Abandonner</button>
           </div>
           <img id="main-image" src="../../medias/process-main-image.png" alt="Banquette sélectionnée">
         </section>

@@ -57,11 +57,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <script type="module" src="../../script/keydown.js"></script>
 
   <title>Étape 7 - Choisi ta mousse</title>
-  
+
 </head>
 
 <body data-user-id="<?php echo $_SESSION['user_id']; ?>" data-current-step="7-mousse-tissu">
-
+  <?php include '../cookies/index.html'; ?>
   <header>
     <?php require '../../squelette/header.php'; ?>
   </header>
@@ -199,7 +199,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         function saveSelection() {
           localStorage.setItem('selectedMousse', selectedMousseId);
         }
-        
+
         // Restaurer la sélection si elle existe
         options.forEach(img => {
           if (img.getAttribute('data-mousse-bois-id') === selectedMousseId) {

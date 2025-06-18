@@ -10,7 +10,8 @@ $stmt = $pdo->prepare($sql);
 $stmt->execute();
 $commandes = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-function calculPrix($commande, &$composition = []) {
+function calculPrix($commande, &$composition = [])
+{
     global $pdo;
 
     $composition = [];
@@ -103,17 +104,18 @@ function calculPrix($commande, &$composition = []) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nos Canapés</title>
     <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
-    <link rel="stylesheet" href="../../styles/catalogue-prefait.css">
+    <link rel="stylesheet" href="../../styles/catalogue.css">
     <link rel="stylesheet" href="../../styles/buttons.css">
 </head>
 
 <body>
+    <?php include '../cookies/index.html'; ?>
     <header>
         <?php require '../../squelette/header.php'; ?>
 
     </header>
 
-    
+
 
 
     <section class="hero-section">
@@ -141,28 +143,28 @@ function calculPrix($commande, &$composition = []) {
             <button class="filter-btn" data-category="tissu">Tissus</button>
 
         </div>
-<div class="products-grid">
-        <?php foreach ($commandes as $commande): ?>
-    <?php
-        $composition = []; 
-        $prixDynamique = calculPrix($commande, $composition); // OK maintenant
-    ?>
+        <div class="products-grid">
+            <?php foreach ($commandes as $commande): ?>
+                <?php
+                $composition = [];
+                $prixDynamique = calculPrix($commande, $composition); // OK maintenant
+                ?>
 
-        <div class="product-card" data-type="<?php echo htmlspecialchars($commande['type_nom'] ?? 'inconnu', ENT_QUOTES); ?>">
-            <img
-                src="../../admin/uploads/canape-prefait/<?php echo htmlspecialchars($commande['img'] ?? 'default.jpg', ENT_QUOTES); ?>"
-                alt="<?php echo htmlspecialchars($commande['nom'] ?? 'Canapé préfait', ENT_QUOTES); ?>">
-            <div class="product-info">
-                <h3><?php echo htmlspecialchars($commande['nom'] ?? 'Nom non disponible', ENT_QUOTES); ?></h3>
-                <p class="price"><?php echo number_format($prixDynamique, 2, ',', ' '); ?> €</p>
-                <button class="btn-beige"
-                    onclick="window.location.href = '../CanapePrefait/canapPrefait.php?id=<?php echo (int)$commande['id']; ?>'">
-                    Personnaliser
-                </button>
-            </div>
+                <div class="product-card" data-type="<?php echo htmlspecialchars($commande['type_nom'] ?? 'inconnu', ENT_QUOTES); ?>">
+                    <img
+                        src="../../admin/uploads/canape-prefait/<?php echo htmlspecialchars($commande['img'] ?? 'default.jpg', ENT_QUOTES); ?>"
+                        alt="<?php echo htmlspecialchars($commande['nom'] ?? 'Canapé préfait', ENT_QUOTES); ?>">
+                    <div class="product-info">
+                        <h3><?php echo htmlspecialchars($commande['nom'] ?? 'Nom non disponible', ENT_QUOTES); ?></h3>
+                        <p class="price"><?php echo number_format($prixDynamique, 2, ',', ' '); ?> €</p>
+                        <button class="btn-beige"
+                            onclick="window.location.href = '../CanapePrefait/canapPrefait.php?id=<?php echo (int)$commande['id']; ?>'">
+                            Personnaliser
+                        </button>
+                    </div>
+                </div>
+            <?php endforeach; ?>
         </div>
-    <?php endforeach; ?>
-</div>
 
 
     </main>
