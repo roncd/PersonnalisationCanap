@@ -7,7 +7,6 @@ body {
 
 /* Title bar */
 .title-bar {
-  background-color: #E3D1C8;
   padding: 2rem;
   text-align: center;
   margin: 3rem auto 1.25rem;
@@ -70,21 +69,14 @@ ul {
   padding-left: 1.25rem;
 }
 
-li {
-  margin-bottom: 0.5rem;
-  line-height: 1.6;
-}
 
 /* Links */
 a {
-  color: #E3D1C8;
+  color: #997765;
   text-decoration: none;
   transition: color 0.3s ease;
 }
 
-a:hover {
-  color: #c4a69b;
-}
 
 /* Responsive design */
 @media screen and (max-width: 1024px) {

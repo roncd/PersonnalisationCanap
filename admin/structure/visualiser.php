@@ -88,6 +88,7 @@ $totalPages = ceil($totalCommandes / $limit);
                                 ID
                             </th>
                             <th>NOM</th>
+                            <th>NOMBRE_BANQUETTE</th>
                             <th>IMAGE</th>
                             <th class="sticky-col">ACTION</th>
                         </tr>
@@ -108,6 +109,7 @@ $totalPages = ceil($totalCommandes / $limit);
                             echo "<tr>";
                             echo "<td>{$row['id']}</td>";
                             echo "<td>{$row['nom']}</td>";
+                            echo "<td>{$row['nb_longueurs']}</td>";
                             echo "<td><img src='../uploads/structure/{$row['img']}' alt='{$row['nom']}' style='width:50px; height:auto;'></td>";
                             echo "<td class='actions'>";
                             echo "<a href='edit.php?id={$row['id']}' class='edit-action actions vert' title='Modifier'>EDIT</a>";

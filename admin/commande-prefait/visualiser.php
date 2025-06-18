@@ -136,10 +136,10 @@ $triURL = '?' . http_build_query($params);
                         <th>NB_ACCOUDOIR_BOIS</th>
                         <th>DOSSIER_BOIS</th>
                         <th>COULEUR_TISSU_BOIS</th>
-                        <th>MOTIF_BOIS</th>
+                        <th>COUSSIN_BOIS</th>
                         <th>MODELE_TISSU</th>
                         <th>COULEUR_TISSU</th>
-                        <th>MOTIF_TISSU</th>
+                        <th>COUSSIN_TISSU</th>
                         <th>DOSSIER_TISSU</th>
                         <th>ACCOUDOIR_TISSU</th>
                         <th>NB_ACCOUDOIR_TISSU</th>

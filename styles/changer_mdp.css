@@ -45,7 +45,7 @@ body {
 
 .password-page input[type="password"] {
     padding: 12px;
-    background-color: #e9d6cc;
+    background-color: rgba(227, 209, 200, 0.71);
     border: none;
     border-radius: 10px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
