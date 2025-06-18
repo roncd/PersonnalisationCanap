@@ -64,11 +64,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['couleur_tissu_bois_id
 
 
   <title>Étape 7.1 - Choisi ton tissu</title>
- 
+
 </head>
 
 <body data-user-id="<?php echo $_SESSION['user_id']; ?>" data-current-step="7-1-motif-bois">
-
+  <?php include '../cookies/index.html'; ?>
   <header>
     <?php require '../../squelette/header.php'; ?>
   </header>
@@ -188,7 +188,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['couleur_tissu_bois_id
         const selectedCouleurBoisInput = document.getElementById('selected-couleur_tissu_bois');
         const erreurPopup = document.getElementById('erreur-popup');
         const closeErreurBtn = erreurPopup.querySelector('.btn-noir');
-        const form = document.querySelector('form'); 
+        const form = document.querySelector('form');
 
         let selectedCouleurTissuBoisId = localStorage.getItem('selectedCouleurTissuBois') || '';
         let selected = selectedCouleurTissuBoisId !== '';

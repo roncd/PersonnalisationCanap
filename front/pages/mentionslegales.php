@@ -14,10 +14,11 @@ session_start();
 </head>
 
 <body>
+    <?php include '../cookies/index.html'; ?>
     <header>
         <?php require '../../squelette/header.php'; ?>
     </header>
-    
+
     <!-- Main -->
     <main>
         <div class="title-bar">

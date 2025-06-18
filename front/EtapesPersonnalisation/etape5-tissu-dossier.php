@@ -59,7 +59,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 
 <body data-user-id="<?php echo $_SESSION['user_id']; ?>" data-current-step="5-dossier-tissu">
-
+    <?php include '../cookies/index.html'; ?>
     <header>
         <?php require '../../squelette/header.php'; ?>
     </header>

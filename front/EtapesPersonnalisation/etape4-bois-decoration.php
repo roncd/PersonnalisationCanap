@@ -63,7 +63,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 
 <body data-user-id="<?php echo $_SESSION['user_id']; ?>" data-current-step="4-deco-bois">
-
+  <?php include '../cookies/index.html'; ?>
   <header>
     <?php require '../../squelette/header.php'; ?>
   </header>
@@ -110,7 +110,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <button onclick="retourEtapePrecedente()" class="btn-beige  ">Retour</button>
             <form method="POST" action="">
               <input type="hidden" name="decoration_id" id="selected-decoration">
-              <button type="submit"  id="btn-suivant" class="btn-noir">Suivant</button>
+              <button type="submit" id="btn-suivant" class="btn-noir">Suivant</button>
             </form>
           </div>
         </div>
@@ -171,7 +171,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         const erreurPopup = document.getElementById('erreur-popup');
         const closeErreurBtn = erreurPopup.querySelector('.btn-noir');
         const selectedDecorationInput = document.getElementById('selected-decoration');
-        const form = document.querySelector('form'); 
+        const form = document.querySelector('form');
 
         let selectedDecoId = localStorage.getItem('selectedDecoration') || '';
         let selected = selectedDecoId !== '';

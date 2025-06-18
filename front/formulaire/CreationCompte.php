@@ -12,6 +12,7 @@ $baseUrl = $protocol . '://' . $host . $path;
 //Méthode SMTP
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
+
 require '../../vendor/autoload.php'; // adapte le chemin si besoin
 ?>
 
@@ -30,7 +31,7 @@ require '../../vendor/autoload.php'; // adapte le chemin si besoin
 </head>
 
 <body>
-
+  <?php include '../cookies/index.html'; ?>
   <header>
     <?php require '../../squelette/header.php'; ?>
   </header>
@@ -51,24 +52,24 @@ require '../../vendor/autoload.php'; // adapte le chemin si besoin
           $info = htmlspecialchars($_POST['infos-supplementaires']);
           $codepostal = htmlspecialchars($_POST['code-postal']);
           $ville = htmlspecialchars($_POST['ville']);
-        
+
           $stmt = $pdo->prepare("SELECT id FROM client WHERE mail = ?");
           $stmt->execute([$mail]);
-        
+
           if ($stmt->rowCount() > 0) {
             echo "<div class='message error'>Cet email est déjà utilisé.</div>";
           } else {
             $token = bin2hex(random_bytes(32));
             $link = $baseUrl . "/verification.php?token=$token";
-        
+
             try {
               $stmt = $pdo->prepare("INSERT INTO client(nom, prenom, mail, tel, mdp, adresse, info, codepostal, ville, token, verified) 
                                      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0)");
               $stmt->execute([$nom, $prenom, $mail, $tel, $mdp, $adresse, $info, $codepostal, $ville, $token]);
-        
+
               // Envoi de l'e-mail de vérification via SMTP
               $env = parse_ini_file(__DIR__ . '/../../.env');
-        
+
               $mailSMTP = new PHPMailer(true);
               $mailSMTP->isSMTP();
               $mailSMTP->Host       = $env['SMTP_HOST'];
@@ -77,13 +78,13 @@ require '../../vendor/autoload.php'; // adapte le chemin si besoin
               $mailSMTP->Password   = $env['SMTP_PASS'];
               $mailSMTP->SMTPSecure = 'tls';
               $mailSMTP->Port       = 587;
-        
+
               $mailSMTP->setFrom($env['SMTP_USER'],  mb_convert_encoding('Déco du Monde', "ISO-8859-1", "UTF-8"));
               $mailSMTP->addAddress($mail, $prenom . ' ' . $nom);
-        
+
               $mailSMTP->Subject =  mb_convert_encoding('Vérification de votre adresse mail', "ISO-8859-1", "UTF-8");
               $mailSMTP->Body    = "Bonjour $prenom,\n\nVeuillez cliquer sur ce lien pour vérifier votre compte :\n$link";
-        
+
               $mailSMTP->send();
               echo "<div class='message success'>Un email de vérification a été envoyé à $mail. Veuillez vérifier votre boîte de réception.</div>";
             } catch (Exception $e) {

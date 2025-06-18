@@ -157,7 +157,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['comment'])) {
 </head>
 
 <body data-user-id="<?php echo $_SESSION['user_id']; ?>">
-
+  <?php include '../cookies/index.html'; ?>
   <header>
     <?php require '../../squelette/header.php'; ?>
   </header>
@@ -304,49 +304,49 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['comment'])) {
     </div>
     <!-- Popup devis -->
     <div id="pdf-popup" class="popup">
-            <div class="popup-content">
-              <h2>Commande finalisé !</h2>
-              <p>Votre devis a été créé et envoyé à l'adresse suivante :
-                </br><?php echo "<strong>" . htmlspecialchars($assocMail['client'][$commande['id_client']]['mail'] ?? '-') . "</strong>"; ?>
-              </p>
-              <br>
-              <button onclick="location.href='../pages/commandes.php'" class="btn-beige">Voir mes commandes</button>
-              <button id="pdf-btn" class="btn-noir">Voir le devis</button>
-            </div>
-          </div>
+      <div class="popup-content">
+        <h2>Commande finalisé !</h2>
+        <p>Votre devis a été créé et envoyé à l'adresse suivante :
+          </br><?php echo "<strong>" . htmlspecialchars($assocMail['client'][$commande['id_client']]['mail'] ?? '-') . "</strong>"; ?>
+        </p>
+        <br>
+        <button onclick="location.href='../pages/commandes.php'" class="btn-beige">Voir mes commandes</button>
+        <button id="pdf-btn" class="btn-noir">Voir le devis</button>
+      </div>
+    </div>
 
-          <!-- Popup besoin d'aide -->
-          <div id="help-popup" class="popup">
-            <div class="popup-content">
-              <h2>Vous avez une question ?</h2>
-              <p>Contactez nous au numéro suivant et un vendeur vous assistera :
-                <br><br>
-                <strong>06 58 47 58 56</strong>
-              </p>
-              <br>
-              <button class="btn-noir">Merci !</button>
-            </div>
-          </div>
+    <!-- Popup besoin d'aide -->
+    <div id="help-popup" class="popup">
+      <div class="popup-content">
+        <h2>Vous avez une question ?</h2>
+        <p>Contactez nous au numéro suivant et un vendeur vous assistera :
+          <br><br>
+          <strong>06 58 47 58 56</strong>
+        </p>
+        <br>
+        <button class="btn-noir">Merci !</button>
+      </div>
+    </div>
 
-          <!-- Popup abandonner -->
-          <div id="abandonner-popup" class="popup">
-            <div class="popup-content">
-              <h2>Êtes vous sûr de vouloir abandonner ?</h2>
-              <br>
-              <button class="btn-beige">Oui...</button>
-              <button class="btn-noir">Non !</button>
-            </div>
-          </div>
+    <!-- Popup abandonner -->
+    <div id="abandonner-popup" class="popup">
+      <div class="popup-content">
+        <h2>Êtes vous sûr de vouloir abandonner ?</h2>
+        <br>
+        <button class="btn-beige">Oui...</button>
+        <button class="btn-noir">Non !</button>
+      </div>
+    </div>
 
-          <!-- Popup validation generation -->
-          <div id="generer-popup" class="popup">
-            <div class="popup-content">
-              <h2>Êtes vous sûr de vouloir générer un devis ?</h2>
-              <p>Vous ne pourrez plus effectuer de modifictions sur votre commande</p>
-              <button id="btn-oui" class="btn-beige" name="envoyer" data-id="<?= htmlspecialchars($id) ?>">Oui</button>
-              <button id="btn-close" class="btn-noir">Non</button>
-            </div>
-          </div>
+    <!-- Popup validation generation -->
+    <div id="generer-popup" class="popup">
+      <div class="popup-content">
+        <h2>Êtes vous sûr de vouloir générer un devis ?</h2>
+        <p>Vous ne pourrez plus effectuer de modifictions sur votre commande</p>
+        <button id="btn-oui" class="btn-beige" name="envoyer" data-id="<?= htmlspecialchars($id) ?>">Oui</button>
+        <button id="btn-close" class="btn-noir">Non</button>
+      </div>
+    </div>
   </main>
   <?php require_once '../../squelette/footer.php'; ?>
 
@@ -419,11 +419,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['comment'])) {
     }, 5000);
   </script>
 
-<script>
-        function retourEtapePrecedente() {
-          window.location.href = "etape7-tissu-mousse.php";
-        }
-      </script>
+  <script>
+    function retourEtapePrecedente() {
+      window.location.href = "etape7-tissu-mousse.php";
+    }
+  </script>
 </body>
 
 </html>

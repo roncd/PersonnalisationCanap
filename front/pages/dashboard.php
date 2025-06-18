@@ -35,85 +35,86 @@ $existing_order = $stmt->fetch(PDO::FETCH_ASSOC);
 $show_commencer = !$existing_order;
 
 
-function calculPrix($commande, &$composition = []) {
-    global $pdo;
+function calculPrix($commande, &$composition = [])
+{
+  global $pdo;
 
-    $composition = [];
-    $totalPrice = 0;
-    $id_commande = $commande['id'];
+  $composition = [];
+  $totalPrice = 0;
+  $id_commande = $commande['id'];
 
-    // Liste des éléments simples
-    $elements = [
-        'id_structure' => 'structure',
-        'id_banquette' => 'type_banquette',
-        'id_mousse' => 'mousse',
-        'id_couleur_bois' => 'couleur_bois',
-        'id_decoration' => 'decoration',
-        'id_accoudoir_bois' => 'accoudoir_bois',
-        'id_dossier_bois' => 'dossier_bois',
-        'id_couleur_tissu_bois' => 'couleur_tissu_bois',
-        'id_motif_bois' => 'motif_bois',
-        'id_modele' => 'modele',
-        'id_couleur_tissu' => 'couleur_tissu',
-        'id_motif_tissu' => 'motif_tissu',
-        'id_dossier_tissu' => 'dossier_tissu',
-        'id_accoudoir_tissu' => 'accoudoir_tissu',
-    ];
+  // Liste des éléments simples
+  $elements = [
+    'id_structure' => 'structure',
+    'id_banquette' => 'type_banquette',
+    'id_mousse' => 'mousse',
+    'id_couleur_bois' => 'couleur_bois',
+    'id_decoration' => 'decoration',
+    'id_accoudoir_bois' => 'accoudoir_bois',
+    'id_dossier_bois' => 'dossier_bois',
+    'id_couleur_tissu_bois' => 'couleur_tissu_bois',
+    'id_motif_bois' => 'motif_bois',
+    'id_modele' => 'modele',
+    'id_couleur_tissu' => 'couleur_tissu',
+    'id_motif_tissu' => 'motif_tissu',
+    'id_dossier_tissu' => 'dossier_tissu',
+    'id_accoudoir_tissu' => 'accoudoir_tissu',
+  ];
 
-    foreach ($elements as $colonne => $table) {
-        if (!empty($commande[$colonne])) {
-            $stmt = $pdo->prepare("SELECT * FROM $table WHERE id = ?");
-            $stmt->execute([$commande[$colonne]]);
-            $detail = $stmt->fetch(PDO::FETCH_ASSOC);
+  foreach ($elements as $colonne => $table) {
+    if (!empty($commande[$colonne])) {
+      $stmt = $pdo->prepare("SELECT * FROM $table WHERE id = ?");
+      $stmt->execute([$commande[$colonne]]);
+      $detail = $stmt->fetch(PDO::FETCH_ASSOC);
 
-            if ($detail) {
-                $composition[$table] = $detail;
-                if (!empty($detail['prix'])) {
-                    $totalPrice += floatval($detail['prix']);
-                }
-            }
+      if ($detail) {
+        $composition[$table] = $detail;
+        if (!empty($detail['prix'])) {
+          $totalPrice += floatval($detail['prix']);
         }
+      }
     }
+  }
 
-    // Accoudoirs multiples (bois)
-    $stmt = $pdo->prepare("SELECT ab.*, cpa.nb_accoudoir
+  // Accoudoirs multiples (bois)
+  $stmt = $pdo->prepare("SELECT ab.*, cpa.nb_accoudoir
                            FROM commande_prefait_accoudoir cpa
                            JOIN accoudoir_bois ab ON cpa.id_accoudoir_bois = ab.id
                            WHERE cpa.id_commande_prefait = ?");
-    $stmt->execute([$id_commande]);
-    $accoudoirs = $stmt->fetchAll(PDO::FETCH_ASSOC);
+  $stmt->execute([$id_commande]);
+  $accoudoirs = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    if ($accoudoirs) {
-        $composition['accoudoirs_bois_multiples'] = $accoudoirs;
-        foreach ($accoudoirs as $acc) {
-            if (!empty($acc['prix']) && !empty($acc['nb_accoudoir'])) {
-                $totalPrice += floatval($acc['prix']) * intval($acc['nb_accoudoir']);
-            }
-        }
+  if ($accoudoirs) {
+    $composition['accoudoirs_bois_multiples'] = $accoudoirs;
+    foreach ($accoudoirs as $acc) {
+      if (!empty($acc['prix']) && !empty($acc['nb_accoudoir'])) {
+        $totalPrice += floatval($acc['prix']) * intval($acc['nb_accoudoir']);
+      }
     }
+  }
 
-    // 💰 Prix par centimètre (350 € / mètre = 3.5 € / cm)
-    $prixParCm = 3.5;
+  // 💰 Prix par centimètre (350 € / mètre = 3.5 € / cm)
+  $prixParCm = 3.5;
 
-    foreach (['longueurA', 'longueurB', 'longueurC'] as $longueur) {
-        if (!empty($commande[$longueur])) {
-            $totalPrice += floatval($commande[$longueur]) * $prixParCm;
-        }
+  foreach (['longueurA', 'longueurB', 'longueurC'] as $longueur) {
+    if (!empty($commande[$longueur])) {
+      $totalPrice += floatval($commande[$longueur]) * $prixParCm;
     }
+  }
 
-    // 💡 Bonus : traitement spécifique de certains éléments (optionnel)
-    if (!empty($composition)) {
-        foreach ($composition as $nomTable => $details) {
-            if ($nomTable === 'accoudoirs_bois_multiples') continue; // déjà traité
-            if ($nomTable === 'accoudoir_tissu') {
-                if (!empty($details['prix'])) {
-                    $totalPrice += floatval($details['prix']); // tu peux multiplier par 2 si besoin
-                }
-            }
+  // 💡 Bonus : traitement spécifique de certains éléments (optionnel)
+  if (!empty($composition)) {
+    foreach ($composition as $nomTable => $details) {
+      if ($nomTable === 'accoudoirs_bois_multiples') continue; // déjà traité
+      if ($nomTable === 'accoudoir_tissu') {
+        if (!empty($details['prix'])) {
+          $totalPrice += floatval($details['prix']); // tu peux multiplier par 2 si besoin
         }
+      }
     }
+  }
 
-    return $totalPrice;
+  return $totalPrice;
 }
 
 ?>
@@ -138,46 +139,47 @@ function calculPrix($commande, &$composition = []) {
 </head>
 
 <body>
+  <?php include '../cookies/index.html'; ?>
   <header>
     <?php require '../../squelette/header.php'; ?>
   </header>
   <main>
-  
-        <!-- Section avec image de fond et texte superposé -->
-        <section class="hero-section">
-            <div class="hero-container">
-                <img src="../../medias/salon-marocain.jpg" alt="Salon marocain" class="hero-image">
-                <div class="hero-content">
-                    <h1 class="hero-title">
-                    Bienvenue, <?php echo htmlspecialchars($_SESSION['user_name']); ?>!
-                    </h1>
-                    <p class="hero-description">
-                      Testez notre <strong>configurateur de canapé</strong> et imaginez le meuble qui répond à vos goûts et à l’aménagement de votre salon.
-                    </p>
-                    <?php if ($show_commencer): ?>
-          <form action="../EtapesPersonnalisation/etape1-1-structure.php" method="get">
-            <button type="submit" class="btn-noir">Commencer la personnalisation</button>
-          </form>
-        <?php else: ?>
-          <div class="boutons-container">
-            <form action="../EtapesPersonnalisation/etape1-1-structure.php" method="get">
-              <button type="submit" class="btn-beige">Reprendre la personnalisation</button>
-            </form>
-            <form>
-              <button
-                type="button" id="btn-abandonner"
-                class="btn-noir"
-                data-url="../EtapesPersonnalisation/etape1-1-structure.php">
-                Nouvelle personnalisation
-              </button>
-            </form>
-          </div>
-        <?php endif; ?>
-                </div>
-            </div>
-        </section>
 
+    <!-- Section avec image de fond et texte superposé -->
+    <section class="hero-section">
+      <div class="hero-container">
+        <img src="../../medias/salon-marocain.jpg" alt="Salon marocain" class="hero-image">
+        <div class="hero-content">
+          <h1 class="hero-title">
+            Bienvenue, <?php echo htmlspecialchars($_SESSION['user_name']); ?>!
+          </h1>
+          <p class="hero-description">
+            Testez notre <strong>configurateur de canapé</strong> et imaginez le meuble qui répond à vos goûts et à l’aménagement de votre salon.
+          </p>
+          <?php if ($show_commencer): ?>
+            <form action="../EtapesPersonnalisation/etape1-1-structure.php" method="get">
+              <button type="submit" class="btn-noir">Commencer la personnalisation</button>
+            </form>
+          <?php else: ?>
+            <div class="boutons-container">
+              <form action="../EtapesPersonnalisation/etape1-1-structure.php" method="get">
+                <button type="submit" class="btn-beige">Reprendre la personnalisation</button>
+              </form>
+              <form>
+                <button
+                  type="button" id="btn-abandonner"
+                  class="btn-noir"
+                  data-url="../EtapesPersonnalisation/etape1-1-structure.php">
+                  Nouvelle personnalisation
+                </button>
+              </form>
+            </div>
+          <?php endif; ?>
+        </div>
       </div>
+    </section>
+
+    </div>
     </section>
 
     <!-- SECTION PERSONNALISATION -->
@@ -200,78 +202,79 @@ function calculPrix($commande, &$composition = []) {
     </section>
 
 
-<!-- ------------------- SECTION COMBINAISONS ------------------- -->
-<section class="combination-section">
-  <h2>Choisissez une combinaison à personnaliser</h2>
-  <div class="combination-container">
+    <!-- ------------------- SECTION COMBINAISONS ------------------- -->
+    <section class="combination-section">
+      <h2>Choisissez une combinaison à personnaliser</h2>
+      <div class="combination-container">
 
         <?php foreach ($commandes as $commande): ?>
-        <?php
-        $composition = []; 
-        $prixDynamique = calculPrix($commande, $composition); // OK maintenant
-    ?>
-      <div class="product-card">
-<img
-                src="../../admin/uploads/canape-prefait/<?php echo htmlspecialchars($commande['img'] ?? 'default.jpg', ENT_QUOTES); ?>"
-                alt="<?php echo htmlspecialchars($commande['nom'] ?? 'Canapé préfait', ENT_QUOTES); ?>">        <h3><?= htmlspecialchars($commande['nom']) ?></h3>
-        <p class="description">Type : <?= htmlspecialchars($commande['type_nom']) ?></p>
-        <p class="description">Structure : <?= htmlspecialchars($commande['structure_nom'] ?? 'Non défini') ?></p>
-        <p class="price"><?php echo number_format($prixDynamique, 2, ',', ' '); ?> €</p>
-        <button class="btn-beige"
-          onclick="window.location.href = '../CanapePrefait/canapPrefait.php?id=<?= (int)$commande['id']; ?>'">
-          Personnaliser
-        </button>
+          <?php
+          $composition = [];
+          $prixDynamique = calculPrix($commande, $composition); // OK maintenant
+          ?>
+          <div class="product-card">
+            <img
+              src="../../admin/uploads/canape-prefait/<?php echo htmlspecialchars($commande['img'] ?? 'default.jpg', ENT_QUOTES); ?>"
+              alt="<?php echo htmlspecialchars($commande['nom'] ?? 'Canapé préfait', ENT_QUOTES); ?>">
+            <h3><?= htmlspecialchars($commande['nom']) ?></h3>
+            <p class="description">Type : <?= htmlspecialchars($commande['type_nom']) ?></p>
+            <p class="description">Structure : <?= htmlspecialchars($commande['structure_nom'] ?? 'Non défini') ?></p>
+            <p class="price"><?php echo number_format($prixDynamique, 2, ',', ' '); ?> €</p>
+            <button class="btn-beige"
+              onclick="window.location.href = '../CanapePrefait/canapPrefait.php?id=<?= (int)$commande['id']; ?>'">
+              Personnaliser
+            </button>
+          </div>
+        <?php endforeach; ?>
+
       </div>
-    <?php endforeach; ?>
-
-  </div>
-</section>
+    </section>
 
 
-        <!-- ------------------- SECTION COMBINAISONS ------------------- -->
+    <!-- ------------------- SECTION COMBINAISONS ------------------- -->
     <section class="combination-section">
       <h2>Ces articles peuvent aussi vous intéresser</h2>
       <div class="combination-container">
 
-      <div class="product-card">
+        <div class="product-card">
           <img src="../../medias/coussin.png" alt="HANNELISE Coussin">
           <h3>Coussin</h3> <!-- Mettre police baloo-->
           <span class="price">649,00 €</span> <!-- en beige et police baloo je crois-->
-                          <button class="btn-beige"
-                    onclick="window.location.href = '../CanapePrefait/canapPrefait.php?id=<?php echo (int)$commande['id']; ?>'">
-                    Personnaliser
-                </button><!-- augmenter la largeur-->
-      </div>
+          <button class="btn-beige"
+            onclick="window.location.href = '../CanapePrefait/canapPrefait.php?id=<?php echo (int)$commande['id']; ?>'">
+            Personnaliser
+          </button><!-- augmenter la largeur-->
+        </div>
 
-            <div class="product-card">
+        <div class="product-card">
           <img src="../../medias/coussin.png" alt="HANNELISE Coussin">
           <h3>Table Ronde</h3>
           <span class="price">649,00 €</span>
-                          <button class="btn-beige"
-                    onclick="window.location.href = '../CanapePrefait/canapPrefait.php?id=<?php echo (int)$commande['id']; ?>'">
-                    Personnaliser
-                </button>
-      </div>
+          <button class="btn-beige"
+            onclick="window.location.href = '../CanapePrefait/canapPrefait.php?id=<?php echo (int)$commande['id']; ?>'">
+            Personnaliser
+          </button>
+        </div>
 
-            <div class="product-card">
+        <div class="product-card">
           <img src="../../medias/coussin.png" alt="HANNELISE Coussin">
           <h3>Tapis bubble</h3>
           <span class="price">649,00 €</span>
-                          <button class="btn-beige"
-                    onclick="window.location.href = '../CanapePrefait/canapPrefait.php?id=<?php echo (int)$commande['id']; ?>'">
-                    Personnaliser
-                </button>
-      </div>
+          <button class="btn-beige"
+            onclick="window.location.href = '../CanapePrefait/canapPrefait.php?id=<?php echo (int)$commande['id']; ?>'">
+            Personnaliser
+          </button>
+        </div>
 
-            <div class="product-card">
+        <div class="product-card">
           <img src="../../medias/coussin.png" alt="HANNELISE Coussin">
           <h3>Mousse dur</h3>
           <span class="price">649,00 €</span>
-                          <button class="btn-beige"
-                    onclick="window.location.href = '../CanapePrefait/canapPrefait.php?id=<?php echo (int)$commande['id']; ?>'">
-                    Personnaliser
-                </button>
-      </div>
+          <button class="btn-beige"
+            onclick="window.location.href = '../CanapePrefait/canapPrefait.php?id=<?php echo (int)$commande['id']; ?>'">
+            Personnaliser
+          </button>
+        </div>
 
     </section>
 
@@ -293,4 +296,4 @@ function calculPrix($commande, &$composition = []) {
   <?php require '../../squelette/footer.php'; ?>
 </footer>
 
-</html>    
+</html>

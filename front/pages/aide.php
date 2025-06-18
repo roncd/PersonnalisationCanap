@@ -88,6 +88,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["envoyer"])) {
 </head>
 
 <body>
+    <?php include '../cookies/index.html'; ?>
     <header>
         <?php require '../../squelette/header.php'; ?>
     </header>
@@ -113,24 +114,24 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["envoyer"])) {
                     <div class="form-row">
                         <div class="form-group">
                             <label for="nom">Nom <span class="required">*</span></label>
-                            <input type="text" id="nom" name="nom" class="input-field" >
+                            <input type="text" id="nom" name="nom" class="input-field">
 
                         </div>
                         <div class="form-group">
                             <label for="prenom">Prénom <span class="required">*</span></label>
-                            <input type="text" id="prenom" name="prenom" class="input-field" >
+                            <input type="text" id="prenom" name="prenom" class="input-field">
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group">
                             <label for="mail">Adresse mail <span class="required">*</span></label>
-                            <input type="email" id="mail" name="mail" class="input-field" >
+                            <input type="email" id="mail" name="mail" class="input-field">
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group">
                             <label for="message">Message <span class="required">*</span></label>
-                            <textarea id="message" class="input-field" name="message" ></textarea>
+                            <textarea id="message" class="input-field" name="message"></textarea>
                         </div>
                     </div>
                     <div class="footer">

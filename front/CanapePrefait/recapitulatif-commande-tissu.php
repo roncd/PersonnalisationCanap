@@ -1,6 +1,7 @@
 <?php
 require '../../admin/config.php';
 session_start();
+require '../../admin/include/session_expiration.php';
 
 // Vérifier si l'utilisateur est connecté
 if (!isset($_SESSION['user_id'])) {
@@ -91,27 +92,6 @@ foreach ($data['commande_temporaire'] as $dim) {
   ];
 }
 
-/*if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['comment'])) {
-  // Vérifier si un commentaire a été saisi
-  if (!empty($_POST["comment"])) {
-    $commentaire = trim($_POST["comment"]);
-
-    if ($commande) {
-      // Mettre à jour la commande temporaire avec le commentaire
-      $stmt = $pdo->prepare("UPDATE commande_temporaire SET commentaire = ? WHERE id = ?");
-      $stmt->execute([$commentaire, $id]);
-      $message = '<p class="message success">Commentaire ajouté avec succès !</p>';
-    } else {
-      $message = '<p class="message error">Aucune commande trouvée pour cet utilisateur.</p>';
-    }
-  } else {
-    $message = '<p class="message error">Le commentaire ne peut pas être vide.</p>';
-  }
-}*/
-
-
-
-
 // Traitement du formulaire pour ajouter ou modifier un commentaire
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['comment'])) {
   $commentaire_saisi = trim($_POST["comment"]);
@@ -165,7 +145,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['comment'])) {
 </head>
 
 <body data-user-id="<?php echo $_SESSION['user_id']; ?>">
-
+  <?php include '../cookies/index.html'; ?>
   <header>
     <?php require '../../squelette/header.php'; ?>
   </header>
@@ -273,26 +253,26 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['comment'])) {
           </div>';
           ?>
         </section>
-<div class="footer-processus">
-  <p>Total : <span><?= number_format($prixCommande, 2, ',', ' ') ?> €</span></p>
-  <div class="buttons">
-    <button onclick="retourEtapePrecedente()" class="btn-beige">Retour</button>
-    <button id="btn-generer" class="btn-noir">Générer un devis</button>
-  </div>
-</div>
+        <div class="footer-processus">
+          <p>Total : <span><?= number_format($prixCommande, 2, ',', ' ') ?> €</span></p>
+          <div class="buttons">
+            <button onclick="retourEtapePrecedente()" class="btn-beige">Retour</button>
+            <button id="btn-generer" class="btn-noir">Générer un devis</button>
+          </div>
+        </div>
 
       </div>
 
-<script>
-  function retourEtapePrecedente() {
-    const id = new URLSearchParams(window.location.search).get('id');
-    if (id) {
-      window.location.href = `choix-mousse.php?id=${id}`;
-    } else {
-      alert("ID introuvable dans l'URL.");
-    }
-  }
-</script>
+      <script>
+        function retourEtapePrecedente() {
+          const id = new URLSearchParams(window.location.search).get('id');
+          if (id) {
+            window.location.href = `choix-mousse.php?id=${id}`;
+          } else {
+            alert("ID introuvable dans l'URL.");
+          }
+        }
+      </script>
 
 
       <!-- Colonne de droite -->
@@ -325,49 +305,49 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['comment'])) {
     </div>
     <!-- Popup devis -->
     <div id="pdf-popup" class="popup">
-            <div class="popup-content">
-              <h2>Commande finalisé !</h2>
-              <p>Votre devis a été créé et envoyé à l'adresse suivante :
-                </br><?php echo "<strong>" . htmlspecialchars($assocMail['client'][$commande['id_client']]['mail'] ?? '-') . "</strong>"; ?>
-              </p>
-              <br>
-              <button onclick="location.href='../pages/commandes.php'" class="btn-beige">Voir mes commandes</button>
-              <button id="pdf-btn" class="btn-noir">Voir le devis</button>
-            </div>
-          </div>
+      <div class="popup-content">
+        <h2>Commande finalisé !</h2>
+        <p>Votre devis a été créé et envoyé à l'adresse suivante :
+          </br><?php echo "<strong>" . htmlspecialchars($assocMail['client'][$commande['id_client']]['mail'] ?? '-') . "</strong>"; ?>
+        </p>
+        <br>
+        <button onclick="location.href='../pages/commandes.php'" class="btn-beige">Voir mes commandes</button>
+        <button id="pdf-btn" class="btn-noir">Voir le devis</button>
+      </div>
+    </div>
 
-          <!-- Popup besoin d'aide -->
-          <div id="help-popup" class="popup">
-            <div class="popup-content">
-              <h2>Vous avez une question ?</h2>
-              <p>Contactez nous au numéro suivant et un vendeur vous assistera :
-                <br><br>
-                <strong>06 58 47 58 56</strong>
-              </p>
-              <br>
-              <button class="btn-noir">Merci !</button>
-            </div>
-          </div>
+    <!-- Popup besoin d'aide -->
+    <div id="help-popup" class="popup">
+      <div class="popup-content">
+        <h2>Vous avez une question ?</h2>
+        <p>Contactez nous au numéro suivant et un vendeur vous assistera :
+          <br><br>
+          <strong>06 58 47 58 56</strong>
+        </p>
+        <br>
+        <button class="btn-noir">Merci !</button>
+      </div>
+    </div>
 
-          <!-- Popup abandonner -->
-          <div id="abandonner-popup" class="popup">
-            <div class="popup-content">
-              <h2>Êtes vous sûr de vouloir abandonner ?</h2>
-              <br>
-              <button class="btn-beige">Oui...</button>
-              <button class="btn-noir">Non !</button>
-            </div>
-          </div>
+    <!-- Popup abandonner -->
+    <div id="abandonner-popup" class="popup">
+      <div class="popup-content">
+        <h2>Êtes vous sûr de vouloir abandonner ?</h2>
+        <br>
+        <button class="btn-beige">Oui...</button>
+        <button class="btn-noir">Non !</button>
+      </div>
+    </div>
 
-          <!-- Popup validation generation -->
-          <div id="generer-popup" class="popup">
-            <div class="popup-content">
-              <h2>Êtes vous sûr de vouloir générer un devis ?</h2>
-              <p>Vous ne pourrez plus effectuer de modifictions sur votre commande</p>
-              <button id="btn-oui" class="btn-beige" name="envoyer" data-id="<?= htmlspecialchars($id) ?>">Oui</button>
-              <button id="btn-close" class="btn-noir">Non</button>
-            </div>
-          </div>
+    <!-- Popup validation generation -->
+    <div id="generer-popup" class="popup">
+      <div class="popup-content">
+        <h2>Êtes vous sûr de vouloir générer un devis ?</h2>
+        <p>Vous ne pourrez plus effectuer de modifictions sur votre commande</p>
+        <button id="btn-oui" class="btn-beige" name="envoyer" data-id="<?= htmlspecialchars($id) ?>">Oui</button>
+        <button id="btn-close" class="btn-noir">Non</button>
+      </div>
+    </div>
   </main>
   <?php require_once '../../squelette/footer.php'; ?>
 

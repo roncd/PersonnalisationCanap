@@ -46,7 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (
         empty($nom) || empty($prenom) || empty($mail) || empty($tel)
-        || empty($adresse) || empty($codepostal) || empty($ville) 
+        || empty($adresse) || empty($codepostal) || empty($ville)
     ) {
         $_SESSION['message']      = 'Tous les champs requis doivent être remplis.';
         $_SESSION['message_type'] = 'error';
@@ -96,6 +96,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 
 <body>
+    <?php include '../cookies/index.html'; ?>
     <header>
         <?php require '../../squelette/header.php'; ?>
     </header>

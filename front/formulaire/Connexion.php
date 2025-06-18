@@ -78,7 +78,7 @@ if (isset($_GET['message']) && $_GET['message'] == 'success') {
 </head>
 
 <body>
-
+    <?php include '../cookies/index.html'; ?>
     <header>
         <?php require '../../squelette/header.php'; ?>
     </header>

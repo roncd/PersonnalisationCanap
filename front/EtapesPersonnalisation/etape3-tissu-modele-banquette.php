@@ -66,8 +66,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 
 <body data-user-id="<?php echo $_SESSION['user_id']; ?>" data-current-step="3-modele-tissu">
-
-
+  <?php include '../cookies/index.html'; ?>
   <header>
     <?php require '../../squelette/header.php'; ?>
   </header>
@@ -169,7 +168,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         const mainImage = document.getElementById('main-image');
         const erreurPopup = document.getElementById('erreur-popup');
         const closeErreurBtn = erreurPopup.querySelector('.btn-noir');
-        const form = document.querySelector('form'); 
+        const form = document.querySelector('form');
 
         let savedModeleTissuId = localStorage.getItem('selectedModeleTissuId');
         let selected = savedModeleTissuId !== '';
@@ -177,7 +176,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         function saveSelection() {
           localStorage.setItem('selectedModeleTissuId', savedModeleTissuId);
         }
-        
+
         // Restaurer la sélection si elle existe
         options.forEach(img => {
           if (img.getAttribute('data-modele-tissu-id') === savedModeleTissuId) {
@@ -204,7 +203,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         form.addEventListener('submit', (e) => {
           if (!selectedModeleTissuInput.value) {
             e.preventDefault();
-            erreurPopup.style.display = 'flex'; 
+            erreurPopup.style.display = 'flex';
           }
         });
 

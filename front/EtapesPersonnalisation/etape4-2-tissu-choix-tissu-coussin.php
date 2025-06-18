@@ -56,13 +56,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <script type="module" src="../../script/popup.js"></script>
     <script type="module" src="../../script/variationPrix.js"></script>
     <script type="module" src="../../script/keydown.js"></script>
-    
+
     <title>Étape 4.2 - Choisi tes coussins</title>
-    
+
 </head>
 
 <body data-user-id="<?php echo $_SESSION['user_id']; ?>" data-current-step="4-2-couleur-tissu">
-
+    <?php include '../cookies/index.html'; ?>
     <header>
         <?php require '../../squelette/header.php'; ?>
     </header>
@@ -167,7 +167,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 const mainImage = document.querySelector('.main-display img');
                 const erreurPopup = document.getElementById('erreur-popup');
                 const closeErreurBtn = erreurPopup.querySelector('.btn-noir');
-                const form = document.querySelector('form'); 
+                const form = document.querySelector('form');
 
                 // Vérification si une sélection existe dans localStorage
                 let savedMotifTissuId = localStorage.getItem('selectedMotifTissuId');
@@ -176,7 +176,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 function saveSelection(motifTissuId) {
                     localStorage.setItem('selectedMotifTissuId', savedMotifTissuId);
                 }
-                
+
                 // Restaurer la sélection si elle existe
                 options.forEach(img => {
                     if (img.getAttribute('data-motif-tissu-id') === savedMotifTissuId) {
@@ -203,7 +203,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 form.addEventListener('submit', (e) => {
                     if (!selectedMotifTissuInput.value) {
                         e.preventDefault();
-                        erreurPopup.style.display = 'flex'; 
+                        erreurPopup.style.display = 'flex';
                     }
                 });
 
