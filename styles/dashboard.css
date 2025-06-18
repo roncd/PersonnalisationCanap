@@ -1,3 +1,7 @@
+body {
+    font-family: 'Be Vietnam Pro', sans-serif;
+}
+
 .hero-banner {
   position: relative;
   width: 100%;
@@ -54,6 +58,12 @@
     gap: 20px;
     flex-wrap: nowrap;
     margin-top: 2rem;
+}
+.btn-beige {
+  margin-top: 10px;
+    width: 350px; /* fixe la largeur à 250px, adapte selon ce que tu veux */
+    max-width: 100%; /* empêche que ça dépasse le conteneur si écran trop petit */
+    box-sizing: border-box; /* pour inclure padding dans la largeur */
 }
 
 
@@ -168,7 +178,7 @@
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.1);
   padding: 1rem;
-  text-align: center;
+  text-align: left;
 }
 .product-card img {
   width: 100%;
@@ -179,10 +189,10 @@
 .product-card h3 {
   font-size: 1.125rem;
   margin: 0.5rem 0 0.25rem;
-  color: #212529;
+  color: #000000;
 }
 .product-card p {
-  font-size: 1rem;
+  font-size: 0.8rem;
   color: #666;
   margin-bottom: 0.5rem;
 }
@@ -192,6 +202,17 @@
   color: #212529;
   display: block;
   margin-bottom: 0.25rem;
+}
+
+.price {
+    font-weight: bold; 
+    color: #997765 !important;
+    font-size: 1.1rem!important;
+    justify-content: right!important;
+    align-items: right !important;
+    margin-bottom: 0.25rem;
+
+
 }
 .eco-tax {
   font-size: 0.875rem;

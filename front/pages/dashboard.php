@@ -1,15 +1,26 @@
 <?php
 require '../../admin/config.php';
 session_start();
-require '../../admin/include/session_expiration.php';
 
 if (!isset($_SESSION['user_id'])) {
-  $_SESSION['redirect_to'] = $_SERVER['REQUEST_URI'];
   header("Location: ../formulaire/Connexion.php");
   exit;
 }
 
 $id_client = $_SESSION['user_id'];
+$sql = "SELECT cp.*, 
+               tb.nom AS type_nom, 
+               s.nom AS structure_nom
+        FROM commande_prefait cp
+        LEFT JOIN type_banquette tb ON cp.id_banquette = tb.id
+        LEFT JOIN structure s ON cp.id_structure = s.id
+        ORDER BY cp.id DESC
+        LIMIT 4";
+
+$stmt = $pdo->prepare($sql);
+$stmt->execute();
+$commandes = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
 
 if (isset($_GET['reset']) && $_GET['reset'] == 1) {
   $stmt = $pdo->prepare("DELETE FROM commande_temporaire WHERE id_client = ?");
@@ -22,6 +33,89 @@ $existing_order = $stmt->fetch(PDO::FETCH_ASSOC);
 
 //commande existante
 $show_commencer = !$existing_order;
+
+
+function calculPrix($commande, &$composition = []) {
+    global $pdo;
+
+    $composition = [];
+    $totalPrice = 0;
+    $id_commande = $commande['id'];
+
+    // Liste des éléments simples
+    $elements = [
+        'id_structure' => 'structure',
+        'id_banquette' => 'type_banquette',
+        'id_mousse' => 'mousse',
+        'id_couleur_bois' => 'couleur_bois',
+        'id_decoration' => 'decoration',
+        'id_accoudoir_bois' => 'accoudoir_bois',
+        'id_dossier_bois' => 'dossier_bois',
+        'id_couleur_tissu_bois' => 'couleur_tissu_bois',
+        'id_motif_bois' => 'motif_bois',
+        'id_modele' => 'modele',
+        'id_couleur_tissu' => 'couleur_tissu',
+        'id_motif_tissu' => 'motif_tissu',
+        'id_dossier_tissu' => 'dossier_tissu',
+        'id_accoudoir_tissu' => 'accoudoir_tissu',
+    ];
+
+    foreach ($elements as $colonne => $table) {
+        if (!empty($commande[$colonne])) {
+            $stmt = $pdo->prepare("SELECT * FROM $table WHERE id = ?");
+            $stmt->execute([$commande[$colonne]]);
+            $detail = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if ($detail) {
+                $composition[$table] = $detail;
+                if (!empty($detail['prix'])) {
+                    $totalPrice += floatval($detail['prix']);
+                }
+            }
+        }
+    }
+
+    // Accoudoirs multiples (bois)
+    $stmt = $pdo->prepare("SELECT ab.*, cpa.nb_accoudoir
+                           FROM commande_prefait_accoudoir cpa
+                           JOIN accoudoir_bois ab ON cpa.id_accoudoir_bois = ab.id
+                           WHERE cpa.id_commande_prefait = ?");
+    $stmt->execute([$id_commande]);
+    $accoudoirs = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    if ($accoudoirs) {
+        $composition['accoudoirs_bois_multiples'] = $accoudoirs;
+        foreach ($accoudoirs as $acc) {
+            if (!empty($acc['prix']) && !empty($acc['nb_accoudoir'])) {
+                $totalPrice += floatval($acc['prix']) * intval($acc['nb_accoudoir']);
+            }
+        }
+    }
+
+    // 💰 Prix par centimètre (350 € / mètre = 3.5 € / cm)
+    $prixParCm = 3.5;
+
+    foreach (['longueurA', 'longueurB', 'longueurC'] as $longueur) {
+        if (!empty($commande[$longueur])) {
+            $totalPrice += floatval($commande[$longueur]) * $prixParCm;
+        }
+    }
+
+    // 💡 Bonus : traitement spécifique de certains éléments (optionnel)
+    if (!empty($composition)) {
+        foreach ($composition as $nomTable => $details) {
+            if ($nomTable === 'accoudoirs_bois_multiples') continue; // déjà traité
+            if ($nomTable === 'accoudoir_tissu') {
+                if (!empty($details['prix'])) {
+                    $totalPrice += floatval($details['prix']); // tu peux multiplier par 2 si besoin
+                }
+            }
+        }
+    }
+
+    return $totalPrice;
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -37,6 +131,7 @@ $show_commencer = !$existing_order;
   <link rel="stylesheet" href="../../styles/dashboard.css">
   <link rel="stylesheet" href="../../styles/popup.css">
   <link rel="stylesheet" href="../../styles/buttons.css">
+  <link rel="stylesheet" href="../../styles/styles.css">
 
   <script type="module" src="../../script/popup.js"></script>
 
@@ -47,16 +142,19 @@ $show_commencer = !$existing_order;
     <?php require '../../squelette/header.php'; ?>
   </header>
   <main>
-
-    <!-- SECTION HERO BANNIÈRE -->
-    <section class="hero-banner">
-      <div class="hero-banner-content">
-        <h1>Bienvenue, <?php echo htmlspecialchars($_SESSION['user_name']); ?>!</h1>
-        <p>
-          Testez notre <strong>configurateur de canapé</strong> et imaginez le meuble qui répond à vos goûts et à l’aménagement de votre salon.
-        </p>
-
-        <?php if ($show_commencer): ?>
+  
+        <!-- Section avec image de fond et texte superposé -->
+        <section class="hero-section">
+            <div class="hero-container">
+                <img src="../../medias/salon-marocain.jpg" alt="Salon marocain" class="hero-image">
+                <div class="hero-content">
+                    <h1 class="hero-title">
+                    Bienvenue, <?php echo htmlspecialchars($_SESSION['user_name']); ?>!
+                    </h1>
+                    <p class="hero-description">
+                      Testez notre <strong>configurateur de canapé</strong> et imaginez le meuble qui répond à vos goûts et à l’aménagement de votre salon.
+                    </p>
+                    <?php if ($show_commencer): ?>
           <form action="../EtapesPersonnalisation/etape1-1-structure.php" method="get">
             <button type="submit" class="btn-noir">Commencer la personnalisation</button>
           </form>
@@ -75,7 +173,9 @@ $show_commencer = !$existing_order;
             </form>
           </div>
         <?php endif; ?>
-
+                </div>
+            </div>
+        </section>
 
       </div>
     </section>
@@ -90,7 +190,6 @@ $show_commencer = !$existing_order;
           <li><img src="../../medias/coussin_icon.png" alt="Coussins" class="feature-icon">Ajoutez vos coussins préférés</li>
           <li><img src="../../medias/artiste_icon.png" alt="Aperçu" class="feature-icon">Aperçu en temps réel de votre création</li>
         </ul>
-        <a href="../EtapesPersonnalisation/etape1-1-structure.php" class="btn-beige">Commencer la personnalisation</a>
       </div>
       <div class="customize-image">
         <!-- Blob de fond (SVG ou PNG) -->
@@ -101,171 +200,79 @@ $show_commencer = !$existing_order;
     </section>
 
 
-    <!-- ------------------- SECTION COMBINAISONS ------------------- -->
+<!-- ------------------- SECTION COMBINAISONS ------------------- -->
+<section class="combination-section">
+  <h2>Choisissez une combinaison à personnaliser</h2>
+  <div class="combination-container">
+
+        <?php foreach ($commandes as $commande): ?>
+        <?php
+        $composition = []; 
+        $prixDynamique = calculPrix($commande, $composition); // OK maintenant
+    ?>
+      <div class="product-card">
+<img
+                src="../../admin/uploads/canape-prefait/<?php echo htmlspecialchars($commande['img'] ?? 'default.jpg', ENT_QUOTES); ?>"
+                alt="<?php echo htmlspecialchars($commande['nom'] ?? 'Canapé préfait', ENT_QUOTES); ?>">        <h3><?= htmlspecialchars($commande['nom']) ?></h3>
+        <p class="description">Type : <?= htmlspecialchars($commande['type_nom']) ?></p>
+        <p class="description">Structure : <?= htmlspecialchars($commande['structure_nom'] ?? 'Non défini') ?></p>
+        <p class="price"><?php echo number_format($prixDynamique, 2, ',', ' '); ?> €</p>
+        <button class="btn-beige"
+          onclick="window.location.href = '../CanapePrefait/canapPrefait.php?id=<?= (int)$commande['id']; ?>'">
+          Personnaliser
+        </button>
+      </div>
+    <?php endforeach; ?>
+
+  </div>
+</section>
+
+
+        <!-- ------------------- SECTION COMBINAISONS ------------------- -->
     <section class="combination-section">
-      <h2>Choisissez une combinaison à personnaliser</h2>
+      <h2>Ces articles peuvent aussi vous intéresser</h2>
       <div class="combination-container">
 
       <div class="product-card">
-          <img src="../../medias/sofa.png" alt="SÖDERHAMN Canapé 3 places">
-          <h3>SÖDERHAMN</h3>
-          <p>Canapé 3 places</p>
-          <span class="price">649,00 €</span>
-          <div class="eco-tax">dont Éco-part. Mobilier 17,10 €</div>
-          <div class="options">
-            <img src="../../medias/sofa.png" alt="option coussin">
-            <img src="../../medias/sofa.png" alt="option coussin">
-            <img src="../../medias/sofa.png" alt="option coussin">
-            <span class="more">+11</span>
-          </div>
-        </div>
-
-        <div class="product-card">
-          <img src="../../medias/sofa.png" alt="SÖDERHAMN Canapé 3 places">
-          <h3>SÖDERHAMN</h3>
-          <p>Canapé 3 places</p>
-          <span class="price">649,00 €</span>
-          <div class="eco-tax">dont Éco-part. Mobilier 17,10 €</div>
-          <div class="options">
-            <img src="../../medias/sofa.png" alt="option coussin">
-            <img src="../../medias/sofa.png" alt="option coussin">
-            <img src="../../medias/sofa.png" alt="option coussin">
-            <span class="more">+11</span>
-          </div>
-        </div>
-
-
-        <div class="product-card">
-          <img src="../../medias/sofa.png" alt="SÖDERHAMN Canapé 3 places">
-          <h3>SÖDERHAMN</h3>
-          <p>Canapé 3 places</p>
-          <span class="price">649,00 €</span>
-          <div class="eco-tax">dont Éco-part. Mobilier 17,10 €</div>
-          <div class="options">
-            <img src="../../medias/sofa.png" alt="option coussin">
-            <img src="../../medias/sofa.png" alt="option coussin">
-            <img src="../../medias/sofa.png" alt="option coussin">
-            <span class="more">+11</span>
-          </div>
-        </div>
-
-
-        <div class="product-card">
-          <img src="../../medias/sofa.png" alt="SÖDERHAMN Canapé 3 places">
-          <h3>SÖDERHAMN</h3>
-          <p>Canapé 3 places</p>
-          <span class="price">649,00 €</span>
-          <div class="eco-tax">dont Éco-part. Mobilier 17,10 €</div>
-          <div class="options">
-            <img src="../../medias/sofa.png" alt="option coussin">
-            <img src="../../medias/sofa.png" alt="option coussin">
-            <img src="../../medias/sofa.png" alt="option coussin">
-            <span class="more">+11</span>
-          </div>
-        </div>
+          <img src="../../medias/coussin.png" alt="HANNELISE Coussin">
+          <h3>Coussin</h3> <!-- Mettre police baloo-->
+          <span class="price">649,00 €</span> <!-- en beige et police baloo je crois-->
+                          <button class="btn-beige"
+                    onclick="window.location.href = '../CanapePrefait/canapPrefait.php?id=<?php echo (int)$commande['id']; ?>'">
+                    Personnaliser
+                </button><!-- augmenter la largeur-->
       </div>
-    </section>
 
-
-    <section class="interest-section">
-      <h2>Ces articles peuvent aussi vous intéresser</h2>
-      <div class="interest-container">
-
-      <div class="interest-card">
+            <div class="product-card">
           <img src="../../medias/coussin.png" alt="HANNELISE Coussin">
-          <h3>HANNELISE</h3>
-          <p>Coussin, 50x50 cm</p>
-          <span class="price">8,99€</span>
-          <div class="rating">
-            ★★★★★
-            <span class="count">(94)</span>
-          </div>
-          <div class="availability">
-            <span class="status available">● Disponible pour la livraison</span>
-            <span class="status in-stock">● En stock à Paris Nord</span>
-          </div>
-          <div class="actions">
-            <button class="btn-basket"><i class="fas fa-shopping-cart"></i></button>
-            <button class="btn-favorite"><i class="fas fa-heart"></i></button>
-          </div>
-        </div>
-
-        <div class="interest-card">
-          <img src="../../medias/coussin.png" alt="HANNELISE Coussin">
-          <h3>HANNELISE</h3>
-          <p>Coussin, 50x50 cm</p>
-          <span class="price">8,99€</span>
-          <div class="rating">
-            ★★★★★
-            <span class="count">(94)</span>
-          </div>
-          <div class="availability">
-            <span class="status available">● Disponible pour la livraison</span>
-            <span class="status in-stock">● En stock à Paris Nord</span>
-          </div>
-          <div class="actions">
-            <button class="btn-basket"><i class="fas fa-shopping-cart"></i></button>
-            <button class="btn-favorite"><i class="fas fa-heart"></i></button>
-          </div>
-        </div>
-
-        <div class="interest-card">
-          <img src="../../medias/coussin.png" alt="HANNELISE Coussin">
-          <h3>HANNELISE</h3>
-          <p>Coussin, 50x50 cm</p>
-          <span class="price">8,99€</span>
-          <div class="rating">
-            ★★★★★
-            <span class="count">(94)</span>
-          </div>
-          <div class="availability">
-            <span class="status available">● Disponible pour la livraison</span>
-            <span class="status in-stock">● En stock à Paris Nord</span>
-          </div>
-          <div class="actions">
-            <button class="btn-basket"><i class="fas fa-shopping-cart"></i></button>
-            <button class="btn-favorite"><i class="fas fa-heart"></i></button>
-          </div>
-        </div>
-
-        <div class="interest-card">
-          <img src="../../medias/coussin.png" alt="HANNELISE Coussin">
-          <h3>HANNELISE</h3>
-          <p>Coussin, 50x50 cm</p>
-          <span class="price">8,99€</span>
-          <div class="rating">
-            ★★★★★
-            <span class="count">(94)</span>
-          </div>
-          <div class="availability">
-            <span class="status available">● Disponible pour la livraison</span>
-            <span class="status in-stock">● En stock à Paris Nord</span>
-          </div>
-          <div class="actions">
-            <button class="btn-basket"><i class="fas fa-shopping-cart"></i></button>
-            <button class="btn-favorite"><i class="fas fa-heart"></i></button>
-          </div>
-        </div>
-
-        <div class="interest-card">
-          <img src="../../medias/coussin.png" alt="HANNELISE Coussin">
-          <h3>HANNELISE</h3>
-          <p>Coussin, 50x50 cm</p>
-          <span class="price">8,99€</span>
-          <div class="rating">
-            ★★★★★
-            <span class="count">(94)</span>
-          </div>
-          <div class="availability">
-            <span class="status available">● Disponible pour la livraison</span>
-            <span class="status in-stock">● En stock à Paris Nord</span>
-          </div>
-          <div class="actions">
-            <button class="btn-basket"><i class="fas fa-shopping-cart"></i></button>
-            <button class="btn-favorite"><i class="fas fa-heart"></i></button>
-          </div>
-        </div>
+          <h3>Table Ronde</h3>
+          <span class="price">649,00 €</span>
+                          <button class="btn-beige"
+                    onclick="window.location.href = '../CanapePrefait/canapPrefait.php?id=<?php echo (int)$commande['id']; ?>'">
+                    Personnaliser
+                </button>
       </div>
+
+            <div class="product-card">
+          <img src="../../medias/coussin.png" alt="HANNELISE Coussin">
+          <h3>Tapis bubble</h3>
+          <span class="price">649,00 €</span>
+                          <button class="btn-beige"
+                    onclick="window.location.href = '../CanapePrefait/canapPrefait.php?id=<?php echo (int)$commande['id']; ?>'">
+                    Personnaliser
+                </button>
+      </div>
+
+            <div class="product-card">
+          <img src="../../medias/coussin.png" alt="HANNELISE Coussin">
+          <h3>Mousse dur</h3>
+          <span class="price">649,00 €</span>
+                          <button class="btn-beige"
+                    onclick="window.location.href = '../CanapePrefait/canapPrefait.php?id=<?php echo (int)$commande['id']; ?>'">
+                    Personnaliser
+                </button>
+      </div>
+
     </section>
 
 
@@ -286,4 +293,4 @@ $show_commencer = !$existing_order;
   <?php require '../../squelette/footer.php'; ?>
 </footer>
 
-</html>
+</html>    
