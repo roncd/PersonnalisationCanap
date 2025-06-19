@@ -79,7 +79,7 @@ body {
   .hero-content { width: 90%; padding: 1.5rem; }
 }
 @media (max-width: 480px) {
-  .hero-section { height: 50vh; }
+  .hero-section { height: 90vh; }
   .hero-title { font-size: 1.75rem; }
   .hero-description { font-size: 0.9rem; }
   .hero-content button{ padding: 0.6rem 1.5rem; font-size: 0.9rem; }
