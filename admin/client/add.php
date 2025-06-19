@@ -57,7 +57,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 ?>
 
-
+ 
 <!DOCTYPE html>
 <html lang="en">
 
@@ -115,16 +115,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <input type="phone" id="tel" name="tel" class="input-field" required>
                         </div>
                     </div>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="mdp">Mot de passe <span class="required">*</span></label>
-                            <input type="password" id="mdp" name="mdp" class="input-field" required>
-                        </div>
                         <div class="form-group">
                             <label for="adresse">Adresse <span class="required">*</span></label>
                             <input type="text" id="adresse" name="adresse" class="input-field" required>
                         </div>
-                    </div>
                     <div class="form-row">
                         <div class="form-group">
                             <label for="info">Info suplémentaire</label>
@@ -145,6 +139,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <input type="date" id="date" name="date" class="input-field">
                         </div>
                     </div>
+ <div class="form-group">
+  <label for="mdp">Mot de passe <span class="required">*</span></label>
+
+    <input type="password" id="mdp" name="mdp" class="input-field" required>
+
+  <!-- Checklist dynamique -->
+  <ul class="password-requirements">
+    <li id="check-length"><span class="check-icon"></span> Minimum 8 caractères</li>
+    <li id="check-uppercase"><span class="check-icon"></span> Une lettre majuscule</li>
+    <li id="check-lowercase"><span class="check-icon"></span> Une lettre minuscule</li>
+    <li id="check-number"><span class="check-icon"></span> Un chiffre</li>
+    <li id="check-special"><span class="check-icon"></span> Un caractère spécial (!@#$...)</li>
+  </ul>
+
+</div>
+
+
                     <div class="button-section">
                         <div class="buttons">
                             <button type="button"id="btn-retour" class="btn-beige" onclick="history.go(-1)">Retour</button>
@@ -154,10 +165,43 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </form>
             </div>
         </div>
+
+        <script>
+  const passwordInput = document.getElementById("mdp");
+
+  passwordInput.addEventListener("input", function () {
+    const value = passwordInput.value;
+
+    // Critères
+    const hasLength = value.length >= 8;
+    const hasUppercase = /[A-Z]/.test(value);
+    const hasLowercase = /[a-z]/.test(value);
+    const hasNumber = /[0-9]/.test(value);
+    const hasSpecialChar = /[^A-Za-z0-9]/.test(value);
+
+    // Mise à jour classes
+    toggleClass("check-length", hasLength);
+    toggleClass("check-uppercase", hasUppercase);
+    toggleClass("check-lowercase", hasLowercase);
+    toggleClass("check-number", hasNumber);
+    toggleClass("check-special", hasSpecialChar);
+  });
+
+  function toggleClass(id, isValid) {
+    const item = document.getElementById(id);
+    if (isValid) {
+      item.classList.add("valid");
+    } else {
+      item.classList.remove("valid");
+    }
+  }
+</script>
+
     </main>
     <footer>
         <?php require '../squelette/footer.php'; ?>
     </footer>
+
 </body>
 
 </html>
