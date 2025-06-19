@@ -9,22 +9,6 @@ if (!isset($_SESSION['id'])) {
     exit();
 }
 
-$plainPassword = $_POST['mdp'];
-
-if (
-    strlen($plainPassword) < 8 ||
-    !preg_match('/[A-Z]/', $plainPassword) ||
-    !preg_match('/[a-z]/', $plainPassword) ||
-    !preg_match('/[0-9]/', $plainPassword) ||
-    !preg_match('/[^A-Za-z0-9]/', $plainPassword)
-) {
-    $_SESSION['message'] = 'Le mot de passe ne respecte pas les critères de sécurité.';
-    $_SESSION['message_type'] = 'error';
-    header("Location: add.php");
-    exit();
-}
-
-
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nom = trim($_POST['name']);
     $prenom = trim($_POST['prenom']);
@@ -168,7 +152,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <li id="check-number"><span class="check-icon"></span> Un chiffre</li>
     <li id="check-special"><span class="check-icon"></span> Un caractère spécial (!@#$...)</li>
   </ul>
- 
+
 </div>
 
 
