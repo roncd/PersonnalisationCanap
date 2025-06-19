@@ -42,24 +42,24 @@ session_start();
       </div>
     </div>
     <div class="values-section">
-      <h2>Nos valeurs</h2>
-      <div class="values-container">
-        <div class="value-item">
-          <h3>Artisanat</h3>
-          <p>Nous valorisons le savoir-faire artisanal et le travail minutieux de nos artisans locaux.</p>
-          <img src="../../medias/icons-artisanat.png" alt="Artisanat" class="value-icon">
+        <h2>Nos valeurs</h2>
+        <div class="values-container">
+            <div class="value-item">
+                <h3>Artisanat</h3>
+                <p>Nous valorisons le savoir-faire artisanal et le travail minutieux de nos artisans locaux.</p>
+                <img src="../../medias/icons-authencite.png" alt="Artisanat" class="value-icon">
+            </div>
+            <div class="value-item">
+                <h3>Qualité</h3>
+                <p>Nous nous engageons à fournir des produits de haute qualité avec des matériaux soigneusement sélectionnés.</p>
+                <img src="../../medias/icon-personnaliser.png" alt="Qualité" class="value-icon">
+            </div>
+            <div class="value-item">
+                <h3>Personnalisation</h3>
+                <p>Nous croyons en la création de pièces uniques adaptées aux goûts et besoins de chaque client.</p>
+                <img src="../../medias/icon_accessibilite.jpg" alt="Personnalisation" class="value-icon">
+            </div>
         </div>
-        <div class="value-item">
-          <h3>Qualité</h3>
-          <p>Nous nous engageons à fournir des produits de haute qualité avec des matériaux soigneusement sélectionnés.</p>
-          <img src="../../medias/icon-qualite.png" alt="Qualité" class="value-icon">
-        </div>
-        <div class="value-item">
-          <h3>Personnalisation</h3>
-          <p>Nous croyons en la création de pièces uniques adaptées aux goûts et besoins de chaque client.</p>
-          <img src="../../medias/icon_personnaliser.jpg" alt="Personnalisation" class="value-icon">
-        </div>
-      </div>
     </div>
     <div class="why-us-section">
       <div class="why-us-content">
@@ -90,56 +90,56 @@ session_start();
       </div>
     </div>
 
-    <div class="customizer-section">
-      <div class="customizer-left">
-        <div class="customizer-content">
-          <h2><span class="highlight">Un canapé unique</span>, fait pour vous</h2>
-          <p>
-            Velours, bois, motifs berbères ou couleurs modernes...<br>
-            À vous de composer le canapé qui vous ressemble.
-          </p>
-          <div class="options">
-            <div class="option">
-              <img src="../../medias/couleur.jpg" alt="Modèle">
-              <span>Couleur</span>
-            </div>
-            <div class="option">
-              <img src="../../medias/tissu.jpg" alt="Tissu">
-              <span>Tissu</span>
-            </div>
-            <div class="option">
-              <img src="../../medias/matiere.jpg" alt="Matière">
-              <span>Matière</span>
-            </div>
-            <div class="option">
-              <img src="../../medias/motif.jpg" alt="Motif">
-              <span>Motif</span>
-            </div>
-          </div>
-          <a href="dashboard.php" class="custom-btn">Je crée mon canapé</a>
+<div class="customizer-section">
+  <div class="customizer-left">
+    <div class="customizer-content">
+      <h2><span class="highlight">Un canapé unique</span>, fait pour vous</h2>
+      <p>
+        Velours, bois, motifs berbères ou couleurs modernes...<br>
+        À vous de composer le canapé qui vous ressemble.
+      </p>
+      <div class="options">
+        <div class="option">
+          <img src="../../medias/couleur.jpg" alt="Modèle">
+          <span>Couleur</span>
+        </div>
+        <div class="option">
+          <img src="../../medias/tissu.jpg" alt="Tissu">
+          <span>Tissu</span>
+        </div>
+        <div class="option">
+          <img src="../../medias/boisnoir.jpeg" alt="Matière">
+          <span>Matière</span>
+        </div>
+        <div class="option">
+          <img src="../../medias/motif.jpg" alt="Motif">
+          <span>Motif</span>
         </div>
       </div>
-      <div class="customizer-right">
-        <img src="../../medias/canape_droite.jpg" alt="Canapé personnalisé">
-      </div>
+    <a href="dashboard.php" class="custom-btn">Je crée mon canapé</a>
     </div>
-    <section class="ateliers">
-      <h2>Nos ateliers en France</h2>
-      <p class="intro">
-        Au cœur de nos ateliers français, chaque canapé est façonné avec soin par des artisans passionnés.
-        Inspirés du savoir-faire marocain, ils marient techniques traditionnelles et exigence moderne
-        pour créer des pièces uniques et durables.
-      </p>
-      <div class="images">
-        <img src="../../medias/image-bois-gauche.jpg" alt="Travail du bois à la main">
-        <img src="../../medias/tissu_marocain.jpg" alt="Tissu marocain coloré">
-        <img src="../../medias/image-bois-droite.jpg" alt="Travail du bois à la main">
-      </div>
-      <p class="conclusion">
-        Chaque tissu est choisi avec minutie, chaque finition est travaillée à la main, pour vous offrir un canapé qui vous ressemble, fabriqué localement avec amour.<br>
-        Chez Déco du Monde, nous faisons le choix d’une fabrication française, engagée et de qualité.
-      </p>
-    </section>
+  </div>
+  <div class="customizer-right">
+    <img src="../../medias/canape_droite.jpg" alt="Canapé personnalisé">
+  </div>
+</div>
+            <section class="ateliers">
+                <h2>Nos ateliers en France</h2>
+                <p class="intro">
+                Au cœur de nos ateliers français, chaque canapé est façonné avec soin par des artisans passionnés.
+                Inspirés du savoir-faire marocain, ils marient techniques traditionnelles et exigence moderne
+                pour créer des pièces uniques et durables.
+                </p>
+                <div class="images">
+                <img src="../../medias/image-bois-gauche.jpg" alt="Travail du bois à la main">
+                <img src="../../medias/tissu_marocain.jpg" alt="Tissu marocain coloré">
+                <img src="../../medias/image-bois-droite.jpg" alt="Travail du bois à la main">
+                </div>
+                <p class="conclusion">
+                Chaque tissu est choisi avec minutie, chaque finition est travaillée à la main, pour vous offrir un canapé qui vous ressemble, fabriqué localement avec amour.<br>
+                Chez Déco du Monde, nous faisons le choix d’une fabrication française, engagée et de qualité.
+                </p>
+            </section>
 
 
   </main>
