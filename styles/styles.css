@@ -1,432 +1,571 @@
-/* Reset CSS */
-*, *::before, *::after {
-  box-sizing: border-box;
+/* --------------- GENERAL --------------- */
+body {
+  font-family: 'Be Vietnam Pro', sans-serif;
   margin: 0;
   padding: 0;
 }
 
-/* Base */
-body {
-  padding-top: 80px;
+h2 {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #000;
+  margin-bottom: 1rem;
+  text-align: left;
+}
+
+.h2-center {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #000;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+
+
+/* --------------- BOUTTONS --------------- */
+.boutons-container {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: nowrap;
+    margin-top: 2rem;
+}
+
+.btn-beige {
+  margin-top: 10px;
+    width: 350px; /* fixe la largeur à 250px, adapte selon ce que tu veux */
+    max-width: 100%; /* empêche que ça dépasse le conteneur si écran trop petit */
+    box-sizing: border-box; /* pour inclure padding dans la largeur */
+}
+
+.voir-plus {
+  text-align: center;
+}
+
+/* --------------- SECTION PERSONNALISATION --------------- */
+.customize-section {
+  position: relative;
+  z-index: 1;               
+  background-color: #fff;   
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  max-width: 1200px;
+  margin: 4rem auto;
+  padding: 4rem 2rem;       /* haut + côtés */
+  gap: 2rem;
   font-family: 'Be Vietnam Pro', sans-serif;
 }
 
-/* Hero Section */
-.hero-section {
+.customize-text {
+  flex: 1;
+  padding-right: 2rem;
+}
+
+.customize-text h2 {
+  font-size: 2.25rem;
+  color: #212529;
+  margin-bottom: 1.75rem;
+  font-weight: bold;
+  line-height: 1.2;
+}
+
+.customize-features {
+  list-style: none;
+  padding: 0;
+  margin-bottom: 2.5rem;
+}
+
+.customize-features li {
+  display: flex;
+  align-items: left;
+  margin-bottom: 1.25rem;
+  line-height: 1.6;
+}
+
+.feature-icon {
+  width: 24px;
+  height: 24px;
+  margin-right: 0.75rem;
+}
+
+/* ------- IMAGE ET BLOB ------- */
+.customize-image {
+  flex: 1;
   position: relative;
-  width: 100%;
-  height: 60vh;
-  overflow: hidden;
-  margin-top: -80px;
+  padding: 3rem 0 2rem 0;          
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* Supprimer l'image de fond si tu utilises .blob en <img> */
+  /* sinon garde-la et supprime le <img class="blob"> */
+  /* background: url('../../medias/blob.png') center/contain no-repeat; */
 }
 
-.hero-container {
-  width: 100%;
-  height: 100%;
-  position: relative;
-}
-
-.hero-image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center 30%;
-  filter: brightness(50%);
-  opacity: 0.9;
-}
-
-.hero-content {
+.customize-image .blob {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  text-align: center;
-  color: white;
-  z-index: 2;
+  width: 100%;
+  max-width: 700px;
+  z-index: -1; /* Derrière le sofa */
+  pointer-events: none; /* au cas où */
+}
+
+.customize-image .sofa {
+  position: relative;
+  width: 80%;
   max-width: 800px;
-  padding: 2rem;
+  height: auto;
+  z-index: 2;
+  object-fit: contain;
 }
 
-.hero-title {
-  font-family: 'Baloo 2', sans-serif;
-  font-size: 2.80rem;
-  font-weight: 800;
-  margin-bottom: 1.25rem;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
-  line-height: 1.2;
-} 
-
-.hero-description {
-  font-size: 1.2rem;
-  line-height: 1.6;
+/* ------------------- STYLES SECTION COMBINAISONS ------------------- */
+.combination-section {
+  max-width: 1200px;
+  margin: 4rem auto;
+  padding: 0 2rem;
+  font-family: 'Be Vietnam Pro', sans-serif;
+}
+.combination-section h2 {
+  font-size: 2rem;
+  color: #212529;
   margin-bottom: 2rem;
-  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.6);
+  margin-top: 6rem;
+  text-align: left;
+}
+.combination-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 2rem;
 }
 
-.hero-content button {
-  padding: 0.75rem 2rem;
-  font-size: 1rem;
+.product-card {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  text-align: left;
+  padding: 0; /* padding déplacé dans .product-content */
 }
 
-.hero-content button:hover {
-  transform: scale(1.05);
+.product-image img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  display: block;
 }
 
-/* Hero Responsive */
-@media (max-width: 768px) {
-  .hero-title { font-size: 2.25rem; }
-  .hero-description { font-size: 1.1rem; padding: 0 1rem; }
-  .hero-content { width: 90%; padding: 1.5rem; }
+.product-content {
+  padding: 1rem;
+}
+
+.product-card h3 {
+  font-size: 1.125rem;
+  margin: 0.5rem 0 0.25rem;
+  color: #000000;
+}
+.product-card p {
+  font-size: 0.8rem;
+  color: #666;
+  margin-bottom: 0.5rem;
+}
+
+.price {
+    font-weight: bold; 
+    color: #997765 !important;
+    font-size: 1.1rem!important;
+    justify-content: right!important;
+    align-items: right !important;
+    margin-bottom: 0.25rem;
+
+
+}
+
+/* --------------- SECTION STAT --------------- */
+.stats-section {
+  background-color: rgba(227, 209, 200, 0.9);
+  padding: 4rem 2rem;
+  text-align: center;
+  margin: 4rem auto;
+  max-width: 1145px;
+  width: 87%;
+  border-radius: 20px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.stats-section h2 {
+  font-size: 2rem;
+  margin-bottom: 2rem;
+  color: #000000;
+}
+
+.stats-list {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 2rem;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.stats-list li {
+  font-size: 1.2rem;
+  color: #000000;
+}
+
+.stats-list strong {
+  display: block;
+  font-size: 2rem;
+  color: #997765 !important;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+/* --------------- AVANTAGES CARD --------------- */
+.avantages-card {
+  background-color: rgba(227, 209, 200, 0.9);
+  border-radius: 20px;
+  margin: 4rem auto;
+  max-width: 1145px;
+  width: 87%;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  position: relative;
+  overflow: hidden;
+}
+
+.avantages-text {
+  flex: 1 1 60%;
+  padding: 2rem; /* padding déplacé ici */
+  padding-right: 3rem; /* tu peux ajuster pour plus d'espace à droite */
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.avantages-text h2 {
+  font-size: 1.8rem;
+  margin-bottom: 1.5rem;
+  color: #000000;
+}
+
+.avantages-text ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.avantages-text li {
+  position: relative;
+  padding-left: 2rem;
+  margin-bottom: 1rem;
+  font-size: 1.1rem;
+  color: #000000;
+}
+
+.avantages-text li::before {
+  content: "✅";
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+.avantages-img {
+  flex: 0 0 520px;        /* largeur fixe pour l’image */
+  height: auto;
+  position: relative;
+}
+
+.avantages-img img {
+  height: 100%;           /* image prend toute la hauteur du container parent */
+  width: 100%;            /* prend toute la largeur du conteneur image */
+  border-radius: 0 20px 20px 0; /* arrondi uniquement côté gauche */
+  object-fit: cover;      /* bien remplir le cadre sans déformation */
+  display: block;
+}
+
+/* ----------- RESPONSIVE GLOBAL (H2) ----------- */
+@media (max-width: 480px) {
+  h2 {
+    font-size: 1.4rem;
+  }
+}
+@media (min-width: 481px) and (max-width: 768px) {
+  h2 {
+    font-size: 1.6rem;
+  }
+}
+
+
+/* ----------- HERO IMAGE ----------- */
+.hero-img {
+  height: 400px;
+  object-fit: cover;
+  width: 100%;
 }
 @media (max-width: 480px) {
-  .hero-section { height: 90vh; }
+  .hero-img {
+    height: 500px;
+  }
+}
+@media (min-width: 481px) and (max-width: 768px) {
+  .hero-img {
+    height: 450px;
+  }
+}
+
+
+/* ----------- BOUTONS CONTAINER ----------- */
+@media (max-width: 480px) {
+  .boutons-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .boutons-container form {
+    width: 100%;
+  }
+
+  .boutons-container button {
+    width: 100%;
+  }
+}
+
+
+/* ----------- AVANTAGES SECTION ----------- */
+@media (max-width: 480px) {
+  .avantages-card {
+    flex-direction: column;
+  }
+
+  .avantages-img {
+    display: none;
+  }
+
+  .avantages-text {
+    flex: 1 1 auto;
+    padding: 1rem;
+  }
+
+  .avantages-text h2 {
+    font-size: 1.4rem;
+  }
+
+  .avantages-text li {
+    font-size: 0.95rem;
+  }
+
+  
+.h2-center {
+  text-align: center;
+}
+
+  
+}
+
+@media (min-width: 481px) and (max-width: 768px) {
+  .avantages-card {
+    flex-direction: row;
+  }
+
+  .avantages-text {
+    flex: 1 1 auto;
+    padding: 1.5rem;
+  }
+
+  .avantages-img {
+    flex: 0 0 120px;
+    display: block;
+  }
+
+  .avantages-img img {
+    height: 100%;
+    width: 100%;
+    border-radius: 0 20px 20px 0;
+    object-fit: cover;
+  }
+
+  .avantages-text h2 {
+    font-size: 1.6rem;
+  }
+
+  .avantages-text li {
+    font-size: 1rem;
+  }
+
+  .h2-center {
+  text-align: center;
+}
+
+}
+
+
+/* ----------- INTEREST CONTAINER ----------- */
+@media (max-width: 768px) {
+  .interest-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  }
+}
+@media (max-width: 480px) {
+  .interest-container {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+/* ----------- COMBINATION CONTAINER ----------- */
+@media (max-width: 768px) {
+  .combination-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+}
+@media (max-width: 480px) {
+  .combination-container {
+    grid-template-columns: 1fr;
+  }
+}
+
+
+/* ----------- CUSTOMIZE SECTION ----------- */
+@media (max-width: 992px) {
+  .customize-section {
+    flex-direction: column-reverse;
+    text-align: left;
+  }
+
+  .customize-text {
+    padding-right: 0;
+  }
+
+  .customize-image .blob {
+    display: none;
+  }
+
+  .customize-image .sofa {
+    width: 80%;
+    max-width: none;
+  }
+
+  /* Ordre texte puis image */
+  .customize-text {
+    order: 1;
+  }
+
+  .customize-image {
+    order: 2;
+  }
+}
+
+@media (max-width: 576px) {
+  .customize-text h2 {
+    font-size: 1.4rem;
+  }
+
+  .customize-features li i {
+    font-size: 1rem;
+  }
+
+  .customize-image .sofa {
+    width: 100%;
+  }
+
+  /* Ordre texte puis image */
+  .customize-text {
+    order: 1;
+  }
+
+  .customize-image {
+    order: 2;
+  }
+}
+
+
+/* ----------- STATS SECTION ----------- */
+@media (max-width: 480px) {
+  .stats-section {
+    padding: 2rem 1rem;
+    margin: 2rem auto;
+  }
+
+  .stats-section h2 {
+    font-size: 1.4rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .stats-list {
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .stats-list li {
+    font-size: 1rem;
+  }
+
+  .stats-list strong {
+    font-size: 1.5rem;
+  }
+}
+
+@media (min-width: 481px) and (max-width: 768px) {
+  .stats-section {
+    padding: 3rem 1.5rem;
+    margin: 3rem auto;
+  }
+
+  .stats-section h2 {
+    font-size: 1.6rem;
+    margin-bottom: 1.8rem;
+  }
+
+  .stats-list {
+    flex-direction: row;
+    justify-content: center;
+    gap: 1.5rem;
+  }
+
+  .stats-list li {
+    font-size: 1.1rem;
+  }
+
+  .stats-list strong {
+    font-size: 1.8rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-section { height: 80vh; }
   .hero-title { font-size: 1.75rem; }
   .hero-description { font-size: 0.9rem; }
   .hero-content button{ padding: 0.6rem 1.5rem; font-size: 0.9rem; }
 }
 
-/* Titres de section */
-.section-title {
-  text-align: center;
-  font-size: 2rem;
-  margin: 40px 0;
-  color: #333;
-}
 
-/* Layout */
-.modeles-section,
-.about-section,
-.devis-section {
-  padding: 40px 20px;
-}
+/* ------- RESPONSIVE IMAGE BLOB ------- */
+@media screen and (max-width: 768px) {
+  .customize-image {
+    padding: 2rem 0;
+  }
 
-/* Wrapper de section */
-/* Section "Inspirez-vous de nos modèles" */
-/* Section Wrapper */
-.sections-wrapper {
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
-}
+  .customize-image .blob {
+    max-width: 90%;
+    top: 60%;
+  }
 
-/* Carousel Section */
-.carousel-section {
-  min-height: 500px;
-  position: relative;
-}
-
-/* Fix pour le carousel */
-.hs-carousel {
-  position: relative;
-  z-index: 1;
-}
-
-.hs-carousel-body {
-  position: relative !important;
-  height: auto !important;
-}
-
-/* Carousel Container */
-.hs-carousel {
-  background-color: none;
-  border-radius: 3px;
-  overflow: hidden;
-  padding: 20px 0;
-  position: relative;
-}
-
-/* Carousel Slides */
-.hs-carousel-body {
-  display: flex;
-  transition: transform 0.5s ease;
-}
-
-.hs-carousel-slide {
-  flex-shrink: 0;
-  padding: 0 15px;
-  width: 100%;
-}
-
-@media (min-width: 1024px) {
-  .hs-carousel-slide {
-      width: 33.333%;
+  .customize-image .sofa {
+    width: 90%;
   }
 }
 
-/* Slide Content */
-.hs-carousel-slide .flex-col {
-  background: none;
-  border-radius: 3px;
-  transition: transform 0.3s ease;
-}
-
-.hs-carousel-slide .flex-col:hover {
-  transform: translateY(-5px);
-}
-
-/* Slide Image */
-.hs-carousel-slide img {
-  width: 100%;
-  height: 300px;
-  object-fit: cover;
-  border-radius: 8px;
-  transition: transform 0.3s ease;
-}
-
-.hs-carousel-slide img:hover {
-  transform: scale(1.02);
-}
-
-/* Slide Text Content */
-.hs-carousel-slide .text-center {
-  padding: 20px 10px;
-}
-
-.hs-carousel-slide h3.baloo-2-bold {
-  color: #000000;
-  font-size: 1.25rem;
-  margin-bottom: 8px;
-  font-weight: 700;
-}
-
-.hs-carousel-slide p.text-lg {
-  color: #4B5563;
-  font-size: 1.125rem;
-  font-weight: 600;
-}
-
-/* Navigation Arrows */
-.hs-carousel-prev,
-.hs-carousel-next {
-  background-color: rgba(227, 209, 200, 0.9);
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  height: 40px;
-  position: absolute;
-  top: 130px; 
-  transform: translateY(0);
-  transition: all 0.3s ease;
-  width: 40px;
-  z-index: 10;
-}
-
-.hs-carousel-prev {
-  left: 10px;
-}
-
-.hs-carousel-next {
-  right: 10px;
-}
-
-.hs-carousel-prev:hover,
-.hs-carousel-next:hover {
-  background-color: rgba(227, 209, 200, 1);
-  transform: scale(1.1);
-}
-
-.hs-carousel-prev span,
-.hs-carousel-next span {
-  color: #000000;
-  font-size: 24px;
-  line-height: 1;
-}
-
-/* Disabled State */
-.hs-carousel-disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-/* Responsive Adjustments */
-@media (max-width: 768px) {
-  .hs-carousel {
-      padding: 15px 0;
-  }
-
-  .hs-carousel-slide {
-      padding: 0 10px;
-  }
-
-  .hs-carousel-slide img {
-      height: 250px;
-  }
-
-  .hs-carousel-prev,
-  .hs-carousel-next {
-      top: 105px;
-  }
-}
-
-@media (max-width: 480px) {
-  .hs-carousel-slide h3.baloo-2-bold {
-      font-size: 1.1rem;
-  }
-
-  .hs-carousel-slide p.text-lg {
-      font-size: 1rem;
-  }
-}
-
-
-/* Flèches */
-.hs-carousel-prev,
-.hs-carousel-next {
-  background-color: rgba(227, 209, 200, 0.9);
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  height: 40px;
-  width: 40px;
-  position: absolute;
-  top: 130px;
-  z-index: 10;
-  transition: all 0.3s ease;
-}
-
-.hs-carousel-prev:hover,
-.hs-carousel-next:hover {
-  background-color: rgba(227, 209, 200, 1);
-  transform: scale(1.1);
-}
-
-.hs-carousel-prev { left: 10px; }
-.hs-carousel-next { right: 10px; }
-
-.hs-carousel-prev span,
-.hs-carousel-next span {
-  color: #000;
-  font-size: 24px;
-}
-
-.hs-carousel-disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-/* Carousel responsive */
-@media (max-width: 768px) {
-  .hs-carousel { padding: 15px 0; }
-  .hs-carousel-slide { padding: 0 10px; }
-  .hs-carousel-slide img { height: 250px; }
-  .hs-carousel-prev, .hs-carousel-next { top: 105px; }
-}
-@media (max-width: 480px) {
-  .hs-carousel-slide img { height: 200px; }
-  .hs-carousel-slide h3.baloo-2-bold { font-size: 1.1rem; }
-  .hs-carousel-slide p.text-lg { font-size: 1rem; }
-  .hs-carousel-prev, .hs-carousel-next {
-    top: 90px;
-    width: 32px;
-    height: 32px;
-  }
-  .hs-carousel-prev span,
-  .hs-carousel-next span {
-    font-size: 20px;
-  }
-}
-
-/* Section About */
-.about-section {
-  padding: 4rem 0;
-}
-
-.about-container {
-  max-width: 1280px;
-  margin: 0 auto;
-}
-
-.about-content {
-  display: flex;
-  justify-content: space-between;
-  align-items: stretch;
-  gap: 0;
-  min-height: 400px;
-  background-color: rgba(227, 209, 200, 0.3);
-}
-
-.about-text {
-  flex: 1;
-  text-align: left;
-  padding: 4rem;
-}
-
-.about-image {
-  flex: 1;
-  max-width: 50%;
-}
-
-.about-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
-
-.about-title {
-  font-family: 'Baloo 2', sans-serif;
-  font-size: 3rem;
-  font-weight: 700;
-  text-align: center;
-  margin-bottom: 1.5rem;
-  color: black;
-}
-
-.about-description,
-.about-mission {
-  font-size: 1.1rem;
-  line-height: 1.6;
-  margin-bottom: 1.5rem;
-  color: #4a4a4a;
-}
-
-/* About Responsive */
-@media (max-width: 768px) {
-  .about-content { flex-direction: column; gap: 2rem; }
-  .about-image { max-width: 100%; }
-  .about-text { text-align: center; }
-}
-@media (max-width: 480px) {
-  .about-content { padding: 1rem; }
-  .about-text { padding: 2rem 1rem; }
-  .about-title { font-size: 2rem; }
-  .about-description,
-  .about-mission { font-size: 1rem; }
-}
-
-/* Section Devis */
-.devis-section {
-  padding: 4rem 0;
-}
-
-.devis-container {
-  margin: 0;
-  text-align: center;
-  border: 4px solid #E3D1C8;
-  background-color: rgba(255, 255, 255, 0.5);
-  backdrop-filter: blur(8px);
-  padding: 2rem;
-  width: 100%;
-}
-
-.devis-title {
-  font-family: 'Baloo 2', sans-serif;
-  font-weight: 700;
-  margin: 1rem 0 2rem;
-  line-height: 1.25;
-  text-align: center;
-  font-size: 3rem;
-}
-
-.devis-description {
-  font-size: 1.125rem;
-  margin-bottom: 2rem;
-  line-height: 1.75;
-}
-
-
-@media (max-width: 480px) {
-  .devis-title { font-size: 2rem; }
-  .devis-description { font-size: 1rem; padding: 0 1rem; }
-  .devis-container button { padding: 0.6rem 1.2rem; font-size: 0.9rem; }
-}
