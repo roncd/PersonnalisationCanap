@@ -145,44 +145,42 @@ select.input-field {
 
 .password-requirements {
   list-style: none;
-  padding: 0;
-  margin: 0 0 1rem 0;
-  font-size: 0.9rem;
+  padding-left: 0;
+  margin-top: 10px;
+  font-size: 0.95rem;
 }
 
 .password-requirements li {
   display: flex;
   align-items: center;
-  margin-bottom: 5px;
-  color: #888;
+  margin-bottom: 6px;
+  color: #777;
 }
 
-.password-requirements li.valid {
-  color: green;
-}
-
-.password-requirements .icon {
+.check-icon {
   width: 18px;
   height: 18px;
-  margin-right: 8px;
-  border-radius: 50%;
   border: 2px solid #ccc;
-  display: inline-block;
+  border-radius: 50%;
+  margin-right: 10px;
   position: relative;
+  display: inline-block;
 }
 
-.password-requirements li.valid .icon {
-  background-color: green;
-  border-color: green;
+.valid .check-icon {
+  background-color: #28a745;
+  border-color: #28a745;
 }
 
-.password-requirements li.valid .icon::after {
-  content: '✓';
+.valid .check-icon::after {
+  content: "✓";
   color: white;
+  font-weight: bold;
   font-size: 14px;
   position: absolute;
-  top: -2px;
-  left: 3px;
+  top: -1px;
+  left: 4px;
 }
+
 
 
