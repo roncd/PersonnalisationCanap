@@ -27,7 +27,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $_SESSION['message'] = 'Tous les champs sont requis !';
         $_SESSION['message_type'] = 'error';
     }
+    $plainPassword = $_POST['mdp'];
 
+    if (
+        strlen($plainPassword) < 8 ||
+        !preg_match('/[A-Z]/', $plainPassword) ||
+        !preg_match('/[a-z]/', $plainPassword) ||
+        !preg_match('/[0-9]/', $plainPassword) ||
+        !preg_match('/[^A-Za-z0-9]/', $plainPassword)
+    ) {
+        $_SESSION['message'] = 'Le mot de passe ne respecte pas les critères de sécurité.';
+        $_SESSION['message_type'] = 'error';
+        header("Location: add.php");
+        exit();
+    }
     try {
         $stmt = $pdo->prepare("INSERT INTO client (nom, prenom, mail, tel, mdp, adresse, info, codepostal, ville, date_naissance, civilite) VALUES (:nom, :prenom, :mail, :tel, :mdp, :adresse, :info, :codepostal, :ville, :date_naissance, :civilite)");
         $stmt->bindValue(':nom', $nom, PDO::PARAM_STR);
