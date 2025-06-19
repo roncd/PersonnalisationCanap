@@ -1,57 +1,29 @@
+/* --------------- GENERAL --------------- */
 body {
-    font-family: 'Be Vietnam Pro', sans-serif;
-}
-
-.hero-banner {
-  position: relative;
-  width: 100%;
-  height: 80vh;
-  /* Assurez-vous que ce chemin corresponde à l'emplacement de votre CSS
-     - Si ce style est dans un fichier CSS placé dans /css/, remontez d'un niveau : */
-  background-image: url('../medias/canape_dashboard.jpg');
-  background-position: center;
-  background-size: cover;
-  background-repeat: no-repeat;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.hero-banner::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.3);
-}
-.hero-banner-content {
-  position: relative;
-  text-align: center;
-  color: #fff;
-  max-width: 600px;
-  padding: 2rem;
-}
-.hero-banner-content h1 {
-  font-size: 3rem;
-  margin-bottom: 1rem;
-  font-family: 'Baloo 2', sans-serif;
-}
-.hero-banner-content p {
-  font-size: 1.125rem;
-  line-height: 1.6;
   font-family: 'Be Vietnam Pro', sans-serif;
+  margin: 0;
+  padding: 0;
 }
 
-.hero-banner-content button {
-  font-size: 14px;
+h2 {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #000;
+  margin-bottom: 1rem;
+  text-align: left;
 }
 
-.feature-icon {
-  width: 24px;
-  height: 24px;
-  margin-right: 0.75rem;
+.h2-center {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #000;
+  margin-bottom: 1rem;
+  text-align: center;
 }
 
 
+
+/* --------------- BOUTTONS --------------- */
 .boutons-container {
     display: flex;
     justify-content: center;
@@ -59,6 +31,7 @@ body {
     flex-wrap: nowrap;
     margin-top: 2rem;
 }
+
 .btn-beige {
   margin-top: 10px;
     width: 350px; /* fixe la largeur à 250px, adapte selon ce que tu veux */
@@ -66,10 +39,11 @@ body {
     box-sizing: border-box; /* pour inclure padding dans la largeur */
 }
 
-
+.voir-plus {
+  text-align: center;
+}
 
 /* --------------- SECTION PERSONNALISATION --------------- */
-/* section personnalisation */
 .customize-section {
   position: relative;
   z-index: 1;               
@@ -83,10 +57,12 @@ body {
   gap: 2rem;
   font-family: 'Be Vietnam Pro', sans-serif;
 }
+
 .customize-text {
   flex: 1;
   padding-right: 2rem;
 }
+
 .customize-text h2 {
   font-size: 2.25rem;
   color: #212529;
@@ -94,66 +70,59 @@ body {
   font-weight: bold;
   line-height: 1.2;
 }
+
 .customize-features {
   list-style: none;
   padding: 0;
   margin-bottom: 2.5rem;
 }
+
 .customize-features li {
   display: flex;
-  align-items: center;
+  align-items: left;
   margin-bottom: 1.25rem;
   line-height: 1.6;
 }
-.customize-features li i {
-  font-size: 1.25rem;
+
+.feature-icon {
+  width: 24px;
+  height: 24px;
   margin-right: 0.75rem;
-  color: #a3471c;
-}
-.customize-button {
-  display: inline-block;
-  background-color: #e3d1c8;
-  color: #212529;
-  padding: 1rem 1.75rem;
-  border-radius: 8px;
-  text-decoration: none;
-  font-weight: 600;
-  transition: background-color 0.3s;
-}
-.customize-button:hover {
-  background-color: #d1b8ac;
 }
 
 /* ------- IMAGE ET BLOB ------- */
 .customize-image {
   flex: 1;
   position: relative;
-  /* image de fond blob centrée */
-  background: url('../../medias/blob.png') center/contain no-repeat;
-  /* espace haut/bas pour faire de la place au blob */
   padding: 3rem 0 2rem 0;          
   display: flex;
   justify-content: center;
   align-items: center;
+  /* Supprimer l'image de fond si tu utilises .blob en <img> */
+  /* sinon garde-la et supprime le <img class="blob"> */
+  /* background: url('../../medias/blob.png') center/contain no-repeat; */
 }
+
 .customize-image .blob {
   position: absolute;
-  top: 55%;
+  top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   width: 100%;
   max-width: 700px;
-  z-index: -1;  /* Blob derrière le sofa */
+  z-index: -1; /* Derrière le sofa */
+  pointer-events: none; /* au cas où */
 }
+
 .customize-image .sofa {
   position: relative;
-  top: 100%;
-  width: 80%;       /* Ajustez pour réduire ou agrandir */
+  width: 80%;
   max-width: 800px;
   height: auto;
-  z-index: 2;       /* Sofa devant le blob */
+  z-index: 2;
   object-fit: contain;
 }
+
 /* ------------------- STYLES SECTION COMBINAISONS ------------------- */
 .combination-section {
   max-width: 1200px;
@@ -173,19 +142,27 @@ body {
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   gap: 2rem;
 }
+
 .product-card {
   background: #fff;
   border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-  padding: 1rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
   text-align: left;
+  padding: 0; /* padding déplacé dans .product-content */
 }
-.product-card img {
+
+.product-image img {
   width: 100%;
-  height: auto;
+  height: 200px;
   object-fit: cover;
-  margin-bottom: 1rem;
+  display: block;
 }
+
+.product-content {
+  padding: 1rem;
+}
+
 .product-card h3 {
   font-size: 1.125rem;
   margin: 0.5rem 0 0.25rem;
@@ -195,13 +172,6 @@ body {
   font-size: 0.8rem;
   color: #666;
   margin-bottom: 0.5rem;
-}
-.price {
-  font-size: 1.25rem;
-  font-weight: bold;
-  color: #212529;
-  display: block;
-  margin-bottom: 0.25rem;
 }
 
 .price {
@@ -214,116 +184,225 @@ body {
 
 
 }
-.eco-tax {
-  font-size: 0.875rem;
-  color: #999;
-  margin-bottom: 0.75rem;
-}
-.options {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 0.5rem;
-}
-.options img {
-  width: 40px;
-  height: 40px;
-  object-fit: cover;
-  border-radius: 4px;
-}
-.options .more {
-  font-size: 0.875rem;
-  color: #212529;
+
+/* --------------- SECTION STAT --------------- */
+.stats-section {
+  background-color: rgba(227, 209, 200, 0.9);
+  padding: 4rem 2rem;
+  text-align: center;
+  margin: 4rem auto;
+  max-width: 1145px;
+  width: 87%;
+  border-radius: 20px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
-/* ------------------- STYLES SECTION ARTICLES INTÉRESSANTS ------------------- */
-.interest-section {
-  max-width: 1200px;
-  margin: 4rem auto;
-  padding: 0 2rem;
-  font-family: 'Be Vietnam Pro', sans-serif;
-}
-.interest-section h2 {
+.stats-section h2 {
   font-size: 2rem;
-  color: #212529;
   margin-bottom: 2rem;
-  text-align: left;
+  color: #000000;
 }
-.interest-container {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 2rem;
-}
-.interest-card {
-  background: #fff;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-  padding: 1rem;
-  text-align: center;
-}
-.interest-card img {
-  width: 100%;
-  height: auto;
-  object-fit: cover;
-  margin-bottom: 1rem;
-}
-.interest-card h3 {
-  font-size: 1rem;
-  margin: 0.5rem 0 0.25rem;
-  color: #212529;
-}
-.interest-card p {
-  font-size: 0.875rem;
-  color: #666;
-  margin-bottom: 0.5rem;
-}
-.interest-card .price {
-  font-size: 1.125rem;
-  font-weight: bold;
-  color: #212529;
-  display: block;
-  margin-bottom: 0.5rem;
-}
-.interest-card .rating {
-  font-size: 0.875rem;
-  color: #ffba00;
-  margin-bottom: 0.5rem;
-}
-.interest-card .rating .count {
-  color: #666;
-  margin-left: 0.25rem;
-}
-.interest-card .availability .status {
-  display: block;
-  font-size: 0.75rem;
-  color: #212529;
-  margin-bottom: 0.25rem;
-}
-.interest-card .availability .available {
-  color: #28a745;
-}
-.interest-card .availability .in-stock {
-  color: #28a745;
-}
-.interest-card .actions {
+
+.stats-list {
   display: flex;
   justify-content: center;
-  gap: 1rem;
-  margin-top: 0.75rem;
+  flex-wrap: wrap;
+  gap: 2rem;
+  list-style: none;
+  padding: 0;
+  margin: 0;
 }
-.interest-card .actions button {
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-size: 1.25rem;
-  color: #212529;
-  transition: color 0.2s;
+
+.stats-list li {
+  font-size: 1.2rem;
+  color: #000000;
 }
-.interest-card .actions button:hover {
-  color: #a3471c;
+
+.stats-list strong {
+  display: block;
+  font-size: 2rem;
+  color: #997765 !important;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
 }
+
+/* --------------- AVANTAGES CARD --------------- */
+.avantages-card {
+  background-color: rgba(227, 209, 200, 0.9);
+  border-radius: 20px;
+  margin: 4rem auto;
+  max-width: 1145px;
+  width: 87%;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  position: relative;
+  overflow: hidden;
+}
+
+.avantages-text {
+  flex: 1 1 60%;
+  padding: 2rem; /* padding déplacé ici */
+  padding-right: 3rem; /* tu peux ajuster pour plus d'espace à droite */
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.avantages-text h2 {
+  font-size: 1.8rem;
+  margin-bottom: 1.5rem;
+  color: #000000;
+}
+
+.avantages-text ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.avantages-text li {
+  position: relative;
+  padding-left: 2rem;
+  margin-bottom: 1rem;
+  font-size: 1.1rem;
+  color: #000000;
+}
+
+.avantages-text li::before {
+  content: "✅";
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+.avantages-img {
+  flex: 0 0 520px;        /* largeur fixe pour l’image */
+  height: auto;
+  position: relative;
+}
+
+.avantages-img img {
+  height: 100%;           /* image prend toute la hauteur du container parent */
+  width: 100%;            /* prend toute la largeur du conteneur image */
+  border-radius: 0 20px 20px 0; /* arrondi uniquement côté gauche */
+  object-fit: cover;      /* bien remplir le cadre sans déformation */
+  display: block;
+}
+
+/* ----------- RESPONSIVE GLOBAL (H2) ----------- */
+@media (max-width: 480px) {
+  h2 {
+    font-size: 1.4rem;
+  }
+}
+@media (min-width: 481px) and (max-width: 768px) {
+  h2 {
+    font-size: 1.6rem;
+  }
+}
+
+
+/* ----------- HERO IMAGE ----------- */
+.hero-img {
+  height: 400px;
+  object-fit: cover;
+  width: 100%;
+}
+@media (max-width: 480px) {
+  .hero-img {
+    height: 500px;
+  }
+}
+@media (min-width: 481px) and (max-width: 768px) {
+  .hero-img {
+    height: 450px;
+  }
+}
+
+
+/* ----------- BOUTONS CONTAINER ----------- */
+@media (max-width: 480px) {
+  .boutons-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .boutons-container form {
+    width: 100%;
+  }
+
+  .boutons-container button {
+    width: 100%;
+  }
+}
+
+
+/* ----------- AVANTAGES SECTION ----------- */
+@media (max-width: 480px) {
+  .avantages-card {
+    flex-direction: column;
+  }
+
+  .avantages-img {
+    display: none;
+  }
+
+  .avantages-text {
+    flex: 1 1 auto;
+    padding: 1rem;
+  }
+
+  .avantages-text h2 {
+    font-size: 1.4rem;
+  }
+
+  .avantages-text li {
+    font-size: 0.95rem;
+  }
+}
+
+@media (min-width: 481px) and (max-width: 768px) {
+  .avantages-card {
+    flex-direction: row;
+  }
+
+  .avantages-text {
+    flex: 1 1 auto;
+    padding: 1.5rem;
+  }
+
+  .avantages-img {
+    flex: 0 0 120px;
+    display: block;
+  }
+
+  .avantages-img img {
+    height: 100%;
+    width: 100%;
+    border-radius: 0 20px 20px 0;
+    object-fit: cover;
+  }
+
+  .avantages-text h2 {
+    font-size: 1.6rem;
+  }
+
+  .avantages-text li {
+    font-size: 1rem;
+  }
+}
+
+
+/* ----------- INTEREST CONTAINER ----------- */
 @media (max-width: 768px) {
   .interest-container {
+    display: grid;
     grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
   }
 }
@@ -333,8 +412,11 @@ body {
   }
 }
 
+
+/* ----------- COMBINATION CONTAINER ----------- */
 @media (max-width: 768px) {
   .combination-container {
+    display: grid;
     grid-template-columns: 1fr 1fr;
   }
 }
@@ -343,18 +425,23 @@ body {
     grid-template-columns: 1fr;
   }
 }
-/* ------------------- RESPONSIVE ------------------- */
+
+
+/* ----------- CUSTOMIZE SECTION ----------- */
 @media (max-width: 992px) {
   .customize-section {
     flex-direction: column-reverse;
-    text-align: center;
+    text-align: left;
   }
+
   .customize-text {
     padding-right: 0;
   }
+
   .customize-image .blob {
     display: none;
   }
+
   .customize-image .sofa {
     width: 80%;
     max-width: none;
@@ -363,12 +450,92 @@ body {
 
 @media (max-width: 576px) {
   .customize-text h2 {
-    font-size: 1.75rem;
+    font-size: 1.4rem;
   }
+
   .customize-features li i {
     font-size: 1rem;
   }
+
   .customize-image .sofa {
     width: 100%;
   }
 }
+
+
+/* ----------- STATS SECTION ----------- */
+@media (max-width: 480px) {
+  .stats-section {
+    padding: 2rem 1rem;
+    margin: 2rem auto;
+  }
+
+  .stats-section h2 {
+    font-size: 1.4rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .stats-list {
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .stats-list li {
+    font-size: 1rem;
+  }
+
+  .stats-list strong {
+    font-size: 1.5rem;
+  }
+}
+
+@media (min-width: 481px) and (max-width: 768px) {
+  .stats-section {
+    padding: 3rem 1.5rem;
+    margin: 3rem auto;
+  }
+
+  .stats-section h2 {
+    font-size: 1.6rem;
+    margin-bottom: 1.8rem;
+  }
+
+  .stats-list {
+    flex-direction: row;
+    justify-content: center;
+    gap: 1.5rem;
+  }
+
+  .stats-list li {
+    font-size: 1.1rem;
+  }
+
+  .stats-list strong {
+    font-size: 1.8rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-section { height: 80vh; }
+  .hero-title { font-size: 1.75rem; }
+  .hero-description { font-size: 0.9rem; }
+  .hero-content button{ padding: 0.6rem 1.5rem; font-size: 0.9rem; }
+}
+
+
+/* ------- RESPONSIVE IMAGE BLOB ------- */
+@media screen and (max-width: 768px) {
+  .customize-image {
+    padding: 2rem 0;
+  }
+
+  .customize-image .blob {
+    max-width: 90%;
+    top: 60%;
+  }
+
+  .customize-image .sofa {
+    width: 90%;
+  }
+}
+
