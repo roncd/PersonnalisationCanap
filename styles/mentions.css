@@ -7,9 +7,9 @@ body {
 
 /* Title bar */
 .title-bar {
-  padding: 2rem;
+  padding: 2rem 2rem 0rem;
   text-align: center;
-  margin: 3rem auto 1.25rem;
+  margin: 2rem auto 0rem;
 }
 
 /* Typography */
@@ -20,18 +20,11 @@ body {
   margin: 0;
 }
 
-.baloo-2-regular {
-  font-family: "Baloo 2", sans-serif;
-  font-weight: 400;
-  font-size: 1.5rem;
-  margin-bottom: 1rem;
-}
-
 /* Layout containers */
 .container-intro {
   max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 1.25rem;
+  margin: 4rem auto 0rem;
+  padding: 1.25rem;
 }
 
 .container {
@@ -42,7 +35,6 @@ body {
 
 /* Content sections */
 .intro {
-  margin-bottom: 2rem;
   line-height: 1.8;
   font-size: 1rem;
   color: #333;
@@ -50,6 +42,14 @@ body {
 
 .section {
   margin-bottom: 2.5rem;
+}
+
+.section h2 {
+  margin-top: 4rem;
+}
+
+.section h3 {
+  margin-top: 2rem;
 }
 
 /* Text elements */
@@ -67,6 +67,7 @@ strong {
 ul {
   margin: 1rem 0;
   padding-left: 1.25rem;
+  list-style:disc;
 }
 
 
@@ -80,51 +81,53 @@ a {
 
 /* Responsive design */
 @media screen and (max-width: 1024px) {
+
   .container-intro,
   .container {
-      max-width: 90%;
+    max-width: 90%;
   }
 
   .baloo-2-bold {
-      font-size: 2rem;
+    font-size: 2rem;
   }
 }
 
 @media screen and (max-width: 768px) {
+
   .container-intro,
   .container {
-      max-width: 100%;
-      padding: 1rem;
+    max-width: 100%;
+    padding: 1rem;
   }
 
   .title-bar {
-      margin: 1.5rem auto 1rem;
-      padding: 1.5rem;
+    margin: 1.5rem auto 1rem;
+    padding: 1.5rem;
   }
 
   .baloo-2-bold {
-      font-size: 1.75rem;
+    font-size: 1.75rem;
   }
 
-  .baloo-2-regular {
-      font-size: 1.25rem;
+  .section h2 {
+    font-size: 1.25rem;
   }
 
   .intro {
-      font-size: 0.9rem;
+    font-size: 0.9rem;
   }
 }
 
 @media screen and (max-width: 480px) {
   .title-bar {
-      padding: 1rem;
+    padding: 1rem;
   }
 
   .baloo-2-bold {
-      font-size: 1.5rem;
+    font-size: 1.5rem;
   }
 
   .section {
-      margin-bottom: 2rem;
+    margin-bottom: 2rem;
   }
 }
