@@ -68,7 +68,7 @@ if (!empty($error_message)) {
                 <form action="" method="POST" class="formulaire-connexion">
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="login">Adresse mail test</label>
+                            <label for="login">Adresse mail</label>
                             <input type="email" id="login" name="login" class="input-field" value="<?= $old_login ?>" required>
                         </div>
                     </div>
