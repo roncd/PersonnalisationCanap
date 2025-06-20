@@ -270,7 +270,7 @@ function calculPrix($commande, &$composition = []) {
 
 <!-- ------------------- SECTION ARTICLES ASSOCIES ------------------- -->
 <section class="combination-section">
-  <h2 class="h2-center">Ces articles peuvent aussi vous intéresser</h2>
+  <h2>Ces articles peuvent aussi vous intéresser</h2>
   <div class="combination-container">
 
     <?php foreach ($produits as $produit): ?>
@@ -305,7 +305,7 @@ function calculPrix($commande, &$composition = []) {
 
 
 <section class="stats-section">
-  <h2>Ils nous font confiance</h2>
+  <h2 class="h2-center">Ils nous font confiance</h2>
   <ul class="stats-list">
     <li><strong>+500</strong> canapés personnalisés</li>
     <li><strong>4.8/5</strong> de satisfaction client</li>

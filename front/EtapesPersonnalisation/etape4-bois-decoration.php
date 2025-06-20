@@ -9,9 +9,11 @@ if (!isset($_SESSION['user_id'])) {
   header("Location: ../formulaire/Connexion.php");
   exit;
 }
+$selectedCouleurId = $_SESSION['id_couleur_bois'];
 
-// Récupérer les types de banquette depuis la base de données
-$stmt = $pdo->query("SELECT * FROM decoration");
+//Affiche seulement les deco lié à la couleur séléctionné 
+$stmt = $pdo->prepare("SELECT * FROM decoration WHERE id_couleur_bois = ?");
+$stmt->execute([$selectedCouleurId]);
 $decoration = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 // Vérifier si le formulaire a été soumis

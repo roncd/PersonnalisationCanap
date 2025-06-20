@@ -168,33 +168,36 @@ label {
     margin-bottom: 10px;
 
 }
+
 /* Wrapper en position relative */
 .input-section {
-  position: relative;
-  width: 100%;
+    position: relative;
+    width: 100%;
 }
 
 /* Le champ de saisie : on décale un peu le texte à droite */
 .input-section .input-field {
-  width: 100%;
-  padding-right: 40px;  /* suffisamment pour laisser la place de l'œil */
-  box-sizing: border-box;
+    width: 100%;
+    padding-right: 40px;
+    /* suffisamment pour laisser la place de l'œil */
+    box-sizing: border-box;
 }
 
 /* L’icône œil en position absolue */
 .input-section img {
-  position: absolute;
-  top: 50%;
-  right: 10px;
-  transform: translateY(-50%);
-  width: 24px;    /* ajuster selon la taille souhaitée */
-  height: 24px;
-  cursor: pointer;
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    width: 24px;
+    /* ajuster selon la taille souhaitée */
+    height: 24px;
+    cursor: pointer;
 }
 
 
 #eyeBtn {
-  cursor: pointer;
+    cursor: pointer;
 }
 
 /* ----------- RESPONSIVE DESIGN ----------- */
@@ -204,11 +207,13 @@ label {
         margin: 30px;
     }
 
-   .main-display img {
-         height: 500px;
+    .main-display img {
+        height: 500px;
         width: 100%;
-        object-fit: cover; /* Changed from contain to cover */
-        object-position: center; /* Added to ensure image is centered */
+        object-fit: cover;
+        /* Changed from contain to cover */
+        object-position: center;
+        /* Added to ensure image is centered */
     }
 
     h2 {
@@ -234,7 +239,7 @@ label {
     }
 
     .main-display img {
-        height: 400px;
+        display: none;
     }
 
     .form-row {
@@ -248,13 +253,12 @@ label {
     }
 
     .footer {
-        flex-direction: column;
-        gap: 15px;
+        display: flex;
     }
 
     .footer .buttons {
         width: 100%;
-        justify-content: center;
+        justify-content: flex-end;
     }
 
     .btn-retour,
