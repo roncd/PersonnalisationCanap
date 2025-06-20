@@ -180,6 +180,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
 
         <script>
+  const mdpInput = document.getElementById("mdp");
+  const checklist = document.querySelector(".password-requirements");
+
+  // Affiche la checklist au focus
+  mdpInput.addEventListener("focus", () => {
+    checklist.classList.add("show");
+  });
+
+  // Cache la checklist si on sort du champ ET qu’on ne clique pas dessus
+  mdpInput.addEventListener("blur", () => {
+    setTimeout(() => {
+      // Ne pas masquer si on clique dans la checklist
+      if (!document.activeElement.closest(".password-requirements")) {
+        checklist.classList.remove("show");
+      }
+    }, 100);
+  });
+</script>
+
+
+        <script>
   const passwordInput = document.getElementById("mdp");
 
   passwordInput.addEventListener("input", function () {
