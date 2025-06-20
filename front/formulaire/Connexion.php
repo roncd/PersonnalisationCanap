@@ -69,12 +69,13 @@ if (isset($_GET['message']) && $_GET['message'] == 'success') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&display=swap" rel="stylesheet">
+    <title>Connexion</title>
+    <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&family=Be+Vietnam+Pro&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../../styles/formulaire.css">
     <link rel="stylesheet" href="../../styles/buttons.css">
     <link rel="stylesheet" href="../../styles/message.css">
-    <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
-    <title>Connexion</title>
+    
 </head>
 
 <body>
