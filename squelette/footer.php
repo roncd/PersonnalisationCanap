@@ -54,9 +54,10 @@
           <li class="ft-nav-item"><a href="../pages/aide.php">Besoin d'aide ?</a></li>
           <li class="ft-nav-item"><a href="../pages/mentionslegales.php">Mentions Légales</a></li>
           <li class="ft-nav-item"><a href="../pages/politiquedeconfidentialite.php">Politique de Confidentialité</a></li>
-
+          <li class="ft-nav-item"><a href="../pages/faq.php">FAQ</a></li>
         </ol>
       </nav>
+
       
     </div>
   </div>
