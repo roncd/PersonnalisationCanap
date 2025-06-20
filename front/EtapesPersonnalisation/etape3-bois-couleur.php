@@ -10,6 +10,7 @@ if (!isset($_SESSION['user_id'])) {
   exit;
 }
 
+
 // Récupérer les types de bois depuis la base de données
 $stmt = $pdo->query("SELECT * FROM couleur_bois");
 $couleur_bois = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -34,6 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt->execute([$id_client, $id_couleur_bois]);
   }
 
+  $_SESSION['id_couleur_bois'] = $_POST['couleur_bois_id'];
   // Rediriger vers l'étape suivante
   header("Location: etape4-bois-decoration.php");
   exit;

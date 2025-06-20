@@ -120,7 +120,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['couleur_tissu_bois_id
         <div class="footer">
           <p>Total : <span>0 €</span></p>
           <div class="buttons">
-            <button onclick="retourEtapePrecedente()" class="btn-beige  ">Retour</button>
+            <button onclick="retourEtapePrecedente()" class="btn-beige">Retour</button>
             <form method="POST" action="">
               <input type="hidden" name="couleur_tissu_bois_id" id="selected-couleur_tissu_bois">
               <button type="submit" id="btn-suivant" class="btn-noir">Suivant</button>

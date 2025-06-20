@@ -352,6 +352,7 @@ label {
 
 .fil-ariane {
   display: flex;
+  flex-wrap: wrap;
   list-style: none;
   padding: 0;
   margin: 0;
@@ -448,21 +449,23 @@ label {
 
 /* ============ RESPONSIVE TABLETTE ============ */
 @media (max-width: 1024px) {
+  .comment-section {
+    display: none; 
+  }
   .container {
-    flex-direction: column;
+    flex-direction: column-reverse;    
     margin: 30px 20px;
     gap: 40px;
   }
 
   .right-column,
   .left-column {
-    justify-content: center;
+    justify-content: end;
     padding-right: 0;
   }
 
   .main-display img {
-    width: 100%;
-    height: auto;
+   display: none;
   }
 
   .main-display {
@@ -498,6 +501,9 @@ label {
     justify-content: flex-start;
     flex-wrap: wrap;
   }
+  .fil-ariane-container {
+    margin: 70px 10px 10px;
+  }
 }
 
 /* RESPONSIVE MOBILE */
@@ -520,8 +526,8 @@ label {
 
   .main-display img,
   .main-display-recap img {
-    max-width: 100%;
-    height: auto;
+    display: none;
+
   }
 
   .textarea-custom {
@@ -535,9 +541,7 @@ label {
     gap: 20px;
   }
 
-  .fil-ariane-container {
-    margin: 20px 10px;
-  }
+
 }
 
 /* TRÈS PETITS ÉCRANS  */
@@ -547,10 +551,11 @@ label {
   }
 
   h2 {
-    font-size: 20px;
+    font-size: 24px;
   }
 
   .container {
+    flex-direction: column-reverse;
     margin: 20px 10px;
     gap: 30px;
   }

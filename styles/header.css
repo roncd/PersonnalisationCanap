@@ -1,5 +1,6 @@
-
-*, *:before, *:after {
+*,
+*:before,
+*:after {
     box-sizing: inherit;
     box-sizing: border-box;
 
@@ -11,20 +12,24 @@
     box-sizing: border-box;
 }
 
-html, body {
+html,
+body {
     overflow-x: hidden;
 }
 
 h1 {
-    padding-top: 70px; /* ou la hauteur exacte de ton header */
+    padding-top: 70px;
+    /* ou la hauteur exacte de ton header */
 }
 
 .h2 {
-    padding-top: 70px; /* ou la hauteur exacte de ton header */
+    padding-top: 70px;
+    /* ou la hauteur exacte de ton header */
 }
 
 .h2-commande {
-    padding-top: 120px; /* ou la hauteur exacte de ton header */
+    padding-top: 120px;
+    /* ou la hauteur exacte de ton header */
 }
 
 /* Conteneur général */
@@ -33,7 +38,8 @@ h1 {
 header {
     width: 100%;
     display: flex;
-    justify-content: flex-end; /* Aligner tout à droite */
+    justify-content: flex-end;
+    /* Aligner tout à droite */
     align-items: center;
     padding: 20px 0;
     position: fixed;
@@ -46,13 +52,17 @@ header {
 .header-content {
     background-color: #997765;
     display: flex;
-    backdrop-filter: blur(4px); /* effet de flou */
-    -webkit-backdrop-filter: blur(4px); /* support Safari */
+    backdrop-filter: blur(4px);
+    /* effet de flou */
+    -webkit-backdrop-filter: blur(4px);
+    /* support Safari */
     justify-content: space-between;
     align-items: center;
     border-radius: 20px;
-    width: 94%; /* Augmente la largeur */
-    max-width: 2000px; /* Ajustement de la largeur maximale */
+    width: 94%;
+    /* Augmente la largeur */
+    max-width: 2000px;
+    /* Ajustement de la largeur maximale */
     margin: 0 auto;
     padding: 0 20px;
 }
@@ -61,7 +71,8 @@ header {
 .panier {
     display: flex;
     align-items: center;
-    margin-left: auto; /* Pousse le panier complètement à droite */
+    margin-left: auto;
+    /* Pousse le panier complètement à droite */
     padding-right: 30px;
 }
 
@@ -76,7 +87,8 @@ header {
 }
 
 .hamburger {
-    display: none; /* Bouton hamburger caché par défaut */
+    display: none;
+    /* Bouton hamburger caché par défaut */
     flex-direction: column;
     cursor: pointer;
 }
@@ -90,15 +102,18 @@ header {
 }
 
 .logo img {
-    height: 50px; /* Ajustement de la taille du logo */
+    height: 50px;
+    /* Ajustement de la taille du logo */
 }
+
 nav {
     flex-grow: 1;
     display: flex;
-    justify-content: center; /* Centre le menu */
+    justify-content: center;
+    /* Centre le menu */
 }
 
-nav ul {
+header nav ul {
     list-style: none;
     display: flex;
     gap: 20px;
@@ -106,18 +121,19 @@ nav ul {
     margin: 0;
 }
 
-nav ul li {
+header nav ul li {
     position: relative;
 }
 
-nav ul li a {
+header nav ul li a {
     color: white;
     text-decoration: none;
     font-weight: bold;
-    padding: 8px 24px; /* Taille fixe */
+    padding: 8px 24px;
+    /* Taille fixe */
     border-radius: 20px;
     font-family: "Baloo 2", sans-serif;
-    transition: 
+    transition:
         background-color 0.3s ease,
         color 0.3s ease,
         transform 0.3s ease,
@@ -126,8 +142,8 @@ nav ul li a {
     white-space: nowrap;
 }
 
-nav ul li a:hover,
-nav ul li a.active {
+header nav ul li a:hover,
+header nav ul li a.active {
     background-color: rgba(227, 209, 200, 0.9);
     color: black;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
@@ -140,12 +156,12 @@ nav ul li a.active {
     position: relative;
 }
 
-.dropdown > a {
+.dropdown>a {
     position: relative;
     padding-right: 25px;
 }
 
-.dropdown > a::after {
+.dropdown>a::after {
     content: "▾";
     position: absolute;
     right: 10px;
@@ -178,8 +194,10 @@ nav ul li a.active {
 
 /* Liens du dropdown */
 .dropdown-menu li {
-    width: 100%; /* Assure que chaque élément occupe toute la largeur */
+    width: 100%;
+    /* Assure que chaque élément occupe toute la largeur */
 }
+
 .dropdown-menu li a {
     display: block;
     width: 100%;
@@ -194,7 +212,7 @@ nav ul li a.active {
     background-color: rgba(227, 209, 200, 0.9);
     color: #000000;
     /* padding-left: 25px; <-- on enlève ça */
-    
+
     /* Pour décaler le texte sans changer la taille du conteneur : */
     transform: translateY(5px);
 }
@@ -244,7 +262,8 @@ nav ul li a.active {
 body.menu-open::before {
     content: '';
     position: fixed;
-    top: 0; left: 0;
+    top: 0;
+    left: 0;
     width: 100vw;
     height: 100vh;
     backdrop-filter: blur(4px);
@@ -257,13 +276,18 @@ body.menu-open::before {
 
 /* Responsive Design */
 @media screen and (max-width: 1024px) {
+    .h2 {
+        padding-top: 40px;
+    }
     .header-content {
-        justify-content: center; /* Centre le logo */
+        justify-content: center;
+        /* Centre le logo */
         position: relative;
     }
 
     .hamburger {
-        display: flex; /* Affichage du menu burger */
+        display: flex;
+        /* Affichage du menu burger */
         position: absolute;
         left: 10px;
         z-index: 1100;
@@ -272,45 +296,51 @@ body.menu-open::before {
     .panier {
         position: absolute;
         right: 10px;
-        z-index: 10000; /* plus que nav (9999) */
+        z-index: 10000;
+        /* plus que nav (9999) */
 
     }
 
     .logo {
-        z-index: 10000; /* plus que nav (9999) */
+        z-index: 10000;
+        /* plus que nav (9999) */
     }
 
-    nav {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100vh;
-    background-color: rgba(153, 119, 101, 0.7); /* moins opaque */
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 60px 20px;
-    z-index: 9999; /* au-dessus de tout */
-    overflow: hidden; /* important pour le pseudo-élément */
+    header nav {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100vh;
+        background-color: rgba(153, 119, 101, 0.7);
+        /* moins opaque */
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 60px 20px;
+        z-index: 9999;
+        /* au-dessus de tout */
+        overflow: hidden;
+        /* important pour le pseudo-élément */
     }
 
     /* Ajout de la classe active pour afficher la modal au clic */
-    nav.active {
+    header nav.active {
         display: flex;
         animation: fadeIn 0.3s ease;
     }
 
-nav ul {
-    flex-direction: column;
-    align-items: center; /* ✅ centre horizontalement */
-    justify-content: center;
-    width: 100%;
-    gap: 30px;
-}
+    header nav ul {
+        flex-direction: column;
+        align-items: center;
+        /* ✅ centre horizontalement */
+        justify-content: center;
+        width: 100%;
+        gap: 30px;
+    }
 
-    nav ul li {
+    header nav ul li {
         width: 90%;
         border-radius: 25px;
         justify-content: center;
@@ -321,34 +351,34 @@ nav ul {
         text-align: center;
     }
 
-    nav ul li a {
+    header nav ul li a {
         font-size: 18px;
         padding: 15px;
         color: black;
 
     }
 
-    nav ul li a:hover,
-    nav ul li a.active {
-    background-color: transparent;
-    color: black;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0);
-    transform: none;
-}
+    header nav ul li a:hover,
+    header nav ul li a.active {
+        background-color: transparent;
+        color: black;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0);
+        transform: none;
+    }
 
-nav ul.dropdown-menu li {
-    background-color: transparent !important;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0);
-}
+    header nav ul.dropdown-menu li {
+        background-color: transparent !important;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0);
+    }
 
-.dropdown-menu {
-    border-radius: 20px;
-}
+    .dropdown-menu {
+        border-radius: 20px;
+    }
 
-.dropdown-menu li a:hover {
-    background-color: transparent;
-    transform: none;
-}
+    .dropdown-menu li a:hover {
+        background-color: transparent;
+        transform: none;
+    }
 
 
     .hamburger {
@@ -356,7 +386,8 @@ nav ul.dropdown-menu li {
         order: 3;
         margin-left: 20px;
         cursor: pointer;
-        z-index: 10000; /* plus que nav (9999) */
+        z-index: 10000;
+        /* plus que nav (9999) */
 
     }
 
@@ -371,7 +402,8 @@ nav ul.dropdown-menu li {
         position: fixed;
         width: 100vw;
         height: 100vh;
-        overflow: hidden; /* Empêche tout défilement */
+        overflow: hidden;
+        /* Empêche tout défilement */
     }
 }
 
@@ -381,6 +413,7 @@ nav ul.dropdown-menu li {
         opacity: 0;
         transform: translateY(-10px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
@@ -401,31 +434,32 @@ nav ul.dropdown-menu li {
         width: 22px;
     }
 
-    nav ul li a {
+    header nav ul li a {
         font-size: 16px;
     }
 
-    
-.dropdown-menu li a {
-    display: block;
-    width: 100%;
-    padding: 12px 20px;
-    box-sizing: border-box;
-    text-align: center;
-    background-color: transparent;
-    color: #000;
-}
 
-    body.menu-open .header-content {
-    background-color: transparent;
-    backdrop-filter: none;
-    -webkit-backdrop-filter: none;
+    .dropdown-menu li a {
+        display: block;
+        width: 100%;
+        padding: 12px 20px;
+        box-sizing: border-box;
+        text-align: center;
+        background-color: transparent;
+        color: #000;
     }
 
-body.menu-open {
-    position: fixed;
-    width: 100vw;
-    height: 100vh;
-    overflow: hidden; /* Empêche tout défilement */
-}
+    body.menu-open .header-content {
+        background-color: transparent;
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+    }
+
+    body.menu-open {
+        position: fixed;
+        width: 100vw;
+        height: 100vh;
+        overflow: hidden;
+        /* Empêche tout défilement */
+    }
 }
