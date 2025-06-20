@@ -1,0 +1,119 @@
+/* ---- Structure globale ---- */
+body {
+  font-family: "Baloo 2", sans-serif;
+  background-color: #f9f9f9;
+  color: #333;
+  margin: 0;
+  padding: 0;
+}
+
+/* ---- Conteneur principal ---- */
+.faq-page-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 60px 20px;
+}
+
+/* ---- Titre de la page ---- */
+.faq-page-container h1 {
+  font-size: 32px;
+  text-align: center;
+  margin-bottom: 40px;
+  color: #222;
+}
+
+/* ---- Barre de recherche ---- */
+.faq-search {
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto 40px auto;
+  display: block;
+  padding: 12px 18px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.03);
+}
+
+/* ---- Accordéon global ---- */
+.accordeon-item {
+  background-color: #fff;
+  border-radius: 10px;
+  border: 1px solid #e0e0e0;
+  margin-bottom: 16px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+  overflow: hidden;
+}
+.accordeon-item:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+}
+
+/* ---- En-tête de chaque question ---- */
+.accordeon-header {
+  width: 100%;
+  padding: 20px;
+  font-size: 19px;
+  font-weight: 600;
+  background: none;
+  border: none;
+  text-align: left;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+}
+
+.accordeon-item.active {
+  border-left: 4px solid #a4745a;
+  padding-left: 16px;
+  transition: background 0.3s ease;
+}
+
+/* ---- Icône à droite ---- */
+.accordeon-icon {
+  font-size: 26px;
+  color: #a4745a;
+  transition: transform 0.3s ease;
+  font-weight: 700;
+}
+
+.accordeon-item.active .accordeon-icon {
+  transform: rotate(45deg); /* + devient × */
+}
+
+/* ---- Contenu caché par défaut ---- */
+.accordeon-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease;
+  will-change: max-height;
+}
+
+.accordeon-content p {
+  padding: 20px;
+  font-size: 15px;
+  color: #555;
+  line-height: 1.7;
+  margin: 0;
+}
+
+/* ---- Responsive ---- */
+@media (max-width: 600px) {
+  .faq-page-container h1 {
+    font-size: 26px;
+  }
+
+  .accordeon-header {
+    font-size: 16px;
+    padding: 16px;
+  }
+
+  .accordeon-icon {
+    font-size: 20px;
+  }
+
+  .accordeon-content p {
+    padding: 16px;
+    font-size: 14px;
+  }
+}
