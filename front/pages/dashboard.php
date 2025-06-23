@@ -139,8 +139,8 @@ function calculPrix($commande, &$composition = []) {
   <link rel="stylesheet" href="../../styles/processus.css">
   <link rel="stylesheet" href="../../styles/dashboard.css">
   <link rel="stylesheet" href="../../styles/popup.css">
+  <link rel="stylesheet" href="../../styles/accueil.css">
   <link rel="stylesheet" href="../../styles/buttons.css">
-  <link rel="stylesheet" href="../../styles/styles.css">
   <script type="module" src="../../script/popup.js"></script>
 
 </head>
@@ -203,10 +203,11 @@ function calculPrix($commande, &$composition = []) {
         </ul>
       </div>
       <div class="customize-image">
-        <!-- Blob de fond (SVG ou PNG) -->
-        <img class="blob" src="../../medias/blob.png" alt="forme décorative">
-        <!-- Image du canapé (taille réduite, devant le blob) -->
-        <img class="sofa" src="../../medias/sofa.png" alt="Canapé personnalisé">
+        <!-- Blob de fond (SVG ou PNG) 
+        <img class="blob" src="../../medias/blob.png" alt="forme décorative">-->
+        <!-- Image du canapé (taille réduite, devant le blob)
+        <img class="sofa" src="../../medias/sofa.png" alt="Canapé personnalisé"> -->
+        <img class="sofa" src="../../medias/sofablob.png" alt="Canapé personnalisé">
       </div>
     </section>
 

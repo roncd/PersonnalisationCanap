@@ -11,6 +11,7 @@ session_start();
     <title>Accueil</title>
     <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
     <link rel="stylesheet" href="../../styles/styles.css">
+    <link rel="stylesheet" href="../../styles/accueil.css">
     <link rel="stylesheet" href="../../styles/buttons.css">
     <script src="../../node_modules/@preline/carousel/index.js"></script>
 </head>
