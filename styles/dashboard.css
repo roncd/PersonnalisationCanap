@@ -518,20 +518,25 @@ h2 {
 /* ----------- CUSTOMIZE SECTION ----------- */
 @media (max-width: 992px) {
   .customize-section {
-    flex-direction: column;
+    flex-direction: row;
     align-items: center;
-    text-align: center;
-    padding: 2rem 1rem;
-    gap: 3rem;
+    text-align: left;
+    padding: 1rem 2rem;
+    gap: 2rem;
+    width: 100%;
+    margin-bottom: -6rem;
   }
 
   .customize-text {
+    flex: 1.5;              /* ✅ Donne + de place au texte */
     padding-top: 0;
-    padding-right: 0;
+    padding-right: 1rem;
   }
 
   .customize-text h2 {
+    font-size: 1.6rem;
     line-height: 1.3;
+    margin-bottom: -1.5rem;
   }
 
   .customize-features li {
@@ -540,14 +545,15 @@ h2 {
   }
 
   .customize-image {
-    width: 100%;
+    flex: 1;                /* ✅ Laisse moins de place à l'image */
     display: flex;
     justify-content: center;
+    align-items: center;
   }
 
   .customize-image .sofa {
-    width: 100%;
-    max-width: 550px; /* 🔼 Agrandi ici */
+    width: 125%;
+    max-width: 400px;      /* ✅ Moins large pour équilibrer */
     height: auto;
   }
 
