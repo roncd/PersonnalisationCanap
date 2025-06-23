@@ -142,6 +142,9 @@ function calculPrix($commande, &$composition = []) {
   <link rel="stylesheet" href="../../styles/accueil.css">
   <link rel="stylesheet" href="../../styles/buttons.css">
   <script type="module" src="../../script/popup.js"></script>
+  <script type="module" src="../../script/animate-value.js"></script>
+
+
 
 </head>
 
@@ -303,13 +306,12 @@ function calculPrix($commande, &$composition = []) {
   </button>
 </div>
 
-
 <section class="stats-section">
   <h2 class="h2-center">Ils nous font confiance</h2>
   <ul class="stats-list">
-    <li><strong>+500</strong> canapés personnalisés</li>
-    <li><strong>4.8/5</strong> de satisfaction client</li>
-    <li><strong>4j</strong> de délai moyen de fabrication</li>
+    <li><strong data-target="500" data-plus="true">0</strong> canapés personnalisés</li>
+    <li><strong data-target="4.8" data-decimal="true">0/5</strong> de satisfaction client</li>
+    <li><strong data-target="4">0j</strong> de délai moyen de fabrication</li>
   </ul>
 </section>
 
