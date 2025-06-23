@@ -2,9 +2,18 @@
 require '../../admin/config.php';
 session_start();
 
-$sql = "SELECT cp.*, tb.nom as type_nom 
+$sql = "SELECT cp.*, 
+               tb.nom AS type_nom, 
+               s.nom AS structure_nom
         FROM commande_prefait cp
-        LEFT JOIN type_banquette tb ON cp.id_banquette = tb.id";
+        LEFT JOIN type_banquette tb ON cp.id_banquette = tb.id
+        LEFT JOIN structure s ON cp.id_structure = s.id
+        ORDER BY cp.id DESC";
+
+$stmt = $pdo->prepare($sql);
+$stmt->execute();
+$commandes = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
 
 $stmt = $pdo->prepare($sql);
 $stmt->execute();
@@ -143,28 +152,39 @@ function calculPrix($commande, &$composition = [])
             <button class="filter-btn" data-category="tissu">Tissus</button>
 
         </div>
-        <div class="products-grid">
-            <?php foreach ($commandes as $commande): ?>
-                <?php
-                $composition = [];
-                $prixDynamique = calculPrix($commande, $composition); // OK maintenant
-                ?>
 
-                <div class="product-card" data-type="<?php echo htmlspecialchars($commande['type_nom'] ?? 'inconnu', ENT_QUOTES); ?>">
-                    <img
-                        src="../../admin/uploads/canape-prefait/<?php echo htmlspecialchars($commande['img'] ?? 'default.jpg', ENT_QUOTES); ?>"
-                        alt="<?php echo htmlspecialchars($commande['nom'] ?? 'Canapé préfait', ENT_QUOTES); ?>">
-                    <div class="product-info">
-                        <h3><?php echo htmlspecialchars($commande['nom'] ?? 'Nom non disponible', ENT_QUOTES); ?></h3>
-                        <p class="price"><?php echo number_format($prixDynamique, 2, ',', ' '); ?> €</p>
-                        <button class="btn-beige"
-                            onclick="window.location.href = '../CanapePrefait/canapPrefait.php?id=<?php echo (int)$commande['id']; ?>'">
-                            Personnaliser
-                        </button>
-                    </div>
-                </div>
-            <?php endforeach; ?>
+        
+<!-- ------------------- SECTION COMBINAISONS ------------------- -->
+<section class="combination-section">
+  <div class="combination-container">
+
+    <?php foreach ($commandes as $commande): ?>
+      <?php
+        $composition = []; 
+        $prixDynamique = calculPrix($commande, $composition);
+        $type = strtolower($commande['type_nom'] ?? 'inconnu');
+      ?>
+      <div class="product-card" data-type="<?= htmlspecialchars($type, ENT_QUOTES) ?>">
+        <div class="product-image">
+          <img
+            src="../../admin/uploads/canape-prefait/<?php echo htmlspecialchars($commande['img'] ?? 'default.jpg', ENT_QUOTES); ?>"
+            alt="<?php echo htmlspecialchars($commande['nom'] ?? 'Canapé préfait', ENT_QUOTES); ?>">
         </div>
+        <div class="product-content">
+          <h3><?= htmlspecialchars($commande['nom']) ?></h3>
+          <p class="description">Type : <?= htmlspecialchars($commande['type_nom']) ?></p>
+          <p class="description">Structure : <?= htmlspecialchars($commande['structure_nom'] ?? 'Non défini') ?></p>
+          <p class="price"><?= number_format($prixDynamique, 2, ',', ' ') ?> €</p>
+          <button class="btn-beige"
+            onclick="window.location.href = '../CanapePrefait/canapPrefait.php?id=<?= (int)$commande['id']; ?>'">
+            Personnaliser
+          </button>
+        </div>
+      </div>
+    <?php endforeach; ?>
+
+  </div> 
+</section>
 
 
     </main>
@@ -172,38 +192,32 @@ function calculPrix($commande, &$composition = [])
     <footer>
         <?php require '../../squelette/footer.php'; ?>
     </footer>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const filterButtons = document.querySelectorAll('.filter-btn');
+    const products = document.querySelectorAll('.product-card');
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const filterButtons = document.querySelectorAll('.filter-btn');
-            const products = document.querySelectorAll('.product-card');
+    filterButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        // Enlever la classe active
+        filterButtons.forEach(btn => btn.classList.remove('active'));
+        button.classList.add('active');
 
-            filterButtons.forEach(button => {
-                button.addEventListener('click', () => {
-                    // Enlever la classe active de tous les boutons
-                    filterButtons.forEach(btn => btn.classList.remove('active'));
-                    // Ajouter la classe active au bouton cliqué
-                    button.classList.add('active');
+        const category = button.getAttribute('data-category');
 
-                    const category = button.getAttribute('data-category');
-
-                    products.forEach(product => {
-                        if (category === 'all') {
-                            product.style.display = 'block';
-                        } else {
-                            // Récupère la data-type du produit
-                            const type = product.getAttribute('data-type').toLowerCase();
-                            if (type === category.toLowerCase()) {
-                                product.style.display = 'block';
-                            } else {
-                                product.style.display = 'none';
-                            }
-                        }
-                    });
-                });
-            });
+        products.forEach(product => {
+          const type = product.getAttribute('data-type').toLowerCase();
+          if (category === 'all' || type === category.toLowerCase()) {
+            product.style.display = 'block';
+          } else {
+            product.style.display = 'none';
+          }
         });
-    </script>
+      });
+    });
+  });
+</script>
+
 
 </body>
 
