@@ -2,12 +2,13 @@
 require '../../admin/config.php';
 session_start();
 
-// Requête pour récupérer tous les produits avec le nom de leur catégorie
 $sql = "
     SELECT vente_produit.*, categorie.nom AS nom_categorie 
     FROM vente_produit 
     JOIN categorie ON vente_produit.id_categorie = categorie.id
+    ORDER BY vente_produit.id DESC
 ";
+
 $stmt = $pdo->query($sql);
 $produits = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -110,25 +111,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['produit'])) {
             <?php endforeach; ?>
         </div>
 
-        <!-- Grille de produits -->
-        <div class="products-grid">
-            <?php foreach ($produits as $produit): ?>
-            <div class="product-card" data-category="<?= htmlspecialchars($produit['nom_categorie']) ?>">
-                <img src="<?= htmlspecialchars($produit['img']) ?>" alt="<?= htmlspecialchars($produit['nom']) ?>" />
-                <div class="product-info">
-                    <h3><?= htmlspecialchars($produit['nom']) ?></h3>
-                    <p class="price"><?= htmlspecialchars($produit['prix']) ?>€</p>
-                    <form method="POST" style="display:inline;">
-                        <input type="hidden" name="produit" value="<?= htmlspecialchars($produit['nom']) ?>" />
-                        <input type="hidden" name="quantite" value="1" />
-                        <button type="submit" class="btn-beige">
-                            Ajouter au panier
-                        </button>
-                    </form>
-                </div>
-            </div>
-            <?php endforeach; ?>
+        <!-- ------------------- SECTION ARTICLES ASSOCIES ------------------- -->
+<section class="combination-section">
+  <h2>Ces articles peuvent aussi vous intéresser</h2>
+  <div class="combination-container">
+    <?php foreach ($produits as $produit): ?>
+      <div class="product-card" data-category="<?= htmlspecialchars($produit['nom_categorie']) ?>">
+        <div class="product-image">
+          <img 
+            src="<?= htmlspecialchars($produit['img']) ?>" 
+            alt="<?= htmlspecialchars($produit['nom']) ?>" />
         </div>
+        <div class="product-content">
+          <h3><?= htmlspecialchars($produit['nom']) ?></h3>
+          <p class="description">Catégorie : <?= htmlspecialchars($produit['nom_categorie']) ?></p>
+          <p class="price"><?= number_format($produit['prix'], 2, ',', ' ') ?> €</p>
+          <form method="POST" style="display:inline;">
+            <input type="hidden" name="produit" value="<?= htmlspecialchars($produit['nom']) ?>" />
+            <input type="hidden" name="quantite" value="1" />
+            <button type="submit" class="btn-beige">Ajouter au panier</button>
+          </form>
+        </div>
+      </div>
+    <?php endforeach; ?>
+  </div>
+</section>
 
         <!-- Modal d'ajout au panier -->
         <div id="reservation-modal" class="modal" style="display:none;">
