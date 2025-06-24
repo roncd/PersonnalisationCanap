@@ -138,7 +138,7 @@ h2 {
 .combination-section {
   max-width: 1200px;
   margin: 4rem auto;
-  padding: 0 2rem;
+  padding: 0 2rem!important;
   font-family: 'Be Vietnam Pro', sans-serif;
 }
 .combination-section h2 {
@@ -452,7 +452,7 @@ h2 {
   
 }
 
-@media (min-width: 481px) and (max-width: 768px) {
+@media (min-width: 481px) and (max-width: 100px) {
   .avantages-card {
     flex-direction: row;
   }

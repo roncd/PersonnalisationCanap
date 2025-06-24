@@ -1,34 +1,55 @@
-/* ------------------- STYLES SECTION COMBINAISONS ------------------- */
-.combination-section-accueil {
-  width: 100%;
-  font-family: 'Be Vietnam Pro', sans-serif;
-  margin: 50px auto; /* centre avec marge automatique */
-  padding: 0 40px; /* un petit padding pour éviter que ça colle aux bords */
-}
-
-.combination-section-accueil h2 {
-  font-size: 2.5rem;
+h2 {
+  font-size: 2rem;
   color: #000000;
   margin-bottom: 2rem;
-  margin-top: 6rem;
   text-align: left;
   font-family: 'Baloo 2', sans-serif;
 }
 
-.combination-container-accueil {
+
+.h2-center {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #000;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+
+body {
+  font-family: 'Be Vietnam Pro', sans-serif;
+}
+
+/* ------------------- STYLES SECTION COMBINAISONS ------------------- */
+.combination-section {
+  width: 100%;
+  font-family: 'Be Vietnam Pro', sans-serif;
+  margin: 15px auto; /* centre avec marge automatique */
+  padding: 0 200px; /* un petit padding pour éviter que ça colle aux bords */
+}
+
+.combination-section h2 {
+  font-size: 2rem;
+  color: #000000;
+  margin-bottom: 2rem;
+  text-align: left;
+  font-family: 'Baloo 2', sans-serif;
+}
+
+.combination-container {
   flex-wrap: wrap;
   justify-content: center;
   max-width: 100%;
 }
 
-.combination-container-accueil {
+.combination-container {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 2rem;
 }
 
 
-.product-card-accueil {
+.product-card {
   width: 100%;
   background: #fff;
   border-radius: 8px;
@@ -39,29 +60,29 @@
 }
 
 
-.product-image-accueil img {
+.product-image img {
   width: 100%;
   height: 200px;
   object-fit: cover;
   display: block;
 }
 
-.product-content-accueil {
+.product-content {
   padding: 1rem;
 }
 
-.product-card-accueil h3 {
+.product-card h3 {
   font-size: 1.125rem;
   margin: 0.5rem 0 0.25rem;
   color: #000000;
 }
-.product-card-accueil p {
+.product-card p {
   font-size: 0.8rem;
   color: #666;
   margin-bottom: 0.5rem;
 }
 
-.price-accueil {
+.price {
     font-weight: bold; 
     color: #997765 !important;
     font-size: 1.1rem!important;
@@ -70,17 +91,484 @@
     margin-bottom: 0.25rem;
 }
 
-.carousel-container-accueil {
-  display: flex;
-  gap: 1.5rem;
-  overflow-x: auto;
-  padding-bottom: 1rem;
-  scroll-snap-type: x mandatory;
-  -webkit-overflow-scrolling: touch;
+.btn-fullwidth {
+  width: 100%;
+  display: block;
+  text-align: center;
+  box-sizing: border-box;
+  margin-top: 1rem; /* optionnel */
 }
 
-.carousel-container-accueil .product-card-accueil {
-  min-width: 300px;
-  flex: 0 0 auto;
+.carousel-container {
+  display: flex;
+  gap: 1.5rem;
+  overflow-x: scroll; /* permet le scroll manuel */
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: 1rem;
+  position: relative;
+  scrollbar-width: none;
+  scroll-behavior: smooth; /* défilement fluide */
+}
+
+.carousel-container::-webkit-scrollbar {
+  display: none;
+}
+
+.carousel-container .product-card {
+  flex: 0 0 calc((100% - 3rem) / 3);
   scroll-snap-align: start;
 }
+
+/* ✅ Tablette (max-width: 991px) → 2 colonnes */
+@media (max-width: 991px) {
+  .carousel-container .product-card {
+    flex: 0 0 calc((100% - 1.5rem) / 2);
+  }
+}
+
+/* ✅ Mobile (max-width: 600px) → 1 colonne */
+@media (max-width: 600px) {
+  .carousel-container .product-card {
+    flex: 0 0 100%;
+  }
+}
+
+/* Tablette */
+@media (max-width: 1024px) {
+  .combination-section h2 {
+    font-size: 1.6rem;
+  }
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+  .combination-section h2 {
+    font-size: 1.4rem;
+  }
+}
+
+.banner-artisanal {
+  overflow: hidden;
+  background-color: #997765; /* couleur douce */
+  padding: 0.5rem 0;
+}
+
+.banner-track {
+  display: inline-block;
+  white-space: nowrap;
+  animation: scroll-left 20s linear infinite;
+  font-family: 'Baloo 2', sans-serif;
+  /*font-family: 'Be Vietnam Pro', sans-serif;*/
+  font-size: 1rem;
+  color: #ffffff;
+}
+
+@keyframes scroll-left {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+
+
+/* --------------- AVANTAGES CARD --------------- */
+.avantages-card {
+  background-color: rgba(227, 209, 200, 0.9);
+  border-radius: 20px;
+  margin: 4rem auto;
+  max-width: 1145px;
+  width: 87%;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  position: relative;
+  overflow: hidden;
+}
+
+.avantages-text {
+  flex: 1 1 60%;
+  padding: 2rem; /* padding déplacé ici */
+  padding-right: 3rem; /* tu peux ajuster pour plus d'espace à droite */
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.avantages-text h2 {
+  font-size: 1.8rem;
+  margin-bottom: 1.5rem;
+  color: #000000;
+}
+
+.avantages-text ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.avantages-text li {
+  position: relative;
+  padding-left: 2rem;
+  margin-bottom: 1rem;
+  font-size: 1.1rem;
+  color: #000000;
+}
+
+.avantages-text li::before {
+  content: "✅";
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+.avantages-img {
+  flex: 0 0 520px;        /* largeur fixe pour l’image */
+  height: auto;
+  position: relative;
+}
+
+.avantages-img img {
+  height: 100%;           /* image prend toute la hauteur du container parent */
+  width: 100%;            /* prend toute la largeur du conteneur image */
+  border-radius:  100px 0 0 100px; /* arrondi uniquement côté gauche */
+  object-fit: cover;      /* bien remplir le cadre sans déformation */
+  display: block;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.686);
+}
+
+.histoire-img {
+  flex: 0 0 520px;        /* largeur fixe pour l’image */
+  height: auto;
+  position: relative;
+}
+
+.histoire-img img {
+  height: 100%;           /* image prend toute la hauteur du container parent */
+  width: 100%;            /* prend toute la largeur du conteneur image */
+  border-radius: 0 218px 0 0; /* arrondi uniquement côté gauche */
+  object-fit: cover;      /* bien remplir le cadre sans déformation */
+  display: block;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.686);
+
+  
+}
+
+.histoire-btn {
+  width: 220px; /* Modifie cette valeur comme tu veux */
+  display: inline-block;
+  text-align: center;
+  white-space: nowrap;
+}
+
+
+.histoire-description,
+.histoire-mission {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+  color: #000000;
+}
+
+
+/* ----------- AVANTAGES SECTION ----------- */
+@media (max-width: 480px) {
+  .avantages-card {
+    flex-direction: column;
+  }
+
+  .avantages-img {
+    display: none;
+  }
+
+  .avantages-text {
+    flex: 1 1 auto;
+    padding: 1rem;
+  }
+
+  .avantages-text h2 {
+    font-size: 1.4rem;
+  }
+
+  .avantages-text li {
+    font-size: 0.95rem;
+  }
+
+  
+.h2-center {
+  text-align: center;
+}
+
+  
+}
+
+@media (min-width: 481px) and (max-width: 1000px) {
+  .avantages-card {
+    flex-direction: row;
+  }
+
+  .avantages-text {
+    flex: 1 1 auto;
+    padding: 1.5rem;
+  }
+
+  .avantages-img {
+    flex: 0 0 120px;
+    display: block;
+  }
+
+  .avantages-img img {
+    height: 100%;
+    width: 100%;
+    border-radius: 0 20px 20px 0;
+    object-fit: cover;
+  }
+
+  .avantages-text h2 {
+    font-size: 1.6rem;
+  }
+
+  .avantages-text li {
+    font-size: 1rem;
+  }
+
+  .h2-center {
+  text-align: center;
+}
+
+}
+
+
+
+/* --------------- SECTION STAT --------------- */
+.stats-section {
+  background-color: rgba(227, 209, 200, 0.9);
+  padding: 4rem 2rem;
+  text-align: center;
+  margin: 4rem auto;
+  max-width: 1145px;
+  width: 87%;
+  border-radius: 20px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.stats-section h2 {
+  font-size: 2rem;
+  margin-bottom: 2rem;
+  color: #000000;
+}
+
+.stats-list {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 2rem;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.stats-list li {
+  font-size: 1.2rem;
+  color: #000000;
+}
+
+.stats-list strong {
+  display: block;
+  font-size: 2rem;
+  color: #997765 !important;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+
+
+/* ----------- STATS SECTION ----------- */
+@media (max-width: 480px) {
+  .stats-section {
+    padding: 2rem 1rem;
+    margin: 2rem auto;
+  }
+
+  .stats-section h2 {
+    font-size: 1.4rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .stats-list {
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .stats-list li {
+    font-size: 1rem;
+  }
+
+  .stats-list strong {
+    font-size: 1.5rem;
+  }
+}
+
+@media (min-width: 481px) and (max-width: 768px) {
+  .stats-section {
+    padding: 3rem 1.5rem;
+    margin: 3rem auto;
+  }
+
+  .stats-section h2 {
+    font-size: 2rem;
+    margin-bottom: 1.8rem;
+  }
+
+  .stats-list {
+    flex-direction: row;
+    justify-content: center;
+    gap: 1.5rem;
+  }
+
+  .stats-list li {
+    font-size: 1.1rem;
+  }
+
+  .stats-list strong {
+    font-size: 1.8rem;
+  }
+}
+
+.devis-section {
+  padding: 40px 20px;
+}
+
+
+/* Section Devis */
+.devis-section {
+  padding: 4rem 0;
+}
+
+.devis-container {
+  margin: 0;
+  text-align: center;
+  border: 4px solid #E3D1C8;
+  background-color: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(8px);
+  padding: 2rem;
+  width: 100%;
+}
+
+.devis-title {
+  font-family: 'Baloo 2', sans-serif;
+  font-weight: 700;
+  margin: 1rem 0 2rem;
+  line-height: 1.25;
+  text-align: center;
+  font-size: 3rem;
+}
+
+.devis-description {
+  font-size: 1.125rem;
+  margin-bottom: 2rem;
+  line-height: 1.75;
+}
+
+
+@media (max-width: 480px) {
+  .devis-title { font-size: 2rem; }
+  .devis-description { font-size: 1rem; padding: 0 1rem; }
+  .devis-container button { padding: 0.6rem 1.2rem; font-size: 0.9rem; }
+}
+
+
+
+
+.faq-contact {
+  padding: 40px 30px;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  background-color: #fff;
+  text-align: center;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.04);
+
+
+  margin: 4rem auto;
+  max-width: 1145px;
+  width: 87%;
+ 
+}
+
+.faq-contact-icon {
+  font-size: 40px;
+  margin-bottom: 15px;
+  display: inline-block;
+  line-height: 1;
+}
+
+.process-section {
+  padding: 3rem 1.5rem;
+  background-color: #ffffff;
+  text-align: center;
+}
+
+.process-section h2 {
+  font-size: 2rem;
+  margin-bottom: 2rem;
+}
+
+.process-cards {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2rem;
+}
+
+.process-card {
+  background: #E3D1C8;
+  border-radius: 1rem;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  padding: 2rem 1.5rem;
+  max-width: 250px;
+  flex: 1 1 200px;
+  text-align: center;
+  transition: transform 0.2s ease;
+}
+
+.process-card:hover {
+  transform: translateY(-5px);
+}
+
+/* Icône Font Awesome */
+.process-card i {
+  font-size: 2.5rem;
+  color: #8C6E63; /* Une teinte brune pour aller avec le fond beige */
+  margin-bottom: 1rem;
+}
+
+.process-card h3 {
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+  color: #8C6E63;
+}
+
+.process-card p {
+  font-size: 0.95rem;
+  color: #000000;
+}
+
+/* Responsive mobile : 1 colonne */
+@media screen and (max-width: 768px) {
+  .process-cards {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .process-card {
+    width: 90%;
+    max-width: 100%;
+  }
+}
+
+
