@@ -83,11 +83,23 @@ body {
 }
 
 /* Hero Responsive */
-@media (max-width: 768px) {
-  .hero-title { font-size: 2.25rem; }
-  .hero-description { font-size: 1.1rem; padding: 0 1rem; }
+@media (min-width: 825px) and (max-width: 1500px) {
+  .hero-section { height: 60vh; }
+  .hero-title { font-size: 2.80rem; }
+  .hero-description { font-size: 1.2rem; padding: 0 1rem; }
   .hero-content { width: 90%; padding: 1.5rem; }
 }
+
+
+/* Hero Responsive */
+@media (min-width: 481px) and (max-width: 824px) {
+  .hero-section { height: 60vh; }
+  .hero-title { font-size: 2.25rem; }
+  .hero-description { font-size: 1rem; padding: 0 1rem; }
+  .hero-content { width: 90%; padding: 1.5rem; }
+}
+
+
 @media (max-width: 480px) {
   .hero-section { height: 90vh; }
   .hero-title { font-size: 1.75rem; }
