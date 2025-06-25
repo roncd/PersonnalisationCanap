@@ -1,6 +1,7 @@
 <?php
 require '../../admin/config.php';
 session_start();
+require '../../admin/include/session_expiration.php';
 
 $sql = "
     SELECT vente_produit.*, categorie.nom AS nom_categorie 
@@ -17,51 +18,71 @@ $sql = "SELECT * FROM categorie";
 $stmt = $pdo->query($sql);
 $categories = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-// Calcul du total du panier
-$total = 0;
-if (!empty($_SESSION['panier'])) {
-    foreach ($_SESSION['panier'] as $item) {
-        $total += $item['prix'] * $item['quantite'];
-    }
-}
-
 // Gestion de l'ajout au panier
 $produitAjoute = null; // Variable pour savoir quel produit a été ajouté
 
+
+if (isset($_GET['post_restore']) && isset($_SESSION['temp_post'])) {
+    $_POST = $_SESSION['temp_post'];
+    unset($_SESSION['temp_post']);
+    $_SERVER['REQUEST_METHOD'] = 'POST';
+}
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['produit'])) {
-    $nomProduit = $_POST['produit'];
-    $quantite = isset($_POST['quantite']) ? intval($_POST['quantite']) : 1;
+    if (!isset($_SESSION['user_id'])) {
+        $_SESSION['pending_add_to_cart'] = $_POST;
+        header('Location: ../formulaire/Connexion.php');
+        exit;
+    }
 
-    foreach ($produits as $produit) {
-        if ($produit['nom'] === $nomProduit) {
-            $id = $produit['id'];
-            $prix = $produit['prix'];
+    if (isset($_SESSION['user_id'])) {
+        $id_client = $_SESSION['user_id'];
 
-            if (!isset($_SESSION['panier'])) {
-                $_SESSION['panier'] = [];
-            }
+        $nomProduit = $_POST['produit'];
+        $quantite = intval($_POST['quantite'] ?? 1);
+        // Récupérer l'ID et le prix du produit via son nom
+        $stmt = $pdo->prepare("SELECT id, prix FROM vente_produit WHERE nom = ?");
+        $stmt->execute([$nomProduit]);
+        $produit = $stmt->fetch();
 
-            $trouve = false;
-            foreach ($_SESSION['panier'] as &$item) {
-                if ($item['id'] === $id) {
-                    $item['quantite'] += $quantite;
-                    $trouve = true;
-                    break;
-                }
-            }
-
-            if (!$trouve) {
-                $_SESSION['panier'][] = [
-                    'id' => $id,
-                    'nom' => $nomProduit,
-                    'prix' => $prix,
-                    'quantite' => $quantite
-                ];
-            }
-
-            $produitAjoute = $nomProduit; // Indique le nom du produit ajouté
-            break;
+        if (!$produit) {
+            // Sécurité : produit introuvable (mauvaise saisie ?)
+            die("Produit introuvable.");
         }
+
+        $id = $produit['id'];
+        $prix = $produit['prix'];
+
+        // Vérifie s'il y a déjà un panier pour ce client
+        $stmt = $pdo->prepare("SELECT id FROM panier WHERE id_client = ?");
+        $stmt->execute([$id_client]);
+        $panier = $stmt->fetch();
+
+        if (!$panier) {
+            // Créer un nouveau panier
+            $stmt = $pdo->prepare("INSERT INTO panier (id_client, prix) VALUES (?, ?)");
+            $stmt->execute([$id_client, 0]);
+            $panier_id = $pdo->lastInsertId();
+        } else {
+            $panier_id = $panier['id'];
+        }
+
+        // Vérifie si le produit est déjà dans le panier
+        $stmt = $pdo->prepare("SELECT * FROM panier_detail WHERE id_panier = ? AND id_produit = ?");
+        $stmt->execute([$panier_id, $id]);
+        $produit_existe = $stmt->fetch();
+
+        if ($produit_existe) {
+            $stmt = $pdo->prepare("UPDATE panier_detail SET quantite = quantite + ? WHERE id_panier = ? AND id_produit = ?");
+            $stmt->execute([$quantite, $panier_id, $id]);
+        } else {
+            $stmt = $pdo->prepare("INSERT INTO panier_detail (id_panier, id_produit, quantite) VALUES (?, ?, ?)");
+            $stmt->execute([$panier_id, $id, $quantite]);
+        }
+
+        // Mettre à jour le prix total dans la table panier
+        $stmt = $pdo->prepare("UPDATE panier SET prix = prix + ? WHERE id = ?");
+        $stmt->execute([$prix * $quantite, $panier_id]);
+        $produitAjoute = $nomProduit;
     }
 }
 ?>
@@ -105,9 +126,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['produit'])) {
         <div class="filters">
             <button class="filter-btn active" data-category="all">Tous</button>
             <?php foreach ($categories as $cat): ?>
-            <button class="filter-btn" data-category="<?= htmlspecialchars(strtolower($cat['nom'])) ?>">
-                <?= htmlspecialchars($cat['nom']) ?>
-            </button>
+                <button class="filter-btn" data-category="<?= htmlspecialchars(strtolower($cat['nom'])) ?>">
+                    <?= htmlspecialchars($cat['nom']) ?>
+                </button>
             <?php endforeach; ?>
         </div>
 
@@ -118,28 +139,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['produit'])) {
 
         <!-- ------------------- SECTION ARTICLES ASSOCIES ------------------- -->
         <section class="combination-section">
-          <h2>Ces articles peuvent aussi vous intéresser</h2>
-          <div class="combination-container">
-            <?php foreach ($produits as $produit): ?>
-              <div class="product-card" data-category="<?= htmlspecialchars($produit['nom_categorie']) ?>">
-                <div class="product-image">
-                  <img 
-                    src="<?= htmlspecialchars($produit['img']) ?>" 
-                    alt="<?= htmlspecialchars($produit['nom']) ?>" />
-                </div>
-                <div class="product-content">
-                  <h3><?= htmlspecialchars($produit['nom']) ?></h3>
-                  <p class="description">Catégorie : <?= htmlspecialchars($produit['nom_categorie']) ?></p>
-                  <p class="price"><?= number_format($produit['prix'], 2, ',', ' ') ?> €</p>
-                  <form method="POST" style="display:inline;">
-                    <input type="hidden" name="produit" value="<?= htmlspecialchars($produit['nom']) ?>" />
-                    <input type="hidden" name="quantite" value="1" />
-                    <button type="submit" class="btn-beige">Ajouter au panier</button>
-                  </form>
-                </div>
-              </div>
-            <?php endforeach; ?>
-          </div>
+            <h2>Ces articles peuvent aussi vous intéresser</h2>
+            <div class="combination-container">
+                <?php foreach ($produits as $produit): ?>
+                    <div class="product-card" data-category="<?= htmlspecialchars($produit['nom_categorie']) ?>">
+                        <div class="product-image">
+                            <img
+                                src="<?= htmlspecialchars($produit['img']) ?>"
+                                alt="<?= htmlspecialchars($produit['nom']) ?>" />
+                        </div>
+                        <div class="product-content">
+                            <h3><?= htmlspecialchars($produit['nom']) ?></h3>
+                            <p class="description">Catégorie : <?= htmlspecialchars($produit['nom_categorie']) ?></p>
+                            <p class="price"><?= number_format($produit['prix'], 2, ',', ' ') ?> €</p>
+                            <form method="POST" style="display:inline;">
+                                <input type="hidden" name="produit" value="<?= htmlspecialchars($produit['nom']) ?>" />
+                                <input type="hidden" name="quantite" value="1" />
+                                <button type="submit" class="btn-beige">Ajouter au panier</button>
+                            </form>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
+            </div>
         </section>
 
         <!-- Modal d'ajout au panier -->
@@ -169,7 +190,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['produit'])) {
     </footer>
 
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
+        document.addEventListener("DOMContentLoaded", function() {
             const filterButtons = document.querySelectorAll(".filter-btn");
             const productCards = document.querySelectorAll(".product-card");
 
@@ -223,11 +244,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['produit'])) {
     </script>
 
     <?php if ($produitAjoute): ?>
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            openReservationModal("<?= addslashes($produitAjoute) ?>");
-        });
-    </script>
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                openReservationModal("<?= addslashes($produitAjoute) ?>");
+            });
+        </script>
     <?php endif; ?>
 
     <script>
