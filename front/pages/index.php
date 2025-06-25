@@ -11,6 +11,7 @@ session_start();
     <title>Accueil</title>
     <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
     <link rel="stylesheet" href="../../styles/styles.css">
+    <link rel="stylesheet" href="../../styles/accueil.css">
     <link rel="stylesheet" href="../../styles/buttons.css">
     <script src="../../node_modules/@preline/carousel/index.js"></script>
 </head>
@@ -46,9 +47,7 @@ session_start();
         <!-- Section "Inspirez-vous de nos modèles" -->
         <div class="sections-wrapper">
             <div class="container pt-10 md:pt-24 mx-auto text-center">
-                <h1 class="baloo-2-bold my-4 text-3xl md:text-5xl leading-tight mb-8">
-                    Inspirez-vous de nos salons marocains
-                </h1>
+                <h1 class="title"> Inspirez-vous de nos salons marocains </h1>
             </div>
 
             <!-- Slider -->
@@ -133,13 +132,13 @@ session_start();
                             <button type="button"
                                 class="hs-carousel-prev hs-carousel-disabled:opacity-70 absolute start-0 top-[140px] bottom-[100px] inline-flex justify-center items-center w-[46px]">
                                 <span class="text-2xl">‹</span>
-                                <span class="sr-only">Previous</span>
+                                <span class="sr-only"></span>
                             </button>
 
                             <button type="button"
                                 class="hs-carousel-next hs-carousel-disabled:opacity-70 absolute end-0 top-[140px] bottom-[100px] inline-flex justify-center items-center w-[46px]">
                                 <span class="text-2xl">›</span>
-                                <span class="sr-only">Next</span>
+                                <span class="sr-only"></span>
                             </button>
 
                         </div>
@@ -167,7 +166,7 @@ session_start();
                                 chaleureux,
                                 en alliant confort, élégance et culture.
                             </p>
-                            <a href="apropos.php" class="about-button">
+                            <a href="apropos.php" class="btn-beige">
                                 En savoir plus
                             </a>
                         </div>

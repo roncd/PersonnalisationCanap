@@ -18,17 +18,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = $_POST['adresse'];
     $password = $_POST['motdepasse'];
 
-    // Ligne de débogage
-    echo 'Email : ' . htmlspecialchars($email) . '<br>';
-    echo 'Mot de passe : ' . htmlspecialchars($password) . '<br>';
-
     $stmt = $pdo->prepare("SELECT * FROM client WHERE mail = :mail");
     $stmt->execute(['mail' => $email]);
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if ($user) {
-        // Ligne de débogage
-        echo 'Hash stocké : ' . htmlspecialchars($user['mdp']) . '<br>';
+
 
         if (password_verify($password, $user['mdp'])) {
             $_SESSION['user_id'] = $user['id'];
@@ -42,14 +37,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
             exit;
         } else {
-            echo 'La vérification du mot de passe a échoué.<br>';
-            header("Location: Connexion.php?erreur=1");
-            exit;
+  $message = '<p class="error">Mot de passe incorrect.</p>';
         }
     } else {
-        echo 'Utilisateur non trouvé.<br>';
-        header("Location: Connexion.php?erreur=1");
-        exit;
+   $message = '<p class="error">Utilisateur non trouvé.</p>';
     }
 }
 
@@ -94,7 +85,9 @@ if (isset($_GET['message']) && $_GET['message'] == 'success') {
                     <div class="form-row">
                         <div class="form-group">
                             <label for="adresse">Adresse mail</label>
-                            <input type="email" id="adresse" name="adresse" class="input-field" required>
+                            <input type="email" id="adresse" name="adresse" class="input-field" required 
+                            value="<?php echo isset($_POST['adresse']) ? htmlspecialchars($_POST['adresse']) : ''; ?>">
+
                         </div>
                     </div>
 

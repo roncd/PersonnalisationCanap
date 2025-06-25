@@ -11,6 +11,16 @@ body {
   font-family: 'Be Vietnam Pro', sans-serif;
 }
 
+.title {
+    font-family: 'Baloo 2', cursive; 
+    margin-top: 1rem;     
+    margin-bottom: 2rem;  
+    font-size: 2rem;  
+    line-height: 1.25;    
+    text-align: center;   
+    font-weight: bold;    
+}
+
 /* Hero Section */
 .hero-section {
   position: relative;
@@ -100,7 +110,6 @@ body {
   padding: 40px 20px;
 }
 
-/* Wrapper de section */
 /* Section "Inspirez-vous de nos modèles" */
 /* Section Wrapper */
 .sections-wrapper {
@@ -240,7 +249,11 @@ body {
 
 /* Responsive Adjustments */
 @media (max-width: 768px) {
-  .hs-carousel {
+     .title {
+        font-size: 1.5rem;
+    }
+
+.hs-carousel {
       padding: 15px 0;
   }
 
