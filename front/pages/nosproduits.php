@@ -111,31 +111,36 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['produit'])) {
             <?php endforeach; ?>
         </div>
 
+        <!-- ------------------- BARRE DE RECHERCHE ------------------- -->
+        <div class="search-bar" style="text-align:center; margin: 20px;">
+          <input type="text" id="searchInput" placeholder="Rechercher un produit par nom par catégorie..." style="padding: 10px; width: 300px;">
+        </div>
+
         <!-- ------------------- SECTION ARTICLES ASSOCIES ------------------- -->
-<section class="combination-section">
-  <h2>Ces articles peuvent aussi vous intéresser</h2>
-  <div class="combination-container">
-    <?php foreach ($produits as $produit): ?>
-      <div class="product-card" data-category="<?= htmlspecialchars($produit['nom_categorie']) ?>">
-        <div class="product-image">
-          <img 
-            src="<?= htmlspecialchars($produit['img']) ?>" 
-            alt="<?= htmlspecialchars($produit['nom']) ?>" />
-        </div>
-        <div class="product-content">
-          <h3><?= htmlspecialchars($produit['nom']) ?></h3>
-          <p class="description">Catégorie : <?= htmlspecialchars($produit['nom_categorie']) ?></p>
-          <p class="price"><?= number_format($produit['prix'], 2, ',', ' ') ?> €</p>
-          <form method="POST" style="display:inline;">
-            <input type="hidden" name="produit" value="<?= htmlspecialchars($produit['nom']) ?>" />
-            <input type="hidden" name="quantite" value="1" />
-            <button type="submit" class="btn-beige">Ajouter au panier</button>
-          </form>
-        </div>
-      </div>
-    <?php endforeach; ?>
-  </div>
-</section>
+        <section class="combination-section">
+          <h2>Ces articles peuvent aussi vous intéresser</h2>
+          <div class="combination-container">
+            <?php foreach ($produits as $produit): ?>
+              <div class="product-card" data-category="<?= htmlspecialchars($produit['nom_categorie']) ?>">
+                <div class="product-image">
+                  <img 
+                    src="<?= htmlspecialchars($produit['img']) ?>" 
+                    alt="<?= htmlspecialchars($produit['nom']) ?>" />
+                </div>
+                <div class="product-content">
+                  <h3><?= htmlspecialchars($produit['nom']) ?></h3>
+                  <p class="description">Catégorie : <?= htmlspecialchars($produit['nom_categorie']) ?></p>
+                  <p class="price"><?= number_format($produit['prix'], 2, ',', ' ') ?> €</p>
+                  <form method="POST" style="display:inline;">
+                    <input type="hidden" name="produit" value="<?= htmlspecialchars($produit['nom']) ?>" />
+                    <input type="hidden" name="quantite" value="1" />
+                    <button type="submit" class="btn-beige">Ajouter au panier</button>
+                  </form>
+                </div>
+              </div>
+            <?php endforeach; ?>
+          </div>
+        </section>
 
         <!-- Modal d'ajout au panier -->
         <div id="reservation-modal" class="modal" style="display:none;">
@@ -224,6 +229,34 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['produit'])) {
         });
     </script>
     <?php endif; ?>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        const searchInput = document.getElementById('searchInput');
+        const products = document.querySelectorAll('.product-card');
+
+        searchInput.addEventListener('input', function () {
+          const searchTerm = this.value.toLowerCase();
+
+          products.forEach(product => {
+            const productName = product.querySelector('h3').textContent.toLowerCase();
+
+            // On récupère le texte de la catégorie et on enlève "Catégorie : " avant la recherche
+            const productCategoryElement = product.querySelector('.description');
+            const productCategory = productCategoryElement 
+              ? productCategoryElement.textContent.toLowerCase().replace('catégorie : ', '').trim() 
+              : '';
+
+            if (productName.includes(searchTerm) || productCategory.includes(searchTerm)) {
+              product.style.display = 'block';
+            } else {
+              product.style.display = 'none';
+            }
+          });
+        });
+      });
+    </script>
+
 </body>
 
 </html>
