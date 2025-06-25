@@ -275,7 +275,7 @@ body.menu-open::before {
 
 
 /* Responsive Design */
-@media screen and (max-width: 1024px) {
+@media screen and (max-width: 1125px) {
     .h2 {
         padding-top: 40px;
     }
