@@ -24,8 +24,10 @@ body {
 .combination-section {
   width: 100%;
   font-family: 'Be Vietnam Pro', sans-serif;
-  margin: 15px auto; /* centre avec marge automatique */
-  padding: 0 200px; /* un petit padding pour éviter que ça colle aux bords */
+
+    margin: 4rem auto;
+  max-width: 1145px;
+  width: 87%;
 }
 
 .combination-section h2 {
@@ -40,7 +42,11 @@ body {
   flex-wrap: wrap;
   justify-content: center;
   max-width: 100%;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
 }
+
 
 .combination-container {
   display: grid;
@@ -120,33 +126,34 @@ body {
   scroll-snap-align: start;
 }
 
-/* ✅ Tablette (max-width: 991px) → 2 colonnes */
-@media (max-width: 991px) {
+
+
+/* ✅ Tablette : 2 produits visibles */
+@media (min-width: 481px) and (max-width: 1000px) {
   .carousel-container .product-card {
-    flex: 0 0 calc((100% - 1.5rem) / 2);
+    flex: 0 0 min(300px, 90%);
+  }
+
+  .combination-section h2 {
+    font-size: 1.6rem;
   }
 }
 
-/* ✅ Mobile (max-width: 600px) → 1 colonne */
+/* ✅ Mobile : 1 produit visible */
 @media (max-width: 600px) {
   .carousel-container .product-card {
     flex: 0 0 100%;
   }
 }
 
-/* Tablette */
-@media (max-width: 1024px) {
+/* ✅ Mobile : 1 produit visible */
+@media (max-width: 480px) {
   .combination-section h2 {
-    font-size: 1.6rem;
+    font-size: 1.4rem;
+    text-align: center;
   }
 }
 
-/* Mobile */
-@media (max-width: 600px) {
-  .combination-section h2 {
-    font-size: 1.4rem;
-  }
-}
 
 .banner-artisanal {
   overflow: hidden;
@@ -275,7 +282,6 @@ body {
   color: #000000;
 }
 
-
 /* ----------- AVANTAGES SECTION ----------- */
 @media (max-width: 480px) {
   .avantages-card {
@@ -286,6 +292,10 @@ body {
     display: none;
   }
 
+    .histoire-img {
+    display: none; /* Supprime l’image sur mobile */
+  }
+
   .avantages-text {
     flex: 1 1 auto;
     padding: 1rem;
@@ -293,16 +303,19 @@ body {
 
   .avantages-text h2 {
     font-size: 1.4rem;
+    text-align: center;
   }
 
   .avantages-text li {
     font-size: 0.95rem;
   }
 
-  
-.h2-center {
-  text-align: center;
-}
+  .histoire-btn {
+    margin: 0 auto;
+    display: block; /* s'assurer qu'il prend toute la ligne pour bien se centrer */
+    margin-bottom: 1rem;
+  }
+
 
   
 }
@@ -322,26 +335,40 @@ body {
     display: block;
   }
 
+    .histoire-img {
+    flex: 0 0 120px;
+    display: block;
+  }
+
+
   .avantages-img img {
     height: 100%;
     width: 100%;
-    border-radius: 0 20px 20px 0;
+    border-radius: 50px 0 0 50px;
     object-fit: cover;
   }
 
+    .histoire-img img {
+    height: 100%;
+    width: 100%;
+    border-radius: 0 100px 0 0;
+    object-fit: cover;
+  }
+
+
   .avantages-text h2 {
     font-size: 1.6rem;
+    text-align: left;
+
   }
 
   .avantages-text li {
     font-size: 1rem;
   }
 
-  .h2-center {
-  text-align: center;
 }
 
-}
+
 
 
 
@@ -421,8 +448,8 @@ body {
   }
 
   .stats-section h2 {
-    font-size: 2rem;
-    margin-bottom: 1.8rem;
+    font-size: 1.6rem;
+    margin-bottom: 1.4rem;
   }
 
   .stats-list {
@@ -439,6 +466,9 @@ body {
     font-size: 1.8rem;
   }
 }
+
+
+
 
 .devis-section {
   padding: 40px 20px;
@@ -543,14 +573,14 @@ body {
 /* Icône Font Awesome */
 .process-card i {
   font-size: 2.5rem;
-  color: #8C6E63; /* Une teinte brune pour aller avec le fond beige */
+  color: #000000; /* Une teinte brune pour aller avec le fond beige */
   margin-bottom: 1rem;
 }
 
 .process-card h3 {
   font-size: 1.1rem;
   margin-bottom: 0.5rem;
-  color: #8C6E63;
+  color: #000000;
 }
 
 .process-card p {
@@ -558,8 +588,8 @@ body {
   color: #000000;
 }
 
-/* Responsive mobile : 1 colonne */
-@media screen and (max-width: 768px) {
+/* Responsive tablette : 1 colonne */
+@media (min-width: 481px) and (max-width: 768px) {
   .process-cards {
     flex-direction: column;
     align-items: center;
@@ -569,6 +599,42 @@ body {
     width: 90%;
     max-width: 100%;
   }
+
+  .process-section h2 {
+    font-size: 1.6rem;
+  }
 }
+/* Responsive mobile : 1 colonne */
+@media screen and (max-width: 480px) {
+  .process-cards {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .process-card {
+    width: 90%;
+    max-width: 100%;
+  }
+  
+  .process-section h2 {
+    font-size: 1.4rem;
+  }
+}
+
+
+/* Responsive tablette : 1 colonne */
+@media (min-width: 481px) and (max-width: 768px) {
+  .faq-contact h2 {
+    font-size: 1.6rem;
+  }
+}
+/* Responsive mobile : 1 colonne */
+@media screen and (max-width: 480px) {
+  .faq-contact h2 {
+    font-size: 1.4rem;
+  }
+}
+
+
 
 
