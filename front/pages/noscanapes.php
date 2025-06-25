@@ -153,38 +153,43 @@ function calculPrix($commande, &$composition = [])
 
         </div>
 
-        
-<!-- ------------------- SECTION COMBINAISONS ------------------- -->
-<section class="combination-section">
-  <div class="combination-container">
+        <!-- ------------------- BARRE DE RECHERCHE ------------------- -->
+        <div class="search-bar" style="text-align:center; margin: 20px;">
+            <input type="text" id="searchInput" placeholder="Rechercher un canapé par nom ou par catégorie..."
+                style="padding: 10px; width: 300px;">
+        </div>
 
-    <?php foreach ($commandes as $commande): ?>
-      <?php
+        <!-- ------------------- SECTION COMBINAISONS ------------------- -->
+        <section class="combination-section">
+            <div class="combination-container">
+
+                <?php foreach ($commandes as $commande): ?>
+                <?php
         $composition = []; 
         $prixDynamique = calculPrix($commande, $composition);
         $type = strtolower($commande['type_nom'] ?? 'inconnu');
       ?>
-      <div class="product-card" data-type="<?= htmlspecialchars($type, ENT_QUOTES) ?>">
-        <div class="product-image">
-          <img
-            src="../../admin/uploads/canape-prefait/<?php echo htmlspecialchars($commande['img'] ?? 'default.jpg', ENT_QUOTES); ?>"
-            alt="<?php echo htmlspecialchars($commande['nom'] ?? 'Canapé préfait', ENT_QUOTES); ?>">
-        </div>
-        <div class="product-content">
-          <h3><?= htmlspecialchars($commande['nom']) ?></h3>
-          <p class="description">Type : <?= htmlspecialchars($commande['type_nom']) ?></p>
-          <p class="description">Structure : <?= htmlspecialchars($commande['structure_nom'] ?? 'Non défini') ?></p>
-          <p class="price"><?= number_format($prixDynamique, 2, ',', ' ') ?> €</p>
-          <button class="btn-beige"
-            onclick="window.location.href = '../CanapePrefait/canapPrefait.php?id=<?= (int)$commande['id']; ?>'">
-            Personnaliser
-          </button>
-        </div>
-      </div>
-    <?php endforeach; ?>
+                <div class="product-card" data-type="<?= htmlspecialchars($type, ENT_QUOTES) ?>">
+                    <div class="product-image">
+                        <img src="../../admin/uploads/canape-prefait/<?php echo htmlspecialchars($commande['img'] ?? 'default.jpg', ENT_QUOTES); ?>"
+                            alt="<?php echo htmlspecialchars($commande['nom'] ?? 'Canapé préfait', ENT_QUOTES); ?>">
+                    </div>
+                    <div class="product-content">
+                        <h3><?= htmlspecialchars($commande['nom']) ?></h3>
+                        <p class="description">Type : <?= htmlspecialchars($commande['type_nom']) ?></p>
+                        <p class="description">Structure :
+                            <?= htmlspecialchars($commande['structure_nom'] ?? 'Non défini') ?></p>
+                        <p class="price"><?= number_format($prixDynamique, 2, ',', ' ') ?> €</p>
+                        <button class="btn-beige"
+                            onclick="window.location.href = '../CanapePrefait/canapPrefait.php?id=<?= (int)$commande['id']; ?>'">
+                            Personnaliser
+                        </button>
+                    </div>
+                </div>
+                <?php endforeach; ?>
 
-  </div> 
-</section>
+            </div>
+        </section>
 
 
     </main>
@@ -192,31 +197,55 @@ function calculPrix($commande, &$composition = [])
     <footer>
         <?php require '../../squelette/footer.php'; ?>
     </footer>
-<script>
-  document.addEventListener('DOMContentLoaded', function() {
-    const filterButtons = document.querySelectorAll('.filter-btn');
-    const products = document.querySelectorAll('.product-card');
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const filterButtons = document.querySelectorAll('.filter-btn');
+        const products = document.querySelectorAll('.product-card');
 
-    filterButtons.forEach(button => {
-      button.addEventListener('click', () => {
-        // Enlever la classe active
-        filterButtons.forEach(btn => btn.classList.remove('active'));
-        button.classList.add('active');
+        filterButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                // Enlever la classe active
+                filterButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
 
-        const category = button.getAttribute('data-category');
+                const category = button.getAttribute('data-category');
 
-        products.forEach(product => {
-          const type = product.getAttribute('data-type').toLowerCase();
-          if (category === 'all' || type === category.toLowerCase()) {
-            product.style.display = 'block';
-          } else {
-            product.style.display = 'none';
-          }
+                products.forEach(product => {
+                    const type = product.getAttribute('data-type').toLowerCase();
+                    if (category === 'all' || type === category.toLowerCase()) {
+                        product.style.display = 'block';
+                    } else {
+                        product.style.display = 'none';
+                    }
+                });
+            });
         });
-      });
     });
-  });
-</script>
+    </script>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const searchInput = document.getElementById('searchInput');
+        const products = document.querySelectorAll('.product-card');
+
+        searchInput.addEventListener('input', function() {
+            const searchTerm = this.value.trim().toLowerCase();
+
+            products.forEach(product => {
+                const productName = product.querySelector('h3')?.textContent.toLowerCase() ||
+                '';
+                const productType = product.getAttribute('data-type')?.toLowerCase() || '';
+
+                // Affiche le produit si le searchTerm est dans le nom ou dans la catégorie
+                if (productName.includes(searchTerm) || productType.includes(searchTerm)) {
+                    product.style.display = 'block';
+                } else {
+                    product.style.display = 'none';
+                }
+            });
+        });
+    });
+    </script>
 
 
 </body>
