@@ -104,6 +104,55 @@ body {
 
 }
 
+/* -------------------- BARRE DE RECHERCHE -------------------- */
+.search-bar {
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto 24px auto;
+    display: flex;
+    align-items: center;
+    border: 1px solid #e3d1c8;
+    border-radius: 8px;
+    background: #fff;
+    padding: 6px 12px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+}
+
+.search-bar input[type="text"] {
+    flex: 1;
+    border: none;
+    outline: none;
+    font-size: 16px;
+    background: transparent;
+    padding: 8px 0;
+}
+/* Responsive */
+
+/* Tablettes et petits écrans > 480px */
+@media (max-width: 768px) {
+    .search-bar {
+        max-width: 320px;
+        padding: 5px 10px;
+    }
+    
+    .search-bar input[type="text"] {
+        font-size: 14px;
+        padding: 6px 0;
+    }
+}
+
+/* Mobiles petits écrans <= 480px */
+@media (max-width: 480px) {
+    .search-bar {
+        max-width: 280px;
+        padding: 4px 8px;
+    }
+    
+    .search-bar input[type="text"] {
+        font-size: 14px;
+        padding: 5px 0;
+    }
+}
 
 /* ------------------- STYLES SECTION COMBINAISONS ------------------- */
 .combination-section {
