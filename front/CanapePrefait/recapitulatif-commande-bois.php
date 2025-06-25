@@ -141,8 +141,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['comment'])) {
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
   <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&family=Be+Vietnam+Pro&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../../styles/processus.css">
   <link rel="stylesheet" href="../../styles/popup.css">
+  <link rel="stylesheet" href="../../styles/canapPrefait.css">
   <link rel="stylesheet" href="../../styles/message.css">
   <link rel="stylesheet" href="../../styles/buttons.css">
   <script type="module" src="../../script/popup-bois.js"></script>
@@ -158,10 +158,15 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['comment'])) {
   </header>
 
   <main>
-    <div class="container transition">
+    <div class="container-recap transition">
       <!-- Colonne de gauche -->
-      <div class="left-column">
-        <h2 class="h2">Récapitulatif de la commande préfaite</h2>
+      <div class="left-column-recap">
+        <div class="buttons h2-recap h2">
+            <button id="btn-aide" class="btn-beige">Besoin d'aide ?</button>
+            <button type="button" data-url="../pages/dashboard.php" id="btn-abandonner" class="btn-noir">Abandonner</button>
+          </div>
+
+        <h2>Récapitulatif de la commande préfaite</h2>
         <section class="color-options">
 
           <h3>Étape 1.1 : Choisi ta structure</h3>
@@ -292,12 +297,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['comment'])) {
       </script>
 
       <!-- Colonne de droite -->
-      <div class="right-column">
+      <div class="right-column-recap">
         <section class="main-display-recap">
-          <div class="buttons">
-            <button id="btn-aide" class="btn-beige">Besoin d'aide ?</button>
-            <button type="button" data-url="../pages/dashboard.php" id="btn-abandonner" class="btn-noir">Abandonner</button>
-          </div>
           <img src="../../medias/canapekenitra.png" alt="Armoire">
 
           <!-- Section commentaire -->
