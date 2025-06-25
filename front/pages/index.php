@@ -2,6 +2,14 @@
 require '../../admin/config.php';
 session_start();
 
+
+// Vérifier si l'utilisateur est connecté
+if (!isset($_SESSION['user_id'])) {
+    $_SESSION['redirect_to'] = $_SERVER['REQUEST_URI'];
+    header("Location: ../formulaire/Connexion.php"); // Redirection vers la page de connexion
+    exit();
+}
+
 // 1. Canapés préfaits
 $sqlCommandes = "
     SELECT cp.*, tb.nom AS type_nom 
