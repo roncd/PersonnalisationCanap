@@ -180,7 +180,6 @@ $triURL = '?' . http_build_query($params);
                                 echo "<td>{$row['date']}</td>";
                                 echo "<td>{$row['statut']}</td>";
                                 echo "<td>" . htmlspecialchars($assocData['structure'][$row['id_structure']] ?? '-') . "</td>";
-                                $dimensions = htmlspecialchars($assocData['commande_detail'][$row['id']]['dimensions'] ?? '-');
                                 echo "<td>{$row['longueurA']}</td>";
                                 echo "<td>{$row['longueurB']}</td>";
                                 echo "<td>{$row['longueurC']}</td>";

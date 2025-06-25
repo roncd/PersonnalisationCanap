@@ -1,50 +1,39 @@
 <?php
 require '../../admin/config.php';
 session_start();
+require '../../admin/include/session_expiration.php';
 
-if (!isset($_SESSION['panier'])) {
-    $_SESSION['panier'] = [];
+if (!isset($_SESSION['user_id'])) {
+    $_SESSION['redirect_to'] = $_SERVER['REQUEST_URI'];
+    header("Location: ../formulaire/Connexion.php");
+    exit();
 }
 
-// Gestion augmentation/diminution quantité
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Augmenter la quantité
-    if (isset($_POST['ajouter_id'])) {
-        $id = intval($_POST['ajouter_id']);
-        foreach ($_SESSION['panier'] as $index => $item) {
-            if ($item['id'] === $id) {
-                $_SESSION['panier'][$index]['quantite']++;
-                break;
-            }
-        }
-    }
+$id_client = $_SESSION['user_id'];
 
-    // Réduire la quantité
-    if (isset($_POST['reduire_id'])) {
-        $id = intval($_POST['reduire_id']);
-        foreach ($_SESSION['panier'] as $index => $item) {
-            if ($item['id'] === $id) {
-                $_SESSION['panier'][$index]['quantite']--;
-                if ($_SESSION['panier'][$index]['quantite'] <= 0) {
-                    unset($_SESSION['panier'][$index]);
-                    $_SESSION['panier'] = array_values($_SESSION['panier']); // Réindexe
-                }
-                break;
-            }
-        }
-    }
+$stmt = $pdo->prepare("SELECT id, prix FROM panier WHERE id_client = ?");
+$stmt->execute([$id_client]);
+$panier = $stmt->fetch();
 
-    // Redirection pour empêcher l’envoi répété du formulaire
-    header('Location: ' . $_SERVER['PHP_SELF']);
+if (!$panier) {
+    echo "<p style='text-align:center;'>Votre panier est vide.</p>";
     exit;
 }
 
+$panier_id = $panier['id'];
 
-// Calcul total
-$total = 0;
-foreach ($_SESSION['panier'] as $item) {
-    $total += $item['prix'] * $item['quantite'];
-}
+$stmt = $pdo->prepare("
+    SELECT 
+        vp.id AS id_produit,
+        vp.nom,
+        vp.prix,
+        pd.quantite
+    FROM panier_detail pd
+    JOIN vente_produit vp ON pd.id_produit = vp.id
+    WHERE pd.id_panier = ?
+");
+$stmt->execute([$panier_id]);
+$produits = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <!DOCTYPE html>
@@ -57,6 +46,10 @@ foreach ($_SESSION['panier'] as $item) {
     <link rel="icon" href="../../medias/favicon.png" type="image/x-icon">
     <link rel="stylesheet" href="../../styles/panier.css">
     <link rel="stylesheet" href="../../styles/buttons.css">
+    <link rel="stylesheet" href="../../styles/popup.css">
+    <script type="module" src="../../script/popup.js"></script>
+
+
 </head>
 
 <body>
@@ -69,64 +62,102 @@ foreach ($_SESSION['panier'] as $item) {
         <section class="panier-container">
             <h1>Mon panier</h1>
             <div class="panier-actions">
-                <a href="index.php" class="btn-grey">Continuer mes achats</a>
+                <a href="nosproduits.php" class="btn-beige">Continuer mes achats</a>
             </div>
-
-            <div class="panier-table">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Produits</th>
-                            <th>Quantité</th>
-                            <th>Prix</th>
-                            <th>Total</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php if (!empty($_SESSION['panier'])): ?>
-                        <?php foreach ($_SESSION['panier'] as $item): ?>
-                        <tr>
-                            <td><?= htmlspecialchars($item['nom']) ?></td>
-                            <td><?= $item['quantite'] ?></td> 
-                            <td><?= number_format($item['prix'], 2) ?>€</td>
-                            <td><?= number_format($item['prix'] * $item['quantite'], 2) ?>€</td>
-                            <td>
-                                <form method="POST" style="display:inline;">
-                                    <input type="hidden" name="reduire_id" value="<?= $item['id'] ?>">
-                                    <button type="submit" class="btn-grey">-</button>
-                                </form>
-                                <form method="POST" style="display:inline;">
-                                    <input type="hidden" name="ajouter_id" value="<?= $item['id'] ?>">
-                                    <button type="submit" class="btn-grey">+</button>
-                                </form>
-                            </td>
-                        </tr>
-                        <?php endforeach; ?>
-                        <?php else: ?>
-                        <tr>
-                            <td colspan="5" style="text-align:center; color:#888;">Votre panier est vide.</td>
-                        </tr>
-                        <?php endif; ?>
-                    </tbody>
-                    <tfoot>
-                        <tr>
-                            <td colspan="4" class="total-label">Total du panier :</td>
-                            <td class="total-value"><?= number_format($total, 2) ?>€</td>
-                        </tr>
-                    </tfoot>
-                </table>
-            </div>
-
-            <div class="panier-recaps">
-                <h2>Récapitulatif devis :</h2>
-                <div class="recap-text">
-                    <strong>Total : <?= number_format($total, 2) ?>€</strong>
+            <div class="panier-info">
+                <div class="panier-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Produits</th>
+                                <th>Quantité</th>
+                                <th>Prix</th>
+                                <th>Total</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php if (!empty($produits)): ?>
+                                <?php foreach ($produits as $produit): ?>
+                                    <tr>
+                                        <td><?= htmlspecialchars($produit['nom']) ?></td>
+                                        <td><?= intval($produit['quantite']) ?></td>
+                                        <td><?= number_format($produit['prix'], 2) ?> €</td>
+                                        <td><?= number_format($produit['prix'] * $produit['quantite'], 2) ?> €</td>
+                                        <td>
+                                            <div class="actions">
+                                                <div class="quantity-selector">
+                                                    <form action="modif_panier.php" method="post">
+                                                        <input type="hidden" name="action" value="decrement">
+                                                        <input type="hidden" name="id_produit" value="<?= $produit['id_produit'] ?>">
+                                                        <button type="submit">-</button>
+                                                    </form>
+                                                    <form action="modif_panier.php" method="post">
+                                                        <input type="hidden" name="action" value="increment">
+                                                        <input type="hidden" name="id_produit" value="<?= $produit['id_produit'] ?>">
+                                                        <button type="submit">+</button>
+                                                    </form>
+                                                </div>
+                                                <form action="modif_panier.php" method="post">
+                                                    <input type="hidden" name="action" value="remove">
+                                                    <input type="hidden" name="id_produit" value="<?= $produit['id_produit'] ?>">
+                                                    <button class="btn-noir" type="submit">Supprimer</button>
+                                                </form>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                <?php endforeach; ?>
+                            <?php else: ?>
+                                <tr>
+                                    <td colspan="5" style="text-align:center;">Votre panier est vide.</td>
+                                </tr>
+                            <?php endif; ?>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="4" class="total-label">Total du panier :</td>
+                                <td class="total-value"><?= number_format($panier['prix']) ?> €</td>
+                            </tr>
+                        </tfoot>
+                    </table>
                 </div>
-                <button class="btn-noir">Générer le devis</button>
+                <div class="panier-devis">
+                    <div class="panier-recaps">
+                        <h2>Récapitulatif panier :</h2>
+                        <div class="recap-text">
+                            <strong>Total : <?= number_format($panier['prix']) ?> €</strong>
+                        </div>
+                        <button id="btn-generer" class="btn-noir">Générer un devis du panier</button>
+                    </div>
+                </div>
             </div>
         </section>
+        <!-- Popup validation generation -->
+        <div id="generer-popup" class="popup">
+            <div class="popup-content">
+                <h2>Êtes vous sûr de vouloir générer un devis ?</h2>
+                <p>Vous ne pourrez plus effectuer de modifictions sur votre commande</p>
+                <button id="btn-oui" class="btn-beige" name="envoyer" data-id="<?= htmlspecialchars($id) ?>">Oui</button>
+                <button id="btn-close" class="btn-noir">Non</button>
+            </div>
+        </div>
+
+        <!-- Popup devis -->
+        <div id="pdf-popup" class="popup">
+            <div class="popup-content">
+                <h2>Commande finalisé !</h2>
+                <p>Votre devis a été créé et envoyé à l'adresse suivante :
+                    </br><?php echo "<strong>" . htmlspecialchars($assocMail['client'][$commande['id_client']]['mail'] ?? '-') . "</strong>"; ?>
+                </p>
+                <br>
+                <button onclick="location.href='../pages/commandes.php'" class="btn-beige">Voir mes commandes</button>
+                <button id="pdf-btn" class="btn-noir">Voir le devis</button>
+            </div>
+        </div>
+        </div>
     </main>
+
+
 
     <footer>
         <?php require '../../squelette/footer.php'; ?>

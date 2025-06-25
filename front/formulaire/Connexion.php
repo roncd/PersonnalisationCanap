@@ -3,11 +3,17 @@ require '../../admin/config.php';
 session_start();
 require '../../admin/include/session_expiration.php';
 if (!isset($_SESSION['user_id'])) {
-    $currentPage = $_SERVER['HTTP_REFERER'] ?? '/index.php'; // Page précédente, ou accueil si absent
-    // On évite de sauvegarder la page de connexion elle-même
+    $currentPage = $_SERVER['HTTP_REFERER'] ?? '/index.php';
     if (!isset($_SESSION['redirect_after_login']) && strpos($currentPage, 'Connexion.php') === false) {
         $_SESSION['redirect_after_login'] = $currentPage;
     }
+}
+
+if (isset($_SESSION['pending_add_to_cart'])) {
+    $_SESSION['temp_post'] = $_SESSION['pending_add_to_cart'];
+    unset($_SESSION['pending_add_to_cart']);
+    header('Location: ../pages/nosproduits.php?post_restore=1');
+    exit;
 }
 
 // Initialiser la variable du message
