@@ -161,7 +161,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['comment'])) {
     <div class="container-recap transition">
       <!-- Colonne de gauche -->
       <div class="left-column-recap">
-        <div class="buttons h2 space">
+        <div class="buttons h2-recap h2">
             <button id="btn-aide" class="btn-beige">Besoin d'aide ?</button>
             <button type="button" data-url="../pages/dashboard.php" id="btn-abandonner" class="btn-noir">Abandonner</button>
           </div>
