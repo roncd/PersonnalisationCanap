@@ -1,8 +1,9 @@
 body {
   background-color: #f9f9f9;
-  color: #333;
+  color: #000000;
   font-family: "Be vietnam pro", sans-serif;;
 }
+
 .faq-categories {
   max-width: 1000px;
   margin: 0 auto;
@@ -15,12 +16,14 @@ body {
   font-size: 2.5rem;
   margin-bottom: 10px;
   font-family: "Baloo 2", sans-serif;
+  color: #000000;
+
 }
 
 .faq-categories p {
   font-size: 1.2rem;
   margin-bottom: 40px;
-  color: #444;
+  color: #000000;
 }
 
 .faq-grid {
@@ -44,7 +47,7 @@ body {
 .faq-categories p {
   font-size: 1.2rem;
   margin-bottom: 40px;
-  color: #444;
+  color: #000000;
 }
 
 .faq-grid {
@@ -69,14 +72,14 @@ body {
 }
 
 .faq-card:focus {
-  outline: 2px solid #a4745a;
+  outline: 2px solid #997765;
   outline-offset: 4px;
 }
 
 .faq-card .icon {
   font-size: 38px; /* taille agrandie */
   margin-bottom: 15px;
-  color: #a4745a;
+  color: #997765;
   transition: transform 0.3s ease;
 }
 
@@ -111,22 +114,24 @@ body {
 }
 
 .faq-contact-icon {
-  font-size: 40px;
+  font-size: 60px;
   margin-bottom: 15px;
   display: inline-block;
   line-height: 1;
+    color: #997765;
+
 }
 
 .faq-contact h2 {
   font-size: 20px;
   font-weight: 700;
   margin-bottom: 10px;
-  color: #222;
+  color: #000000;
 }
 
 .faq-contact p {
   font-size: 16px;
-  color: #555;
+  color: #000000;
   margin-bottom: 25px;
 }
 
@@ -160,4 +165,64 @@ body {
   }
 }
 
+
+
+
+/* =============== RÉCAP MOBILE (≤ 768 px) =============== */
+@media (max-width: 768px) {
+
+  .faq-categories h1 {
+  font-size: 2rem;
+  margin-top: -2.5rem;
+
+}
+
+.faq-categories p {
+    font-size: 1rem;
+}
+
+.faq-card span {
+    font-size: 14px;
+}
+
+.faq-contact h2 {
+    font-size: 18px;
+}
+
+.faq-contact {
+    margin: 10px 20px;
+    
+}
+}
+
+
+/* =============== RÉCAP TABLETTE (769 – 1110 px) =============== */
+@media (min-width: 769px) and (max-width: 1110px) {
+  
+  .faq-categories h1 {
+  font-size: 2.30rem;
+  margin-top: -2.5rem;
+
+}
+
+.faq-categories p {
+    font-size: 1.25rem;
+}
+
+.faq-card span {
+    font-size: 16px;
+}
+
+.faq-contact h2 {
+    font-size: 19px;
+}
+
+
+.faq-contact {
+    margin: 10px 20px;
+    
+}
+
+    
+}
 
