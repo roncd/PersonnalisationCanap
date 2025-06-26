@@ -33,6 +33,24 @@
   // Cas spécifiques pour les autres menus
   $isClientPage = strpos($currentPath, '/client/') !== false;
   $isEquipePage = strpos($currentPath, '/utilisateur/') !== false;
+
+  $isSitePage = (
+    strpos($currentPage, 'add-site.php') !== false &&
+    strpos($currentPath, '/client/') === false &&
+    strpos($currentPath, '/utilisateur/') === false ||
+
+    strpos($currentPage, 'visualiser-site.php') !== false &&
+    strpos($currentPath, '/client/') === false &&
+    strpos($currentPath, '/utilisateur/') === false ||
+
+    strpos($currentPage, 'edit-site.php') !== false &&
+    strpos($currentPath, '/client/') === false &&
+    strpos($currentPath, '/utilisateur/') === false || 
+
+    strpos($currentPage, 'site.php') !== false &&
+    strpos($currentPath, '/client/') === false &&
+    strpos($currentPath, '/utilisateur/') === false   
+);
   ?>
   <aside>
     <div class="menu-section">
@@ -68,6 +86,16 @@
           </div>
         </div>
       </nav>
+
+      <nav class="space-nav">
+        <span><strong>SITE WEB</strong></span>
+        <a href="../pages/site.php" class="menu-link <?= $isSitePage ? 'active' : '' ?>" data-icon="website">
+          <img src="../../assets/menu/website.svg" alt="" width="20" height="20"> 
+          <span>Pages</span>
+        </a>
+      </nav>
+
+      
 
       <nav class="space-nav">
         <span><strong>PARAMÈTRES</strong></span>

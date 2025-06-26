@@ -36,5 +36,5 @@ try {
     $_SESSION['message_type'] = 'error';
 }
 
-header("Location: visualiser.php");
+header("Location: visualiser-site.php");
 exit();

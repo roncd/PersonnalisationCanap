@@ -9,38 +9,10 @@ if (!isset($_SESSION['id'])) {
     exit();
 }
 
-$search = $_GET['search'] ?? '';
-$order = strtoupper($_GET['order'] ?? 'DESC');
-$limit = 20;
-$offset = 0;
-
-// Récupération des catégories en tableau associatif id ➝ nom
-$stmtCat = $pdo->prepare("SELECT id, nom FROM faq_categorie");
-$stmtCat->execute();
-$categorieData = array_column($stmtCat->fetchAll(PDO::FETCH_ASSOC), 'nom', 'id');
-
-// Préparation de la requête FAQ
-if ($search) {
-    $stmt = $pdo->prepare("
-        SELECT f.id, f.question, f.reponse, f.categorie_id
-        FROM faq f
-        WHERE f.question LIKE :search
-        ORDER BY f.id $order
-    ");
-    $stmt->bindValue(':search', '%' . $search . '%', PDO::PARAM_STR);
-} else {
-    $stmt = $pdo->prepare("
-        SELECT f.id, f.question, f.reponse, f.categorie_id
-        FROM faq f
-        ORDER BY f.id $order
-        LIMIT :limit OFFSET :offset
-    ");
-    $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
-    $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
-}
-
+// Récupération de toutes les catégories FAQ
+$stmt = $pdo->prepare("SELECT id, nom, icon FROM faq_categorie ORDER BY id DESC");
 $stmt->execute();
-$faqs = $stmt->fetchAll(PDO::FETCH_ASSOC);
+$categories = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 // Paramètres de pagination
 $page = isset($_GET['page']) && is_numeric($_GET['page']) && $_GET['page'] > 0 ? (int)$_GET['page'] : 1;
@@ -86,14 +58,15 @@ $totalPages = ceil($totalCommandes / $limit);
     </header>
     <main>
         <div class="container">
-            <h2>FAQ</h2>
+                <h2>Liste des catégories de la FAQ</h2>
+
             <div class="option">
                 <div class="section-button">
                     <div>
-                        <button onclick="location.href='../pages/visualiser.php'" class="btn-grey" type="button">Retourner aux options</button>
+                        <button onclick="location.href='../pages/site.php'" class="btn-grey" type="button">Retourner aux éléments du site</button>
                     </div>
                     <div>
-                        <button onclick="location.href='add.php'" class="btn-noir" type="button">+ Ajouter à la FAQ</button>
+                        <button onclick="location.href='add-site.php'" class="btn-noir" type="button">+ Ajouter une catégorie à la FAQ</button>
                     </div>
                 </div>
                 <div class="search-bar">
@@ -105,58 +78,28 @@ $totalPages = ceil($totalCommandes / $limit);
             </div>
             <?php require '../include/message.php'; ?>
            <div class="tab-container">
+    <?php require '../include/message.php'; ?>
     <table class="styled-table">
         <thead>
             <tr>
                 <th>ID</th>
-                <th>Question</th>
-                <th>Réponse</th>
-                <th>Catégorie</th>
+                <th>Nom</th>
+                <th>Icône</th>
                 <th class="sticky-col">Action</th>
             </tr>
         </thead>
         <tbody>
-            <?php
-            $search = $_GET['search'] ?? '';
-            $order = strtoupper($_GET['order'] ?? 'DESC');
-            $limit = 20;
-            $offset = 0;
-
-            // Préparation de la liste des catégories associées
-            $stmtCat = $pdo->prepare("SELECT id, nom FROM faq_categorie");
-            $stmtCat->execute();
-            $categorieData = array_column($stmtCat->fetchAll(PDO::FETCH_ASSOC), 'nom', 'id');
-
-            if ($search) {
-                $stmt = $pdo->prepare("
-                    SELECT * FROM faq 
-                    WHERE question LIKE :search 
-                    ORDER BY id $order
-                ");
-                $stmt->bindValue(':search', '%' . $search . '%', PDO::PARAM_STR);
-            } else {
-                $stmt = $pdo->prepare("SELECT * FROM faq ORDER BY id $order LIMIT :limit OFFSET :offset");
-                $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
-                $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
-            }
-
-            $stmt->execute();
-
-            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                $categorieNom = $categorieData[$row['categorie_id']] ?? 'Non définie';
-
-                echo "<tr>";
-                echo "<td>{$row['id']}</td>";
-                echo "<td>" . htmlspecialchars($row['question']) . "</td>";
-                echo "<td>" . htmlspecialchars($row['reponse']) . "</td>";
-                echo "<td>" . htmlspecialchars($categorieNom) . "</td>";
-                echo "<td class='actions'>";
-                echo "<a href='edit.php?id={$row['id']}' class='edit-action actions vert' title='Modifier'>EDIT</a>";
-                echo "<a href='delete.php?id={$row['id']}' class='delete-action actions rouge' title='Supprimer'>DELETE</a>";
-                echo "</td>";
-                echo "</tr>";
-            }
-            ?>
+            <?php foreach ($categories as $categorie): ?>
+                <tr>
+                    <td><?= htmlspecialchars($categorie['id']) ?></td>
+                    <td><?= htmlspecialchars($categorie['nom']) ?></td>
+                    <td><?= htmlspecialchars($categorie['icon']) ?></td>
+                    <td class="actions">
+                        <a href="edit-site.php?id=<?= $categorie['id'] ?>" class="edit-action actions vert" title="Modifier">EDIT</a>
+                        <a href="delete.php?id=<?= $categorie['id'] ?>" class="delete-action actions rouge" title="Supprimer">DELETE</a>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
         </tbody>
     </table>
 </div>

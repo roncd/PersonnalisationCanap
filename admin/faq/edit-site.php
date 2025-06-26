@@ -14,7 +14,7 @@ $id = $_GET['id'] ?? null;
 if (!$id) {
     $_SESSION['message'] = 'ID de la question FAQ manquant.';
     $_SESSION['message_type'] = 'error';
-    header("Location: visualiser.php");
+    header("Location: visualiser-site.php");
     exit();
 }
 
@@ -32,7 +32,7 @@ $faq = $stmt->fetch(PDO::FETCH_ASSOC);
 if (!$faq) {
     $_SESSION['message'] = 'Question FAQ introuvable.';
     $_SESSION['message_type'] = 'error';
-    header("Location: visualiser.php");
+    header("Location: visualiser-site.php");
     exit();
 }
 
@@ -50,7 +50,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt->execute([$question, $reponse, $categorie_id, $id]);
             $_SESSION['message'] = 'Question mise à jour avec succès.';
             $_SESSION['message_type'] = 'success';
-            header("Location: visualiser.php");
+            header("Location: visualiser-site.php");
             exit();
         } catch (Exception $e) {
             $_SESSION['message'] = 'Erreur : ' . $e->getMessage();
