@@ -104,31 +104,46 @@ body {
 
 }
 
-/* -------------------- BARRE DE RECHERCHE -------------------- */
+/* -------------------- BARRE DE RECHERCHE & FILTRES -------------------- */
 .search-bar {
-    width: 100%;
-    max-width: 400px;
-    margin: 0 auto 24px auto;
     display: flex;
-    align-items: center;
-    border: 1px solid #e3d1c8;
-    border-radius: 8px;
-    background: #fff;
-    padding: 6px 12px;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+    justify-content: flex-start; 
+    margin: 20px;
 }
 
-.search-bar input[type="text"] {
-    flex: 1;
-    border: none;
-    outline: none;
-    font-size: 16px;
-    background: transparent;
-    padding: 8px 0;
+.search-bar form {
+    position: relative;
+    width: 300px; 
 }
+
+#searchInput {
+    width: 100%;
+    padding: 8px 30px 8px 10px; 
+    font-size: 16px;
+    border: 1px solid #e3d1c8;
+    border-radius: 4px;
+}
+
+.clear-button {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    border: none;
+    background: transparent;
+    font-size: 20px;
+    cursor: pointer;
+    color: #999;
+    padding: 0;
+}
+
+.clear-button:hover {
+    color: #555;
+}
+
+
 /* Responsive */
 
-/* Tablettes et petits écrans > 480px */
 @media (max-width: 768px) {
     .search-bar {
         max-width: 320px;
@@ -141,7 +156,6 @@ body {
     }
 }
 
-/* Mobiles petits écrans <= 480px */
 @media (max-width: 480px) {
     .search-bar {
         max-width: 280px;
@@ -151,6 +165,34 @@ body {
     .search-bar input[type="text"] {
         font-size: 14px;
         padding: 5px 0;
+    }
+}
+
+.filters {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+#sortPrice {
+    padding: 8px 12px;
+    border: 1px solid #e3d1c8;
+    border-radius: 8px;
+    font-size: 15px;
+    background: #fff;
+    color: #444;
+    font-weight: 500;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+    outline: none;
+    margin-right: 20px;
+}
+
+@media (max-width: 768px) {
+    #sortPrice {
+        font-size: 14px;
+        width: 100%;
+        margin-right: 0;
+        margin-bottom: 10px;
     }
 }
 

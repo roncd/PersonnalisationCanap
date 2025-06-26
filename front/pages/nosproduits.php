@@ -1,19 +1,31 @@
 <?php
 require '../../admin/config.php';
 session_start();
-require '../../admin/include/session_expiration.php';
 
 $sql = "
     SELECT vente_produit.*, categorie.nom AS nom_categorie 
     FROM vente_produit 
     JOIN categorie ON vente_produit.id_categorie = categorie.id
-    ORDER BY vente_produit.id DESC
 ";
 
-$stmt = $pdo->query($sql);
+// Si une recherche est présente, on ajoute une clause WHERE
+if (!empty($search)) {
+    $sql .= " WHERE vente_produit.nom LIKE :search OR categorie.nom LIKE :search";
+}
+
+$sql .= " ORDER BY vente_produit.id DESC";
+
+$stmt = $pdo->prepare($sql);
+
+
+if (!empty($search)) {
+    $stmt->bindValue(':search', '%' . $search . '%', PDO::PARAM_STR);
+}
+
+$stmt->execute();
 $produits = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-// Requête pour récupérer toutes les catégories
+
 $sql = "SELECT * FROM categorie";
 $stmt = $pdo->query($sql);
 $categories = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -21,12 +33,6 @@ $categories = $stmt->fetchAll(PDO::FETCH_ASSOC);
 // Gestion de l'ajout au panier
 $produitAjoute = null; // Variable pour savoir quel produit a été ajouté
 
-
-if (isset($_GET['post_restore']) && isset($_SESSION['temp_post'])) {
-    $_POST = $_SESSION['temp_post'];
-    unset($_SESSION['temp_post']);
-    $_SERVER['REQUEST_METHOD'] = 'POST';
-}
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['produit'])) {
     if (!isset($_SESSION['user_id'])) {
         $_SESSION['pending_add_to_cart'] = $_POST;
@@ -122,20 +128,41 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['produit'])) {
 
     <main class="products-container">
 
-        <!-- Filtres -->
-        <div class="filters">
-            <button class="filter-btn active" data-category="all">Tous</button>
-            <?php foreach ($categories as $cat): ?>
-                <button class="filter-btn" data-category="<?= htmlspecialchars(strtolower($cat['nom'])) ?>">
-                    <?= htmlspecialchars($cat['nom']) ?>
-                </button>
-            <?php endforeach; ?>
-        </div>
+        <!-- ------------------- SECTION ARTICLES ASSOCIES ------------------- -->
+        <section class="combination-section">
+          <h2>Ces articles peuvent aussi vous intéresser</h2>
 
-        <!-- ------------------- BARRE DE RECHERCHE ------------------- -->
-        <div class="search-bar" style="text-align:center; margin: 20px;">
-          <input type="text" id="searchInput" placeholder="Rechercher un produit par nom par catégorie..." style="padding: 10px; width: 300px;">
-        </div>
+          <!------------ BOUTONS DE FILTRE PAR CATÉGORIE ----------->
+<div class="filters">
+    <button class="filter-btn active" data-category="all">Tous</button>
+    <?php foreach ($categories as $cat): ?>
+        <button class="filter-btn" data-category="<?= htmlspecialchars(strtolower($cat['nom'])) ?>">
+            <?= htmlspecialchars($cat['nom']) ?>
+        </button>
+    <?php endforeach; ?>
+</div>
+
+          <!-- Nouveau select de tri prix -->
+  <select id="sortPrice" style="text-align:left; margin: 20px;">
+    <option value="none">Trier par prix</option>
+    <option value="asc">Prix : du - cher au + cher</option>
+    <option value="desc">Prix : du + cher au - cher</option>
+  </select>
+</div>
+
+               <!--------------------- BARRE DE RECHERCHE EN PHP --------------------->
+<div class="search-bar">
+    <form method="GET" action="" style="position: relative;">
+        <input 
+            type="text" 
+            name="search" 
+            id="searchInput"
+            placeholder="Rechercher par nom..." 
+            value="<?= htmlspecialchars($_GET['search'] ?? '', ENT_QUOTES) ?>"
+        >
+        <button type="button" id="clearSearch" class="clear-button" style="display: none;">&times;</button>
+    </form>
+</div>
 
         <!-- ------------------- SECTION ARTICLES ASSOCIES ------------------- -->
         <section class="combination-section">
@@ -244,11 +271,38 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['produit'])) {
     </script>
 
     <?php if ($produitAjoute): ?>
-        <script>
-            document.addEventListener("DOMContentLoaded", function() {
-                openReservationModal("<?= addslashes($produitAjoute) ?>");
+
+          <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const filterButtons = document.querySelectorAll('.filter-btn');
+        const products = document.querySelectorAll('.product-card');
+
+        filterButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                // Enlever la classe active
+                filterButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+
+                const category = button.getAttribute('data-category');
+
+                products.forEach(product => {
+                    const type = product.getAttribute('data-type').toLowerCase();
+                    if (category === 'all' || type === category.toLowerCase()) {
+                        product.style.display = 'block';
+                    } else {
+                        product.style.display = 'none';
+                    }
+                });
             });
-        </script>
+        });
+    });
+    </script>
+    
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            openReservationModal("<?= addslashes($produitAjoute) ?>");
+        });
+    </script>
     <?php endif; ?>
 
     <script>
@@ -277,6 +331,35 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['produit'])) {
         });
       });
     </script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const searchInput = document.getElementById('searchInput');
+    const clearBtn = document.getElementById('clearSearch');
+
+    // Fonction pour afficher ou cacher le bouton clear
+    function toggleClearButton() {
+        if (searchInput.value.trim() !== '') {
+            clearBtn.style.display = 'block';
+        } else {
+            clearBtn.style.display = 'none';
+        }
+    }
+
+    // Détecte les changements dans le champ de recherche
+    searchInput.addEventListener('input', toggleClearButton);
+
+    // Affiche ou masque au chargement
+    toggleClearButton();
+
+    // Suppprime la recherche avec le clic sur la croix
+    clearBtn.addEventListener('click', function () {
+        searchInput.value = '';
+        toggleClearButton();
+        window.location.href = window.location.pathname; // recharge sans la recherche
+    });
+});
+</script>
 
 </body>
 
