@@ -564,6 +564,11 @@ label {
   padding-right: 8px;    /* place pour la scrollbar (optionnel)            */
 }
 
+  .color-options .option img {
+    width: 218px;
+    height: 218px;
+}
+
   /* 4. Footer : pile total + boutons                               */
   .footer{
     flex-direction: column;
