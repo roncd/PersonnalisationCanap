@@ -73,10 +73,15 @@ body {
   outline-offset: 4px;
 }
 
-
 .faq-card .icon {
+  font-size: 38px; /* taille agrandie */
   margin-bottom: 15px;
-  color: #a4745a; /* couleur terracotta */
+  color: #a4745a;
+  transition: transform 0.3s ease;
+}
+
+.faq-card:hover .icon {
+  transform: scale(1.1) rotate(3deg);
 }
 
 .faq-card span {

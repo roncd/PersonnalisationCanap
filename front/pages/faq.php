@@ -1,3 +1,12 @@
+<?php
+require '../../admin/config.php';
+session_start();
+
+$stmt = $pdo->prepare("SELECT id, nom, icon FROM faq_categorie ORDER BY nom ASC");
+$stmt->execute();
+$categories = $stmt->fetchAll(PDO::FETCH_ASSOC);
+?>
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -6,6 +15,7 @@
   <title>FAQ - Canapés Marocains</title>
   <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
   <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&family=Be+Vietnam+Pro&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link rel="stylesheet" href="../../styles/faq.css">
 </head>
 <body>
@@ -16,6 +26,21 @@
 
   <main class="faq-container">
 
+  <section class="faq-categories">
+  <h1>FAQ</h1>
+  <p>Votre question concerne quel sujet ?</p>
+  <div class="faq-grid">
+    <?php foreach ($categories as $categorie): ?>
+      <a href="faq_details.php?categorie=<?= urlencode($categorie['id']) ?>" class="faq-card">
+        <div class="icon">
+  <i class="fa <?= htmlspecialchars($categorie['icon'] ?? 'fa-question-circle') ?>"></i>
+</div>
+        <span><?= htmlspecialchars($categorie['nom']) ?></span>
+      </a>
+    <?php endforeach; ?>
+  </div>
+</section>
+<!--
    <section class="faq-categories">
   <h1>FAQ</h1>
   <p>Votre question concerne quel sujet ?</p>
@@ -71,6 +96,8 @@
     </a>
   </div>
 </section>
+
+-->
 
     <div class="faq-contact">
         <div class="faq-contact-icon">💬</div>

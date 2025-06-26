@@ -11,21 +11,21 @@ if (!isset($_SESSION['id'])) {
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nom = trim($_POST['nom']);
+    $icon = trim($_POST['icon']);
 
-    if (empty($nom)) {
-        $_SESSION['message'] = 'Le nom de la catégorie est requis.';
+    if (empty($nom) || empty($icon)) {
+        $_SESSION['message'] = 'Le nom et l’icône sont requis.';
         $_SESSION['message_type'] = 'error';
     } else {
         try {
-            $stmt = $pdo->prepare("INSERT INTO faq_categorie (nom) VALUES (?)");
-            $stmt->execute([$nom]);
-
-            $_SESSION['message'] = 'La catégorie a été ajoutée avec succès !';
+            $stmt = $pdo->prepare("INSERT INTO faq_categorie (nom, icon) VALUES (?, ?)");
+            $stmt->execute([$nom, $icon]);
+            $_SESSION['message'] = 'Catégorie ajoutée avec succès.';
             $_SESSION['message_type'] = 'success';
             header("Location: visualiser.php");
             exit();
         } catch (Exception $e) {
-            $_SESSION['message'] = 'Erreur lors de l\'ajout de la catégorie : ' . $e->getMessage();
+            $_SESSION['message'] = 'Erreur : ' . $e->getMessage();
             $_SESSION['message_type'] = 'error';
         }
     }
@@ -62,6 +62,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <label for="nom">Nom de la catégorie<span class="required">*</span></label>
                             <input type="text" id="nom" name="nom" class="input-field" required>
                         </div>
+                        <div class="form-group">
+    <label for="icon">Icône Font Awesome <label for="icon">
+  Icône Font Awesome 
+  (ex: fa-solid fa-truck | 
+  <a href="https://fontawesome.com/search" target="_blank" style="color: #a4745a; text-decoration: underline;">
+    lien vers la bibliothèque
+  </a>)
+</label><span class="required">*</span></label>
+    <input type="text" id="icon" name="icon" class="input-field" placeholder="fa-truck" required>
+</div>
                     <div class="button-section">
                         <div class="buttons">
                             <button type="button" id="btn-retour" class="btn-beige" onclick="history.go(-1)">Retour</button>
