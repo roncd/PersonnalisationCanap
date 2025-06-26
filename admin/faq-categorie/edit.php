@@ -32,14 +32,15 @@ if (!$categorie) {
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nom = trim($_POST['nom']);
+    $icon = trim($_POST['icon']);
 
-    if (empty($nom)) {
-        $_SESSION['message'] = 'Le nom de la catégorie est requis.';
+    if (empty($nom) || empty($icon)) {
+        $_SESSION['message'] = 'Le nom et l’icône sont requis.';
         $_SESSION['message_type'] = 'error';
     } else {
         try {
-            $stmt = $pdo->prepare("UPDATE faq_categorie SET nom = ? WHERE id = ?");
-            $stmt->execute([$nom, $id]);
+            $stmt = $pdo->prepare("UPDATE faq_categorie SET nom = ?, icon = ? WHERE id = ?");
+            $stmt->execute([$nom, $icon, $id]);
 
             $_SESSION['message'] = 'Catégorie mise à jour avec succès.';
             $_SESSION['message_type'] = 'success';
@@ -84,6 +85,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <input type="text" id="nom" name="nom" class="input-field" 
                    value="<?= htmlspecialchars($categorie['nom']) ?>" required>
         </div>
+        <div class="form-group">
+<label for="icon">
+  Icône Font Awesome 
+  (ex: fa-solid fa-truck |
+  <a href="https://fontawesome.com/search" target="_blank" style="color: #a4745a; text-decoration: underline;">
+    lien vers la bibliothèque
+  </a>)
+</label>    <input type="text" id="icon" name="icon" class="input-field" 
+           placeholder="fa-truck" 
+           value="<?= htmlspecialchars($categorie['icon']) ?>" required>
+</div>
         <div class="button-section">
             <div class="buttons">
                 <button type="button" id="btn-retour" class="btn-beige" onclick="history.go(-1)">Retour</button>
