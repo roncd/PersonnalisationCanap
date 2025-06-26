@@ -14,7 +14,7 @@ $id = $_GET['id'] ?? null;
 if (!$id) {
     $_SESSION['message'] = 'ID de la catégorie manquant.';
     $_SESSION['message_type'] = 'error';
-    header("Location: visualiser_categories.php");
+    header("Location: visualiser-site.php");
     exit();
 }
 
@@ -47,5 +47,5 @@ try {
     $_SESSION['message_type'] = 'error';
 }
 
-header("Location: visualiser.php");
+header("Location: visualiser-site.php");
 exit();

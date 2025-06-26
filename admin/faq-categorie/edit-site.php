@@ -14,7 +14,7 @@ $id = $_GET['id'] ?? null;
 if (!$id) {
     $_SESSION['message'] = 'ID de la catégorie manquant.';
     $_SESSION['message_type'] = 'error';
-    header("Location: visualiser.php");
+    header("Location: visualiser-site.php");
     exit();
 }
 
@@ -26,7 +26,7 @@ $categorie = $stmt->fetch(PDO::FETCH_ASSOC);
 if (!$categorie) {
     $_SESSION['message'] = 'Catégorie introuvable.';
     $_SESSION['message_type'] = 'error';
-    header("Location: visualiser.php");
+    header("Location: visualiser-site.php");
     exit();
 }
 
@@ -44,7 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             $_SESSION['message'] = 'Catégorie mise à jour avec succès.';
             $_SESSION['message_type'] = 'success';
-            header("Location: visualiser.php");
+            header("Location: visualiser-site.php");
             exit();
         } catch (Exception $e) {
             $_SESSION['message'] = 'Erreur : ' . $e->getMessage();

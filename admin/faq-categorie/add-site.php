@@ -22,7 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt->execute([$nom, $icon]);
             $_SESSION['message'] = 'Catégorie ajoutée avec succès.';
             $_SESSION['message_type'] = 'success';
-            header("Location: visualiser.php");
+            header("Location: visualiser-site.php");
             exit();
         } catch (Exception $e) {
             $_SESSION['message'] = 'Erreur : ' . $e->getMessage();
