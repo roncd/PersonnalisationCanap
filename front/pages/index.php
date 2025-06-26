@@ -124,6 +124,7 @@ function calculPrix($commande, &$composition = []) {
     <link rel="stylesheet" href="../../styles/buttons.css">
     <link rel="stylesheet" href="../../styles/accueil.css">
     <script src="../../node_modules/@preline/carousel/index.js"></script>
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <script type="module" src="../../script/animate-value.js"></script>
 </head>
        
