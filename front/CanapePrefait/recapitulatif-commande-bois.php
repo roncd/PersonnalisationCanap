@@ -278,7 +278,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['comment'])) {
 
         <div class="footer-processus">
           <p>Total : <span><?= number_format($prixCommande, 2, ',', ' ') ?> €</span></p>
-          <div class="buttons">
+          <div class="buttons footer-buttons">
             <button onclick="retourEtapePrecedente()" class="btn-beige">Retour</button>
             <button id="btn-generer" class="btn-noir">Générer un devis</button>
           </div>

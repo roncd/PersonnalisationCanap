@@ -122,10 +122,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 
   <main>
-    <div class="container transition">
-      <!-- Colonne de gauche -->
-      <div class="left-column">
-        <div class="fil-ariane-container-prefait h2" aria-label="fil-ariane">
+      <div class="fil-ariane-container h2 " aria-label="fil-ariane">
           <ul class="fil-ariane">
             <?php
             $id = $_GET['id'] ?? null;
@@ -134,7 +131,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <li><a href="./choix-mousse.php?id=<?= $id ?>" class="active">Mousse</a></li>
           </ul>
         </div>
-        <h2>Choisi ta mousse</h2>
+<div style="margin-bottom: 60px !important;"></div>    <div class="container transition">
+      <!-- Colonne de gauche -->
+      <div class="left-column">
+        <h2>Choisi ta mousse </h2>
         <section class="color-options">
           <?php if (!empty($mousse)): ?>
             <?php foreach ($mousse as $mousse_bois): ?>
@@ -175,7 +175,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 
       <!-- Colonne de droite -->
-      <div class="right-column h2 ">
+      <div class="right-column">
         <section class="main-display2">
           <div class="buttons">
             <button id="btn-aide" class="btn-beige">Besoin d'aide ?</button>
