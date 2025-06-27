@@ -438,11 +438,20 @@ label {
   border-radius: 5px;
 }
 
+.align-right {
+  display: flex;
+  justify-content: flex-end; /* Aligne les boutons à droite */
+  gap: 5px; /* Espace entre les boutons */
+}
+
+
 /* ============ RESPONSIVE TABLETTE ============ */
-@media (max-width: 1024px) {
-  .comment-section {
+@media (max-width: 1070px) {
+      .main-display-recap img  {
     display: none; 
   }
+
+  
 
   .footer-buttons {
   display: flex;
@@ -469,6 +478,10 @@ label {
     padding-right: 0;
   }
 
+  .right-column{
+    justify-content: start;
+    padding-right: 0;
+  }
   .main-display img {
    display: none;
   }
@@ -478,11 +491,6 @@ label {
     margin-top: 10px;
   }
 
-  .main-display-recap img {
-    width: 100%;
-    max-width: 450px;
-    height: auto;
-  }
 
  
   .color-2options {
@@ -512,7 +520,6 @@ label {
     align-items: flex-start;
     margin-bottom: 10px;
   }
-
   
   .footer p,
   .footer-processus p {
@@ -545,6 +552,36 @@ label {
   width: 100%;
 }
 
+  .footer-processus .buttons {
+  display: flex;
+  justify-content: space-between; /* Un bouton à gauche, un bouton à droite */
+  gap: 10px; /* Optionnel : espace entre les boutons */
+  width: 100%;
+}
+
+
+  .recap-container {
+    flex-direction: column;
+  }
+
+  .left-column {
+    order: 1;
+    width: 100%;
+  }
+
+  .right-column {
+    order: 2;
+    width: 100%;
+  }
+
+      
+    .h2-recap {
+        padding-top: 55px!important;
+    }
+
+
+
+
 
 }
 
@@ -554,12 +591,20 @@ label {
     font-size: 1.4rem;
   }
 
+
+
+
     .fil-ariane-container {
     font-size: 12px;
 }
 
     .h2 {
         padding-top: 5px!important;
+    }
+
+    
+    .h2-recap {
+        padding-top: 55px!important;
     }
 
   
@@ -611,8 +656,26 @@ padding-bottom: 1rem;  }
   width: 100%;
 }
 
-  
+  .footer-processus .buttons {
+  display: flex;
+  justify-content: space-between; /* Un bouton à gauche, un bouton à droite */
+  gap: 10px; /* Optionnel : espace entre les boutons */
+  width: 100%;
+}
 
+  .recap-container {
+    flex-direction: column;
+  }
+
+  .left-column {
+    order: 1;
+    width: 100%;
+  }
+
+  .right-column {
+    order: 2;
+    width: 100%;
+  }
 
 }
 
@@ -621,6 +684,30 @@ padding-bottom: 1rem;  }
   body {
     margin: 0 10px;
   }
+
+    .footer-processus .buttons {
+  display: flex;
+  justify-content: space-between; /* Un bouton à gauche, un bouton à droite */
+  gap: 10px; /* Optionnel : espace entre les boutons */
+  width: 100%;
+}
+
+
+  .recap-container {
+    flex-direction: column;
+  }
+
+  .left-column {
+    order: 1;
+    width: 100%;
+  }
+
+  .right-column {
+    order: 2;
+    width: 100%;
+  }
+
+
 
   .fil-ariane-container {
     font-size: 12px;
@@ -693,6 +780,22 @@ padding-bottom: 1rem;  }
   gap: 10px; /* Optionnel : espace entre les boutons */
   width: 100%;
 }
+
+
+  .recap-container {
+    flex-direction: column;
+  }
+
+  .left-column {
+    order: 1;
+    width: 100%;
+  }
+
+  .right-column {
+    order: 2;
+    width: 100%;
+  }
+
 
 
 }

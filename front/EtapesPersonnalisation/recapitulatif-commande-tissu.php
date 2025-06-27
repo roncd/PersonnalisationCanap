@@ -163,10 +163,14 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['comment'])) {
   </header>
 
   <main>
-    <div class="container transition">
+    <div class="container transition recap-container">
       <!-- Colonne de gauche -->
-      <div class="left-column">
-        <h2 class="h2">Récapitulatif de la commande</h2>
+      <div class="left-column ">
+          <div class="buttons align-right h2 h2-recap">
+            <button id="btn-aide" class="btn-beige">Besoin d'aide ?</button>
+            <button type="button" data-url="../pages/dashboard.php" id="btn-abandonner" class="btn-noir">Abandonner</button>
+          </div>
+        <h2>Récapitulatif de la commande</h2>
 
         <section class="color-options">
           <h3>Étape 1.1 : Choisi ta structure</h3>
@@ -277,10 +281,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['comment'])) {
       <!-- Colonne de droite -->
       <div class="right-column">
         <section class="main-display-recap">
-          <div class="buttons">
-            <button id="btn-aide" class="btn-beige">Besoin d'aide ?</button>
-            <button type="button" data-url="../pages/dashboard.php" id="btn-abandonner" class="btn-noir">Abandonner</button>
-          </div>
           <img src="../../medias/canapekenitra.png" alt="Armoire">
 
 
