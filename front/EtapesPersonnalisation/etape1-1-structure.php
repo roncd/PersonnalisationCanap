@@ -90,7 +90,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </section>
 
 
-        <div class="footer">
+        <div class="footer footer-buttons">
           <p>Total : <span>0 €</span></p>
           <div class="buttons">
             <form method="POST" action="">
