@@ -88,6 +88,7 @@ span {
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
   width: 130px;
   height: 130px;
+  margin-bottom: 15px;
 }
 
 .color-options .option p {
@@ -222,7 +223,6 @@ span {
 .right-column-recap {
   flex: 1;
   display: flex;
-  justify-content: flex-end;
   align-items: flex-start;
   position: relative;
   padding-right: 20px;
@@ -261,13 +261,17 @@ span {
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-.main-display-recap img{
-  width: 500px;          /* cadre fixe */
-  height: 430px;         /* cadre fixe */
-  object-fit: cover;     /* remplit le cadre en rognant si besoin */
-  object-position: center;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0,0,0,.2);
+.main-display-recap img {
+    width: 100%;
+    max-width: 674px;
+    height: auto;
+    aspect-ratio: 674 / 430;
+    object-fit: cover;
+    object-position: center;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, .2);
+    display: block;
+    margin: 0 auto;
 }
 
 .comment-section {
@@ -673,13 +677,8 @@ height: 170px;
     gap: 20px;
     margin-top: 0;              /* déjà géré par le gap ci-dessus           */
   }
-  .main-display-recap img{
-    width: 100%;
-    height: auto;
-    max-height: 300px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0,0,0,.2);
-  }
+    .main-display-recap img{ display:none; }  /* cache l’image uniquement mobile */
+
 
   /* 4. Grille des options (colonne gauche) */
   .color-options{
@@ -806,17 +805,24 @@ height: 170px;
     gap: 20px;
     margin-top: 0;              /* déjà géré par le gap ci-dessus           */
   }
-  .main-display-recap img{
+
+
+  .main-display-recap img {
     width: 100%;
+    max-width: 674px;
     height: auto;
-    max-height: 300px;
+    aspect-ratio: 674 / 430;
+    object-fit: cover;
+    object-position: center;
     border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0,0,0,.2);
-  }
+    box-shadow: 0 4px 8px rgba(0, 0, 0, .2);
+    display: block;
+    margin: 0 auto;
+}
 
   /* petit espace entre image et texte */
   .color-options .option img{
-    margin-bottom:6px;
+    margin-bottom:15px;
   }
 
   /* 5. Zone commentaire largeur fluide */
