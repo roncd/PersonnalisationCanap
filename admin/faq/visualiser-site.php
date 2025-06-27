@@ -90,10 +90,10 @@ $totalPages = ceil($totalCommandes / $limit);
             <div class="option">
                 <div class="section-button">
                     <div>
-                        <button onclick="location.href='../pages/visualiser.php'" class="btn-grey" type="button">Retourner aux options</button>
+                        <button onclick="location.href='../pages/site.php'" class="btn-grey" type="button">Retourner éléments du site</button>
                     </div>
                     <div>
-                        <button onclick="location.href='add.php'" class="btn-noir" type="button">+ Ajouter à la FAQ</button>
+                        <button onclick="location.href='add-site.php'" class="btn-noir" type="button">+ Ajouter à la FAQ</button>
                     </div>
                 </div>
                 <div class="search-bar">
@@ -151,7 +151,7 @@ $totalPages = ceil($totalCommandes / $limit);
                 echo "<td>" . htmlspecialchars($row['reponse']) . "</td>";
                 echo "<td>" . htmlspecialchars($categorieNom) . "</td>";
                 echo "<td class='actions'>";
-                echo "<a href='edit.php?id={$row['id']}' class='edit-action actions vert' title='Modifier'>EDIT</a>";
+                echo "<a href='edit-site.php?id={$row['id']}' class='edit-action actions vert' title='Modifier'>EDIT</a>";
                 echo "<a href='delete.php?id={$row['id']}' class='delete-action actions rouge' title='Supprimer'>DELETE</a>";
                 echo "</td>";
                 echo "</tr>";

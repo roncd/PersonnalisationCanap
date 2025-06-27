@@ -10,7 +10,7 @@ if (!isset($_SESSION['id'])) {
 }
 
 // Récupération de toutes les catégories FAQ
-$stmt = $pdo->prepare("SELECT id, nom FROM faq_categorie ORDER BY id DESC");
+$stmt = $pdo->prepare("SELECT id, nom, icon FROM faq_categorie ORDER BY id DESC");
 $stmt->execute();
 $categories = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -58,14 +58,15 @@ $totalPages = ceil($totalCommandes / $limit);
     </header>
     <main>
         <div class="container">
-            <h2>FAQ</h2>
+                <h2>Liste des catégories de la FAQ</h2>
+
             <div class="option">
                 <div class="section-button">
                     <div>
-                        <button onclick="location.href='../pages/visualiser.php'" class="btn-grey" type="button">Retourner aux options</button>
+                        <button onclick="location.href='../pages/site.php'" class="btn-grey" type="button">Retourner aux éléments du site</button>
                     </div>
                     <div>
-                        <button onclick="location.href='add.php'" class="btn-noir" type="button">+ Ajouter à la FAQ</button>
+                        <button onclick="location.href='add-site.php'" class="btn-noir" type="button">+ Ajouter une catégorie à la FAQ</button>
                     </div>
                 </div>
                 <div class="search-bar">
@@ -77,13 +78,13 @@ $totalPages = ceil($totalCommandes / $limit);
             </div>
             <?php require '../include/message.php'; ?>
            <div class="tab-container">
-    <h2>Liste des catégories de la FAQ</h2>
     <?php require '../include/message.php'; ?>
     <table class="styled-table">
         <thead>
             <tr>
                 <th>ID</th>
                 <th>Nom</th>
+                <th>Icône</th>
                 <th class="sticky-col">Action</th>
             </tr>
         </thead>
@@ -92,8 +93,9 @@ $totalPages = ceil($totalCommandes / $limit);
                 <tr>
                     <td><?= htmlspecialchars($categorie['id']) ?></td>
                     <td><?= htmlspecialchars($categorie['nom']) ?></td>
+                    <td><?= htmlspecialchars($categorie['icon']) ?></td>
                     <td class="actions">
-                        <a href="edit.php?id=<?= $categorie['id'] ?>" class="edit-action actions vert" title="Modifier">EDIT</a>
+                        <a href="edit-site.php?id=<?= $categorie['id'] ?>" class="edit-action actions vert" title="Modifier">EDIT</a>
                         <a href="delete.php?id=<?= $categorie['id'] ?>" class="delete-action actions rouge" title="Supprimer">DELETE</a>
                     </td>
                 </tr>

@@ -2,22 +2,32 @@
 require '../../admin/config.php';
 session_start();
 
+$search = $_GET['search'] ?? '';
+
+//Récupération des canapés avec leurs types et structures associés
 $sql = "SELECT cp.*, 
                tb.nom AS type_nom, 
                s.nom AS structure_nom
         FROM commande_prefait cp
         LEFT JOIN type_banquette tb ON cp.id_banquette = tb.id
-        LEFT JOIN structure s ON cp.id_structure = s.id
-        ORDER BY cp.id DESC";
+        LEFT JOIN structure s ON cp.id_structure = s.id";
+
+//si une recherche est effectuée, on filtre par nom du canapé OU par nom du type
+if (!empty($search)) {
+    $sql .= " WHERE cp.nom LIKE :search OR tb.nom LIKE :search";
+}
+
+$sql .= " ORDER BY cp.id DESC";
 
 $stmt = $pdo->prepare($sql);
+
+if (!empty($search)) {
+    $stmt->bindValue(':search', '%' . $search . '%', PDO::PARAM_STR);
+}
+
 $stmt->execute();
 $commandes = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-
-$stmt = $pdo->prepare($sql);
-$stmt->execute();
-$commandes = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 function calculPrix($commande, &$composition = [])
 {
@@ -77,7 +87,7 @@ function calculPrix($commande, &$composition = [])
         }
     }
 
-    // 💰 Prix par centimètre (350 € / mètre = 3.5 € / cm)
+    // Prix par centimètre 
     $prixParCm = 3.5;
 
     foreach (['longueurA', 'longueurB', 'longueurC'] as $longueur) {
@@ -86,7 +96,7 @@ function calculPrix($commande, &$composition = [])
         }
     }
 
-    // 💡 Bonus : traitement spécifique de certains éléments (optionnel)
+    // Bonus : traitement spécifique de certains éléments (optionnel)
     if (!empty($composition)) {
         foreach ($composition as $nomTable => $details) {
             if ($nomTable === 'accoudoirs_bois_multiples') continue; // déjà traité
@@ -103,7 +113,6 @@ function calculPrix($commande, &$composition = [])
 
 
 ?>
-
 
 <!DOCTYPE html>
 <html lang="fr">
@@ -123,9 +132,6 @@ function calculPrix($commande, &$composition = [])
         <?php require '../../squelette/header.php'; ?>
 
     </header>
-
-
-
 
     <section class="hero-section">
         <div class="hero-container">
@@ -153,11 +159,27 @@ function calculPrix($commande, &$composition = [])
 
         </div>
 
-        <!-- ------------------- BARRE DE RECHERCHE ------------------- -->
-        <div class="search-bar" style="text-align:center; margin: 20px;">
-            <input type="text" id="searchInput" placeholder="Rechercher un canapé par nom ou par catégorie..."
-                style="padding: 10px; width: 300px;">
-        </div>
+          <!-- Nouveau select de tri prix -->
+  <select id="sortPrice" style="text-align:left; margin: 20px;">
+    <option value="none">Trier par prix</option>
+    <option value="asc">Prix : du - cher au + cher</option>
+    <option value="desc">Prix : du + cher au - cher</option>
+  </select>
+</div>
+
+        <!-- ------------------- BARRE DE RECHERCHE EN PHP ------------------- -->
+<div class="search-bar">
+    <form method="GET" action="" style="position: relative;">
+        <input 
+            type="text" 
+            name="search" 
+            id="searchInput"
+            placeholder="Rechercher par nom..." 
+            value="<?= htmlspecialchars($_GET['search'] ?? '', ENT_QUOTES) ?>"
+        >
+        <button type="button" id="clearSearch" class="clear-button" style="display: none;">&times;</button>
+    </form>
+</div>
 
         <!-- ------------------- SECTION COMBINAISONS ------------------- -->
         <section class="combination-section">
@@ -224,29 +246,62 @@ function calculPrix($commande, &$composition = [])
     </script>
 
     <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const searchInput = document.getElementById('searchInput');
-        const products = document.querySelectorAll('.product-card');
+    document.addEventListener('DOMContentLoaded', function () {
+  const sortSelect = document.getElementById('sortPrice');
+  const productsContainer = document.querySelector('.combination-container'); // conteneur des cartes
+  const products = Array.from(document.querySelectorAll('.product-card'));
 
-        searchInput.addEventListener('input', function() {
-            const searchTerm = this.value.trim().toLowerCase();
+  sortSelect.addEventListener('change', function () {
+    const value = this.value;
 
-            products.forEach(product => {
-                const productName = product.querySelector('h3')?.textContent.toLowerCase() ||
-                '';
-                const productType = product.getAttribute('data-type')?.toLowerCase() || '';
+    if (value === 'none') {
+      // Remettre dans l'ordre original (par id ou ordre DOM initial)
+      products.forEach(product => productsContainer.appendChild(product));
+      return;
+    }
 
-                // Affiche le produit si le searchTerm est dans le nom ou dans la catégorie
-                if (productName.includes(searchTerm) || productType.includes(searchTerm)) {
-                    product.style.display = 'block';
-                } else {
-                    product.style.display = 'none';
-                }
-            });
-        });
+    // Trier en fonction du prix affiché dans chaque carte
+    const sorted = products.slice().sort((a, b) => {
+      const priceA = parseFloat(a.querySelector('.price').textContent.replace(/\s/g, '').replace(',', '.').replace('€', '')) || 0;
+      const priceB = parseFloat(b.querySelector('.price').textContent.replace(/\s/g, '').replace(',', '.').replace('€', '')) || 0;
+
+      return value === 'asc' ? priceA - priceB : priceB - priceA;
     });
+
+    // Réordonner les cartes dans le DOM
+    sorted.forEach(product => productsContainer.appendChild(product));
+  });
+});
     </script>
 
+    <script>
+document.addEventListener('DOMContentLoaded', function () {
+    const searchInput = document.getElementById('searchInput');
+    const clearBtn = document.getElementById('clearSearch');
+
+    // Fonction pour afficher ou cacher le bouton clear
+    function toggleClearButton() {
+        if (searchInput.value.trim() !== '') {
+            clearBtn.style.display = 'block';
+        } else {
+            clearBtn.style.display = 'none';
+        }
+    }
+
+    // Repère les changements dans le champ de recherche
+    searchInput.addEventListener('input', toggleClearButton);
+
+    // Affiche ou masque au chargement
+    toggleClearButton();
+
+    // Supprime la recherche au clic sur la croix
+    clearBtn.addEventListener('click', function () {
+        searchInput.value = '';
+        toggleClearButton();
+        window.location.href = window.location.pathname; // recharge sans la recherche
+    });
+});
+</script>
 
 </body>
 

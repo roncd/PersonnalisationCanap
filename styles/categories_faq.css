@@ -2,7 +2,7 @@
 body {
   font-family: "Be Vietnam Pro", sans-serif;
   background-color: #f9f9f9;
-  color: #333;
+  color: #000000;
   margin: 0;
   padding: 0;
 }
@@ -16,10 +16,11 @@ body {
 
 /* ---- Titre de la page ---- */
 .faq-page-container h1 {
-  font-size: 32px;
+  font-size: 2.5rem;
+  margin-bottom: 10px;
+  font-family: "Baloo 2", sans-serif;
+  color: #000000;
   text-align: center;
-  margin-bottom: 40px;
-  color: #222;
 }
 
 /* ---- Barre de recherche ---- */
@@ -64,7 +65,7 @@ body {
 }
 
 .accordeon-item.active {
-  border-left: 4px solid #a4745a;
+  border-left: 4px solid #997765;
   padding-left: 16px;
   transition: background 0.3s ease;
 }
@@ -72,7 +73,7 @@ body {
 /* ---- Icône à droite ---- */
 .accordeon-icon {
   font-size: 26px;
-  color: #a4745a;
+  color: #997765;
   transition: transform 0.3s ease;
   font-weight: 700;
 }
@@ -92,7 +93,7 @@ body {
 .accordeon-content p {
   padding: 20px;
   font-size: 15px;
-  color: #555;
+  color: #000000;
   line-height: 1.7;
   margin: 0;
 }
@@ -116,4 +117,65 @@ body {
     padding: 16px;
     font-size: 14px;
   }
+
 }
+
+
+
+
+/* =============== RÉCAP MOBILE (≤ 768 px) =============== */
+@media (max-width: 768px) {
+
+  .faq-page-container h1 {
+  font-size: 2rem;
+  margin-top: -2.5rem;
+
+}
+
+
+  .accordeon-header {
+    font-size: 16px;
+    padding: 16px;
+  }
+
+  .accordeon-icon {
+    font-size: 20px;
+  }
+
+  .accordeon-content p {
+    padding: 16px;
+    font-size: 14px;
+  }
+
+
+
+}
+
+
+/* =============== RÉCAP TABLETTE (769 – 1110 px) =============== */
+@media (min-width: 769px) and (max-width: 1110px) {
+  
+  .faq-page-container h1 {
+  font-size: 2.30rem;
+  margin-top: -2.5rem;
+}
+
+
+  .accordeon-header {
+    font-size: 18px;
+    padding: 16px;
+  }
+
+  .accordeon-icon {
+    font-size: 20px;
+  }
+
+  .accordeon-content p {
+    padding: 16px;
+    font-size: 16px;
+  }
+
+
+    
+}
+

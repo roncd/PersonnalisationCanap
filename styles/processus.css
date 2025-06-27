@@ -443,6 +443,10 @@ label {
   .comment-section {
     display: none; 
   }
+
+  h2 {
+    font-size: 1.6rem;
+  }
   .container {
     flex-direction: column-reverse;    
     margin: 30px 20px;
@@ -485,6 +489,13 @@ label {
     flex-direction: column;
     gap: 20px;
     align-items: flex-start;
+    margin-bottom: 10px;
+  }
+
+  
+  .footer p,
+  .footer-processus p {
+    font-size: 22px;
   }
 
   .footer .buttons,
@@ -495,18 +506,26 @@ label {
   .fil-ariane-container {
     margin: 70px 10px 10px;
   }
+
+  .color-options .option img {
+    width: 218px;
+    height: 218px;
+}
+
 }
 
 /* RESPONSIVE MOBILE */
 @media (max-width: 768px) {
   h2 {
-    font-size: 24px;
+    font-size: 1.4rem;
   }
 
-  .color-options,
+  .color-options{
+  grid-template-columns: repeat(2, 1fr);  }
+
   .color-2options {
-    grid-template-columns: 1fr;
-  }
+  grid-template-columns: repeat(2, 1fr);
+padding-bottom: 1rem;  }
 
   .color-options .option img,
   .color-2options .option img {
@@ -532,6 +551,13 @@ label {
     gap: 20px;
   }
 
+  
+  .footer p,
+  .footer-processus p {
+    font-size: 22px;
+  }
+  
+
 
 }
 
@@ -542,7 +568,7 @@ label {
   }
 
   h2 {
-    font-size: 24px;
+    font-size: 1.4rem;
   }
 
   .container {
@@ -559,7 +585,7 @@ label {
 
   .footer p,
   .footer-processus p {
-    font-size: 18px;
+    font-size: 22px;
   }
 
   .btn-aide,
@@ -589,4 +615,5 @@ label {
     width: 30px;
     font-size: 14px;
   }
+
 }

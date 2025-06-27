@@ -29,7 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             $_SESSION['message'] = 'La question a été ajoutée avec succès !';
             $_SESSION['message_type'] = 'success';
-            header("Location: visualiser.php");
+            header("Location: visualiser-site.php");
             exit();
         } catch (Exception $e) {
             $_SESSION['message'] = 'Erreur lors de l\'ajout de la question : ' . $e->getMessage();

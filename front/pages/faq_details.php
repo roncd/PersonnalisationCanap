@@ -1,3 +1,31 @@
+<?php
+require '../../admin/config.php';
+session_start();
+
+$categorie_id = $_GET['categorie'] ?? null;
+
+if (!$categorie_id) {
+  header("Location: ../pages/categories_faq.php");
+  exit();
+}
+
+// Récupère le nom de la catégorie
+$stmtCat = $pdo->prepare("SELECT nom FROM faq_categorie WHERE id = ?");
+$stmtCat->execute([$categorie_id]);
+$categorie = $stmtCat->fetch(PDO::FETCH_ASSOC);
+
+// Si la catégorie n’existe pas
+if (!$categorie) {
+  header("Location: ../pages/categories_faq.php");
+  exit();
+}
+
+// Récupère toutes les questions associées à cette catégorie
+$stmtFaq = $pdo->prepare("SELECT question, reponse FROM faq WHERE categorie_id = ? ORDER BY id ASC");
+$stmtFaq->execute([$categorie_id]);
+$questions = $stmtFaq->fetchAll(PDO::FETCH_ASSOC);
+?>
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -5,7 +33,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" type="image/x-icon" href="../../../medias/favicon.png">
   <link rel="stylesheet" href="../../styles/categories_faq.css">
-  <title>Livraison</title>
+  <title>Livraison ci affiche FAQ - non de categori</title>
 </head>
 <body>
 
@@ -16,12 +44,34 @@
 
   <main class="faq-page">
     <div class="faq-page-container">
-      <h1>Livraison</h1>
+        
+    <h1><?= htmlspecialchars($categorie['nom']) ?></h1>
+<input type="text" id="faq-search" placeholder="Rechercher une question..." class="faq-search">
 
-      <!-- Barre de recherche -->
+<!-- Liste des questions dynamiques -->
+<div class="faq" id="faq-list">
+  <?php if (count($questions) > 0): ?>
+    <?php foreach ($questions as $faq): ?>
+      <div class="accordeon-item">
+        <button class="accordeon-header">
+          <span class="accordeon-title"><?= htmlspecialchars($faq['question']) ?></span>
+          <span class="accordeon-icon">+</span>
+        </button>
+        <div class="accordeon-content">
+          <p><?= nl2br(htmlspecialchars($faq['reponse'])) ?></p>
+        </div>
+      </div>
+    <?php endforeach; ?>
+  <?php else: ?>
+    <p style="text-align:center; font-weight:500; color:#a4745a;">Aucune question trouvée pour cette catégorie.</p>
+  <?php endif; ?>
+</div>
+      <!--<h1>Livraison ici on met le nom de la categorie</h1>
+
+       Barre de recherche
       <input type="text" id="faq-search" placeholder="Rechercher une question..." class="faq-search">
-
-      <!-- Liste des questions -->
+ et tu rend la liste de questoin dynamique en fonction des des categorie genre 
+      Liste des questions
       <div class="faq" id="faq-list">
         <div class="accordeon-item">
           <button class="accordeon-header">
@@ -53,11 +103,14 @@
           </div>
         </div>
 
-      <!-- Message aucun résultat -->
+
+
+      Message aucun résultat
       <p id="no-results" style="display:none; text-align:center; color:#a4745a; font-weight:500;">
         Aucune question ne correspond à votre recherche.
       </p>
     </div>
+     -->
   </main>
 
   <?php include '../../squelette/footer.php'; ?>
