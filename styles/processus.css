@@ -208,6 +208,8 @@ span {
   align-items: flex-start;
   position: relative;
   padding-right: 20px;
+  flex-wrap: wrap; /* Permet aux éléments de passer à la ligne si besoin */
+
 }
 
 .main-display {
@@ -228,10 +230,14 @@ span {
 }
 
 .main-display img {
-    width: 700px;
-    height: 500px;
-    border-radius: 10px;
-    object-fit: cover;
+  max-width: 100%;
+  width: 700px;
+  height: auto; /* Change pour auto pour éviter les déformations */
+  max-height: 500px;
+  border-radius: 10px;
+  object-fit: cover;
+  transition: all 0.3s ease;
+
 }
 
 
@@ -250,7 +256,7 @@ span {
 .comment-section {
   width: 100%;
   text-align: left;
-  margin-top: 20px;
+  margin-top: 45px;
 }
 
 .comment-section h3 {
@@ -459,6 +465,16 @@ label {
     display: none; 
   }
 
+  .comment-section {
+  margin-top: 20px;
+}
+
+
+.main-display-recap {
+  margin-top: -23px;
+}
+
+
   
 
   .footer-buttons {
@@ -516,6 +532,7 @@ label {
   overflow-y: auto;      /* conserve la barre verticale                    */
   padding-right: 8px;    /* place pour la scrollbar (optionnel)            */
 }
+
 
   .form-row {
     flex-direction: column;
@@ -598,6 +615,16 @@ label {
   h2 {
     font-size: 1.4rem;
   }
+  
+  .main-display-recap {
+  margin-top: -23px;
+}
+
+
+  
+  .comment-section {
+  margin-top: 20px;
+}
 
 
 
@@ -624,16 +651,26 @@ label {
   grid-template-columns: repeat(2, 1fr);  }
 
   .color-2options {
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(1, 1fr);
 padding-bottom: 1rem;  }
 
-  .color-options .option img,
-  .color-2options .option img {
-    width: 100%;
-    max-width: 220px;
-    height: auto;
+  .color-options .option img {
+   object-fit: cover;
+    border-radius: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    width: 120px;
+    height: 120px;
+    margin-bottom: 15px;
   }
-
+  .color-2options .option img {
+   object-fit: cover;
+    border-radius: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    width: 140px;
+    height: 140px;
+    margin-bottom: 15px;
+  }
+  
   .main-display img,
   .main-display-recap img {
     display: none;
@@ -692,6 +729,16 @@ padding-bottom: 1rem;  }
   body {
     margin: 0 10px;
   }
+
+  .main-display-recap {
+  margin-top: -23px;
+}
+
+
+  
+  .comment-section {
+  margin-top: 20px;
+}
 
     .footer-processus .buttons {
   display: flex;
