@@ -78,7 +78,7 @@ $triURL = '?' . http_build_query($params);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Commande</title>
+    <title>Commande - Canapé marocain</title>
     <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
     <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&family=Be+Vietnam+Pro&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../../styles/admin/tab.css">
@@ -96,7 +96,7 @@ $triURL = '?' . http_build_query($params);
     </header>
     <main>
         <div class="container">
-            <h2>Commande</h2>
+            <h2>Commande - Canapé marrocain</h2>
             <div class="search-bar">
                 <form method="GET" action="index.php">
                     <input type="text" name="search" placeholder="Rechercher par ID client..." value="<?php echo htmlspecialchars($search); ?>">

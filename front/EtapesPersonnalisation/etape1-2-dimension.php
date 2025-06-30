@@ -101,19 +101,19 @@ if (isset($_GET['structure_id'])) {
           <div class="form-row">
             <div class="form-group">
               <label for="longueurA">Longueur banquette A (en cm) :</label>
-              <input type="number" id="longueurA" name="longueurA" class="input-field" placeholder="Ex: 150">
+              <input type="number" id="longueurA" name="longueurA" class="input-field" value="<?= $_POST['longueurA'] ?? '' ?>" placeholder="Ex: 150">
             </div>
           </div>
           <div class="form-row">
             <div class="form-group">
               <label for="longueurB">Longueur banquette B (en cm) :</label>
-              <input type="number" id="longueurB" name="longueurB" class="input-field" placeholder="Ex: 350">
+              <input type="number" id="longueurB" name="longueurB" class="input-field" value="<?= $_POST['longueurB'] ?? '' ?>" placeholder="Ex: 350">
             </div>
           </div>
           <div class="form-row">
             <div class="form-group">
               <label for="longueurC">Longueur banquette C (en cm) :</label>
-              <input type="number" id="longueurC" name="longueurC" class="input-field" placeholder="Ex: 350">
+              <input type="number" id="longueurC" name="longueurC" class="input-field" value="<?= $_POST['longueurC'] ?? '' ?>" placeholder="Ex: 350">
             </div>
           </div>
           <div class="footer">
@@ -126,23 +126,33 @@ if (isset($_GET['structure_id'])) {
           </div>
         </form>
       </div>
+
       <script>
         document.addEventListener('DOMContentLoaded', () => {
-          // Utiliser la variable PHP $nbLongueurs pour afficher les bons champs
-          const nbLongueurs = <?php echo $nbLongueurs; ?>;
+          const nbLongueurs = <?= (int) $nbLongueurs ?>;
+
           updateVisibleInputs(nbLongueurs);
 
           function updateVisibleInputs(nb) {
-            const a = document.getElementById('longueurA').closest('.form-row');
-            const b = document.getElementById('longueurB').closest('.form-row');
-            const c = document.getElementById('longueurC').closest('.form-row');
+            const inputA = document.getElementById("longueurA");
+            const inputB = document.getElementById("longueurB");
+            const inputC = document.getElementById("longueurC");
+
+            const a = inputA.closest('.form-row');
+            const b = inputB.closest('.form-row');
+            const c = inputC.closest('.form-row');
 
             a.style.display = nb >= 1 ? 'block' : 'none';
             b.style.display = nb >= 2 ? 'block' : 'none';
             c.style.display = nb >= 3 ? 'block' : 'none';
+
+            inputA.required = nb >= 1;
+            inputB.required = nb >= 2;
+            inputC.required = nb >= 3;
           }
         });
       </script>
+
 
       <script>
         document.addEventListener("DOMContentLoaded", () => {
@@ -248,7 +258,6 @@ if (isset($_GET['structure_id'])) {
       });
     </script>
 
-
     <!-- VARIATION DES PRIX  -->
     <script>
       document.addEventListener('DOMContentLoaded', () => {
@@ -349,7 +358,19 @@ if (isset($_GET['structure_id'])) {
             }
           });
         });
+        const selectedStructureId = <?= (int) $_GET['structure_id'] ?? 0 ?>;
+        const structureKey = `selectedStructure_${userId}`;
+        const previousStructureId = parseInt(sessionStorage.getItem(structureKey)) || 0;
 
+        // Si la structure a changé, on efface les dimensions sauvegardées
+        if (previousStructureId !== selectedStructureId) {
+          sessionStorage.removeItem(dimensionKey);
+          savedDimensions = {
+            longueurB: "",
+            longueurC: ""
+          };
+          sessionStorage.setItem(structureKey, selectedStructureId);
+        }
         // Pré-remplir les champs avec les dimensions sauvegardées
         document.getElementById("longueurA").value = savedDimensions.longueurA;
         document.getElementById("longueurB").value = savedDimensions.longueurB;
@@ -369,7 +390,6 @@ if (isset($_GET['structure_id'])) {
         updateTotal();
       });
     </script>
-
 
     <!-- BOUTTON RETOUR -->
     <script>

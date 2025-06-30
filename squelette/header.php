@@ -1,3 +1,22 @@
+<?php
+require_once '../../admin/config.php';
+
+$nombreArticles = 0;
+
+if (isset($_SESSION['user_id'])) {
+    $stmt = $pdo->prepare("
+        SELECT SUM(quantite) as total 
+        FROM panier_detail pd
+        JOIN panier p ON pd.id_panier = p.id
+        WHERE p.id_client = ?
+    ");
+    $stmt->execute([$_SESSION['user_id']]);
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    $nombreArticles = $result['total'] ?? 0;
+}
+?>
+
+
 <!DOCTYPE html>
 <html lang="fr">
 
@@ -74,7 +93,7 @@
                     </a>
                     <ul class="dropdown-menu">
                         <div class="drop">     
-                            <li><a href="../pages/commandes.php">Mes commandes</a></li>
+                            <li><a href="../pages/commandes.php">Suivis commandes</a></li>
                             <li><a href="../pages/information.php">Mes informations</a></li>
                             <?php if (isset($_SESSION['user_id'])): ?>
                             <li><a href="../formulaire/logout.php">Déconnexion</a></li>
@@ -95,10 +114,13 @@
 
           <!-- Panier à droite -->
         <div class="panier">
-            <a href="../pages/panier.php">
-                <img src="../../assets/icone-panier.svg" alt="Logo Panier">
-            </a>
-        </div>
+    <a href="../pages/panier.php" style="position: relative; display: inline-block;">
+        <img src="../../assets/icone-panier.svg" alt="Panier">
+        <?php if ($nombreArticles > 0): ?>
+            <span class="panier-count"><?= $nombreArticles ?></span>
+        <?php endif; ?>
+    </a>
+</div>
          
     </div>
     </header>

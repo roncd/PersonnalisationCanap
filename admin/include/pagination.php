@@ -1,51 +1,58 @@
-<?php
-if (!$search) {
-    echo '<nav class="nav" aria-label="pagination">';
-    echo '<ul class="pagination">';
-    $params = $_GET;
-    unset($params['page']);
-    if ($page > 1) {
-        echo '<li><a href="?' . http_build_query($params) . '&page=' . ($page - 1) . '">Précédent</a></li>';
-    }
+<?php if (!$search): ?>
+    <nav class="nav" aria-label="pagination">
+        <ul class="pagination">
+            <?php
+            $params = $_GET;
 
-    // Nombre maximal de liens à afficher
-    $max_links = 3;
-    // Premier lien pagination 
-    $start = max(1, $page - floor($max_links / 2));
-    // Dernier lien pagination
-    $end = min($totalPages, $start + $max_links - 1);
+            if ($page > 1):
+                $params['page'] = $page - 1;
+            ?>
+                <li><a href="?<?= http_build_query($params) ?>">Précédent</a></li>
+            <?php endif; ?>
 
-    if ($end - $start + 1 < $max_links) {
-        $start = max(1, $end - $max_links + 1);
-    }
+            <?php
+            $max_links = 3;
+            $start = max(1, $page - floor($max_links / 2));
+            $end = min($totalPages, $start + $max_links - 1);
 
-    // Affichage de première page et de ... entre max_link et première page
-    if ($start > 1) {
-        echo '<li><a href="?' . http_build_query($params) . '&page=1">1</a></li>';
-        if ($start > 2) {
-            echo '<li><span>…</span></li>';
-        }
-    }
+            if ($end - $start + 1 < $max_links) {
+                $start = max(1, $end - $max_links + 1);
+            }
 
-    // Page active
-    for ($i = $start; $i <= $end; $i++) {
-        echo '<li>';
-        echo '<a class="' . ($i == $page ? 'active' : '') . '" href="?' . http_build_query($params) . '&page=' . $i . '">' . $i . '</a>';
-        echo '</li>';
-    }
+            if ($start > 1):
+                $params['page'] = 1;
+            ?>
+                <li><a href="?<?= http_build_query($params) ?>">1</a></li>
+                <?php if ($start > 2): ?>
+                    <li><span>…</span></li>
+                <?php endif; ?>
+            <?php endif; ?>
 
-    // Affichage de dernière page et de ... entre max_link et dernière page
-    if ($end < $totalPages) {
-        if ($end < $totalPages - 1) {
-            echo '<li><span>…</span></li>';
-        }
-        echo '<li><a href="?' . http_build_query($params) . '&page=' . $totalPages . '">' . $totalPages . '</a></li>';
-    }
+            <?php for ($i = $start; $i <= $end; $i++): ?>
+                <?php
+                $params['page'] = $i;
+                ?>
+                <li>
+                    <a class="<?= $i == $page ? 'active' : '' ?>" href="?<?= http_build_query($params) ?>"><?= $i ?></a>
+                </li>
+            <?php endfor; ?>
 
-    if ($page < $totalPages) {
-        echo '<li><a href="?' . http_build_query($params) . '&page=' . ($page + 1) . '">Suivant</a></li>';
-    }
+            <?php if ($end < $totalPages): ?>
+                <?php if ($end < $totalPages - 1): ?>
+                    <li><span>…</span></li>
+                <?php endif; ?>
+                <?php
+                $params['page'] = $totalPages;
+                ?>
+                <li><a href="?<?= http_build_query($params) ?>"><?= $totalPages ?></a></li>
+            <?php endif; ?>
 
-    echo '</ul>';
-    echo '</nav>';
-}
+            <?php if ($page < $totalPages):
+                $params['page'] = $page + 1;
+            ?>
+                <li><a href="?<?= http_build_query($params) ?>">Suivant</a></li>
+            <?php endif; ?>
+        </ul>
+    </nav>
+<?php endif; ?>
+

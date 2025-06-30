@@ -170,7 +170,7 @@ $selected = (string) $commande['statut'];
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Modifie une commande</title>
+    <title>Modifie une commande - Canapé marocain</title>
     <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
     <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&family=Be+Vietnam+Pro&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../../styles/admin/ajout.css">
@@ -186,7 +186,7 @@ $selected = (string) $commande['statut'];
     </header>
     <main>
         <div class="container">
-            <h2>Modifie une commande</h2>
+            <h2>Modifie une commande - Canapé marocain</h2>
             <?php require '../include/message.php'; ?>
             <div class="form">
                 <form action="edit.php?id=<?php echo $commande['id']; ?>" method="POST" enctype="multipart/form-data" class="formulaire-creation-compte">

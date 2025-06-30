@@ -93,7 +93,7 @@ function age($date)
 
                     <!-- Bloc commandes -->
                     <section class="info-card commandes-card block-commandes">
-                        <h2>5 DERNIÈRE COMMANDES <?= "<a href='../commande-detail/index.php?search=" . urlencode($client['id']) . "'>Voir plus</a>"; ?></h2>
+                        <h2>5 DERNIÈRE COMMANDES (canapé) <?= "<a href='../commande-detail/index.php?search=" . urlencode($client['id']) . "'>Voir plus</a>"; ?></h2>
                         <table>
                             <thead>
                                 <tr>
@@ -142,6 +142,43 @@ function age($date)
                         <p>Adresse : <?= htmlspecialchars($client['adresse']) ?><br>
                             Code postale : <?= htmlspecialchars($client['codepostal']) ?><br>
                             Informations supplémentaires : <?= ($client['info']) ?></p>
+                    </section>
+
+                     <section class="info-card commandes-card block-panier">
+                        <h2>5 DERNIER PANIER <?= "<a href='../panier/index.php?search=" . urlencode($client['id']) . "'>Voir plus</a>"; ?></h2>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Date</th>
+                                    <th>Statut</th>
+                                    <th>Montant</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php
+
+                                $stmt = $pdo->prepare("SELECT id, id_client, date, prix, statut FROM panier_final WHERE id_client = :id_client ORDER BY id DESC LIMIT :limit");
+                                $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
+                                $stmt->bindValue(':id_client', $id, PDO::PARAM_INT);
+                                $stmt->execute();
+                                $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+                                if (!empty($results)) {
+                                    foreach ($results as $commande) {
+                                        echo "<tr>";
+                                        echo "<td style='height: 30px;'>{$commande['id']}</td>";
+                                        echo "<td style='height: 30px;'>{$commande['date']}</td>";
+                                        echo "<td style='height: 30px;'>{$commande['statut']}</td>";
+                                        echo "<td style='height: 30px;'>{$commande['prix']}€</td>";
+                                        echo "</tr>";
+                                    }
+                                } else {
+                                    echo "<tr><td colspan='4'>Aucune commande trouvée pour ce client.</td></tr>";
+                                }
+                                ?>
+                            </tbody>
+                        </table>
                     </section>
                 <?php else: ?>
                     <p>Utilisateur non trouvé.</p>

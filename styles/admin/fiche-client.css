@@ -22,7 +22,8 @@ h1 {
     grid-template-areas:
         "identite commandes"
         "contact commandes"
-        "adresse .";
+        "adresse panier"
+        ". panier";
     gap: 30px;
 }
 
@@ -43,6 +44,10 @@ h1 {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+}
+
+.block-panier {
+    grid-area: panier;
 }
 
 .account-grid {

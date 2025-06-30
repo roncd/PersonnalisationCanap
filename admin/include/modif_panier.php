@@ -41,11 +41,26 @@ if ($detail) {
             } else {
                 $stmt = $pdo->prepare("DELETE FROM panier_detail WHERE id_panier = ? AND id_produit = ?");
                 $stmt->execute([$panier_id, $id_produit]);
+
+                $stmt_check = $pdo->prepare("SELECT COUNT(*) FROM panier_detail WHERE id_panier = ?");
+                $stmt_check->execute([$panier_id]);
+                if ($stmt_check->fetchColumn() == 0) {
+                    $stmt_panier = $pdo->prepare("DELETE FROM panier WHERE id = ?");
+                    $stmt_panier->execute([$panier_id]);
+                }
             }
             break;
+
         case 'remove':
             $stmt = $pdo->prepare("DELETE FROM panier_detail WHERE id_panier = ? AND id_produit = ?");
             $stmt->execute([$panier_id, $id_produit]);
+
+            $stmt_check = $pdo->prepare("SELECT COUNT(*) FROM panier_detail WHERE id_panier = ?");
+            $stmt_check->execute([$panier_id]);
+            if ($stmt_check->fetchColumn() == 0) {
+                $stmt_panier = $pdo->prepare("DELETE FROM panier WHERE id = ?");
+                $stmt_panier->execute([$panier_id]);
+            }
             break;
     }
 }

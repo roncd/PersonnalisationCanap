@@ -24,16 +24,16 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-//Menu déroulant catalogue
+//Menu déroulant commande
 document.addEventListener('DOMContentLoaded', function () {
-    const catalogueLink = document.querySelector('.menu-link.catalogue');
-    const menuGroup = catalogueLink.closest('.menu-group');
+    const commandeLink = document.querySelector('.menu-link.commande-link');
+    const menuGroup = commandeLink.closest('.menu-group');
   
     const aside = document.querySelector('aside');
     const main = document.querySelector('main');
     const footer = document.querySelector('.footer');
   
-    catalogueLink.addEventListener('click', function (e) {
+    commandeLink.addEventListener('click', function (e) {
       e.preventDefault();
   
       const isCollapsed = aside.classList.contains('collapsed');
@@ -45,7 +45,7 @@ document.addEventListener('DOMContentLoaded', function () {
         localStorage.setItem('menuCollapsed', 'false');
       }
   
-      // Ouvre/ferme le sous-menu catalogue
+      // Ouvre/ferme le sous-menu commande
       menuGroup.classList.toggle('open');
     });
   });

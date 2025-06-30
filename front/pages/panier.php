@@ -11,31 +11,11 @@ if (!isset($_SESSION['user_id'])) {
 
 $id_client = $_SESSION['user_id'];
 
-$stmt = $pdo->prepare("SELECT id, prix FROM panier WHERE id_client = ?");
+$stmt = $pdo->prepare("SELECT * FROM panier WHERE id_client = ?");
 $stmt->execute([$id_client]);
 $panier = $stmt->fetch();
 
-if (!$panier) {
-    echo "<p style='text-align:center;'>Votre panier est vide.</p>";
-    exit;
-}
-
-$panier_id = $panier['id'];
-
-$stmt = $pdo->prepare("
-    SELECT 
-        vp.id AS id_produit,
-        vp.nom,
-        vp.prix,
-        pd.quantite
-    FROM panier_detail pd
-    JOIN vente_produit vp ON pd.id_produit = vp.id
-    WHERE pd.id_panier = ?
-");
-$stmt->execute([$panier_id]);
-$produits = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
-
 <!DOCTYPE html>
 <html lang="fr">
 
@@ -47,23 +27,49 @@ $produits = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <link rel="stylesheet" href="../../styles/panier.css">
     <link rel="stylesheet" href="../../styles/buttons.css">
     <link rel="stylesheet" href="../../styles/popup.css">
-    <script type="module" src="../../script/popup.js"></script>
-
-
+    <script type="module" src="../../script/popup-panier.js"></script>
 </head>
+
 
 <body>
     <?php include '../cookies/index.html'; ?>
     <header>
         <?php require '../../squelette/header.php'; ?>
     </header>
-
     <main>
         <section class="panier-container">
             <h1>Mon panier</h1>
             <div class="panier-actions">
                 <a href="nosproduits.php" class="btn-beige">Continuer mes achats</a>
             </div>
+            <?php if (!$panier): ?>
+                <p style="text-align:center;">Votre panier est vide.</p>
+            <?php else: $sql = "SELECT * FROM client WHERE id = :id_client";
+                $stmt = $pdo->prepare($sql);
+                $stmt->bindValue(':id_client', $panier['id_client'], PDO::PARAM_INT);
+                $stmt->execute();
+                $client = $stmt->fetch(PDO::FETCH_ASSOC);
+
+                if ($client) {
+                    $assocMail['client'][$panier['id_client']] = $client;
+                } else {
+                    $assocMail['client'][$panier['id_client']] = ['mail' => '-'];
+                }
+                $panier_id = $panier['id'];
+
+                $stmt = $pdo->prepare("
+                SELECT 
+                    vp.id AS id_produit,
+                    vp.nom,
+                    vp.prix,
+                    pd.quantite
+                FROM panier_detail pd
+                JOIN vente_produit vp ON pd.id_produit = vp.id
+                WHERE pd.id_panier = ?
+            ");
+                $stmt->execute([$panier_id]);
+                $produits = $stmt->fetchAll(PDO::FETCH_ASSOC); ?>
+           
             <div class="panier-info">
                 <div class="panier-table">
                     <table>
@@ -87,18 +93,18 @@ $produits = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                         <td>
                                             <div class="actions">
                                                 <div class="quantity-selector">
-                                                    <form action="modif_panier.php" method="post">
+                                                    <form action="../../admin/include/modif_panier.php" method="post">
                                                         <input type="hidden" name="action" value="decrement">
                                                         <input type="hidden" name="id_produit" value="<?= $produit['id_produit'] ?>">
                                                         <button type="submit">-</button>
                                                     </form>
-                                                    <form action="modif_panier.php" method="post">
+                                                    <form action="../../admin/include/modif_panier.php" method="post">
                                                         <input type="hidden" name="action" value="increment">
                                                         <input type="hidden" name="id_produit" value="<?= $produit['id_produit'] ?>">
                                                         <button type="submit">+</button>
                                                     </form>
                                                 </div>
-                                                <form action="modif_panier.php" method="post">
+                                                <form action="../../admin/include/modif_panier.php" method="post">
                                                     <input type="hidden" name="action" value="remove">
                                                     <input type="hidden" name="id_produit" value="<?= $produit['id_produit'] ?>">
                                                     <button class="btn-noir" type="submit">Supprimer</button>
@@ -127,17 +133,18 @@ $produits = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         <div class="recap-text">
                             <strong>Total : <?= number_format($panier['prix']) ?> €</strong>
                         </div>
-                        <button id="btn-generer" class="btn-noir">Générer un devis du panier</button>
+                        <button id="btn-generer" class="btn-noir">Générer le devis</button>
                     </div>
                 </div>
             </div>
+             <?php endif; ?>
         </section>
         <!-- Popup validation generation -->
         <div id="generer-popup" class="popup">
             <div class="popup-content">
                 <h2>Êtes vous sûr de vouloir générer un devis ?</h2>
                 <p>Vous ne pourrez plus effectuer de modifictions sur votre commande</p>
-                <button id="btn-oui" class="btn-beige" name="envoyer" data-id="<?= htmlspecialchars($id) ?>">Oui</button>
+                <button id="btn-oui" class="btn-beige" name="envoyer" data-id="<?= htmlspecialchars($panier_id) ?>">Oui</button>
                 <button id="btn-close" class="btn-noir">Non</button>
             </div>
         </div>
@@ -147,7 +154,7 @@ $produits = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <div class="popup-content">
                 <h2>Commande finalisé !</h2>
                 <p>Votre devis a été créé et envoyé à l'adresse suivante :
-                    </br><?php echo "<strong>" . htmlspecialchars($assocMail['client'][$commande['id_client']]['mail'] ?? '-') . "</strong>"; ?>
+                    </br><?php echo "<strong>" . htmlspecialchars($assocMail['client'][$panier['id_client']]['mail'] ?? '-') . "</strong>"; ?>
                 </p>
                 <br>
                 <button onclick="location.href='../pages/commandes.php'" class="btn-beige">Voir mes commandes</button>
@@ -156,8 +163,6 @@ $produits = $stmt->fetchAll(PDO::FETCH_ASSOC);
         </div>
         </div>
     </main>
-
-
 
     <footer>
         <?php require '../../squelette/footer.php'; ?>
