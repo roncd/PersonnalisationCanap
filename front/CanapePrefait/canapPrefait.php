@@ -109,19 +109,19 @@ $totalPrice += floatval($commande['prix_dimensions'] ?? 0);
           <!-- Afficher Longueur A uniquement si elle a une valeur -->
           <?php if (!empty($commande['longueurA'])): ?>
             <div class="option">
-              <p><strong>Longueur A :</strong> <?php echo htmlspecialchars($commande['longueurA']); ?> cm</p>
+              <p class="input-field"><strong>Longueur A :</strong> <?php echo htmlspecialchars($commande['longueurA']); ?> cm</p>
             </div>
           <?php endif; ?>
 
           <?php if (!empty($commande['longueurB'])): ?>
             <div class="option">
-              <p><strong>Longueur B :</strong> <?php echo htmlspecialchars($commande['longueurB']); ?> cm</p>
+              <p class="input-field"><strong>Longueur B :</strong> <?php echo htmlspecialchars($commande['longueurB']); ?> cm</p>
             </div>
           <?php endif; ?>
 
           <?php if (!empty($commande['longueurC'])): ?>
             <div class="option">
-              <p><strong>Longueur C :</strong> <?php echo htmlspecialchars($commande['longueurC']); ?> cm</p>
+              <p class="input-field"><strong>Longueur C :</strong> <?php echo htmlspecialchars($commande['longueurC']); ?> cm</p>
             </div>
           <?php endif; ?>
 
@@ -258,7 +258,7 @@ $totalPrice += floatval($commande['prix_dimensions'] ?? 0);
 
       <!-- Colonne de droite -->
       <div class="right-column h2 ">
-        <section class="main-display2">
+        <section class="main-display">
           <div class="buttons">
             <button id="btn-aide" class="btn-beige">Besoin d'aide ?</button>
           </div>
