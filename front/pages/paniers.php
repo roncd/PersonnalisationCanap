@@ -1,16 +1,16 @@
 <?php
-require '../config.php';
+require '../../admin/config.php';
 session_start();
-require '../include/session_expiration.php';
+require '../../admin/include/session_expiration.php';
 
-// Vérification si l'utilisateur est connecté
-if (!isset($_SESSION['id'])) {
+// Vérifier si l'utilisateur est connecté
+if (!isset($_SESSION['user_id'])) {
     $_SESSION['redirect_to'] = $_SERVER['REQUEST_URI'];
-    header("Location: ../index.php");
+    header("Location: ../formulaire/Connexion.php"); // Redirection vers la page de connexion
     exit();
 }
 
-$search = $_GET['search'] ?? '';
+$userId = $_SESSION['user_id'];
 
 $statut = isset($_GET['statut']) && in_array($_GET['statut'], ['validation', 'traitement', 'final'])
     ? $_GET['statut']
@@ -18,122 +18,65 @@ $statut = isset($_GET['statut']) && in_array($_GET['statut'], ['validation', 'tr
 
 // Paramètres de pagination
 $page = isset($_GET['page']) && is_numeric($_GET['page']) && $_GET['page'] > 0 ? (int)$_GET['page'] : 1;
-$limit = 10; // Nombre de commandes par page
-// Compte le nombre total de commandes pour ce statut
+$limit = 10;
+$offset = ($page - 1) * $limit;
+
+// Récupérer les commandes de l'utilisateur connecté
+$stmt = $pdo->prepare("SELECT pf.id, pf.date, pf.statut, cl.id AS id_client, cl.nom, cl.prenom 
+    FROM panier_final pf
+    JOIN client cl ON pf.id_client = cl.id 
+    WHERE pf.statut = :statut 
+    ORDER BY pf.id DESC 
+    LIMIT :limit OFFSET :offset");
+    $stmt->bindValue(':statut', $statut, PDO::PARAM_STR);
+    $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
+    $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+$stmt->execute();
+$commandes = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
 $stmtCount = $pdo->prepare("SELECT COUNT(*) FROM panier_final WHERE statut = :statut");
 $stmtCount->bindValue(':statut', $statut, PDO::PARAM_STR);
 $stmtCount->execute();
 $totalCommandes = $stmtCount->fetchColumn();
 
-$totalPages = ceil($totalCommandes / $limit); 
+$totalPages = ceil($totalCommandes / $limit);
 
-$offset = ($page - 1) * $limit;
-
-$order = (isset($_GET['order']) && $_GET['order'] === 'asc') ? 'ASC' : 'DESC';
-$next  = ($order === 'ASC') ? 'desc' : 'asc';
-$icon  = ($order === 'ASC')
-    ? '../../assets/sort-dsc.svg'
-    : '../../assets/sort-asc.svg';
-
-$params = $_GET;
-$params['order'] = $next;
-
-$triURL = '?' . http_build_query($params);
-
-if ($search) {
-    $stmt = $pdo->prepare("SELECT pf.id, pf.date, pf.statut, cl.id AS id_client, cl.nom, cl.prenom 
-    FROM panier_final pf
-    JOIN client cl ON pf.id_client = cl.id 
-    WHERE pf.statut = :statut AND (cl.nom LIKE :search OR pf.id LIKE :search)
-    ORDER BY pf.id $order");
-    $stmt->bindValue(':statut', $statut, PDO::PARAM_STR);
-    $stmt->bindValue(':search', '%' . $search . '%', PDO::PARAM_STR);
-} else {
-    // Récupérer les commandes pour le statut et la page actuels
-    $stmt = $pdo->prepare("SELECT pf.id, pf.date, pf.statut, cl.id AS id_client, cl.nom, cl.prenom 
-    FROM panier_final pf
-    JOIN client cl ON pf.id_client = cl.id 
-    WHERE pf.statut = :statut 
-    ORDER BY pf.id $order 
-    LIMIT :limit OFFSET :offset");
-    $stmt->bindValue(':statut', $statut, PDO::PARAM_STR);
-    $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
-    $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+// Organiser les commandes par statut
+foreach ($commandes as $commande) {
+    $statuts[$commande['statut']][] = $commande;
 }
-$stmt->execute();
-$commandes = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Commandes - Paniers</title>
+    <title>Suivis des commandes - Paniers</title>
+    <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
     <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&family=Be+Vietnam+Pro&display=swap" rel="stylesheet">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-    <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
     <link rel="stylesheet" href="../../styles/commandes.css">
-    <link rel="stylesheet" href="../../styles/popup.css">
-    <link rel="stylesheet" href="../../styles/buttons.css">
     <link rel="stylesheet" href="../../styles/pagination.css">
-    <link rel="stylesheet" href="../../styles/message.css">
-    <script src="../../script/paniers.js"></script>
     <script type="module" src="../../script/download-panier.js"></script>
+    <script type="module" src="../../script/commandes.js"></script>
 </head>
 
 <body>
+    <?php include '../cookies/index.html'; ?>
     <header>
-        <?php require '../squelette/header.php'; ?>
+        <?php require '../../squelette/header.php'; ?>
     </header>
     <main>
         <div class="container">
-            <h2>Suivis commandes - Paniers</h2>
-            <div class="filtre-wrapper">
-                <div class="filtre">
-                    <div class="search-bar">
-                        <form method="GET" action="">
-                            <input type="hidden" name="statut" value="<?php echo htmlspecialchars($statut); ?>">
-                            <input type="text" name="search" placeholder="Rechercher par nom ou N°..." value="<?php echo htmlspecialchars($search); ?>">
-                            <button class ="btn-noir" type="submit">Rechercher</button>
-                        </form>
-                    </div>
-                    <div>
-                        <a class="btn-order" href="<?= $triURL ?>"
-                            title="Trier <?= $order === 'ASC' ? 'du plus récent au plus ancien' : 'du plus ancien au plus récent' ?>">
-                            <img src="<?= $icon ?>" alt="" width="20" height="20">
-                            <span>Trier <?= $order === 'ASC' ? 'du plus récent au plus ancien' : 'du plus ancien au plus récent' ?></span>
-                        </a>
-                    </div>
-                </div>
-            </div>
-
+            <!-- Colonne de gauche -->
+            <h2 class="h2-commande">Suivis des commandes - Paniers</h2>
             <div class="tableau">
                 <div class="tabs">
                     <button onclick="location.href='?statut=validation'" class="tab <?= ($statut === 'validation') ? 'active' : '' ?>">En attente de validation</button>
                     <button onclick="location.href='?statut=traitement'" class="tab <?= ($statut === 'traitement') ? 'active' : '' ?>">En cours de traitement</button>
                     <button onclick="location.href='?statut=final'" class="tab <?= ($statut === 'final') ? 'active' : '' ?>">Commandes finalisées</button>
-                </div>
-                <div id="message-container"></div>
-                <div id="supprimer-popup" class="popup">
-                    <div class="popup-content">
-                        <h2>Êtes vous sûr de vouloir supprimer ?</h2>
-                        <p>(La commande disparaîtra définitivement)</p>
-                        <br>
-                        <button class="btn-beige">Oui</button>
-                        <button class="btn-noir">Non</button>
-                    </div>
-                </div>
-                <div id="update-popup" class="popup">
-                    <div class="popup-content">
-                        <h2>Êtes-vous sûr de continuer ?</h2>
-                        <p>Cette commande passera au statut suivant</p>
-                        <br>
-                        <button class="btn-beige">Oui</button>
-                        <button class="btn-noir">Non</button>
-                    </div>
                 </div>
                 <div class="tab-content <?= $statut === 'validation' ? 'active' : '' ?>" id="validation">
                     <div id="commandes-container">
@@ -147,17 +90,16 @@ $commandes = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                         <p><strong>N° commande :</strong> <?= htmlspecialchars($commande['id']) ?></p>
                                     </div>
                                     <div class="actions">
-                                        <i title="Passez la commande au statut suivant" class="bx bxs-chevrons-right vert" onclick="updateStatus(this)"></i>
-                                        <i title="Supprimez la commande" class="bx bx-trash-alt actions rouge" onclick="removeCommand(this)"></i>
                                         <i title="Téléchargez le devis" class="bx bxs-file-pdf" data-id="<?= htmlspecialchars($commande['id']) ?>"></i>
                                     </div>
                                 </div>
                             <?php endforeach; ?>
                         <?php else: ?>
-                            <p>Aucun panier trouvé pour ce statut.</p>
+                            <p>Aucune commande trouvée pour ce statut.</p>
                         <?php endif; ?>
                     </div>
                 </div>
+
                 <div class="tab-content <?= $statut === 'traitement' ? 'active' : '' ?>" id="traitement">
                     <div id="commandes-container">
                         <?php if (!empty($commandes)): ?>
@@ -170,14 +112,12 @@ $commandes = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                         <p><strong>N° commande :</strong> <?= htmlspecialchars($commande['id']) ?></p>
                                     </div>
                                     <div class="actions">
-                                        <i title="Passez la commande au statut suivant" class="bx bxs-chevrons-right vert" onclick="updateStatus(this)"></i>
-                                        <i title="Supprimez la commande" class="bx bx-trash-alt actions rouge" onclick="removeCommand(this)"></i>
                                         <i title="Téléchargez le devis" class="bx bxs-file-pdf" data-id="<?= htmlspecialchars($commande['id']) ?>"></i>
                                     </div>
                                 </div>
                             <?php endforeach; ?>
                         <?php else: ?>
-                            <p>Aucun panier trouvé pour ce statut.</p>
+                            <p>Aucune commande trouvée pour ce statut.</p>
                         <?php endif; ?>
                     </div>
                 </div>
@@ -194,22 +134,61 @@ $commandes = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                         <p><strong>N° commande :</strong> <?= htmlspecialchars($commande['id']) ?></p>
                                     </div>
                                     <div class="actions">
-                                        <i title="Supprimez la commande" class="bx bx-trash-alt actions rouge" onclick="removeCommand(this)"></i>
                                         <i title="Téléchargez le devis" class="bx bxs-file-pdf" data-id="<?= htmlspecialchars($commande['id']) ?>"></i>
                                     </div>
                                 </div>
                             <?php endforeach; ?>
                         <?php else: ?>
-                            <p>Aucun panier trouvé pour ce statut.</p>
+                            <p>Aucune commande trouvée pour ce statut.</p>
                         <?php endif; ?>
                     </div>
                 </div>
-                <?php require '../include/pagination.php'; ?>
+                <nav class="nav" aria-label="pagination">
+                    <ul class="pagination">
+                        <?php if ($page > 1): ?>
+                            <li><a href="?page=<?= $page - 1 ?>&statut=<?= $statut ?>">Précédent</a></li>
+                        <?php endif; ?>
+
+                        <?php
+                        $max_links = 3;
+                        $start = max(1, $page - floor($max_links / 2));
+                        $end = min($totalPages, $start + $max_links - 1);
+
+                        if ($end - $start + 1 < $max_links) {
+                            $start = max(1, $end - $max_links + 1);
+                        }
+
+                        if ($start > 1):
+                        ?>
+                            <li><a href="?page=1&statut=<?= $statut ?>">1</a></li>
+                            <?php if ($start > 2): ?>
+                                <li><span>…</span></li>
+                            <?php endif; ?>
+                        <?php endif; ?>
+
+                        <?php for ($i = $start; $i <= $end; $i++): ?>
+                            <li>
+                                <a class="<?= $i == $page ? 'active' : '' ?>" href="?page=<?= $i ?>&statut=<?= $statut ?>"><?= $i ?></a>
+                            </li>
+                        <?php endfor; ?>
+
+                        <?php if ($end < $totalPages): ?>
+                            <?php if ($end < $totalPages - 1): ?>
+                                <li><span>…</span></li>
+                            <?php endif; ?>
+                            <li><a href="?page=<?= $totalPages ?>&statut=<?= $statut ?>"><?= $totalPages ?></a></li>
+                        <?php endif; ?>
+
+                        <?php if ($page < $totalPages): ?>
+                            <li><a href="?page=<?= $page + 1 ?>&statut=<?= $statut ?>">Suivant</a></li>
+                        <?php endif; ?>
+                    </ul>
+                </nav>
             </div>
+        </div>
+
     </main>
-    <footer>
-        <?php require '../squelette/footer.php'; ?>
-    </footer>
+    <?php require_once '../../squelette/footer.php' ?>
 </body>
 
 </html>

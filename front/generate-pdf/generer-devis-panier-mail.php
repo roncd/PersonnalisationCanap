@@ -101,7 +101,7 @@ $pdf->Cell($colWidth, $lineHeight, $entreprise['telephone'], 0, 1, 'R');
 $pdf->Ln(10);
 
 $pdf->SetFont('Arial', 'B', 13);
-$pdf->Cell(65, 10, mb_convert_encoding("NUMÉRO DE COMMANDE :", "ISO-8859-1", "UTF-8"), 0, 0);
+$pdf->Cell(65, 10, mb_convert_encoding("NUMÉRO DE PANIER :", "ISO-8859-1", "UTF-8"), 0, 0);
 $pdf->Cell(110, 10, $idCommande, 0, 1);
 
 $pdf->SetFont('Arial', '', 10);
