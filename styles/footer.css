@@ -1,32 +1,38 @@
 /* Footer styles */
 
 .ft {
-    background-color: #997765;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-radius: 30px;
-    width: 95%; /* Augmente la largeur */
-    max-width: 1800px; /* Ajustement de la largeur maximale */
-    margin: 0 auto;
-    padding: 0 20px;
-    margin-top: 25px;
-    margin-bottom: 25px;
+  background-color: #997765;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 30px;
+  width: 95%;
+  /* Augmente la largeur */
+  max-width: 1800px;
+  /* Ajustement de la largeur maximale */
+  margin: 0 auto;
+  padding: 0 20px;
+  margin-top: 25px;
+  margin-bottom: 25px;
 }
 
 .ft-container {
   display: flex;
   justify-content: center;
-  flex-wrap: wrap; /* Permet au contenu de passer sur plusieurs lignes si nécessaire */
+  flex-wrap: wrap;
+  /* Permet au contenu de passer sur plusieurs lignes si nécessaire */
 }
 
 .ft-grid {
   display: grid;
-  grid-template-columns: repeat(5, 1fr); /* 3 colonnes sur grand écran */
+  grid-template-columns: repeat(4, 1fr);
+  /* 3 colonnes sur grand écran */
   align-items: center;
-  gap: 20px; /* Espacement entre les colonnes */
+  gap: 20px;
+  /* Espacement entre les colonnes */
   width: 100%;
-  max-width: 1200px; /* Largeur maximale du footer */
+  max-width: 1200px;
+  /* Largeur maximale du footer */
 }
 
 /* Logo */
@@ -39,15 +45,15 @@
 .ft-contact {
   font-family: "Be Vietnam Pro", sans-serif;
   font-weight: bold;
-  font-size: 0.875rem; 
+  font-size: 0.875rem;
   margin: 0 auto;
-  text-align: left; 
+  text-align: left;
   align-items: left;
   justify-content: left;
 }
 
 .ft-text {
-  margin: 24px 0; 
+  margin: 24px 0;
   color: #ffffff;
   text-decoration: none;
   font-family: "Baloo 2", sans-serif;
@@ -64,9 +70,9 @@
 .ft-nav {
   font-family: "Be Vietnam Pro", sans-serif;
   font-weight: bold;
-  font-size: 0.875rem; 
+  font-size: 0.875rem;
   margin: 0 auto;
-  text-align: left; 
+  text-align: left;
   align-items: left;
   justify-content: left;
 
@@ -78,11 +84,14 @@
 }
 
 .ft-nav-item {
-  margin: 10px 0; 
+  margin: 10px 0;
 }
+
 .ft-nav-item a {
-   white-space: normal; /* Permet le retour à la ligne */
-  word-break: break-word; /* Coupe les mots longs si nécessaire */
+  white-space: normal;
+  /* Permet le retour à la ligne */
+  word-break: break-word;
+  /* Coupe les mots longs si nécessaire */
   color: #ffffff;
   text-decoration: none;
   font-family: "Baloo 2", sans-serif;
@@ -118,7 +127,7 @@
 .ft-legal {
   text-align: center;
   margin-top: 16px;
-  font-size: 0.75rem; 
+  font-size: 0.75rem;
   font-family: "Be Vietnam Pro", sans-serif;
   color: #000000;
   margin-bottom: 30px;
@@ -126,44 +135,57 @@
 
 .ft-map {
   width: 100%;
-  max-width: 500px; /* ajuste selon la largeur souhaitée */
+  max-width: 500px;
+  /* ajuste selon la largeur souhaitée */
   border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   margin-top: 10px;
   margin-bottom: 10px;
   margin-left: -30px;
-  min-width: 250px; /* ou 350px selon ton besoin */
-
-
 
 }
 
+.ft-map img {
+  width: 100%;
+  height: auto;
+}
 
 /* Responsive Design */
 @media (max-width: 1024px) {
+  .ft {
+    display: block;
+  }
+
   .ft-grid {
-    grid-template-columns: repeat(3, 1fr); /* 2 colonnes sur tablette */
+    grid-template-columns: repeat(2, 1fr);
+    /* 2 colonnes sur tablette */
     gap: 16px;
   }
 
   .ft-logo {
-    width: 180px;
     margin-right: 0;
+  }
+
+  .ft-map {
+    width: 80%;
+    margin-left: 0;
   }
 }
 
 @media (max-width: 768px) {
   .ft {
+    display: flex;
     flex-direction: column;
     align-items: center;
     padding: 20px;
     margin-top: 65px;
-    
+
   }
 
   .ft-grid {
-    grid-template-columns: 1fr; /* 1 colonne sur mobile */
+    grid-template-columns: 1fr;
+    /* 1 colonne sur mobile */
     gap: 20px;
     text-align: center;
   }
@@ -177,8 +199,9 @@
   }
 
   .ft-nav-item a {
-    padding: 12px 32px; /* Plus gros padding sur mobile */
-    font-size: 17px;     /* Liens plus visibles */
+    padding: 12px 32px;
+    /* Plus gros padding sur mobile */
+    font-size: 15px;
   }
 
   .ft-contact {
@@ -188,10 +211,13 @@
   .ft-logo {
     margin-bottom: 20px;
   }
-.ft-map {
-  grid-column: 1 / -1;
-  margin-top: -10px;
-  margin-left: auto;   /* annule le -30px */
-  margin-right: auto;  /* centre la map */
-}
+
+  .ft-map {
+    grid-column: 1 / -1;
+    margin-top: -10px;
+    margin-left: auto;
+    /* annule le -30px */
+    margin-right: auto;
+    /* centre la map */
+  }
 }
