@@ -246,7 +246,6 @@ if (!empty($produitAjoute)) : ?>
 
         <!-- ------------------- SECTION ARTICLES ASSOCIES ------------------- -->
         <section class="combination-section">
-            <h2>Ces articles peuvent aussi vous intéresser</h2>
 
             <!------------ BOUTONS DE FILTRE PAR CATÉGORIE ----------->
             <?php
@@ -302,7 +301,7 @@ if (!empty($produitAjoute)) : ?>
                             </div>
                             <div class="product-content">
                                 <h3><?= htmlspecialchars($produit['nom']) ?></h3>
-                                Catégorie : <?= htmlspecialchars(ucfirst($catNom)) ?>
+                               <p class="description"> Catégorie : <?= htmlspecialchars(ucfirst($catNom)) ?>
                                 </p>
                                 <p class="price"><?= number_format($produit['prix'], 2, ',', ' ') ?> €</p>
                                 <form method="POST" style="display:inline;">
