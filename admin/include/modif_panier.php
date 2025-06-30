@@ -3,7 +3,7 @@ session_start();
 require '../../admin/config.php';
 
 if (!isset($_SESSION['user_id'], $_POST['id_produit'], $_POST['action'])) {
-    header('Location: panier.php');
+    header('Location: ../../front/pages/panier.php');
     exit;
 }
 
@@ -17,7 +17,7 @@ $stmt->execute([$id_client]);
 $panier = $stmt->fetch();
 
 if (!$panier) {
-    header('Location: panier.php');
+    header('Location: ../../front/pages/panier.php');
     exit;
 }
 
@@ -86,5 +86,5 @@ if ($panier) {
     $stmt->execute([$nouveau_total, $panier_id]);
 }
 // Redirection
-header('Location: panier.php');
+header('Location: ../../front/pages/panier.php');
 exit;
