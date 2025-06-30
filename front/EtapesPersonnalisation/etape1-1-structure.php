@@ -17,7 +17,7 @@ $structures = $stmt->fetchAll(PDO::FETCH_ASSOC);
 // Vérifier si le formulaire a été soumis
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
-  $id_client = $_SESSION['user_id']; // Assurez-vous que user_id correspond bien à id_client
+  $id_client = $_SESSION['user_id']; 
   $id_structure = $_POST['structure_id'];
 
   // Vérifier si une commande temporaire existe déjà pour cet utilisateur
