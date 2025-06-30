@@ -6,7 +6,7 @@ body {
 .container {
   display: flex;
   justify-content: space-between;
-  gap: 20px;
+  gap: 60px;
   margin: 50px;
 }
 
@@ -90,6 +90,8 @@ span {
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
   width: 130px;
   height: 130px;
+  margin-bottom: 15px;
+
 }
 
 .color-options .option p {
@@ -153,6 +155,8 @@ span {
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
   width: 230px;
   height: 230px;
+  margin-bottom: 15px;
+
 }
 
 .color-2options .option p {
@@ -201,7 +205,6 @@ span {
 .right-column {
   flex: 1;
   display: flex;
-  justify-content: flex-end;
   align-items: flex-start;
   position: relative;
   padding-right: 20px;
@@ -225,20 +228,25 @@ span {
 }
 
 .main-display img {
-  width: 90%;
-  height: 90%;
-  max-height: 500px;
-  border-radius: 8px;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    width: 700px;
+    height: 500px;
+    border-radius: 10px;
+    object-fit: cover;
 }
+
 
 .main-display-recap img {
-  width: 500px;
-  height: 330px;
-  border-radius: 8px;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    width: 100%;
+    max-width: 674px;
+    height: auto;
+    aspect-ratio: 674 / 430;
+    object-fit: cover;
+    object-position: center;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, .2);
+    display: block;
+    margin: 0 auto;
 }
-
 .comment-section {
   width: 100%;
   text-align: left;
@@ -438,11 +446,30 @@ label {
   border-radius: 5px;
 }
 
+.align-right {
+  display: flex;
+  justify-content: flex-end; /* Aligne les boutons à droite */
+  gap: 5px; /* Espace entre les boutons */
+}
+
+
 /* ============ RESPONSIVE TABLETTE ============ */
-@media (max-width: 1024px) {
-  .comment-section {
+@media (max-width: 1070px) {
+      .main-display-recap img  {
     display: none; 
   }
+
+  
+
+  .footer-buttons {
+  display: flex;
+  justify-content: space-between; /* un à gauche, un à droite */
+  width: 100%;
+}
+
+  .fil-ariane-container {
+    font-size: 13px;
+}
 
   h2 {
     font-size: 1.6rem;
@@ -459,26 +486,36 @@ label {
     padding-right: 0;
   }
 
+  .right-column{
+    justify-content: start;
+    padding-right: 0;
+  }
   .main-display img {
    display: none;
   }
 
   .main-display {
     align-items: center;
-    margin-top: 30px;
+    margin-top: 10px;
   }
 
-  .main-display-recap img {
-    width: 100%;
-    max-width: 450px;
-    height: auto;
-  }
 
-  .color-options,
+ 
   .color-2options {
     grid-template-columns: repeat(2, 1fr);
     padding-right: 0;
   }
+
+  
+  /* 3. Grille des options : 2 cartes + scroll conservé */
+.color-options{
+  grid-template-columns: repeat(3, minmax(0, 1fr)); /* chaque colonne ne dépasse pas 50 % */
+  height: 60vh;          /* hauteur fixe pour déclencher le scroll         */
+  max-height: 60vh;
+  overflow-x: hidden;    /* empêche le scroll horizontal         */
+  overflow-y: auto;      /* conserve la barre verticale                    */
+  padding-right: 8px;    /* place pour la scrollbar (optionnel)            */
+}
 
   .form-row {
     flex-direction: column;
@@ -491,7 +528,6 @@ label {
     align-items: flex-start;
     margin-bottom: 10px;
   }
-
   
   .footer p,
   .footer-processus p {
@@ -504,13 +540,56 @@ label {
     flex-wrap: wrap;
   }
   .fil-ariane-container {
-    margin: 70px 10px 10px;
+    margin: 70px 22px 10px;
   }
 
   .color-options .option img {
     width: 218px;
     height: 218px;
 }
+
+.color-options h3 {
+    font-size: 1.2em;
+}
+
+
+  .footer .buttons {
+  display: flex;
+  justify-content: space-between; /* Un bouton à gauche, un bouton à droite */
+  gap: 10px; /* Optionnel : espace entre les boutons */
+  width: 100%;
+}
+
+  .footer-processus .buttons {
+  display: flex;
+  justify-content: space-between; /* Un bouton à gauche, un bouton à droite */
+  gap: 10px; /* Optionnel : espace entre les boutons */
+  width: 100%;
+}
+
+
+  .recap-container {
+    flex-direction: column;
+  }
+
+  .left-column {
+    order: 1;
+    width: 100%;
+  }
+
+  .right-column {
+    order: 2;
+    width: 100%;
+  }
+
+      
+    .h2-recap {
+        padding-top: 55px!important;
+    }
+
+
+
+
 
 }
 
@@ -519,6 +598,27 @@ label {
   h2 {
     font-size: 1.4rem;
   }
+
+
+
+
+    .fil-ariane-container {
+    font-size: 12px;
+}
+
+    .h2 {
+        padding-top: 5px!important;
+    }
+
+    
+    .h2-recap {
+        padding-top: 55px!important;
+    }
+
+  
+.color-options h3 {
+    font-size: 1.1em;
+}
 
   .color-options{
   grid-template-columns: repeat(2, 1fr);  }
@@ -556,8 +656,34 @@ padding-bottom: 1rem;  }
   .footer-processus p {
     font-size: 22px;
   }
-  
 
+  .footer .buttons {
+  display: flex;
+  justify-content: space-between; /* Un bouton à gauche, un bouton à droite */
+  gap: 10px; /* Optionnel : espace entre les boutons */
+  width: 100%;
+}
+
+  .footer-processus .buttons {
+  display: flex;
+  justify-content: space-between; /* Un bouton à gauche, un bouton à droite */
+  gap: 10px; /* Optionnel : espace entre les boutons */
+  width: 100%;
+}
+
+  .recap-container {
+    flex-direction: column;
+  }
+
+  .left-column {
+    order: 1;
+    width: 100%;
+  }
+
+  .right-column {
+    order: 2;
+    width: 100%;
+  }
 
 }
 
@@ -566,6 +692,38 @@ padding-bottom: 1rem;  }
   body {
     margin: 0 10px;
   }
+
+    .footer-processus .buttons {
+  display: flex;
+  justify-content: space-between; /* Un bouton à gauche, un bouton à droite */
+  gap: 10px; /* Optionnel : espace entre les boutons */
+  width: 100%;
+}
+
+
+  .recap-container {
+    flex-direction: column;
+  }
+
+  .left-column {
+    order: 1;
+    width: 100%;
+  }
+
+  .right-column {
+    order: 2;
+    width: 100%;
+  }
+
+
+
+  .fil-ariane-container {
+    font-size: 12px;
+}
+
+  .color-options h3 {
+    font-size: 1.1em;
+}
 
   h2 {
     font-size: 1.4rem;
@@ -615,5 +773,37 @@ padding-bottom: 1rem;  }
     width: 30px;
     font-size: 14px;
   }
+
+  
+  .footer-buttons {
+  display: flex;
+  justify-content: space-between; /* un à gauche, un à droite */
+  width: 100%;
+}
+
+
+  .footer .buttons {
+  display: flex;
+  justify-content: space-between; /* Un bouton à gauche, un bouton à droite */
+  gap: 10px; /* Optionnel : espace entre les boutons */
+  width: 100%;
+}
+
+
+  .recap-container {
+    flex-direction: column;
+  }
+
+  .left-column {
+    order: 1;
+    width: 100%;
+  }
+
+  .right-column {
+    order: 2;
+    width: 100%;
+  }
+
+
 
 }

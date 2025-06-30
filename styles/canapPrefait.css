@@ -88,6 +88,7 @@ span {
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
   width: 130px;
   height: 130px;
+  margin-bottom: 15px;
 }
 
 .color-options .option p {
@@ -222,7 +223,6 @@ span {
 .right-column-recap {
   flex: 1;
   display: flex;
-  justify-content: flex-end;
   align-items: flex-start;
   position: relative;
   padding-right: 20px;
@@ -261,13 +261,17 @@ span {
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-.main-display-recap img{
-  width: 500px;          /* cadre fixe */
-  height: 430px;         /* cadre fixe */
-  object-fit: cover;     /* remplit le cadre en rognant si besoin */
-  object-position: center;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0,0,0,.2);
+.main-display-recap img {
+    width: 100%;
+    max-width: 674px;
+    height: auto;
+    aspect-ratio: 674 / 430;
+    object-fit: cover;
+    object-position: center;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, .2);
+    display: block;
+    margin: 0 auto;
 }
 
 .comment-section {
@@ -302,16 +306,13 @@ span {
   margin: 40px 0 -40px 50px;
 }
 
-.fil-ariane-container-prefait {
-  font-size: 14px;
-}
 
 .fil-ariane {
   display: flex;
   flex-wrap: wrap;
   list-style: none;
   padding: 0;
-  margin: 0;
+  margin-bottom: 20px;
 }
 
 .fil-ariane li {
@@ -338,7 +339,6 @@ span {
   margin-left: 10px;
   color: #ccc;
 }
-
 
 /* ================== FORM ================== */
 .formulaire {
@@ -413,6 +413,10 @@ label {
     .left-column h2 {
     font-size: 1.4rem;
     }
+
+      .fil-ariane-container {
+    font-size: 12px;
+}
     
   /* 1. Empiler les colonnes */
   .container{
@@ -468,9 +472,24 @@ label {
   .formulaire {
     height: 170px;
   }
+
+    .color-options .option img, .color-2options .option img {
+        width: 100%;
+        max-width: 220px;
+        height: auto;
+    
+}
+
+      .fil-ariane-container {
+        margin: 101px 22px -92px;
+    }
 }
 
 @media (min-width: 361px) and (max-width: 768px) {
+
+    .fil-ariane-container {
+    font-size: 12px;
+}
 
     .left-column h2 {
         font-size: 1.4rem;
@@ -517,6 +536,15 @@ label {
 
   }
 
+  
+    .color-options .option img, .color-2options .option img {
+        width: 100%;
+        max-width: 220px;
+        height: auto;
+    }
+
+  
+
     .right-column button{
         margin-top: 4rem;
 
@@ -529,6 +557,10 @@ label {
   .formulaire {
     height: 170px;
   }
+
+      .fil-ariane-container {
+        margin: 101px 22px -92px;
+    }
 }
 
 /* ================= TABLETTE ================= */
@@ -538,6 +570,16 @@ label {
     font-size: 1.6rem;
     }
 
+    .fil-ariane-container {
+    font-size: 13px;
+}
+
+
+
+    
+     .fil-ariane-container {
+        margin: 101px 22px -92px;
+    }
   /* 1. Empiler les colonnes */
   .container{
     flex-direction: column;      /* gauche -> haut, droite -> bas   */
@@ -635,13 +677,8 @@ height: 170px;
     gap: 20px;
     margin-top: 0;              /* déjà géré par le gap ci-dessus           */
   }
-  .main-display-recap img{
-    width: 100%;
-    height: auto;
-    max-height: 300px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0,0,0,.2);
-  }
+    .main-display-recap img{ display:none; }  /* cache l’image uniquement mobile */
+
 
   /* 4. Grille des options (colonne gauche) */
   .color-options{
@@ -666,12 +703,18 @@ height: 170px;
     align-items: stretch;
     gap: 20px;
     font-size: 16px;
+
   }
   .footer-processus p{ font-size: 22px; }
 
+  .footer .buttons {
+    display: flex
+;
+    gap: 15px;
+}
+  
   /* 7. Boutons pleine largeur */
   .buttons{
-    display: flex;
     width: 100%;
     justify-content: space-between;
     gap: 10px;
@@ -695,6 +738,21 @@ height: 170px;
 
     .main-display-recap img{ display:none; }  /* cache l’image uniquement mobile */
 
+  .footer-buttons {
+  display: flex;
+  justify-content: space-between; /* un à gauche, un à droite */
+  width: 100%;
+}
+
+.buttons.h2-recap {
+  display: flex;
+  justify-content: flex-end; /* Aligne les boutons à droite */
+  gap: 10px; /* espace entre les deux boutons */
+}
+
+
+
+
 }
 
 
@@ -705,6 +763,13 @@ height: 170px;
     font-size: 1.6rem;
     margin-top: 10px;
     }
+
+    .buttons.h2-recap {
+  display: flex;
+  justify-content: flex-end; /* Aligne les boutons à droite */
+  gap: 10px; /* espace entre les deux boutons */
+}
+
 
       .color-options h3{
     font-size: 1.3em;   /* un chouïa plus petit que desktop */
@@ -740,33 +805,24 @@ height: 170px;
     gap: 20px;
     margin-top: 0;              /* déjà géré par le gap ci-dessus           */
   }
-  .main-display-recap img{
-    width: 100%;
-    height: auto;
-    max-height: 300px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0,0,0,.2);
-  }
 
-  /* 4. Grille des options (colonne gauche) */
-  .color-options{
-    grid-template-columns: repeat(2, minmax(0,1fr));
-    height: 60vh;
-    max-height: 60vh;
-    overflow-y: auto;
-    overflow-x: hidden;
-    padding-right: 8px;
-  }
-  .color-options .option{
-    text-align:left;          /* plus centré */
-    display:flex;
-    flex-direction:column;    /* pile img + texte */
-    align-items:flex-start;   /* aligne à gauche  */
-  }
+
+  .main-display-recap img {
+    width: 100%;
+    max-width: 674px;
+    height: auto;
+    aspect-ratio: 674 / 430;
+    object-fit: cover;
+    object-position: center;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, .2);
+    display: block;
+    margin: 0 auto;
+}
 
   /* petit espace entre image et texte */
   .color-options .option img{
-    margin-bottom:6px;
+    margin-bottom:15px;
   }
 
   /* 5. Zone commentaire largeur fluide */
