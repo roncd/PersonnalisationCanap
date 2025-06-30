@@ -2,7 +2,16 @@
 require '../../admin/config.php';
 session_start();
 
+// Paramètres URL
 $search = $_GET['search'] ?? '';
+$page = (isset($_GET['page']) && is_numeric($_GET['page']) && $_GET['page'] > 0) ? (int) $_GET['page'] : 1;
+$type = $_GET['type'] ?? ''; 
+$limit = 6;
+$offset = ($page - 1) * $limit;
+
+// Tous les types 
+$stmt = $pdo->query("SELECT id, nom FROM type_banquette");
+$types = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 //Récupération des canapés avec leurs types et structures associés
 $sql = "SELECT cp.*, 
@@ -12,21 +21,56 @@ $sql = "SELECT cp.*,
         LEFT JOIN type_banquette tb ON cp.id_banquette = tb.id
         LEFT JOIN structure s ON cp.id_structure = s.id";
 
-//si une recherche est effectuée, on filtre par nom du canapé OU par nom du type
+$conditions = [];
+$params = [];
+
+// recherche
 if (!empty($search)) {
-    $sql .= " WHERE cp.nom LIKE :search OR tb.nom LIKE :search";
+    $conditions[] = "(cp.nom LIKE :search OR tb.nom LIKE :search)";
+    $params[':search'] = '%' . $search . '%';
 }
 
-$sql .= " ORDER BY cp.id DESC";
+// filtre type de banquette
+if (!empty($type)) {
+    $conditions[] = "LOWER(tb.nom) = :type";
+    $params[':type'] = strtolower($type);
+}
+
+if (!empty($conditions)) {
+    $sql .= " WHERE " . implode(" AND ", $conditions);
+}
+
+$sql .= " ORDER BY cp.id DESC LIMIT :offset, :limit";
 
 $stmt = $pdo->prepare($sql);
-
-if (!empty($search)) {
-    $stmt->bindValue(':search', '%' . $search . '%', PDO::PARAM_STR);
+foreach ($params as $key => $value) {
+    $stmt->bindValue($key, $value, PDO::PARAM_STR);
 }
-
+$stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+$stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
 $stmt->execute();
 $commandes = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+
+$sqlCount = "SELECT COUNT(*) FROM commande_prefait cp
+             LEFT JOIN type_banquette tb ON cp.id_banquette = tb.id";
+
+if (!empty($conditions)) {
+    $sqlCount .= " WHERE " . implode(" AND ", $conditions);
+}
+
+$stmtCount = $pdo->prepare($sqlCount);
+foreach ($params as $key => $value) {
+    $stmtCount->bindValue($key, $value, PDO::PARAM_STR);
+}
+$stmtCount->execute();
+$totalCommandes = $stmtCount->fetchColumn();
+
+$totalPages = ceil($totalCommandes / $limit);
+
+// URL pour les liens de pagination
+$urlParams = $_GET;
+$triURL = '?' . http_build_query($urlParams);
 
 
 function calculPrix($commande, &$composition = [])
@@ -110,8 +154,6 @@ function calculPrix($commande, &$composition = [])
 
     return $totalPrice;
 }
-
-
 ?>
 
 <!DOCTYPE html>
@@ -121,9 +163,11 @@ function calculPrix($commande, &$composition = [])
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nos Canapés</title>
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&family=Be+Vietnam+Pro&display=swap" rel="stylesheet">
     <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
     <link rel="stylesheet" href="../../styles/catalogue.css">
     <link rel="stylesheet" href="../../styles/buttons.css">
+    <link rel="stylesheet" href="../../styles/pagination.css">
 </head>
 
 <body>
@@ -152,65 +196,71 @@ function calculPrix($commande, &$composition = [])
 
     <main class="products-container">
         <!-- Filtres -->
-        <div class="filters">
-            <button class="filter-btn active" data-category="all">Tous</button>
-            <button class="filter-btn" data-category="bois">Bois</button>
-            <button class="filter-btn" data-category="tissu">Tissus</button>
+        <?php
+        $currentType = isset($_GET['type']) ? strtolower($_GET['type']) : '';
+        ?>
 
+        <div class="filters">
+            <button class="filter-btn <?= $currentType === '' ? 'active' : '' ?>" data-type="">Tous</button>
+            <?php foreach ($types as $t): ?>
+                <?php $typeNom = strtolower($t['nom']); ?>
+                <button class="filter-btn <?= $currentType === $typeNom ? 'active' : '' ?>" data-type="<?= htmlspecialchars($typeNom) ?>">
+                    <?= htmlspecialchars($t['nom']) ?>
+                </button>
+            <?php endforeach; ?>
         </div>
 
-          <!-- Nouveau select de tri prix -->
-  <select id="sortPrice" style="text-align:left; margin: 20px;">
-    <option value="none">Trier par prix</option>
-    <option value="asc">Prix : du - cher au + cher</option>
-    <option value="desc">Prix : du + cher au - cher</option>
-  </select>
-</div>
+        <div class="search-tri">
+            <!-- Nouveau select de tri prix -->
+            <select id="sortPrice" style="text-align:left; margin: 20px;">
+                <option value="none">Trier par prix</option>
+                <option value="asc">Prix : du - cher au + cher</option>
+                <option value="desc">Prix : du + cher au - cher</option>
+            </select>
 
-        <!-- ------------------- BARRE DE RECHERCHE EN PHP ------------------- -->
-<div class="search-bar">
-    <form method="GET" action="" style="position: relative;">
-        <input 
-            type="text" 
-            name="search" 
-            id="searchInput"
-            placeholder="Rechercher par nom..." 
-            value="<?= htmlspecialchars($_GET['search'] ?? '', ENT_QUOTES) ?>"
-        >
-        <button type="button" id="clearSearch" class="clear-button" style="display: none;">&times;</button>
-    </form>
-</div>
+            <!-- ------------------- BARRE DE RECHERCHE EN PHP ------------------- -->
+            <div class="search-bar">
+                <form method="GET" action="" style="position: relative;">
+                    <input
+                        type="text"
+                        name="search"
+                        id="searchInput"
+                        placeholder="Rechercher par nom..."
+                        value="<?= htmlspecialchars($_GET['search'] ?? '', ENT_QUOTES) ?>">
+                    <button type="button" id="clearSearch" class="clear-button" style="display: none;">&times;</button>
+                </form>
+            </div>
+        </div>
 
         <!-- ------------------- SECTION COMBINAISONS ------------------- -->
         <section class="combination-section">
             <div class="combination-container">
 
                 <?php foreach ($commandes as $commande): ?>
-                <?php
-        $composition = []; 
-        $prixDynamique = calculPrix($commande, $composition);
-        $type = strtolower($commande['type_nom'] ?? 'inconnu');
-      ?>
-                <div class="product-card" data-type="<?= htmlspecialchars($type, ENT_QUOTES) ?>">
-                    <div class="product-image">
-                        <img src="../../admin/uploads/canape-prefait/<?php echo htmlspecialchars($commande['img'] ?? 'default.jpg', ENT_QUOTES); ?>"
-                            alt="<?php echo htmlspecialchars($commande['nom'] ?? 'Canapé préfait', ENT_QUOTES); ?>">
+                    <?php
+                    $composition = [];
+                    $prixDynamique = calculPrix($commande, $composition);
+                    ?>
+                    <div class="product-card" data-type="<?= htmlspecialchars(strtolower($commande['type_nom'] ?? '')) ?>">
+                        <div class="product-image">
+                            <img src="../../admin/uploads/canape-prefait/<?php echo htmlspecialchars($commande['img'] ?? 'default.jpg', ENT_QUOTES); ?>"
+                                alt="<?php echo htmlspecialchars($commande['nom'] ?? 'Canapé préfait', ENT_QUOTES); ?>">
+                        </div>
+                        <div class="product-content">
+                            <h3><?= htmlspecialchars($commande['nom']) ?></h3>
+                            <p class="description">Type : <?= htmlspecialchars($commande['type_nom'] ?? '') ?></p>
+                            <p class="description">Structure :
+                                <?= htmlspecialchars($commande['structure_nom'] ?? 'Non défini') ?></p>
+                            <p class="price"><?= number_format($prixDynamique, 2, ',', ' ') ?> €</p>
+                            <button class="btn-beige"
+                                onclick="window.location.href = '../CanapePrefait/canapPrefait.php?id=<?= (int)$commande['id']; ?>'">
+                                Personnaliser
+                            </button>
+                        </div>
                     </div>
-                    <div class="product-content">
-                        <h3><?= htmlspecialchars($commande['nom']) ?></h3>
-                        <p class="description">Type : <?= htmlspecialchars($commande['type_nom']) ?></p>
-                        <p class="description">Structure :
-                            <?= htmlspecialchars($commande['structure_nom'] ?? 'Non défini') ?></p>
-                        <p class="price"><?= number_format($prixDynamique, 2, ',', ' ') ?> €</p>
-                        <button class="btn-beige"
-                            onclick="window.location.href = '../CanapePrefait/canapPrefait.php?id=<?= (int)$commande['id']; ?>'">
-                            Personnaliser
-                        </button>
-                    </div>
-                </div>
                 <?php endforeach; ?>
-
             </div>
+            <?php require '../../admin/include/pagination.php'; ?>
         </section>
 
 
@@ -220,88 +270,75 @@ function calculPrix($commande, &$composition = [])
         <?php require '../../squelette/footer.php'; ?>
     </footer>
     <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const filterButtons = document.querySelectorAll('.filter-btn');
-        const products = document.querySelectorAll('.product-card');
+        document.addEventListener("DOMContentLoaded", function() {
+            const filterButtons = document.querySelectorAll(".filter-btn");
 
-        filterButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                // Enlever la classe active
-                filterButtons.forEach(btn => btn.classList.remove('active'));
-                button.classList.add('active');
-
-                const category = button.getAttribute('data-category');
-
-                products.forEach(product => {
-                    const type = product.getAttribute('data-type').toLowerCase();
-                    if (category === 'all' || type === category.toLowerCase()) {
-                        product.style.display = 'block';
-                    } else {
-                        product.style.display = 'none';
-                    }
+            filterButtons.forEach((button) => {
+                button.addEventListener("click", () => {
+                    const selectedType = button.getAttribute("data-type").toLowerCase();
+                    window.location.href = `?type=${encodeURIComponent(selectedType)}&page=1`;
                 });
             });
         });
-    });
     </script>
 
     <script>
-    document.addEventListener('DOMContentLoaded', function () {
-  const sortSelect = document.getElementById('sortPrice');
-  const productsContainer = document.querySelector('.combination-container'); // conteneur des cartes
-  const products = Array.from(document.querySelectorAll('.product-card'));
+        document.addEventListener('DOMContentLoaded', function() {
+            const sortSelect = document.getElementById('sortPrice');
+            const productsContainer = document.querySelector('.combination-container'); // conteneur des cartes
+            const products = Array.from(document.querySelectorAll('.product-card'));
 
-  sortSelect.addEventListener('change', function () {
-    const value = this.value;
+            sortSelect.addEventListener('change', function() {
+                const value = this.value;
 
-    if (value === 'none') {
-      // Remettre dans l'ordre original (par id ou ordre DOM initial)
-      products.forEach(product => productsContainer.appendChild(product));
-      return;
-    }
+                if (value === 'none') {
+                    // Remettre dans l'ordre original (par id ou ordre DOM initial)
+                    products.forEach(product => productsContainer.appendChild(product));
+                    return;
+                }
 
-    // Trier en fonction du prix affiché dans chaque carte
-    const sorted = products.slice().sort((a, b) => {
-      const priceA = parseFloat(a.querySelector('.price').textContent.replace(/\s/g, '').replace(',', '.').replace('€', '')) || 0;
-      const priceB = parseFloat(b.querySelector('.price').textContent.replace(/\s/g, '').replace(',', '.').replace('€', '')) || 0;
+                // Trier en fonction du prix affiché dans chaque carte
+                const sorted = products.slice().sort((a, b) => {
+                    const priceA = parseFloat(a.querySelector('.price').textContent.replace(/\s/g, '').replace(',', '.').replace('€', '')) || 0;
+                    const priceB = parseFloat(b.querySelector('.price').textContent.replace(/\s/g, '').replace(',', '.').replace('€', '')) || 0;
 
-      return value === 'asc' ? priceA - priceB : priceB - priceA;
-    });
+                    return value === 'asc' ? priceA - priceB : priceB - priceA;
+                });
 
-    // Réordonner les cartes dans le DOM
-    sorted.forEach(product => productsContainer.appendChild(product));
-  });
-});
+                // Réordonner les cartes dans le DOM
+                sorted.forEach(product => productsContainer.appendChild(product));
+            });
+        });
     </script>
 
     <script>
-document.addEventListener('DOMContentLoaded', function () {
-    const searchInput = document.getElementById('searchInput');
-    const clearBtn = document.getElementById('clearSearch');
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchInput = document.getElementById('searchInput');
+            const clearBtn = document.getElementById('clearSearch');
 
-    // Fonction pour afficher ou cacher le bouton clear
-    function toggleClearButton() {
-        if (searchInput.value.trim() !== '') {
-            clearBtn.style.display = 'block';
-        } else {
-            clearBtn.style.display = 'none';
-        }
-    }
+            // Fonction pour afficher ou cacher le bouton clear
+            function toggleClearButton() {
+                if (searchInput.value.trim() !== '') {
+                    clearBtn.style.display = 'block';
+                } else {
+                    clearBtn.style.display = 'none';
+                }
+            }
 
-    // Repère les changements dans le champ de recherche
-    searchInput.addEventListener('input', toggleClearButton);
+            // Repère les changements dans le champ de recherche
+            searchInput.addEventListener('input', toggleClearButton);
 
-    // Affiche ou masque au chargement
-    toggleClearButton();
+            // Affiche ou masque au chargement
+            toggleClearButton();
 
-    // Supprime la recherche au clic sur la croix
-    clearBtn.addEventListener('click', function () {
-        searchInput.value = '';
-        toggleClearButton();
-        window.location.href = window.location.pathname; // recharge sans la recherche
-    });
-});
-</script>
+            // Supprime la recherche au clic sur la croix
+            clearBtn.addEventListener('click', function() {
+                searchInput.value = '';
+                toggleClearButton();
+                window.location.href = window.location.pathname; // recharge sans la recherche
+            });
+        });
+    </script>
 
 </body>
 

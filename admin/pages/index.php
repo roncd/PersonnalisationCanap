@@ -62,34 +62,8 @@ $assocData[$table] = array_column($data[$table], 'nom', 'id');
                 <p>Vous êtes bien connecté à l'administration de Déco du Monde</p>
             </div>
             <div class="tables">
-                <div class="table-box client">
-                    <h2>5 DERNIER CLIENTS <a href="../client/visualiser.php">Voir plus</a></h2>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Nom</th>
-                                <th>Prénom</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php
-                            $stmt = $pdo->prepare("SELECT id, nom, prenom FROM client ORDER BY id DESC LIMIT :limit");
-                            $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
-                            $stmt->execute();
-                            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                                echo "<tr>";
-                                echo "<td style='height: 30px;'>{$row['id']}</td>";
-                                echo "<td style='height: 30px;'>{$row['nom']}</td>";
-                                echo "<td style='height: 30px;'>{$row['prenom']}</td>";
-                                echo "</tr>";
-                            }
-                            ?>
-                        </tbody>
-                    </table>
-                </div>
                 <div class="table-box">
-                    <h2>5 DERNIÈRE COMMANDES <a href="commande.php">Voir plus</a></h2>
+                    <h2>5 DERNIÈRES COMMANDES (canapé)<a href="commande.php">Voir plus</a></h2>
                     <table>
                         <thead>
                             <tr>
@@ -116,21 +90,66 @@ $assocData[$table] = array_column($data[$table], 'nom', 'id');
                         </tbody>
                     </table>
                 </div>
+                <div class="table-box">
+                    <h2>5 DERNIERS PANIERS <a href="panier.php">Voir plus</a></h2>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Nom</th>
+                                <th>Date</th>
+                                <th>Montant</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php
+                            $stmt = $pdo->prepare("SELECT id, id_client, date, prix FROM panier_final ORDER BY id DESC LIMIT :limit");
+                            $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
+                            $stmt->execute();
+                            while ($commande = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                                echo "<tr>";
+                                echo "<td style='height: 30px;'>{$commande['id']}</td>";
+                                echo "<td>" . htmlspecialchars($assocData['client'][$commande['id_client']] ?? '-') . "</td>";
+                                echo "<td style='height: 30px;'>{$commande['date']}</td>";
+                                echo "<td style='height: 30px;'>{$commande['prix']}€</td>";
+                                echo "</tr>";
+                            }
+                            ?>
+                        </tbody>
+                    </table>
+                </div>
+
+
             </div>
 
-            <!-- <div class="tables">
-                <a href="../pages/visualiser.php">
-                    <div class="table-box img1">
-                        <h2>VISUALISER DES DONNÉES</h2>
-                    </div>
-                </a>
-                <a href="../pages/add.php">
-                    <div class="table-box img2">
-                        <h2>AJOUTER DES DONNÉES</h2>
-                    </div>
-                </a>
-            </div> -->
-        </div>
+            <div class="tables">
+                <div class="table-box client">
+                    <h2>5 DERNIERS CLIENTS <a href="../client/visualiser.php">Voir plus</a></h2>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Nom</th>
+                                <th>Prénom</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php
+                            $stmt = $pdo->prepare("SELECT id, nom, prenom FROM client ORDER BY id DESC LIMIT :limit");
+                            $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
+                            $stmt->execute();
+                            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                                echo "<tr>";
+                                echo "<td style='height: 30px;'>{$row['id']}</td>";
+                                echo "<td style='height: 30px;'>{$row['nom']}</td>";
+                                echo "<td style='height: 30px;'>{$row['prenom']}</td>";
+                                echo "</tr>";
+                            }
+                            ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
     </main>
     <footer>
         <?php require '../squelette/footer.php'; ?>
