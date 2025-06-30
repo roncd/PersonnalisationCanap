@@ -93,7 +93,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['couleur_tissu_bois_id
       <div class="left-column ">
         <h2>Étape 7.1 - Choisi ton tissu</h2>
         <select class="select-field" id="couleur" name="couleur">
-          <option value="">-- Sélectionne une couleur --</option>
+          <option value=""> Trier par couleur</option>
           <?php foreach ($couleurs as $couleur): ?>
             <option value="<?= htmlspecialchars($couleur['id']) ?>">
               <?= htmlspecialchars($couleur['nom']) ?>

@@ -2,13 +2,13 @@
 <?php
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
-require '../include/session_expiration.php';
 }
 // Expire après 3h d'inactivité
 $timeout_duration = 10800;
 
 if (isset($_SESSION['LAST_ACTIVITY']) && 
     (time() - $_SESSION['LAST_ACTIVITY']) > $timeout_duration) {
+    $_SESSION['redirect_to'] = $_SERVER['REQUEST_URI'];
 
     echo "Session expirée. Redirection...";
     $_SESSION = array();
