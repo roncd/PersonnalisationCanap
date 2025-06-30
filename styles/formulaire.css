@@ -402,3 +402,55 @@ label {
         font-size: 20px;
     }
 }
+
+@media (max-width: 1110px) {
+
+     .container {
+        flex-direction: column;
+        margin: 20px;
+        gap: 30px;
+    }
+
+    .right-column {
+        justify-content: center;
+        padding-right: 0;
+    }
+
+    .main-display {
+        align-items: center;
+        margin-top: 30px;
+    }
+
+    .main-display img {
+        display: none;
+    }
+
+    .form-row {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    h2 {
+        font-size: 28px;
+        text-align: center;
+    }
+
+    .footer {
+        display: flex;
+    }
+
+    .footer .buttons {
+        width: 100%;
+        justify-content: flex-end;
+    }
+
+    .btn-retour,
+    .btn-valider {
+        width: 100%;
+        max-width: 200px;
+    }
+    
+  .hide-on-small {
+    display: none !important;
+  }
+}

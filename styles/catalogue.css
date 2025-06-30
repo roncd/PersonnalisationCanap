@@ -448,7 +448,7 @@ body {
 
 
 /* Responsive Design */
-@media (max-width: 768px) {
+@media (max-width: 840px) {
     .products-container {
         padding: 1rem;
     }

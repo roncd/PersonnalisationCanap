@@ -125,6 +125,7 @@ function calculPrix($commande, &$composition = [])
   <link rel="stylesheet" href="../../styles/styles.css">
   <link rel="stylesheet" href="../../styles/buttons.css">
   <link rel="stylesheet" href="../../styles/accueil.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <script src="../../node_modules/@preline/carousel/index.js"></script>
   <script type="module" src="../../script/animate-value.js"></script>
 </head>
@@ -412,7 +413,7 @@ function calculPrix($commande, &$composition = [])
 
 
     <div class="faq-contact">
-      <div class="faq-contact-icon">💬</div>
+      <div class="faq-contact-icon"><i class="fa-solid fa-comment faq-contact-icon"></i></div>
       <h2 class="h2-center">Une question ? On est là pour vous aider</h2>
       <p>Découvrez les réponses aux questions les plus fréquentes sur la personnalisation, la livraison ou nos engagements.</p>
       <br>
