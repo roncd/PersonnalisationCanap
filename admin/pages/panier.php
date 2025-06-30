@@ -20,7 +20,7 @@ $statut = isset($_GET['statut']) && in_array($_GET['statut'], ['validation', 'co
 $page = isset($_GET['page']) && is_numeric($_GET['page']) && $_GET['page'] > 0 ? (int)$_GET['page'] : 1;
 $limit = 10; // Nombre de commandes par page
 // Compte le nombre total de commandes pour ce statut
-$stmtCount = $pdo->prepare("SELECT COUNT(*) FROM commande_detail WHERE statut = :statut");
+$stmtCount = $pdo->prepare("SELECT COUNT(*) FROM panier_final WHERE statut = :statut");
 $stmtCount->bindValue(':statut', $statut, PDO::PARAM_STR);
 $stmtCount->execute();
 $totalCommandes = $stmtCount->fetchColumn();
@@ -41,20 +41,20 @@ $params['order'] = $next;
 $triURL = '?' . http_build_query($params);
 
 if ($search) {
-    $stmt = $pdo->prepare("SELECT cd.id, cd.date, cd.statut, cl.id AS id_client, cl.nom, cl.prenom 
-    FROM commande_detail cd
-    JOIN client cl ON cd.id_client = cl.id 
-    WHERE cd.statut = :statut AND (cl.nom LIKE :search OR cd.id LIKE :search)
-    ORDER BY cd.id $order");
+    $stmt = $pdo->prepare("SELECT pf.id, pf.date, pf.statut, cl.id AS id_client, cl.nom, cl.prenom 
+    FROM panier_final pf
+    JOIN client cl ON pf.id_client = cl.id 
+    WHERE pf.statut = :statut AND (cl.nom LIKE :search OR pf.id LIKE :search)
+    ORDER BY pf.id $order");
     $stmt->bindValue(':statut', $statut, PDO::PARAM_STR);
     $stmt->bindValue(':search', '%' . $search . '%', PDO::PARAM_STR);
 } else {
     // Récupérer les commandes pour le statut et la page actuels
-    $stmt = $pdo->prepare("SELECT cd.id, cd.date, cd.statut, cl.id AS id_client, cl.nom, cl.prenom 
-    FROM commande_detail cd
-    JOIN client cl ON cd.id_client = cl.id 
-    WHERE cd.statut = :statut 
-    ORDER BY cd.id $order 
+    $stmt = $pdo->prepare("SELECT pf.id, pf.date, pf.statut, cl.id AS id_client, cl.nom, cl.prenom 
+    FROM panier_final pf
+    JOIN client cl ON pf.id_client = cl.id 
+    WHERE pf.statut = :statut 
+    ORDER BY pf.id $order 
     LIMIT :limit OFFSET :offset");
     $stmt->bindValue(':statut', $statut, PDO::PARAM_STR);
     $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
@@ -71,7 +71,7 @@ $commandes = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Commandes - Canapé marocain</title>
+    <title>Commandes - Panier</title>
     <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&family=Be+Vietnam+Pro&display=swap" rel="stylesheet">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
@@ -80,8 +80,8 @@ $commandes = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <link rel="stylesheet" href="../../styles/buttons.css">
     <link rel="stylesheet" href="../../styles/pagination.css">
     <link rel="stylesheet" href="../../styles/message.css">
-    <script src="../../script/commandes.js"></script>
-    <script type="module" src="../../script/download.js"></script>
+    <script src="../../script/paniers.js"></script>
+    <script type="module" src="../../script/download-panier.js"></script>
 </head>
 
 <body>
@@ -90,7 +90,7 @@ $commandes = $stmt->fetchAll(PDO::FETCH_ASSOC);
     </header>
     <main>
         <div class="container">
-            <h2>Suivis commandes - Canapé marocain</h2>
+            <h2>Suivis commandes - Panier </h2>
             <div class="filtre-wrapper">
                 <div class="filtre">
                     <div class="search-bar">
@@ -154,7 +154,7 @@ $commandes = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                 </div>
                             <?php endforeach; ?>
                         <?php else: ?>
-                            <p>Aucune commande trouvée pour ce statut.</p>
+                            <p>Aucun panier trouvé pour ce statut.</p>
                         <?php endif; ?>
                     </div>
                 </div>
@@ -177,7 +177,7 @@ $commandes = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                 </div>
                             <?php endforeach; ?>
                         <?php else: ?>
-                            <p>Aucune commande trouvée pour ce statut.</p>
+                            <p>Aucun panier trouvé pour ce statut.</p>
                         <?php endif; ?>
                     </div>
                 </div>
@@ -200,7 +200,7 @@ $commandes = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                 </div>
                             <?php endforeach; ?>
                         <?php else: ?>
-                            <p>Aucune commande trouvée pour ce statut.</p>
+                            <p>Aucun panier trouvé pour ce statut.</p>
                         <?php endif; ?>
                     </div>
                 </div>
