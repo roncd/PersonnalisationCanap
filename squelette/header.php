@@ -99,7 +99,7 @@ if (isset($_SESSION['user_id'])) {
                     </a>
                     <ul class="dropdown-menu">
                         <div class="drop">     
-                            <li><a href="../pages/commandes.php">Mes commandes</a></li>
+                            <li><a href="../pages/commandes.php">Suivis commandes</a></li>
                             <li><a href="../pages/information.php">Mes informations</a></li>
                             <?php if (isset($_SESSION['user_id'])): ?>
                             <li><a href="../formulaire/logout.php">Déconnexion</a></li>

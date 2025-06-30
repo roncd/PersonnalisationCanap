@@ -54,7 +54,7 @@ foreach ($commandes as $commande) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mes Commandes</title>
+    <title>Suivis des commandes - canapés marocains</title>
     <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
     <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&family=Be+Vietnam+Pro&display=swap" rel="stylesheet">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
@@ -72,7 +72,7 @@ foreach ($commandes as $commande) {
     <main>
         <div class="container">
             <!-- Colonne de gauche -->
-            <h2 class="h2-commande">Mes commandes</h2>
+            <h2 class="h2-commande">Suivis des commandes - canapés marocains</h2>
             <div class="tableau">
                 <div class="tabs">
                     <button onclick="location.href='?statut=validation'" class="tab <?= ($statut === 'validation') ? 'active' : '' ?>">En attente de validation</button>

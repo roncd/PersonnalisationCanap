@@ -4,12 +4,13 @@ session_start();
 require '../../admin/include/session_expiration.php';
 if (!isset($_SESSION['user_id'])) {
     $currentPage = $_SERVER['HTTP_REFERER'] ?? '/index.php';
-    if (!isset($_SESSION['redirect_after_login']) && strpos($currentPage, 'Connexion.php') === false) {
-        $_SESSION['redirect_after_login'] = $currentPage;
+    if (!isset($_SESSION['redirect_to']) && strpos($currentPage, 'Connexion.php') === false) {
+        $_SESSION['redirect_to'] = $currentPage;
     }
 }
 
-if (isset($_SESSION['pending_add_to_cart'])) {
+if (isset($_SESSION['pending_add_to_cart']) && isset($_SESSION['user_id'])) {
+    // On restaure seulement si l’utilisateur est maintenant connecté
     $_SESSION['temp_post'] = $_SESSION['pending_add_to_cart'];
     unset($_SESSION['pending_add_to_cart']);
     header('Location: ../pages/nosproduits.php?post_restore=1');
@@ -29,24 +30,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if ($user) {
-
-
         if (password_verify($password, $user['mdp'])) {
             $_SESSION['user_id'] = $user['id'];
             $_SESSION['user_name'] = $user['prenom'];
+
+            if (isset($_SESSION['pending_add_to_cart'])) {
+                $_SESSION['temp_post'] = $_SESSION['pending_add_to_cart'];
+                unset($_SESSION['pending_add_to_cart']);
+                header('Location: ../pages/nosproduits.php?post_restore=1');
+                exit;
+            }
+
             if (!empty($_SESSION['redirect_to'])) {
                 $redirect_to = $_SESSION['redirect_to'];
                 unset($_SESSION['redirect_to']);
                 header("Location: $redirect_to");
-            } else {
-                header("Location: ../pages/index.php");
+                exit;
             }
+
+            header("Location: ../pages/index.php");
             exit;
         } else {
-  $message = '<p class="error">Mot de passe incorrect.</p>';
+            $message = '<p class="error">Mot de passe incorrect.</p>';
         }
     } else {
-   $message = '<p class="error">Utilisateur non trouvé.</p>';
+        $message = '<p class="error">Utilisateur non trouvé.</p>';
     }
 }
 
@@ -72,7 +80,7 @@ if (isset($_GET['message']) && $_GET['message'] == 'success') {
     <link rel="stylesheet" href="../../styles/formulaire.css">
     <link rel="stylesheet" href="../../styles/buttons.css">
     <link rel="stylesheet" href="../../styles/message.css">
-    
+
 </head>
 
 <body>
@@ -91,8 +99,8 @@ if (isset($_GET['message']) && $_GET['message'] == 'success') {
                     <div class="form-row">
                         <div class="form-group">
                             <label for="adresse">Adresse mail</label>
-                            <input type="email" id="adresse" name="adresse" class="input-field" required 
-                            value="<?php echo isset($_POST['adresse']) ? htmlspecialchars($_POST['adresse']) : ''; ?>">
+                            <input type="email" id="adresse" name="adresse" class="input-field" required
+                                value="<?php echo isset($_POST['adresse']) ? htmlspecialchars($_POST['adresse']) : ''; ?>">
 
                         </div>
                     </div>
