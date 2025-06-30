@@ -85,17 +85,16 @@ header {
     height: 22px;
     cursor: pointer;
 }
-
 .panier-count {
     position: absolute;
-    top: -5px;
-    right: -5px;
+    top: -9px;
+    right: -10px;
     background: #e74c3c;
     color: white;
-    font-size: 12px;
+    font-size: 11px;
     font-weight: bold;
-    padding: 2px 6px;
-    border-radius: 50%;
+    padding: 3px 6px;
+    border-radius: 61%;
     line-height: 1;
 }
 
@@ -289,9 +288,7 @@ body.menu-open::before {
 
 /* Responsive Design */
 @media screen and (max-width: 1125px) {
-    .h2 {
-        padding-top: 40px;
-    }
+
     .header-content {
         justify-content: center;
         /* Centre le logo */

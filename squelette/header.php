@@ -85,12 +85,6 @@ if (isset($_SESSION['user_id'])) {
                         À Propos
                     </a>
                 </li>
-                 <li>
-                    <a href="../pages/aide.php" 
-                       class="<?= $currentPage == 'aide.php' ? 'active' : '' ?>">
-                        Besoin d'aides ?
-                    </a>
-                </li>
                 <li class="dropdown">
                     <a href="#" 
                        class="dropdown-toggle <?= strpos($_SERVER['REQUEST_URI'], 'information.php') !== false ||
@@ -108,6 +102,12 @@ if (isset($_SESSION['user_id'])) {
                             <?php endif; ?>       
                         </div>
                     </ul>
+                </li>
+                <li>
+                    <a href="../pages/aide.php" 
+                       class="<?= $currentPage == 'aide.php' ? 'active' : '' ?>">
+                        Besoin d'aides ?
+                    </a>
                 </li>
             </ul>
         </nav>
