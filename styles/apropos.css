@@ -3,6 +3,8 @@ body {
     font-family: 'Be Vietnam Pro', sans-serif;
 }
 
+
+
 .banner {
   position: relative;
   width: 100%;
@@ -70,17 +72,18 @@ body {
 
 .text-content h2 {
   margin-bottom: 30px;
-  color: #a33e00;
+  color: #000000;
   font-size: 24px;
   width: 100%;
   text-align: center;
+  font-size: 2rem;
+    font-family: 'Baloo 2', sans-serif;
 }
 
 .text-content p {
   line-height: 1.8;
-  color: #666;
+  color: #000000;
   font-size: 1.1em;
-  text-align: justify;
   width: 100%;
 }
 
@@ -94,35 +97,30 @@ body {
   width: 100%;
   max-width: 500px;
   height: auto;
-  border-radius: 3px;
+  border-radius: 20px;
 }
 
-@media screen and (max-width: 768px) {
-  .about-content {
-    padding: 40px 15px;
-    gap: 30px;
-  }
-
-  .text-content h2 {
-    font-size: 20px;
-  }
-
-  .text-content p {
-    font-size: 1em;
-  }
+.value-item i {
+    font-size: 2.5rem;
+    color: #997765; /* ou autre selon ta charte */
+    margin-bottom: 20px;
 }
 
 /* ------------------- NOS VALEURS --------------------*/
 .values-section {
     padding: 30px 20px 60px 20px;
     text-align: center;
-    background-color: #E3D1C8 ;
+  background-color: rgba(227, 209, 200, 0.9);
 }
 
 .values-section h2 {
-    margin-bottom: 20px;
-    color: #a33e00;
-    font-size: 24px;
+  margin-bottom: 30px;
+  color: #000000;
+  font-size: 24px;
+  width: 100%;
+  text-align: center;
+  font-size: 2rem;
+  font-family: 'Baloo 2', sans-serif;
 }
 
 .values-container {
@@ -144,13 +142,13 @@ body {
 }
 
 .value-item h3 {
-    color: #a33e00;
+    color: #000000;
     margin-bottom: 15px;
     font-size: 20px;
 }
 
 .value-item p {
-    color: #666;
+    color: #000000;
     line-height: 1.6;
 }
 
@@ -168,7 +166,7 @@ body {
 .why-us-section {
   padding: 50px 20px;
   background-color: #fefaf6;
-  color: #212529;
+  color: #000000;
 }
 
 .why-us-content {
@@ -188,6 +186,7 @@ body {
   width: 80%;
   border-radius: 3px;
   object-fit: cover;
+  border-radius: 20px;
 }
 
 .why-us-text {
@@ -195,14 +194,23 @@ body {
 }
 
 .why-us-text h2 {
-  color: #a3471c;
+  color: #0c0603;
   margin-bottom: 20px;
   margin-top: 50px;
+  width: 100%;
+  text-align: left;
+  font-size: 2rem;
+  font-family: 'Baloo 2', sans-serif;
 }
 
 .why-us-text .highlight {
-  font-weight: bold;
-  color: #a3471c;
+  color: #0c0603;
+  margin-bottom: 20px;
+  margin-top: 50px;
+  width: 100%;
+  text-align: left;
+  font-size: 2rem;
+  font-family: 'Baloo 2', sans-serif;
 }
 
 .why-us-text p {
@@ -211,42 +219,7 @@ body {
   margin-bottom: 16px;
 }
 
-@media screen and (max-width: 768px) {
-  .why-us-content {
-    gap: 20px;
-  }
-  
-  .why-us-image, .why-us-text {
-    flex: 1 1 100%;
-  }
-  
-  .why-us-image img {
-    width: 100%;
-  }
-  
-  .why-us-text h2 {
-    margin-top: 20px;
-    font-size: 20px;
-  }
-  
-  .why-us-text p {
-    font-size: 14px;
-  }
-}
 
-@media screen and (max-width: 480px) {
-  .why-us-section {
-    padding: 30px 15px;
-  }
-  
-  .why-us-content {
-    gap: 15px;
-  }
-  
-  .why-us-text h2 {
-    font-size: 18px;
-  }
-}
 
 /*------------------- CRER VOTRE CANAPER ------------------*/
 .customizer-section {
@@ -257,7 +230,7 @@ body {
 }
 
 .customizer-left {
-  background-color: #f3e3d7;
+  background-color: rgba(227, 209, 200, 0.9);
   flex: 1;
   display: flex;
   justify-content: center;
@@ -271,15 +244,18 @@ body {
 }
 
 .customizer-content h2 {
-  font-size: 22px;
-  margin-bottom: 10px;
-  color: #a3471c;
+  color: #000000;
+  margin-bottom: 20px;
+  width: 100%;
+  text-align: center;
+  font-size: 2rem;
+  font-family: 'Baloo 2', sans-serif;
 }
 
 .customizer-content p {
   font-size: 15px;
   margin-bottom: 24px;
-  color: #212529;
+  color: #000000;
 }
 
 .options {
@@ -305,25 +281,6 @@ body {
   margin-bottom: 12px;
 }
 
-.custom-btn {
-  background-color: #a3471c;
-  color: white;
-  padding: 10px 20px;
-  font-size: 13px;
-  border-radius: 5px;
-  border: none;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-  text-transform: uppercase;   
-  text-decoration: none;
-}
-
-.custom-btn:hover {
-  background-color: #c45523;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-}
-
 .customizer-right {
   flex: 1;
   overflow: hidden;
@@ -336,61 +293,24 @@ body {
   object-position: center;
 }
 
-/* Tablet styles */
-@media screen and (max-width: 768px) {
-  .customizer-section {
-    height: auto;
-    flex-direction: column;
-  }
 
-  .customizer-left, .customizer-right {
-    width: 100%;
-    min-height: 300px;
-  }
-
-  .customizer-content {
-    padding: 20px;
-  }
-
-  .options {
-    gap: 12px;
-  }
-}
-
-/* Mobile styles */
-@media screen and (max-width: 480px) {
-  .customizer-content h2 {
-    font-size: 20px;
-  }
-
-  .customizer-content p {
-    font-size: 14px;
-  }
-
-  .option img {
-    width: 50px;
-    height: 50px;
-  }
-
-  .option span {
-    font-size: 12px;
-  }
-
-  .customizer-right {
-    height: 250px;
-  }
-}
 /*------------------- ATELIER ------------------*/ 
 .ateliers {
-  padding: 40px 40px 0 40px;  
-  max-width: 1000px;
-  margin: auto;
+  margin-right: 160px;
+  margin-left: 160px;
+  margin-top: 40px;
+  max-width: 100%;
+
+
 }
   
 .ateliers h2 {
-  color: #a33e00;
-  font-size: 22px;
+  color: #0c0603;
   margin-bottom: 20px;
+  width: 100%;
+  text-align: center;
+  font-size: 2rem;
+  font-family: 'Baloo 2', sans-serif;
 }
   
 .ateliers .intro,
@@ -407,16 +327,106 @@ body {
 }
 
 .images img {
-  width: 300px;
+  width: 390px;
   height: 300px;
   object-fit: cover;
+  border-radius: 20px;
 }
 
-/* Tablet styles */
-@media screen and (max-width: 768px) {
-  .ateliers {
-    padding: 30px 20px 0 20px;
+
+/* Mobile styles */
+@media screen and (max-width: 480px) {
+   .about-content {
+    padding: 40px 15px;
+    gap: 30px;
   }
+
+  .text-content h2 {
+    font-size: 1.4rem!important;
+  }
+
+  .text-content p {
+    font-size: 0.90em;
+  }
+
+  .values-section h2 {
+    font-size: 1.4rem!important;
+}
+
+.value-item h3 {
+    font-size: 1rem!important;
+}
+
+.value-item p {
+    font-size: 0.90em;
+    }
+
+.why-us-text h2 {
+    font-size: 1.4rem!important;
+    text-align: center!important;
+    margin-top: 10px!important;
+  }
+
+  .why-us-text .highlight {
+    font-size: 1.4rem!important;
+}
+
+  .why-us-content {
+    gap: 20px;
+  }
+  
+  .why-us-image, .why-us-text {
+    flex: 1 1 100%;
+  }
+  
+  .why-us-image img {
+    width: 100%;
+  }
+
+    .why-us-section {
+    padding: 30px 15px;
+  }
+  
+  .why-us-content {
+    gap: 15px;
+  }
+
+  .customizer-content h2 {
+   font-size: 1.4rem!important;
+}
+
+.why-us-text p {
+    font-size: 0.90rem;
+}
+
+.why-us-image img {
+    width: 100%!important;
+}
+
+ .customizer-section {
+    height: auto;
+    flex-direction: column;
+  }
+
+  .customizer-left, .customizer-right {
+    width: 100%;
+    min-height: 300px;
+  }
+
+  .customizer-content {
+    padding: 20px;
+  }
+
+  .options {
+    gap: 12px;
+  }
+
+.ateliers {
+    margin-right: 15px;
+    margin-left: 15px;
+    margin-top: 40px;
+    max-width: 100%;
+}
   
   .images {
     flex-wrap: wrap;
@@ -430,26 +440,233 @@ body {
     min-width: 250px;
     aspect-ratio: 1/1;
   }
+
+  .ateliers h2 {
+    font-size: 1.4rem;
 }
 
-/* Mobile styles */
-@media screen and (max-width: 480px) {
-  .ateliers {
-    padding: 20px 15px 0 15px;
+.ateliers .intro, .ateliers .conclusion {
+    font-size: 0.90rem; 
+}
+
+}
+
+
+
+@media screen and (max-width: 768px) {
+  .about-content {
+    padding: 40px 15px;
+    gap: 30px;
+  }
+
+  .text-content h2 {
+    font-size: 1.4rem!important;
+  }
+
+  .text-content p {
+    font-size: 0.90em;
+  }
+
+  .values-section h2 {
+    font-size: 1.4rem!important;
+}
+
+.value-item h3 {
+    font-size: 1rem!important;
+}
+
+.value-item p {
+    font-size: 0.90em;
+    }
+
+.why-us-text h2 {
+    font-size: 1.4rem!important;
+    text-align: center!important;
+    margin-top: 10px!important;
+  }
+
+  .why-us-text .highlight {
+    font-size: 1.4rem!important;
+}
+
+  .why-us-content {
+    gap: 20px;
   }
   
-  .ateliers h2 {
-    font-size: 20px;
+  .why-us-image, .why-us-text {
+    flex: 1 1 100%;
   }
+  
+  .why-us-image img {
+    width: 100%;
+  }
+
+    .why-us-section {
+    padding: 30px 15px;
+  }
+  
+  .why-us-content {
+    gap: 15px;
+  }
+
+  .customizer-content h2 {
+   font-size: 1.4rem!important;
+}
+
+.why-us-text p {
+    font-size: 0.90rem;
+}
+
+.why-us-image img {
+    width: 100%!important;
+}
+
+ .customizer-section {
+    height: auto;
+    flex-direction: column;
+  }
+
+  .customizer-left, .customizer-right {
+    width: 100%;
+    min-height: 300px;
+  }
+
+  .customizer-content {
+    padding: 20px;
+  }
+
+  .options {
+    gap: 12px;
+  }
+
+.ateliers {
+    margin-right: 15px;
+    margin-left: 15px;
+    margin-top: 40px;
+    max-width: 100%;
+}
   
   .images {
-    flex-direction: column;
-    align-items: center;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
   }
   
   .images img {
-    width: 100%;
+    width: calc(50% - 15px);
     height: auto;
+    min-width: 250px;
     aspect-ratio: 1/1;
   }
+
+    .ateliers h2 {
+    font-size: 1.4rem;
 }
+
+.ateliers .intro, .ateliers .conclusion {
+    font-size: 0.90rem; 
+}
+  
+}
+
+@media screen and (max-width: 1242px) {
+  .about-content {
+    padding: 40px 15px;
+    gap: 30px;
+  }
+
+  .why-us-content {
+    gap: 20px;
+    flex-direction: column;
+  }
+
+  .why-us-image,
+  .why-us-text {
+    flex: 1 1 100%;
+  }
+
+  .why-us-text {
+    padding: 0 30px;
+    box-sizing: border-box;
+}
+
+
+.text-content p {
+    padding: 0 30px;
+    box-sizing: border-box;
+}
+
+  .why-us-image {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+    margin: 0 auto;
+    box-sizing: border-box;
+}
+
+.why-us-image img {
+    width: 100%;
+    height: auto;
+    max-width: 600px; /* limite visuelle pour éviter qu'elle s'étire trop */
+    object-fit: contain;
+}
+
+
+  .why-us-section {
+    padding: 30px 15px;
+  }
+
+  .customizer-section {
+    height: auto;
+    flex-direction: column;
+  }
+
+  .customizer-left,
+  .customizer-right {
+    width: 100%;
+    min-height: 300px;
+  }
+
+  .customizer-content {
+    padding: 20px;
+  }
+
+  .options {
+    gap: 12px;
+  }
+
+  /* --- Atelier uniquement --- */
+  .ateliers {
+    margin: 40px 15px 0;
+    max-width: 100%;
+    text-align: center;
+  }
+
+  .images {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+  }
+
+  .images img {
+    width: calc(50% - 15px);
+    height: auto;
+    min-width: 250px;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    border-radius: 10px;
+  }
+
+  .ateliers .intro,
+  .ateliers .conclusion {
+    margin-bottom: 1.5rem;
+    line-height: 1.6;
+    text-align: left;
+    padding: 0 30px;
+    box-sizing: border-box;
+  }
+}
+
