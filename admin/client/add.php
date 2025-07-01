@@ -41,6 +41,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         header("Location: add.php");
         exit();
     }
+
+    $confirmPassword = $_POST['confirm-password'];
+if ($_POST['mdp'] !== $confirmPassword) {
+    $_SESSION['message'] = 'Les mots de passe ne correspondent pas.';
+    $_SESSION['message_type'] = 'error';
+    header("Location: add.php");
+    exit();
+}
+
     try {
         $stmt = $pdo->prepare("INSERT INTO client (nom, prenom, mail, tel, mdp, adresse, info, codepostal, ville, date_naissance, civilite) VALUES (:nom, :prenom, :mail, :tel, :mdp, :adresse, :info, :codepostal, :ville, :date_naissance, :civilite)");
         $stmt->bindValue(':nom', $nom, PDO::PARAM_STR);
@@ -80,6 +89,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <title>Ajoute un client</title>
     <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
     <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&family=Be+Vietnam+Pro&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="../../styles/admin/ajout.css">
     <link rel="stylesheet" href="../../styles/message.css">
     <link rel="stylesheet" href="../../styles/buttons.css">
@@ -151,10 +161,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <input type="date" id="date" name="date" class="input-field">
                         </div>
                     </div>
- <div class="form-group">
+<!-- Mot de passe -->
+<div class="form-group"> 
   <label for="mdp">Mot de passe <span class="required">*</span></label>
-
-    <input type="password" id="mdp" name="mdp" class="input-field" required>
+  <input type="password" id="mdp" name="mdp" class="input-field" required>
+  <p id="password-strength-text" style="font-size: 0.9em; margin-top: 5px;"></p>
 
   <!-- Checklist dynamique -->
   <ul class="password-requirements">
@@ -164,8 +175,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <li id="check-number"><span class="check-icon"></span> Un chiffre</li>
     <li id="check-special"><span class="check-icon"></span> Un caractère spécial (!@#$...)</li>
   </ul>
-
 </div>
+
+<!-- Confirmation -->
+<div class="form-row">
+  <div class="form-group password-confirm-wrapper">
+    <label for="confirm-password">Confirmer le mot de passe <span class="required">*</span></label>
+<input type="password" id="confirm-password" class="input-field" name="confirm_password" required>
+
+<span id="match-message" class="error-message">Les mots de passe ne correspondent pas.</span>
+  </div>
+</div>
+
 
 
                     <div class="button-section">
@@ -178,57 +199,115 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
         </div>
 
-        <script>
-  const mdpInput = document.getElementById("mdp");
-  const checklist = document.querySelector(".password-requirements");
+<script>
+      const mdpInput = document.getElementById("mdp");
+      const checklist = document.querySelector(".password-requirements");
 
-  // Affiche la checklist au focus
-  mdpInput.addEventListener("focus", () => {
-    checklist.classList.add("show");
-  });
+      // Affiche la checklist au focus
+      mdpInput.addEventListener("focus", () => {
+        checklist.classList.add("show");
+      });
 
-  // Cache la checklist si on sort du champ ET qu’on ne clique pas dessus
-  mdpInput.addEventListener("blur", () => {
-    setTimeout(() => {
-      // Ne pas masquer si on clique dans la checklist
-      if (!document.activeElement.closest(".password-requirements")) {
-        checklist.classList.remove("show");
-      }
-    }, 100);
-  });
+      // Cache la checklist si on sort du champ ET qu’on ne clique pas dessus
+      mdpInput.addEventListener("blur", () => {
+        setTimeout(() => {
+          // Ne pas masquer si on clique dans la checklist
+          if (!document.activeElement.closest(".password-requirements")) {
+            checklist.classList.remove("show");
+          }
+        }, 100);
+      });
 </script>
 
+<script>
+const passwordInput = document.getElementById("mdp");
+const strengthText = document.getElementById("password-strength-text");
 
-        <script>
-  const passwordInput = document.getElementById("mdp");
+passwordInput.addEventListener("input", function () {
+  const value = passwordInput.value;
 
-  passwordInput.addEventListener("input", function () {
-    const value = passwordInput.value;
+  const hasLength = value.length >= 8;
+  const hasUppercase = /[A-Z]/.test(value);
+  const hasLowercase = /[a-z]/.test(value);
+  const hasNumber = /[0-9]/.test(value);
+  const hasSpecialChar = /[^A-Za-z0-9]/.test(value);
 
-    // Critères
-    const hasLength = value.length >= 8;
-    const hasUppercase = /[A-Z]/.test(value);
-    const hasLowercase = /[a-z]/.test(value);
-    const hasNumber = /[0-9]/.test(value);
-    const hasSpecialChar = /[^A-Za-z0-9]/.test(value);
+  const criteriaCount = [hasLength, hasUppercase, hasLowercase, hasNumber, hasSpecialChar].filter(Boolean).length;
 
-    // Mise à jour classes
-    toggleClass("check-length", hasLength);
-    toggleClass("check-uppercase", hasUppercase);
-    toggleClass("check-lowercase", hasLowercase);
-    toggleClass("check-number", hasNumber);
-    toggleClass("check-special", hasSpecialChar);
-  });
-
-  function toggleClass(id, isValid) {
-    const item = document.getElementById(id);
-    if (isValid) {
-      item.classList.add("valid");
-    } else {
-      item.classList.remove("valid");
-    }
+  // Met à jour visuellement la force du mot de passe
+  passwordInput.classList.remove("input-weak", "input-medium", "input-strong");
+  if (criteriaCount <= 2) {
+    passwordInput.classList.add("input-weak");
+    strengthText.textContent = "Mot de passe faible";
+    strengthText.style.color = "red";
+  } else if (criteriaCount <= 4) {
+    passwordInput.classList.add("input-medium");
+    strengthText.textContent = "Mot de passe moyen";
+    strengthText.style.color = "orange";
+  } else {
+    passwordInput.classList.add("input-strong");
+    strengthText.textContent = "Mot de passe fort";
+    strengthText.style.color = "green";
   }
+
+  // Met à jour la checklist
+  toggleClass("check-length", hasLength);
+  toggleClass("check-uppercase", hasUppercase);
+  toggleClass("check-lowercase", hasLowercase);
+  toggleClass("check-number", hasNumber);
+  toggleClass("check-special", hasSpecialChar);
+});
+
+// Fonction pour appliquer ou retirer la classe "valid" sur les éléments de checklist
+function toggleClass(id, isValid) {
+  const item = document.getElementById(id);
+  if (isValid) {
+    item.classList.add("valid");
+  } else {
+    item.classList.remove("valid");
+  }
+}
+
+
 </script>
+
+
+<script>
+const password = document.getElementById('mdp');
+const confirmPassword = document.getElementById('confirm-password');
+const matchMessage = document.getElementById('match-message');
+
+function checkPasswordMatch() {
+  const pwd = password.value;
+  const confirmPwd = confirmPassword.value;
+
+  if (confirmPwd.length === 0) {
+    matchMessage.style.display = 'none';
+    confirmPassword.classList.remove('input-error', 'input-valid');
+    confirmPassword.setCustomValidity('');
+    return;
+  }
+
+  if (pwd === confirmPwd) {
+    matchMessage.style.display = 'none';
+    confirmPassword.classList.remove('input-error');
+    confirmPassword.classList.add('input-valid');
+    confirmPassword.setCustomValidity('');
+  } else {
+    matchMessage.style.display = 'block';
+    confirmPassword.classList.remove('input-valid');
+    confirmPassword.classList.add('input-error');
+    confirmPassword.setCustomValidity('Les mots de passe ne correspondent pas.');
+  }
+}
+
+password.addEventListener('input', checkPasswordMatch);
+confirmPassword.addEventListener('input', checkPasswordMatch);
+
+</script>
+
+
+
 
     </main>
     <footer>

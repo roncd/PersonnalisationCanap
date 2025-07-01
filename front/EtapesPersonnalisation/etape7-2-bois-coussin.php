@@ -59,7 +59,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <script type="module" src="../../script/keydown.js"></script>
 
 
-  <title>Étape 7.2 - Choisi tes coussins</title>
+  <title>Étape 7.2 - Choisi ton kit de coussinss</title>
 
 </head>
 
@@ -87,7 +87,41 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <div class="container transition">
       <!-- Colonne de gauche -->
       <div class="left-column ">
-        <h2>Étape 7.2 - Choisi tes coussins</h2>
+        <div style="display: flex; align-items: center; gap: 0.5em;">
+          <h2 style="margin: 0;">Étape 7.2 - Choisi ton kit de coussins</h2>
+          <!-- Icône d'information avec popup -->
+          <button id="info-coussin-btn" title="Information" style="background: none; border: none; cursor: pointer; padding: 0;">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+              <circle cx="10" cy="10" r="9" stroke="#333" stroke-width="2" fill="#f5f5f5"/>
+              <text x="10" y="15" text-anchor="middle" font-size="13" fill="#333" font-family="Arial" font-weight="bold">i</text>
+            </svg>
+          </button>
+        </div>
+        <div id="info-coussin-popup" style="display:none; position:absolute; background:#fff; border:1px solid #ccc; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.1); padding:1em; z-index:1000; max-width:300px;">
+          <span style="font-size: 1em;">Le nombre de coussin est calculé en fonction de la longueur.</span>
+        </div>
+        <script>
+          document.addEventListener('DOMContentLoaded', function() {
+            const btn = document.getElementById('info-coussin-btn');
+            const popup = document.getElementById('info-coussin-popup');
+
+            btn.addEventListener('click', function(e) {
+              e.stopPropagation();
+              popup.style.display = popup.style.display === 'block' ? 'none' : 'block';
+              // Position popup below the button
+              const rect = btn.getBoundingClientRect();
+              popup.style.top = (window.scrollY + rect.bottom + 8) + 'px';
+              popup.style.left = (window.scrollX + rect.left) + 'px';
+            });
+
+            // Hide popup when clicking outside
+            document.addEventListener('click', function(e) {
+              if (!popup.contains(e.target) && e.target !== btn) {
+          popup.style.display = 'none';
+              }
+            });
+          });
+        </script>
 
         <section class="color-options">
           <?php if (!empty($motif_bois)): ?>

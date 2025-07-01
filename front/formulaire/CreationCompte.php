@@ -170,31 +170,50 @@ require '../../vendor/autoload.php'; // adapte le chemin si besoin
     </div>
   </div>
 
-  <!-- Ligne 5 : Mot de passe -->
-  <div class="form-row">
-    <div class="form-group">
-      <label for="motdepasse">Mot de passe <span class="required">*</span></label>
-      <input type="password" id="motdepasse" name="motdepasse" class="input-field" required>
-        <p id="password-strength-text" style="font-size: 0.9em; margin-top: 5px;"></p>
-
-            <ul class="password-requirements" id="password-checklist">
-              <li id="check-length"><span class="check-icon"></span> Minimum 8 caractères</li>
-              <li id="check-uppercase"><span class="check-icon"></span> Une lettre majuscule</li>
-              <li id="check-lowercase"><span class="check-icon"></span> Une lettre minuscule</li>
-              <li id="check-number"><span class="check-icon"></span> Un chiffre</li>
-              <li id="check-special"><span class="check-icon"></span> Un caractère spécial (!@#$...)</li>
-            </ul>
+<!-- Ligne 5 : Mot de passe -->
+<div class="form-row">
+  <div class="form-group">
+    <label for="motdepasse">Mot de passe <span class="required">*</span></label>
+    
+    <div class="input-section" style="position: relative;">
+      <input type="password" id="motdepasse" name="motdepasse" class="input-field" required style="padding-right: 60px;">
+      <span class="toggle-password-text" 
+            style="cursor: pointer; color: #666; user-select: none; position: absolute; right: 10px; top: 50%; transform: translateY(-50%); font-weight: 100;">
+        Afficher
+      </span>
     </div>
+    
+    <p id="password-strength-text" style="font-size: 0.9em; margin-top: 5px;"></p>
+
+    <ul class="password-requirements" id="password-checklist">
+      <li id="check-length"><span class="check-icon"></span> Minimum 8 caractères</li>
+      <li id="check-uppercase"><span class="check-icon"></span> Une lettre majuscule</li>
+      <li id="check-lowercase"><span class="check-icon"></span> Une lettre minuscule</li>
+      <li id="check-number"><span class="check-icon"></span> Un chiffre</li>
+      <li id="check-special"><span class="check-icon"></span> Un caractère spécial (!@#$...)</li>
+    </ul>
   </div>
+</div>
+
 
   <!-- Ligne 6 : Confirmer mot de passe -->
 <div class="form-row">
   <div class="form-group password-confirm-wrapper">
     <label for="confirm-password">Confirmer le mot de passe <span class="required">*</span></label>
-    <input type="password" id="confirm-password" name="confirm-password" class="input-field" required>
+
+    <div class="input-section" style="position: relative;">
+      <input type="password" id="confirm-password" name="confirm-password" class="input-field" required style="padding-right: 60px;">
+      <span class="toggle-password-text" 
+            style="cursor: pointer; color: #666; user-select: none; position: absolute; right: 10px; top: 50%; 
+                   transform: translateY(-50%); font-weight: 100;">
+        Afficher
+      </span>
+    </div>
+
     <p id="match-message" class="error-message">Les mots de passe ne correspondent pas.</p>
   </div>
 </div>
+
 
 
 
@@ -325,7 +344,7 @@ password.addEventListener('input', checkPasswordMatch);
 confirmPassword.addEventListener('input', checkPasswordMatch);
 
 </script>
-
+<script src="../../script/togglePassword.js"></script>
 </body>
 
 </html>

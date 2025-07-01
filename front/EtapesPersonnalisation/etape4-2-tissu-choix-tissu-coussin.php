@@ -57,7 +57,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <script type="module" src="../../script/variationPrix.js"></script>
     <script type="module" src="../../script/keydown.js"></script>
 
-    <title>Étape 4.2 - Choisi tes coussins</title>
+    <title>Étape 4.2 - Choisi ton kit de coussins</title>
 
 </head>
 
@@ -84,7 +84,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div class="container transition">
             <!-- Colonne de gauche -->
             <div class="left-column ">
-                <h2>Étape 4.2 - Choisi tes coussins</h2>
+                <h2>Étape 4.2 - Choisi ton kit de coussins</h2>
                 <section class="color-options">
                     <?php if (!empty($motif_tissu)): ?>
                         <?php foreach ($motif_tissu as $tissu): ?>

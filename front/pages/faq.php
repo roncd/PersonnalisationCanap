@@ -32,6 +32,12 @@ $categories = $stmt->fetchAll(PDO::FETCH_ASSOC);
   <section class="faq-categories">
   <h1>FAQ</h1>
   <p>Votre question concerne quel sujet ?</p>
+<div class="faq-search-bar">
+  <input type="text" id="faqSearchInput" placeholder="Rechercher une question, un mot-clé…" oninput="showSuggestions()" onkeydown="handleEnter(event)">
+  <div id="suggestions" class="suggestions-box"></div>
+</div>
+
+
   <div class="faq-grid">
     <?php foreach ($categories as $categorie): ?>
       <a href="faq_details.php?categorie=<?= urlencode($categorie['id']) ?>" class="faq-card">
@@ -55,17 +61,5 @@ $categories = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
   <?php require_once '../../squelette/footer.php'; ?>
 
-  <script>
-    // Toggle des réponses
-    document.querySelectorAll('.faq-question').forEach((question) => {
-      question.addEventListener('click', () => {
-        const item = question.parentElement;
-        item.classList.toggle('active');
-
-        const toggle = question.querySelector('.faq-toggle');
-        toggle.textContent = item.classList.contains('active') ? '−' : '+';
-      });
-    });
-  </script>
 </body>
 </html>
