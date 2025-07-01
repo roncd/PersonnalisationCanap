@@ -187,7 +187,6 @@ function calculPrix($commande, &$composition = [])
                 </h1>
 
                 <p class="hero-description">
-                    Nos canapés marocains pré-personnalisés allient tradition et modernité pour sublimer votre salon.
                     Choisissez votre style, réservez votre modèle favoris et récupérez-le directement en boutique.
                 </p>
             </div>

@@ -170,9 +170,14 @@ h2 {
 
 @media screen and (max-width: 768px) {
     .container {
-        width: 100%;
+        width: 93%;
         margin: 20px;
     }
+
+       h2 {
+        font-size: 1.6rem;
+    }
+
 
     .tabs {
         flex-wrap: wrap;
@@ -205,6 +210,10 @@ h2 {
         padding: 0.4em 0.8em;
         font-size: 14px;
     }
+
+    .h2-commande {
+    padding-top: 75px!important;
+}
 }
 
 @media screen and (max-width: 480px) {
@@ -212,8 +221,16 @@ h2 {
         margin: 10px;
     }
 
+    .container {
+        width: 90%;
+        margin: 20px;
+    }
+
+.h2-commande {
+    padding-top: 75px!important;
+}
     h2 {
-        font-size: 24px;
+        font-size: 1.4rem;
     }
 
     .tab {
@@ -255,6 +272,7 @@ h2 {
     .tab {
         min-width: 100%;
     }
+
 
     .pagination {
         gap: 3px;

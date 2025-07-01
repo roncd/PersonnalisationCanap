@@ -79,9 +79,9 @@ a {
 }
 
 
-/* Responsive design */
-@media screen and (max-width: 1024px) {
 
+/* ------------------- RESPONSIVE DESIGN ------------------- */
+@media screen and (max-width: 1024px) {
   .container-intro,
   .container {
     max-width: 90%;
@@ -90,14 +90,35 @@ a {
   .baloo-2-bold {
     font-size: 2rem;
   }
+
+  .section h2 {
+    font-size: 1.6rem;
+  }
+
+  .section h3 {
+    font-size: 1.3rem;
+  }
+
+  p {
+    font-size: 0.95rem;
+  }
+
+  .intro {
+    font-size: 0.95rem;
+  }
+  
+  
 }
 
 @media screen and (max-width: 768px) {
-
   .container-intro,
   .container {
     max-width: 100%;
     padding: 1rem;
+  }
+
+  .container-intro{
+    margin-top: -1.5rem;
   }
 
   .title-bar {
@@ -110,12 +131,24 @@ a {
   }
 
   .section h2 {
-    font-size: 1.25rem;
+    font-size: 1.4rem;
+  }
+
+  .section h3 {
+    font-size: 1.2rem;
+  }
+
+  p {
+    font-size: 0.9rem;
   }
 
   .intro {
     font-size: 0.9rem;
   }
+
+  .section h2 {
+    margin-top: -1.5rem;
+}
 }
 
 @media screen and (max-width: 480px) {
@@ -123,11 +156,36 @@ a {
     padding: 1rem;
   }
 
+  
+  .container-intro{
+    margin-top: -1.5rem;
+  }
+
+  .section h2 {
+    margin-top: -1.5rem;
+}
+
   .baloo-2-bold {
     font-size: 1.5rem;
   }
 
   .section {
     margin-bottom: 2rem;
+  }
+
+  .section h2 {
+    font-size: 1.3rem;
+  }
+
+  .section h3 {
+    font-size: 1.1rem;
+  }
+
+  p {
+    font-size: 0.85rem;
+  }
+
+  .intro {
+    font-size: 0.85rem;
   }
 }

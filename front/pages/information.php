@@ -215,7 +215,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             <div class="right-column">
                 <section class="main-display">
-                    <img src="../../medias/meknes.png" alt="Illustration">
+                    <img src="../../medias/meknes.png" alt="Illustration" class="hide-on-small">
                 </section>
             </div>
         </div>

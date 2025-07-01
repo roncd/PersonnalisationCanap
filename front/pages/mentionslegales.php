@@ -228,12 +228,15 @@ session_start();
                     À tout moment, l’Utilisateur peut faire le choix d’exprimer et de modifier ses souhaits en matière de Cookies. <a href="https://decodumonde.alwaysdata.net">https://decodumonde.alwaysdata.net</a> pourra en outre faire appel aux services de prestataires externes pour l’aider à recueillir et traiter les informations décrites dans cette section.</p>
               
             </section>
+            <section class="section">
 
             <h2>9. Droit applicable et attribution de juridiction.</h2>
             <p>
                 Tout litige en relation avec l’utilisation du site <a href="https://decodumonde.alwaysdata.net">https://decodumonde.alwaysdata.net</a> est soumis au droit français.
                 En dehors des cas où la loi ne le permet pas, il est fait attribution exclusive de juridiction aux tribunaux compétents de Pierrefitte-Sur-Seine</p>
-        </div>
+                    </section>
+
+            </div>
     </main>
 
     <?php require_once '../../squelette/footer.php'; ?>
