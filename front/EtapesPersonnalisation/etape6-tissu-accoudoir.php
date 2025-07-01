@@ -100,7 +100,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <img src="../../admin/uploads/accoudoirs-tissu/<?php echo htmlspecialchars($accoudoir['img']); ?>"
                   alt="<?php echo htmlspecialchars($accoudoir['nom']); ?>"
                   data-accoudoir-id="<?php echo $accoudoir['id']; ?>"
-                  data-accoudoir-prix="<?php echo $accoudoir['prix']; ?>">
+                  data-accoudoir-prix="<?php echo $accoudoir['prix']; ?>"
+                  data-can-deselect="true">
                 <p><?php echo htmlspecialchars($accoudoir['nom']); ?></p>
                 <p><strong><?php echo htmlspecialchars($accoudoir['prix']); ?> €</strong></p>
 

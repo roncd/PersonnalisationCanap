@@ -64,39 +64,47 @@ document.addEventListener("DOMContentLoaded", function () {
     const price = parseFloat(option.getAttribute(priceAttr.name)) || 0;
     const uniqueId = `${currentStep}_${optionId}`;
 
+    const canDeselect = option.dataset.canDeselect === 'true';
+
     if (allSelectedOptions.some(opt => opt.id === uniqueId)) {
       option.parentElement.classList.add('selected');
     }
 
     option.addEventListener('click', () => {
-      const alreadySelected = option.parentElement.classList.contains('selected');
+    const alreadySelected = option.parentElement.classList.contains('selected');
 
-      if (alreadySelected) {
-        // ➖ Désélectionner
-        option.parentElement.classList.remove('selected');
-        allSelectedOptions = allSelectedOptions.filter(opt => opt.id !== uniqueId);
-        console.log(`➖ Option retirée : ${uniqueId}`);
-      } else {
-        const imgElements = Array.from(document.querySelectorAll("img"))
-          .filter(img => img.offsetParent !== null);
+    /* ◼︎ 1. Clic sur la même option déjà sélectionnée */
+    if (alreadySelected) {
+      // → option obligatoire : on ignore le clic
+      if (!canDeselect) return;
 
-        imgElements.forEach(opt => {
-          opt.parentElement.classList.remove('selected');
-        });
-        allSelectedOptions = allSelectedOptions.filter(opt => !opt.id.startsWith(`${currentStep}_`));
-        clearOtherPathOptions();
+      // → option facultative : on la retire
+      option.parentElement.classList.remove('selected');
+      allSelectedOptions = allSelectedOptions.filter(opt => opt.id !== uniqueId);
+      console.log(`➖ Option retirée : ${uniqueId}`);
 
-        // ➕ Ajouter nouvelle sélection
-        allSelectedOptions.push({ id: uniqueId, price: price });
-        option.parentElement.classList.add('selected');
-        console.log(`➕ Option ajoutée : ${uniqueId} (${price} €)`);
-      }
+    /* ◼︎ 2. Clic sur une autre option de la même étape */
+    } else {
+      // On remet à zéro la sélection de l’étape courante
+      document.querySelectorAll("img").forEach(img =>
+        img.parentElement.classList.remove('selected')
+      );
+      allSelectedOptions = allSelectedOptions.filter(opt =>
+        !opt.id.startsWith(`${currentStep}_`)
+      );
+      clearOtherPathOptions();
 
-      sessionStorage.setItem(sessionKey, JSON.stringify(allSelectedOptions));
-      updateTotal();
-    });
+      // On ajoute la nouvelle option
+      allSelectedOptions.push({ id: uniqueId, price });
+      option.parentElement.classList.add('selected');
+      console.log(`➕ Option ajoutée : ${uniqueId} (${price} €)`);
+    }
 
+    sessionStorage.setItem(sessionKey, JSON.stringify(allSelectedOptions));
+    updateTotal();
   });
+
+}); 
 
   clearOtherPathOptions();
   updateTotal();
