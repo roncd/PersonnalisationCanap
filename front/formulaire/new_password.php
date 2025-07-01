@@ -48,21 +48,30 @@
                 }
             }
             ?>
+<form method="POST" class="form">
+  <div class="form-group">
+    <label for="new_password">Nouveau mot de passe <span class="required">*</span></label>
+    
+    <div class="input-section" style="position: relative;">
+      <input type="password" id="new_password" name="new_password" class="input-field" required style="padding-right: 60px;">
+      <span class="toggle-password-text" 
+            style="cursor: pointer; color: #666; user-select: none; position: absolute; right: 10px; top: 50%; 
+                   transform: translateY(-50%); font-weight: 100;">
+        Afficher
+      </span>
+    </div>
+  </div>
+  <div class="button-section">
+    <p>Revenir sur <span><a href="../pages/index.php" class="link-connect">Deco du monde</a></span></p>
+    <div class="buttons">
+      <button type="submit" class="btn-noir">Mettre à jour</button>
+    </div>
+  </div>
+</form>
 
-            <form method="POST" class="form">
-                <div class="form-group">
-                    <label for="new_password">Nouveau mot de passe <span class="required">*</span></label>
-                    <input type="password" id="new_password" name="new_password" class="input-field" required>
-                </div>
-                <div class="button-section">
-                    <p>Revenir sur <span><a href="../pages/index.php" class="link-connect">Deco du monde</a></span></p>
-                    <div class="buttons">
-                        <button type="submit" class="btn-noir">Mettre à jour</button>
-                    </div>
-                </div>
-            </form>
         </div>
     </main>
+    <script src="../../script/togglePassword.js"></script>
 </body>
 
 </html>

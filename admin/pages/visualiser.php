@@ -64,7 +64,7 @@ if (!isset($_SESSION['id'])) {
                         <a href="../dossier-bois/visualiser.php" class="btn">Dossier</a>
                         <a href="../couleur/visualiser.php" class="btn">Couleur tissu</a>
                         <a href="../couleur-tissu-bois/visualiser.php" class="btn">Motif tissu</a>
-                        <a href="../motif-bois/visualiser.php" class="btn">Motif coussin</a>
+                        <a href="../motif-bois/visualiser.php" class="btn">Kit de coussins</a>
                     </div>
                 </section>
 
@@ -75,7 +75,7 @@ if (!isset($_SESSION['id'])) {
                         <a href="../accoudoirs-tissu/visualiser.php" class="btn">Accoudoirs</a>
                         <a href="../dossier-tissu/visualiser.php" class="btn">Dossier</a>
                         <a href="../couleur-tissu-tissu/visualiser.php" class="btn">Couleur tissu</a>
-                        <a href="../motif-tissu/visualiser.php" class="btn">Motif coussin</a>
+                        <a href="../motif-tissu/visualiser.php" class="btn">Kit de coussins</a>
                     </div>
                 </section>
             </div>

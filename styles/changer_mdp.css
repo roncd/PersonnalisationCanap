@@ -43,15 +43,16 @@ body {
     margin-top: 15px;
 }
 
-.password-page input[type="password"] {
+.password-page input[type="password"],
+.password-page input[type="text"] {
     padding: 12px;
     background-color: rgba(227, 209, 200, 0.71);
     border: none;
     border-radius: 10px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
     font-size: 16px;
-
 }
+
 
 .password-page button {
     margin-top: 1rem;

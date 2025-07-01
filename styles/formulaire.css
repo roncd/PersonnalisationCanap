@@ -196,10 +196,6 @@ label {
 }
 
 
-#eyeBtn {
-    cursor: pointer;
-}
-
 /*Mot de passe et confirmation de mot de passe */
 
 /* Vérification dynamique des critères de mot de passe */
@@ -281,6 +277,77 @@ label {
 .input-valid {
   border: 1px solid green;
 }
+
+.image-preview {
+  margin-top: 10px;
+  max-width: 200px;
+  max-height: 200px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.image-preview img {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: contain;
+}
+
+.dropzone {
+  border: 2px dashed #997765; /* même couleur que .footer span */
+  border-radius: 8px;
+  padding: 15px;
+  background-color: rgba(227, 209, 200, 0.71); /* Même que .input-field */
+  font-family: 'Be Vietnam Pro', sans-serif;
+  transition: background-color 0.3s ease;
+}
+
+
+.dropzone.dragover {
+  background-color: rgba(227, 209, 200, 0.85); /* même hover que .input-field:focus */
+}
+
+
+#file-list {
+  list-style-type: none;
+  padding-left: 0;
+  margin-top: 10px;
+}
+
+#file-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  background: #f8bbd0; /* rose moyen pour les fichiers */
+  margin-bottom: 6px;
+  border-radius: 6px;
+  font-family: 'Be Vietnam Pro', sans-serif;
+  font-size: 14px;
+}
+
+#file-list li::before {
+  content: "📎";
+  margin-right: 8px;
+}
+
+
+#file-list li span {
+  flex-grow: 1;
+  overflow-wrap: anywhere;
+}
+
+#file-list li button {
+  background: none;
+  border: none;
+  color: #880e4f; /* rouge foncé */
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+
 
 
 
