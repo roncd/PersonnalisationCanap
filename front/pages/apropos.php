@@ -12,6 +12,10 @@ session_start();
   <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
   <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&family=Be+Vietnam+Pro&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../../styles/apropos.css">
+  <link rel="stylesheet" href="../../styles/buttons.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+
 </head>
 
 <body>
@@ -44,22 +48,23 @@ session_start();
     <div class="values-section">
         <h2>Nos valeurs</h2>
         <div class="values-container">
-            <div class="value-item">
-                <h3>Artisanat</h3>
-                <p>Nous valorisons le savoir-faire artisanal et le travail minutieux de nos artisans locaux.</p>
-                <img src="../../medias/icons-authencite.png" alt="Artisanat" class="value-icon">
-            </div>
-            <div class="value-item">
-                <h3>Qualité</h3>
-                <p>Nous nous engageons à fournir des produits de haute qualité avec des matériaux soigneusement sélectionnés.</p>
-                <img src="../../medias/icon-personnaliser.png" alt="Qualité" class="value-icon">
-            </div>
-            <div class="value-item">
-                <h3>Personnalisation</h3>
-                <p>Nous croyons en la création de pièces uniques adaptées aux goûts et besoins de chaque client.</p>
-                <img src="../../medias/icon_accessibilite.jpg" alt="Personnalisation" class="value-icon">
-            </div>
-        </div>
+    <div class="value-item">
+        <i class="fa-solid fa-hands" aria-hidden="true"></i>
+        <h3>Artisanat</h3>
+        <p>Nous valorisons le savoir-faire artisanal et le travail minutieux de nos artisans locaux.</p>
+    </div>
+    <div class="value-item">
+        <i class="fa-solid fa-thumbs-up" aria-hidden="true"></i>
+        <h3>Qualité</h3>
+        <p>Nous nous engageons à fournir des produits de haute qualité avec des matériaux soigneusement sélectionnés.</p>
+    </div>
+    <div class="value-item">
+        <i class="fa-solid fa-paint-brush" aria-hidden="true"></i>
+        <h3>Personnalisation</h3>
+        <p>Nous croyons en la création de pièces uniques adaptées aux goûts et besoins de chaque client.</p>
+    </div>
+</div>
+
     </div>
     <div class="why-us-section">
       <div class="why-us-content">
@@ -116,7 +121,7 @@ session_start();
           <span>Motif</span>
         </div>
       </div>
-    <a href="dashboard.php" class="custom-btn">Je crée mon canapé</a>
+    <a href="dashboard.php" class="btn-beige">Je crée mon canapé</a>
     </div>
   </div>
   <div class="customizer-right">
