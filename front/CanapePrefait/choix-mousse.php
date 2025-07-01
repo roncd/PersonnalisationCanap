@@ -88,8 +88,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 
 <script>
-  const ancienPrixMousse = <?= json_encode($oldMoussePrice) ?>;
-  localStorage.setItem('ancienPrixMousse', ancienPrixMousse);
+  const sofaId = <?= json_encode($id_commande_prefait) ?>;
+  const defaultFoamId = <?= json_encode($selectedMousseId) ?>;
+  const defaultFoamPrice = <?= json_encode($oldMoussePrice) ?>;
 </script>
 
 
@@ -227,103 +228,105 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 
 
+<!-- GESTION DES SELECTIONS -->
+<script>
+  // Helpers pour lire / écrire l'objet central
+  function loadFoamData() {
+    return JSON.parse(localStorage.getItem('mousseBySofa') || '{}');
+  }
+  function saveFoamData(data) {
+    localStorage.setItem('mousseBySofa', JSON.stringify(data));
+  }
 
-  <!-- GESTION DES SELECTIONS -->
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const options = document.querySelectorAll('.color-options .option img');
-      const mainImage = document.querySelector('.main-display2 img');
-      const erreurPopup = document.getElementById('erreur-popup');
-      const closeErreurBtn = erreurPopup?.querySelector('.btn-noir');
-      const selectedMousseInput = document.getElementById('selected-mousse');
-      const prixTotalInput = document.getElementById('input-prix-total');
-      const form = document.querySelector('form');
-      const totalSansMousseEl = document.getElementById('prix-sans-mousse');
-      const prixTotalFinalEl = document.getElementById('prix-total-final');
+  document.addEventListener('DOMContentLoaded', () => {
+    // --------- DOM ----------
+    const options            = document.querySelectorAll('.color-options .option img');
+    const mainImage          = document.querySelector('.main-display2 img');
+    const erreurPopup        = document.getElementById('erreur-popup');
+    const closeErreurBtn     = erreurPopup?.querySelector('.btn-noir');
+    const selectedMousseInput= document.getElementById('selected-mousse');
+    const prixTotalInput     = document.getElementById('input-prix-total');
+    const form               = document.querySelector('form');
+    const totalSansMousseEl  = document.getElementById('prix-sans-mousse');
+    const prixTotalFinalEl   = document.getElementById('prix-total-final');
 
-      // Récupération des prix et sélection
-      const prixAvantMousseStr = localStorage.getItem('prix_total_jusqua_dimensions');
-      let ancienPrixMousse = parseFloat(localStorage.getItem('ancienPrixMousse') || '0');
-      const prixBrut = parseFloat(prixAvantMousseStr || '0');
-      let prixBaseSansMousse = Math.max(prixBrut - ancienPrixMousse, 0);
-      let selectedMousseId = localStorage.getItem('selectedMousse') || '';
+    // --------- lecture des données persistées ----------
+    const prixAvantMousseStr = localStorage.getItem('prix_total_jusqua_dimensions');  // prix du canapé sans mousse
+    const data               = loadFoamData();                                        // { [sofaId]: {id, price}, ... }
+    const stored             = data[sofaId] || { id: defaultFoamId, price: defaultFoamPrice };
 
-      // Affichage du prix sans mousse
-      if (totalSansMousseEl) {
-        totalSansMousseEl.textContent = prixBaseSansMousse.toFixed(2).replace('.', ',') + ' €';
+    let selectedMousseId = stored.id ? String(stored.id) : '';                        // peut être '' si pas de mousse
+    let ancienPrixMousse = parseFloat(stored.price || 0);                             // prix de la mousse stockée
+    const prixBrut       = parseFloat(prixAvantMousseStr || '0');                     // prix canapé + mousse
+    let prixBaseSansMousse = Math.max(prixBrut - ancienPrixMousse, 0);                // prix canapé SANS mousse
+
+    // --------- affichage initial ----------
+    if (totalSansMousseEl) {
+      totalSansMousseEl.textContent = prixBaseSansMousse.toFixed(2).replace('.', ',') + ' €';
+    }
+    const prixInitial = prixBaseSansMousse + ancienPrixMousse;
+    prixTotalFinalEl.textContent = prixInitial.toFixed(2).replace('.', ',') + ' €';
+    prixTotalInput.value = prixInitial.toFixed(2);
+
+    // --------- fonction centrale ----------
+    function updateSelection(mousseElement, force = false) {
+      const moussePrix = parseFloat(mousseElement.dataset.mousseBoisPrix || '0');
+      const newMousseId = mousseElement.getAttribute('data-mousse-bois-id');
+
+      // si clic sur la mousse déjà sélectionnée (et pas forcé) → on ne fait rien
+      if (!force && selectedMousseId === newMousseId) return;
+
+      // visuel : retirer / ajouter la classe 'selected'
+      options.forEach(opt => opt.classList.remove('selected'));
+      mousseElement.classList.add('selected');
+
+      // mémorise la sélection
+      selectedMousseId = newMousseId;
+      selectedMousseInput.value = selectedMousseId;
+      if (mainImage) mainImage.src = mousseElement.src;
+
+      // prix
+      const totalFinal = prixBaseSansMousse + moussePrix;
+      prixTotalFinalEl.textContent = totalFinal.toFixed(2).replace('.', ',') + ' €';
+      prixTotalInput.value = totalFinal.toFixed(2);
+
+      // ---- persistance : on met à jour UNIQUEMENT la branche du canapé courant ----
+      data[sofaId] = { id: selectedMousseId, price: moussePrix };
+      saveFoamData(data);
+    }
+
+    // ----- ré‑applique la sélection enregistrée (si elle existe dans le DOM) -----
+    if (selectedMousseId) {
+      const previouslySelected = document.querySelector(`[data-mousse-bois-id="${selectedMousseId}"]`);
+      if (previouslySelected) {
+        updateSelection(previouslySelected, true); // true = charge sans recalculer
       }
+    }
 
-      // Calcul du prix initial
-      let prixInitial = prixBaseSansMousse + ancienPrixMousse;
-      prixTotalFinalEl.textContent = prixInitial.toFixed(2).replace('.', ',') + ' €';
-      prixTotalInput.value = prixInitial.toFixed(2);
-
-      function updateSelection(mousseElement, force = false) {
-        const moussePrix = parseFloat(mousseElement.dataset.mousseBoisPrix || '0');
-        const newMousseId = mousseElement.getAttribute('data-mousse-bois-id');
-
-        // Si ce n'est pas un chargement forcé et la mousse est déjà sélectionnée, ne rien faire
-        if (!force && selectedMousseId === newMousseId) {
-          return;
-        }
-
-        // Supprimer les sélections visuelles
-        options.forEach(opt => opt.classList.remove('selected'));
-
-        // Appliquer la nouvelle sélection
-        mousseElement.classList.add('selected');
-        selectedMousseId = newMousseId;
-        selectedMousseInput.value = selectedMousseId;
-
-        if (mainImage) mainImage.src = mousseElement.src;
-
-        // Mise à jour du prix
-        const totalFinal = prixBaseSansMousse + moussePrix;
-        prixTotalFinalEl.textContent = totalFinal.toFixed(2).replace('.', ',') + ' €';
-        prixTotalInput.value = totalFinal.toFixed(2);
-
-        // Sauvegarder dans le localStorage
-        localStorage.setItem('ancienPrixMousse', moussePrix.toFixed(2));
-        localStorage.setItem('selectedMousse', selectedMousseId);
-      }
-
-      // Réappliquer la sélection si elle existe
-      if (selectedMousseId) {
-        const previouslySelected = document.querySelector(`[data-mousse-bois-id="${selectedMousseId}"]`);
-        if (previouslySelected) {
-          updateSelection(previouslySelected, true); // true = forcer rechargement même si déjà sélectionnée
-        }
-      }
-
-      // Gestion des clics sur les mousses
-      options.forEach(img => {
-        img.addEventListener('click', () => {
-          updateSelection(img);
-        });
-      });
-
-      // Validation du formulaire
-      form?.addEventListener('submit', (e) => {
-        if (!selectedMousseInput.value) {
-          e.preventDefault();
-          if (erreurPopup) erreurPopup.style.display = 'flex';
-        }
-      });
-
-      // Fermeture du popup
-      closeErreurBtn?.addEventListener('click', () => {
-        if (erreurPopup) erreurPopup.style.display = 'none';
-      });
-
-      window.addEventListener('click', (event) => {
-        if (event.target === erreurPopup) {
-          erreurPopup.style.display = 'none';
-        }
-      });
+    // ----- gestion des clics sur les images de mousse -----
+    options.forEach(img => {
+      img.addEventListener('click', () => updateSelection(img));
     });
-  </script>
 
+    // ----- validation du formulaire -----
+    form?.addEventListener('submit', (e) => {
+      if (!selectedMousseInput.value) {
+        e.preventDefault();
+        if (erreurPopup) erreurPopup.style.display = 'flex';
+      }
+    });
 
+    // ----- popup d'erreur -----
+    closeErreurBtn?.addEventListener('click', () => {
+      if (erreurPopup) erreurPopup.style.display = 'none';
+    });
+    window.addEventListener('click', (event) => {
+      if (event.target === erreurPopup) {
+        erreurPopup.style.display = 'none';
+      }
+    });
+  });
+</script>
 
 
 
