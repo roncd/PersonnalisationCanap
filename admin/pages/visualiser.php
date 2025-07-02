@@ -38,7 +38,7 @@ if (!isset($_SESSION['id'])) {
             <div class="grid-wrapper">
 
             <section class="category-block">
-                    <h2>Produits à l'unité / Canapé Pré-personnalisé</h2>
+                    <h2>Produits à l'unité / Canapé Pré-fait</h2>
                     <div class="button-grid">
                         <a href="../vente-produit/visualiser.php" class="btn">Produit</a>
                         <a href="../categorie/visualiser.php" class="btn">Catégorie produits</a>

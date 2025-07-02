@@ -24,6 +24,7 @@ body {
 h2 {
   font-family: 'Be Vietnam Pro', sans-serif;
 }
+
 .button-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -77,18 +78,75 @@ h2 {
     grid-template-columns: repeat(2, 1fr);
     /* 2 colonnes sur les écrans plus petits */
   }
+
+  .header h1 {
+    font-size: 26px;
+    margin-top: 5px;
+    line-height: 1.5rem;
+  }
+
+  .header p {
+    margin-bottom: 20px;
+    font-size: 14px
+  }
+
+  /* Boutons personnalisés */
+  .btn {
+    font-size: 14px;
+    padding: 12px 15px;
+  }
+
+  .category-block {
+    padding: 1rem;
+  }
+
+  .category-block h2 {
+    font-size: 18px;
+  }
 }
 
-@media screen and (max-width: 480px) {
+
+@media screen and (max-width: 500px) {
   .button-grid-container {
     grid-template-columns: 1fr;
     /* 1 colonne sur les très petits écrans */
   }
+
+  .header h1 {
+    font-size: 24px;
+    margin-top: 10px;
+    line-height: 1.5rem;
+  }
+
+  .header p {
+    margin-bottom: 20px;
+    font-size: 13px
+  }
+
+  .container {
+    width: 80%;
+    margin: 0px 40px;
+  }
+
+  /* Boutons personnalisés */
+  .btn {
+    font-size: 13px;
+    padding: 12px 15px;
+  }
+
+  .category-block {
+    padding: 1rem;
+  }
+
+  .category-block h2 {
+    font-size: 17px;
+  }
 }
 
-@media screen and (max-width: 1075px) {
+@media screen and (max-width: 849px) {
   .grid-wrapper {
     grid-template-columns: 1fr;
     /* Une seule colonne en responsive */
   }
+
 }

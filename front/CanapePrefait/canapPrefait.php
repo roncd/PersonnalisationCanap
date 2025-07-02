@@ -268,7 +268,7 @@ $totalPrice += floatval($commande['prix_dimensions'] ?? 0);
           ?>
           <img
             src="../../admin/uploads/canape-prefait/<?php echo $imgFile; ?>"
-            alt="<?php echo htmlspecialchars($commande['nom'] ?? 'Canapé préfait', ENT_QUOTES); ?>"
+            alt="<?php echo htmlspecialchars($commande['nom'] ?? 'Canapé pré-fait', ENT_QUOTES); ?>"
             class="primary-img">
         </section>
       </div>

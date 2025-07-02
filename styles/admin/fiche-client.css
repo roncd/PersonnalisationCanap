@@ -44,10 +44,12 @@ h1 {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    overflow-x: auto;
 }
 
 .block-panier {
     grid-area: panier;
+    overflow-x: auto;
 }
 
 .account-grid {
@@ -84,6 +86,7 @@ h1 {
     cursor: pointer;
     text-decoration: none;
 }
+
 .info-card h2 a:hover {
     text-decoration: underline;
     cursor: pointer;
@@ -149,5 +152,96 @@ tr:nth-of-type(even) {
     .account-grid {
         display: flex;
         flex-direction: column;
+    }
+}
+@media (max-width: 768px) {
+       h1 {
+        font-size: 26px;
+        margin: 0px;
+        line-height: 1.5rem;
+    }
+    .info-card h2 {
+        font-size: 18px;
+        margin-bottom: 10px;
+        margin-top: 5px;
+    }
+
+    .info-card h2 a {
+        font-size: 12px;
+    }
+
+    .info-card p {
+        font-size: 14px;
+
+    }
+
+    .commandes-card table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 1rem;
+    }
+
+    .commandes-card th,
+    .commandes-card td {
+        font-size: 14px;
+    }
+
+    .bouton {
+        justify-content: flex-start;
+        display: flex;
+    }
+
+    .btn {
+        font-size: 14px;
+        padding: 10px 20px;
+    }
+
+}
+@media (max-width: 500px) {
+    h1 {
+        font-size: 24px;
+        margin: 0px;
+        line-height: 1.5rem;
+    }
+
+    .container {
+        width: 80%;
+        margin: 0px 40px;
+    }
+
+    .info-card h2 {
+        font-size: 17px;
+        margin-bottom: 10px;
+        margin-top: 5px;
+    }
+
+    .info-card h2 a {
+        font-size: 10px;
+    }
+
+    .info-card p {
+        font-size: 12px;
+
+    }
+
+    .commandes-card table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 1rem;
+    }
+
+    .commandes-card th,
+    .commandes-card td {
+        font-size: 12px;
+    }
+
+    .bouton {
+        justify-content: flex-start;
+        display: flex;
+    }
+
+    .btn {
+        font-size: 12px;
+        padding: 10px 20px;
     }
 }
