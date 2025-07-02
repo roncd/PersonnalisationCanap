@@ -3,13 +3,6 @@ require '../../admin/config.php';
 session_start();
 
 
-// Vérifier si l'utilisateur est connecté
-if (!isset($_SESSION['user_id'])) {
-  $_SESSION['redirect_to'] = $_SERVER['REQUEST_URI'];
-  header("Location: ../formulaire/Connexion.php"); // Redirection vers la page de connexion
-  exit();
-}
-
 // 1. Canapés préfaits
 $sqlCommandes = "
     SELECT cp.*, tb.nom AS type_nom 
@@ -125,6 +118,8 @@ function calculPrix($commande, &$composition = [])
   <link rel="stylesheet" href="../../styles/styles.css">
   <link rel="stylesheet" href="../../styles/buttons.css">
   <link rel="stylesheet" href="../../styles/accueil.css">
+  <link rel="stylesheet" href="../../styles/transition.css">
+  <script type="module" src="../../script/transition.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <script src="../../node_modules/@preline/carousel/index.js"></script>
   <script type="module" src="../../script/animate-value.js"></script>
@@ -167,7 +162,7 @@ function calculPrix($commande, &$composition = [])
     </section>
 
     <div class="accueil">
-      <section class="avantages-card">
+      <section class="avantages-card transition-boom">
         <div class="histoire-img">
           <img src="../../medias/canapekenitra.png" alt="Aperçu canapé personnalisé">
         </div>
@@ -190,7 +185,7 @@ function calculPrix($commande, &$composition = [])
           </a>
         </div>
       </section>
-      <section class="combination-section">
+      <section class="combination-section transition-all">
         <h2>Inspirez-vous de nos salons marocains</h2>
         <div class="carousel-container" id="carousel">
           <?php foreach ($commandes as $commande): ?>
@@ -216,7 +211,7 @@ function calculPrix($commande, &$composition = [])
           <?php endforeach; ?>
         </div>
       </section>
-      <section class="avantages-card">
+      <section class="avantages-card transition-boom">
         <div class="avantages-text">
           <h2>Pourquoi personnaliser votre canapé ici ?</h2>
           <ul>
@@ -269,7 +264,7 @@ function calculPrix($commande, &$composition = [])
           }, 1000); // attend 1s après dernier scroll
         });
       </script>
-      <section class="combination-section">
+      <section class="combination-section transition-all" >
         <h2>Les indispensables à l’unité</h2>
         <div class="carousel-container" id="carousel-unitaires">
           <?php foreach ($produits as $produit): ?>
@@ -328,7 +323,7 @@ function calculPrix($commande, &$composition = [])
         });
       </script>
       <!-- Section Commencer un devis -->
-      <section class="devis-section">
+      <section class="devis-section transition-all">
         <div class="devis-container">
           <section class="process-section">
             <h2 class="h2-center">Personnalisez votre salon en 4 étapes</h2>
@@ -362,7 +357,7 @@ function calculPrix($commande, &$composition = [])
           </a>
         </div>
       </section>
-      <section class="stats-section">
+      <section class="stats-section transition-boom">
         <h2 class="h2-center">Ils nous font confiance</h2>
         <ul class="stats-list">
           <li><strong data-target="500" data-plus="true">0</strong> canapés personnalisés</li>
@@ -370,7 +365,7 @@ function calculPrix($commande, &$composition = [])
           <li><strong data-target="4">0j</strong> de délai moyen de fabrication</li>
         </ul>
       </section>
-      <div class="faq-contact">
+      <div class="faq-contact transition-all">
         <div class="faq-contact-icon"><i class="fa-solid fa-comment faq-contact-icon"></i></div>
         <h2 class="h2-center">Une question ? On est là pour vous aider</h2>
         <p>Découvrez les réponses aux questions les plus fréquentes sur la personnalisation, la livraison ou nos engagements.</p>

@@ -143,6 +143,8 @@ function calculPrix($commande, &$composition = [])
   <link rel="stylesheet" href="../../styles/accueil.css">
   <link rel="stylesheet" href="../../styles/buttons.css">
   <script type="module" src="../../script/popup.js"></script>
+  <link rel="stylesheet" href="../../styles/transition.css">
+  <script type="module" src="../../script/transition.js"></script>
   <script type="module" src="../../script/animate-value.js"></script>
 
 
@@ -193,21 +195,21 @@ function calculPrix($commande, &$composition = [])
 
       </section>
 
-      <!-- SECTION PERSONNALISATION -->
-      <section class="customize-section">
-        <div class="customize-text">
-          <h2>Créez vous-même votre canapé marocain idéal</h2>
-          <br>
-          <br>
-          <ul class="customize-features">
-            <li><img src="../../medias/canape_icon.png" alt="Forme" class="feature-icon">Choisissez la forme du canapé</li>
-            <li><img src="../../medias/couleurs_icon.png" alt="Couleurs" class="feature-icon">Sélectionnez les couleurs & matières</li>
-            <li><img src="../../medias/coussin_icon.png" alt="Coussins" class="feature-icon">Ajoutez vos coussins préférés</li>
-            <li><img src="../../medias/artiste_icon.png" alt="Aperçu" class="feature-icon">Aperçu en temps réel de votre création</li>
-          </ul>
-        </div>
-        <div class="customize-image">
-          <!-- Blob de fond (SVG ou PNG) 
+    <!-- SECTION PERSONNALISATION -->
+    <section class="customize-section transition-all">
+      <div class="customize-text">
+        <h2>Créez vous-même votre canapé marocain idéal</h2>
+        <br>
+        <br>
+        <ul class="customize-features">
+          <li><img src="../../medias/canape_icon.png" alt="Forme" class="feature-icon">Choisissez la forme du canapé</li>
+          <li><img src="../../medias/couleurs_icon.png" alt="Couleurs" class="feature-icon">Sélectionnez les couleurs & matières</li>
+          <li><img src="../../medias/coussin_icon.png" alt="Coussins" class="feature-icon">Ajoutez vos coussins préférés</li>
+          <li><img src="../../medias/artiste_icon.png" alt="Aperçu" class="feature-icon">Aperçu en temps réel de votre création</li>
+        </ul>
+      </div>
+      <div class="customize-image">
+        <!-- Blob de fond (SVG ou PNG) 
         <img class="blob" src="../../medias/blob.png" alt="forme décorative">-->
           <!-- Image du canapé (taille réduite, devant le blob)
         <img class="sofa" src="../../medias/sofa.png" alt="Canapé personnalisé"> -->
@@ -215,10 +217,10 @@ function calculPrix($commande, &$composition = [])
         </div>
       </section>
 
-      <!-- ------------------- SECTION COMBINAISONS ------------------- -->
-      <section class="combination-section">
-        <h2>Choisissez une combinaison à personnaliser</h2>
-        <div class="combination-container">
+<!-- ------------------- SECTION COMBINAISONS ------------------- -->
+<section class="combination-section transition-all">
+  <h2>Choisissez une combinaison à personnaliser</h2>
+  <div class="combination-container">
 
           <?php foreach ($commandes as $commande): ?>
             <?php
@@ -255,27 +257,27 @@ function calculPrix($commande, &$composition = [])
         </button>
       </div>
 
-      <section class="avantages-card">
-        <div class="avantages-text">
-          <h2>Pourquoi personnaliser votre canapé ici ?</h2>
-          <ul>
-            <li>Visualisation en temps réel de votre canapé</li>
-            <li>Produits faits main, sur mesure</li>
-            <li>Livraison rapide et soignée</li>
-            <li>Paiement sécurisé</li>
-          </ul>
-        </div>
-        <div class="avantages-img">
-          <img src="../../medias/canapekenitra.png" alt="Aperçu canapé personnalisé">
-        </div>
-      </section>
+<section class="avantages-card transition-boom">
+  <div class="avantages-text">
+    <h2>Pourquoi personnaliser votre canapé ici ?</h2>
+    <ul>
+      <li>Visualisation en temps réel de votre canapé</li>
+      <li>Produits faits main, sur mesure</li>
+      <li>Livraison rapide et soignée</li>
+      <li>Paiement sécurisé</li>
+    </ul>
+  </div>
+  <div class="avantages-img">
+      <img src="../../medias/canapekenitra.png" alt="Aperçu canapé personnalisé">
+  </div>
+</section>
 
 
 
-      <!-- ------------------- SECTION ARTICLES ASSOCIES ------------------- -->
-      <section class="combination-section">
-        <h2>Ces articles peuvent aussi vous intéresser</h2>
-        <div class="combination-container">
+<!-- ------------------- SECTION ARTICLES ASSOCIES ------------------- -->
+<section class="combination-section transition-all">
+  <h2>Ces articles peuvent aussi vous intéresser</h2>
+  <div class="combination-container">
 
           <?php foreach ($produits as $produit): ?>
             <div class="product-card">
@@ -307,14 +309,14 @@ function calculPrix($commande, &$composition = [])
         </button>
       </div>
 
-      <section class="stats-section">
-        <h2 class="h2-center">Ils nous font confiance</h2>
-        <ul class="stats-list">
-          <li><strong data-target="500" data-plus="true">0</strong> canapés personnalisés</li>
-          <li><strong data-target="4.8" data-decimal="true">0/5</strong> de satisfaction client</li>
-          <li><strong data-target="4">0j</strong> de délai moyen de fabrication</li>
-        </ul>
-      </section>
+<section class="stats-section transition-boom">
+  <h2 class="h2-center">Ils nous font confiance</h2>
+  <ul class="stats-list">
+    <li><strong data-target="500" data-plus="true">0</strong> canapés personnalisés</li>
+    <li><strong data-target="4.8" data-decimal="true">0/5</strong> de satisfaction client</li>
+    <li><strong data-target="4">0j</strong> de délai moyen de fabrication</li>
+  </ul>
+</section>
 
     </div>
     <!-- POPUP ABANDONNER -->

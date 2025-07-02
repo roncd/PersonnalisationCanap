@@ -11,6 +11,8 @@ session_start();
     <title>Mentions Légales</title>
     <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
     <link rel="stylesheet" href="../../styles/mentions.css">
+    <link rel="stylesheet" href="../../styles/transition.css">
+    <script type="module" src="../../script/transition.js"></script>
 </head>
 
 <body>
@@ -22,10 +24,10 @@ session_start();
     <!-- Main -->
     <main>
         <div class="title-bar">
-            <h1 class="baloo-2-bold">Mentions Légales</h1>
+            <h1 class="baloo-2-bold transition-all">Mentions Légales</h1>
         </div>
         <div class="container">
-            <section class="section">
+            <section class="section  transition-all">
                 <h2>Définitions</h2>
                 <p><b>Client :</b> tout professionnel ou personne physique capable au sens des articles 1123 et suivants du Code civil, ou personne morale, qui visite le Site objet des présentes conditions générales.
                 </p>
@@ -39,7 +41,7 @@ session_start();
                 <p><b>Informations personnelles :</b> « Les informations qui permettent, sous quelque forme que ce soit, directement ou non, l'identification des personnes physiques auxquelles elles s'appliquent » (article 4 de la loi n° 78-17 du 6 janvier 1978).</p>
                 <p>Les termes « données à caractère personnel », « personne concernée », « sous traitant » et « données sensibles » ont le sens défini par le Règlement Général sur la Protection des Données (RGPD : n° 2016-679)</p>
             </section>
-            <section class="section">
+            <section class="section transition-all">
                 <h2>Éditeur du site :</h2>
                 <p>En vertu de l'article 6 de la loi n° 2004-575 du 21 juin 2004 pour la confiance dans l'économie numérique, il est précisé aux utilisateurs du site internet <a href="https://decodumonde.alwaysdata.net">https://decodumonde.alwaysdata.net</a> l'identité des différents intervenants dans le cadre de sa réalisation et de son suivi:
                 </p>
@@ -57,14 +59,14 @@ session_start();
 
             </section>
 
-            <section class="section">
+            <section class="section transition-all">
                 <h2>Ce site est hébergé par :</h2>
                 <p><b>IONOS</b></p>
                 <p><b>RCS :</b></p>
                 <p><b>Siège social :</b> 7 PLACE DE LA GARE, 57200 SARREGUEMINES</p>
             </section>
 
-            <section class="section">
+            <section class="section transition-all">
                 <h2>1. Termes et conditions d’utilisation du site et des services proposés</h2>
                 <p>Le Site constitue une œuvre de l’esprit protégée par les dispositions du Code de la Propriété Intellectuelle et des Réglementations Internationales applicables.
                     Le Client ne peut en aucune manière réutiliser, céder ou exploiter pour son propre compte tout ou partie des éléments ou travaux du Site.</p>
@@ -76,7 +78,7 @@ session_start();
 
             </section>
 
-            <section class="section">
+            <section class="section transition-all">
                 <h2>2. Description des services fournis</h2>
 
                 <p>Le site internet <a href="https://decodumonde.alwaysdata.net">https://decodumonde.alwaysdata.net</a> a pour objet de fournir une information concernant l’ensemble des activités de la société.
@@ -85,7 +87,7 @@ session_start();
                 <p>Toutes les informations indiquées sur le site sont données à titre indicatif, et sont susceptibles d’évoluer. Par ailleurs, les renseignements figurant sur le site ne sont pas exhaustifs. Ils sont donnés sous réserve de modifications ayant été apportées depuis leur mise en ligne.</p>
             </section>
 
-            <section class="section">
+            <section class="section transition-all">
                 <h2>3. Limitations contractuelles sur les données techniques</h2>
 
                 <p>Le site utilise la technologie JavaScript.
@@ -97,7 +99,7 @@ session_start();
 
             <p><a href="https://decodumonde.alwaysdata.net">https://decodumonde.alwaysdata.net</a> et l’hébergeur ne pourront être tenus responsables en cas de dysfonctionnement du réseau Internet, des lignes téléphoniques ou du matériel informatique et de téléphonie lié notamment à l’encombrement du réseau empêchant l’accès au serveur.</p>
 
-            <section class="section">
+            <section class="section transition-all">
                 <h2>4. Propriété intellectuelle et contrefaçons</h2>
 
                 <p>L’accès au site Déco du Monde vous accorde un droit d’usage personnel, privé et non exclusif. Déco du Monde est propriétaire des droits de propriété intellectuelle et détient les droits d’usage sur tous les éléments accessibles sur le site internet, notamment les textes, images, graphismes, logos et vidéos.
@@ -107,7 +109,7 @@ session_start();
                 <p>Toute exploitation non autorisée du site ou de l’un quelconque des éléments qu’il contient sera considérée comme constitutive d’une contrefaçon et poursuivie conformément aux dispositions des articles L.335-2 et suivants du Code de Propriété Intellectuelle.</p>
             </section>
 
-            <section class="section">
+            <section class="section transition-all">
                 <h2>5. Limitations de responsabilité</h2>
 
                 <p>Déco du Monde agit en tant qu’éditeur du site. Déco du Monde est responsable de la qualité et de la véracité du Contenu qu’il publie. </p>
@@ -118,7 +120,7 @@ session_start();
                     Des espaces interactifs (possibilité de poser des questions dans l’espace "besoin d'aide") sont à la disposition des utilisateurs. Déco du Monde se réserve le droit de supprimer, sans mise en demeure préalable, tout contenu déposé dans cet espace qui contreviendrait à la législation applicable en France, en particulier aux dispositions relatives à la protection des données. Le cas échéant, Déco du Monde se réserve également la possibilité de mettre en cause la responsabilité civile et/ou pénale de l’utilisateur, notamment en cas de message à caractère raciste, injurieux, diffamant, ou pornographique, quel que soit le support utilisé (texte, photographie …).</p>
             </section>
 
-            <section class="section">
+            <section class="section transition-all">
 
                 <h2>6. Gestion des données personnelles</h2>
 
@@ -191,7 +193,7 @@ session_start();
 
                 <div ng-bind-html="rgpdHTML"></div>
             </section>
-            <section class="section">
+            <section class="section transition-all" >
                 <h2>7. Notification d’incident</h2>
                 <p>
                     Quels que soient les efforts fournis, aucune méthode de transmission sur Internet et aucune méthode de stockage électronique n'est complètement sûre. Nous ne pouvons en conséquence pas garantir une sécurité absolue.
@@ -209,7 +211,7 @@ session_start();
             </section>
 
 
-            <section class="section">
+            <section class="section transition-all">
                 <h2>8. Cookies</h2>
                 <p>
                     Sauf si vous décidez de désactiver les cookies, vous acceptez que le site puisse les utiliser. Vous pouvez à tout moment désactiver ces cookies et ce gratuitement à partir des possibilités de désactivation qui vous sont offertes et rappelées ci-après, sachant que cela peut réduire ou empêcher l’accessibilité à tout ou partie des Services proposés par le site.
@@ -228,7 +230,7 @@ session_start();
                     À tout moment, l’Utilisateur peut faire le choix d’exprimer et de modifier ses souhaits en matière de Cookies. <a href="https://decodumonde.alwaysdata.net">https://decodumonde.alwaysdata.net</a> pourra en outre faire appel aux services de prestataires externes pour l’aider à recueillir et traiter les informations décrites dans cette section.</p>
               
             </section>
-            <section class="section">
+            <section class="section transition-all">
 
             <h2>9. Droit applicable et attribution de juridiction.</h2>
             <p>

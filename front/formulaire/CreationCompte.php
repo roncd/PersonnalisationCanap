@@ -54,6 +54,8 @@ require '../../vendor/autoload.php'; // adapte le chemin si besoin
   <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
   <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&family=Be+Vietnam+Pro&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../../styles/formulaire.css">
+  <link rel="stylesheet" href="../../styles/transition.css">
+  <script type="module" src="../../script/transition.js"></script>
   <link rel="stylesheet" href="../../styles/message.css">
   <link rel="stylesheet" href="../../styles/buttons.css">
 </head>
@@ -67,7 +69,7 @@ require '../../vendor/autoload.php'; // adapte le chemin si besoin
   <main>
     <div class="container">
       <!-- Colonne de gauche -->
-      <div class="left-column">
+      <div class="left-column transition-all">
         <h2 class="h2">Créer ton compte</h2>
         <?php
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -228,7 +230,7 @@ require '../../vendor/autoload.php'; // adapte le chemin si besoin
 
 
       </div>
-      <div class="right-column">
+      <div class="right-column transition-boom">
         <section class="main-display">
           <img src="../../medias/meknes.png" alt="Armoire">
         </section>

@@ -166,6 +166,8 @@ function calculPrix($commande, &$composition = [])
     <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&family=Be+Vietnam+Pro&display=swap" rel="stylesheet">
     <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
     <link rel="stylesheet" href="../../styles/catalogue.css">
+    <link rel="stylesheet" href="../../styles/transition.css">
+    <script type="module" src="../../script/transition.js"></script>
     <link rel="stylesheet" href="../../styles/buttons.css">
     <link rel="stylesheet" href="../../styles/pagination.css">
 </head>
@@ -193,7 +195,7 @@ function calculPrix($commande, &$composition = [])
         </div>
     </section>
 
-    <main class="products-container">
+    <main class="products-container transition-all">
         <!-- Filtres -->
         <?php
         $currentType = isset($_GET['type']) ? strtolower($_GET['type']) : '';
@@ -209,7 +211,7 @@ function calculPrix($commande, &$composition = [])
             <?php endforeach; ?>
         </div>
 
-        <div class="search-tri">
+        <div class="search-tri transition-all">
             <!-- Nouveau select de tri prix -->
             <select id="sortPrice" style="text-align:left; margin: 20px;">
                 <option value="none">Trier par prix</option>
@@ -218,7 +220,7 @@ function calculPrix($commande, &$composition = [])
             </select>
 
             <!-- ------------------- BARRE DE RECHERCHE EN PHP ------------------- -->
-            <div class="search-bar">
+            <div class="search-bar transition-all">
                 <form method="GET" action="" style="position: relative;">
                     <input
                         type="text"
@@ -233,7 +235,7 @@ function calculPrix($commande, &$composition = [])
 
         <!-- ------------------- SECTION COMBINAISONS ------------------- -->
         <section class="combination-section">
-            <div class="combination-container">
+            <div class="combination-container transition-all">
 
                 <?php foreach ($commandes as $commande): ?>
                     <?php

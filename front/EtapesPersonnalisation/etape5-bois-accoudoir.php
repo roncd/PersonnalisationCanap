@@ -132,7 +132,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
               <div class="option">
                 <img src="../../admin/uploads/accoudoirs-bois/<?php echo htmlspecialchars($bois['img']); ?>"
                   alt="<?php echo htmlspecialchars($bois['nom']); ?>" data-bois-id="<?php echo $bois['id']; ?>"
-                  data-bois-prix="<?php echo $bois['prix']; ?>">
+                  data-bois-prix="<?php echo $bois['prix']; ?>"
+                  data-can-deselect="true">
                 <p><?php echo htmlspecialchars($bois['nom']); ?></p>
                 <p><strong><?php echo htmlspecialchars($bois['prix']); ?> €</strong></p>
                 <!-- Compteur de quantité -->
