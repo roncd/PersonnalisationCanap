@@ -235,6 +235,9 @@ if (!empty($produitAjoute)) : ?>
     <link rel="stylesheet" href="../../styles/catalogue.css" />
     <link rel="stylesheet" href="../../styles/buttons.css" />
     <link rel="stylesheet" href="../../styles/pagination.css">
+    <link rel="stylesheet" href="../../styles/transition.css">
+    <script type="module" src="../../script/transition.js"></script>
+  
 </head>
 
 <body>
@@ -268,7 +271,7 @@ if (!empty($produitAjoute)) : ?>
             $currentCategorie = isset($_GET['categorie']) ? strtolower($_GET['categorie']) : '';
             ?>
 
-            <div class="filters">
+            <div class="filters transition-all">
                 <button class="filter-btn <?= $currentCategorie === '' ? 'active' : '' ?>" data-category="">Tous</button>
 
                 <?php foreach ($categories as $cat): ?>
@@ -279,7 +282,7 @@ if (!empty($produitAjoute)) : ?>
                 <?php endforeach; ?>
             </div>
 
-            <div class="search-tri">
+            <div class="search-tri transition-all">
                 <!-- Nouveau select de tri prix -->
                 <select id="sortPrice" style="text-align:left; margin: 20px;">
                     <option value="none">Trier par prix</option>
@@ -287,7 +290,7 @@ if (!empty($produitAjoute)) : ?>
                     <option value="desc">Prix : du + cher au - cher</option>
                 </select>
                 <!--------------------- BARRE DE RECHERCHE EN PHP --------------------->
-                <div class="search-bar">
+                <div class="search-bar transition-all">
                     <form method="GET" action="" style="position: relative;">
                         <input
                             type="text"
@@ -302,7 +305,7 @@ if (!empty($produitAjoute)) : ?>
 
             <!-- ------------------- SECTION ARTICLES ASSOCIES ------------------- -->
             <section class="combination-section">
-                <div class="combination-container">
+                <div class="combination-container transition-all">
                     <?php foreach ($produits as $produit): ?>
                         <?php
                         $catNom = isset($categoriesAssoc[$produit['id_categorie']])

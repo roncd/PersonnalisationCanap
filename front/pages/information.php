@@ -91,6 +91,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
     <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&family=Be+Vietnam+Pro&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../../styles/formulaire.css">
+    <link rel="stylesheet" href="../../styles/transition.css">
+    <script type="module" src="../../script/transition.js"></script>
     <link rel="stylesheet" href="../../styles/message.css">
     <link rel="stylesheet" href="../../styles/buttons.css">
 </head>
@@ -102,7 +104,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </header>
     <main>
         <div class="container">
-            <div class="left-column">
+            <div class="left-column transition-all">
                 <h2 class="h2">Modifiez vos informations</h2>
 
                 <?php
@@ -213,7 +215,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </form>
             </div>
 
-            <div class="right-column">
+            <div class="right-column transition-boom">
                 <section class="main-display">
                     <img src="../../medias/meknes.png" alt="Illustration" class="hide-on-small">
                 </section>

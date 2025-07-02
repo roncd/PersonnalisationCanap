@@ -78,6 +78,8 @@ if (isset($_GET['message']) && $_GET['message'] == 'success') {
     <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
     <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&family=Be+Vietnam+Pro&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../../styles/formulaire.css">
+    <link rel="stylesheet" href="../../styles/transition.css">
+    <script type="module" src="../../script/transition.js"></script>
     <link rel="stylesheet" href="../../styles/buttons.css">
     <link rel="stylesheet" href="../../styles/message.css">
 
@@ -90,7 +92,7 @@ if (isset($_GET['message']) && $_GET['message'] == 'success') {
     </header>
     <main>
         <div class="container">
-            <div class="left-column">
+            <div class="left-column transition-all">
                 <h2 class="h2">Connexion</h2>
                 <?php if (!empty($message)) {
                     echo $message;
@@ -140,7 +142,7 @@ if (isset($_GET['message']) && $_GET['message'] == 'success') {
             </div>
 
             <!-- Colonne de droite avec l'image -->
-            <div class="right-column">
+            <div class="right-column  transition-boom">
                 <section class="main-display">
                     <img src="../../medias/meknes.png" alt="Image d'illustration">
                 </section>

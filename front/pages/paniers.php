@@ -59,6 +59,8 @@ foreach ($commandes as $commande) {
     <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&family=Be+Vietnam+Pro&display=swap" rel="stylesheet">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <link rel="stylesheet" href="../../styles/commandes.css">
+    <link rel="stylesheet" href="../../styles/transition.css">
+    <script type="module" src="../../script/transition.js"></script>
     <link rel="stylesheet" href="../../styles/pagination.css">
     <script type="module" src="../../script/download-panier.js"></script>
     <script type="module" src="../../script/commandes.js"></script>
@@ -72,9 +74,9 @@ foreach ($commandes as $commande) {
     <main>
         <div class="container">
             <!-- Colonne de gauche -->
-            <h2 class="h2-commande">Suivis des commandes - Paniers</h2>
+            <h2 class="h2-commande transition-all">Suivis des commandes - Paniers</h2>
             <div class="content">
-                <div class="tableau">
+                <div class="tableau transition-all">
                     <div class="tabs">
                         <button onclick="location.href='?statut=validation'" class="tab <?= ($statut === 'validation') ? 'active' : '' ?>">En attente de validation</button>
                         <button onclick="location.href='?statut=traitement'" class="tab <?= ($statut === 'traitement') ? 'active' : '' ?>">En cours de traitement</button>

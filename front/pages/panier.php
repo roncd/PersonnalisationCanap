@@ -27,6 +27,8 @@ $panier = $stmt->fetch();
     <link rel="stylesheet" href="../../styles/panier.css">
     <link rel="stylesheet" href="../../styles/buttons.css">
     <link rel="stylesheet" href="../../styles/popup.css">
+    <link rel="stylesheet" href="../../styles/transition.css">
+    <script type="module" src="../../script/transition.js"></script>
     <script type="module" src="../../script/popup-panier.js"></script>
 </head>
 
@@ -38,8 +40,8 @@ $panier = $stmt->fetch();
     </header>
     <main>
         <section class="panier-container">
-            <h1>Mon panier</h1>
-            <div class="panier-actions">
+            <h1 class="transition-all">Mon panier</h1>
+            <div class="panier-actions transition-all">
                 <a href="nosproduits.php" class="btn-beige">Continuer mes achats</a>
             </div>
             <?php if (!$panier): ?>
@@ -71,7 +73,7 @@ $panier = $stmt->fetch();
                 $produits = $stmt->fetchAll(PDO::FETCH_ASSOC); ?>
            
             <div class="panier-info">
-                <div class="panier-table">
+                <div class="panier-table transition-all">
                     <table>
                         <thead>
                             <tr>
@@ -128,7 +130,7 @@ $panier = $stmt->fetch();
                     </table>
                 </div>
                 <div class="panier-devis">
-                    <div class="panier-recaps">
+                    <div class="panier-recaps transition-boom">
                         <h2>Récapitulatif panier :</h2>
                         <div class="recap-text">
                             <strong>Total : <?= number_format($panier['prix']) ?> €</strong>

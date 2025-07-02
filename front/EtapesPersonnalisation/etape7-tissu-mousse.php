@@ -91,14 +91,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         <section class="color-options">
           <?php if (!empty($mousse)): ?>
-            <?php foreach ($mousse as $mousse_bois): ?>
+            <?php foreach ($mousse as $mousse_tissu): ?>
               <div class="option ">
-                <img src="../../admin/uploads/mousse/<?php echo htmlspecialchars($mousse_bois['img']); ?>"
-                  alt="<?php echo htmlspecialchars($mousse_bois['nom']); ?>"
-                  data-mousse-bois-id="<?php echo $mousse_bois['id']; ?>"
-                  data-mousse-bois-prix="<?php echo $mousse_bois['prix']; ?>">
-                <p><?php echo htmlspecialchars($mousse_bois['nom']); ?></p>
-                <p><strong><?php echo htmlspecialchars($mousse_bois['prix']); ?> €</strong></p>
+                <img src="../../admin/uploads/mousse/<?php echo htmlspecialchars($mousse_tissu['img']); ?>"
+                  alt="<?php echo htmlspecialchars($mousse_tissu['nom']); ?>"
+                  data-mousse-tissu-id="<?php echo $mousse_tissu['id']; ?>"
+                  data-mousse-tissu-prix="<?php echo $mousse_tissu['prix']; ?>">
+                <p><?php echo htmlspecialchars($mousse_tissu['nom']); ?></p>
+                <p><strong><?php echo htmlspecialchars($mousse_tissu['prix']); ?> €</strong></p>
               </div>
             <?php endforeach; ?>
           <?php else: ?>
@@ -211,7 +211,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         // Restaurer la sélection si elle existe
         options.forEach(img => {
-          if (img.getAttribute('data-mousse-bois-id') === selectedMousseId) {
+          if (img.getAttribute('data-mousse-tissu-id') === selectedMousseId) {
             img.classList.add('selected');
             mainImage.src = img.src;
             selectedMousseInput.value = selectedMousseId;
@@ -223,7 +223,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             options.forEach(opt => opt.classList.remove('selected'));
             img.classList.add('selected');
             mainImage.src = img.src;
-            selectedMousseId = img.getAttribute('data-mousse-bois-id');
+            selectedMousseId = img.getAttribute('data-mousse-tissu-id');
             selectedMousseInput.value = selectedMousseId;
             selected = true;
             saveSelection();

@@ -45,7 +45,6 @@ body {
 .customize-section {
   position: relative;
   z-index: 1;
-  background-color: #fff;
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
@@ -59,6 +58,7 @@ body {
   gap: 2rem;
   font-family: 'Be Vietnam Pro', sans-serif;
   margin-bottom: -6rem;
+  margin-top: -6rem;
 }
 
 
