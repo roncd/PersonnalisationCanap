@@ -142,6 +142,16 @@ body {
     border-radius: 8px;
     flex: 1;
     box-sizing: border-box;
+    -webkit-appearance: none;
+    /* Supprime l'apparence par défaut */
+    appearance: none;
+    -moz-appearance: none;
+    cursor: pointer;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='black'><path d='M5 7l5 5 5-5H5z'/></svg>");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 15px;
+
 }
 
 /* Bouton "effacer" */
@@ -189,18 +199,7 @@ body {
     flex-wrap: wrap;
 }
 
-#sortPrice {
-    padding: 8px 12px;
-    border: 2px solid #e3d1c8;
-    border-radius: 8px;
-    font-size: 15px;
-    background: #fff;
-    color: #444;
-    font-weight: 500;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.04);
-    outline: none;
-    margin-right: 20px;
-}
+
 
 @media (max-width: 768px) {
     #sortPrice {

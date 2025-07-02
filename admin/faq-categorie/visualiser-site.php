@@ -8,6 +8,7 @@ if (!isset($_SESSION['id'])) {
     header("Location: ../index.php");
     exit();
 }
+$search = $_GET['search'] ?? '';
 
 // Récupération de toutes les catégories FAQ
 $stmt = $pdo->prepare("SELECT id, nom, icon FROM faq_categorie ORDER BY id DESC");

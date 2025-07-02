@@ -166,7 +166,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['comment'])) {
             <button type="button" data-url="../pages/dashboard.php" id="btn-abandonner" class="btn-noir">Abandonner</button>
           </div>
 
-        <h2>Récapitulatif de la commande préfaite</h2>
+        <h2>Récapitulatif de la commande pré-faite</h2>
         <section class="color-options">
 
           <h3>Étape 1.1 : Choisi ta structure</h3>

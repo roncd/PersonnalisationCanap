@@ -25,7 +25,7 @@ $stmtCount->bindValue(':statut', $statut, PDO::PARAM_STR);
 $stmtCount->execute();
 $totalCommandes = $stmtCount->fetchColumn();
 
-$totalPages = ceil($totalCommandes / $limit); 
+$totalPages = ceil($totalCommandes / $limit);
 
 $offset = ($page - 1) * $limit;
 
@@ -91,13 +91,13 @@ $commandes = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <main>
         <div class="container">
             <h2>Suivis commandes - Paniers</h2>
-            <div class="filtre-wrapper">
-                <div class="filtre">
+            <div class=content>
+                <div class="filtre-wrapper">
                     <div class="search-bar">
                         <form method="GET" action="">
                             <input type="hidden" name="statut" value="<?php echo htmlspecialchars($statut); ?>">
                             <input type="text" name="search" placeholder="Rechercher par nom ou N°..." value="<?php echo htmlspecialchars($search); ?>">
-                            <button class ="btn-noir" type="submit">Rechercher</button>
+                            <button class="btn-noir" type="submit">Rechercher</button>
                         </form>
                     </div>
                     <div>
@@ -108,104 +108,103 @@ $commandes = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         </a>
                     </div>
                 </div>
+                <div class="tableau">
+                    <div class="tabs">
+                        <button onclick="location.href='?statut=validation'" class="tab <?= ($statut === 'validation') ? 'active' : '' ?>">En attente de validation</button>
+                        <button onclick="location.href='?statut=traitement'" class="tab <?= ($statut === 'traitement') ? 'active' : '' ?>">En cours de traitement</button>
+                        <button onclick="location.href='?statut=final'" class="tab <?= ($statut === 'final') ? 'active' : '' ?>">Commandes finalisées</button>
+                    </div>
+                    <div id="message-container"></div>
+                    <div id="supprimer-popup" class="popup">
+                        <div class="popup-content">
+                            <h2>Êtes vous sûr de vouloir supprimer ?</h2>
+                            <p>(La commande disparaîtra définitivement)</p>
+                            <br>
+                            <button class="btn-beige">Oui</button>
+                            <button class="btn-noir">Non</button>
+                        </div>
+                    </div>
+                    <div id="update-popup" class="popup">
+                        <div class="popup-content">
+                            <h2>Êtes-vous sûr de continuer ?</h2>
+                            <p>Cette commande passera au statut suivant</p>
+                            <br>
+                            <button class="btn-beige">Oui</button>
+                            <button class="btn-noir">Non</button>
+                        </div>
+                    </div>
+                    <div class="tab-content <?= $statut === 'validation' ? 'active' : '' ?>" id="validation">
+                        <div id="commandes-container">
+                            <?php if (!empty($commandes)): ?>
+                                <?php foreach ($commandes as $commande): ?>
+                                    <div class="commande" data-id="<?= htmlspecialchars($commande['id']) ?>" data-statut="<?= htmlspecialchars($commande['statut']) ?>">
+                                        <div class="info">
+                                            <p><strong>Nom :</strong> <?= htmlspecialchars($commande['nom']) ?></p>
+                                            <p><strong>Prénom :</strong> <?= htmlspecialchars($commande['prenom']) ?></p>
+                                            <p><strong>Date :</strong> <?= htmlspecialchars(date('d/m/Y', strtotime($commande['date']))) ?></p>
+                                            <p><strong>N° commande :</strong> <?= htmlspecialchars($commande['id']) ?></p>
+                                        </div>
+                                        <div class="actions">
+                                            <i title="Passez la commande au statut suivant" class="bx bxs-chevrons-right vert" onclick="updateStatus(this)"></i>
+                                            <i title="Supprimez la commande" class="bx bx-trash-alt actions rouge" onclick="removeCommand(this)"></i>
+                                            <i title="Téléchargez le devis" class="bx bxs-file-pdf" data-id="<?= htmlspecialchars($commande['id']) ?>"></i>
+                                        </div>
+                                    </div>
+                                <?php endforeach; ?>
+                            <?php else: ?>
+                                <p>Aucun panier trouvé pour ce statut.</p>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+                    <div class="tab-content <?= $statut === 'traitement' ? 'active' : '' ?>" id="traitement">
+                        <div id="commandes-container">
+                            <?php if (!empty($commandes)): ?>
+                                <?php foreach ($commandes as $commande): ?>
+                                    <div class="commande" data-id="<?= htmlspecialchars($commande['id']) ?>" data-statut="<?= htmlspecialchars($commande['statut']) ?>">
+                                        <div class="info">
+                                            <p><strong>Nom :</strong> <?= htmlspecialchars($commande['nom']) ?></p>
+                                            <p><strong>Prénom :</strong> <?= htmlspecialchars($commande['prenom']) ?></p>
+                                            <p><strong>Date :</strong> <?= htmlspecialchars(date('d/m/Y', strtotime($commande['date']))) ?></p>
+                                            <p><strong>N° commande :</strong> <?= htmlspecialchars($commande['id']) ?></p>
+                                        </div>
+                                        <div class="actions">
+                                            <i title="Passez la commande au statut suivant" class="bx bxs-chevrons-right vert" onclick="updateStatus(this)"></i>
+                                            <i title="Supprimez la commande" class="bx bx-trash-alt actions rouge" onclick="removeCommand(this)"></i>
+                                            <i title="Téléchargez le devis" class="bx bxs-file-pdf" data-id="<?= htmlspecialchars($commande['id']) ?>"></i>
+                                        </div>
+                                    </div>
+                                <?php endforeach; ?>
+                            <?php else: ?>
+                                <p>Aucun panier trouvé pour ce statut.</p>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+                    <div class="tab-content <?= $statut === 'final' ? 'active' : '' ?>" id="final">
+                        <div id="commandes-container">
+                            <?php if (!empty($commandes)): ?>
+                                <?php foreach ($commandes as $commande): ?>
+                                    <div class="commande" data-id="<?= htmlspecialchars($commande['id']) ?>" data-statut="<?= htmlspecialchars($commande['statut']) ?>">
+                                        <div class="info">
+                                            <p><strong>Nom :</strong> <?= htmlspecialchars($commande['nom']) ?></p>
+                                            <p><strong>Prénom :</strong> <?= htmlspecialchars($commande['prenom']) ?></p>
+                                            <p><strong>Date :</strong> <?= htmlspecialchars(date('d/m/Y', strtotime($commande['date']))) ?></p>
+                                            <p><strong>N° commande :</strong> <?= htmlspecialchars($commande['id']) ?></p>
+                                        </div>
+                                        <div class="actions">
+                                            <i title="Supprimez la commande" class="bx bx-trash-alt actions rouge" onclick="removeCommand(this)"></i>
+                                            <i title="Téléchargez le devis" class="bx bxs-file-pdf" data-id="<?= htmlspecialchars($commande['id']) ?>"></i>
+                                        </div>
+                                    </div>
+                                <?php endforeach; ?>
+                            <?php else: ?>
+                                <p>Aucun panier trouvé pour ce statut.</p>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+                    <?php require '../include/pagination.php'; ?>
+                </div>
             </div>
-
-            <div class="tableau">
-                <div class="tabs">
-                    <button onclick="location.href='?statut=validation'" class="tab <?= ($statut === 'validation') ? 'active' : '' ?>">En attente de validation</button>
-                    <button onclick="location.href='?statut=traitement'" class="tab <?= ($statut === 'traitement') ? 'active' : '' ?>">En cours de traitement</button>
-                    <button onclick="location.href='?statut=final'" class="tab <?= ($statut === 'final') ? 'active' : '' ?>">Commandes finalisées</button>
-                </div>
-                <div id="message-container"></div>
-                <div id="supprimer-popup" class="popup">
-                    <div class="popup-content">
-                        <h2>Êtes vous sûr de vouloir supprimer ?</h2>
-                        <p>(La commande disparaîtra définitivement)</p>
-                        <br>
-                        <button class="btn-beige">Oui</button>
-                        <button class="btn-noir">Non</button>
-                    </div>
-                </div>
-                <div id="update-popup" class="popup">
-                    <div class="popup-content">
-                        <h2>Êtes-vous sûr de continuer ?</h2>
-                        <p>Cette commande passera au statut suivant</p>
-                        <br>
-                        <button class="btn-beige">Oui</button>
-                        <button class="btn-noir">Non</button>
-                    </div>
-                </div>
-                <div class="tab-content <?= $statut === 'validation' ? 'active' : '' ?>" id="validation">
-                    <div id="commandes-container">
-                        <?php if (!empty($commandes)): ?>
-                            <?php foreach ($commandes as $commande): ?>
-                                <div class="commande" data-id="<?= htmlspecialchars($commande['id']) ?>" data-statut="<?= htmlspecialchars($commande['statut']) ?>">
-                                    <div class="info">
-                                        <p><strong>Nom :</strong> <?= htmlspecialchars($commande['nom']) ?></p>
-                                        <p><strong>Prénom :</strong> <?= htmlspecialchars($commande['prenom']) ?></p>
-                                        <p><strong>Date :</strong> <?= htmlspecialchars(date('d/m/Y', strtotime($commande['date']))) ?></p>
-                                        <p><strong>N° commande :</strong> <?= htmlspecialchars($commande['id']) ?></p>
-                                    </div>
-                                    <div class="actions">
-                                        <i title="Passez la commande au statut suivant" class="bx bxs-chevrons-right vert" onclick="updateStatus(this)"></i>
-                                        <i title="Supprimez la commande" class="bx bx-trash-alt actions rouge" onclick="removeCommand(this)"></i>
-                                        <i title="Téléchargez le devis" class="bx bxs-file-pdf" data-id="<?= htmlspecialchars($commande['id']) ?>"></i>
-                                    </div>
-                                </div>
-                            <?php endforeach; ?>
-                        <?php else: ?>
-                            <p>Aucun panier trouvé pour ce statut.</p>
-                        <?php endif; ?>
-                    </div>
-                </div>
-                <div class="tab-content <?= $statut === 'traitement' ? 'active' : '' ?>" id="traitement">
-                    <div id="commandes-container">
-                        <?php if (!empty($commandes)): ?>
-                            <?php foreach ($commandes as $commande): ?>
-                                <div class="commande" data-id="<?= htmlspecialchars($commande['id']) ?>" data-statut="<?= htmlspecialchars($commande['statut']) ?>">
-                                    <div class="info">
-                                        <p><strong>Nom :</strong> <?= htmlspecialchars($commande['nom']) ?></p>
-                                        <p><strong>Prénom :</strong> <?= htmlspecialchars($commande['prenom']) ?></p>
-                                        <p><strong>Date :</strong> <?= htmlspecialchars(date('d/m/Y', strtotime($commande['date']))) ?></p>
-                                        <p><strong>N° commande :</strong> <?= htmlspecialchars($commande['id']) ?></p>
-                                    </div>
-                                    <div class="actions">
-                                        <i title="Passez la commande au statut suivant" class="bx bxs-chevrons-right vert" onclick="updateStatus(this)"></i>
-                                        <i title="Supprimez la commande" class="bx bx-trash-alt actions rouge" onclick="removeCommand(this)"></i>
-                                        <i title="Téléchargez le devis" class="bx bxs-file-pdf" data-id="<?= htmlspecialchars($commande['id']) ?>"></i>
-                                    </div>
-                                </div>
-                            <?php endforeach; ?>
-                        <?php else: ?>
-                            <p>Aucun panier trouvé pour ce statut.</p>
-                        <?php endif; ?>
-                    </div>
-                </div>
-
-                <div class="tab-content <?= $statut === 'final' ? 'active' : '' ?>" id="final">
-                    <div id="commandes-container">
-                        <?php if (!empty($commandes)): ?>
-                            <?php foreach ($commandes as $commande): ?>
-                                <div class="commande" data-id="<?= htmlspecialchars($commande['id']) ?>" data-statut="<?= htmlspecialchars($commande['statut']) ?>">
-                                    <div class="info">
-                                        <p><strong>Nom :</strong> <?= htmlspecialchars($commande['nom']) ?></p>
-                                        <p><strong>Prénom :</strong> <?= htmlspecialchars($commande['prenom']) ?></p>
-                                        <p><strong>Date :</strong> <?= htmlspecialchars(date('d/m/Y', strtotime($commande['date']))) ?></p>
-                                        <p><strong>N° commande :</strong> <?= htmlspecialchars($commande['id']) ?></p>
-                                    </div>
-                                    <div class="actions">
-                                        <i title="Supprimez la commande" class="bx bx-trash-alt actions rouge" onclick="removeCommand(this)"></i>
-                                        <i title="Téléchargez le devis" class="bx bxs-file-pdf" data-id="<?= htmlspecialchars($commande['id']) ?>"></i>
-                                    </div>
-                                </div>
-                            <?php endforeach; ?>
-                        <?php else: ?>
-                            <p>Aucun panier trouvé pour ce statut.</p>
-                        <?php endif; ?>
-                    </div>
-                </div>
-                <?php require '../include/pagination.php'; ?>
-            </div>
+        </div>
     </main>
     <footer>
         <?php require '../squelette/footer.php'; ?>

@@ -141,12 +141,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $stmtAcc2->execute([$idCommande, intval($acc2)]);
             }
 
-            $_SESSION['message'] = 'La commande préfaite a été ajoutée avec succès.';
+            $_SESSION['message'] = 'La commande pré-faite a été ajoutée avec succès.';
             $_SESSION['message_type'] = 'success';
             header('Location: visualiser.php');
             exit();
         } catch (Exception $e) {
-            $_SESSION['message'] = 'Erreur lors de l\'ajout du canapé pré-personnalisé : ' . $e->getMessage();
+            $_SESSION['message'] = 'Erreur lors de l\'ajout du canapé pré-fait : ' . $e->getMessage();
             $_SESSION['message_type'] = 'error';
         }
         header("Location: add.php");
@@ -160,7 +160,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ajoute une commande préfaites</title>
+    <title>Ajoute un canapé pré-fait</title>
     <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
     <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&family=Be+Vietnam+Pro&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../../styles/admin/ajout.css">
@@ -179,7 +179,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </header>
     <main>
         <div class="container">
-            <h2>Ajoute une commande préfaite</h2>
+            <h2>Ajoute un canapé pré-fait</h2>
             <?php require '../include/message.php'; ?>
             <div class="form">
                 <form class="formulaire-creation-compte" action="" method="POST" enctype="multipart/form-data">

@@ -73,7 +73,7 @@ $triURL = '?' . http_build_query($params);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Canapé Pré-Personnalisé</title>
+    <title>Canapé Pré-fait</title>
     <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
     <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&family=Be+Vietnam+Pro&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../../styles/admin/tab.css">
@@ -91,7 +91,7 @@ $triURL = '?' . http_build_query($params);
     </header>
     <main>
         <div class="container">
-            <h2>Canapé Pré-Personnalisé</h2>
+            <h2>Canapé Pré-fait</h2>
             <?php require '../include/message.php'; ?>
 
             <div class="option">
@@ -100,7 +100,7 @@ $triURL = '?' . http_build_query($params);
                         <button onclick="location.href='../pages/visualiser.php'" class="btn-grey" type="button">Retourner aux options</button>
                     </div>
                     <div>
-                        <button onclick="location.href='add.php'" class="btn-noir" type="button">+ Ajouter un canapé pré-personnalisé</button>
+                        <button onclick="location.href='add.php'" class="btn-noir" type="button">+ Ajouter un canapé pré-fait</button>
                     </div>
                 </div>
                 <div class="search-bar">
@@ -212,7 +212,7 @@ $triURL = '?' . http_build_query($params);
                                 echo "</tr>";
                             }
                         } else {
-                            echo "<tr><td colspan='24' style='text-align:left;'>Aucune commande préfaite trouvée.</td></tr>";
+                            echo "<tr><td colspan='24' style='text-align:left;'>Aucun canapé pré-fait trouvé.</td></tr>";
                         }
                         ?>
                     </tbody>

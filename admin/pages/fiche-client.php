@@ -93,7 +93,7 @@ function age($date)
 
                     <!-- Bloc commandes -->
                     <section class="info-card commandes-card block-commandes">
-                        <h2>5 DERNIÈRE COMMANDES (canapé) <?= "<a href='../commande-detail/index.php?search=" . urlencode($client['id']) . "'>Voir plus</a>"; ?></h2>
+                        <h2>5 DERNIÈRES COMMANDES (canapé) <?= "<a href='../commande-detail/index.php?search=" . urlencode($client['id']) . "'>Voir plus</a>"; ?></h2>
                         <table>
                             <thead>
                                 <tr>
@@ -145,7 +145,7 @@ function age($date)
                     </section>
 
                      <section class="info-card commandes-card block-panier">
-                        <h2>5 DERNIER PANIER <?= "<a href='../panier/index.php?search=" . urlencode($client['id']) . "'>Voir plus</a>"; ?></h2>
+                        <h2>5 DERNIERS PANIERS <?= "<a href='../panier/index.php?search=" . urlencode($client['id']) . "'>Voir plus</a>"; ?></h2>
                         <table>
                             <thead>
                                 <tr>

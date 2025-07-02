@@ -24,12 +24,17 @@ h1 {
     margin-bottom: 18px;
 }
 
+.panier-table {
+    overflow-x: auto;
+    margin-bottom: 10px;
+}
 .panier-table table {
     min-width: 800px;
     width: 100%;
     border-collapse: collapse;
     background: transparent;
     margin-bottom: 26px;
+   
 }
 
 .panier-table th,
