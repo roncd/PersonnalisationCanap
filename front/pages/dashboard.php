@@ -142,6 +142,8 @@ function calculPrix($commande, &$composition = []) {
   <link rel="stylesheet" href="../../styles/accueil.css">
   <link rel="stylesheet" href="../../styles/buttons.css">
   <script type="module" src="../../script/popup.js"></script>
+  <link rel="stylesheet" href="../../styles/transition.css">
+  <script type="module" src="../../script/transition.js"></script>
   <script type="module" src="../../script/animate-value.js"></script>
 
 
@@ -193,7 +195,7 @@ function calculPrix($commande, &$composition = []) {
     </section>
 
     <!-- SECTION PERSONNALISATION -->
-    <section class="customize-section">
+    <section class="customize-section transition-all">
       <div class="customize-text">
         <h2>Créez vous-même votre canapé marocain idéal</h2>
         <br>
@@ -215,7 +217,7 @@ function calculPrix($commande, &$composition = []) {
     </section>
 
 <!-- ------------------- SECTION COMBINAISONS ------------------- -->
-<section class="combination-section">
+<section class="combination-section transition-all">
   <h2>Choisissez une combinaison à personnaliser</h2>
   <div class="combination-container">
 
@@ -254,7 +256,7 @@ function calculPrix($commande, &$composition = []) {
   </button>
 </div>
 
-<section class="avantages-card">
+<section class="avantages-card transition-boom">
   <div class="avantages-text">
     <h2>Pourquoi personnaliser votre canapé ici ?</h2>
     <ul>
@@ -272,7 +274,7 @@ function calculPrix($commande, &$composition = []) {
 
 
 <!-- ------------------- SECTION ARTICLES ASSOCIES ------------------- -->
-<section class="combination-section">
+<section class="combination-section transition-all">
   <h2>Ces articles peuvent aussi vous intéresser</h2>
   <div class="combination-container">
 
@@ -306,7 +308,7 @@ function calculPrix($commande, &$composition = []) {
   </button>
 </div>
 
-<section class="stats-section">
+<section class="stats-section transition-boom">
   <h2 class="h2-center">Ils nous font confiance</h2>
   <ul class="stats-list">
     <li><strong data-target="500" data-plus="true">0</strong> canapés personnalisés</li>

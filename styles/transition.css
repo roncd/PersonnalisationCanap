@@ -1,0 +1,23 @@
+/* Élégant : pour les animations douces */
+.transition-all {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.transition-all.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Boom : effet dynamique, pop & punchy */
+.transition-boom {
+  opacity: 0;
+  transform: scale(0.8) translateY(30px);
+  transition: opacity 0.4s ease-out, transform 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.transition-boom.show {
+  opacity: 1;
+  transform: scale(1) translateY(0);
+}

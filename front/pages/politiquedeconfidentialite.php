@@ -13,6 +13,9 @@ session_start();
     <title>Politique de confidentialité - Déco du Monde</title>
     <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
     <link rel="stylesheet" href="../../styles/mentions.css">
+    <link rel="stylesheet" href="../../styles/transition.css">
+    <script type="module" src="../../script/transition.js"></script>
+  
 </head>
 
 <body>
@@ -23,10 +26,10 @@ session_start();
 
     <main>
         <div class="title-bar">
-            <h1 class="baloo-2-bold">Politique de confidentialité</h1>
+            <h1 class="baloo-2-bold transition-all">Politique de confidentialité</h1>
         </div>
 
-        <div class="container-intro">
+        <div class="container-intro transition-all ">
             <div class="intro">
                 <p>
                     Devant le développement des nouveaux outils de communication, il est nécessaire de porter une attention particulière à la protection de la vie privée.
@@ -43,7 +46,7 @@ session_start();
         </div>
 
         <div class="container">
-            <section class="section">
+            <section class="section transition-all">
                 <h2>1. Quelles données personnelles traitons-nous ?</h2>
 
                 <h3>Collecte des renseignements personnels</h3>
@@ -92,14 +95,14 @@ session_start();
                 Par dérogation, les données personnelles requises pour à l’établissement de la preuve d’un droit ou d’un contrat sont archivées conformément aux dispositions légales (5 ou 10 ans après la fin de la relation commerciale selon le cas).
                 </p>
             </section>
-            <section class="section">
+            <section class="section transition-all">
                 <h2>2. Comment Déco du Monde préserve la sécurité de vos données ?</h2>
                 <p>Nous mettons en place toutes les mesures organisationnelles et techniques permettant d’assurer un niveau approprié de sécurité à vos données personnelles, et notamment d'éviter toute perte de confidentialité, d'intégrité ou d’accessibilité.</p>
                 <p>Nous effectuons fréquemment la sauvegarde des données. </p>
                 <p>Dans la mesure du possible, nous limitons l'accès aux informations personnelles aux seules personnes qui ont besoin de les traiter. </p>
                 <p>Met en place des mesures techniques et organisationnelles pour assurer que la conservation des données personnelles des Clients est sécurisée et ce, pendant la durée nécessaire à l’exercice des finalités poursuivies.</p>
             </section>
-            <section class="section">
+            <section class="section transition-all">
                 <h2>3. Quels sont les destinataires de vos données ?</h2>
                 <p>
                     Vos données personnelles sont destinées à Déco du Monde.
@@ -113,7 +116,7 @@ session_start();
                 </p>
             </section>
 
-            <section class="section">
+            <section class="section transition-all">
                 <h2>4. Quels sont vos droits sur vos données personnelles ?</h2>
 
 
@@ -162,7 +165,7 @@ session_start();
                 </ul>
             </section>
 
-            <section class="section">
+            <section class="section transition-all">
 
                 <h2>5. Politique de Cookies</h2>
 
@@ -233,7 +236,7 @@ session_start();
                     }
                 </script>
             </section>
-            <section class="section">
+            <section class="section transition-all">
                 <h2>6. Qui contacter pour toutes les demandes liées au RGPD ?</h2>
 
                 <p>Pour exercer vos droits, vous pouvez nous contacter :</p>
@@ -252,7 +255,7 @@ session_start();
                 <p>La présente Politique de protection des données personnelles peut être amenée à évoluer. Comme nous développons constamment nos services, nous nous réservons le droit de modifier cette Politique de confidentialité, conformément aux dispositions légales en vigueur. Toute modification est publiée sur ce document en temps opportun. Nous vous conseillons de consulter régulièrement cette page pour prendre connaissance des éventuelles modifications ou mises à jour apportées à notre politique de confidentialité.</p>
             </section>
 
-            <section class="section">
+            <section class="section transition-all">
                 <h2>7. Législation</h2>
                 <p>Nous nous engageons à respecter les dispositions législatives énoncées dans : le règlement général sur la protection des données (RGPD).</p>
             </section>

@@ -61,6 +61,8 @@ foreach ($commandes as $commande) {
     <link rel="stylesheet" href="../../styles/commandes.css">
     <link rel="stylesheet" href="../../styles/pagination.css">
     <script type="module" src="../../script/download.js"></script>
+    <link rel="stylesheet" href="../../styles/transition.css">
+    <script type="module" src="../../script/transition.js"></script>
     <script type="module" src="../../script/commandes.js"></script>
 </head>
 
@@ -72,8 +74,8 @@ foreach ($commandes as $commande) {
     <main>
         <div class="container">
             <!-- Colonne de gauche -->
-            <h2 class="h2-commande">Suivis des commandes - canapés marocains</h2>
-            <div class="tableau">
+            <h2 class="h2-commande transition-all">Suivis des commandes - canapés marocains</h2>
+            <div class="tableau transition-all">
                 <div class="tabs">
                     <button onclick="location.href='?statut=validation'" class="tab <?= ($statut === 'validation') ? 'active' : '' ?>">En attente de validation</button>
                     <button onclick="location.href='?statut=construction'" class="tab <?= ($statut === 'construction') ? 'active' : '' ?>">En cours de construction</button>

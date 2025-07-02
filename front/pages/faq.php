@@ -18,6 +18,8 @@ $categories = $stmt->fetchAll(PDO::FETCH_ASSOC);
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link rel="stylesheet" href="../../styles/faq.css">
   <link rel="stylesheet" href="../../styles/buttons.css">
+  <link rel="stylesheet" href="../../styles/transition.css">
+  <script type="module" src="../../script/transition.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
 </head>
@@ -30,9 +32,9 @@ $categories = $stmt->fetchAll(PDO::FETCH_ASSOC);
   <main class="faq-container">
 
   <section class="faq-categories">
-  <h1>FAQ</h1>
-  <p>Votre question concerne quel sujet ?</p>
-  <div class="faq-grid">
+  <h1 class="transition-all">FAQ</h1>
+  <p class="transition-all">Votre question concerne quel sujet ?</p>
+  <div class="faq-grid transition-boom">
     <?php foreach ($categories as $categorie): ?>
       <a href="faq_details.php?categorie=<?= urlencode($categorie['id']) ?>" class="faq-card">
         <div class="icon">
@@ -44,7 +46,7 @@ $categories = $stmt->fetchAll(PDO::FETCH_ASSOC);
   </div>
 </section>
 
-    <div class="faq-contact">
+    <div class="faq-contact transition-all">
         <div class="faq-contact-icon"><i class="fa-solid fa-comment faq-contact-icon"></i></div>
         <h2>Vous avez d’autres questions ?</h2>
         <p>Contactez-nous, notre équipe se fera un plaisir de vous aider.</p>

@@ -83,6 +83,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["envoyer"])) {
     <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
     <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&family=Be+Vietnam+Pro&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../../styles/formulaire.css">
+    <link rel="stylesheet" href="../../styles/transition.css">
+    <script type="module" src="../../script/transition.js"></script>
     <link rel="stylesheet" href="../../styles/buttons.css">
     <link rel="stylesheet" href="../../styles/message.css">
 </head>
@@ -95,7 +97,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["envoyer"])) {
     <main>
 
         <div class="container">
-            <div class="left-column">
+            <div class="left-column transition-all">
                 <h2 class="h2">Besoin d'aide ?</h2>
                 <p>Si tu as besoin d’un renseignement ou de l’aide tu peux appeler un vendeur : </p>
                 <p>Tél : 01 48 22 98 05</p>
@@ -141,7 +143,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["envoyer"])) {
                     </div>
                 </form>
             </div>
-            <div class="right-column">
+            <div class="right-column transition-boom">
                 <section class="main-display">
                     <img src="../../medias/meknes.png" alt="Armoire">
                 </section>

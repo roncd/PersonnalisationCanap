@@ -14,8 +14,8 @@ session_start();
   <link rel="stylesheet" href="../../styles/apropos.css">
   <link rel="stylesheet" href="../../styles/buttons.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
-
+  <link rel="stylesheet" href="../../styles/transition.css">
+  <script type="module" src="../../script/transition.js"></script>
 </head>
 
 <body>
@@ -31,8 +31,8 @@ session_start();
       <img src="../../medias/canapeapropos.jpg" alt="Canapé à propos">
       <h1>A propos</h1>
     </div>
-    <div class="about-content">
-      <div class="text-content">
+    <div class="about-content ">
+      <div class="text-content transition-all">
         <h2>Déco du Monde</h2>
         <p>
           Chez Déco du Monde, nous vous offrons la liberté de créer un canapé qui vous ressemble.
@@ -41,11 +41,11 @@ session_start();
           pour un rendu unique et chaleureux dans votre intérieur.
         </p>
       </div>
-      <div class="image-content">
+      <div class="image-content transition-boom">
         <img src="../../medias/canape_intro_apropos.jpg" alt="Présentation Déco du Monde">
       </div>
     </div>
-    <div class="values-section">
+    <div class="values-section transition-all">
         <h2>Nos valeurs</h2>
         <div class="values-container">
     <div class="value-item">
@@ -68,10 +68,10 @@ session_start();
     </div>
     <div class="why-us-section">
       <div class="why-us-content">
-        <div class="why-us-image">
+        <div class="why-us-image transition-boom">
           <img src="../../medias/decoration_oriental.jpg" alt="Ambiance orientale">
         </div>
-        <div class="why-us-text">
+        <div class="why-us-text transition-all">
           <h2><span class="highlight">Pourquoi nous </span> ?</h2>
           <p>Notre concept repose sur la personnalisation.</p>
           <p>
@@ -95,9 +95,9 @@ session_start();
       </div>
     </div>
 
-<div class="customizer-section">
-  <div class="customizer-left">
-    <div class="customizer-content">
+<div class="customizer-section transition-all">
+  <div class="customizer-left ">
+    <div class="customizer-content ">
       <h2><span class="highlight">Un canapé unique</span>, fait pour vous</h2>
       <p>
         Velours, bois, motifs berbères ou couleurs modernes...<br>
@@ -129,18 +129,18 @@ session_start();
   </div>
 </div>
             <section class="ateliers">
-                <h2>Nos ateliers en France</h2>
-                <p class="intro">
+                <h2 class="transition-all">Nos ateliers en France</h2>
+                <p class="intro transition-all">
                 Au cœur de nos ateliers français, chaque canapé est façonné avec soin par des artisans passionnés.
                 Inspirés du savoir-faire marocain, ils marient techniques traditionnelles et exigence moderne
                 pour créer des pièces uniques et durables.
                 </p>
-                <div class="images">
+                <div class="images transition-boom">
                 <img src="../../medias/image-bois-gauche.jpg" alt="Travail du bois à la main">
                 <img src="../../medias/tissu_marocain.jpg" alt="Tissu marocain coloré">
                 <img src="../../medias/image-bois-droite.jpg" alt="Travail du bois à la main">
                 </div>
-                <p class="conclusion">
+                <p class="conclusion transition-all">
                 Chaque tissu est choisi avec minutie, chaque finition est travaillée à la main, pour vous offrir un canapé qui vous ressemble, fabriqué localement avec amour.<br>
                 Chez Déco du Monde, nous faisons le choix d’une fabrication française, engagée et de qualité.
                 </p>
