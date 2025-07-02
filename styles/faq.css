@@ -151,6 +151,36 @@ body {
   background-color: #8a5d46;
 }
 
+.faq-search-bar {
+  text-align: center;
+  margin: 20px 0;
+}
+
+.faq-search-bar input {
+  width: 70%;
+  max-width: 500px;
+  padding: 12px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+
+.faq-search-bar button {
+  padding: 12px 20px;
+  margin-left: 10px;
+  background-color: #a4745a;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.faq-search-bar button:hover {
+  background-color: #8d5b45;
+}
+
+
 /**
  * Media Query - Responsive Design
  */

@@ -69,12 +69,7 @@
 /* ----------- RESPONSIVE DESIGN ----------- */
 
 /* Large devices (desktops) */
-@media (max-width: 1024px) {
-    .search-bar {
-        width: 90%;
-        margin: 15px auto;
-    }
-    
+@media (max-width: 1011px) {
     .search-bar input {
         width: 250px;
     }
@@ -110,7 +105,6 @@
     }
 
     .search-bar {
-        flex-direction: column;
         align-items: stretch;
         gap: 8px;
         padding: 6px;
@@ -120,14 +114,11 @@
     .search-bar input {
         width: 100%;
         font-size: 15px;
-        padding: 8px;
+        padding: 8px 0px;
     }
 
     .search-bar button {
-        width: 100%;
-        font-size: 15px;
-        padding: 10px;
-        margin-left: 0;
+        display: none;
     }
 
     .php-message-success,
@@ -139,7 +130,7 @@
 }
 
 /* Extra small devices (phones) */
-@media (max-width: 480px) {
+@media (max-width: 500px) {
     .message {
         font-size: 14px;
         padding: 6px;
@@ -149,16 +140,17 @@
     .search-bar {
         gap: 6px;
         padding: 4px;
+        flex-direction: column;
+
     }
 
     .search-bar input {
-        padding: 6px;
-        font-size: 14px;
+        padding: 8px 0px;
+        font-size: 12px;
     }
 
     .search-bar button {
-        padding: 8px;
-        font-size: 14px;
+        display: none;
     }
 
     .php-message-success,

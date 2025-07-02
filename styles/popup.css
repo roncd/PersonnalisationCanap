@@ -32,7 +32,7 @@
 /* ============ RESPONSIVE POPUP ============ */
 @media (max-width: 768px) {
   .popup-content {
-    width: 90%;
+    width: 60%;
     padding: 15px;
     border-radius: 15px;
   }
@@ -57,9 +57,9 @@
   }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 500px) {
   .popup-content {
-    width: 95%;
+    width: 80%;
     padding: 10px;
     border-radius: 10px;
   }

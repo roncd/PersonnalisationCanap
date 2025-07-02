@@ -103,6 +103,12 @@ if (isset($_GET['post_restore']) && isset($_SESSION['temp_post'])) {
     $_SERVER['REQUEST_METHOD'] = 'POST';
 }
 
+if (isset($_SESSION['popup_produit'])) {
+    $produitAjoute = $_SESSION['popup_produit']['nom'];
+    $imageProduitAjoute = $_SESSION['popup_produit']['img'];
+    unset($_SESSION['popup_produit']);
+}
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['produit'])) {
     if (!isset($_SESSION['user_id'])) {
         $_SESSION['pending_add_to_cart'] = $_POST;
@@ -160,6 +166,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['produit'])) {
         $stmt = $pdo->prepare("UPDATE panier SET prix = prix + ? WHERE id = ?");
         $stmt->execute([$prix * $quantite, $panier_id]);
         $produitAjoute = $nomProduit;
+
+        // Stocker le produit dans la session pour le popup après redirection
+$_SESSION['popup_produit'] = [
+    'nom' => $nomProduit,
+    'img' => $img
+];
+
+// Rediriger pour éviter re-post et déclencher le modal
+header("Location: ?post_restore=1");
+exit;
+        
     }
 }
 if (!empty($produitAjoute)) : ?>
@@ -171,8 +188,7 @@ if (!empty($produitAjoute)) : ?>
 
             const lastAddedProduct = {
                 name: <?= json_encode($produitAjoute) ?>,
-                image: <?= json_encode($produit['img']) ?>
-
+                image: <?= json_encode($imageProduitAjoute ?? '') ?>
             };
 
             function openReservationModal(productName, productImg) {

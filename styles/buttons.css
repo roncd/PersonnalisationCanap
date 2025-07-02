@@ -33,6 +33,7 @@
     background-color: #f4f1f1;
     color: black;
 }
+
 /* Effet zoom au survol */
 .btn-beige:hover,
 .btn-noir:hover,
@@ -113,4 +114,39 @@
 
 .button-footer {
     text-align: right;
+}
+
+@media (max-width: 500px) {
+
+    /* Bouton */
+    .btn-noir,
+    .btn-beige,
+    .btn-grey {
+        font-size: 12px;
+    }
+
+    /* ADMIN */
+
+    /* button section */
+    .button-section {
+        font-size: 13px;
+        display: flex;
+        flex-direction: row;
+        align-items: flex-start;
+        justify-content: space-between;
+    }
+
+    .button-section p {
+        font-size: 12px;
+    }
+
+    .button-section span {
+        font-size: 12px;
+    }
+
+    .button-section button {
+        padding: 10px 10px;
+       
+    }
+
 }

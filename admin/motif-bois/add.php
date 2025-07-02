@@ -65,7 +65,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ajoute un motif de coussin - bois</title>
+    <title>Ajoute un Kit de coussins - bois</title>
     <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../../styles/admin/ajout.css">
     <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
@@ -82,7 +82,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <main>
         <div class="container">
-            <h2>Ajouter un motif de coussin - bois</h2>
+            <h2>Ajouter un Kit de coussins - bois</h2>
             <?php require '../include/message.php'; ?>
             <div class="form">
                 <form method="POST" enctype="multipart/form-data" class="formulaire-creation-compte">

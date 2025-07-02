@@ -55,7 +55,7 @@ $totalPages = ceil($totalCommandes / $limit);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Motifs des coussins - tissu</title>
+    <title>Kit de coussins - tissu</title>
     <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
     <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&family=Be+Vietnam+Pro&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../../styles/admin/tab.css">
@@ -74,7 +74,7 @@ $totalPages = ceil($totalCommandes / $limit);
 
     <main>
         <div class="container">
-            <h2>Motifs des coussins - tissu</h2>
+            <h2>Kit de coussins - tissu</h2>
             <div class="option">
                 <div class="section-button">
                     <div>

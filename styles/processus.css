@@ -47,7 +47,7 @@ span {
   flex: 1;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: space-evenly;
 }
 
 /* ================== COLOR OPTIONS ================== */
@@ -208,7 +208,8 @@ span {
   align-items: flex-start;
   position: relative;
   padding-right: 20px;
-  flex-wrap: wrap; /* Permet aux éléments de passer à la ligne si besoin */
+  flex-wrap: wrap;
+  /* Permet aux éléments de passer à la ligne si besoin */
 
 }
 
@@ -232,7 +233,8 @@ span {
 .main-display img {
   max-width: 100%;
   width: 700px;
-  height: auto; /* Change pour auto pour éviter les déformations */
+  height: auto;
+  /* Change pour auto pour éviter les déformations */
   max-height: 500px;
   border-radius: 10px;
   object-fit: cover;
@@ -242,17 +244,18 @@ span {
 
 
 .main-display-recap img {
-    width: 100%;
-    max-width: 674px;
-    height: auto;
-    aspect-ratio: 674 / 430;
-    object-fit: cover;
-    object-position: center;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, .2);
-    display: block;
-    margin: 0 auto;
+  width: 100%;
+  max-width: 674px;
+  height: auto;
+  aspect-ratio: 674 / 430;
+  object-fit: cover;
+  object-position: center;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, .2);
+  display: block;
+  margin: 0 auto;
 }
+
 .comment-section {
   width: 100%;
   text-align: left;
@@ -319,11 +322,16 @@ label {
 }
 
 .select-field {
-  padding: 10px;
-  font-size: 16px;
-  border: 1px solid #ccc;
+  padding: 8px 12px;
+  border: 2px solid #e3d1c8;
   border-radius: 8px;
-  background-color: rgba(227, 209, 200, 0.71);
+  font-size: 15px;
+  background: #fff;
+  color: #444;
+  font-weight: 500;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+  outline: none;
+  margin-right: 20px;
   transition: all 0.3s ease;
   margin-bottom: 10px;
   appearance: none;
@@ -334,8 +342,6 @@ label {
 }
 
 .select-field:focus {
-  background-color: rgba(227, 209, 200, 0.85);
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
   outline: none;
 }
 
@@ -454,44 +460,48 @@ label {
 
 .align-right {
   display: flex;
-  justify-content: flex-end; /* Aligne les boutons à droite */
-  gap: 5px; /* Espace entre les boutons */
+  justify-content: flex-end;
+  /* Aligne les boutons à droite */
+  gap: 5px;
+  /* Espace entre les boutons */
 }
 
 
 /* ============ RESPONSIVE TABLETTE ============ */
 @media (max-width: 1070px) {
-      .main-display-recap img  {
-    display: none; 
+  .main-display-recap img {
+    display: none;
   }
 
   .comment-section {
-  margin-top: 20px;
-}
+    margin-top: 20px;
+  }
 
 
-.main-display-recap {
-  margin-top: -23px;
-}
+  .main-display-recap {
+    margin-top: -23px;
+  }
 
 
-  
+
 
   .footer-buttons {
-  display: flex;
-  justify-content: space-between; /* un à gauche, un à droite */
-  width: 100%;
-}
+    display: flex;
+    justify-content: space-between;
+    /* un à gauche, un à droite */
+    width: 100%;
+  }
 
   .fil-ariane-container {
     font-size: 13px;
-}
+  }
 
   h2 {
     font-size: 1.6rem;
   }
+
   .container {
-    flex-direction: column-reverse;    
+    flex-direction: column-reverse;
     margin: 30px 20px;
     gap: 40px;
   }
@@ -502,12 +512,13 @@ label {
     padding-right: 0;
   }
 
-  .right-column{
+  .right-column {
     justify-content: start;
     padding-right: 0;
   }
+
   .main-display img {
-   display: none;
+    display: none;
   }
 
   .main-display {
@@ -516,22 +527,27 @@ label {
   }
 
 
- 
+
   .color-2options {
     grid-template-columns: repeat(2, 1fr);
     padding-right: 0;
   }
 
-  
+
   /* 3. Grille des options : 2 cartes + scroll conservé */
-.color-options{
-  grid-template-columns: repeat(3, minmax(0, 1fr)); /* chaque colonne ne dépasse pas 50 % */
-  height: 60vh;          /* hauteur fixe pour déclencher le scroll         */
-  max-height: 60vh;
-  overflow-x: hidden;    /* empêche le scroll horizontal         */
-  overflow-y: auto;      /* conserve la barre verticale                    */
-  padding-right: 8px;    /* place pour la scrollbar (optionnel)            */
-}
+  .color-options {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    /* chaque colonne ne dépasse pas 50 % */
+    height: 60vh;
+    /* hauteur fixe pour déclencher le scroll         */
+    max-height: 60vh;
+    overflow-x: hidden;
+    /* empêche le scroll horizontal         */
+    overflow-y: auto;
+    /* conserve la barre verticale                    */
+    padding-right: 8px;
+    /* place pour la scrollbar (optionnel)            */
+  }
 
 
   .form-row {
@@ -545,7 +561,7 @@ label {
     align-items: flex-start;
     margin-bottom: 10px;
   }
-  
+
   .footer p,
   .footer-processus p {
     font-size: 22px;
@@ -556,6 +572,7 @@ label {
     justify-content: flex-start;
     flex-wrap: wrap;
   }
+
   .fil-ariane-container {
     margin: 70px 22px 10px;
   }
@@ -563,26 +580,30 @@ label {
   .color-options .option img {
     width: 218px;
     height: 218px;
-}
+  }
 
-.color-options h3 {
+  .color-options h3 {
     font-size: 1.2em;
-}
+  }
 
 
   .footer .buttons {
-  display: flex;
-  justify-content: space-between; /* Un bouton à gauche, un bouton à droite */
-  gap: 10px; /* Optionnel : espace entre les boutons */
-  width: 100%;
-}
+    display: flex;
+    justify-content: space-between;
+    /* Un bouton à gauche, un bouton à droite */
+    gap: 10px;
+    /* Optionnel : espace entre les boutons */
+    width: 100%;
+  }
 
   .footer-processus .buttons {
-  display: flex;
-  justify-content: space-between; /* Un bouton à gauche, un bouton à droite */
-  gap: 10px; /* Optionnel : espace entre les boutons */
-  width: 100%;
-}
+    display: flex;
+    justify-content: space-between;
+    /* Un bouton à gauche, un bouton à droite */
+    gap: 10px;
+    /* Optionnel : espace entre les boutons */
+    width: 100%;
+  }
 
 
   .recap-container {
@@ -599,10 +620,10 @@ label {
     width: 100%;
   }
 
-      
-    .h2-recap {
-        padding-top: 55px!important;
-    }
+
+  .h2-recap {
+    padding-top: 55px !important;
+  }
 
 
 
@@ -615,62 +636,66 @@ label {
   h2 {
     font-size: 1.4rem;
   }
-  
+
   .main-display-recap {
-  margin-top: -23px;
-}
+    margin-top: -23px;
+  }
 
 
-  
+
   .comment-section {
-  margin-top: 20px;
-}
+    margin-top: 20px;
+  }
 
 
 
 
-    .fil-ariane-container {
+  .fil-ariane-container {
     font-size: 12px;
-}
+  }
 
-    .h2 {
-        padding-top: 5px!important;
-    }
+  .h2 {
+    padding-top: 15px !important;
+  }
 
-    
-    .h2-recap {
-        padding-top: 55px!important;
-    }
 
-  
-.color-options h3 {
+  .h2-recap {
+    padding-top: 55px !important;
+  }
+
+
+  .color-options h3 {
     font-size: 1.1em;
-}
+  }
 
-  .color-options{
-  grid-template-columns: repeat(2, 1fr);  }
+  .color-options {
+    grid-template-columns: repeat(2, 1fr);
+  }
 
   .color-2options {
-  grid-template-columns: repeat(1, 1fr);
-padding-bottom: 1rem;  }
+    grid-template-columns: repeat(2, 1fr);
+    height: 300px;
+    gap: 0px;
+  }
 
   .color-options .option img {
-   object-fit: cover;
+    object-fit: cover;
     border-radius: 10px;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
     width: 120px;
     height: 120px;
     margin-bottom: 15px;
   }
+
   .color-2options .option img {
-   object-fit: cover;
+    object-fit: cover;
     border-radius: 10px;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
     width: 140px;
     height: 140px;
     margin-bottom: 15px;
   }
-  
+
   .main-display img,
   .main-display-recap img {
     display: none;
@@ -688,25 +713,29 @@ padding-bottom: 1rem;  }
     gap: 20px;
   }
 
-  
+
   .footer p,
   .footer-processus p {
     font-size: 22px;
   }
 
   .footer .buttons {
-  display: flex;
-  justify-content: space-between; /* Un bouton à gauche, un bouton à droite */
-  gap: 10px; /* Optionnel : espace entre les boutons */
-  width: 100%;
-}
+    display: flex;
+    justify-content: space-between;
+    /* Un bouton à gauche, un bouton à droite */
+    gap: 10px;
+    /* Optionnel : espace entre les boutons */
+    width: 100%;
+  }
 
   .footer-processus .buttons {
-  display: flex;
-  justify-content: space-between; /* Un bouton à gauche, un bouton à droite */
-  gap: 10px; /* Optionnel : espace entre les boutons */
-  width: 100%;
-}
+    display: flex;
+    justify-content: space-between;
+    /* Un bouton à gauche, un bouton à droite */
+    gap: 10px;
+    /* Optionnel : espace entre les boutons */
+    width: 100%;
+  }
 
   .recap-container {
     flex-direction: column;
@@ -725,27 +754,29 @@ padding-bottom: 1rem;  }
 }
 
 /* TRÈS PETITS ÉCRANS  */
-@media (max-width: 480px) {
+@media (max-width: 500px) {
   body {
     margin: 0 10px;
   }
 
   .main-display-recap {
-  margin-top: -23px;
-}
+    margin-top: -23px;
+  }
 
 
-  
+
   .comment-section {
-  margin-top: 20px;
-}
+    margin-top: 20px;
+  }
 
-    .footer-processus .buttons {
-  display: flex;
-  justify-content: space-between; /* Un bouton à gauche, un bouton à droite */
-  gap: 10px; /* Optionnel : espace entre les boutons */
-  width: 100%;
-}
+  .footer-processus .buttons {
+    display: flex;
+    justify-content: space-between;
+    /* Un bouton à gauche, un bouton à droite */
+    gap: 10px;
+    /* Optionnel : espace entre les boutons */
+    width: 100%;
+  }
 
 
   .recap-container {
@@ -766,11 +797,11 @@ padding-bottom: 1rem;  }
 
   .fil-ariane-container {
     font-size: 12px;
-}
+  }
 
   .color-options h3 {
     font-size: 1.1em;
-}
+  }
 
   h2 {
     font-size: 1.4rem;
@@ -821,20 +852,23 @@ padding-bottom: 1rem;  }
     font-size: 14px;
   }
 
-  
+
   .footer-buttons {
-  display: flex;
-  justify-content: space-between; /* un à gauche, un à droite */
-  width: 100%;
-}
+    display: flex;
+    justify-content: space-between;
+    /* un à gauche, un à droite */
+    width: 100%;
+  }
 
 
   .footer .buttons {
-  display: flex;
-  justify-content: space-between; /* Un bouton à gauche, un bouton à droite */
-  gap: 10px; /* Optionnel : espace entre les boutons */
-  width: 100%;
-}
+    display: flex;
+    justify-content: space-between;
+    /* Un bouton à gauche, un bouton à droite */
+    gap: 10px;
+    /* Optionnel : espace entre les boutons */
+    width: 100%;
+  }
 
 
   .recap-container {

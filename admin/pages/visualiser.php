@@ -38,7 +38,7 @@ if (!isset($_SESSION['id'])) {
             <div class="grid-wrapper">
 
             <section class="category-block">
-                    <h2>Produits à l'unité / Canapé Pré-personnalisé</h2>
+                    <h2>Produits à l'unité / Canapé Pré-fait</h2>
                     <div class="button-grid">
                         <a href="../vente-produit/visualiser.php" class="btn">Produit</a>
                         <a href="../categorie/visualiser.php" class="btn">Catégorie produits</a>
@@ -64,7 +64,7 @@ if (!isset($_SESSION['id'])) {
                         <a href="../dossier-bois/visualiser.php" class="btn">Dossier</a>
                         <a href="../couleur/visualiser.php" class="btn">Couleur tissu</a>
                         <a href="../couleur-tissu-bois/visualiser.php" class="btn">Motif tissu</a>
-                        <a href="../motif-bois/visualiser.php" class="btn">Motif coussin</a>
+                        <a href="../motif-bois/visualiser.php" class="btn">Kit de coussins</a>
                     </div>
                 </section>
 
@@ -75,7 +75,7 @@ if (!isset($_SESSION['id'])) {
                         <a href="../accoudoirs-tissu/visualiser.php" class="btn">Accoudoirs</a>
                         <a href="../dossier-tissu/visualiser.php" class="btn">Dossier</a>
                         <a href="../couleur-tissu-tissu/visualiser.php" class="btn">Couleur tissu</a>
-                        <a href="../motif-tissu/visualiser.php" class="btn">Motif coussin</a>
+                        <a href="../motif-tissu/visualiser.php" class="btn">Kit de coussins</a>
                     </div>
                 </section>
             </div>

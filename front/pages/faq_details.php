@@ -118,7 +118,6 @@ $questions = $stmtFaq->fetchAll(PDO::FETCH_ASSOC);
   <?php include '../../squelette/footer.php'; ?>
 
   <script src="../../script/accordeon.js"></script>
-  <script src="../../script/search.js"></script>
 
 </body>
 </html>

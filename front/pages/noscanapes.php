@@ -185,7 +185,7 @@ function calculPrix($commande, &$composition = [])
             <div class="hero-content">
                 <br><br><br>
                 <h1 class="hero-title h2">
-                    Nos Canapés Pré-Personnalisés
+                    Nos Canapés Pré-fait
                 </h1>
 
                 <p class="hero-description">
@@ -245,7 +245,7 @@ function calculPrix($commande, &$composition = [])
                     <div class="product-card" data-type="<?= htmlspecialchars(strtolower($commande['type_nom'] ?? '')) ?>">
                         <div class="product-image">
                             <img src="../../admin/uploads/canape-prefait/<?php echo htmlspecialchars($commande['img'] ?? 'default.jpg', ENT_QUOTES); ?>"
-                                alt="<?php echo htmlspecialchars($commande['nom'] ?? 'Canapé préfait', ENT_QUOTES); ?>">
+                                alt="<?php echo htmlspecialchars($commande['nom'] ?? 'Canapé pré-fait', ENT_QUOTES); ?>">
                         </div>
                         <div class="product-content">
                             <h3><?= htmlspecialchars($commande['nom']) ?></h3>

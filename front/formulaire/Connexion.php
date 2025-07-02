@@ -112,7 +112,11 @@ if (isset($_GET['message']) && $_GET['message'] == 'success') {
                             <label for="motdepasse">Mot de passe</label>
                             <div class="input-section">
                                 <input type="password" id="motdepasse" name="motdepasse" class="input-field" required>
-                                <img src="../../medias/eye.svg" id="eyeBtn" alt="Afficher/masquer le mot de passe">
+                        <span class="toggle-password-text" 
+                            style="cursor: pointer; color: #666; user-select: none; position: absolute; right: 10px; top: 50%; transform: translateY(-50%); font-weight: 100;">
+                            Afficher
+                        </span>
+
                             </div>
                             <div id="caps-lock-warning" style="display:none; color: gris; font-size: 0.95em; margin-top: 4px;">
                                 ⚠️ Attention : Verr Maj est activé !
@@ -148,7 +152,7 @@ if (isset($_GET['message']) && $_GET['message'] == 'success') {
     <?php require_once '../../squelette/footer.php' ?>
 
     <script src="../../script/toucheMaj.js"></script>
-    <script src="../../script/eye.js"></script>
+    <script src="../../script/togglePassword.js"></script>
 </body>
 
 
