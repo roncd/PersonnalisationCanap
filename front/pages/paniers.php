@@ -25,12 +25,13 @@ $offset = ($page - 1) * $limit;
 $stmt = $pdo->prepare("SELECT pf.id, pf.date, pf.statut, cl.id AS id_client, cl.nom, cl.prenom 
     FROM panier_final pf
     JOIN client cl ON pf.id_client = cl.id 
-    WHERE pf.statut = :statut 
+    WHERE id_client = :id_client AND pf.statut = :statut 
     ORDER BY pf.id DESC 
     LIMIT :limit OFFSET :offset");
-    $stmt->bindValue(':statut', $statut, PDO::PARAM_STR);
-    $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
-    $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+$stmt->bindValue(':id_client', $userId, PDO::PARAM_INT);
+$stmt->bindValue(':statut', $statut, PDO::PARAM_STR);
+$stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
+$stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
 $stmt->execute();
 $commandes = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -72,118 +73,112 @@ foreach ($commandes as $commande) {
         <div class="container">
             <!-- Colonne de gauche -->
             <h2 class="h2-commande">Suivis des commandes - Paniers</h2>
-            <div class="tableau">
-                <div class="tabs">
-                    <button onclick="location.href='?statut=validation'" class="tab <?= ($statut === 'validation') ? 'active' : '' ?>">En attente de validation</button>
-                    <button onclick="location.href='?statut=traitement'" class="tab <?= ($statut === 'traitement') ? 'active' : '' ?>">En cours de traitement</button>
-                    <button onclick="location.href='?statut=final'" class="tab <?= ($statut === 'final') ? 'active' : '' ?>">Commandes finalisées</button>
-                </div>
-                <div class="tab-content <?= $statut === 'validation' ? 'active' : '' ?>" id="validation">
-                    <div id="commandes-container">
-                        <?php if (!empty($commandes)): ?>
-                            <?php foreach ($commandes as $commande): ?>
-                                <div class="commande" data-id="<?= htmlspecialchars($commande['id']) ?>" data-statut="<?= htmlspecialchars($commande['statut']) ?>">
-                                    <div class="info">
-                                        <p><strong>Nom :</strong> <?= htmlspecialchars($commande['nom']) ?></p>
-                                        <p><strong>Prénom :</strong> <?= htmlspecialchars($commande['prenom']) ?></p>
-                                        <p><strong>Date :</strong> <?= htmlspecialchars(date('d/m/Y', strtotime($commande['date']))) ?></p>
-                                        <p><strong>N° commande :</strong> <?= htmlspecialchars($commande['id']) ?></p>
-                                    </div>
-                                    <div class="actions">
-                                        <i title="Téléchargez le devis" class="bx bxs-file-pdf" data-id="<?= htmlspecialchars($commande['id']) ?>"></i>
-                                    </div>
-                                </div>
-                            <?php endforeach; ?>
-                        <?php else: ?>
-                            <p>Aucune commande trouvée pour ce statut.</p>
-                        <?php endif; ?>
+            <div class="content">
+                <div class="tableau">
+                    <div class="tabs">
+                        <button onclick="location.href='?statut=validation'" class="tab <?= ($statut === 'validation') ? 'active' : '' ?>">En attente de validation</button>
+                        <button onclick="location.href='?statut=traitement'" class="tab <?= ($statut === 'traitement') ? 'active' : '' ?>">En cours de traitement</button>
+                        <button onclick="location.href='?statut=final'" class="tab <?= ($statut === 'final') ? 'active' : '' ?>">Commandes finalisées</button>
                     </div>
-                </div>
-
-                <div class="tab-content <?= $statut === 'traitement' ? 'active' : '' ?>" id="traitement">
-                    <div id="commandes-container">
-                        <?php if (!empty($commandes)): ?>
-                            <?php foreach ($commandes as $commande): ?>
-                                <div class="commande" data-id="<?= htmlspecialchars($commande['id']) ?>" data-statut="<?= htmlspecialchars($commande['statut']) ?>">
-                                    <div class="info">
-                                        <p><strong>Nom :</strong> <?= htmlspecialchars($commande['nom']) ?></p>
-                                        <p><strong>Prénom :</strong> <?= htmlspecialchars($commande['prenom']) ?></p>
-                                        <p><strong>Date :</strong> <?= htmlspecialchars(date('d/m/Y', strtotime($commande['date']))) ?></p>
-                                        <p><strong>N° commande :</strong> <?= htmlspecialchars($commande['id']) ?></p>
+                    <div class="tab-content <?= $statut === 'validation' ? 'active' : '' ?>" id="validation">
+                        <div id="commandes-container">
+                            <?php if (!empty($commandes)): ?>
+                                <?php foreach ($commandes as $commande): ?>
+                                    <div class="commande" data-id="<?= htmlspecialchars($commande['id']) ?>" data-statut="<?= htmlspecialchars($commande['statut']) ?>">
+                                        <div class="info">
+                                            <p><strong>Nom :</strong> <?= htmlspecialchars($commande['nom']) ?></p>
+                                            <p><strong>Prénom :</strong> <?= htmlspecialchars($commande['prenom']) ?></p>
+                                            <p><strong>Date :</strong> <?= htmlspecialchars(date('d/m/Y', strtotime($commande['date']))) ?></p>
+                                            <p><strong>N° commande :</strong> <?= htmlspecialchars($commande['id']) ?></p>
+                                        </div>
+                                        <div class="actions">
+                                            <i title="Téléchargez le devis" class="bx bxs-file-pdf" data-id="<?= htmlspecialchars($commande['id']) ?>"></i>
+                                        </div>
                                     </div>
-                                    <div class="actions">
-                                        <i title="Téléchargez le devis" class="bx bxs-file-pdf" data-id="<?= htmlspecialchars($commande['id']) ?>"></i>
-                                    </div>
-                                </div>
-                            <?php endforeach; ?>
-                        <?php else: ?>
-                            <p>Aucune commande trouvée pour ce statut.</p>
-                        <?php endif; ?>
-                    </div>
-                </div>
-
-                <div class="tab-content <?= $statut === 'final' ? 'active' : '' ?>" id="final">
-                    <div id="commandes-container">
-                        <?php if (!empty($commandes)): ?>
-                            <?php foreach ($commandes as $commande): ?>
-                                <div class="commande" data-id="<?= htmlspecialchars($commande['id']) ?>" data-statut="<?= htmlspecialchars($commande['statut']) ?>">
-                                    <div class="info">
-                                        <p><strong>Nom :</strong> <?= htmlspecialchars($commande['nom']) ?></p>
-                                        <p><strong>Prénom :</strong> <?= htmlspecialchars($commande['prenom']) ?></p>
-                                        <p><strong>Date :</strong> <?= htmlspecialchars(date('d/m/Y', strtotime($commande['date']))) ?></p>
-                                        <p><strong>N° commande :</strong> <?= htmlspecialchars($commande['id']) ?></p>
-                                    </div>
-                                    <div class="actions">
-                                        <i title="Téléchargez le devis" class="bx bxs-file-pdf" data-id="<?= htmlspecialchars($commande['id']) ?>"></i>
-                                    </div>
-                                </div>
-                            <?php endforeach; ?>
-                        <?php else: ?>
-                            <p>Aucune commande trouvée pour ce statut.</p>
-                        <?php endif; ?>
-                    </div>
-                </div>
-                <nav class="nav" aria-label="pagination">
-                    <ul class="pagination">
-                        <?php if ($page > 1): ?>
-                            <li><a href="?page=<?= $page - 1 ?>&statut=<?= $statut ?>">Précédent</a></li>
-                        <?php endif; ?>
-
-                        <?php
-                        $max_links = 3;
-                        $start = max(1, $page - floor($max_links / 2));
-                        $end = min($totalPages, $start + $max_links - 1);
-
-                        if ($end - $start + 1 < $max_links) {
-                            $start = max(1, $end - $max_links + 1);
-                        }
-
-                        if ($start > 1):
-                        ?>
-                            <li><a href="?page=1&statut=<?= $statut ?>">1</a></li>
-                            <?php if ($start > 2): ?>
-                                <li><span>…</span></li>
+                                <?php endforeach; ?>
+                            <?php else: ?>
+                                <p>Aucune commande trouvée pour ce statut.</p>
                             <?php endif; ?>
-                        <?php endif; ?>
-
-                        <?php for ($i = $start; $i <= $end; $i++): ?>
-                            <li>
-                                <a class="<?= $i == $page ? 'active' : '' ?>" href="?page=<?= $i ?>&statut=<?= $statut ?>"><?= $i ?></a>
-                            </li>
-                        <?php endfor; ?>
-
-                        <?php if ($end < $totalPages): ?>
-                            <?php if ($end < $totalPages - 1): ?>
-                                <li><span>…</span></li>
+                        </div>
+                    </div>
+                    <div class="tab-content <?= $statut === 'traitement' ? 'active' : '' ?>" id="traitement">
+                        <div id="commandes-container">
+                            <?php if (!empty($commandes)): ?>
+                                <?php foreach ($commandes as $commande): ?>
+                                    <div class="commande" data-id="<?= htmlspecialchars($commande['id']) ?>" data-statut="<?= htmlspecialchars($commande['statut']) ?>">
+                                        <div class="info">
+                                            <p><strong>Nom :</strong> <?= htmlspecialchars($commande['nom']) ?></p>
+                                            <p><strong>Prénom :</strong> <?= htmlspecialchars($commande['prenom']) ?></p>
+                                            <p><strong>Date :</strong> <?= htmlspecialchars(date('d/m/Y', strtotime($commande['date']))) ?></p>
+                                            <p><strong>N° commande :</strong> <?= htmlspecialchars($commande['id']) ?></p>
+                                        </div>
+                                        <div class="actions">
+                                            <i title="Téléchargez le devis" class="bx bxs-file-pdf" data-id="<?= htmlspecialchars($commande['id']) ?>"></i>
+                                        </div>
+                                    </div>
+                                <?php endforeach; ?>
+                            <?php else: ?>
+                                <p>Aucune commande trouvée pour ce statut.</p>
                             <?php endif; ?>
-                            <li><a href="?page=<?= $totalPages ?>&statut=<?= $statut ?>"><?= $totalPages ?></a></li>
-                        <?php endif; ?>
-
-                        <?php if ($page < $totalPages): ?>
-                            <li><a href="?page=<?= $page + 1 ?>&statut=<?= $statut ?>">Suivant</a></li>
-                        <?php endif; ?>
-                    </ul>
-                </nav>
+                        </div>
+                    </div>
+                    <div class="tab-content <?= $statut === 'final' ? 'active' : '' ?>" id="final">
+                        <div id="commandes-container">
+                            <?php if (!empty($commandes)): ?>
+                                <?php foreach ($commandes as $commande): ?>
+                                    <div class="commande" data-id="<?= htmlspecialchars($commande['id']) ?>" data-statut="<?= htmlspecialchars($commande['statut']) ?>">
+                                        <div class="info">
+                                            <p><strong>Nom :</strong> <?= htmlspecialchars($commande['nom']) ?></p>
+                                            <p><strong>Prénom :</strong> <?= htmlspecialchars($commande['prenom']) ?></p>
+                                            <p><strong>Date :</strong> <?= htmlspecialchars(date('d/m/Y', strtotime($commande['date']))) ?></p>
+                                            <p><strong>N° commande :</strong> <?= htmlspecialchars($commande['id']) ?></p>
+                                        </div>
+                                        <div class="actions">
+                                            <i title="Téléchargez le devis" class="bx bxs-file-pdf" data-id="<?= htmlspecialchars($commande['id']) ?>"></i>
+                                        </div>
+                                    </div>
+                                <?php endforeach; ?>
+                            <?php else: ?>
+                                <p>Aucune commande trouvée pour ce statut.</p>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+                    <nav class="nav" aria-label="pagination">
+                        <ul class="pagination">
+                            <?php if ($page > 1): ?>
+                                <li><a href="?page=<?= $page - 1 ?>&statut=<?= $statut ?>">Précédent</a></li>
+                            <?php endif; ?>
+                            <?php
+                            $max_links = 3;
+                            $start = max(1, $page - floor($max_links / 2));
+                            $end = min($totalPages, $start + $max_links - 1);
+                            if ($end - $start + 1 < $max_links) {
+                                $start = max(1, $end - $max_links + 1);
+                            }
+                            if ($start > 1):
+                            ?>
+                                <li><a href="?page=1&statut=<?= $statut ?>">1</a></li>
+                                <?php if ($start > 2): ?>
+                                    <li><span>…</span></li>
+                                <?php endif; ?>
+                            <?php endif; ?>
+                            <?php for ($i = $start; $i <= $end; $i++): ?>
+                                <li>
+                                    <a class="<?= $i == $page ? 'active' : '' ?>" href="?page=<?= $i ?>&statut=<?= $statut ?>"><?= $i ?></a>
+                                </li>
+                            <?php endfor; ?>
+                            <?php if ($end < $totalPages): ?>
+                                <?php if ($end < $totalPages - 1): ?>
+                                    <li><span>…</span></li>
+                                <?php endif; ?>
+                                <li><a href="?page=<?= $totalPages ?>&statut=<?= $statut ?>"><?= $totalPages ?></a></li>
+                            <?php endif; ?>
+                            <?php if ($page < $totalPages): ?>
+                                <li><a href="?page=<?= $page + 1 ?>&statut=<?= $statut ?>">Suivant</a></li>
+                            <?php endif; ?>
+                        </ul>
+                    </nav>
+                </div>
             </div>
         </div>
 

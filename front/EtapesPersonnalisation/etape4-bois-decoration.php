@@ -102,7 +102,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
               </div>
             <?php endforeach; ?>
           <?php else: ?>
-            <p>Aucune couleur disponible pour le moment.</p>
+            <p>Aucune décoration avec la couleur sélécdtionné disponible pour le moment.</p>
           <?php endif; ?>
         </section>
 

@@ -218,13 +218,13 @@ if (isset($_GET['structure_id'])) {
       </div>
     </div>
 
-        <!-- Popup bloquant pour les étapes non validées -->
-<div id="filariane-popup" class="popup">
-  <div class="popup-content">
-    <h2>Veuillez sélectionner une option et cliquez sur "suivant" pour passer à l’étape d’après.</h2>
-    <button class="btn-noir">OK</button>
-  </div>
-</div>
+    <!-- Popup bloquant pour les étapes non validées -->
+    <div id="filariane-popup" class="popup">
+      <div class="popup-content">
+        <h2>Veuillez sélectionner une option et cliquez sur "suivant" pour passer à l’étape d’après.</h2>
+        <button class="btn-noir">OK</button>
+      </div>
+    </div>
 
     <!-- GESTION DES SELECTIONS -->
     <script>
@@ -398,49 +398,54 @@ if (isset($_GET['structure_id'])) {
       }
     </script>
 
-    
     <!-- FIL ARIANE -->
     <script>
-document.addEventListener('DOMContentLoaded', () => {
-  const filAriane = document.querySelector('.fil-ariane');
-  const links = filAriane.querySelectorAll('a');
+      document.addEventListener('DOMContentLoaded', () => {
+        const filAriane = document.querySelector('.fil-ariane');
+        const links = filAriane.querySelectorAll('a');
 
-  const filArianePopup = document.getElementById('filariane-popup');
-  const closeFilArianePopupBtn = filArianePopup.querySelector('.btn-noir');
+        const filArianePopup = document.getElementById('filariane-popup');
+        const closeFilArianePopupBtn = filArianePopup.querySelector('.btn-noir');
 
-  const etapes = [
-  { id: 'etape1-1-structure.php', key: null }, // toujours accessible
-  { id: 'etape1-2-dimension.php', key:  null },
-  { id: 'etape2-type-banquette.php', key:  'etape2_valide'  },
-];
+        const etapes = [{
+            id: 'etape1-1-structure.php',
+            key: null
+          }, // toujours accessible
+          {
+            id: 'etape1-2-dimension.php',
+            key: null
+          },
+          {
+            id: 'etape2-type-banquette.php',
+            key: 'etape2_valide'
+          },
+        ];
 
- links.forEach((link, index) => {
-    const etape = etapes[index];
+        links.forEach((link, index) => {
+          const etape = etapes[index];
 
-    // Empêche de cliquer si l'étape n’est pas validée
-    if (etape.key && sessionStorage.getItem(etape.key) !== 'true') {
-      link.addEventListener('click', (e) => {
-        e.preventDefault();
-        filArianePopup.style.display = 'flex';
+          // Empêche de cliquer si l'étape n’est pas validée
+          if (etape.key && sessionStorage.getItem(etape.key) !== 'true') {
+            link.addEventListener('click', (e) => {
+              e.preventDefault();
+              filArianePopup.style.display = 'flex';
+            });
+            link.classList.add('disabled-link');
+          }
+        });
+
+        // Fermer le popup avec le bouton
+        closeFilArianePopupBtn.addEventListener('click', () => {
+          filArianePopup.style.display = 'none';
+        });
+
+        // Fermer si on clique en dehors du contenu
+        window.addEventListener('click', (event) => {
+          if (event.target === filArianePopup) {
+            filArianePopup.style.display = 'none';
+          }
+        });
       });
-      link.classList.add('disabled-link');
-    }
-  });
-
-  // Fermer le popup avec le bouton
-  closeFilArianePopupBtn.addEventListener('click', () => {
-    filArianePopup.style.display = 'none';
-  });
-
-  // Fermer si on clique en dehors du contenu
-  window.addEventListener('click', (event) => {
-    if (event.target === filArianePopup) {
-      filArianePopup.style.display = 'none';
-    }
-  });
-});
-
-
     </script>
 
   </main>

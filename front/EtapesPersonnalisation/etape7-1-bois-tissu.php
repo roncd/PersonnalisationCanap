@@ -246,14 +246,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['couleur_tissu_bois_id
           }
         });
       });
-
-      document.querySelectorAll('.color-options .option img').forEach(option => {
-        option.addEventListener('click', () => {
-          const id = option.getAttribute('data-tissu-bois-id');
-          document.getElementById('selected-couleur_tissu').value = id;
-
-        });
-      });
     </script>
 
     <!-- BOUTTON RETOUR -->

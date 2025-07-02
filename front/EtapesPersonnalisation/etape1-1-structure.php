@@ -17,7 +17,7 @@ $structures = $stmt->fetchAll(PDO::FETCH_ASSOC);
 // Vérifier si le formulaire a été soumis
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
-  $id_client = $_SESSION['user_id']; 
+  $id_client = $_SESSION['user_id'];
   $id_structure = $_POST['structure_id'];
 
   // Vérifier si une commande temporaire existe déjà pour cet utilisateur
@@ -146,12 +146,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
 
     <!-- Popup bloquant pour les étapes non validées -->
-<div id="filariane-popup" class="popup">
-  <div class="popup-content">
-    <h2>Veuillez sélectionner une option et cliquez sur "suivant" pour passer à l’étape d’après.</h2>
-    <button class="btn-noir">OK</button>
-  </div>
-</div>
+    <div id="filariane-popup" class="popup">
+      <div class="popup-content">
+        <h2>Veuillez sélectionner une option et cliquez sur "suivant" pour passer à l’étape d’après.</h2>
+        <button class="btn-noir">OK</button>
+      </div>
+    </div>
 
 
     <!-- GESTION DES SELECTIONS -->
@@ -221,13 +221,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         let totalPrice = 0; // Total global pour toutes les étapes
 
         // Charge l'ID utilisateur depuis une variable PHP intégrée dans le HTML
-        const userId = document.body.getAttribute('data-user-id');
-        <?php echo $_SESSION['user_id']; ?>
+        const userId = document.body.getAttribute('data-user-id'); // Ex. <body data-user-id="
+        // <?php echo $_SESSION['user_id']; ?>">
         if (!userId) {
           console.error("ID utilisateur non trouvé. Vérifiez que 'data-user-id' est bien défini dans le HTML.");
           return;
         }
-
         // Charge toutes les options sélectionnées depuis sessionStorage 
         const sessionKey = `allSelectedOptions_${userId}`;
         const selectedKey = `selectedOptions_${userId}`;
@@ -250,10 +249,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           }, 0);
 
           // Sauvegarder les données mises à jour dans sessionStorage
-          function saveData() {
-            sessionStorage.setItem(sessionKey, JSON.stringify(allSelectedOptions));
-            sessionStorage.setItem(selectedKey, JSON.stringify(selectedOptions));
-          }
           // Mettre à jour le total dans l'interface
           const totalElement = document.querySelector(".footer p span");
           if (totalElement) {
@@ -262,6 +257,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             console.error("L'élément '.footer p span' est introuvable !");
           }
         }
+
+        function saveData() {
+          sessionStorage.setItem(sessionKey, JSON.stringify(allSelectedOptions));
+          sessionStorage.setItem(selectedKey, JSON.stringify(selectedOptions));
+        }
         // Initialiser le total dès le chargement de la page
         updateTotal();
         // Sauvegarder les données au chargement de la page (au cas où elles sont modifiées)
@@ -269,49 +269,56 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       });
     </script>
 
-    
+
     <!-- FIL ARIANE -->
     <script>
-document.addEventListener('DOMContentLoaded', () => {
-  const filAriane = document.querySelector('.fil-ariane');
-  const links = filAriane.querySelectorAll('a');
+      document.addEventListener('DOMContentLoaded', () => {
+        const filAriane = document.querySelector('.fil-ariane');
+        const links = filAriane.querySelectorAll('a');
 
-  const filArianePopup = document.getElementById('filariane-popup');
-  const closeFilArianePopupBtn = filArianePopup.querySelector('.btn-noir');
+        const filArianePopup = document.getElementById('filariane-popup');
+        const closeFilArianePopupBtn = filArianePopup.querySelector('.btn-noir');
 
-  const etapes = [
-  { id: 'etape1-1-structure.php', key: null }, // toujours accessible
-  { id: 'etape1-2-dimension.php', key:  'etape1-2_valide' },
-  { id: 'etape2-type-banquette.php', key:  'etape2_valide'  },
-];
+        const etapes = [{
+            id: 'etape1-1-structure.php',
+            key: null
+          }, // toujours accessible
+          {
+            id: 'etape1-2-dimension.php',
+            key: 'etape1-2_valide'
+          },
+          {
+            id: 'etape2-type-banquette.php',
+            key: 'etape2_valide'
+          },
+        ];
 
 
- links.forEach((link, index) => {
-    const etape = etapes[index];
+        links.forEach((link, index) => {
+          const etape = etapes[index];
 
-    // Empêche de cliquer si l'étape n’est pas validée
-    if (etape.key && sessionStorage.getItem(etape.key) !== 'true') {
-      link.addEventListener('click', (e) => {
-        e.preventDefault();
-        filArianePopup.style.display = 'flex';
+          // Empêche de cliquer si l'étape n’est pas validée
+          if (etape.key && sessionStorage.getItem(etape.key) !== 'true') {
+            link.addEventListener('click', (e) => {
+              e.preventDefault();
+              filArianePopup.style.display = 'flex';
+            });
+            link.classList.add('disabled-link');
+          }
+        });
+
+        // Fermer le popup avec le bouton
+        closeFilArianePopupBtn.addEventListener('click', () => {
+          filArianePopup.style.display = 'none';
+        });
+
+        // Fermer si on clique en dehors du contenu
+        window.addEventListener('click', (event) => {
+          if (event.target === filArianePopup) {
+            filArianePopup.style.display = 'none';
+          }
+        });
       });
-      link.classList.add('disabled-link');
-    }
-  });
-
-  // Fermer le popup avec le bouton
-  closeFilArianePopupBtn.addEventListener('click', () => {
-    filArianePopup.style.display = 'none';
-  });
-
-  // Fermer si on clique en dehors du contenu
-  window.addEventListener('click', (event) => {
-    if (event.target === filArianePopup) {
-      filArianePopup.style.display = 'none';
-    }
-  });
-});
-
     </script>
 
 
