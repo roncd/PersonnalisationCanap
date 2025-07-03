@@ -236,7 +236,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <!-- BOUTTON RETOUR -->
     <script>
       function retourEtapePrecedente() {
-        window.location.href = "etape5-bois-accoudoir.php";
+        window.location.href = "etape5-bois-accoudoir-place.php";
       }
     </script>
 
