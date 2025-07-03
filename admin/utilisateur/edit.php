@@ -34,20 +34,29 @@ if (!$utilisateur) {
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Récupérer et valider les données
     $mail = trim($_POST['mail']);
-    $mdp = password_hash($_POST['mdp'], PASSWORD_BCRYPT);
     $nom = trim($_POST['nom']);
     $prenom = trim($_POST['prenom']);
     $civilite = trim($_POST['civilite']);
     $profil = trim($_POST['profil']);
     $tel = trim($_POST['tel']);
 
-    if (empty($nom) || empty($prenom) || empty($mail) || empty($mdp)) {
+    if (empty($nom) || empty($prenom) || empty($mail)) {
         $_SESSION['message'] = 'Tous les champs requis doivent être remplis.';
         $_SESSION['message_type'] = 'error';
     } else {
+        $stmt = $pdo->prepare("SELECT id FROM utilisateur WHERE mail = ?");
+        $stmt->execute([$mail]);
+
+        if ($stmt->rowCount() > 0) {
+            $_SESSION['message'] = 'Cet email est déjà utilisé.';
+            $_SESSION['message_type'] = 'error';
+            header("Location:" . $_SERVER['REQUEST_URI']);
+
+            exit();
+        }
         // Mettre à jour de l'utilisateur dans la base de données
-        $stmt = $pdo->prepare("UPDATE utilisateur SET mail = ?, mdp = ?, nom = ?, prenom = ?, civilite = ?, profil = ?, tel = ? WHERE id = ?");
-        $stmt->execute([$mail, $mdp, $nom, $prenom, $civilite, $profil, $tel, $id]);
+        $stmt = $pdo->prepare("UPDATE utilisateur SET mail = ?, nom = ?, prenom = ?, civilite = ?, profil = ?, tel = ? WHERE id = ?");
+        $stmt->execute([$mail, $nom, $prenom, $civilite, $profil, $tel, $id]);
 
         $_SESSION['message'] = 'Membre mis à jour avec succès!';
         $_SESSION['message_type'] = 'success';
@@ -115,7 +124,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <input type="email" id="email" name="mail" class="input-field" value="<?php echo htmlspecialchars($utilisateur['mail']); ?>" required>
                         </div>
                         <div class="form-group">
-                        <label for="mdp">Mot de passe <span class="required">*</span></label>
+                            <label for="mdp">Mot de passe <span class="required">*</span></label>
                             <a href="../include/changer_mdp.php?id=<?php echo $utilisateur['id']; ?>"
                                 class="input-field"
                                 style=" text-decoration: none; color: black; text-align: center;">
@@ -124,7 +133,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         </div>
                     </div>
                     <div class="form-row">
-                    <div class="form-group">
+                        <div class="form-group">
                             <label for="tel">Téléphone</label>
                             <input type="phone" id="tel" name="tel" class="input-field" value="<?php echo ($utilisateur['tel']); ?>">
                         </div>
@@ -133,7 +142,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <select class="input-field" id="profil" name="profil">
                                 <option value="<?php echo htmlspecialchars($utilisateur['profil']); ?>"><?php echo htmlspecialchars($utilisateur['profil']); ?></option>
                                 <?php
-                                $options = ["Administrateur" => "Administrateur" , "Commercial" => "Commercial"];
+                                $options = ["Administrateur" => "Administrateur", "Commercial" => "Commercial"];
 
                                 // Boucle pour afficher uniquement les options différentes
                                 foreach ($options as $value => $label) {
@@ -148,7 +157,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <div class="button-section">
                         <div class="buttons">
                             <button type="button" id="btn-retour" class="btn-beige" onclick="history.go(-1)">Retour</button>
-                            <input type="submit"  class="btn-noir" value="Mettre à jour"></input>
+                            <input type="submit" class="btn-noir" value="Mettre à jour"></input>
                         </div>
                     </div>
                 </form>
