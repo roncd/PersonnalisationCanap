@@ -70,7 +70,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   echo "<script>
         localStorage.setItem('selectedAccoudoirBois', '$js_ids');
         localStorage.setItem('selectedNbAccoudoirBois', '$js_nbs');
-        window.location.href = 'etape6-bois-dossier.php';
+        window.location.href = 'etape5-bois-accoudoir-place.php';
     </script>";
   exit;
 }
@@ -173,6 +173,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </section>
       </div>
     </div>
+
+    
 
     <!-- Popup besoin d'aide -->
     <div id="help-popup" class="popup">
