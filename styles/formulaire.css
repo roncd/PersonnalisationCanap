@@ -312,7 +312,6 @@ label {
 #file-list {
   list-style-type: none;
   padding-left: 0;
-  margin-top: 10px;
 }
 
 #file-list li {
@@ -345,6 +344,10 @@ label {
   font-size: 18px;
   font-weight: bold;
   cursor: pointer;
+}
+
+.space {
+    margin-top: 100px;
 }
 
 

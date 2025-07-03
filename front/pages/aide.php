@@ -115,7 +115,6 @@ if (isset($_FILES['image']) && !empty($_FILES['image']['name'][0])) {
 #file-list {
   list-style: none;
   padding: 0;
-  margin-top: 10px;
 }
 #file-list li {
   margin: 5px 0;

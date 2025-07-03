@@ -231,7 +231,7 @@ require '../../vendor/autoload.php'; // adapte le chemin si besoin
 
       </div>
       <div class="right-column transition-boom">
-        <section class="main-display">
+        <section class="main-display space">
           <img src="../../medias/meknes.png" alt="Armoire">
         </section>
       </div>
