@@ -159,7 +159,7 @@ $panier = $stmt->fetch();
                     </br><?php echo "<strong>" . htmlspecialchars($assocMail['client'][$panier['id_client']]['mail'] ?? '-') . "</strong>"; ?>
                 </p>
                 <br>
-                <button onclick="location.href='../pages/commandes.php'" class="btn-beige">Voir mes commandes</button>
+                <button onclick="location.href='../pages/paniers.php'" class="btn-beige">Voir mes commandes</button>
                 <button id="pdf-btn" class="btn-noir">Voir le devis</button>
             </div>
         </div>

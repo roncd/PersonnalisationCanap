@@ -15,9 +15,9 @@ window.updateStatus = function (button) {
         // Déterminerle prochain statut dynamiquement
         let nextStatut = '';
         if (currentStatut === 'validation') {
-            nextStatut = 'construction'; // Passe de Validation à Construction
-        } else if (currentStatut === 'construction') {
-            nextStatut = 'final'; // Passe de Construction à Final
+            nextStatut = 'traitement'; // Passe de Validation à traitement
+        } else if (currentStatut === 'traitement') {
+            nextStatut = 'final'; // Passe de traitement à Final
         } else {
             console.error('Statut actuel non valide :', currentStatut);
             return; // Arrête l'exécution si le statut est invalide
