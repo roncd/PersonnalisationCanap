@@ -52,7 +52,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 if (!is_dir($uploadDir)) {
                     mkdir($uploadDir, 0777, true);
                 }
+                require '../include/cleanFileName.php';
                 $fileName = basename($img['name']);
+                $fileName = cleanFileName($fileName);
                 $uploadPath = $uploadDir . $fileName;
                 if (!move_uploaded_file($img['tmp_name'], $uploadPath)) {
                     $_SESSION['message'] = 'Erreur lors de l\'upload de l\'image.';
@@ -82,7 +84,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&family=Be+Vietnam+Pro&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../../styles/admin/ajout.css">
     <link rel="stylesheet" href="../../styles/message.css">
-    
+
     <link rel="stylesheet" href="../../styles/buttons.css">
     <script src="../../script/previewImage.js"></script>
 </head>
@@ -111,14 +113,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <div class="form-row">
                         <div class="form-group">
                             <label for="img">Image (Laissez vide pour conserver l'image actuelle) <span class="required">*</span></label>
-                            <input type="file" id="img" name="img" class="input-field" accept="image/*" onchange="loadFile(event)" >
+                            <input type="file" id="img" name="img" class="input-field" accept="image/*" onchange="loadFile(event)">
                             <img class="preview-img" src="../uploads/couleur-tissu-tissu/<?php echo htmlspecialchars($couleurtissu['img']); ?>" id="output" />
-                         </div>
+                        </div>
                     </div>
                     <div class="button-section">
                         <div class="buttons">
                             <button type="button" id="btn-retour" class="btn-beige" onclick="history.go(-1)">Retour</button>
-                            <input type="submit"  class="btn-noir" value="Mettre à jour">
+                            <input type="submit" class="btn-noir" value="Mettre à jour">
                         </div>
                     </div>
                 </form>

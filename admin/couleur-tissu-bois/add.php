@@ -36,6 +36,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['message_type'] = 'error';
         } else {
             $fileName = basename($img['name']);
+            require '../include/cleanFileName.php';
+            $fileName = cleanFileName($fileName);
             $uploadPath = $uploadDir . $fileName;
 
             // Upload du fichier

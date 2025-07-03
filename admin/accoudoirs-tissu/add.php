@@ -32,7 +32,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     // Traitement de l'image
+    require '../include/cleanFileName.php';
     $fileName = basename($img['name']);
+    $fileName = cleanFileName($fileName);
     $uploadPath = $uploadDir . $fileName;
 
     if (move_uploaded_file($img['tmp_name'], $uploadPath)) {

@@ -22,13 +22,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (!is_dir($uploadDir)) {
             mkdir($uploadDir, 0777, true);
         }
-
         $allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/jpg'];
         if (!in_array($img['type'], $allowedTypes)) {
             $_SESSION['message'] = 'Seuls les fichiers JPEG, PNG et GIF sont autorisés.';
             $_SESSION['message_type'] = 'error';
         } else {
+            require '../include/cleanFileName.php';
             $fileName = basename($img['name']);
+            $fileName = cleanFileName($fileName);
             $uploadPath = $uploadDir . $fileName;
 
             if (move_uploaded_file($img['tmp_name'], $uploadPath)) {
@@ -65,10 +66,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ajoute un accoudoir bois</title>
+        <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
     <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&family=Be+Vietnam+Pro&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../../styles/admin/ajout.css">
     <link rel="stylesheet" href="../../styles/buttons.css">
-    <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
     <link rel="stylesheet" href="../../styles/message.css">
     <script src="../../script/previewImage.js"></script>
 </head>
