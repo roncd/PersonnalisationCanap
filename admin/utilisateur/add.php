@@ -79,7 +79,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link rel="stylesheet" href="../../styles/message.css">
     <link rel="stylesheet" href="../../styles/buttons.css">
     <script type="module" src="../../script/mdp_check.js"></script>
-    <script src="../../script/togglePassword.js"></script>
+    <script type="module" src="../../script/togglePassword.js"></script>
 
 </head>
 

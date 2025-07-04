@@ -19,6 +19,7 @@
         <div class="container">
             <h2>Entrez un nouveau mot de passe</h2>
             <?php
+            session_start();
             require '../../admin/config.php';
             if (!isset($_GET['token'])) {
                 die("<div class='message error'>Lien invalide.</div>");
@@ -39,8 +40,9 @@
 
                 // Vérifier que le mot de passe est différent de l'ancien
                 if (password_verify($new_password, $user['mdp'])) {
-                    echo "<div class='message error'>Le nouveau mot de passe doit être différent de l'ancien.</div>";
-                    header("Location: new_password.php");
+                    $_SESSION['message'] = 'Le nouveau mot de passe doit être différent de l\'ancien.';
+                    $_SESSION['message_type'] = 'error';
+                    header("Location:" . $_SERVER['REQUEST_URI']);
                     exit;
                 }
                 // Validation du nouveau mot de passe
@@ -51,8 +53,9 @@
                     !preg_match('/[0-9]/', $new_password) ||
                     !preg_match('/[^A-Za-z0-9]/', $new_password)
                 ) {
-                    echo "<div class='message error'>Le mot de passe ne respecte pas les critères de sécurité.</div>";
-                    header("Location: new_password.php");
+                    $_SESSION['message'] = 'Le mot de passe ne respecte pas les critères de sécurité.';
+                    $_SESSION['message_type'] = 'error';
+                    header("Location:" . $_SERVER['REQUEST_URI']);
                     exit;
                 }
 
@@ -64,8 +67,9 @@
                 header("refresh:3;url=../index.php");
                 exit;
             }
-
+            require 'message.php';
             ?>
+
 
             <form method="POST" class="form">
                 <div class="form-group">
@@ -100,7 +104,6 @@
                     </div>
                 </div>
                 <span id="match-message" class="error-message">Les mots de passe ne correspondent pas.</span>
-
 
                 <div class="button-section">
                     <p>Revenir sur <span><a href="../index.php" class="link-connect">la page de connexion</a></span></p>
