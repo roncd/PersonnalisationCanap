@@ -33,6 +33,7 @@ $questions = $stmtFaq->fetchAll(PDO::FETCH_ASSOC);
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" type="image/x-icon" href="../../../medias/favicon.png">
   <link rel="stylesheet" href="../../styles/transition.css">
+  <link rel="stylesheet" href="../../styles/buttons.css">
   <script type="module" src="../../script/transition.js"></script>
   <link rel="stylesheet" href="../../styles/categories_faq.css">
   <title>FAQ - <?= htmlspecialchars($categorie['nom']) ?> </title>
@@ -46,7 +47,7 @@ $questions = $stmtFaq->fetchAll(PDO::FETCH_ASSOC);
 
   <main class="faq-page transition-all">
     <div class="faq-page-container">
-        
+    <a href="../pages/faq.php" class="btn-beige retour">Retour</a>
     <h1><?= htmlspecialchars($categorie['nom']) ?></h1>
 <input type="text" id="faq-search" placeholder="Rechercher une question..." class="faq-search">
 

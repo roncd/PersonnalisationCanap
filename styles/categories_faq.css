@@ -64,6 +64,17 @@ body {
   cursor: pointer;
 }
 
+.btn-beige.retour {
+  display: inline-block;
+  margin-top: 50px; /* ajuste la valeur selon ton besoin */
+  margin-bottom: -50px;
+}
+
+h1 {
+    padding-top: 15px!important;
+}
+
+
 .accordeon-item.active {
   border-left: 4px solid #997765;
   padding-left: 16px;

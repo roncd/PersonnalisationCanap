@@ -92,8 +92,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           <!-- Icône d'information avec popup -->
           <button id="info-coussin-btn" title="Information" style="background: none; border: none; cursor: pointer; padding: 0;">
             <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
-              <circle cx="10" cy="10" r="9" stroke="#333" stroke-width="2" fill="#f5f5f5"/>
-              <text x="10" y="15" text-anchor="middle" font-size="13" fill="#333" font-family="Arial" font-weight="bold">i</text>
+              <circle cx="10" cy="10" r="9" stroke="#997765" stroke-width="2" fill="#f5f5f5"/>
+              <text x="10" y="15" text-anchor="middle" font-size="13" fill="#997765" font-family="Arial" font-weight="bold">i</text>
             </svg>
           </button>
         </div>
