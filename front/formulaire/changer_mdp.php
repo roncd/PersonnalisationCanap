@@ -11,9 +11,6 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 $userId = $_SESSION['user_id'];
-$message = $_SESSION['message'] ?? '';
-$messageType = $_SESSION['message_type'] ?? '';
-unset($_SESSION['message'], $_SESSION['message_type']);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Étape 1 : Récupération des champs
@@ -81,7 +78,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link rel="stylesheet" href="../../styles/buttons.css">
     <link rel="stylesheet" href="../../styles/message.css">
     <script type="module" src="../../script/mdp_check.js"></script>
-    <script src="../../script/togglePassword.js"></script>
+    <script type="module" src="../../script/togglePassword.js"></script>
 </head>
 
 <body>
@@ -93,9 +90,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <main class="password-page">
         <div class="container">
             <h2>Changer le mot de passe</h2>
-            <?php if (isset($message)): ?>
-                <div class="message <?= $messageType ?? '' ?>"><?= htmlspecialchars($message) ?></div>
-            <?php endif; ?>
+          <?php require '../../admin/include/message.php'; ?>
             <form method="POST">
                 <label for="ancien">Ancien mot de passe <span class="required">*</span></label>
                 <div class="input-section">

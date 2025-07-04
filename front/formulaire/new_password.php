@@ -8,10 +8,11 @@
   <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
   <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&family=Be+Vietnam+Pro&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../../styles/formulaire.css">
+    <link rel="stylesheet" href="../../styles/message.css">
   <link rel="stylesheet" href="../../styles/modif-pswd.css">
   <link rel="stylesheet" href="../../styles/buttons.css">
   <script type="module" src="../../script/mdp_check.js"></script>
-  <script src="../../script/togglePassword.js"></script>
+  <script type="module" src="../../script/togglePassword.js"></script>
 </head>
 
 <body>
@@ -19,6 +20,7 @@
     <div class="container">
       <h2>Entrez un nouveau mot de passe</h2>
       <?php
+      session_start();
       require '../../admin/config.php';
       if (!isset($_GET['token'])) {
         die("<div class='message error'>Lien invalide.</div>");
@@ -39,8 +41,9 @@
 
         // Vérifier que le mot de passe est différent de l'ancien
         if (password_verify($new_password, $user['mdp'])) {
-          echo "<div class='message error'>Le nouveau mot de passe doit être différent de l'ancien.</div>";
-          header("Location: new_password.php");
+          $_SESSION['message'] = 'Le nouveau mot de passe doit être différent de l\'ancien.';
+          $_SESSION['message_type'] = 'error';
+          header("Location:" . $_SERVER['REQUEST_URI']);
           exit;
         }
         // Validation du nouveau mot de passe
@@ -51,19 +54,22 @@
           !preg_match('/[0-9]/', $new_password) ||
           !preg_match('/[^A-Za-z0-9]/', $new_password)
         ) {
-          echo "<div class='message error'>Le mot de passe ne respecte pas les critères de sécurité.</div>";
-          header("Location: new_password.php");
+          $_SESSION['message'] = 'Le mot de passe ne respecte pas les critères de sécurité.';
+          $_SESSION['message_type'] = 'error';
+          header("Location:" . $_SERVER['REQUEST_URI']);
           exit;
         }
-        
+
         // Hasher le nouveau mot de passe
         $hashed_password = password_hash($new_password, PASSWORD_DEFAULT);
         $stmt = $pdo->prepare("UPDATE client SET mdp = :mdp, reset_token = NULL, reset_expires = NULL WHERE id = :id");
         $stmt->execute(['mdp' => $hashed_password, 'id' => $user['id']]);
-        echo "<div class='message success'>Votre mot de passe a été mis à jour.</div>";
+        $_SESSION['message'] = 'Votre mot de passe a été mis à jour.';
+        $_SESSION['message_type'] = 'success';
         header("refresh:3;url=Connexion.php");
         exit;
       }
+      require '../../admin/include/message.php';
       ?>
       <form method="POST" class="form">
         <div class="form-group">

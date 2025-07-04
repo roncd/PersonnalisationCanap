@@ -10,7 +10,8 @@
     <link rel="stylesheet" href="../styles/buttons.css">
     <link rel="stylesheet" href="../styles/message.css">
     <link rel="stylesheet" href="../styles/admin/ajout.css">
-    <script src="../script/togglePassword.js"></script>
+    <script type="module" src="../script/togglePassword.js"></script>
+    <script type="module" src="../script/warningMajActive.js"></script>
 
 </head>
 
@@ -84,10 +85,10 @@
                                     Afficher
                                 </span>
                             </div>
-                            <div id="caps-lock-warning" style="display:none; color: grey; font-size: 0.95em; margin-top: 4px;">
+                            <div id="caps-lock-warning" style="display:none; font-size: 0.85em; margin-top: 4px;">
                                 ⚠️ Attention : Verr Maj est activé !
                             </div>
-                            <div id="shift-warning" style="display:none; color: grey; font-size: 0.95em; margin-top: 4px;">
+                            <div id="shift-warning" style="display:none; font-size: 0.85em; margin-top: 4px;">
                                 ⚠️ Attention : La touche Maj (Shift) est maintenue !
                             </div>
                         </div>
@@ -106,36 +107,6 @@
         </div>
     </main>
 
-
-    <script>
-        const passwordInput = document.getElementById('mdp');
-        const capsLockWarning = document.getElementById('caps-lock-warning');
-        const shiftWarning = document.getElementById('shift-warning');
-
-        passwordInput.addEventListener('keydown', function(event) {
-            if (event.getModifierState && event.getModifierState('CapsLock')) {
-                capsLockWarning.style.display = 'block';
-            } else {
-                capsLockWarning.style.display = 'none';
-            }
-
-            if (event.shiftKey) {
-                shiftWarning.style.display = 'block';
-            } else {
-                shiftWarning.style.display = 'none';
-            }
-        });
-
-        passwordInput.addEventListener('keyup', function(event) {
-            if (!(event.getModifierState && event.getModifierState('CapsLock'))) {
-                capsLockWarning.style.display = 'none';
-            }
-
-            if (!event.shiftKey) {
-                shiftWarning.style.display = 'none';
-            }
-        });
-    </script>
 </body>
 
 </html>
