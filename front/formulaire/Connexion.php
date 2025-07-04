@@ -2,6 +2,8 @@
 require '../../admin/config.php';
 session_start();
 require '../../admin/include/session_expiration.php';
+
+/* ───────────── Gestion redirection si non connecté ───────────── */
 if (!isset($_SESSION['user_id'])) {
     $currentPage = $_SERVER['HTTP_REFERER'] ?? '/index.php';
     if (!isset($_SESSION['redirect_to']) && strpos($currentPage, 'Connexion.php') === false) {
@@ -9,31 +11,41 @@ if (!isset($_SESSION['user_id'])) {
     }
 }
 
+/* ───────────── Restauration éventuelle d’un add‑to‑cart ───────────── */
 if (isset($_SESSION['pending_add_to_cart']) && isset($_SESSION['user_id'])) {
-    // On restaure seulement si l’utilisateur est maintenant connecté
     $_SESSION['temp_post'] = $_SESSION['pending_add_to_cart'];
     unset($_SESSION['pending_add_to_cart']);
     header('Location: ../pages/nosproduits.php?post_restore=1');
     exit;
 }
 
-// Initialiser la variable du message
+/* ───────────── Initialisation du message ───────────── */
 $message = '';
 
-// Vérifier si le formulaire a été soumis
+/* ───────────── Formulaire soumis ? ───────────── */
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $email = $_POST['adresse'];
+
+    $email    = $_POST['adresse'];
     $password = $_POST['motdepasse'];
 
-    $stmt = $pdo->prepare("SELECT * FROM client WHERE mail = :mail");
+    /* On récupère TOUTES les infos pour pouvoir tester verified */
+    $stmt = $pdo->prepare("SELECT id, prenom, mdp, verified FROM client WHERE mail = :mail LIMIT 1");
     $stmt->execute(['mail' => $email]);
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if ($user) {
-        if (password_verify($password, $user['mdp'])) {
-            $_SESSION['user_id'] = $user['id'];
+
+        /* 1) Compte non vérifié */
+        if (!$user['verified']) {
+            $message = '<p class="error">Compte non vérifié&nbsp;: consulte ton e‑mail de confirmation.</p>';
+
+        /* 2) Mot de passe ok → connexion */
+        } elseif (password_verify($password, $user['mdp'])) {
+
+            $_SESSION['user_id']   = $user['id'];
             $_SESSION['user_name'] = $user['prenom'];
 
+            /* Restaurer éventuel post add‑to‑cart */
             if (isset($_SESSION['pending_add_to_cart'])) {
                 $_SESSION['temp_post'] = $_SESSION['pending_add_to_cart'];
                 unset($_SESSION['pending_add_to_cart']);
@@ -41,6 +53,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 exit;
             }
 
+            /* Redirection vers la page demandée avant login */
             if (!empty($_SESSION['redirect_to'])) {
                 $redirect_to = $_SESSION['redirect_to'];
                 unset($_SESSION['redirect_to']);
@@ -48,23 +61,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 exit;
             }
 
+            /* Sinon page d’accueil */
             header("Location: ../pages/index.php");
             exit;
+
+        /* 3) Mot de passe incorrect */
         } else {
             $message = '<p class="error">Mot de passe incorrect.</p>';
         }
+
     } else {
         $message = '<p class="error">Utilisateur non trouvé.</p>';
     }
 }
 
-// Vérifier les messages dans les paramètres URL
+/* ───────────── Messages GET (création compte, etc.) ───────────── */
 if (isset($_GET['message']) && $_GET['message'] == 'success') {
     $message = '<p class="success">Votre compte a été créé avec succès. Vous pouvez maintenant vous connecter.</p>';
 } elseif (isset($_GET['message']) && $_GET['message'] == 'error') {
     $message = '<p class="error">Une erreur est survenue lors de la création de votre compte. Veuillez réessayer.</p>';
 } elseif (isset($_GET['erreur']) && $_GET['erreur'] == 1) {
-    $message = '<p class="error">Adresse e-mail ou mot de passe incorrect.</p>';
+    $message = '<p class="error">Adresse e‑mail ou mot de passe incorrect.</p>';
 }
 ?>
 
