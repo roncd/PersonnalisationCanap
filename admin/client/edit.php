@@ -37,7 +37,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $prenom = trim($_POST['prenom']);
     $mail = trim($_POST['mail']);
     $tel = trim($_POST['tel']);
-    $mdp = password_hash($_POST['mdp'], PASSWORD_BCRYPT);
     $adresse = trim($_POST['adresse']);
     $info = trim($_POST['info']);
     $codepostal = trim($_POST['codepostal']);
@@ -49,6 +48,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $_SESSION['message'] = 'Tous les champs requis doivent être remplis.';
         $_SESSION['message_type'] = 'error';
     } else {
+        $stmt = $pdo->prepare("SELECT id FROM client WHERE mail = ?");
+        $stmt->execute([$mail]);
+
+        if ($stmt->rowCount() > 0) {
+            $_SESSION['message'] = 'Cet email est déjà utilisé.';
+            $_SESSION['message_type'] = 'error';
+            header("Location:" . $_SERVER['REQUEST_URI']);
+            exit();
+        }
         // Mettre à jour du client dans la base de données
         $stmt = $pdo->prepare("UPDATE client SET nom = ?, prenom = ?, mail = ?, tel = ?, adresse = ?, info = ?, codepostal = ?, ville = ?, date_naissance = ?,  civilite = ? WHERE id = ?");
         if ($stmt->execute([$nom, $prenom, $mail, $tel, $adresse, $info, $codepostal, $ville, $date, $civilite, $id])) {
@@ -135,8 +143,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <label for="info">Info suplémentaire</label>
                             <input type="text" id="info" class="input-field" name="info" value="<?php echo htmlspecialchars($client['info']); ?>">
                         </div>
-                        </div>
-                        <div class="form-row">
+                    </div>
+                    <div class="form-row">
                         <div class="form-group">
                             <label for="codepostal">Code postal <span class="required">*</span></label>
                             <input type="codepostal" id="codepostal" class="input-field" name="codepostal" value="<?php echo htmlspecialchars($client['codepostal']); ?>" required>
@@ -145,8 +153,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <label for="ville">Ville <span class="required">*</span></label>
                             <input type="ville" id="ville" class="input-field" name="ville" value="<?php echo htmlspecialchars($client['ville']); ?>" required>
                         </div>
-                        </div>
-                        <div class="form-row">
+                    </div>
+                    <div class="form-row">
                         <div class="form-group">
                             <label for="date">Date de naissance </label>
                             <input type="date" id="date" class="input-field" name="date" value="<?php echo htmlspecialchars($client['date_naissance']); ?>">
@@ -155,7 +163,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <div class="button-section">
                         <div class="buttons">
                             <button type="button" id="btn-retour" class="btn-beige" onclick="history.go(-1)">Retour</button>
-                            <input type="submit"  class="btn-noir" value="Mettre à jour"></input>
+                            <input type="submit" class="btn-noir" value="Mettre à jour"></input>
                         </div>
                     </div>
                 </form>

@@ -18,11 +18,34 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $profil = trim($_POST['profil']);
     $tel = trim($_POST['tel']);
 
+    $stmt = $pdo->prepare("SELECT id FROM utilisateur WHERE mail = ?");
+    $stmt->execute([$email]);
+
+    if ($stmt->rowCount() > 0) {
+        $_SESSION['message'] = 'Cet email est déjà utilisé.';
+        $_SESSION['message_type'] = 'error';
+        header("Location: add.php");
+        exit();
+    }
 
     // Validation des champs obligatoires
     if (empty($nom) || empty($prenom) || empty($email) || empty($mdp)) {
         $_SESSION['message'] = 'Tous les champs sont requis !';
         $_SESSION['message_type'] = 'error';
+    }
+    $plainPassword = $_POST['mdp'];
+
+    if (
+        strlen($plainPassword) < 8 ||
+        !preg_match('/[A-Z]/', $plainPassword) ||
+        !preg_match('/[a-z]/', $plainPassword) ||
+        !preg_match('/[0-9]/', $plainPassword) ||
+        !preg_match('/[^A-Za-z0-9]/', $plainPassword)
+    ) {
+        $_SESSION['message'] = 'Le mot de passe ne respecte pas les critères de sécurité.';
+        $_SESSION['message_type'] = 'error';
+        header("Location: add.php");
+        exit();
     }
 
     // Tentative d'insertion dans la base de données
@@ -55,6 +78,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link rel="stylesheet" href="../../styles/admin/ajout.css">
     <link rel="stylesheet" href="../../styles/message.css">
     <link rel="stylesheet" href="../../styles/buttons.css">
+    <script type="module" src="../../script/mdp_check.js"></script>
+    <script src="../../script/togglePassword.js"></script>
+
 </head>
 
 <body>
@@ -72,7 +98,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <div class="form-group">
                             <label for="civilite">Titre de civilité</label>
                             <select class="input-field" id="civilite" name="civilite">
-                                <option value="">-- Sélectionnez une option --</option>
+                                <option value="Pas précisé">-- Sélectionnez une option --</option>
                                 <option value="Mme.">Madame</option>
                                 <option value="M.">Monsieur</option>
                                 <option value="Pas précisé">Ne souhaite pas préciser</option>
@@ -95,19 +121,53 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <input type="email" id="email" name="email" class="input-field" required>
                         </div>
                         <div class="form-group">
-                            <label for="mdp">Mot de passe <span class="required">*</span></label>
+                            <label for="tel">Téléphone</label>
+                            <input type="phone" id="tel" name="tel" class="input-field">
+                        </div>
+                    </div>
+
+                    <!-- Mot de passe -->
+                    <div class="form-group">
+                        <label for="mdp">Mot de passe <span class="required">*</span></label>
+                        <div class="input-section">
                             <input type="password" id="mdp" name="mdp" class="input-field" required>
+                            <span class="toggle-password-text"
+                                style="cursor: pointer; color: #666; user-select: none; position: absolute; right: 10px; top: 50%; transform: translateY(-50%); font-weight: 100;">
+                                Afficher
+                            </span>
+                        </div>
+                        <p id="password-strength-text" style="font-size: 0.9em; margin-top: 5px;"></p>
+
+                        <!-- Checklist dynamique -->
+                        <ul class="password-requirements">
+                            <li id="check-length"><span class="check-icon"></span> Minimum 8 caractères</li>
+                            <li id="check-uppercase"><span class="check-icon"></span> Une lettre majuscule</li>
+                            <li id="check-lowercase"><span class="check-icon"></span> Une lettre minuscule</li>
+                            <li id="check-number"><span class="check-icon"></span> Un chiffre</li>
+                            <li id="check-special"><span class="check-icon"></span> Un caractère spécial (!@#$...)</li>
+                        </ul>
+                    </div>
+
+                    <!-- Confirmation -->
+                    <div class="form-row">
+                        <div class="form-group password-confirm-wrapper">
+                            <label for="confirm-password">Confirmer le mot de passe <span class="required">*</span></label>
+                            <div class="input-section">
+                                <input class="input-field" type="password" id="confirm-password" name="confirm-password" required>
+                                <span class="toggle-password-text"
+                                    style="cursor: pointer; color: #666; user-select: none; position: absolute; right: 10px; top: 50%; transform: translateY(-50%); font-weight: 100;">
+                                    Afficher
+                                </span>
+                            </div>
+
+                            <span id="match-message" class="error-message">Les mots de passe ne correspondent pas.</span>
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="tel">Téléphone</label>
-                            <input type="phone" id="tel" name="tel" class="input-field">
-                        </div>
-                        <div class="form-group">
                             <label for="profil">Profil</label>
                             <select class="input-field" id="profil" name="profil">
-                                <option value="">-- Sélectionnez une option --</option>
+                                <option value="Administrateur">-- Sélectionnez une option --</option>
                                 <option value="Administrateur">Administrateur</option>
                                 <option value="Commercial">Commercial</option>
                             </select>

@@ -32,9 +32,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (!in_array($img['type'], $allowedTypes)) {
             $_SESSION['message'] = 'Seuls les fichiers JPEG, PNG et GIF sont autorisés.';
             $_SESSION['message_type'] = 'error';
-
         } else {
+            require '../include/cleanFileName.php';
             $fileName = basename($img['name']);
+            $fileName = cleanFileName($fileName);
             $uploadPath = $uploadDir . $fileName;
 
             if (move_uploaded_file($img['tmp_name'], $uploadPath)) {
@@ -49,7 +50,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 } catch (Exception $e) {
                     $_SESSION['message'] = 'Erreur lors de l\'ajout du produit : ' . $e->getMessage();
                     $_SESSION['message_type'] = 'error';
-
                 }
             } else {
                 $_SESSION['message'] = 'Erreur lors de l\'upload de l\'image.';

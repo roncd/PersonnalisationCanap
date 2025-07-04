@@ -29,6 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['message_type'] = 'error';
         } else {
             $fileName = basename($img['name']);
+                $fileName = cleanFileName($fileName);
             $uploadPath = $uploadDir . $fileName;
 
             if (move_uploaded_file($img['tmp_name'], $uploadPath)) {

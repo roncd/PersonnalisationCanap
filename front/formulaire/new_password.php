@@ -2,76 +2,113 @@
 <html lang="fr">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nouveau mot de passe</title>
-    <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
-    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&family=Be+Vietnam+Pro&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../../styles/formulaire.css">
-    <link rel="stylesheet" href="../../styles/modif-pswd.css">
-    <link rel="stylesheet" href="../../styles/buttons.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nouveau mot de passe</title>
+  <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&family=Be+Vietnam+Pro&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../styles/formulaire.css">
+  <link rel="stylesheet" href="../../styles/modif-pswd.css">
+  <link rel="stylesheet" href="../../styles/buttons.css">
+  <script type="module" src="../../script/mdp_check.js"></script>
+  <script src="../../script/togglePassword.js"></script>
 </head>
 
 <body>
-    <main class="connexion">
-        <div class="container">
-            <h2>Entrez un nouveau mot de passe</h2>
-            <?php
-            require '../../admin/config.php';
-            if (!isset($_GET['token'])) {
-                die("<div class='message error'>Lien invalide.</div>");
-            }
+  <main class="connexion">
+    <div class="container">
+      <h2>Entrez un nouveau mot de passe</h2>
+      <?php
+      require '../../admin/config.php';
+      if (!isset($_GET['token'])) {
+        die("<div class='message error'>Lien invalide.</div>");
+      }
 
-            $token = $_GET['token'];
-            $stmt = $pdo->prepare("SELECT * FROM client WHERE reset_token = :token AND reset_expires > NOW()");
-            $stmt->execute(['token' => $token]);
-            $user = $stmt->fetch(PDO::FETCH_ASSOC);
+      $token = $_GET['token'];
+      $stmt = $pdo->prepare("SELECT * FROM client WHERE reset_token = :token AND reset_expires > NOW()");
+      $stmt->execute(['token' => $token]);
+      $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-            if (!$user) {
-                die("<div class='message error'>Lien invalide ou expiré.</div>");
-            }
+      if (!$user) {
+        die("<div class='message error'>Lien invalide ou expiré.</div>");
+      }
 
-            if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-                $new_password = $_POST['new_password'];
+      if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $new_password = $_POST['mdp'];
+        $confirmer = $_POST['confirm-password'] ?? '';
 
-                // Vérifier que le mot de passe est différent de l'ancien
-                if (password_verify($new_password, $user['mdp'])) {
-                    echo "<div class='message error'>Le nouveau mot de passe doit être différent de l'ancien.</div>";
-                } else {
-                    // Hasher le nouveau mot de passe
-                    $hashed_password = password_hash($new_password, PASSWORD_DEFAULT);
-                    $stmt = $pdo->prepare("UPDATE client SET mdp = :mdp, reset_token = NULL, reset_expires = NULL WHERE id = :id");
-                    $stmt->execute(['mdp' => $hashed_password, 'id' => $user['id']]);
-                    echo "<div class='message success'>Votre mot de passe a été mis à jour.</div>";
-                    header("refresh:3;url=Connexion.php");
-                    exit;
-                }
-            }
-            ?>
-<form method="POST" class="form">
-  <div class="form-group">
-    <label for="new_password">Nouveau mot de passe <span class="required">*</span></label>
-    
-    <div class="input-section" style="position: relative;">
-      <input type="password" id="new_password" name="new_password" class="input-field" required style="padding-right: 60px;">
-      <span class="toggle-password-text" 
-            style="cursor: pointer; color: #666; user-select: none; position: absolute; right: 10px; top: 50%; 
-                   transform: translateY(-50%); font-weight: 100;">
-        Afficher
-      </span>
-    </div>
-  </div>
-  <div class="button-section">
-    <p>Revenir sur <span><a href="../pages/index.php" class="link-connect">Deco du monde</a></span></p>
-    <div class="buttons">
-      <button type="submit" class="btn-noir">Mettre à jour</button>
-    </div>
-  </div>
-</form>
-
+        // Vérifier que le mot de passe est différent de l'ancien
+        if (password_verify($new_password, $user['mdp'])) {
+          echo "<div class='message error'>Le nouveau mot de passe doit être différent de l'ancien.</div>";
+          header("Location: new_password.php");
+          exit;
+        }
+        // Validation du nouveau mot de passe
+        if (
+          strlen($new_password) < 8 ||
+          !preg_match('/[A-Z]/', $new_password) ||
+          !preg_match('/[a-z]/', $new_password) ||
+          !preg_match('/[0-9]/', $new_password) ||
+          !preg_match('/[^A-Za-z0-9]/', $new_password)
+        ) {
+          echo "<div class='message error'>Le mot de passe ne respecte pas les critères de sécurité.</div>";
+          header("Location: new_password.php");
+          exit;
+        }
+        
+        // Hasher le nouveau mot de passe
+        $hashed_password = password_hash($new_password, PASSWORD_DEFAULT);
+        $stmt = $pdo->prepare("UPDATE client SET mdp = :mdp, reset_token = NULL, reset_expires = NULL WHERE id = :id");
+        $stmt->execute(['mdp' => $hashed_password, 'id' => $user['id']]);
+        echo "<div class='message success'>Votre mot de passe a été mis à jour.</div>";
+        header("refresh:3;url=Connexion.php");
+        exit;
+      }
+      ?>
+      <form method="POST" class="form">
+        <div class="form-group">
+          <label for="mdp">Nouveau mot de passe <span class="required">*</span></label>
+          <div class="input-section">
+            <input type="password" id="mdp" name="mdp" class="input-field" required>
+            <span class="toggle-password-text"
+              style="cursor: pointer; color: #666; user-select: none; position: absolute; right: 10px; top: 50%; transform: translateY(-50%); font-weight: 100;">
+              Afficher
+            </span>
+          </div>
         </div>
-    </main>
-    <script src="../../script/togglePassword.js"></script>
+        <p id="password-strength-text" style="font-size: 0.9em; margin-top: 5px; text-align: left;"></p>
+
+        <!-- Checklist dynamique -->
+        <ul class="password-requirements">
+          <li id="check-length"><span class="check-icon"></span> Minimum 8 caractères</li>
+          <li id="check-uppercase"><span class="check-icon"></span> Une lettre majuscule</li>
+          <li id="check-lowercase"><span class="check-icon"></span> Une lettre minuscule</li>
+          <li id="check-number"><span class="check-icon"></span> Un chiffre</li>
+          <li id="check-special"><span class="check-icon"></span> Un caractère spécial (!@#$...)</li>
+        </ul>
+
+        <div class="form-group password-confirm-wrapper">
+          <label for="confirm-password">Confirmer le mot de passe <span class="required">*</span></label>
+          <div class="input-section">
+            <input class="input-field" type="password" id="confirm-password" name="confirm-password" required>
+            <span class="toggle-password-text"
+              style="cursor: pointer; color: #666; user-select: none; position: absolute; right: 10px; top: 50%; transform: translateY(-50%); font-weight: 100;">
+              Afficher
+            </span>
+          </div>
+        </div>
+        <span id="match-message" class="error-message">Les mots de passe ne correspondent pas.</span>
+
+        <div class="button-section">
+          <p>Revenir sur <span><a href="../pages/index.php" class="link-connect">Deco du monde</a></span></p>
+          <div class="buttons">
+            <button type="submit" class="btn-noir">Mettre à jour</button>
+          </div>
+        </div>
+      </form>
+
+    </div>
+  </main>
 </body>
 
 </html>

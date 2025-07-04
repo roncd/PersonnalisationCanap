@@ -35,7 +35,7 @@ body {
 .password-page form {
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 5px;
 }
 
 .password-page label {
@@ -46,13 +46,20 @@ body {
 .password-page input[type="password"],
 .password-page input[type="text"] {
     padding: 12px;
-    background-color: rgba(227, 209, 200, 0.71);
-    border: none;
-    border-radius: 10px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
     font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: rgba(227, 209, 200, 0.71);
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    width: 100%;
 }
 
+.password-page input:focus {
+    background-color: rgba(227, 209, 200, 0.85);
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    outline: none;
+}
 
 .password-page button {
     margin-top: 1rem;
@@ -60,4 +67,99 @@ body {
 
 .password-page .required {
     color: red;
+}
+
+/* Vérification dynamique des critères de mot de passe */
+.password-requirements {
+    list-style: none;
+    padding-left: 0;
+    margin-top: 10px;
+    font-size: 0.95rem;
+    display: none;
+    /* caché par défaut */
+}
+
+.password-requirements.show {
+    display: block;
+    /* affiché quand le champ est actif */
+}
+
+.password-requirements li {
+    display: flex;
+    align-items: center;
+    margin-bottom: 6px;
+    color: #777;
+}
+
+.check-icon {
+    width: 16px;
+    height: 16px;
+    border: 2px solid #ccc;
+    border-radius: 50%;
+    margin-right: 10px;
+    position: relative;
+    display: inline-block;
+}
+
+.valid .check-icon {
+    background-color: #28a745;
+    border-color: #28a745;
+}
+
+.valid .check-icon::after {
+   content: "\2713";
+  color: white;
+  font-weight: bold;
+  font-size: 11px;
+  position: absolute;
+  top: 1px;
+  left: 4px;
+}
+
+.input-weak {
+  border: 1px solid red;
+}
+.input-medium {
+  border: 1px solid orange;
+}
+.input-strong {
+  border: 1px solid green;
+}
+
+
+/* Wrapper en position relative */
+.input-section {
+    position: relative;
+    width: 100%;
+}
+
+/* Le champ de saisie : on décale un peu le texte à droite */
+.input-section .input-field {
+    width: 100%;
+    padding-right: 40px;
+    box-sizing: border-box;
+}
+
+/* Champ de confirmation de mot de passe */
+
+
+/* Style par défaut */
+.password-confirm-wrapper {
+  position: relative;
+}
+
+#match-message {
+  font-size: 0.9em;
+  margin-top: 5px;
+  color: red;
+  display: none;
+}
+
+/* Si les mots de passe ne correspondent pas */
+.input-error {
+  border: 1px solid red;
+}
+
+.input-valid {
+  border: 1px solid green;
 }

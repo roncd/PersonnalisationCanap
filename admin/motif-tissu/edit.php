@@ -59,7 +59,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 if (!is_dir($uploadDir)) {
                     mkdir($uploadDir, 0777, true);
                 }
+                require '../include/cleanFileName.php';
                 $fileName = basename($img['name']);
+                $fileName = cleanFileName($fileName);
                 $uploadPath = $uploadDir . $fileName;
                 if (!move_uploaded_file($img['tmp_name'], $uploadPath)) {
                     $_SESSION['message'] = 'Échec du téléchargement de l\'image.';

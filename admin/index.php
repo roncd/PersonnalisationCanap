@@ -10,6 +10,8 @@
     <link rel="stylesheet" href="../styles/buttons.css">
     <link rel="stylesheet" href="../styles/message.css">
     <link rel="stylesheet" href="../styles/admin/ajout.css">
+    <script src="../script/togglePassword.js"></script>
+
 </head>
 
 <body>
@@ -17,53 +19,53 @@
     <main class="connexion">
         <div class="container">
             <h2>Connexion</h2>
-          <?php
-require 'config.php';
-session_start();
+            <?php
+            require 'config.php';
+            session_start();
 
-try {
-    $bddlink = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $username, $password);
-    $bddlink->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-} catch (PDOException $e) {
-    die("Erreur de connexion à la base de données : " . $e->getMessage());
-}
-
-$error_message = "";
-$old_login = "";
-
-if (isset($_POST['connecter'])) {
-    if (!empty($_POST['login']) && !empty($_POST['mdp'])) {
-        $login = trim($_POST['login']);
-        $mdp = trim($_POST['mdp']);
-        $old_login = htmlspecialchars($login); // on garde le champ email pour le réafficher
-
-        $requete = $bddlink->prepare('SELECT * FROM utilisateur WHERE mail = ?');
-        $requete->execute([$login]);
-
-        if ($requete->rowCount() > 0) {
-            $utilisateur = $requete->fetch();
-            if (password_verify($mdp, $utilisateur['mdp'])) {
-                $_SESSION['mail'] = $utilisateur['mail'];
-                $_SESSION['id'] = $utilisateur['id'];
-                header('Location: pages/index.php');
-                exit();
-            } else {
-                $error_message = "Le mot de passe est incorrect.";
+            try {
+                $bddlink = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $username, $password);
+                $bddlink->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            } catch (PDOException $e) {
+                die("Erreur de connexion à la base de données : " . $e->getMessage());
             }
-        } else {
-            $error_message = "L'adresse e-mail est incorrecte.";
-        }
-    } else {
-        $error_message = "Veuillez compléter les champs vide.";
-    }
-}
 
-if (!empty($error_message)) {
-    echo "<div class='message error'>" . htmlspecialchars($error_message) . "</div>";
-}
-?>
+            $error_message = "";
+            $old_login = "";
 
-        
+            if (isset($_POST['connecter'])) {
+                if (!empty($_POST['login']) && !empty($_POST['mdp'])) {
+                    $login = trim($_POST['login']);
+                    $mdp = trim($_POST['mdp']);
+                    $old_login = htmlspecialchars($login); // on garde le champ email pour le réafficher
+
+                    $requete = $bddlink->prepare('SELECT * FROM utilisateur WHERE mail = ?');
+                    $requete->execute([$login]);
+
+                    if ($requete->rowCount() > 0) {
+                        $utilisateur = $requete->fetch();
+                        if (password_verify($mdp, $utilisateur['mdp'])) {
+                            $_SESSION['mail'] = $utilisateur['mail'];
+                            $_SESSION['id'] = $utilisateur['id'];
+                            header('Location: pages/index.php');
+                            exit();
+                        } else {
+                            $error_message = "Le mot de passe est incorrect.";
+                        }
+                    } else {
+                        $error_message = "L'adresse e-mail est incorrecte.";
+                    }
+                } else {
+                    $error_message = "Veuillez compléter les champs vide.";
+                }
+            }
+
+            if (!empty($error_message)) {
+                echo "<div class='message error'>" . htmlspecialchars($error_message) . "</div>";
+            }
+            ?>
+
+
             <div class="form">
                 <form action="" method="POST" class="formulaire-connexion">
                     <div class="form-row">
@@ -75,13 +77,19 @@ if (!empty($error_message)) {
                     <div class="form-row">
                         <div class="form-group">
                             <label for="mdp">Mot de passe</label>
-                            <input type="password" id="mdp" name="mdp" class="input-field" require>
+                            <div class="input-section">
+                                <input type="password" id="mdp" name="mdp" class="input-field" required>
+                                <span class="toggle-password-text"
+                                    style="cursor: pointer; color: #666; user-select: none; position: absolute; right: 10px; top: 50%; transform: translateY(-50%); font-weight: 100;">
+                                    Afficher
+                                </span>
+                            </div>
                             <div id="caps-lock-warning" style="display:none; color: grey; font-size: 0.95em; margin-top: 4px;">
-                            ⚠️ Attention : Verr Maj est activé !
+                                ⚠️ Attention : Verr Maj est activé !
                             </div>
                             <div id="shift-warning" style="display:none; color: grey; font-size: 0.95em; margin-top: 4px;">
-                            ⚠️ Attention : La touche Maj (Shift) est maintenue !
-                           </div>
+                                ⚠️ Attention : La touche Maj (Shift) est maintenue !
+                            </div>
                         </div>
                     </div>
                     <div class="footer">
@@ -98,36 +106,36 @@ if (!empty($error_message)) {
         </div>
     </main>
 
-    
-<script>
-    const passwordInput = document.getElementById('mdp');
-    const capsLockWarning = document.getElementById('caps-lock-warning');
-    const shiftWarning = document.getElementById('shift-warning');
 
-    passwordInput.addEventListener('keydown', function (event) {
-        if (event.getModifierState && event.getModifierState('CapsLock')) {
-            capsLockWarning.style.display = 'block';
-        } else {
-            capsLockWarning.style.display = 'none';
-        }
+    <script>
+        const passwordInput = document.getElementById('mdp');
+        const capsLockWarning = document.getElementById('caps-lock-warning');
+        const shiftWarning = document.getElementById('shift-warning');
 
-        if (event.shiftKey) {
-            shiftWarning.style.display = 'block';
-        } else {
-            shiftWarning.style.display = 'none';
-        }
-    });
+        passwordInput.addEventListener('keydown', function(event) {
+            if (event.getModifierState && event.getModifierState('CapsLock')) {
+                capsLockWarning.style.display = 'block';
+            } else {
+                capsLockWarning.style.display = 'none';
+            }
 
-    passwordInput.addEventListener('keyup', function (event) {
-        if (!(event.getModifierState && event.getModifierState('CapsLock'))) {
-            capsLockWarning.style.display = 'none';
-        }
+            if (event.shiftKey) {
+                shiftWarning.style.display = 'block';
+            } else {
+                shiftWarning.style.display = 'none';
+            }
+        });
 
-        if (!event.shiftKey) {
-            shiftWarning.style.display = 'none';
-        }
-    });
-</script>
+        passwordInput.addEventListener('keyup', function(event) {
+            if (!(event.getModifierState && event.getModifierState('CapsLock'))) {
+                capsLockWarning.style.display = 'none';
+            }
+
+            if (!event.shiftKey) {
+                shiftWarning.style.display = 'none';
+            }
+        });
+    </script>
 </body>
 
 </html>

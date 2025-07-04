@@ -31,7 +31,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     // Garder le nom original de l'image
+    require '../include/cleanFileName.php';
     $fileName = basename($img['name']);
+    $fileName = cleanFileName($fileName);
     $uploadPath = $uploadDir . $fileName;
 
     if (move_uploaded_file($img['tmp_name'], $uploadPath)) {
@@ -90,7 +92,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <div class="form-group">
                             <label for="nb_banquette">Nombre de banquettes <span class="required">*</span></label>
                             <select id="nb_banquette" name="nb_banquette" class="input-field" required>
-                                <option value="" disabled selected >-- Sélectionnez une option --</option>
+                                <option value="" disabled selected>-- Sélectionnez une option --</option>
                                 <option value="1">1</option>
                                 <option value="2">2</option>
                                 <option value="3">3</option>
