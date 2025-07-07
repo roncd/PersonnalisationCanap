@@ -34,7 +34,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     // Nom du fichier
+    require '../include/cleanFileName.php';
     $fileName = basename($img['name']);
+    $fileName = cleanFileName($fileName);
     $uploadPath = $uploadDir . $fileName;
 
     // Upload de l'image
@@ -107,7 +109,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <div class="button-section">
                         <div class="buttons">
                             <button type="button" id="btn-retour" class="btn-beige" onclick="history.go(-1)">Retour</button>
-                            <input type="submit"  class="btn-noir" value="Ajouter"></input>
+                            <input type="submit" class="btn-noir" value="Ajouter"></input>
                         </div>
                     </div>
 

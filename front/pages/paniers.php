@@ -35,9 +35,8 @@ $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
 $stmt->execute();
 $commandes = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-$stmtCount = $pdo->prepare("SELECT COUNT(*) FROM panier_final WHERE statut = :statut");
-$stmtCount->bindValue(':statut', $statut, PDO::PARAM_STR);
-$stmtCount->execute();
+$stmtCount = $pdo->prepare("SELECT COUNT(*) FROM panier_final WHERE id_client = ? AND statut = ?");
+$stmtCount->execute([$userId, $statut]);
 $totalCommandes = $stmtCount->fetchColumn();
 
 $totalPages = ceil($totalCommandes / $limit);

@@ -24,9 +24,8 @@ $message = '';
 
 /* ───────────── Formulaire soumis ? ───────────── */
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
-    $email    = $_POST['adresse'];
-    $password = $_POST['motdepasse'];
+    $email = $_POST['adresse'];
+    $password = $_POST['mdp'];
 
     /* On récupère TOUTES les infos pour pouvoir tester verified */
     $stmt = $pdo->prepare("SELECT id, prenom, mdp, verified FROM client WHERE mail = :mail LIMIT 1");
@@ -96,10 +95,11 @@ if (isset($_GET['message']) && $_GET['message'] == 'success') {
     <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&family=Be+Vietnam+Pro&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../../styles/formulaire.css">
     <link rel="stylesheet" href="../../styles/transition.css">
-    <script type="module" src="../../script/transition.js"></script>
     <link rel="stylesheet" href="../../styles/buttons.css">
     <link rel="stylesheet" href="../../styles/message.css">
-
+    <script src="../../script/toucheMaj.js"></script>
+    <script src="../../script/togglePassword.js"></script>
+    <script type="module" src="../../script/transition.js"></script>
 </head>
 
 <body>
@@ -126,13 +126,13 @@ if (isset($_GET['message']) && $_GET['message'] == 'success') {
 
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="motdepasse">Mot de passe</label>
+                            <label for="mdp">Mot de passe</label>
                             <div class="input-section">
-                                <input type="password" id="motdepasse" name="motdepasse" class="input-field" required>
-                        <span class="toggle-password-text" 
-                            style="cursor: pointer; color: #666; user-select: none; position: absolute; right: 10px; top: 50%; transform: translateY(-50%); font-weight: 100;">
-                            Afficher
-                        </span>
+                                <input type="password" id="mdp" name="mdp" class="input-field" required>
+                                <span class="toggle-password-text"
+                                    style="cursor: pointer; color: #666; user-select: none; position: absolute; right: 10px; top: 50%; transform: translateY(-50%); font-weight: 100;">
+                                    Afficher
+                                </span>
 
                             </div>
                             <div id="caps-lock-warning" style="display:none; color: gris; font-size: 0.95em; margin-top: 4px;">
@@ -168,8 +168,7 @@ if (isset($_GET['message']) && $_GET['message'] == 'success') {
     </main>
     <?php require_once '../../squelette/footer.php' ?>
 
-    <script src="../../script/toucheMaj.js"></script>
-    <script src="../../script/togglePassword.js"></script>
+
 </body>
 
 

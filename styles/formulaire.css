@@ -63,6 +63,18 @@ label {
     transition: all 0.3s ease;
 }
 
+.form-group select {
+    -webkit-appearance: none;
+    /* Supprime l'apparence par défaut */
+    appearance: none;
+    -moz-appearance: none;
+    cursor: pointer;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='black'><path d='M5 7l5 5 5-5H5z'/></svg>");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 15px;
+}
+
 .input-field:focus {
     background-color: rgba(227, 209, 200, 0.85);
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
@@ -200,57 +212,61 @@ label {
 
 /* Vérification dynamique des critères de mot de passe */
 .password-requirements {
-  list-style: none;
-  padding-left: 0;
-  margin-top: 10px;
-  font-size: 0.95rem;
-  display: none; /* caché par défaut */
+    list-style: none;
+    padding-left: 0;
+    margin-top: 10px;
+    font-size: 0.95rem;
+    display: none;
+    /* caché par défaut */
 }
 
 .password-requirements.show {
-  display: block; /* affiché quand le champ est actif */
+    display: block;
+    /* affiché quand le champ est actif */
 }
 
 .password-requirements li {
-  display: flex;
-  align-items: center;
-  margin-bottom: 6px;
-  color: #777;
+    display: flex;
+    align-items: center;
+    margin-bottom: 6px;
+    color: #777;
 }
 
 .check-icon {
-  width: 16px;
-  height: 16px;
-  border: 2px solid #ccc;
-  border-radius: 50%;
-  margin-right: 10px;
-  position: relative;
-  display: inline-block;
+    width: 16px;
+    height: 16px;
+    border: 2px solid #ccc;
+    border-radius: 50%;
+    margin-right: 10px;
+    position: relative;
+    display: inline-block;
 }
 
 .valid .check-icon {
-  background-color: #28a745;
-  border-color: #28a745;
+    background-color: #28a745;
+    border-color: #28a745;
 }
 
 .valid .check-icon::after {
-  content: "✓";
-  color: white;
-  font-weight: bold;
-  font-size: 11px;
-  position: absolute;
-  top: 1px;
-  left: 4px;
+    content: "✓";
+    color: white;
+    font-weight: bold;
+    font-size: 11px;
+    position: absolute;
+    top: 1px;
+    left: 4px;
 }
 
 .input-weak {
-  border: 1px solid red;
+    border: 1px solid red;
 }
+
 .input-medium {
-  border: 1px solid orange;
+    border: 1px solid orange;
 }
+
 .input-strong {
-  border: 1px solid green;
+    border: 1px solid green;
 }
 
 
@@ -259,53 +275,57 @@ label {
 
 /* Style par défaut */
 .password-confirm-wrapper {
-  position: relative;
+    position: relative;
 }
 
 #match-message {
-  font-size: 0.9em;
-  margin-top: 5px;
-  color: red;
-  display: none;
+    font-size: 0.9em;
+    margin-top: 5px;
+    color: red;
+    display: none;
 }
 
 /* Si les mots de passe ne correspondent pas */
 .input-error {
-  border: 1px solid red;
+    border: 1px solid red;
 }
 
 .input-valid {
-  border: 1px solid green;
+    border: 1px solid green;
 }
 
 .image-preview {
-  margin-top: 10px;
-  max-width: 200px;
-  max-height: 200px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  overflow: hidden;
+    margin-top: 10px;
+    max-width: 200px;
+    max-height: 200px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    overflow: hidden;
 }
 
 .image-preview img {
-  width: 100%;
-  height: auto;
-  display: block;
-  object-fit: contain;
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: contain;
 }
 
 .dropzone {
-  border: 2px dashed #997765; /* même couleur que .footer span */
-  border-radius: 8px;
-  padding: 15px;
-  background-color: rgba(227, 209, 200, 0.71); /* Même que .input-field */
-  font-family: 'Be Vietnam Pro', sans-serif;
-  transition: background-color 0.3s ease;
+    border: 2px dashed #997765;
+    border-radius: 8px;
+    background-color: rgba(227, 209, 200, 0.71);
+    font-family: 'Be Vietnam Pro', sans-serif;
+    transition: background-color 0.3s ease;
+    padding: 20px;
+    text-align: center;
+    cursor: pointer;
+    margin-top: 10px;
 }
 
 
 .dropzone.dragover {
-  background-color: rgba(227, 209, 200, 0.85); /* même hover que .input-field:focus */
+    background-color: rgba(227, 209, 200, 0.85);
+    /* même hover que .input-field:focus */
 }
 
 
@@ -315,35 +335,35 @@ label {
 }
 
 #file-list li {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 8px 12px;
-  background: #f8bbd0; /* rose moyen pour les fichiers */
-  margin-bottom: 6px;
-  border-radius: 6px;
-  font-family: 'Be Vietnam Pro', sans-serif;
-  font-size: 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 5px 0;
+    padding: 5px 10px;
+    background: #c8f8bb;
+    border-radius: 6px;
+    font-family: 'Be Vietnam Pro', sans-serif;
+    font-size: 14px;
 }
 
 #file-list li::before {
-  content: "📎";
-  margin-right: 8px;
+    content: "📎";
+    margin-right: 8px;
 }
 
 
 #file-list li span {
-  flex-grow: 1;
-  overflow-wrap: anywhere;
+    flex-grow: 1;
+    overflow-wrap: anywhere;
 }
 
 #file-list li button {
-  background: none;
-  border: none;
-  color: #880e4f; /* rouge foncé */
-  font-size: 18px;
-  font-weight: bold;
-  cursor: pointer;
+    background: none;
+    border: none;
+    color: #42880e;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
 }
 
 .space {
@@ -475,7 +495,7 @@ label {
 
 @media (max-width: 1110px) {
 
-     .container {
+    .container {
         flex-direction: column;
         margin: 20px;
         gap: 30px;
@@ -519,8 +539,8 @@ label {
         width: 100%;
         max-width: 200px;
     }
-    
-  .hide-on-small {
-    display: none !important;
-  }
+
+    .hide-on-small {
+        display: none !important;
+    }
 }

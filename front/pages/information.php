@@ -51,6 +51,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $_SESSION['message']      = 'Tous les champs requis doivent être remplis.';
         $_SESSION['message_type'] = 'error';
     } else {
+        $stmt = $pdo->prepare("SELECT id FROM client WHERE mail = ?");
+        $stmt->execute([$mail]);
+
+        if ($stmt->rowCount() > 0) {
+            $_SESSION['message'] = 'Cet email est déjà utilisé.';
+            $_SESSION['message_type'] = 'error';
+            header("Location: information.php");
+            exit();
+        }
+
         // Mettre à jour le client dans la base de données
         $stmt = $pdo->prepare("
             UPDATE client 

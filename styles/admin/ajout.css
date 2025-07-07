@@ -107,6 +107,20 @@ select.input-field {
     outline: none;
 }
 
+/* Wrapper en position relative */
+.input-section {
+    position: relative;
+    width: 100%;
+}
+
+/* Le champ de saisie : on décale un peu le texte à droite */
+.input-section .input-field {
+    width: 100%;
+    padding-right: 40px;
+    box-sizing: border-box;
+}
+
+
 .preview-img {
     border-radius: 8px;
     max-width: 100%;
@@ -198,16 +212,6 @@ select.input-field {
 }
 .input-strong {
   border: 1px solid green;
-    content: "✓";
-    color: white;
-    font-weight: bold;
-    font-size: 11px;
-    /* Taille réduite */
-    position: absolute;
-    top: 1px;
-    /* Centrage vertical */
-    left: 4px;
-    /* Centrage horizontal */
 }
 
 /* Champ de confirmation de mot de passe */

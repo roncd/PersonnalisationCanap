@@ -85,3 +85,42 @@ h2 {
 .link-connect:hover {
     text-decoration: underline;
 }
+
+/* Wrapper en position relative */
+.input-section {
+    position: relative;
+    width: 100%;
+}
+
+/* Le champ de saisie : on décale un peu le texte à droite */
+.input-section .input-field {
+    width: 100%;
+    padding-right: 40px;
+    box-sizing: border-box;
+}
+
+
+/* Champ de confirmation de mot de passe */
+
+
+/* Style par défaut */
+.password-confirm-wrapper {
+    position: relative;
+}
+
+#match-message {
+    font-size: 0.9em;
+    margin-top: 5px;
+    color: red;
+    display: none;
+    text-align: left;
+}
+
+/* Si les mots de passe ne correspondent pas */
+.input-error {
+    border: 1px solid red;
+}
+
+.input-valid {
+    border: 1px solid green;
+}

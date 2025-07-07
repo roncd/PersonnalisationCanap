@@ -27,7 +27,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['message'] = 'Seuls les fichiers JPEG, PNG et GIF sont autorisés.';
             $_SESSION['message_type'] = 'error';
         } else {
+            require '../include/cleanFileName.php';
             $fileName = basename($img['name']);
+            $fileName = cleanFileName($fileName);
             $uploadPath = $uploadDir . $fileName;
 
             if (move_uploaded_file($img['tmp_name'], $uploadPath)) {
