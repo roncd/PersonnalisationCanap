@@ -55,12 +55,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <script type="module" src="../../script/popup.js"></script>
   <script type="module" src="../../script/keydown.js"></script>
 
-
   <title>Étape 1.1 - Choisi ta structure</title>
 
 </head>
 
-<body data-user-id="<?php echo $_SESSION['user_id']; ?>">
+<body data-user-id="<?php echo $_SESSION['user_id']; ?>" data-current-step="1-structure">
   <?php include '../cookies/index.html'; ?>
   <header>
     <?php require '../../squelette/header.php'; ?>
@@ -83,14 +82,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <div class="option " data-nb-longueurs="<?php echo htmlspecialchars($structure['nb_longueurs']); ?>">
               <img src="../../admin/uploads/structure/<?php echo htmlspecialchars($structure['img']); ?>"
                 alt="<?php echo htmlspecialchars($structure['nom']); ?>"
-                data-structure-id="<?php echo $structure['id']; ?>">
+                data-structure-id="<?php echo $structure['id']; ?>"
+                data-structure-prix="<?php echo $structure['prix']; ?>"
+                data-category="structure">
               <p><?php echo htmlspecialchars($structure['nom']); ?></p>
+              <p><strong><?php echo htmlspecialchars($structure['prix']); ?> €</strong></p>
             </div>
           <?php endforeach; ?>
         </section>
 
 
-        <div class="footer footer-buttons">
+        <div class="footer">
           <p>Total : <span>0 €</span></p>
           <div class="buttons">
             <form method="POST" action="">
@@ -164,7 +166,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         const closeErreurBtn = erreurPopup.querySelector('.btn-noir');
         const form = document.querySelector('form');
 
-        // Vérification si une sélection existe dans localStorage
         let savedStructureId = localStorage.getItem('selectedStructureId');
         let selected = savedStructureId !== '';
 
@@ -172,7 +173,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           localStorage.setItem('selectedStructureId', savedStructureId);
         }
 
-        // Restaurer la sélection si elle existe
+        // Restaurer la sélection visuelle
         options.forEach(img => {
           if (img.getAttribute('data-structure-id') === savedStructureId) {
             img.classList.add('selected');
@@ -181,7 +182,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           }
         });
 
-        // Gestion du clic sur une option
+        // Clic sur une structure
         options.forEach(img => {
           img.addEventListener('click', () => {
             options.forEach(opt => opt.classList.remove('selected'));
@@ -191,10 +192,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             selectedStructureInput.value = savedStructureId;
             selected = true;
             saveSelection();
+
+            if (typeof window.toggleOption === 'function') {
+              window.toggleOption(img);
+            } else {
+              console.warn("⚠️ toggleOption n'est pas défini sur window !");
+            }
           });
         });
 
-        // Empêcher la soumission du formulaire si rien n'est sélectionné
         form.addEventListener('submit', (e) => {
           if (!selectedStructureInput.value) {
             e.preventDefault();
@@ -202,7 +208,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           }
         });
 
-        // Fermer le popup
         closeErreurBtn.addEventListener('click', () => {
           erreurPopup.style.display = 'none';
         });
@@ -218,56 +223,97 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <!-- VARIATION DES PRIX  -->
     <script>
       document.addEventListener('DOMContentLoaded', () => {
-        let totalPrice = 0; // Total global pour toutes les étapes
+        const userId = document.body.getAttribute('data-user-id');
+        const currentStep = document.body.getAttribute('data-current-step');
 
-        // Charge l'ID utilisateur depuis une variable PHP intégrée dans le HTML
-        const userId = document.body.getAttribute('data-user-id'); // Ex. <body data-user-id="
-        // <?php echo $_SESSION['user_id']; ?>">
-        if (!userId) {
-          console.error("ID utilisateur non trouvé. Vérifiez que 'data-user-id' est bien défini dans le HTML.");
+        if (!userId || !currentStep) {
+          console.error("ID utilisateur ou étape actuelle manquants !");
           return;
         }
-        // Charge toutes les options sélectionnées depuis sessionStorage 
+
         const sessionKey = `allSelectedOptions_${userId}`;
-        const selectedKey = `selectedOptions_${userId}`;
         let allSelectedOptions = JSON.parse(sessionStorage.getItem(sessionKey)) || [];
-        let selectedOptions = JSON.parse(sessionStorage.getItem(selectedKey)) || {};
+        if (!Array.isArray(allSelectedOptions)) allSelectedOptions = [];
 
-        // Verifie si `allSelectedOptions` est un tableau
-        if (!Array.isArray(allSelectedOptions)) {
-          allSelectedOptions = [];
-          console.warn("allSelectedOptions n'était pas un tableau. Réinitialisé à []");
-        }
-
-        // Fonction pour mettre à jour le total global
         function updateTotal() {
-          // Calculer le total global en prenant en compte les quantités
-          totalPrice = allSelectedOptions.reduce((sum, option) => {
-            const price = option.price || 0; // S'assurer que le prix est valide
-            const quantity = option.quantity || 1; // Par défaut, quantité = 1
-            return sum + (price * quantity);
+          const basePrice = parseFloat(document.querySelector('.base-price')?.textContent) || 0;
+          const totalPrice = basePrice + allSelectedOptions.reduce((sum, opt) => {
+            const price = opt.price || 0;
+            const qty = opt.quantity || 1;
+            return sum + price * qty;
           }, 0);
 
-          // Sauvegarder les données mises à jour dans sessionStorage
-          // Mettre à jour le total dans l'interface
           const totalElement = document.querySelector(".footer p span");
-          if (totalElement) {
-            totalElement.textContent = `${totalPrice.toFixed(2)} €`;
+          if (!totalElement) {
+            console.warn("⚠️ Élément total introuvable !");
           } else {
-            console.error("L'élément '.footer p span' est introuvable !");
+            totalElement.textContent = `${totalPrice.toFixed(2)} €`;
+            console.log(`💰 Total mis à jour : ${totalPrice.toFixed(2)} €`);
           }
         }
 
-        function saveData() {
+
+        function toggleOption(optionElement) {
+          const idAttr = [...optionElement.attributes].find(attr =>
+            attr.name.startsWith('data-') && attr.name.endsWith('-id')
+          );
+          const priceAttr = [...optionElement.attributes].find(attr =>
+            attr.name.startsWith('data-') && attr.name.endsWith('-prix')
+          );
+
+          if (!idAttr || !priceAttr) {
+            console.warn("❌ id ou prix manquant dans l'élément :", optionElement);
+            return;
+          }
+
+          const optionId = optionElement.getAttribute(idAttr.name);
+          const price = parseFloat(optionElement.getAttribute(priceAttr.name)) || 0;
+          console.log(`🆔 Option sélectionnée : ${optionId}, prix : ${price}`);
+
+          const uniqueId = `${currentStep}_${optionId}`;
+
+          // Suppression des autres options
+          const before = [...allSelectedOptions];
+          allSelectedOptions = allSelectedOptions.filter(opt =>
+            !(opt.id.startsWith(`${currentStep}_`) && optionElement.dataset.category === 'structure')
+          );
+          const removed = before.filter(opt => !allSelectedOptions.includes(opt));
+          if (removed.length > 0) {
+            console.log(`🧹 Ancienne structure supprimée :`, removed);
+          }
+
+          // Ajout de la nouvelle
+          allSelectedOptions.push({
+            id: uniqueId,
+            price
+          });
+          console.log("✅ Nouvelle option enregistrée :", allSelectedOptions);
+
           sessionStorage.setItem(sessionKey, JSON.stringify(allSelectedOptions));
-          sessionStorage.setItem(selectedKey, JSON.stringify(selectedOptions));
+          updateTotal();
         }
-        // Initialiser le total dès le chargement de la page
+
+
+        // ✅ Rendre accessible depuis le premier script
+        window.toggleOption = toggleOption;
+
+        document.querySelectorAll('img').forEach(img => {
+          const hasPriceAttr = [...img.attributes].some(attr => attr.name.endsWith('-prix'));
+          if (!hasPriceAttr) return;
+
+          const idAttr = [...img.attributes].find(attr => attr.name.endsWith('-id'));
+          const optionId = img.getAttribute(idAttr?.name || '') || '';
+          const uniqueId = `${currentStep}_${optionId}`;
+
+          if (allSelectedOptions.some(opt => opt.id === uniqueId)) {
+            img.parentElement.classList.add('selected');
+          }
+        });
+
         updateTotal();
-        // Sauvegarder les données au chargement de la page (au cas où elles sont modifiées)
-        saveData();
       });
     </script>
+
 
 
     <!-- FIL ARIANE -->

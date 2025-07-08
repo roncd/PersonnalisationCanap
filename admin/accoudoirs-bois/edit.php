@@ -102,8 +102,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <label for="name">Nom <span class="required">*</span></label>
                             <input type="text" id="name" name="name" class="input-field" value="<?php echo htmlspecialchars($accoudoirbois['nom']); ?>" required>
                         </div>
-                    </div>
-                    <div class="form-row">
                         <div class="form-group">
                             <label for="price">Prix (en €) <span class="required">*</span></label>
                             <input type="number" id="price" name="price" class="input-field" value="<?php echo htmlspecialchars($accoudoirbois['prix']); ?>" required>

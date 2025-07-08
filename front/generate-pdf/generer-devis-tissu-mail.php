@@ -21,7 +21,7 @@ $query_details->execute([$idCommande]);
 $details = $query_details->fetchAll(PDO::FETCH_ASSOC);
 
 // Tables sans prix
-$tablesNoPrix = ['structure', 'type_banquette'];
+$tablesNoPrix = ['type_banquette'];
 
 // Fonction pour récupérer les données des tables sans prix
 function fetchNoPrixData($pdo, $table)
@@ -43,7 +43,7 @@ foreach ($tablesNoPrix as $tableNoPrix) {
 }
 
 // Tables avec prix
-$tables = ['mousse', 'accoudoir_tissu', 'dossier_tissu', 'couleur_tissu', 'motif_tissu', 'modele'];
+$tables = ['mousse', 'accoudoir_tissu', 'dossier_tissu', 'couleur_tissu', 'motif_tissu', 'structure', 'modele'];
 
 // Fonction pour récupérer les données des tables avec prix
 function fetchData($pdo, $table)
