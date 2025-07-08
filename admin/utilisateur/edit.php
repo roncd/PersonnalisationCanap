@@ -124,7 +124,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <input type="email" id="email" name="mail" class="input-field" value="<?php echo htmlspecialchars($utilisateur['mail']); ?>" required>
                         </div>
                         <div class="form-group">
-                            <label for="mdp">Mot de passe <span class="required">*</span></label>
                             <a href="../include/changer_mdp.php?id=<?php echo $utilisateur['id']; ?>"
                                 class="input-field"
                                 style=" text-decoration: none; color: black; text-align: center;">
