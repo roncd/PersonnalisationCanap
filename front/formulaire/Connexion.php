@@ -97,10 +97,9 @@ if (isset($_GET['message']) && $_GET['message'] == 'success') {
     <link rel="stylesheet" href="../../styles/transition.css">
     <link rel="stylesheet" href="../../styles/buttons.css">
     <link rel="stylesheet" href="../../styles/message.css">
-    <script src="../../script/toucheMaj.js"></script>
     <script type="module" src="../../script/togglePassword.js"></script>
     <script type="module" src="../../script/transition.js"></script>
-    <script type="module" src="../script/warningMajActive.js"></script>
+    <script type="module" src="../../script/warningMajActive.js"></script>
 
 </head>
 
