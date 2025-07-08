@@ -56,7 +56,7 @@ foreach ($tablesNoPrix as $tableNoPrix) {
 }
 
 // Tables avec prix
-$tables = ['mousse', 'dossier_bois', 'couleur_bois', 'motif_bois', 'decoration'];
+$tables = ['mousse', 'dossier_bois', 'couleur_bois', 'couleur_tissu_bois', 'motif_bois', 'decoration', 'accoudoir_bois'];
 
 // Fonction pour récupérer les données des tables avec prix
 function fetchData($pdo, $table)
@@ -82,12 +82,12 @@ $stmt = $pdo->prepare("SELECT longueurA, longueurB, longueurC, commentaire, date
 $stmt->execute([$idCommande]);
 $commande = $stmt->fetch(PDO::FETCH_ASSOC);
 
-$stmtAccoudoirBois = $pdo->prepare("SELECT cda.id_accoudoir_bois, cda.nb_accoudoir, ab.nom, ab.prix
-FROM commande_detail_accoudoir cda
-JOIN accoudoir_bois ab ON cda.id_accoudoir_bois = ab.id
-WHERE cda.id_commande_detail = ?");
-$stmtAccoudoirBois->execute([$idCommande]);
-$accoudoirsBois = $stmtAccoudoirBois->fetchAll(PDO::FETCH_ASSOC);
+// $stmtAccoudoirBois = $pdo->prepare("SELECT cda.id_accoudoir_bois, cda.nb_accoudoir, ab.nom, ab.prix
+// FROM commande_detail_accoudoir cda
+// JOIN accoudoir_bois ab ON cda.id_accoudoir_bois = ab.id
+// WHERE cda.id_commande_detail = ?");
+// $stmtAccoudoirBois->execute([$idCommande]);
+// $accoudoirsBois = $stmtAccoudoirBois->fetchAll(PDO::FETCH_ASSOC);
 
 
 $query_structure = $pdo->prepare("SELECT img, nom FROM structure WHERE id = (SELECT id_structure FROM commande_detail WHERE id = ?)");
@@ -179,6 +179,17 @@ $tableColumn = [
     'type_banquette' => 'id_banquette',
 ];
 
+$tableDisplayNames = [
+    'accoudoir_bois' => 'Accoudoir',
+    'mousse' => 'Mousse',
+    'dossier_bois' => 'Dossier',
+    'couleur_bois' => 'Couleur du bois',
+    'couleur_tissu_bois' => 'Motif du tissu',
+    'motif_bois' => 'Kit coussin',
+    'decoration' => 'Décoration',
+    'structure' => 'Structure',
+    'type_banquette' => 'Type de banquette',
+];
 // Parcours des détails
 foreach ($details as $detail) {
     foreach (array_merge($tables, $tablesNoPrix) as $table) {
@@ -191,34 +202,58 @@ foreach ($details as $detail) {
             $prix = isset($element['prix']) ? number_format($element['prix'], 2, ',', ' ') . " EUR" : "-";
 
             // Ajout des données au PDF
-            $pdf->Cell(60, 10, mb_convert_encoding($table, "ISO-8859-1", "UTF-8"), 1);
+            $displayTableName = $tableDisplayNames[$table] ?? $table;
+            $pdf->Cell(60, 10, mb_convert_encoding($displayTableName, "ISO-8859-1", "UTF-8"), 1);
             $pdf->Cell(60, 10, mb_convert_encoding($element['nom'], "ISO-8859-1", "UTF-8"), 1);
             $pdf->Cell(20, 10, "-", 1); // Quantité par défaut
             $pdf->Cell(50, 10, $prix, 1);
             $pdf->Ln();
         }
     }
-    if (!empty($accoudoirsBois)) {
-        // Boucle sur chaque accoudoir bois
-        foreach ($accoudoirsBois as $accoudoir) {
-            $nom = mb_convert_encoding($accoudoir['nom'], "ISO-8859-1", "UTF-8"); // Récupère le nom de l'accoudoir bois
-            $quantite = htmlspecialchars($accoudoir['nb_accoudoir']); // Quantité d'accoudoirs bois
-            $prix = isset($accoudoir['prix']) ? number_format($accoudoir['prix'], 2, ',', ' ') . " EUR" : "-";
+    $accoudoirPositions = ['gauche' => 'id_accoudoir_gauche', 'droit' => 'id_accoudoir_droit'];
 
+    foreach ($accoudoirPositions as $positionLabel => $column) {
+        $idAccoudoir = $detail[$column] ?? null;
 
-            // Affiche les colonnes
-            $pdf->Cell(60, 10, "accoudoir_bois", 1);
+        if ($idAccoudoir && isset($assocData['accoudoir_bois'][$idAccoudoir])) {
+            $accoudoir = $assocData['accoudoir_bois'][$idAccoudoir];
+            $nom = mb_convert_encoding(ucfirst($positionLabel) . " - " . $accoudoir['nom'], "ISO-8859-1", "UTF-8");
+            $prix = number_format($accoudoir['prix'], 2, ',', ' ') . " EUR";
+
+            // Récupération de la quantité depuis la table commande_detail_accoudoir
+            $stmtQuantite = $pdo->prepare("SELECT nb_accoudoir FROM commande_detail_accoudoir WHERE id_commande_detail = ? AND id_accoudoir_bois = ?");
+            $stmtQuantite->execute([$detail['id'], $idAccoudoir]);
+            $quantite = $stmtQuantite->fetchColumn() ?? '-';
+
+            $pdf->Cell(60, 10, $tableDisplayNames['accoudoir_bois'], 1);
             $pdf->Cell(60, 10, $nom, 1);
             $pdf->Cell(20, 10, $quantite, 1);
             $pdf->Cell(50, 10, $prix, 1);
             $pdf->Ln();
         }
-    } else {
-        // Message si aucun accoudoir bois trouvé
-        $pdf->Ln(5);
-        $pdf->SetFont('Arial', 'B', 11);
-        $pdf->Cell(190, 10, mb_convert_encoding("Aucun accoudoir bois pour cette commande", "ISO-8859-1", "UTF-8"), 1, 1, 'C');
     }
+
+    // if (!empty($accoudoirsBois)) {
+    //     // Boucle sur chaque accoudoir bois
+    //     foreach ($accoudoirsBois as $accoudoir) {
+    //         $nom = mb_convert_encoding($accoudoir['nom'], "ISO-8859-1", "UTF-8"); // Récupère le nom de l'accoudoir bois
+    //         $quantite = htmlspecialchars($accoudoir['nb_accoudoir']); // Quantité d'accoudoirs bois
+    //         $prix = isset($accoudoir['prix']) ? number_format($accoudoir['prix'], 2, ',', ' ') . " EUR" : "-";
+
+
+    //         // Affiche les colonnes
+    //         $pdf->Cell(60, 10, "accoudoir_bois", 1);
+    //         $pdf->Cell(60, 10, $nom, 1);
+    //         $pdf->Cell(20, 10, $quantite, 1);
+    //         $pdf->Cell(50, 10, $prix, 1);
+    //         $pdf->Ln();
+    //     }
+    // } else {
+    //     // Message si aucun accoudoir bois trouvé
+    //     $pdf->Ln(5);
+    //     $pdf->SetFont('Arial', 'B', 11);
+    //     $pdf->Cell(190, 10, mb_convert_encoding("Aucun accoudoir bois pour cette commande", "ISO-8859-1", "UTF-8"), 1, 1, 'C');
+    // }
 
     // Vérification si les données existent avant d'afficher
     if (!empty($commande)) {
@@ -226,13 +261,13 @@ foreach ($details as $detail) {
         $longueurB = isset($commande['longueurB']) && !empty(trim($commande['longueurB'])) ? htmlspecialchars($commande['longueurB']) : null;
         $longueurC = isset($commande['longueurC']) && !empty(trim($commande['longueurC'])) ? htmlspecialchars($commande['longueurC']) : null;
         $longueurC = isset($commande['longueurC']) && !empty(trim($commande['longueurC'])) ? htmlspecialchars($commande['longueurC']) : null;
-        $prix_dimensions = number_format($detail['prix_dimensions'] , 2, ',', ' ') . " EUR";
+        $prix_dimensions = number_format($detail['prix_dimensions'], 2, ',', ' ') . " EUR";
         $commentaire = isset($commande['commentaire']) && !empty(trim($commande['commentaire'])) ? htmlspecialchars($commande['commentaire']) : null;
-        
+
         $pdf->Ln(10);
         $pdf->SetFont('Arial', 'B', 12);
         $pdf->Cell(65, 10, mb_convert_encoding("Dimensions du canapé :", "ISO-8859-1", "UTF-8"), 0, 0);
-        
+
         $pdf->SetFont('Arial', '', 12);
         $pdf->Ln(10);
         $pdf->Cell(45, 10, "Longueur A (en cm)", 1, 0);
@@ -261,7 +296,6 @@ foreach ($details as $detail) {
             $pdf->Cell(40, 10, "Commentaire du client :");
             $pdf->Cell(30, 10, $commentaire);
         }
-
     } else {
         $pdf->Ln(10);
         $pdf->Cell(80, 10, mb_convert_encoding("Données de commande introuvables", "ISO-8859-1", "UTF-8"), 1);

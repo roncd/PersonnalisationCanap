@@ -159,6 +159,17 @@ $tableColumn = [
     'type_banquette' => 'id_banquette',
 ];
 
+$tableDisplayNames = [
+    'accoudoir_tissu' => 'Accoudoir',
+    'mousse' => 'Mousse',
+    'dossier_tissu' => 'Dossier',
+    'couleur_tissu' => 'Couleur du tissu',
+    'modele' => 'Modèle de banquette',
+    'motif_tissu' => 'Kit coussin',
+    'structure' => 'Structure',
+    'type_banquette' => 'Type de banquette',
+];
+
 // Parcours des détails
 foreach ($details as $detail) {
     foreach (array_merge($tables, $tablesNoPrix) as $table) {
@@ -171,7 +182,8 @@ foreach ($details as $detail) {
             $prix = isset($element['prix']) ? number_format($element['prix'], 2, ',', ' ') . " EUR" : "-";
 
             // Ajout des données au PDF
-            $pdf->Cell(60, 10, mb_convert_encoding($table, "ISO-8859-1", "UTF-8"), 1);
+            $displayTableName = $tableDisplayNames[$table] ?? $table; 
+            $pdf->Cell(60, 10, mb_convert_encoding($displayTableName, "ISO-8859-1", "UTF-8"), 1);
             $pdf->Cell(60, 10, mb_convert_encoding($element['nom'], "ISO-8859-1", "UTF-8"), 1);
             if ($table === "accoudoir_tissu") {
                 $quantite_accoudoir = htmlspecialchars($commande['id_nb_accoudoir'] ?? '-');
@@ -189,13 +201,13 @@ foreach ($details as $detail) {
         $longueurA = htmlspecialchars($commande['longueurA'] ?? '-');
         $longueurB = isset($commande['longueurB']) && !empty(trim($commande['longueurB'])) ? htmlspecialchars($commande['longueurB']) : null;
         $longueurC = isset($commande['longueurC']) && !empty(trim($commande['longueurC'])) ? htmlspecialchars($commande['longueurC']) : null;
-        $prix_dimensions = number_format($detail['prix_dimensions'] , 2, ',', ' ') . " EUR";
+        $prix_dimensions = number_format($detail['prix_dimensions'], 2, ',', ' ') . " EUR";
         $commentaire = isset($commande['commentaire']) && !empty(trim($commande['commentaire'])) ? htmlspecialchars($commande['commentaire']) : null;
-       
+
         $pdf->Ln(10);
         $pdf->SetFont('Arial', 'B', 12);
         $pdf->Cell(65, 10, mb_convert_encoding("Dimensions du canapé :", "ISO-8859-1", "UTF-8"), 0, 0);
-        
+
         $pdf->SetFont('Arial', '', 12);
         $pdf->Ln(10);
         $pdf->Cell(45, 10, "Longueur A (en cm)", 1, 0);

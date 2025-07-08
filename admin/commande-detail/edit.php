@@ -93,7 +93,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $idAccoudoirTissu = trim($_POST['accoudoirtissu']) ? $_POST['accoudoirtissu'] : NULL;
     $idDossierTissu = trim($_POST['dossiertissu']) ? $_POST['dossiertissu'] : NULL;
     $nbAccoudoir = trim($_POST['nb_accoudoir']) ?: null;
-    $nbAccoudoirBois = $_POST['nb_accoudoir_bois'] !== '' ? intval($_POST['nb_accoudoir_bois']) : null;
+    $idAccoudoirGauche = trim($_POST['accoudoir_gauche']) ?: null;
+    $idAccoudoirDroit = trim($_POST['accoudoir_droit']) ?: null;
+
+
 
     if (empty($prix) || empty($idClient) || empty($idStructure) || empty($longueurA) || empty($idBanquette) || empty($idMousse)) {
         $_SESSION['message'] = 'Tous les champs requis doivent être remplis.';
@@ -104,8 +107,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $pdo->prepare("DELETE FROM commande_detail_accoudoir WHERE id_commande_detail = ?")->execute([$commande['id']]);
 
     // Réinsérer les nouveaux accoudoirs
-    $acc1 = $_POST['accoudoir1'] ?? null;
-    $acc2 = $_POST['accoudoir2'] ?? null;
+    $acc1 = $_POST['accoudoir_gauche'] ?? null;
+    $acc2 = $_POST['accoudoir_droit'] ?? null;
 
     if (!empty($acc1)) {
         $stmtAcc1 = $pdo->prepare("INSERT INTO commande_detail_accoudoir (id_commande_detail, id_accoudoir_bois, nb_accoudoir) VALUES (?, ?, 1)");
@@ -118,8 +121,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
 
-    // Mettre à jour la commande dans la base de données
-    $stmt = $pdo->prepare("UPDATE commande_detail SET prix = ?, commentaire = ?, date = ?, statut = ?, id_client = ?, id_structure = ?, longueurA = ?, longueurB = ?, longueurC = ?, id_banquette = ?, id_mousse = ?, id_couleur_bois = ?, id_decoration = ?, id_accoudoir_bois = ?, id_dossier_bois = ?, id_couleur_tissu_bois = ?,  id_motif_bois = ?, id_modele = ?, id_couleur_tissu = ?, id_motif_tissu = ?, id_accoudoir_tissu = ?, id_dossier_tissu = ?,  id_nb_accoudoir = ?, nb_accoudoir_bois = ?  
+    // Mettre à jour la commande dans la base de donnéesnb_accoudoir_bois
+    $stmt = $pdo->prepare("UPDATE commande_detail SET prix = ?, commentaire = ?, date = ?, statut = ?, id_client = ?, id_structure = ?, longueurA = ?, longueurB = ?, longueurC = ?, id_banquette = ?, id_mousse = ?, id_couleur_bois = ?, id_decoration = ?, id_dossier_bois = ?, id_couleur_tissu_bois = ?,  id_motif_bois = ?, id_modele = ?, id_couleur_tissu = ?, id_motif_tissu = ?, id_accoudoir_tissu = ?, id_dossier_tissu = ?,  id_nb_accoudoir = ?, id_accoudoir_gauche = ?, id_accoudoir_droit = ?
         WHERE id = ?");
     if ($stmt->execute([
         $prix,
@@ -135,7 +138,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $idMousse,
         $idCouleurBois,
         $idDecoration,
-        $idAccoudoirBois,
         $idDossierBois,
         $idTissuBois,
         $idMotifBois,
@@ -145,7 +147,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $idAccoudoirTissu,
         $idDossierTissu,
         $nbAccoudoir,
-        $nbAccoudoirBois,
+        $idAccoudoirGauche,
+        $idAccoudoirDroit,
         $id
     ])) {
         $_SESSION['message'] = 'La commande a été mise à jour avec succès !';
@@ -163,7 +166,7 @@ $valeurs = [
     "final"        => "Commande finalisée"
 ];
 $selected = (string) $commande['statut'];
- ?>
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -360,8 +363,7 @@ $selected = (string) $commande['statut'];
                             </div>
 
 
-
-                            <div class="form-group">
+                            <!-- <div class="form-group">
                                 <label for="nb_accoudoir_bois">Nombre d'accoudoirs <span class="required">*</span></label>
                                 <select id="nb_accoudoir_bois" name="nb_accoudoir_bois" class="input-field">
                                     <option value="">-- Sélectionnez une option --</option>
@@ -370,12 +372,12 @@ $selected = (string) $commande['statut'];
                                     <option value="2" <?= (isset($commande['nb_accoudoir_bois']) && $commande['nb_accoudoir_bois'] == 2) ? 'selected' : '' ?>>2</option>
                                 </select>
                             </div>
-                        </div>
+                        </div> -->
 
-                        <div class="form-row">
+
                             <div class="form-group">
-                                <label for="accoudoir1">Accoudoir Bois 1 <span class="required">*</span></label>
-                                <select id="accoudoir1" name="accoudoir1" class="input-field">
+                                <label for="accoudoir_gauche">Accoudoir Gauche - bois</label>
+                                <select id="accoudoir_gauche" name="accoudoir_gauche" class="input-field">
                                     <option value="">-- Sélectionnez une option --</option>
                                     <?php foreach ($accoudoirsbois as $item): ?>
                                         <option value="<?= $item['id'] ?>"
@@ -385,10 +387,11 @@ $selected = (string) $commande['statut'];
                                     <?php endforeach; ?>
                                 </select>
                             </div>
-
+                        </div>
+                        <div class="form-row">
                             <div class="form-group" id="accoudoir2-group">
-                                <label for="accoudoir2">Accoudoir Bois 2 <span class="required">*</span></label>
-                                <select id="accoudoir2" name="accoudoir2" class="input-field">
+                                <label for="accoudoir_droit">Accoudoir Droit - bois</label>
+                                <select id="accoudoir_droit" name="accoudoir_droit" class="input-field">
                                     <option value="">-- Sélectionnez une option --</option>
                                     <?php foreach ($accoudoirsbois as $item): ?>
                                         <option value="<?= $item['id'] ?>"
