@@ -136,7 +136,7 @@ function calculPrix($commande, &$composition = [])
 
     <section class="hero-section">
       <div class="hero-container">
-        <img src="../../medias/salon-marocain.jpg" alt="Salon marocain" class="hero-image">
+        <img src="../../medias/ban1.jpg" alt="Salon marocain" class="hero-image">
         <div class="hero-content">
           <br><br><br>
           <h1 class="hero-title h2">
@@ -164,7 +164,7 @@ function calculPrix($commande, &$composition = [])
     <div class="accueil">
       <section class="avantages-card transition-boom">
         <div class="histoire-img">
-          <img src="../../medias/canapekenitra.png" alt="Aperçu canapé personnalisé">
+          <img src="../../medias/ban2.jpg" alt="Aperçu canapé personnalisé">
         </div>
         <div class="avantages-text">
           <h2>Qui sommes-nous ?</h2>
@@ -222,7 +222,7 @@ function calculPrix($commande, &$composition = [])
           </ul>
         </div>
         <div class="avantages-img">
-          <img src="../../medias/canapekenitra.png" alt="Aperçu canapé personnalisé">
+          <img src="../../medias/ban2.jpg" alt="Aperçu canapé personnalisé">
         </div>
       </section>
       <script>

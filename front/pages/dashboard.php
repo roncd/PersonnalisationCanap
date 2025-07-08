@@ -15,7 +15,7 @@ $sql = "SELECT cp.*,
         LEFT JOIN type_banquette tb ON cp.id_banquette = tb.id
         LEFT JOIN structure s ON cp.id_structure = s.id
         ORDER BY cp.id DESC
-        LIMIT 4";
+        LIMIT 3";
 
 $stmt = $pdo->prepare($sql);
 $stmt->execute();

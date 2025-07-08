@@ -213,13 +213,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           selectedNbAccoudoirInput.value = Object.values(selectedOptions).join(',');
         }
 
-        function updateTotal() {
-          totalPrice = allSelectedOptions.reduce((sum, option) => {
-            return sum + (option.price * 2);
-          }, 0);
-          if (totalElement) totalElement.textContent = `${totalPrice.toFixed(2)} €`;
-        }
+function updateTotal() {
+  totalPrice = allSelectedOptions.reduce((sum, option) => {
+    // si tu veux compter la quantité (1 par défaut)
+    const qte = option.quantity ?? 1;
+    return sum + option.price * qte;
+  }, 0);
 
+  if (totalElement) totalElement.textContent = `${totalPrice.toFixed(2)} €`;
+}
+
+        
         function saveSelectedOption(optionId, price, quantity) {
           const uniqueId = `${currentStep}_${optionId}`;
           allSelectedOptions = allSelectedOptions.filter(opt => opt.id !== uniqueId);
