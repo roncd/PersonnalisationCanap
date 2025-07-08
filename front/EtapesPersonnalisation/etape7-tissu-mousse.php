@@ -53,6 +53,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <link rel="stylesheet" href="../../styles/popup.css">
   <link rel="stylesheet" href="../../styles/buttons.css">
   <script type="module" src="../../script/popup.js"></script>
+  <script type="module" src="../../script/pathSwitchReset.js"></script>
   <script type="module" src="../../script/variationPrix.js"></script>
   <script type="module" src="../../script/keydown.js"></script>
 
@@ -191,99 +192,70 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </div>
 
 
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-  const options = document.querySelectorAll('.color-options .option img');
-  const mainImage = document.querySelector('.main-display img');
-  const erreurPopup = document.getElementById('erreur-popup');
-  const closeErreurBtn = erreurPopup.querySelector('.btn-noir');
-  const selectedMousseInput = document.getElementById('selected-mousse');
-  const form = document.querySelector('form');
+ <!-- GESTION DES SELECTIONS -->
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        const options = document.querySelectorAll('.color-options .option img');
+        const mainImage = document.querySelector('.main-display img');
+        const erreurPopup = document.getElementById('erreur-popup');
+        const closeErreurBtn = erreurPopup.querySelector('.btn-noir');
+        const selectedMousseInput = document.getElementById('selected-mousse');
+        const form = document.querySelector('form');
 
-  let selectedMousseId = localStorage.getItem('selectedMousse') || '';
-  let selected = selectedMousseId !== '';
+        let selectedMousseId = localStorage.getItem('selectedMousse') || '';
+        let selected = selectedMousseId !== '';
 
-  const currentStep = document.body.getAttribute('data-current-step') || '';
-  const isTissu = currentStep.includes('tissu');
-  const isBois = currentStep.includes('bois');
+        function saveSelection() {
+          localStorage.setItem('selectedMousse', selectedMousseId);
+        }
 
-  // Si chemin bois, enlever sélection mousse tissu, et inversement
-  if (isBois && selectedMousseId) {
-    options.forEach(img => {
-      if (img.getAttribute('data-mousse-tissu-id') === selectedMousseId) {
-        img.classList.remove('selected');
+        // Restaurer la sélection si elle existe
+        options.forEach(img => {
+          if (img.getAttribute('data-mousse-tissu-id') === selectedMousseId) {
+            img.classList.add('selected');
+            mainImage.src = img.src;
+            selectedMousseInput.value = selectedMousseId;
+          }
+        });
+
+        options.forEach(img => {
+          img.addEventListener('click', () => {
+            options.forEach(opt => opt.classList.remove('selected'));
+            img.classList.add('selected');
+            mainImage.src = img.src;
+            selectedMousseId = img.getAttribute('data-mousse-tissu-id');
+            selectedMousseInput.value = selectedMousseId;
+            selected = true;
+            saveSelection();
+          });
+        });
+
+        // Empêcher la soumission du formulaire si rien n'est sélectionné
+        form.addEventListener('submit', (e) => {
+          if (!selectedMousseInput.value) {
+            e.preventDefault();
+            erreurPopup.style.display = 'flex';
+          }
+        });
+
+        // Fermer le popup
+        closeErreurBtn.addEventListener('click', () => {
+          erreurPopup.style.display = 'none';
+        });
+
+        window.addEventListener('click', (event) => {
+          if (event.target === erreurPopup) {
+            erreurPopup.style.display = 'none';
+          }
+        });
+      });
+    </script>
+    <!-- BOUTTON RETOUR -->
+    <script>
+      function retourEtapePrecedente() {
+        window.location.href = "etape6-tissu-accoudoir.php";
       }
-    });
-    localStorage.removeItem('selectedMousse');
-    selectedMousseId = '';
-    selected = false;
-    selectedMousseInput.value = '';
-    console.log('🧹 Suppression sélection mousse TISSU car chemin BOIS');
-  }
-  if (isTissu && selectedMousseId) {
-    options.forEach(img => {
-      if (img.getAttribute('data-mousse-bois-id') === selectedMousseId) {
-        img.classList.remove('selected');
-      }
-    });
-    localStorage.removeItem('selectedMousse');
-    selectedMousseId = '';
-    selected = false;
-    selectedMousseInput.value = '';
-    console.log('🧹 Suppression sélection mousse BOIS car chemin TISSU');
-  }
-
-  function saveSelection() {
-    localStorage.setItem('selectedMousse', selectedMousseId);
-  }
-
-  // Restaurer la sélection selon le chemin
-  options.forEach(img => {
-    if (
-      (isTissu && img.getAttribute('data-mousse-tissu-id') === selectedMousseId) ||
-      (isBois && img.getAttribute('data-mousse-bois-id') === selectedMousseId)
-    ) {
-      img.classList.add('selected');
-      mainImage.src = img.src;
-      selectedMousseInput.value = selectedMousseId;
-    }
-  });
-
-  options.forEach(img => {
-    img.addEventListener('click', () => {
-      options.forEach(opt => opt.classList.remove('selected'));
-      img.classList.add('selected');
-      mainImage.src = img.src;
-
-      selectedMousseId = isTissu
-        ? img.getAttribute('data-mousse-tissu-id')
-        : img.getAttribute('data-mousse-bois-id');
-
-      selectedMousseInput.value = selectedMousseId;
-      selected = true;
-      saveSelection();
-      console.log(`🎨 Mousse sélectionnée : ${selectedMousseId}`);
-    });
-  });
-
-  form.addEventListener('submit', (e) => {
-    if (!selectedMousseInput.value) {
-      e.preventDefault();
-      erreurPopup.style.display = 'flex';
-    }
-  });
-
-  closeErreurBtn.addEventListener('click', () => {
-    erreurPopup.style.display = 'none';
-  });
-
-  window.addEventListener('click', (event) => {
-    if (event.target === erreurPopup) {
-      erreurPopup.style.display = 'none';
-    }
-  });
-});
-</script>
+    </script>
 
     <!-- BOUTTON RETOUR -->
     <script>
