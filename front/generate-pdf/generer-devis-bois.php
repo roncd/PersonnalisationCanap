@@ -34,7 +34,7 @@ if (!$details) {
     die("Commande introuvable.");
 }
 // Tables sans prix
-$tablesNoPrix = ['structure', 'type_banquette'];
+$tablesNoPrix = ['type_banquette'];
 
 // Fonction pour récupérer les données des tables sans prix
 function fetchNoPrixData($pdo, $table)
@@ -56,7 +56,7 @@ foreach ($tablesNoPrix as $tableNoPrix) {
 }
 
 // Tables avec prix
-$tables = ['mousse', 'dossier_bois', 'couleur_bois', 'couleur_tissu_bois', 'motif_bois', 'decoration', 'accoudoir_bois'];
+$tables = ['mousse', 'dossier_bois', 'couleur_bois', 'couleur_tissu_bois', 'motif_bois', 'decoration', 'structure', 'accoudoir_bois'];
 
 // Fonction pour récupérer les données des tables avec prix
 function fetchData($pdo, $table)

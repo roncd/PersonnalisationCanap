@@ -33,6 +33,7 @@ if (!$structure) {
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nom = trim($_POST['name']);
+    $price = ($_POST['price']);
     $nb_banquette = trim($_POST['nb_banquette']);
     $img = $_FILES['img'];
 
@@ -63,8 +64,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         }
         if (!isset($_SESSION['message'])) {
-            $stmt = $pdo->prepare("UPDATE structure SET nom = ?, img = ?, nb_longueurs = ? WHERE id = ?");
-            $stmt->execute([$nom, $fileName, $nb_banquette, $id]);
+            $stmt = $pdo->prepare("UPDATE structure SET nom = ?, img = ?, prix = ?, nb_longueurs = ? WHERE id = ?");
+            $stmt->execute([$nom, $fileName, $price, $nb_banquette, $id]);
             $_SESSION['message'] = 'La structure a été mise à jour avec succès !';
             $_SESSION['message_type'] = 'success';
             header("Location: visualiser.php");
@@ -106,6 +107,12 @@ $valeurs = [1, 2, 3];
                             <label for="name">Nom</label>
                             <input type="text" id="name" name="name" class="input-field" value="<?php echo htmlspecialchars($structure['nom']); ?>" required>
                         </div>
+                        <div class="form-group">
+                            <label for="price">Prix (en €) <span class="required">*</span></label>
+                            <input type="number" id="price" name="price" class="input-field" value="<?php echo htmlspecialchars($structure['prix']); ?>" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
                         <div class="form-group">
                             <label for="nb_banquette">Nombre de banquettes <span class="required">*</span></label>
                             <select id="nb_banquette" name="nb_banquette" class="input-field" required>

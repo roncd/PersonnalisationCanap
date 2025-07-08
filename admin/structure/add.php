@@ -10,10 +10,11 @@ if (!isset($_SESSION['id'])) {
 }
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nom = trim($_POST['name']);
+    $price = trim($_POST['price']);
     $img = $_FILES['img'];
     $nb_banquette = trim($_POST['nb_banquette']);
 
-    if (empty($nom) || empty($img['name'])) {
+    if (empty($nom) || empty($price) || empty($img['name'])) {
         $_SESSION['message'] = 'Tous les champs sont requis !';
         $_SESSION['message_type'] = 'error';
     }
@@ -38,8 +39,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (move_uploaded_file($img['tmp_name'], $uploadPath)) {
         try {
-            $stmt = $pdo->prepare("INSERT INTO structure (nom, img, nb_longueurs) VALUES (?, ?, ?)");
-            $stmt->execute([$nom, $fileName, $nb_banquette]);
+            $stmt = $pdo->prepare("INSERT INTO structure (nom, img, prix, nb_longueurs) VALUES (?, ?, ?, ?)");
+            $stmt->execute([$nom, $fileName, $price, $nb_banquette]);
 
             $_SESSION['message'] = 'La structure a été ajoutée avec succès !';
             $_SESSION['message_type'] = 'success';
@@ -89,6 +90,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <label for="name">Nom <span class="required">*</span></label>
                             <input type="text" id="name" name="name" class="input-field" required>
                         </div>
+                        <div class="form-group">
+                            <label for="price">Prix (en €) <span class="required">*</span></label>
+                            <input type="number" id="price" name="price" class="input-field" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
                         <div class="form-group">
                             <label for="nb_banquette">Nombre de banquettes <span class="required">*</span></label>
                             <select id="nb_banquette" name="nb_banquette" class="input-field" required>
