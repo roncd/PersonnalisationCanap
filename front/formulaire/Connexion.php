@@ -98,8 +98,10 @@ if (isset($_GET['message']) && $_GET['message'] == 'success') {
     <link rel="stylesheet" href="../../styles/buttons.css">
     <link rel="stylesheet" href="../../styles/message.css">
     <script src="../../script/toucheMaj.js"></script>
-    <script src="../../script/togglePassword.js"></script>
+    <script type="module" src="../../script/togglePassword.js"></script>
     <script type="module" src="../../script/transition.js"></script>
+    <script type="module" src="../script/warningMajActive.js"></script>
+
 </head>
 
 <body>
@@ -135,14 +137,12 @@ if (isset($_GET['message']) && $_GET['message'] == 'success') {
                                 </span>
 
                             </div>
-                            <div id="caps-lock-warning" style="display:none; color: gris; font-size: 0.95em; margin-top: 4px;">
+                            <div id="caps-lock-warning" style="display:none; font-size: 0.85em; margin-top: 4px;">
                                 ⚠️ Attention : Verr Maj est activé !
                             </div>
-                            <div id="shift-warning" style="display:none; color: gris; font-size: 0.95em; margin-top: 4px;">
+                            <div id="shift-warning" style="display:none; font-size: 0.85em; margin-top: 4px;">
                                 ⚠️ Attention : La touche Maj (Shift) est maintenue !
                             </div>
-
-
                             <div class="footer">
                                 <p><span><a href="reset_password.php" class="link-connect">Mot de passe oublié ?</a></span></p>
                             </div>

@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', function () {
   toggles.forEach(toggleText => {
     // On remonte jusqu'à l'élément parent qui contient à la fois le champ et le bouton
     const input = toggleText.closest('.input-section')?.querySelector('input[type="password"], input[type="text"]');
-    
+
     if (!input) return;
 
     toggleText.addEventListener('click', () => {
@@ -17,4 +17,5 @@ document.addEventListener('DOMContentLoaded', function () {
       }
     });
   });
+
 });
