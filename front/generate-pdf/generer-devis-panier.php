@@ -38,12 +38,22 @@ $stmt = $pdo->prepare("SELECT date FROM panier_final WHERE id = ?");
 $stmt->execute([$idCommande]);
 $date_panier = $stmt->fetch(PDO::FETCH_ASSOC);
 
-$stmtProduits = $pdo->prepare("SELECT pdf.id_produit, pdf.quantite, vp.nom, vp.prix
-FROM panier_detail_final pdf
-JOIN vente_produit vp ON pdf.id_produit = vp.id
-WHERE pdf.id_panier_final = ?");
+// $stmtProduits = $pdo->prepare("SELECT pdf.id_produit, pdf.quantite, vp.nom, vp.prix
+// FROM panier_detail_final pdf
+// JOIN vente_produit vp ON pdf.id_produit = vp.id
+// WHERE pdf.id_panier_final = ?");
+// $stmtProduits->execute([$idCommande]);
+// $produits = $stmtProduits->fetchAll(PDO::FETCH_ASSOC);
+
+$stmtProduits = $pdo->prepare("SELECT pdf.id_produit, pdf.quantite, vp.prix, vp.id_categorie, vp.nom AS produit_nom, c.nom AS categorie_nom
+    FROM panier_detail_final pdf
+    JOIN vente_produit vp ON pdf.id_produit = vp.id
+    JOIN categorie c ON vp.id_categorie = c.id
+    WHERE pdf.id_panier_final = ?
+");
 $stmtProduits->execute([$idCommande]);
 $produits = $stmtProduits->fetchAll(PDO::FETCH_ASSOC);
+
 
 // Infos de l'entreprise
 $entreprise = [
@@ -117,7 +127,7 @@ $pdf->Ln();
 
 // Table des produits commandés
 $pdf->SetFont('Arial', 'B', 12);
-$pdf->Cell(60, 10, mb_convert_encoding("Produit", "ISO-8859-1", "UTF-8"), 1);
+$pdf->Cell(60, 10, mb_convert_encoding("Produit à l'unité", "ISO-8859-1", "UTF-8"), 1);
 $pdf->Cell(60, 10, mb_convert_encoding("Référence", "ISO-8859-1", "UTF-8"), 1);
 $pdf->Cell(20, 10, mb_convert_encoding("Quantité", "ISO-8859-1", "UTF-8"), 1);
 $pdf->Cell(50, 10, "Prix", 1);
@@ -127,19 +137,19 @@ $pdf->SetFont('Arial', '', 12);
 
 if (!empty($produits)) {
     // Boucle sur chaque produit 
-    foreach ($produits as $produit) {
-        $nom = mb_convert_encoding($produit['nom'], "ISO-8859-1", "UTF-8"); // Récupère le nom de l'produit bois
-        $quantite = htmlspecialchars($produit['quantite']); // Quantité du produit 
-        $prix = isset($produit['prix']) ? number_format($produit['prix'], 2, ',', ' ') . " EUR" : "-";
+   foreach ($produits as $produit) {
+    $nomCat = mb_convert_encoding($produit['categorie_nom'], "ISO-8859-1", "UTF-8");
+    $nom = mb_convert_encoding($produit['produit_nom'], "ISO-8859-1", "UTF-8");
+    $quantite = htmlspecialchars($produit['quantite']);
+    $prix = isset($produit['prix']) ? number_format($produit['prix'], 2, ',', ' ') . " EUR" : "-";
 
+    $pdf->Cell(60, 10, $nomCat, 1);
+    $pdf->Cell(60, 10, $nom, 1);
+    $pdf->Cell(20, 10, $quantite, 1);
+    $pdf->Cell(50, 10, $prix, 1);
+    $pdf->Ln();
+}
 
-        // Affiche les colonnes
-        $pdf->Cell(60, 10, mb_convert_encoding( "Produit à l'unité", "ISO-8859-1", "UTF-8"), 1);
-        $pdf->Cell(60, 10, $nom, 1);
-        $pdf->Cell(20, 10, $quantite, 1);
-        $pdf->Cell(50, 10, $prix, 1);
-        $pdf->Ln();
-    }
 } else {
     // Message si aucun produit trouvé
     $pdf->Ln(5);
