@@ -72,6 +72,10 @@ h2 {
     color: red;
 }
 
+.produits-container .required {
+    color: red;
+}
+
 /* Labels */
 label {
     margin-bottom: 5px;
@@ -286,6 +290,10 @@ select.input-field {
     .check-icon {
         width: 14px;
         height: 14px;
+    }
+    .select.input-field{
+        width: 100%;
+        margin-bottom: 5px;
     }
 }
 

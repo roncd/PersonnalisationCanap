@@ -20,6 +20,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 input.required = false;
                 input.value = "";
             });
+             toggleAccoudoirs();
 
         } else if (type === "Tissu") {
             bois.style.display = "none";
@@ -47,6 +48,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     banquetteSelect.addEventListener("change", afficherChampsCorrespondants);
     afficherChampsCorrespondants();
+    toggleAccoudoirs();
 
     const structureSelect = document.getElementById("structure");
     const inputA = document.getElementById("longueurA");
@@ -93,35 +95,11 @@ document.addEventListener("DOMContentLoaded", function () {
     updateVisibleInputs();
 
     function toggleAccoudoirs() {
-        const nb = document.getElementById("nb_accoudoir_bois").value;
-        const accoudoir1 = document.getElementById("accoudoir1").closest('.form-group');
-        const accoudoir2Group = document.getElementById("accoudoir2-group");
-        const accoudoir1Select = document.getElementById("accoudoir1");
-        const accoudoir2Select = document.getElementById("accoudoir2");
-    
-        if (nb == "2") {
-            accoudoir1.style.display = "flex";
-            accoudoir2Group.style.display = "flex";
-            accoudoir1Select.required = true;
-            accoudoir2Select.required = true;
-        } else if (nb == "1") {
-            accoudoir1.style.display = "flex";
-            accoudoir2Group.style.display = "none";
-            accoudoir1Select.required = true;
-            accoudoir2Select.required = false;
-            accoudoir2Select.value = ""; 
-        } else { // nb == "0"
-            accoudoir1.style.display = "none";
-            accoudoir2Group.style.display = "none";
-            accoudoir1Select.required = false;
-            accoudoir2Select.required = false;
-            accoudoir1Select.value = ""; 
-            accoudoir2Select.value = "";
-        }
+        const accoudoir1Select = document.getElementById("accoudoir_gauche");
+        const accoudoir2Select = document.getElementById("accoudoir_droit");
+
+        if (accoudoir1Select) accoudoir1Select.required = false;
+        if (accoudoir2Select) accoudoir2Select.required = false;
     }
-    
-    document.getElementById("nb_accoudoir_bois").addEventListener("change", toggleAccoudoirs);
-    toggleAccoudoirs(); 
-    
-    
-});    
+}
+);    
