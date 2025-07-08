@@ -92,36 +92,50 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           <!-- Icône d'information avec popup -->
           <button id="info-coussin-btn" title="Information" style="background: none; border: none; cursor: pointer; padding: 0;">
             <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
-              <circle cx="10" cy="10" r="9" stroke="#333" stroke-width="2" fill="#f5f5f5"/>
-              <text x="10" y="15" text-anchor="middle" font-size="13" fill="#333" font-family="Arial" font-weight="bold">i</text>
+              <circle cx="10" cy="10" r="9" stroke="#997765" stroke-width="2" fill="#f5f5f5"/>
+              <text x="10" y="15" text-anchor="middle" font-size="13" fill="#997765" font-family="Arial" font-weight="bold">i</text>
             </svg>
           </button>
         </div>
         <div id="info-coussin-popup" style="display:none; position:absolute; background:#fff; border:1px solid #ccc; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.1); padding:1em; z-index:1000; max-width:300px;">
           <span style="font-size: 1em;">Le nombre de coussin est calculé en fonction de la longueur.</span>
         </div>
-        <script>
-          document.addEventListener('DOMContentLoaded', function() {
-            const btn = document.getElementById('info-coussin-btn');
-            const popup = document.getElementById('info-coussin-popup');
+      
+      <script>
+document.addEventListener('DOMContentLoaded', () => {
+  const btn   = document.getElementById('info-coussin-btn');
+  const popup = document.getElementById('info-coussin-popup');
 
-            btn.addEventListener('click', function(e) {
-              e.stopPropagation();
-              popup.style.display = popup.style.display === 'block' ? 'none' : 'block';
-              // Position popup below the button
-              const rect = btn.getBoundingClientRect();
-              popup.style.top = (window.scrollY + rect.bottom + 8) + 'px';
-              popup.style.left = (window.scrollX + rect.left) + 'px';
-            });
+  btn.addEventListener('click', e => {
+    e.stopPropagation();
 
-            // Hide popup when clicking outside
-            document.addEventListener('click', function(e) {
-              if (!popup.contains(e.target) && e.target !== btn) {
-          popup.style.display = 'none';
-              }
-            });
-          });
-        </script>
+    /* ── toggle affichage ───────────────────────── */
+    const visible = popup.style.display === 'block';
+    popup.style.display = visible ? 'none' : 'block';
+    if (visible) return;   // on vient de fermer : pas besoin de repositionner
+
+    /* ── coordonnées du bouton ──────────────────── */
+    const rect    = btn.getBoundingClientRect();
+    const scrollY = window.scrollY || window.pageYOffset;
+    const scrollX = window.scrollX || window.pageXOffset;
+
+    /* ── positionner AU‑DESSUS et 8 px À GAUCHE du “i” ── */
+    const top  = scrollY + rect.top  - popup.offsetHeight - 10; // 8 px au‑dessus
+    const left = scrollX + rect.left - popup.offsetWidth - 10;  // 8 px à gauche
+
+    popup.style.top  = `${top}px`;
+    popup.style.left = `${left}px`;
+  });
+
+  /* ── clic extérieur : fermer le popup ─────────── */
+  document.addEventListener('click', e => {
+    if (!popup.contains(e.target) && e.target !== btn) {
+      popup.style.display = 'none';
+    }
+  });
+});
+</script>
+
 
         <section class="color-options">
           <?php if (!empty($motif_bois)): ?>

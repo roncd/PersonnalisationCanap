@@ -173,65 +173,112 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   </div>
 </div>
 
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const options               = document.querySelectorAll('.color-options .option img');
+  const mainImage             = document.querySelector('.main-display img');
+  const erreurPopup           = document.getElementById('erreur-popup');
+  const closeErreurBtn        = erreurPopup.querySelector('.btn-noir');
+  const selectedDecorationInput = document.getElementById('selected-decoration');
+  const form                  = document.querySelector('form');
 
-    <!-- GESTION DES SELECTIONS -->
-    <script>
-      document.addEventListener('DOMContentLoaded', () => {
-        const options = document.querySelectorAll('.color-options .option img');
-        const mainImage = document.querySelector('.main-display img');
-        const erreurPopup = document.getElementById('erreur-popup');
-        const closeErreurBtn = erreurPopup.querySelector('.btn-noir');
-        const selectedDecorationInput = document.getElementById('selected-decoration');
-        const form = document.querySelector('form');
+  // ───────────────────────────────────────────────
+  // 1. Récupération et détection du contexte
+  // ───────────────────────────────────────────────
+  let selectedDecoId = localStorage.getItem('selectedDecoration') || '';
+  let selected       = selectedDecoId !== '';
 
-        let selectedDecoId = localStorage.getItem('selectedDecoration') || '';
-        let selected = selectedDecoId !== '';
+  const currentStep  = document.body.getAttribute('data-current-step') || '';
+  const isTissu      = currentStep.includes('tissu');
+  const isBois       = currentStep.includes('bois');
 
-        function saveSelection() {
-          localStorage.setItem('selectedDecoration', selectedDecoId);
-        }
+  // ───────────────────────────────────────────────
+  // 2. Vérifier si la sélection stockée est compatible
+  // ───────────────────────────────────────────────
+  const decoSelector = isBois
+    ? `[data-deco-bois-id="${selectedDecoId}"]`
+    : `[data-deco-tissu-id="${selectedDecoId}"]`;
 
-        // Restaurer la sélection si elle existe
-        options.forEach(img => {
-          if (img.getAttribute('data-deco-bois-id') === selectedDecoId) {
-            img.classList.add('selected');
-            mainImage.src = img.src;
-            selectedDecorationInput.value = selectedDecoId;
-          }
-        });
+  const idCompatible = selectedDecoId && document.querySelector(decoSelector);
 
-        options.forEach(img => {
-          img.addEventListener('click', () => {
-            options.forEach(opt => opt.classList.remove('selected'));
-            img.classList.add('selected');
-            mainImage.src = img.src;
-            selectedDecoId = img.getAttribute('data-deco-bois-id');
-            selectedDecorationInput.value = selectedDecoId;
-            selected = true;
-            saveSelection();
-          });
-        });
+  if (selectedDecoId && !idCompatible) {
+    // L’ID stocké ne correspond pas au chemin actuel → on nettoie
+    options.forEach(img => img.classList.remove('selected'));
+    localStorage.removeItem('selectedDecoration');
+    selectedDecoId = '';
+    selected = false;
+    selectedDecorationInput.value = '';
+    console.log('🧹 Changement de chemin : déco réinitialisée');
+  }
 
-        // Empêcher la soumission du formulaire si rien n'est sélectionné
-        form.addEventListener('submit', (e) => {
-          if (!selectedDecorationInput.value) {
-            e.preventDefault();
-            erreurPopup.style.display = 'flex';
-          }
-        });
+  // ───────────────────────────────────────────────
+  // 3. Restaurer la sélection si cohérente
+  // ───────────────────────────────────────────────
+  options.forEach(img => {
+    if (
+      (isBois  && img.getAttribute('data-deco-bois-id')  === selectedDecoId) ||
+      (isTissu && img.getAttribute('data-deco-tissu-id') === selectedDecoId)
+    ) {
+      img.classList.add('selected');
+      mainImage.src = img.src;
+      selectedDecorationInput.value = selectedDecoId;
+    }
+  });
 
-        // Fermer le popup
-        closeErreurBtn.addEventListener('click', () => {
-          erreurPopup.style.display = 'none';
-        });
+  // ───────────────────────────────────────────────
+  // 4. Sauvegarde
+  // ───────────────────────────────────────────────
+  function saveSelection() {
+    localStorage.setItem('selectedDecoration', selectedDecoId);
+  }
 
-        window.addEventListener('click', (event) => {
-          if (event.target === erreurPopup) {
-            erreurPopup.style.display = 'none';
-          }
-        });
-      });
-    </script>
+  // ───────────────────────────────────────────────
+  // 5. Gestion du clic sur une décoration
+  // ───────────────────────────────────────────────
+  options.forEach(img => {
+    img.addEventListener('click', () => {
+      // Retirer la sélection précédente
+      options.forEach(opt => opt.classList.remove('selected'));
+
+      // Appliquer la nouvelle sélection
+      img.classList.add('selected');
+      mainImage.src = img.src;
+
+      // Stocker l’ID selon le chemin courant
+      selectedDecoId = isBois
+        ? img.getAttribute('data-deco-bois-id')
+        : img.getAttribute('data-deco-tissu-id');
+
+      selectedDecorationInput.value = selectedDecoId;
+      selected = true;
+      saveSelection();
+
+      console.log(`🎨 Décoration sélectionnée : ${selectedDecoId}`);
+    });
+  });
+
+  // ───────────────────────────────────────────────
+  // 6. Empêcher l’envoi si aucune déco n’est choisie
+  // ───────────────────────────────────────────────
+  form.addEventListener('submit', e => {
+    if (!selectedDecorationInput.value) {
+      e.preventDefault();
+      erreurPopup.style.display = 'flex';
+    }
+  });
+
+  // ───────────────────────────────────────────────
+  // 7. Popup erreur (fermeture)
+  // ───────────────────────────────────────────────
+  closeErreurBtn.addEventListener('click', () => {
+    erreurPopup.style.display = 'none';
+  });
+
+  window.addEventListener('click', event => {
+    if (event.target === erreurPopup) erreurPopup.style.display = 'none';
+  });
+});
+</script>
 
     <!-- BOUTTON RETOUR -->
     <script>

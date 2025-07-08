@@ -22,19 +22,54 @@ document.addEventListener("DOMContentLoaded", function () {
     return basePriceElement ? parseFloat(basePriceElement.textContent) || 0 : 0;
   }
 
-  function clearOtherPathOptions() {
-    const before = [...allSelectedOptions];
-    allSelectedOptions = allSelectedOptions.filter(opt => {
-      if (isTissu) return !opt.id.includes('-bois');
-      if (isBois) return !opt.id.includes('-tissu');
-      return true;
-    });
-    const removed = before.filter(opt => !allSelectedOptions.includes(opt));
-    if (removed.length > 0) {
-      console.log(`🧹 Éléments supprimés du chemin opposé :`, removed);
+  // 🔥 Nouvelle fonction pour supprimer tout le localStorage du chemin opposé
+  function clearLocalStorageForOtherPath() {
+    if (isTissu) {
+      Object.keys(localStorage).forEach(key => {
+        if (key.toLowerCase().includes('bois')) {
+          localStorage.removeItem(key);
+          console.log(`🗑️ localStorage supprimé : ${key}`);
+        }
+      });
     }
-    sessionStorage.setItem(sessionKey, JSON.stringify(allSelectedOptions));
+    if (isBois) {
+      Object.keys(localStorage).forEach(key => {
+        if (key.toLowerCase().includes('tissu')) {
+          localStorage.removeItem(key);
+          console.log(`🗑️ localStorage supprimé : ${key}`);
+        }
+      });
+    }
   }
+function clearOtherPathOptions() {
+  const before = [...allSelectedOptions];
+
+  allSelectedOptions = allSelectedOptions.filter(opt => {
+    if (isTissu) return !opt.id.includes('-bois');
+    if (isBois) return !opt.id.includes('-tissu');
+    return true;
+  });
+
+  const removed = before.filter(opt => !allSelectedOptions.includes(opt));
+
+  if (removed.length > 0) {
+    console.log(`🧹 Éléments supprimés du chemin opposé :`, removed);
+
+    clearLocalStorageForOtherPath();
+  }
+
+  // 🔥 Supprime visuellement les sélections du chemin opposé
+  document.querySelectorAll('img').forEach(img => {
+    if (isTissu && [...img.attributes].some(attr => attr.name.includes('-bois-id'))) {
+      img.parentElement.classList.remove('selected');
+    }
+    if (isBois && [...img.attributes].some(attr => attr.name.includes('-tissu-id'))) {
+      img.parentElement.classList.remove('selected');
+    }
+  });
+
+  sessionStorage.setItem(sessionKey, JSON.stringify(allSelectedOptions));
+}
 
   function updateTotal() {
     const basePrice = getBasePrice();
@@ -50,20 +85,22 @@ document.addEventListener("DOMContentLoaded", function () {
     console.log(`🧾 Options sélectionnées :`, allSelectedOptions);
   }
 
-
   const attributeSuffix = isTissu ? '-tissu' : '-bois';
   const imgElements = document.querySelectorAll('img');
 
   imgElements.forEach(option => {
-    const idAttr = [...option.attributes].find(attr => attr.name.startsWith('data-') && attr.name.endsWith('-id') && attr.name.includes(attributeSuffix));
-    const priceAttr = [...option.attributes].find(attr => attr.name.startsWith('data-') && attr.name.endsWith('-prix') && attr.name.includes(attributeSuffix));
+    const idAttr = [...option.attributes].find(attr => 
+      attr.name.startsWith('data-') && attr.name.endsWith('-id') && attr.name.includes(attributeSuffix)
+    );
+    const priceAttr = [...option.attributes].find(attr => 
+      attr.name.startsWith('data-') && attr.name.endsWith('-prix') && attr.name.includes(attributeSuffix)
+    );
 
     if (!idAttr || !priceAttr) return;
 
     const optionId = option.getAttribute(idAttr.name);
     const price = parseFloat(option.getAttribute(priceAttr.name)) || 0;
     const uniqueId = `${currentStep}_${optionId}`;
-
     const canDeselect = option.dataset.canDeselect === 'true';
 
     if (allSelectedOptions.some(opt => opt.id === uniqueId)) {
@@ -71,41 +108,34 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     option.addEventListener('click', () => {
-    const alreadySelected = option.parentElement.classList.contains('selected');
+      const alreadySelected = option.parentElement.classList.contains('selected');
 
-    /* ◼︎ 1. Clic sur la même option déjà sélectionnée */
-    if (alreadySelected) {
-      // → option obligatoire : on ignore le clic
-      if (!canDeselect) return;
+      if (alreadySelected) {
+        if (!canDeselect) return;
 
-      // → option facultative : on la retire
-      option.parentElement.classList.remove('selected');
-      allSelectedOptions = allSelectedOptions.filter(opt => opt.id !== uniqueId);
-      console.log(`➖ Option retirée : ${uniqueId}`);
+        option.parentElement.classList.remove('selected');
+        allSelectedOptions = allSelectedOptions.filter(opt => opt.id !== uniqueId);
+        console.log(`➖ Option retirée : ${uniqueId}`);
+      } else {
+        document.querySelectorAll("img").forEach(img =>
+          img.parentElement.classList.remove('selected')
+        );
+        allSelectedOptions = allSelectedOptions.filter(opt =>
+          !opt.id.startsWith(`${currentStep}_`)
+        );
 
-    /* ◼︎ 2. Clic sur une autre option de la même étape */
-    } else {
-      // On remet à zéro la sélection de l’étape courante
-      document.querySelectorAll("img").forEach(img =>
-        img.parentElement.classList.remove('selected')
-      );
-      allSelectedOptions = allSelectedOptions.filter(opt =>
-        !opt.id.startsWith(`${currentStep}_`)
-      );
-      clearOtherPathOptions();
+        clearOtherPathOptions(); // très important : retire tout ce qui n'est pas du chemin courant
 
-      // On ajoute la nouvelle option
-      allSelectedOptions.push({ id: uniqueId, price });
-      option.parentElement.classList.add('selected');
-      console.log(`➕ Option ajoutée : ${uniqueId} (${price} €)`);
-    }
+        allSelectedOptions.push({ id: uniqueId, price });
+        option.parentElement.classList.add('selected');
+        console.log(`➕ Option ajoutée : ${uniqueId} (${price} €)`);
+      }
 
-    sessionStorage.setItem(sessionKey, JSON.stringify(allSelectedOptions));
-    updateTotal();
+      sessionStorage.setItem(sessionKey, JSON.stringify(allSelectedOptions));
+      updateTotal();
+    });
   });
 
-}); 
-
-  clearOtherPathOptions();
+  clearOtherPathOptions(); // au chargement, on nettoie aussi
   updateTotal();
 });
