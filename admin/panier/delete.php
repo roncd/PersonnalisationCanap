@@ -19,13 +19,13 @@ if (!$id) {
 }
 
 try {
-     // Suppression des détails associés
-    $stmt = $pdo->prepare("DELETE FROM commande_detail_accoudoir WHERE id_commande_detail = :id");
+    // Suppression des détails associés
+    $stmt = $pdo->prepare("DELETE FROM panier_detail_final WHERE id_panier_final = :id");
     $stmt->bindValue(':id', $id, PDO::PARAM_INT);
     $stmt->execute();
     $image = $stmt->fetchColumn();
 
-    $stmt = $pdo->prepare("DELETE FROM commande_detail WHERE id = :id");
+    $stmt = $pdo->prepare("DELETE FROM panier_final WHERE id = :id");
     $stmt->bindValue(':id', $id, PDO::PARAM_INT);
     $stmt->execute();
 

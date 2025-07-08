@@ -13,20 +13,7 @@ $search = $_GET['search'] ?? '';
 
 $tables = [
     'client',
-    'structure',
-    'type_banquette',
-    'mousse',
-    'couleur_bois',
-    'dossier_bois',
-    'couleur_tissu_bois',
-    'motif_bois',
-    'modele',
-    'couleur_tissu',
-    'motif_tissu',
-    'accoudoir_tissu',
-    'accoudoir_bois',
-    'dossier_tissu',
-    'decoration'
+    'vente_produit',
 ];
 
 function fetchData($pdo, $table)
@@ -45,10 +32,6 @@ foreach ($tables as $table) {
     $assocData[$table] = array_column($data[$table], 'nom', 'id');
 }
 
-$stmt = $pdo->prepare("SELECT id, longueurA, longueurB, longueurC FROM commande_detail");
-$stmt->execute();
-$data['commande_detail'] = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
 
 // Paramètres de pagination
 $page = isset($_GET['page']) && is_numeric($_GET['page']) && $_GET['page'] > 0 ? (int)$_GET['page'] : 1;
@@ -56,7 +39,7 @@ $limit = 10; // Nombre de commandes par page
 $offset = ($page - 1) * $limit;
 
 // Compter le nombre total de commandes pour ce statut
-$stmtCount = $pdo->prepare("SELECT COUNT(*) AS total FROM commande_detail");
+$stmtCount = $pdo->prepare("SELECT COUNT(*) AS total FROM panier_final");
 $stmtCount->execute();
 $totalCommandes = $stmtCount->fetchColumn();
 
@@ -79,7 +62,7 @@ $triURL = '?' . http_build_query($params);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Commande - Canapé marocain</title>
+    <title>Commande - Paniers</title>
     <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
     <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&family=Be+Vietnam+Pro&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../../styles/admin/tab.css">
@@ -97,7 +80,7 @@ $triURL = '?' . http_build_query($params);
     </header>
     <main>
         <div class="container">
-            <h2>Commande - Canapé marrocain</h2>
+            <h2>Commande - Paniers</h2>
             <div class="search-bar">
                 <form method="GET" action="index.php">
                     <input type="text" name="search" placeholder="Rechercher par ID client..." value="<?php echo htmlspecialchars($search); ?>">
@@ -118,86 +101,59 @@ $triURL = '?' . http_build_query($params);
                         </th>
                         <th>CLIENT</th>
                         <th>PRIX (TOTAL)</th>
-                        <th>COMMENTAIRE</th>
                         <th>DATE</th>
                         <th>STATUT</th>
-                        <th>STRUCTURE</th>
-                        <th>LONGUEUR_A</th>
-                        <th>LONGUEUR_B</th>
-                        <th>LONGUEUR_C</th>
-                        <th>TYPE_BANQUETTE</th>
-                        <th>MOUSSE</th>
-                        <th>COULEUR_BOIS</th>
-                        <th>DECORATION_BOIS</th>
-                        <th>ACCOUDOIR_BOIS_GAUCHE</th>
-                        <th>ACCOUDOIR_BOIS_DROIT</th>
-                        <th>DOSSIER_BOIS</th>
-                        <th>MOTIF_TISSU_BOIS</th>
-                        <th>COUSSIN_BOIS</th>
-                        <th>MODELE_TISSU</th>
-                        <th>COULEUR_TISSU</th>
-                        <th>COUSSIN_TISSU</th>
-                        <th>DOSSIER_TISSU</th>
-                        <th>ACCOUDOIR_TISSU</th>
-                        <th>NB_ACCOUDOIR_TISSU</th>
+                        <th>PRODUITS</th>
                         <th class="sticky-col">ACTION</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php
                         if ($search) {
-                            $stmt = $pdo->prepare("SELECT cd.*, c.id AS id_client, c.nom, c.prenom
-                                                    FROM commande_detail AS cd
-                                                    INNER JOIN client AS c ON cd.id_client = c.id
+                            $stmt = $pdo->prepare("SELECT pf.*, c.id AS id_client, c.nom, c.prenom
+                                                    FROM panier_final AS pf
+                                                    INNER JOIN client AS c ON pf.id_client = c.id
                                                     WHERE c.nom LIKE :search OR c.id LIKE :search
                                                     ORDER BY id $order
                                                     ");
                             $stmt->bindValue(':search', $search, PDO::PARAM_STR);
                         } else {
-                            $stmt = $pdo->prepare("SELECT * FROM commande_detail ORDER BY id $order LIMIT :limit OFFSET :offset");
+                            $stmt = $pdo->prepare("SELECT * FROM panier_final ORDER BY id $order LIMIT :limit OFFSET :offset");
                             $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
                             $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
                         }
                         $stmt->execute();
                         $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
-                        // // Récupérer les accoudoirs bois associés à la commande detail
-                        // foreach ($results as &$commande) {
-                        //     $stmt = $pdo->prepare("SELECT cda.id_accoudoir_bois, cda.nb_accoudoir, ab.nom, ab.img
-                        //     FROM commande_detail_accoudoir cda
-                        //     JOIN accoudoir_bois ab ON cda.id_accoudoir_bois = ab.id
-                        //     WHERE cda.id_commande_detail = ?");
-                        //     $stmt->execute([$commande['id']]);
-                        //     $commande['accoudoirs'] = $stmt->fetchAll(PDO::FETCH_ASSOC);
-                        // }
-
+                        // Récupérer les accoudoirs bois associés à la commande detail
+                        foreach ($results as &$commande) {
+                            $stmt = $pdo->prepare("SELECT vp.nom, SUM(pdf.quantite) as quantite
+                            FROM panier_detail_final pdf
+                            JOIN vente_produit vp ON pdf.id_produit = vp.id
+                            WHERE pdf.id_panier_final = ?
+                            GROUP BY pdf.id_produit
+                        ");
+                            $stmt->execute([$commande['id']]);
+                            $commande['produits'] = $stmt->fetchAll(PDO::FETCH_ASSOC);
+                        }
                         if (!empty($results)) {
                             foreach ($results as $row) {
                                 echo "<tr>";
                                 echo "<td>{$row['id']}</td>";
                                 echo "<td>" . htmlspecialchars($assocData['client'][$row['id_client']] ?? '-') . "</td>";
                                 echo "<td>{$row['prix']}</td>";
-                                echo "<td>{$row['commentaire']}</td>";
                                 echo "<td>{$row['date']}</td>";
                                 echo "<td>{$row['statut']}</td>";
-                                echo "<td>" . htmlspecialchars($assocData['structure'][$row['id_structure']] ?? '-') . "</td>";
-                                echo "<td>{$row['longueurA']}</td>";
-                                echo "<td>{$row['longueurB']}</td>";
-                                echo "<td>{$row['longueurC']}</td>";
-                                echo "<td>" . htmlspecialchars($assocData['type_banquette'][$row['id_banquette']] ?? '-') . "</td>";
-                                echo "<td>" . htmlspecialchars($assocData['mousse'][$row['id_mousse']] ?? '-') . "</td>";
-                                echo "<td>" . htmlspecialchars($assocData['couleur_bois'][$row['id_couleur_bois']] ?? '-') . "</td>";
-                                echo "<td>" . htmlspecialchars($assocData['decoration'][$row['id_decoration']] ?? '-') . "</td>";
-                                echo "<td>" . htmlspecialchars($assocData['accoudoir_bois'][$row['id_accoudoir_gauche']] ?? '-') . "</td>";
-                                echo "<td>" . htmlspecialchars($assocData['accoudoir_bois'][$row['id_accoudoir_droit']] ?? '-') . "</td>";
-                                echo "<td>" . htmlspecialchars($assocData['dossier_bois'][$row['id_dossier_bois']] ?? '-') . "</td>";
-                                echo "<td>" . htmlspecialchars($assocData['couleur_tissu_bois'][$row['id_couleur_tissu_bois']] ?? '-') . "</td>";
-                                echo "<td>" . htmlspecialchars($assocData['motif_bois'][$row['id_motif_bois']] ?? '-') . "</td>";
-                                echo "<td>" . htmlspecialchars($assocData['modele'][$row['id_modele']] ?? '-') . "</td>";
-                                echo "<td>" . htmlspecialchars($assocData['couleur_tissu'][$row['id_couleur_tissu']] ?? '-') . "</td>";
-                                echo "<td>" . htmlspecialchars($assocData['motif_tissu'][$row['id_motif_tissu']] ?? '-') . "</td>";
-                                echo "<td>" . htmlspecialchars($assocData['dossier_tissu'][$row['id_dossier_tissu']] ?? '-') . "</td>";
-                                echo "<td>" . htmlspecialchars($assocData['accoudoir_tissu'][$row['id_accoudoir_tissu']] ?? '-') . "</td>";
-                                echo "<td>{$row['id_nb_accoudoir']}</td>";
+
+                                echo "<td>";
+                                if (!empty($row['produits'])) {
+                                    foreach ($row['produits'] as $produit) {
+                                        echo htmlspecialchars($produit['nom']) . " (x" . $produit['quantite'] . ")<br>";
+                                    }
+                                } else {
+                                    echo "-";
+                                }
+                                echo "</td>";
+
                                 echo "<td class='actions'>";
                                 echo "<a href='edit.php?id={$row['id']}' class='edit-action actions vert' title='Modifier'>EDIT</a>";
                                 echo "<a href='delete.php?id={$row['id']}' class='delete-action actions rouge' data-id='{$row['id']}' title='Supprimer'>DELETE</a>";
