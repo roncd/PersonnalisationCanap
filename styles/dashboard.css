@@ -573,6 +573,8 @@ body {
     gap: 2rem;
     width: 100%;
     margin-bottom: -6rem;
+    margin-top: 0rem;
+
   }
 
   .customize-text {
@@ -621,6 +623,7 @@ body {
     padding: 0 3rem;
     /* ✅ haut/bas = 1rem, gauche/droite = 2rem */
     width: 100%;
+    margin-top: 0rem;
   }
 
   .customize-text h2 {

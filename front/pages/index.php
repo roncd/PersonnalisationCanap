@@ -119,10 +119,9 @@ function calculPrix($commande, &$composition = [])
   <link rel="stylesheet" href="../../styles/buttons.css">
   <link rel="stylesheet" href="../../styles/accueil.css">
   <link rel="stylesheet" href="../../styles/transition.css">
-  <script type="module" src="../../script/transition.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-  <script src="../../node_modules/@preline/carousel/index.js"></script>
   <script type="module" src="../../script/animate-value.js"></script>
+  <script type="module" src="../../script/transition.js"></script>
 </head>
 
 <body>
@@ -235,6 +234,7 @@ function calculPrix($commande, &$composition = [])
         let isPaused = false;
         let isUserScrolling = false;
         let userScrollTimeout;
+
         function scrollCarousel() {
           if (!isPaused && !isUserScrolling) {
             scrollAmount += speed;
@@ -264,7 +264,7 @@ function calculPrix($commande, &$composition = [])
           }, 1000); // attend 1s après dernier scroll
         });
       </script>
-      <section class="combination-section transition-all" >
+      <section class="combination-section transition-all">
         <h2>Les indispensables à l’unité</h2>
         <div class="carousel-container" id="carousel-unitaires">
           <?php foreach ($produits as $produit): ?>
@@ -295,6 +295,7 @@ function calculPrix($commande, &$composition = [])
         let isPausedUnit = false;
         let isUserScrollingUnit = false;
         let userScrollTimeoutUnit;
+
         function scrollCarouselUnit() {
           if (!isPausedUnit && !isUserScrollingUnit) {
             scrollAmountUnit += speedUnit;
