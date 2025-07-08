@@ -228,7 +228,7 @@ if (isset($_GET['structure_id'])) {
     <!-- Popup bloquant pour les étapes non validées -->
     <div id="filariane-popup" class="popup">
       <div class="popup-content">
-        <h2>Veuillez sélectionner une option et cliquez sur "suivant" pour passer à l’étape d’après.</h2>
+        <h2>Veuillez cliquez sur "suivant" pour passer à l’étape d’après.</h2>
         <button class="btn-noir">OK</button>
       </div>
     </div>
