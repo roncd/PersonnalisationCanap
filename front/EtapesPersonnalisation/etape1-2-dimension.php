@@ -12,10 +12,17 @@ if (!isset($_SESSION['user_id'])) {
 
 $id_client = $_SESSION['user_id'];
 
-// Vérifier si une commande temporaire existe déjà pour cet utilisateur
+// Récupération (ou non) de la commande existante
 $stmt = $pdo->prepare("SELECT * FROM commande_temporaire WHERE id_client = ?");
-$stmt->execute([$id_client]);
-$commande = $stmt->fetch(PDO::FETCH_ASSOC);
+$stmt->execute([$_SESSION['user_id']]);
+$commande = $stmt->fetch(PDO::FETCH_ASSOC) ?: [];
+
+// Valeurs à afficher : on privilégie d’abord le POST (si on vient de soumettre),
+// sinon la commande stockée, sinon chaîne vide.
+$longueurA = $_POST['longueurA'] ?? ($commande['longueurA'] ?? '');
+$longueurB = $_POST['longueurB'] ?? ($commande['longueurB'] ?? '');
+$longueurC = $_POST['longueurC'] ?? ($commande['longueurC'] ?? '');
+$prixDim   = $_POST['prix_dimensions'] ?? ($commande['prix_dimensions'] ?? '');
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
   // Vérifier si longueurA est bien renseignée (obligatoire)
@@ -101,19 +108,19 @@ if (isset($_GET['structure_id'])) {
           <div class="form-row">
             <div class="form-group">
               <label for="longueurA">Longueur banquette A (en cm) :</label>
-              <input type="number" id="longueurA" name="longueurA" class="input-field" value="<?= $_POST['longueurA'] ?? '' ?>" placeholder="Ex: 150">
+              <input type="number" id="longueurA" name="longueurA" class="input-field"  value="<?= htmlspecialchars($longueurA) ?>" placeholder="Ex: 150">
             </div>
           </div>
           <div class="form-row">
             <div class="form-group">
               <label for="longueurB">Longueur banquette B (en cm) :</label>
-              <input type="number" id="longueurB" name="longueurB" class="input-field" value="<?= $_POST['longueurB'] ?? '' ?>" placeholder="Ex: 350">
+              <input type="number" id="longueurB" name="longueurB" class="input-field"   value="<?= htmlspecialchars($longueurB) ?>" placeholder="Ex: 350">
             </div>
           </div>
           <div class="form-row">
             <div class="form-group">
               <label for="longueurC">Longueur banquette C (en cm) :</label>
-              <input type="number" id="longueurC" name="longueurC" class="input-field" value="<?= $_POST['longueurC'] ?? '' ?>" placeholder="Ex: 350">
+              <input type="number" id="longueurC" name="longueurC" class="input-field"  value="<?= htmlspecialchars($longueurC) ?>" placeholder="Ex: 350">
             </div>
           </div>
           <div class="footer">
@@ -257,8 +264,7 @@ if (isset($_GET['structure_id'])) {
         });
       });
     </script>
-
-    <!-- VARIATION DES PRIX  -->
+ <!-- VARIATION DES PRIX  -->
     <script>
       document.addEventListener('DOMContentLoaded', () => {
         let totalPrice = 0; // Total global pour toutes les étapes
@@ -288,33 +294,31 @@ if (isset($_GET['structure_id'])) {
           allSelectedOptions = [];
           console.warn("allSelectedOptions n'était pas un tableau. Réinitialisé à []");
         }
-
+        
 
         // Fonction pour ajouter les dimensions au calcul
         function calculateDimensionPrice() {
-          const longueurA = parseFloat(document.getElementById("longueurA").value) || 0;
-          const longueurB = parseFloat(document.getElementById("longueurB").value) || 0;
-          const longueurC = parseFloat(document.getElementById("longueurC").value) || 0;
+  const longueurA = parseFloat(document.getElementById("longueurA").value) || 0;
+  const longueurB = parseFloat(document.getElementById("longueurB").value) || 0;
+  const longueurC = parseFloat(document.getElementById("longueurC").value) || 0;
 
-          const totalMeters = (longueurA + longueurB + longueurC) / 100;
-          const dimensionPrice = totalMeters * 350;
+  const totalMeters = (longueurA + longueurB + longueurC) / 100;
+  const dimensionPrice = totalMeters * 350;
 
-          document.getElementById("dimension-price").textContent = dimensionPrice.toFixed(2);
+  document.getElementById("dimension-price").textContent = dimensionPrice.toFixed(2);
 
-          // Mettre à jour le champ caché
-          document.getElementById("prix_dimensions_hidden").value = dimensionPrice.toFixed(2);
+  // Mettre à jour le champ caché
+  document.getElementById("prix_dimensions_hidden").value = dimensionPrice.toFixed(2);
 
-          // Supprimer les dimensions précédentes pour cette étape
-          allSelectedOptions = allSelectedOptions.filter(opt => !opt.id.startsWith(`${currentStep}_`));
+  // Supprimer les dimensions précédentes pour cette étape
+  allSelectedOptions = allSelectedOptions.filter(opt => !opt.id.startsWith(`${currentStep}_`));
 
-          // Ajouter les dimensions au stockage global
-          allSelectedOptions.push({
-            id: `${currentStep}_dimensions`,
-            price: dimensionPrice
-          });
+  // Ajouter les dimensions au stockage global
+  allSelectedOptions.push({ id: `${currentStep}_dimensions`, price: dimensionPrice });
 
-          sessionStorage.setItem(sessionKey, JSON.stringify(allSelectedOptions));
-        }
+  sessionStorage.setItem(sessionKey, JSON.stringify(allSelectedOptions));
+}
+
 
         // Fonction pour sauvegarder les valeurs des dimensions dans sessionStorage
         function saveDimensions() {
@@ -322,11 +326,7 @@ if (isset($_GET['structure_id'])) {
           const longueurB = document.getElementById("longueurB").value || "";
           const longueurC = document.getElementById("longueurC").value || "";
 
-          const dimensions = {
-            longueurA,
-            longueurB,
-            longueurC
-          };
+          const dimensions = { longueurA, longueurB, longueurC };
           sessionStorage.setItem(dimensionKey, JSON.stringify(dimensions));
           console.log("Dimensions sauvegardées :", dimensions);
         }
@@ -351,26 +351,18 @@ if (isset($_GET['structure_id'])) {
         }
 
         // Empêcher la saisie de plus de 3 chiffres dans les champs de type number
-        document.querySelectorAll(".input-field").forEach(input => {
-          input.addEventListener("input", () => {
-            if (input.value.length > 3) {
-              input.value = input.value.slice(0, 3);
-            }
-          });
-        });
-        const selectedStructureId = <?= (int) $_GET['structure_id'] ?? 0 ?>;
-        const structureKey = `selectedStructure_${userId}`;
-        const previousStructureId = parseInt(sessionStorage.getItem(structureKey)) || 0;
+document.querySelectorAll(".input-field").forEach(input => {
+  input.addEventListener("input", () => {
+    if (input.value.length > 3) {
+      input.value = input.value.slice(0, 3);
+    }
+  });
+});
 
-        // Si la structure a changé, on efface les dimensions sauvegardées
-        if (previousStructureId !== selectedStructureId) {
-          sessionStorage.removeItem(dimensionKey);
-          savedDimensions = {
-            longueurB: "",
-            longueurC: ""
-          };
-          sessionStorage.setItem(structureKey, selectedStructureId);
-        }
+
+        
+
+
         // Pré-remplir les champs avec les dimensions sauvegardées
         document.getElementById("longueurA").value = savedDimensions.longueurA;
         document.getElementById("longueurB").value = savedDimensions.longueurB;
@@ -390,6 +382,7 @@ if (isset($_GET['structure_id'])) {
         updateTotal();
       });
     </script>
+
 
     <!-- BOUTTON RETOUR -->
     <script>
