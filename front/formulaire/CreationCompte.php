@@ -234,7 +234,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       </div>
       <div class="right-column transition-boom">
         <section class="main-display space">
-          <img src="../../medias/meknes.png" alt="Armoire">
+          <img src="../../medias/apropos-galerie8.jpg" alt="canape-marocain">
         </section>
       </div>
     </div>

@@ -8,7 +8,7 @@ session_start();
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>A propos</title>
+  <title>À propos</title>
   <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
   <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&family=Be+Vietnam+Pro&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../../styles/apropos.css">
@@ -28,8 +28,8 @@ session_start();
 
 
     <div class="banner">
-      <img src="../../medias/canapeapropos.jpg" alt="Canapé à propos">
-      <h1>A propos</h1>
+      <img src="../../medias/apropos-banner.jpg" alt="Canapé à propos">
+      <h1>À propos</h1>
     </div>
     <div class="about-content ">
       <div class="text-content transition-all">
@@ -42,7 +42,7 @@ session_start();
         </p>
       </div>
       <div class="image-content transition-boom">
-        <img src="../../medias/canape_intro_apropos.jpg" alt="Présentation Déco du Monde">
+        <img src="../../medias/apropos-presentation.jpg" alt="Présentation Déco du Monde">
       </div>
     </div>
     <div class="values-section transition-all">
@@ -69,13 +69,13 @@ session_start();
     <div class="why-us-section">
       <div class="why-us-content">
         <div class="why-us-image transition-boom">
-          <img src="../../medias/decoration_oriental.jpg" alt="Ambiance orientale">
+          <img src="../../medias/apropos-whyus.jpg" alt="Ambiance orientale">
         </div>
         <div class="why-us-text transition-all">
           <h2><span class="highlight">Pourquoi nous </span> ?</h2>
           <p>Notre concept repose sur la personnalisation.</p>
           <p>
-            Chaque canapé est fabriqué sur commande, avec le plus grand soin, par des artisans marocains expérimentés.
+            Chaque canapé est fabriqué sur commande, avec le plus grand soin, par des artisans expérimentés.
             Que vous soyez à la recherche d’un modèle élégant pour un salon moderne, ou d’un canapé d’inspiration orientale
             pour une ambiance chaleureuse, vous trouverez sur notre site la solution idéale.
           </p>
@@ -105,19 +105,19 @@ session_start();
       </p>
       <div class="options">
         <div class="option">
-          <img src="../../medias/couleur.jpg" alt="Modèle">
-          <span>Couleur</span>
+          <img src="../../medias/apropos-decoration.jpg" alt="Modèle">
+          <span>Décoration</span>
         </div>
         <div class="option">
-          <img src="../../medias/tissu.jpg" alt="Tissu">
+          <img src="../../medias/apropos-tissu.jpg" alt="Tissu">
           <span>Tissu</span>
         </div>
         <div class="option">
-          <img src="../../medias/boisnoir.jpeg" alt="Matière">
+          <img src="../../medias/apropos-matiere.jpg" alt="Matière">
           <span>Matière</span>
         </div>
         <div class="option">
-          <img src="../../medias/motif.jpg" alt="Motif">
+          <img src="../../medias/apropos-motif.JPG" alt="Motif">
           <span>Motif</span>
         </div>
       </div>
@@ -125,7 +125,7 @@ session_start();
     </div>
   </div>
   <div class="customizer-right">
-    <img src="../../medias/canape_droite.jpg" alt="Canapé personnalisé">
+    <img src="../../medias/apropos-customizer.jpg" alt="Canapé personnalisé">
   </div>
 </div>
             <section class="ateliers">
@@ -146,6 +146,45 @@ session_start();
                 </p>
             </section>
 
+<section class="galerie">
+  <h2 class="transition-all h2">Souvenirs de nos Ateliers</h2>
+  <div class="container">
+    <!-- Répète pour 9 images -->
+    <input type="checkbox" id="item1">
+    <label for="item1" class="item1" style="background-image:url('../../medias/apropos-galerie1.jpg');"></label>
+    
+    <input type="checkbox" id="item2">
+    <label for="item2" class="item2" style="background-image:url(../../medias/apropos-galerie2.jpg);"></label>
+    
+          <!-- Répète pour 9 images -->
+    <input type="checkbox" id="item3">
+    <label for="item3" class="item3" style="background-image:url(../../medias/apropos-galerie3.jpg);"></label>
+    
+    <input type="checkbox" id="item4">
+    <label for="item4" class="item4" style="background-image:url(../../medias/apropos-galerie4.jpg);"></label>
+    
+          <!-- Répète pour 9 images -->
+    <input type="checkbox" id="item5">
+    <label for="item5" class="item5" style="background-image:url(../../medias/apropos-galerie5.jpg);"></label>
+    
+    <input type="checkbox" id="item6">
+    <label for="item6" class="item6" style="background-image:url(../../medias/apropos-galerie6.png);"></label>
+    
+
+      
+          <!-- Répète pour 9 images -->
+    <input type="checkbox" id="item7">
+    <label for="item7" class="item7" style="background-image:url(../../medias/apropos-galerie7.png);"></label>
+    
+    <input type="checkbox" id="item8">
+    <label for="item8" class="item8" style="background-image:url(../../medias/apropos-galerie8.jpg);"></label>
+    
+          <!-- Répète pour 9 images -->
+    <input type="checkbox" id="item9">
+    <label for="item9" class="item9" style="background-image:url(../../medias/apropos-galerie9.png);"></label>
+    <!-- ...jusqu'à item9 -->
+  </div>
+</section>
 
   </main>
 
