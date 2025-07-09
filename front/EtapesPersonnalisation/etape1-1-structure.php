@@ -114,6 +114,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       </div>
     </div>
 
+    <!-- Popup info pratique -->
+    <div id="popup-info" class="popup">
+      <div class="popup-content">
+        <h2>Informations pratiques</h2>
+        <ul>
+          <li>Livraison seulement en Île-de-France</li>
+          <li>Paiement en magasin ou par virement après contact avec le vendeur</li>
+          <li>Prix final n'inclus pas le prix de la livraison</li>
+        </ul>
+        <button id="close-popup" class="btn-noir">OK</button>
+      </div>
+    </div>
+
 
     <!-- POPUP BESOIN D'AIDE -->
     <div id="help-popup" class="popup ">
@@ -156,8 +169,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
 
 
-    <!-- GESTION DES SELECTIONS -->
     <script>
+      //Pop up info pratique
+      window.addEventListener("load", function() {
+        const popup = document.getElementById("popup-info");
+        const closeBtn = document.getElementById("close-popup");
+
+        if (!sessionStorage.getItem("popupShown")) {
+          popup.style.display = "flex"; 
+
+          // Marque comme affiché
+          sessionStorage.setItem("popupShown", "true");
+        }
+
+        closeBtn.addEventListener("click", () => {
+          popup.style.display = "none";
+        });
+      });
+
+      // GESTION DES SELECTIONS 
       document.addEventListener('DOMContentLoaded', () => {
         const options = document.querySelectorAll('.color-options .option img');
         const selectedStructureInput = document.getElementById('selected-structure');

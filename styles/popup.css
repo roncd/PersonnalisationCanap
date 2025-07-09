@@ -13,7 +13,7 @@
 
 .popup-content {
   background: #E3D1C8;
-  padding: 20px;
+  padding: 30px;
   border-radius: 20px;
   text-align: center;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
@@ -27,6 +27,11 @@
 .popup-content p {
   font-size: 16px;
   margin: 0 0 10px;
+}
+
+.popup-content ul {
+  text-align: left;
+  margin: 19px 0px;
 }
 
 /* ============ RESPONSIVE POPUP ============ */
@@ -71,6 +76,12 @@
   .popup-content p {
     font-size: 13px;
   }
+
+  .popup-content ul {
+    font-size: 12px;
+    margin-left: 5px;
+  }
+
 
   .close-btn,
   .close-btn-selection,
