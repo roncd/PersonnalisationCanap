@@ -20,7 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $id_couleur = ($_POST['id_couleur']);
 
     // Validation des champs requis
-    if (empty($nom) || empty($price) || empty($img['name']) || empty($id_couleur)) {
+    if (empty($nom) || !isset($price) || empty($img['name']) || empty($id_couleur)) {
         $_SESSION['message'] = 'Tous les champs sont requis !';
         $_SESSION['message_type'] = 'error';
     } else {

@@ -36,8 +36,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $prix = trim($_POST['prix']);
     $img = $_FILES['img'];
 
-    if (empty($nom)) {
-        $_SESSION['message'] = 'Le nom est requis.';
+     if (empty($nom) || !isset($prix) || empty($img['name'])) {
+        $_SESSION['message'] = 'Tous les champs sont requis !';
         $_SESSION['message_type'] = 'error';
     } else {
         // Garder l'image actuelle si aucune nouvelle image n'est téléchargée

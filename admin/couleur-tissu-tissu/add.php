@@ -15,7 +15,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $img = $_FILES['img'];
 
     // Validation des champs requis
-    if (empty($nom) || empty($price) || empty($img['name'])) {
+    if (empty($nom) || !isset($price) || empty($img['name'])) {
         $_SESSION['message'] = 'Tous les champs sont requis !';
         $_SESSION['message_type'] = 'error';
     }

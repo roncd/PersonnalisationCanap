@@ -39,7 +39,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $coffre = trim($_POST['coffre']);
 
 
-    if (empty($nom) || empty($nb_banquette) || !isset($_POST['coffre'])) {
+    if (empty($nom) || !isset($price) || !isset($_POST['coffre']) || empty($img['name'])) {
         $_SESSION['message'] = 'Veillez remplir les champs requis.';
         $_SESSION['message_type'] = 'error';
     } else {
@@ -130,7 +130,7 @@ $valeurs = [1, 2, 3];
                         <div class="form-group">
                             <label for="coffre">Coffre <span class="required">*</span></label>
                             <select id="coffre" name="coffre" class="input-field" required>
-                               <?php $options = ["0" => "Non", "1" => "Oui"]; ?>
+                                <?php $options = ["0" => "Non", "1" => "Oui"]; ?>
                                 <option value="<?php echo htmlspecialchars($structure['coffre']); ?>"><?php echo htmlspecialchars($options[$structure['coffre']]); ?></option>
                                 <?php
                                 // Boucle pour afficher uniquement les options différentes
