@@ -204,7 +204,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["envoyer"])) {
       </div>
       <div class="right-column transition-boom">
         <section class="main-display">
-          <img src="../../medias/meknes.png" alt="Armoire">
+          <img src="../../medias/apropos-galerie8.jpg" alt="canape-marocain">
         </section>
       </div>
     </div>

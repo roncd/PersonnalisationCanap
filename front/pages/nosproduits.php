@@ -248,7 +248,7 @@ if (!empty($produitAjoute)) : ?>
 
     <section class="hero-section">
         <div class="hero-container">
-            <img src="../../medias/salon-marocain.jpg" alt="Salon marocain" class="hero-image" />
+        <img src="../../medias/hero-banner.jpg" alt="Salon marocain" class="hero-image">
             <div class="hero-content">
                 <br /><br /><br />
                 <h1 class="hero-title h2">Nos Produits</h1>
