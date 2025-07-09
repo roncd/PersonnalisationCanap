@@ -13,9 +13,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $price = trim($_POST['price']);
     $img = $_FILES['img'];
     $nb_banquette = trim($_POST['nb_banquette']);
+    $coffre = trim($_POST['coffre']);
 
-    if (empty($nom) || empty($price) || empty($img['name'])) {
-        $_SESSION['message'] = 'Tous les champs sont requis !';
+    if (empty($nom) || empty($price) || !isset($_POST['coffre'])|| empty($img['name'])) {
+        $_SESSION['message'] = 'Veillez remplir les champs requis.';
         $_SESSION['message_type'] = 'error';
     }
 
@@ -39,8 +40,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (move_uploaded_file($img['tmp_name'], $uploadPath)) {
         try {
-            $stmt = $pdo->prepare("INSERT INTO structure (nom, img, prix, nb_longueurs) VALUES (?, ?, ?, ?)");
-            $stmt->execute([$nom, $fileName, $price, $nb_banquette]);
+            $stmt = $pdo->prepare("INSERT INTO structure (nom, img, prix, nb_longueurs, coffre) VALUES (?, ?, ?, ?, ?)");
+            $stmt->execute([$nom, $fileName, $price, $nb_banquette, $coffre]);
 
             $_SESSION['message'] = 'La structure a été ajoutée avec succès !';
             $_SESSION['message_type'] = 'success';
@@ -103,6 +104,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 <option value="1">1</option>
                                 <option value="2">2</option>
                                 <option value="3">3</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="coffre">Coffre <span class="required">*</span></label>
+                            <select id="coffre" name="coffre" class="input-field" required>
+                                <option value="0">Non</option>
+                                <option value="1">Oui</option>
                             </select>
                         </div>
                     </div>
