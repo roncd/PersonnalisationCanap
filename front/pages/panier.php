@@ -40,8 +40,8 @@ $panier = $stmt->fetch();
     </header>
     <main>
         <section class="panier-container">
-            <h1 class="transition-all">Mon panier</h1>
-            <div class="panier-actions transition-all">
+            <h1>Mon panier</h1>
+            <div class="panier-actions">
                 <a href="nosproduits.php" class="btn-beige">Continuer mes achats</a>
             </div>
             <?php if (!$panier): ?>
@@ -73,7 +73,7 @@ $panier = $stmt->fetch();
                 $produits = $stmt->fetchAll(PDO::FETCH_ASSOC); ?>
            
             <div class="panier-info">
-                <div class="panier-table transition-all">
+                <div class="panier-table">
                     <table>
                         <thead>
                             <tr>

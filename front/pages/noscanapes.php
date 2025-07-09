@@ -195,7 +195,7 @@ function calculPrix($commande, &$composition = [])
         </div>
     </section>
 
-    <main class="products-container transition-all">
+    <main class="products-container">
         <!-- Filtres -->
         <?php
         $currentType = isset($_GET['type']) ? strtolower($_GET['type']) : '';
