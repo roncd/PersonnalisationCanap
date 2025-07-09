@@ -74,15 +74,15 @@ foreach ($commandes as $commande) {
     <main>
         <div class="container">
             <!-- Colonne de gauche -->
-            <h2 class="h2-commande transition-all">Suivis des commandes - canapés marocains</h2>
+            <h2 class="h2-commande">Suivis des commandes - canapés marocains</h2>
             <div class="content">
-                <div class="tableau transition-all">
+                <div class="tableau">
                     <div class="tabs">
                         <button onclick="location.href='?statut=validation'" class="tab <?= ($statut === 'validation') ? 'active' : '' ?>">En attente de validation</button>
                         <button onclick="location.href='?statut=construction'" class="tab <?= ($statut === 'construction') ? 'active' : '' ?>">En cours de construction</button>
                         <button onclick="location.href='?statut=final'" class="tab <?= ($statut === 'final') ? 'active' : '' ?>">Commandes finalisées</button>
                     </div>
-                    <div class="tab-content <?= $statut === 'validation' ? 'active' : '' ?>" id="validation">
+                    <div class="tab-content transition-all <?= $statut === 'validation' ? 'active' : '' ?>" id="validation">
                         <div id="commandes-container">
                             <?php if (!empty($commandes)): ?>
                                 <?php foreach ($commandes as $commande): ?>
@@ -104,7 +104,7 @@ foreach ($commandes as $commande) {
                         </div>
                     </div>
 
-                    <div class="tab-content <?= $statut === 'construction' ? 'active' : '' ?>" id="construction">
+                    <div class="tab-content transition-all <?= $statut === 'construction' ? 'active' : '' ?>" id="construction">
                         <div id="commandes-container">
                             <?php if (!empty($commandes)): ?>
                                 <?php foreach ($commandes as $commande): ?>
@@ -126,7 +126,7 @@ foreach ($commandes as $commande) {
                         </div>
                     </div>
 
-                    <div class="tab-content <?= $statut === 'final' ? 'active' : '' ?>" id="final">
+                    <div class="tab-content transition-all <?= $statut === 'final' ? 'active' : '' ?>" id="final">
                         <div id="commandes-container">
                             <?php if (!empty($commandes)): ?>
                                 <?php foreach ($commandes as $commande): ?>

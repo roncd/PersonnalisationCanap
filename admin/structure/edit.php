@@ -36,9 +36,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $price = ($_POST['price']);
     $nb_banquette = trim($_POST['nb_banquette']);
     $img = $_FILES['img'];
+    $coffre = trim($_POST['coffre']);
 
-    if (empty($nom) || empty($nb_banquette)) {
-        $_SESSION['message'] = 'Le nom est requis.';
+
+    if (empty($nom) || !isset($price) || !isset($_POST['coffre']) || empty($img['name'])) {
+        $_SESSION['message'] = 'Veillez remplir les champs requis.';
         $_SESSION['message_type'] = 'error';
     } else {
         // Garder l'image actuelle si aucune nouvelle image n'est téléchargée
@@ -64,8 +66,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         }
         if (!isset($_SESSION['message'])) {
-            $stmt = $pdo->prepare("UPDATE structure SET nom = ?, img = ?, prix = ?, nb_longueurs = ? WHERE id = ?");
-            $stmt->execute([$nom, $fileName, $price, $nb_banquette, $id]);
+            $stmt = $pdo->prepare("UPDATE structure SET nom = ?, img = ?, prix = ?, nb_longueurs = ?, coffre = ? WHERE id = ?");
+            $stmt->execute([$nom, $fileName, $price, $nb_banquette, $coffre, $id]);
             $_SESSION['message'] = 'La structure a été mise à jour avec succès !';
             $_SESSION['message_type'] = 'success';
             header("Location: visualiser.php");
@@ -75,6 +77,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 $selected = (int) $structure['nb_longueurs'];
 $valeurs = [1, 2, 3];
+
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -122,6 +125,21 @@ $valeurs = [1, 2, 3];
                                         <option value="<?php echo $valeur; ?>"><?php echo $valeur; ?></option>
                                     <?php endif; ?>
                                 <?php endforeach; ?>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="coffre">Coffre <span class="required">*</span></label>
+                            <select id="coffre" name="coffre" class="input-field" required>
+                                <?php $options = ["0" => "Non", "1" => "Oui"]; ?>
+                                <option value="<?php echo htmlspecialchars($structure['coffre']); ?>"><?php echo htmlspecialchars($options[$structure['coffre']]); ?></option>
+                                <?php
+                                // Boucle pour afficher uniquement les options différentes
+                                foreach ($options as $value => $label) {
+                                    if ($value !== $structure['coffre']) {
+                                        echo "<option value=\"$value\">$label</option>";
+                                    }
+                                }
+                                ?>
                             </select>
                         </div>
                     </div>

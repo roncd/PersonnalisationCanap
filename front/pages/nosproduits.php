@@ -271,7 +271,7 @@ if (!empty($produitAjoute)) : ?>
             $currentCategorie = isset($_GET['categorie']) ? strtolower($_GET['categorie']) : '';
             ?>
 
-            <div class="filters transition-all">
+            <div class="filters">
                 <button class="filter-btn <?= $currentCategorie === '' ? 'active' : '' ?>" data-category="">Tous</button>
 
                 <?php foreach ($categories as $cat): ?>

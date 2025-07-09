@@ -39,8 +39,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $id_couleur = trim($_POST['id_couleur']);
 
 
-    if (empty($nom)) {
-        $_SESSION['message'] = 'Le nom est requis.';
+     if (empty($nom) || !isset($price) || empty($img['name'])) {
+        $_SESSION['message'] = 'Tous les champs sont requis !';
         $_SESSION['message_type'] = 'error';
     } else {
         // Garder l'image actuelle si aucune nouvelle image n'est téléchargée

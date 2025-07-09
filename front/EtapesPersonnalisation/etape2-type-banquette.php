@@ -26,23 +26,43 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $stmt->execute([$id_client]);
   $existing_order = $stmt->fetch(PDO::FETCH_ASSOC);
 
-  if ($existing_order) {
-    $stmt = $pdo->prepare("UPDATE commande_temporaire SET id_banquette = ? WHERE id_client = ?");
-    $stmt->execute([$id_banquette, $id_client]);
-  } else {
-    $stmt = $pdo->prepare("INSERT INTO commande_temporaire (id_client, id_banquette) VALUES (?, ?)");
-    $stmt->execute([$id_client, $id_banquette]);
-  }
+  $stmt = $pdo->prepare("SELECT id_structure FROM commande_temporaire WHERE id_client = ?");
+  $stmt->execute([$id_client]);
+  $commande = $stmt->fetch(PDO::FETCH_ASSOC);
 
-  // Redirection en fonction du type de banquette
-  if ($banquette_type === "Bois") {
-    header("Location: etape3-bois-couleur.php");
-  } elseif ($banquette_type === "Tissu") {
-    header("Location: etape3-tissu-modele-banquette.php");
-  } else {
-    header("Location: etape1-2-dimension.php");
+  // Vérifier que la commande et la structure existent
+  if ($commande && !empty($commande['id_structure'])) {
+    $idStructure = $commande['id_structure'];
+
+    // Vérifier si la structure a un coffre
+    $requete = $pdo->prepare("SELECT coffre FROM structure WHERE id = ?");
+    $requete->execute([$idStructure]);
+    $structure = $requete->fetch();
+    $coffre = (int)$structure['coffre']; // Cast en entier pour être sûr
+
+    $showIncompatibilitePopup = false;
+    if ($coffre === 1 && strtolower($banquette_type) === 'tissu') {
+      $showIncompatibilitePopup = true;
+    } else {
+      if ($existing_order) {
+        $stmt = $pdo->prepare("UPDATE commande_temporaire SET id_banquette = ? WHERE id_client = ?");
+        $stmt->execute([$id_banquette, $id_client]);
+      } else {
+        $stmt = $pdo->prepare("INSERT INTO commande_temporaire (id_client, id_banquette) VALUES (?, ?)");
+        $stmt->execute([$id_client, $id_banquette]);
+      }
+
+      // Redirection en fonction du type de banquette
+      if ($banquette_type === "Bois") {
+        header("Location: etape3-bois-couleur.php");
+      } elseif ($banquette_type === "Tissu") {
+        header("Location: etape3-tissu-modele-banquette.php");
+      } else {
+        header("Location: etape1-2-dimension.php");
+      }
+      exit;
+    }
   }
-  exit;
 }
 ?>
 
@@ -84,7 +104,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <div class="container transition">
       <div class="left-column ">
         <h2>Étape 2 - Choisi ton type de banquette</h2>
-
         <section class="color-2options">
           <?php foreach ($banquettes as $banquette): ?>
             <div class="option ">
@@ -144,6 +163,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       </div>
     </div>
 
+    <!-- Popup d'erreur si incompatibilitee avec structure -->
+    <div id="incompatibilite-popup" class="popup ">
+      <div class="popup-content">
+        <h2>Structure incompatible avec ce type de banquette, </br> veuillez sélectionner un autre type.</h2>
+        <button id=close-btn class="btn-noir">OK</button>
+      </div>
+    </div>
+
     <!-- Popup d'erreur si option non selectionnée -->
     <div id="erreur-popup" class="popup ">
       <div class="popup-content">
@@ -152,15 +179,34 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       </div>
     </div>
 
-        <!-- Popup bloquant pour les étapes non validées -->
-<div id="filariane-popup" class="popup">
-  <div class="popup-content">
-    <h2>Veuillez cliquez sur "suivant" pour passer à l’étape d’après.</h2>
-    <button class="btn-noir">OK</button>
-  </div>
-</div>
+    <!-- Popup bloquant pour les étapes non validées -->
+    <div id="filariane-popup" class="popup">
+      <div class="popup-content">
+        <h2>Veuillez cliquez sur "suivant" pour passer à l’étape d’après.</h2>
+        <button class="btn-noir">OK</button>
+      </div>
+    </div>
 
+    <?php if (!empty($showIncompatibilitePopup)) : ?>
+      <script>
+        document.addEventListener('DOMContentLoaded', () => {
+          const popup = document.getElementById("incompatibilite-popup");
+          const closeBtn = document.getElementById("close-btn");
 
+          popup.style.display = "flex";
+
+          closeBtn.addEventListener("click", () => {
+            popup.style.display = "none";
+          });
+
+          window.addEventListener("click", (event) => {
+            if (event.target === popup) {
+              popup.style.display = "none";
+            }
+          });
+        });
+      </script>
+    <?php endif; ?>
 
     <!-- GESTION DES SELECTIONS -->
     <script>
@@ -292,53 +338,58 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       }
     </script>
 
-    
-    
+
+
     <!-- FIL ARIANE -->
     <script>
-document.addEventListener('DOMContentLoaded', () => {
-  const filAriane = document.querySelector('.fil-ariane');
-  const links = filAriane.querySelectorAll('a');
+      document.addEventListener('DOMContentLoaded', () => {
+        const filAriane = document.querySelector('.fil-ariane');
+        const links = filAriane.querySelectorAll('a');
 
-  const filArianePopup = document.getElementById('filariane-popup');
-  const closeFilArianePopupBtn = filArianePopup.querySelector('.btn-noir');
+        const filArianePopup = document.getElementById('filariane-popup');
+        const closeFilArianePopupBtn = filArianePopup.querySelector('.btn-noir');
 
-  const etapes = [
-  { id: 'etape1-1-structure.php', key: null }, // toujours accessible
-  { id: 'etape1-2-dimension.php', key:  null },
-  { id: 'etape2-type-banquette.php', key:  null  },
-];
+        const etapes = [{
+            id: 'etape1-1-structure.php',
+            key: null
+          }, // toujours accessible
+          {
+            id: 'etape1-2-dimension.php',
+            key: null
+          },
+          {
+            id: 'etape2-type-banquette.php',
+            key: null
+          },
+        ];
 
- links.forEach((link, index) => {
-    const etape = etapes[index];
+        links.forEach((link, index) => {
+          const etape = etapes[index];
 
-    // Empêche de cliquer si l'étape n’est pas validée
-    if (etape.key && sessionStorage.getItem(etape.key) !== 'true') {
-      link.addEventListener('click', (e) => {
-        e.preventDefault();
-        filArianePopup.style.display = 'flex';
+          // Empêche de cliquer si l'étape n’est pas validée
+          if (etape.key && sessionStorage.getItem(etape.key) !== 'true') {
+            link.addEventListener('click', (e) => {
+              e.preventDefault();
+              filArianePopup.style.display = 'flex';
+            });
+            link.classList.add('disabled-link');
+          }
+        });
+
+        // Fermer le popup avec le bouton
+        closeFilArianePopupBtn.addEventListener('click', () => {
+          filArianePopup.style.display = 'none';
+        });
+
+        // Fermer si on clique en dehors du contenu
+        window.addEventListener('click', (event) => {
+          if (event.target === filArianePopup) {
+            filArianePopup.style.display = 'none';
+          }
+        });
       });
-      link.classList.add('disabled-link');
-    }
-  });
-
-  // Fermer le popup avec le bouton
-  closeFilArianePopupBtn.addEventListener('click', () => {
-    filArianePopup.style.display = 'none';
-  });
-
-  // Fermer si on clique en dehors du contenu
-  window.addEventListener('click', (event) => {
-    if (event.target === filArianePopup) {
-      filArianePopup.style.display = 'none';
-    }
-  });
-});
-
-
     </script>
   </main>
-
   <?php require_once '../../squelette/footer.php'; ?>
 </body>
 
