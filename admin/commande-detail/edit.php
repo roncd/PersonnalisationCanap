@@ -98,7 +98,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 
 
-    if (empty($prix) || empty($idClient) || empty($idStructure) || empty($longueurA) || empty($idBanquette) || empty($idMousse)) {
+    if (!isset($price) || empty($idClient) || empty($idStructure) || empty($longueurA) || empty($idBanquette) || empty($idMousse)) {
         $_SESSION['message'] = 'Tous les champs requis doivent être remplis.';
         $_SESSION['message_type'] = 'error';
     }
