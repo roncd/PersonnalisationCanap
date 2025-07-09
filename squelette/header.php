@@ -163,8 +163,6 @@ if (isset($_SESSION['user_id'])) {
         });
     </script>
 
-
-
     <!-- Script pour le menu mobile  -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
