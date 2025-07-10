@@ -41,7 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $img = $_FILES['img'];
     $id_couleur = trim($_POST['id_couleur']);
 
-    if (empty($nom) || !isset($prix) || empty($img['name'])) {
+    if (empty($nom) || !isset($prix)) {
         $_SESSION['message'] = 'Tous les champs sont requis !';
         $_SESSION['message_type'] = 'error';
     } else {

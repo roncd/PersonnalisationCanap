@@ -35,7 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $prix = trim($_POST['prix']);
     $img = $_FILES['img'];
 
-     if (empty($nom) || !isset($prix) || empty($img['name'])) {
+     if (empty($nom) || !isset($prix)) {
         $_SESSION['message'] = 'Tous les champs sont requis !';
         $_SESSION['message_type'] = 'error';
     } else {
