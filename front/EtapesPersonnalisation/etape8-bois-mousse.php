@@ -11,7 +11,7 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 // Récupérer les types de mousse depuis la base de données
-$stmt = $pdo->query("SELECT * FROM mousse");
+$stmt = $pdo->query("SELECT * FROM mousse ORDER BY prix ASC");
 $mousse = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 // Vérifier si le formulaire a été soumis

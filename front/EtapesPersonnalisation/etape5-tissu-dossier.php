@@ -11,7 +11,7 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 // Récupérer les types de dossier tissu depuis la base de données
-$stmt = $pdo->query("SELECT * FROM dossier_tissu");
+$stmt = $pdo->query("SELECT * FROM dossier_tissu ORDER BY prix ASC");
 $dossier_tissu = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 // Vérifier si le formulaire a été soumis

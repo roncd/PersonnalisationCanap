@@ -12,7 +12,7 @@ if (!isset($_SESSION['user_id'])) {
 $selectedCouleurId = $_SESSION['id_couleur_bois'];
 
 //Affiche seulement les deco lié à la couleur séléctionné 
-$stmt = $pdo->prepare("SELECT * FROM decoration WHERE id_couleur_bois = ?");
+$stmt = $pdo->prepare("SELECT * FROM decoration WHERE id_couleur_bois = ? ORDER BY prix ASC");
 $stmt->execute([$selectedCouleurId]);
 $decoration = $stmt->fetchAll(PDO::FETCH_ASSOC);
 

@@ -13,7 +13,7 @@ if (!isset($_SESSION['user_id'])) {
 $id_client = $_SESSION['user_id'];
 
 // Récupérer les types d'accoudoirs depuis la base de données
-$stmt = $pdo->query("SELECT * FROM accoudoir_bois");
+$stmt = $pdo->query("SELECT * FROM accoudoir_bois ORDER BY prix ASC");
 $accoudoir_bois = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 // Vérifier si le formulaire a été soumis
