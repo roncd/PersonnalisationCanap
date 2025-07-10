@@ -187,7 +187,107 @@ body {
   border-radius: 3px;
   object-fit: cover;
   border-radius: 20px;
+    height:600px
+
 }
+
+.container {
+  position: relative;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80em;
+  height: 80em;
+  margin-top: 43rem;
+  margin-bottom: -26rem;
+
+
+}
+
+.container input {
+  display: none;
+}
+
+.container label {
+  position: absolute;
+  box-sizing: border-box;
+  width: 33.33%;
+  height: 33.33%;
+  border: 1px solid transparent;
+  background-position: center;
+  background-size: cover;
+  transition: all 0.5s ease-in-out;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.container label:hover {
+  border: 3px solid #997765;
+  z-index: 1;
+}
+
+.item1 {
+  border-radius: 20px 0 0 0;
+}
+
+.item3 {
+  border-radius: 0 20px 0 0;
+}
+
+.item7 {
+  border-radius: 0 0 0 20px ;
+}
+
+.item9 {
+  border-radius: 0  0 20px 0;
+}
+
+
+
+/* Placement en grille 3x3 */
+.item1 { top: 0%; left: 0%; }
+.item2 { top: 0%; left: 33.33%; }
+.item3 { top: 0%; left: 66.66%; }
+.item4 { top: 33.33%; left: 0%; }
+.item5 { top: 33.33%; left: 33.33%; }
+.item6 { top: 33.33%; left: 66.66%; }
+.item7 { top: 66.66%; left: 0%; }
+.item8 { top: 66.66%; left: 33.33%; }
+.item9 { top: 66.66%; left: 66.66%; }
+
+/* Agrandissement au clic */
+input:checked + label {
+  top: 10% !important;
+  left: 26% !important;
+  width: 50% !important;
+  height: 50% !important;
+  z-index: 2;
+  border-radius: 20px !important;
+}
+
+
+@media (max-width: 768px) {
+  .container {
+    width: 95vw;
+    height: 95vw;
+    margin-top: 21rem;
+    margin-bottom: -22rem;
+  }
+
+  .container label {
+    width: 33.33%;
+    height: 33.33%;
+  }
+
+  input:checked + label {
+    top: 2.5% !important;
+    left: 2.5% !important;
+    width: 95% !important;
+    height: 95% !important;
+  }
+}
+
+
 
 .why-us-text {
   flex: 1 1 55%;   
@@ -312,6 +412,17 @@ body {
   font-size: 2rem;
   font-family: 'Baloo 2', sans-serif;
 }
+
+
+.galerie h2 {
+  color: #0c0603;
+  margin-bottom: 20px;
+  width: 100%;
+  text-align: center;
+  font-size: 2rem;
+  font-family: 'Baloo 2', sans-serif;
+}
+  
   
 .ateliers .intro,
 .ateliers .conclusion {
@@ -445,6 +556,12 @@ body {
     font-size: 1.4rem;
 }
 
+
+.galerie h2 {
+    font-size: 1.4rem;
+}
+  
+
 .ateliers .intro, .ateliers .conclusion {
     font-size: 0.90rem; 
 }
@@ -560,6 +677,10 @@ body {
   }
 
     .ateliers h2 {
+    font-size: 1.4rem;
+}
+
+    .galerie h2 {
     font-size: 1.4rem;
 }
 

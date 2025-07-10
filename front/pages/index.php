@@ -135,17 +135,19 @@ function calculPrix($commande, &$composition = [])
 
     <section class="hero-section">
       <div class="hero-container">
-        <img src="../../medias/ban1.jpg" alt="Salon marocain" class="hero-image">
+        <img src="../../medias/hero-banner.jpg" alt="Salon marocain" class="hero-image">
         <div class="hero-content">
           <br><br><br>
           <h1 class="hero-title h2">
-            Personnalisez votre salon marocain
+            Personnalise ton salon marocain
           </h1>
 
           <p class="hero-description">
-            Laissez-vous tenter et personnalisez votre salon de A à Z !
-            Du canapé à la table, choisissez les configurations qui vous plaisent le plus.
-            La couleur, le tissu, la forme... faites ce qui vous ressemble pour un prix raisonnable.
+            Laisse-toi tenter et personnalise ton salon de A à Z !
+            Du canapé à la table, choisis les configurations qui te plaisent le plus.
+            La couleur, le tissu, la forme… fais ce qui te ressemble, et tout ça à un prix raisonnable.
+
+
           </p>
           <a href="dashboard.php">
             <button class="btn-noir">PERSONNALISER</button>
@@ -163,21 +165,16 @@ function calculPrix($commande, &$composition = [])
     <div class="accueil">
       <section class="avantages-card transition-boom">
         <div class="histoire-img">
-          <img src="../../medias/ban2.jpg" alt="Aperçu canapé personnalisé">
+          <img src="../../medias/accueil-whyus.jpg" alt="Aperçu canapé personnalisé">
         </div>
         <div class="avantages-text">
           <h2>Qui sommes-nous ?</h2>
           <p class="histoire-description">
-            Chez Déco du Monde, chaque salon marocain est pensé comme une œuvre unique,
-            façonnée selon vos envies, vos goûts et vos traditions. Du choix des tissus à la finition
-            des détails,
-            nous mettons notre passion et notre savoir-faire au service d'un mobilier qui vous
-            ressemble.
+            Chez Déco du Monde, chaque salon marocain est pensé comme une œuvre unique, façonnée selon tes envies, tes goûts et tes traditions.
+            Du choix des tissus à la finition des détails, on met toute notre passion et notre savoir-faire au service d’un mobilier qui te ressemble.
           </p>
           <p class="histoire-mission">
-            Notre mission : faire vivre l'artisanat marocain dans des intérieurs modernes et
-            chaleureux,
-            en alliant confort, élégance et culture.
+            Notre mission : faire vivre l’artisanat marocain dans ton intérieur, en alliant confort, élégance et culture pour créer un espace moderne et chaleureux.
           </p>
           <a href="apropos.php" class="btn-beige histoire-btn">
             En savoir plus
@@ -185,7 +182,7 @@ function calculPrix($commande, &$composition = [])
         </div>
       </section>
       <section class="combination-section transition-all">
-        <h2>Inspirez-vous de nos salons marocains</h2>
+        <h2>Laisse-toi inspirer par nos salons marocains</h2>
         <div class="carousel-container" id="carousel">
           <?php foreach ($commandes as $commande): ?>
             <?php
@@ -209,19 +206,28 @@ function calculPrix($commande, &$composition = [])
             </div>
           <?php endforeach; ?>
         </div>
+
+        
+      <div class="voir-plus">
+        <button class="btn-noir"
+          onclick="window.location.href = 'noscanapes.php';">
+          Voir plus +
+        </button>
+      </div>
+
       </section>
       <section class="avantages-card transition-boom">
         <div class="avantages-text">
-          <h2>Pourquoi personnaliser votre canapé ici ?</h2>
+          <h2>Pourquoi personnaliser ton canapé ici ?</h2>
           <ul>
-            <li>Visualisation en temps réel de votre canapé</li>
+            <li>Des modèles uniques</li>
             <li>Produits faits main, sur mesure</li>
             <li>Livraison rapide et soignée</li>
             <li>Paiement sécurisé</li>
           </ul>
         </div>
         <div class="avantages-img">
-          <img src="../../medias/ban2.jpg" alt="Aperçu canapé personnalisé">
+          <img src="../../medias/accueil-whyhere.jpg" alt="Aperçu canapé personnalisé">
         </div>
       </section>
       <script>
@@ -285,6 +291,13 @@ function calculPrix($commande, &$composition = [])
             </div>
           <?php endforeach; ?>
         </div>
+
+              <div class="voir-plus">
+        <button class="btn-noir"
+          onclick="window.location.href = 'nosproduits.php';">
+          Voir plus +
+        </button>
+      </div>
       </section>
       <script>
         const carouselUnit = document.getElementById('carousel-unitaires');
@@ -323,31 +336,35 @@ function calculPrix($commande, &$composition = [])
           }, 1000);
         });
       </script>
+
+      
+
+
       <!-- Section Commencer un devis -->
       <section class="devis-section transition-all">
         <div class="devis-container">
           <section class="process-section">
-            <h2 class="h2-center">Personnalisez votre salon en 4 étapes</h2>
+            <h2 class="h2-center">Personnalise ton salon en 4 étapes</h2>
             <div class="process-cards">
               <div class="process-card">
                 <i class="fas fa-couch"></i>
                 <h3>1. Je personnalise</h3>
-                <p>Choisissez votre modèle, les couleurs, les modules et envoyez votre demande.</p>
+                <p>Choisis tes options ou un canapé préfait, puis génére un devis.</p>
               </div>
               <div class="process-card">
                 <i class="fas fa-file-invoice"></i>
                 <h3>2. Je reçois un devis</h3>
-                <p>Notre équipe vous envoie un devis clair et détaillé sous 24h maximum.</p>
+                <p>On vérifie ta commande et te contacte pour confirmer.</p>
               </div>
               <div class="process-card">
                 <i class="fas fa-check-circle"></i>
                 <h3>3. Je paie en magasin</h3>
-                <p>Vous validez la commande et effectuez le paiement en magasin.</p>
+                <p>Tu valides ta commande et effectues le paiement en magasin.</p>
               </div>
               <div class="process-card">
                 <i class="fas fa-truck"></i>
                 <h3>4. Livraison rapide</h3>
-                <p>Livraison sous 3 à 5 jours ouvrés, chez vous, avec le plus grand soin.</p>
+                <p>Livraison sous 3 à 5 jours ouvrés, chez toi, avec le plus grand soin.</p>
               </div>
             </div>
           </section>
@@ -363,12 +380,12 @@ function calculPrix($commande, &$composition = [])
         <ul class="stats-list">
           <li><strong data-target="500" data-plus="true">0</strong> canapés personnalisés</li>
           <li><strong data-target="4.8" data-decimal="true">0/5</strong> de satisfaction client</li>
-          <li><strong data-target="4">0j</strong> de délai moyen de fabrication</li>
+          <li><strong data-target="17" data-plus="true">0</strong> ans d’expérience depuis 2006</li>
         </ul>
       </section>
       <div class="faq-contact transition-all">
         <div class="faq-contact-icon"><i class="fa-solid fa-comment faq-contact-icon"></i></div>
-        <h2 class="h2-center">Une question ? On est là pour vous aider</h2>
+        <h2 class="h2-center">Une question ? On est là pour t'aider</h2>
         <p>Découvrez les réponses aux questions les plus fréquentes sur la personnalisation, la livraison ou nos engagements.</p>
         <br>
         <a href="../pages/faq.php" class="btn-beige">Voir la FAQ complète</a>

@@ -2,10 +2,13 @@
 require '../../admin/config.php';
 session_start();
 
+// Vérifier si l'utilisateur est connecté
 if (!isset($_SESSION['user_id'])) {
-  header("Location: ../formulaire/Connexion.php");
-  exit;
+    $_SESSION['redirect_to'] = $_SERVER['REQUEST_URI'];
+    header("Location: ../formulaire/Connexion.php"); // Redirection vers la page de connexion
+    exit();
 }
+
 
 $id_client = $_SESSION['user_id'];
 $sql = "SELECT cp.*, 
@@ -161,13 +164,13 @@ function calculPrix($commande, &$composition = [])
       <!-- Section avec image de fond et texte superposé -->
       <section class="hero-section">
         <div class="hero-container">
-          <img src="../../medias/salon-marocain.jpg" alt="Salon marocain" class="hero-image">
+        <img src="../../medias/hero-banner.jpg" alt="Salon marocain" class="hero-image">
           <div class="hero-content">
             <h1 class="hero-title">
               Bienvenue, <?php echo htmlspecialchars($_SESSION['user_name']); ?>!
             </h1>
             <p class="hero-description">
-              Testez notre <strong>configurateur de canapé</strong> et imaginez le meuble qui répond à vos goûts et à l’aménagement de votre salon.
+              Teste notre <strong>configurateur de canapé, </strong> et imagine le meuble qui répond le plus à tes goûts, et à l’aménagement de ton salon !
             </p>
             <?php if ($show_commencer): ?>
               <form action="../EtapesPersonnalisation/etape1-1-structure.php" method="get">
@@ -198,14 +201,14 @@ function calculPrix($commande, &$composition = [])
     <!-- SECTION PERSONNALISATION -->
     <section class="customize-section transition-all">
       <div class="customize-text">
-        <h2>Créez vous-même votre canapé marocain idéal</h2>
+        <h2>Crée toi-même ton canapé marocain idéal</h2>
         <br>
         <br>
         <ul class="customize-features">
-          <li><img src="../../medias/canape_icon.png" alt="Forme" class="feature-icon">Choisissez la forme du canapé</li>
-          <li><img src="../../medias/couleurs_icon.png" alt="Couleurs" class="feature-icon">Sélectionnez les couleurs & matières</li>
-          <li><img src="../../medias/coussin_icon.png" alt="Coussins" class="feature-icon">Ajoutez vos coussins préférés</li>
-          <li><img src="../../medias/artiste_icon.png" alt="Aperçu" class="feature-icon">Aperçu en temps réel de votre création</li>
+          <li><img src="../../medias/canape_icon.png" alt="Forme" class="feature-icon">Choisis la structure du canapé</li>
+          <li><img src="../../medias/couleurs_icon.png" alt="Couleurs" class="feature-icon">Sélectionne les couleurs & matières</li>
+          <li><img src="../../medias/coussin_icon.png" alt="Coussins" class="feature-icon">Ajoutez tes options préférés</li>
+          <li><img src="../../medias/artiste_icon.png" alt="Aperçu" class="feature-icon">Vue d'ensemble de ta création</li>
         </ul>
       </div>
       <div class="customize-image">
@@ -219,7 +222,7 @@ function calculPrix($commande, &$composition = [])
 
 <!-- ------------------- SECTION COMBINAISONS ------------------- -->
 <section class="combination-section transition-all">
-  <h2>Choisissez une combinaison à personnaliser</h2>
+  <h2>Choisis une combinaison à personnaliser</h2>
   <div class="combination-container">
 
           <?php foreach ($commandes as $commande): ?>
@@ -259,16 +262,16 @@ function calculPrix($commande, &$composition = [])
 
 <section class="avantages-card transition-boom">
   <div class="avantages-text">
-    <h2>Pourquoi personnaliser votre canapé ici ?</h2>
+    <h2>Pourquoi personnaliser ton canapé ici ?</h2>
     <ul>
-      <li>Visualisation en temps réel de votre canapé</li>
+      <li>Des modèles uniques</li>
       <li>Produits faits main, sur mesure</li>
       <li>Livraison rapide et soignée</li>
       <li>Paiement sécurisé</li>
     </ul>
   </div>
   <div class="avantages-img">
-      <img src="../../medias/canapekenitra.png" alt="Aperçu canapé personnalisé">
+    <img src="../../medias/accueil-whyhere.jpg" alt="Aperçu canapé personnalisé">
   </div>
 </section>
 
@@ -276,7 +279,7 @@ function calculPrix($commande, &$composition = [])
 
 <!-- ------------------- SECTION ARTICLES ASSOCIES ------------------- -->
 <section class="combination-section transition-all">
-  <h2>Ces articles peuvent aussi vous intéresser</h2>
+  <h2>Ces articles peuvent aussi t'intéresser</h2>
   <div class="combination-container">
 
           <?php foreach ($produits as $produit): ?>
@@ -314,7 +317,7 @@ function calculPrix($commande, &$composition = [])
   <ul class="stats-list">
     <li><strong data-target="500" data-plus="true">0</strong> canapés personnalisés</li>
     <li><strong data-target="4.8" data-decimal="true">0/5</strong> de satisfaction client</li>
-    <li><strong data-target="4">0j</strong> de délai moyen de fabrication</li>
+    <li><strong data-target="17" data-plus="true">0</strong> ans d’expérience depuis 2006</li>
   </ul>
 </section>
 

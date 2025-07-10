@@ -160,7 +160,7 @@ if (isset($_GET['message']) && $_GET['message'] == 'success') {
             <!-- Colonne de droite avec l'image -->
             <div class="right-column  transition-boom">
                 <section class="main-display">
-                    <img src="../../medias/meknes.png" alt="Image d'illustration">
+                    <img src="../../medias/apropos-galerie8.jpg" alt="canape-marocain">
                 </section>
             </div>
         </div>
