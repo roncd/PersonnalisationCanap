@@ -13,6 +13,7 @@ $stmtCommandes = $pdo->prepare($sqlCommandes);
 $stmtCommandes->execute();
 $commandes = $stmtCommandes->fetchAll(PDO::FETCH_ASSOC);
 
+
 // 2. Articles à l’unité (vente_produit)
 $sqlProduits = "
     SELECT vente_produit.*, categorie.nom AS nom_categorie 
@@ -232,9 +233,6 @@ function calculPrix($commande, &$composition = [])
       </section>
       <script>
         const carousel = document.getElementById('carousel');
-        // Dupliquer le contenu pour effet infini
-        const clone = carousel.innerHTML;
-        carousel.innerHTML += clone;
         let scrollAmount = 0;
         let speed = 2; // vitesse de défilement automatique
         let isPaused = false;
