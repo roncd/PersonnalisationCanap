@@ -1,6 +1,6 @@
 <?php
 session_start();
-require '../../admin/include/session_expiration.php';
+
 require '../../admin/config.php';
 
 // 1. Vérification de l’authentification
