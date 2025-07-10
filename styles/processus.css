@@ -347,7 +347,8 @@ label {
 
 .place-select-field {
   margin-top: 6px;
-padding: 2px 70px 2px 12px; /* top right bottom left */
+  padding: 2px 70px 2px 12px;
+  /* top right bottom left */
   border: 2px solid #e3d1c8;
   border-radius: 8px;
   font-size: 14px;
@@ -365,11 +366,11 @@ padding: 2px 70px 2px 12px; /* top right bottom left */
   background-size: 15px;
 
   /* Ajoute ceci pour aligner le texte à gauche */
-  text-align: left!important;
-  text-align-last: left!important;
+  text-align: left !important;
+  text-align-last: left !important;
   appearance: none;
--webkit-appearance: none;
--moz-appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
 
 }
 
@@ -499,6 +500,10 @@ padding: 2px 70px 2px 12px; /* top right bottom left */
   /* Espace entre les boutons */
 }
 
+.left-column .info-text {
+  margin-top: -1rem;
+  margin-bottom: 1.5rem;
+}
 
 /* ============ RESPONSIVE TABLETTE ============ */
 @media (max-width: 1070px) {
@@ -514,9 +519,6 @@ padding: 2px 70px 2px 12px; /* top right bottom left */
   .main-display-recap {
     margin-top: -23px;
   }
-
-
-
 
   .footer-buttons {
     display: flex;
@@ -558,8 +560,6 @@ padding: 2px 70px 2px 12px; /* top right bottom left */
     align-items: center;
     margin-top: 10px;
   }
-
-
 
   .color-2options {
     grid-template-columns: repeat(2, 1fr);
@@ -681,6 +681,10 @@ padding: 2px 70px 2px 12px; /* top right bottom left */
   }
 
 
+
+  .left-column .info-text {
+    font-size: 14px;
+  }
 
 
   .fil-ariane-container {

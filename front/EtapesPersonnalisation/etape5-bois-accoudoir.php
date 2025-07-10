@@ -18,11 +18,6 @@ $accoudoir_bois = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 // Vérifier si le formulaire a été soumis
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-  if (!isset($_POST['accoudoir_bois_id']) || empty($_POST['accoudoir_bois_id']) || !isset($_POST['nb_accoudoir']) || empty($_POST['nb_accoudoir'])) {
-    echo "Erreur : Aucun accoudoir ou quantité sélectionné.";
-    exit;
-  }
-
   $id_accoudoirs = explode(',', $_POST['accoudoir_bois_id']);
   $nb_accoudoirs = explode(',', $_POST['nb_accoudoir']);
 
@@ -44,6 +39,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt->execute([$commande_id]);
   }
 
+  if (isset($_POST['aucun_accoudoir'])) {
+    $stmt = $pdo->prepare("UPDATE commande_temporaire SET id_accoudoir_droit = NULL, id_accoudoir_gauche = NULL WHERE id = ?");
+    $stmt->execute([$commande_id]);
+
+    $stmt = $pdo->prepare("DELETE FROM commande_temp_accoudoir WHERE id_commande_temporaire = ?");
+    $stmt->execute([$commande_id]);
+
+    header('Location: etape6-bois-dossier.php');
+    exit;
+  }
   // Insérer les nouveaux accoudoirs sélectionnés
   $stmt = $pdo->prepare("INSERT INTO commande_temp_accoudoir (id_commande_temporaire, id_accoudoir_bois, nb_accoudoir) VALUES (?, ?, ?)");
   $check = $pdo->prepare("SELECT COUNT(*) FROM accoudoir_bois WHERE id = ?");
@@ -122,58 +127,54 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       <!-- Colonne de gauche -->
       <div class="left-column ">
         <div style="display: flex; align-items: center; gap: 0.5em;">
-        <h2>Étape 5 - Choisi ta forme d'accoudoirs</h2>
-        <!-- <label for="deco">Voulez vous ajouter la décoration (choisi avant) sur l'accoudoir ?</label>
-        <select class="select-field" id="deco" name="deco">
-          <option value="Non" selected>Non</option>
-          <option value="oui">Oui</option>
-        </select> -->
-        <!-- Icône d'information avec popup -->
+          <h2>Étape 5 - Choisi ta forme d'accoudoirs</h2>
+          <!-- Icône d'information avec popup -->
           <button id="info-coussin-btn" title="Information" style="background: none; border: none; cursor: pointer; padding: 0;">
             <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
-              <circle cx="10" cy="10" r="9" stroke="#997765" stroke-width="2" fill="#f5f5f5"/>
+              <circle cx="10" cy="10" r="9" stroke="#997765" stroke-width="2" fill="#f5f5f5" />
               <text x="10" y="15" text-anchor="middle" font-size="13" fill="#997765" font-family="Arial" font-weight="bold">i</text>
             </svg>
           </button>
         </div>
         <div id="info-coussin-popup" style="display:none; position:absolute; background:#fff; border:1px solid #ccc; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.1); padding:1em; z-index:1000; max-width:300px;">
-          <span style="font-size: 1em;">Forme au choix, les décorations seront celles sélectionnées précédement.</span>
+          <span style="font-size: 1em;">Cette étape est facultative. Clique sur “Suivant” pour passer si tu ne souhaite pas d’accoudoirs.</span>
         </div>
-      
-      <script>
-document.addEventListener('DOMContentLoaded', () => {
-  const btn   = document.getElementById('info-coussin-btn');
-  const popup = document.getElementById('info-coussin-popup');
+        <p class="info-text">Forme au choix, les décorations seront celles sélectionnées précédement.</p>
 
-  btn.addEventListener('click', e => {
-    e.stopPropagation();
+        <script>
+          document.addEventListener('DOMContentLoaded', () => {
+            const btn = document.getElementById('info-coussin-btn');
+            const popup = document.getElementById('info-coussin-popup');
 
-    /* ── toggle affichage ───────────────────────── */
-    const visible = popup.style.display === 'block';
-    popup.style.display = visible ? 'none' : 'block';
-    if (visible) return;   // on vient de fermer : pas besoin de repositionner
+            btn.addEventListener('click', e => {
+              e.stopPropagation();
 
-    /* ── coordonnées du bouton ──────────────────── */
-    const rect    = btn.getBoundingClientRect();
-    const scrollY = window.scrollY || window.pageYOffset;
-    const scrollX = window.scrollX || window.pageXOffset;
+              /* ── toggle affichage ───────────────────────── */
+              const visible = popup.style.display === 'block';
+              popup.style.display = visible ? 'none' : 'block';
+              if (visible) return; // on vient de fermer : pas besoin de repositionner
 
-    /* ── positionner AU‑DESSUS et 8 px À GAUCHE du “i” ── */
-    const top  = scrollY + rect.top  - popup.offsetHeight - 10; // 8 px au‑dessus
-    const left = scrollX + rect.left - popup.offsetWidth - 10;  // 8 px à gauche
+              /* ── coordonnées du bouton ──────────────────── */
+              const rect = btn.getBoundingClientRect();
+              const scrollY = window.scrollY || window.pageYOffset;
+              const scrollX = window.scrollX || window.pageXOffset;
 
-    popup.style.top  = `${top}px`;
-    popup.style.left = `${left}px`;
-  });
+              /* ── positionner AU‑DESSUS et 8 px À GAUCHE du “i” ── */
+              const top = scrollY + rect.top - popup.offsetHeight - 10; // 8 px au‑dessus
+              const left = scrollX + rect.left - popup.offsetWidth - 10; // 8 px à gauche
 
-  /* ── clic extérieur : fermer le popup ─────────── */
-  document.addEventListener('click', e => {
-    if (!popup.contains(e.target) && e.target !== btn) {
-      popup.style.display = 'none';
-    }
-  });
-});
-</script>
+              popup.style.top = `${top}px`;
+              popup.style.left = `${left}px`;
+            });
+
+            /* ── clic extérieur : fermer le popup ─────────── */
+            document.addEventListener('click', e => {
+              if (!popup.contains(e.target) && e.target !== btn) {
+                popup.style.display = 'none';
+              }
+            });
+          });
+        </script>
         <section class="color-options">
           <?php if (!empty($accoudoir_bois)): ?>
             <?php foreach ($accoudoir_bois as $bois): ?>
@@ -222,7 +223,7 @@ document.addEventListener('DOMContentLoaded', () => {
       </div>
     </div>
 
-    
+
 
     <!-- Popup besoin d'aide -->
     <div id="help-popup" class="popup">
@@ -263,13 +264,13 @@ document.addEventListener('DOMContentLoaded', () => {
       </div>
     </div>
 
-        <!-- Popup bloquant pour les étapes non validées -->
-<div id="filariane-popup" class="popup">
-  <div class="popup-content">
-    <h2>Veuillez cliquez sur "suivant" pour passer à l’étape d’après.</h2>
-    <button class="btn-noir">OK</button>
-  </div>
-</div>
+    <!-- Popup bloquant pour les étapes non validées -->
+    <div id="filariane-popup" class="popup">
+      <div class="popup-content">
+        <h2>Veuillez cliquez sur "suivant" pour passer à l’étape d’après.</h2>
+        <button class="btn-noir">OK</button>
+      </div>
+    </div>
 
 
 
@@ -325,7 +326,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         function saveSelectedOption(optionId, price, quantity) {
           const uniqueId = `${currentStep}_${optionId}`;
+
+          // Supprimer toute ancienne entrée de ce bois
           allSelectedOptions = allSelectedOptions.filter(opt => opt.id !== uniqueId);
+
           if (quantity > 0) {
             allSelectedOptions.push({
               id: uniqueId,
@@ -333,8 +337,20 @@ document.addEventListener('DOMContentLoaded', () => {
               quantity
             });
           }
+
           sessionStorage.setItem(sessionKey, JSON.stringify(allSelectedOptions));
+
+          // Nettoyage du localStorage si besoin (bonus)
+          if (quantity === 0) {
+            const selectedAcc = localStorage.getItem('selectedAccoudoirBois') || '';
+            const selectedNb = localStorage.getItem('selectedNbAccoudoirBois') || '';
+            const idList = selectedAcc.split(',').filter(id => id !== optionId);
+            const qtyList = selectedNb.split(','); // Ce nettoyage dépend du lien positionnel, à adapter selon ton usage
+            localStorage.setItem('selectedAccoudoirBois', idList.join(','));
+            // Tu peux également mettre à jour 'selectedNbAccoudoirBois' si nécessaire
+          }
         }
+
 
         function updateTotal() {
           const total = allSelectedOptions.reduce((sum, opt) => sum + (opt.price || 0) * (opt.quantity || 1), 0);
@@ -514,8 +530,14 @@ document.addEventListener('DOMContentLoaded', () => {
             if (currentQuantity > 1) {
               currentQuantity--;
               quantityInput.value = currentQuantity;
-              selectedOptions[boisId] = currentQuantity;
-              saveSelectedOption(boisId, price, currentQuantity);
+              if (currentQuantity === 0) {
+                delete selectedOptions[boisId];
+                saveSelectedOption(boisId, price, 0); // Ce sera supprimé dans la fonction
+              } else {
+                selectedOptions[boisId] = currentQuantity;
+                saveSelectedOption(boisId, price, currentQuantity);
+              }
+
               saveSelection();
               updateHiddenInputs();
               updateTotal();
@@ -534,33 +556,23 @@ document.addEventListener('DOMContentLoaded', () => {
         suivantButton.addEventListener('click', (e) => {
           e.preventDefault();
           const total = getTotalAccoudoirs();
+
           if (total === 0) {
-            erreurPopup.style.display = 'flex';
-            return;
-          }
-          updateHiddenInputs();
-          saveSelection();
-          form.submit();
-        });
+            localStorage.setItem('selectedAccoudoirBois', '');
+            localStorage.setItem('selectedNbAccoudoirBois', '');
+            window.location.href = 'etape6-bois-dossier.php';
+            const input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = 'aucun_accoudoir';
+            input.value = '1';
+            form.appendChild(input);
 
-        // Validation du formulaire + affichage pop up
-        form.addEventListener('submit', (e) => {
-          if (getTotalAccoudoirs() === 0) {
-            e.preventDefault();
-            erreurPopup.style.display = 'flex';
+            form.submit();
           } else {
+            // Accoudoirs sélectionnés, on continue normalement
             updateHiddenInputs();
-          }
-        });
-
-        // Fermer le popup erreur
-        closeErreurBtn.addEventListener('click', () => {
-          erreurPopup.style.display = 'none';
-        });
-
-        window.addEventListener('click', (event) => {
-          if (event.target === erreurPopup) {
-            erreurPopup.style.display = 'none';
+            saveSelection();
+            form.submit();
           }
         });
 
@@ -578,55 +590,80 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     </script>
 
-    
+
     <!-- FIL ARIANE -->
     <script>
-   document.addEventListener('DOMContentLoaded', () => {
-  const filAriane = document.querySelector('.fil-ariane');
-  const links = filAriane.querySelectorAll('a');
+      document.addEventListener('DOMContentLoaded', () => {
+        const filAriane = document.querySelector('.fil-ariane');
+        const links = filAriane.querySelectorAll('a');
 
-  const filArianePopup = document.getElementById('filariane-popup');
-  const closeFilArianePopupBtn = filArianePopup.querySelector('.btn-noir');
+        const filArianePopup = document.getElementById('filariane-popup');
+        const closeFilArianePopupBtn = filArianePopup.querySelector('.btn-noir');
 
-  const etapes = [
-    { id: 'etape1-1-structure.php', key: null }, // toujours accessible
-    { id: 'etape1-2-dimension.php', key: null },
-    { id: 'etape2-type-banquette.php', key: null },
-    { id: 'etape3-bois-couleur.php', key: null },
-    { id: 'etape4-bois-decoration.php', key: null },
-    { id: 'etape5-bois-accoudoir.php', key: null },
-    { id: 'etape6-bois-dossier.php', key: 'etape6_valide' },
-    { id: 'etape7-1-bois-tissu.php', key: 'etape7_valide' },
-    { id: 'etape8-bois-mousse.php', key: 'etape8_valide' },
-  ];
+        const etapes = [{
+            id: 'etape1-1-structure.php',
+            key: null
+          }, // toujours accessible
+          {
+            id: 'etape1-2-dimension.php',
+            key: null
+          },
+          {
+            id: 'etape2-type-banquette.php',
+            key: null
+          },
+          {
+            id: 'etape3-bois-couleur.php',
+            key: null
+          },
+          {
+            id: 'etape4-bois-decoration.php',
+            key: null
+          },
+          {
+            id: 'etape5-bois-accoudoir.php',
+            key: null
+          },
+          {
+            id: 'etape6-bois-dossier.php',
+            key: 'etape6_valide'
+          },
+          {
+            id: 'etape7-1-bois-tissu.php',
+            key: 'etape7_valide'
+          },
+          {
+            id: 'etape8-bois-mousse.php',
+            key: 'etape8_valide'
+          },
+        ];
 
 
- links.forEach((link, index) => {
-    const etape = etapes[index];
+        links.forEach((link, index) => {
+          const etape = etapes[index];
 
-    // Empêche de cliquer si l'étape n’est pas validée
-    if (etape.key && sessionStorage.getItem(etape.key) !== 'true') {
-      link.addEventListener('click', (e) => {
-        e.preventDefault();
-        filArianePopup.style.display = 'flex';
+          // Empêche de cliquer si l'étape n’est pas validée
+          if (etape.key && sessionStorage.getItem(etape.key) !== 'true') {
+            link.addEventListener('click', (e) => {
+              e.preventDefault();
+              filArianePopup.style.display = 'flex';
+            });
+            link.classList.add('disabled-link');
+          }
+        });
+
+        // Fermer le popup avec le bouton
+        closeFilArianePopupBtn.addEventListener('click', () => {
+          filArianePopup.style.display = 'none';
+        });
+
+        // Fermer si on clique en dehors du contenu
+        window.addEventListener('click', (event) => {
+          if (event.target === filArianePopup) {
+            filArianePopup.style.display = 'none';
+          }
+        });
       });
-      link.classList.add('disabled-link');
-    }
-  });
-
-  // Fermer le popup avec le bouton
-  closeFilArianePopupBtn.addEventListener('click', () => {
-    filArianePopup.style.display = 'none';
-  });
-
-  // Fermer si on clique en dehors du contenu
-  window.addEventListener('click', (event) => {
-    if (event.target === filArianePopup) {
-      filArianePopup.style.display = 'none';
-    }
-  });
-});
-
     </script>
 
 

@@ -237,6 +237,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['comment'])) {
           ?>
           <h3>Étape 5 : Choisi tes accoudoirs</h3>
           <?php
+          if (!empty($accoudoirs)){
           foreach ($accoudoirs as $accoudoir) {
             // Affichage de l'accoudoir avec son image, nom, et quantité
             echo '<div class="option">
@@ -245,9 +246,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['comment'])) {
               <p>' . htmlspecialchars($accoudoir['nom'] ?? 'N/A') . '</p>
               <p>Quantité : ' . htmlspecialchars($accoudoir['nb_accoudoir']) . '</p>
             </div>';
+          } 
+          } else {
+            echo '<p>Tu n\'as pas sélectionné d\'accoudoir.</p>';
           }
           ?>
-
 
           <h3>Étape 6 : Choisi ton dossier</h3>
           <?php
