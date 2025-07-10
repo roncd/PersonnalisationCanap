@@ -275,7 +275,7 @@ function calculPrix($commande, &$composition = [])
             <div class="product-card">
               <div class="product-image">
                 <img
-                  src="<?= htmlspecialchars($produit['img']) ?>"
+                  src="../../admin/uploads/produit/<?php echo htmlspecialchars($produit['img'] ?? 'default.jpg', ENT_QUOTES); ?>"
                   alt="<?= htmlspecialchars($produit['nom']) ?>" />
               </div>
               <div class="product-content">
@@ -283,7 +283,7 @@ function calculPrix($commande, &$composition = [])
                 <p class="price"><?= number_format($produit['prix'], 2, ',', ' ') ?> €</p>
                 <button class="btn-beige btn-fullwidth"
                   onclick="window.location.href = 'page-produit.php?id=<?= (int)$produit['id']; ?>'">
-                  Voir l'article
+                  Ajouter au panier
                 </button>
               </div>
             </div>
