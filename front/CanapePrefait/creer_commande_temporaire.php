@@ -53,13 +53,11 @@ if ($commandeExistante) {
 } else {
     // Insérer une nouvelle commande temporaire si aucune existante
     $stmt = $pdo->prepare("INSERT INTO commande_temporaire (
-        commentaire, statut, id_client, id_commande_prefait, id_structure, id_banquette, id_mousse, 
-        id_mousse_tissu, id_couleur_bois, id_decoration, id_dossier_bois, 
+        commentaire, statut, id_client, id_commande_prefait, id_structure, id_banquette, id_mousse, id_couleur_bois, id_decoration, id_dossier_bois, 
         id_couleur_tissu_bois, id_motif_bois, id_modele, id_couleur_tissu, id_motif_tissu, 
         id_dossier_tissu, id_accoudoir_tissu, id_nb_accoudoir, longueurA, longueurB, 
         longueurC, prix_dimensions
-    ) VALUES (
-        ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
     )");
 
     $stmt->execute([
@@ -70,7 +68,6 @@ if ($commandeExistante) {
         $prefait['id_structure'],
         $prefait['id_banquette'],
         $prefait['id_mousse'],
-        $prefait['id_mousse_tissu'],
         $prefait['id_couleur_bois'],
         $prefait['id_decoration'],
         $prefait['id_dossier_bois'],
