@@ -257,7 +257,7 @@ $totalPrice += floatval($commande['prix_dimensions'] ?? 0);
 
 
       <!-- Colonne de droite -->
-      <div class="right-column h2 ">
+      <div class="right-column">
         <section class="main-display">
           <div class="buttons">
             <button id="btn-aide" class="btn-beige">Besoin d'aide ?</button>
