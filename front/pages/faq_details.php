@@ -31,7 +31,7 @@ $questions = $stmtFaq->fetchAll(PDO::FETCH_ASSOC);
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="icon" type="image/x-icon" href="../../../medias/favicon.png">
+  <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
   <link rel="stylesheet" href="../../styles/transition.css">
   <link rel="stylesheet" href="../../styles/buttons.css">
   <script type="module" src="../../script/transition.js"></script>

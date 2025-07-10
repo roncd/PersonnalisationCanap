@@ -1,6 +1,5 @@
 <?php
 session_start();
-require '../../admin/include/session_expiration.php';
 require '../../admin/config.php';
 
 // --- Flash message depuis changer_mdp.php ---

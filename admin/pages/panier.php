@@ -1,7 +1,7 @@
 <?php
 require '../config.php';
 session_start();
-require '../include/session_expiration.php';
+
 
 // Vérification si l'utilisateur est connecté
 if (!isset($_SESSION['id'])) {
