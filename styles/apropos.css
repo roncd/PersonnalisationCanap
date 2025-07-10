@@ -265,6 +265,57 @@ input:checked + label {
   border-radius: 20px !important;
 }
 
+.carousel-container::-webkit-scrollbar {
+  display: none;
+}.carousel-container {
+  display: flex;
+  gap: 1.5rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: 1rem;
+  position: relative;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
+}
+
+.carousel-container::-webkit-scrollbar {
+  display: none;
+}
+
+.carousel-container .atelier-card {
+  flex: 0 0 calc((100% - 3rem) / 3); /* 3 éléments visibles */
+  scroll-snap-align: start;
+  overflow: hidden;
+  border-radius: 8px;
+}
+
+.carousel-container .atelier-card img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* ✅ Tablette : 2 visibles */
+@media (min-width: 481px) and (max-width: 1000px) {
+  .carousel-container .atelier-card {
+    flex: 0 0 50%;
+  }
+}
+
+/* ✅ Mobile : 1 visible */
+@media (max-width: 480px) {
+  .carousel-container .atelier-card {
+    flex: 0 0 100%;
+  }
+  .ateliers h2 {
+    font-size: 1.4rem;
+    text-align: center;
+  }
+}
+
+
+
 
 @media (max-width: 768px) {
   .container {

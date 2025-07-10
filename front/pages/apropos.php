@@ -128,23 +128,124 @@ session_start();
     <img src="../../medias/apropos-customizer.jpg" alt="Canapé personnalisé">
   </div>
 </div>
-            <section class="ateliers">
-                <h2 class="transition-all">Nos ateliers en France</h2>
-                <p class="intro transition-all">
-                Au cœur de nos ateliers français, chaque canapé est façonné avec soin par des artisans passionnés.
-                Inspirés du savoir-faire marocain, ils marient techniques traditionnelles et exigence moderne
-                pour créer des pièces uniques et durables.
-                </p>
-                <div class="images transition-boom">
-                <img src="../../medias/image-bois-gauche.jpg" alt="Travail du bois à la main">
-                <img src="../../medias/tissu_marocain.jpg" alt="Tissu marocain coloré">
-                <img src="../../medias/image-bois-droite.jpg" alt="Travail du bois à la main">
-                </div>
-                <p class="conclusion transition-all">
-                Chaque tissu est choisi avec minutie, chaque finition est travaillée à la main, pour vous offrir un canapé qui vous ressemble, fabriqué localement avec amour.<br>
-                Chez Déco du Monde, nous faisons le choix d’une fabrication française, engagée et de qualité.
-                </p>
-            </section>
+           <section class="ateliers">
+  <h2 class="transition-all">Notre atelier</h2>
+  <p class="intro transition-all">
+    Au cœur de nos ateliers français, chaque canapé est façonné avec soin par des artisans passionnés.
+    Inspirés du savoir-faire marocain, ils marient techniques traditionnelles et exigence moderne
+    pour créer des pièces uniques et durables.
+  </p>
+
+  <div class="carousel-container" id="carousel-ateliers">
+  <div class="atelier-card">
+    <img src="../../medias/atelier.jpg" alt="Travail du bois à la main">
+  </div>
+  <div class="atelier-card">
+    <img src="../../medias/atelier1.jpg" alt="Tissu marocain coloré">
+  </div>
+  <div class="atelier-card">
+    <img src="../../medias/atelier2.jpg" alt="Travail du bois à la main">
+  </div>
+  <div class="atelier-card">
+    <img src="../../medias/atelier4.jpg" alt="Travail du bois à la main">
+  </div>
+  <div class="atelier-card">
+    <img src="../../medias/atelier5.jpg" alt="Tissu marocain coloré">
+  </div>
+  <div class="atelier-card">
+    <img src="../../medias/atelier6.jpg" alt="Travail du bois à la main">
+  </div>
+</div>
+
+
+  <div class="carousel-container" id="carousel-ateliers2">
+  <div class="atelier-card">
+    <img src="../../medias/atelier8.jpg" alt="Travail du bois à la main">
+  </div>
+  <div class="atelier-card">
+    <img src="../../medias/atelier9.jpg" alt="Tissu marocain coloré">
+  </div>
+  <div class="atelier-card">
+    <img src="../../medias/atelier10.jpg" alt="Travail du bois à la main">
+  </div>
+  <div class="atelier-card">
+    <img src="../../medias/atelier11.jpg" alt="Travail du bois à la main">
+  </div>
+  <div class="atelier-card">
+    <img src="../../medias/atelier12.jpg" alt="Tissu marocain coloré">
+  </div>
+  <div class="atelier-card">
+    <img src="../../medias/atelier7.jpg" alt="Travail du bois à la main">
+  </div>
+</div>
+<!-- Premier carrousel -->
+<script>
+  const carousel1 = document.getElementById('carousel-ateliers');
+  let scroll1 = 0;
+  let speed1 = 2;
+  let pause1 = false;
+  let userScroll1 = false;
+  let timeout1;
+
+  function scrollCarousel1() {
+    if (!pause1 && !userScroll1) {
+      scroll1 += speed1;
+      if (scroll1 >= carousel1.scrollWidth - carousel1.clientWidth) {
+        scroll1 = 0;
+      }
+      carousel1.scrollLeft = scroll1;
+    }
+    requestAnimationFrame(scrollCarousel1);
+  }
+
+  scrollCarousel1();
+
+  carousel1.addEventListener('mouseenter', () => pause1 = true);
+  carousel1.addEventListener('mouseleave', () => pause1 = false);
+  carousel1.addEventListener('scroll', () => {
+    userScroll1 = true;
+    clearTimeout(timeout1);
+    timeout1 = setTimeout(() => {
+      userScroll1 = false;
+      scroll1 = carousel1.scrollLeft;
+    }, 1000);
+  });
+</script>
+
+<!-- Deuxième carrousel (sens inverse) -->
+<script>
+  const carousel2 = document.getElementById('carousel-ateliers2');
+  let scroll2 = carousel2.scrollWidth; // Commence à droite
+  let speed2 = -2;
+  let pause2 = false;
+  let userScroll2 = false;
+  let timeout2;
+
+  function scrollCarousel2() {
+    if (!pause2 && !userScroll2) {
+      scroll2 += speed2;
+      if (scroll2 <= 0) {
+        scroll2 = carousel2.scrollWidth - carousel2.clientWidth;
+      }
+      carousel2.scrollLeft = scroll2;
+    }
+    requestAnimationFrame(scrollCarousel2);
+  }
+
+  scrollCarousel2();
+
+  carousel2.addEventListener('mouseenter', () => pause2 = true);
+  carousel2.addEventListener('mouseleave', () => pause2 = false);
+  carousel2.addEventListener('scroll', () => {
+    userScroll2 = true;
+    clearTimeout(timeout2);
+    timeout2 = setTimeout(() => {
+      userScroll2 = false;
+      scroll2 = carousel2.scrollLeft;
+    }, 1000);
+  });
+</script>
+
 
 <section class="galerie">
   <h2 class="transition-all h2">Souvenirs de nos Ateliers</h2>

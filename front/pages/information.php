@@ -226,8 +226,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
 
             <div class="right-column transition-boom">
-                <section class="main-display">
-                    <img src="../../medias/meknes.png" alt="Illustration" class="hide-on-small">
+                <section class="main-display h2">
+                    <img src="../../medias/apropos-galerie8.jpg" alt="Illustration" class="hide-on-small">
                 </section>
             </div>
         </div>
