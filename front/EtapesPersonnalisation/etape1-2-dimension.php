@@ -25,7 +25,6 @@ $longueurC = $_POST['longueurC'] ?? ($commande['longueurC'] ?? '');
 $prixDim   = $_POST['prix_dimensions'] ?? ($commande['prix_dimensions'] ?? '');
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-  // Vérifier si longueurA est bien renseignée (obligatoire)
 
   if (!empty($_POST["longueurA"])) {
     $longueurA = (int) trim($_POST["longueurA"]);
@@ -44,9 +43,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     }
   }
 }
-?>
 
-<?php
 // Récupérer l'ID de la structure sélectionnée
 if (isset($_GET['structure_id'])) {
   $structure_id = $_GET['structure_id'];
@@ -108,19 +105,19 @@ if (isset($_GET['structure_id'])) {
           <div class="form-row">
             <div class="form-group">
               <label for="longueurA">Longueur banquette A (en cm) :</label>
-              <input type="number" id="longueurA" name="longueurA" class="input-field"  value="<?= htmlspecialchars($longueurA) ?>" placeholder="Ex: 150">
+              <input type="number" id="longueurA" name="longueurA" class="input-field" value="<?= htmlspecialchars($longueurA) ?>" placeholder="Ex: 150">
             </div>
           </div>
           <div class="form-row">
             <div class="form-group">
               <label for="longueurB">Longueur banquette B (en cm) :</label>
-              <input type="number" id="longueurB" name="longueurB" class="input-field"   value="<?= htmlspecialchars($longueurB) ?>" placeholder="Ex: 350">
+              <input type="number" id="longueurB" name="longueurB" class="input-field" value="<?= htmlspecialchars($longueurB) ?>" placeholder="Ex: 350">
             </div>
           </div>
           <div class="form-row">
             <div class="form-group">
               <label for="longueurC">Longueur banquette C (en cm) :</label>
-              <input type="number" id="longueurC" name="longueurC" class="input-field"  value="<?= htmlspecialchars($longueurC) ?>" placeholder="Ex: 350">
+              <input type="number" id="longueurC" name="longueurC" class="input-field" value="<?= htmlspecialchars($longueurC) ?>" placeholder="Ex: 350">
             </div>
           </div>
           <div class="footer">
@@ -134,52 +131,6 @@ if (isset($_GET['structure_id'])) {
         </form>
       </div>
 
-      <script>
-        document.addEventListener('DOMContentLoaded', () => {
-          const nbLongueurs = <?= (int) $nbLongueurs ?>;
-
-          updateVisibleInputs(nbLongueurs);
-
-          function updateVisibleInputs(nb) {
-            const inputA = document.getElementById("longueurA");
-            const inputB = document.getElementById("longueurB");
-            const inputC = document.getElementById("longueurC");
-
-            const a = inputA.closest('.form-row');
-            const b = inputB.closest('.form-row');
-            const c = inputC.closest('.form-row');
-
-            a.style.display = nb >= 1 ? 'block' : 'none';
-            b.style.display = nb >= 2 ? 'block' : 'none';
-            c.style.display = nb >= 3 ? 'block' : 'none';
-
-            inputA.required = nb >= 1;
-            inputB.required = nb >= 2;
-            inputC.required = nb >= 3;
-          }
-        });
-      </script>
-
-
-      <script>
-        document.addEventListener("DOMContentLoaded", () => {
-          const url = new URL(window.location.href);
-          const structureId = url.searchParams.get("structure_id");
-
-          if (structureId) {
-            // Sauvegarde l'ID en localStorage
-            localStorage.setItem("selectedStructureId", structureId);
-          } else {
-            // Si pas dans l'URL, on essaie de le récupérer depuis le localStorage
-            const savedStructureId = localStorage.getItem("selectedStructureId");
-            if (savedStructureId) {
-              // Redirige en rajoutant l'id manquant dans l'URL
-              url.searchParams.set("structure_id", savedStructureId);
-              window.location.href = url.toString();
-            }
-          }
-        });
-      </script>
       <!-- Colonne de droite -->
       <div class="right-column ">
         <section class="main-display">
@@ -233,6 +184,188 @@ if (isset($_GET['structure_id'])) {
       </div>
     </div>
 
+    <!-- VARIATION DES PRIX  -->
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        let totalPrice = 0; // Total global pour toutes les étapes
+
+        // Identifier l'étape actuelle (par exemple, "1-dimensions")
+        const currentStep = "1-dimensions"; // Changez cette valeur pour chaque étape (par exemple "1-dimensions", "4-2", etc.)
+
+        // Charger l'ID utilisateur depuis une variable PHP intégrée dans le HTML
+        const userId = document.body.getAttribute('data-user-id'); // Ex. <body data-user-id="<?php echo $_SESSION['user_id']; ?>">
+        if (!userId) {
+          console.error("ID utilisateur non trouvé. Vérifiez que 'data-user-id' est bien défini dans le HTML.");
+          return;
+        }
+
+        // Charger les données spécifiques à l'utilisateur depuis sessionStorage
+        const sessionKey = `allSelectedOptions_${userId}`;
+        const dimensionKey = `${currentStep}_dimensionsValues_${userId}`;
+        let allSelectedOptions = JSON.parse(sessionStorage.getItem(sessionKey)) || [];
+        let savedDimensions = JSON.parse(sessionStorage.getItem(dimensionKey)) || {
+          longueurA: "",
+          longueurB: "",
+          longueurC: ""
+        };
+
+        // Vérifier si `allSelectedOptions` est un tableau
+        if (!Array.isArray(allSelectedOptions)) {
+          allSelectedOptions = [];
+          console.warn("allSelectedOptions n'était pas un tableau. Réinitialisé à []");
+        }
+
+
+        // Fonction pour ajouter les dimensions au calcul
+        function calculateDimensionPrice() {
+          const inputA = document.getElementById("longueurA");
+          const inputB = document.getElementById("longueurB");
+          const inputC = document.getElementById("longueurC");
+
+          const isVisible = (input) => input.closest('.form-row').style.display !== 'none';
+
+          const longueurA = isVisible(inputA) ? parseFloat(inputA.value) || 0 : 0;
+          const longueurB = isVisible(inputB) ? parseFloat(inputB.value) || 0 : 0;
+          const longueurC = isVisible(inputC) ? parseFloat(inputC.value) || 0 : 0;
+
+          const totalMeters = (longueurA + longueurB + longueurC) / 100;
+          const dimensionPrice = totalMeters * 350;
+
+          document.getElementById("dimension-price").textContent = dimensionPrice.toFixed(2);
+
+          // Mettre à jour le champ caché
+          document.getElementById("prix_dimensions_hidden").value = dimensionPrice.toFixed(2);
+
+          // Supprimer les dimensions précédentes pour cette étape
+          allSelectedOptions = allSelectedOptions.filter(opt => !opt.id.startsWith(`${currentStep}_`));
+
+          // Ajouter les dimensions au stockage global
+          allSelectedOptions.push({
+            id: `${currentStep}_dimensions`,
+            price: dimensionPrice
+          });
+
+          sessionStorage.setItem(sessionKey, JSON.stringify(allSelectedOptions));
+        }
+
+
+        // Fonction pour sauvegarder les valeurs des dimensions dans sessionStorage
+        function saveDimensions() {
+          const longueurA = document.getElementById("longueurA").value || "";
+          const longueurB = document.getElementById("longueurB").value || "";
+          const longueurC = document.getElementById("longueurC").value || "";
+
+          const dimensions = {
+            longueurA,
+            longueurB,
+            longueurC
+          };
+          sessionStorage.setItem(dimensionKey, JSON.stringify(dimensions));
+          console.log("Dimensions sauvegardées :", dimensions);
+        }
+
+        // Fonction pour mettre à jour le total global
+        function updateTotal() {
+          totalPrice = allSelectedOptions.reduce((sum, option) => {
+            const price = option.price || 0; // S'assurer que le prix est valide
+            const quantity = option.quantity || 1; // Par défaut, quantité = 1
+            return sum + (price * quantity);
+          }, 0);
+
+          console.log("Total global mis à jour :", totalPrice);
+
+          // Mettre à jour le total dans l'interface
+          const totalElement = document.querySelector(".footer p span");
+          if (totalElement) {
+            totalElement.textContent = `${totalPrice.toFixed(2)} €`;
+          } else {
+            console.error("L'élément '.footer p span' est introuvable !");
+          }
+        }
+
+        // Empêcher la saisie de plus de 3 chiffres dans les champs de type number
+        document.querySelectorAll(".input-field").forEach(input => {
+          input.addEventListener("input", () => {
+            if (input.value.length > 3) {
+              input.value = input.value.slice(0, 3);
+            }
+          });
+        });
+
+        // Pré-remplir les champs avec les dimensions sauvegardées
+        document.getElementById("longueurA").value = savedDimensions.longueurA;
+        document.getElementById("longueurB").value = savedDimensions.longueurB;
+        document.getElementById("longueurC").value = savedDimensions.longueurC;
+
+        // Mettre à jour le total à chaque modification des dimensions
+        document.querySelectorAll(".input-field").forEach(input => {
+          input.addEventListener("input", () => {
+            calculateDimensionPrice();
+            saveDimensions(); // Sauvegarder les dimensions saisies
+            updateTotal();
+          });
+        });
+
+        // Initialiser le total dès le chargement de la page
+        calculateDimensionPrice();
+        updateTotal();
+
+        const nbLongueurs = <?= (int) $nbLongueurs ?>;
+        updateVisibleInputs(nbLongueurs);
+
+        function updateVisibleInputs(nb) {
+          const inputA = document.getElementById("longueurA");
+          const inputB = document.getElementById("longueurB");
+          const inputC = document.getElementById("longueurC");
+
+          const a = inputA.closest('.form-row');
+          const b = inputB.closest('.form-row');
+          const c = inputC.closest('.form-row');
+
+          a.style.display = nb >= 1 ? 'block' : 'none';
+          b.style.display = nb >= 2 ? 'block' : 'none';
+          c.style.display = nb >= 3 ? 'block' : 'none';
+
+          inputA.required = nb >= 1;
+          inputB.required = nb >= 2;
+          inputC.required = nb >= 3;
+
+          // ❌ Ne vide les champs QUE s'ils sont masqués ET qu'ils n'ont pas été pré-remplis
+          if (nb < 3 && !inputC.value) inputC.value = "";
+          if (nb < 2 && !inputB.value) inputB.value = "";
+          if (nb < 1 && !inputA.value) inputA.value = "";
+
+          // Sauvegarder uniquement si les champs sont effectivement modifiés
+          saveDimensions();
+          calculateDimensionPrice();
+          updateTotal();
+        }
+
+      });
+    </script>
+
+
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const url = new URL(window.location.href);
+        const structureId = url.searchParams.get("structure_id");
+
+        if (structureId) {
+          // Sauvegarde l'ID en localStorage
+          localStorage.setItem("selectedStructureId", structureId);
+        } else {
+          // Si pas dans l'URL, on essaie de le récupérer depuis le localStorage
+          const savedStructureId = localStorage.getItem("selectedStructureId");
+          if (savedStructureId) {
+            // Redirige en rajoutant l'id manquant dans l'URL
+            url.searchParams.set("structure_id", savedStructureId);
+            window.location.href = url.toString();
+          }
+        }
+      });
+    </script>
+
+
     <!-- GESTION DES SELECTIONS -->
     <script>
       document.addEventListener('DOMContentLoaded', () => {
@@ -264,124 +397,8 @@ if (isset($_GET['structure_id'])) {
         });
       });
     </script>
- <!-- VARIATION DES PRIX  -->
-    <script>
-      document.addEventListener('DOMContentLoaded', () => {
-        let totalPrice = 0; // Total global pour toutes les étapes
-
-        // Identifier l'étape actuelle (par exemple, "1-dimensions")
-        const currentStep = "1-dimensions"; // Changez cette valeur pour chaque étape (par exemple "1-dimensions", "4-2", etc.)
-
-        // Charger l'ID utilisateur depuis une variable PHP intégrée dans le HTML
-        const userId = document.body.getAttribute('data-user-id'); // Ex. <body data-user-id="<?php echo $_SESSION['user_id']; ?>">
-        if (!userId) {
-          console.error("ID utilisateur non trouvé. Vérifiez que 'data-user-id' est bien défini dans le HTML.");
-          return;
-        }
-
-        // Charger les données spécifiques à l'utilisateur depuis sessionStorage
-        const sessionKey = `allSelectedOptions_${userId}`;
-        const dimensionKey = `${currentStep}_dimensionsValues_${userId}`;
-        let allSelectedOptions = JSON.parse(sessionStorage.getItem(sessionKey)) || [];
-        let savedDimensions = JSON.parse(sessionStorage.getItem(dimensionKey)) || {
-          longueurA: "",
-          longueurB: "",
-          longueurC: ""
-        };
-
-        // Vérifier si `allSelectedOptions` est un tableau
-        if (!Array.isArray(allSelectedOptions)) {
-          allSelectedOptions = [];
-          console.warn("allSelectedOptions n'était pas un tableau. Réinitialisé à []");
-        }
-        
-
-        // Fonction pour ajouter les dimensions au calcul
-        function calculateDimensionPrice() {
-  const longueurA = parseFloat(document.getElementById("longueurA").value) || 0;
-  const longueurB = parseFloat(document.getElementById("longueurB").value) || 0;
-  const longueurC = parseFloat(document.getElementById("longueurC").value) || 0;
-
-  const totalMeters = (longueurA + longueurB + longueurC) / 100;
-  const dimensionPrice = totalMeters * 350;
-
-  document.getElementById("dimension-price").textContent = dimensionPrice.toFixed(2);
-
-  // Mettre à jour le champ caché
-  document.getElementById("prix_dimensions_hidden").value = dimensionPrice.toFixed(2);
-
-  // Supprimer les dimensions précédentes pour cette étape
-  allSelectedOptions = allSelectedOptions.filter(opt => !opt.id.startsWith(`${currentStep}_`));
-
-  // Ajouter les dimensions au stockage global
-  allSelectedOptions.push({ id: `${currentStep}_dimensions`, price: dimensionPrice });
-
-  sessionStorage.setItem(sessionKey, JSON.stringify(allSelectedOptions));
-}
 
 
-        // Fonction pour sauvegarder les valeurs des dimensions dans sessionStorage
-        function saveDimensions() {
-          const longueurA = document.getElementById("longueurA").value || "";
-          const longueurB = document.getElementById("longueurB").value || "";
-          const longueurC = document.getElementById("longueurC").value || "";
-
-          const dimensions = { longueurA, longueurB, longueurC };
-          sessionStorage.setItem(dimensionKey, JSON.stringify(dimensions));
-          console.log("Dimensions sauvegardées :", dimensions);
-        }
-
-        // Fonction pour mettre à jour le total global
-        function updateTotal() {
-          totalPrice = allSelectedOptions.reduce((sum, option) => {
-            const price = option.price || 0; // S'assurer que le prix est valide
-            const quantity = option.quantity || 1; // Par défaut, quantité = 1
-            return sum + (price * quantity);
-          }, 0);
-
-          console.log("Total global mis à jour :", totalPrice);
-
-          // Mettre à jour le total dans l'interface
-          const totalElement = document.querySelector(".footer p span");
-          if (totalElement) {
-            totalElement.textContent = `${totalPrice.toFixed(2)} €`;
-          } else {
-            console.error("L'élément '.footer p span' est introuvable !");
-          }
-        }
-
-        // Empêcher la saisie de plus de 3 chiffres dans les champs de type number
-document.querySelectorAll(".input-field").forEach(input => {
-  input.addEventListener("input", () => {
-    if (input.value.length > 3) {
-      input.value = input.value.slice(0, 3);
-    }
-  });
-});
-
-
-        
-
-
-        // Pré-remplir les champs avec les dimensions sauvegardées
-        document.getElementById("longueurA").value = savedDimensions.longueurA;
-        document.getElementById("longueurB").value = savedDimensions.longueurB;
-        document.getElementById("longueurC").value = savedDimensions.longueurC;
-
-        // Mettre à jour le total à chaque modification des dimensions
-        document.querySelectorAll(".input-field").forEach(input => {
-          input.addEventListener("input", () => {
-            calculateDimensionPrice();
-            saveDimensions(); // Sauvegarder les dimensions saisies
-            updateTotal();
-          });
-        });
-
-        // Initialiser le total dès le chargement de la page
-        calculateDimensionPrice();
-        updateTotal();
-      });
-    </script>
 
 
     <!-- BOUTTON RETOUR -->
