@@ -281,7 +281,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['comment'])) {
       <!-- Colonne de droite -->
       <div class="right-column">
         <section class="main-display-recap">
-          <img src="../../medias/recap-tissu.png" alt="Armoire">
+          <img src="../../medias/recap-tissu.jpg" alt="Armoire">
 
 
           <!-- Section commentaire -->
