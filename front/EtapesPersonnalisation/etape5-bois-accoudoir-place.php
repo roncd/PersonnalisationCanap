@@ -53,7 +53,7 @@ $stmt->execute([$commande_id]);
 $accoudoirs = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 // Récupérer tous les types d'accoudoirs (pour affichage)
-$stmt = $pdo->query("SELECT * FROM accoudoir_bois");
+$stmt = $pdo->query("SELECT * FROM accoudoir_bois ORDER BY prix ASC");
 $accoudoir_bois = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 // Gérer la soumission du formulaire POST

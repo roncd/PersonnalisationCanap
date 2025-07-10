@@ -14,7 +14,7 @@ $selectedTissuId = $_SESSION['id_couleur_tissu_bois'];
 
 
 // Récupérer les motifs de bois depuis la base de données
-$stmt = $pdo->prepare("SELECT * FROM motif_bois WHERE id_couleur_tissu = ?");
+$stmt = $pdo->prepare("SELECT * FROM motif_bois WHERE id_couleur_tissu = ? ORDER BY prix ASC");
 $stmt->execute([$selectedTissuId]);
 $motif_bois = $stmt->fetchAll(PDO::FETCH_ASSOC);
 

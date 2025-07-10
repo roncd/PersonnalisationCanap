@@ -13,7 +13,7 @@ if (!isset($_SESSION['user_id'])) {
 $selectedTissuId = $_SESSION['id_couleur_tissu'];
 
 // Récupérer les tissus disponibles depuis la base de données
-$stmt = $pdo->prepare("SELECT * FROM motif_tissu WHERE id_couleur_tissu = ?");
+$stmt = $pdo->prepare("SELECT * FROM motif_tissu WHERE id_couleur_tissu = ?  ORDER BY prix ASC");
 $stmt->execute([$selectedTissuId]);
 $motif_tissu = $stmt->fetchAll(PDO::FETCH_ASSOC);
 

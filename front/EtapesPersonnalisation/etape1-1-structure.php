@@ -11,7 +11,7 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 // Récupérer les structures disponibles depuis la base de données
-$stmt = $pdo->query("SELECT * FROM structure");
+$stmt = $pdo->query("SELECT * FROM structure ORDER BY prix ASC");
 $structures = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 // Vérifier si le formulaire a été soumis

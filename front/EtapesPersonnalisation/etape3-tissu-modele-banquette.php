@@ -13,7 +13,7 @@ if (!isset($_SESSION['user_id'])) {
 
 
 // Récupérer les modèles disponibles depuis la base de données
-$stmt = $pdo->query("SELECT * FROM modele");
+$stmt = $pdo->query("SELECT * FROM modele  ORDER BY prix ASC");
 $modele = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 

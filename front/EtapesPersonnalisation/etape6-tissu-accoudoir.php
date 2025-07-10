@@ -13,7 +13,7 @@ if (!isset($_SESSION['user_id'])) {
 $id_client = $_SESSION['user_id'];
 
 // Récupérer les types d'accoudoirs depuis la base de données
-$stmt = $pdo->query("SELECT * FROM accoudoir_tissu");
+$stmt = $pdo->query("SELECT * FROM accoudoir_tissu ORDER BY prix ASC");
 $accoudoir_tissu = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 // Récupérer la sélection existante de l'utilisateur dans la commande temporaire

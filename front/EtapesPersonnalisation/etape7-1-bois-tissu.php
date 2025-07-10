@@ -11,7 +11,7 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 // Récupérer les types de tissu bois depuis la base de données
-$stmt = $pdo->query("SELECT * FROM couleur_tissu_bois");
+$stmt = $pdo->query("SELECT * FROM couleur_tissu_bois ORDER BY prix ASC");
 $couleur_tissu_bois = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 // Récupérer les couleurs depuis la base de données
