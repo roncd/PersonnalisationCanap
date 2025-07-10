@@ -39,7 +39,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $coffre = trim($_POST['coffre']);
 
 
-    if (empty($nom) || !isset($price) || !isset($_POST['coffre']) || empty($img['name'])) {
+    if (empty($nom) || !isset($price) || !isset($_POST['coffre'])) {
         $_SESSION['message'] = 'Veillez remplir les champs requis.';
         $_SESSION['message_type'] = 'error';
     } else {
