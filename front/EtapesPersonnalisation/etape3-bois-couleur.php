@@ -12,7 +12,7 @@ if (!isset($_SESSION['user_id'])) {
 
 
 // Récupérer les types de bois depuis la base de données
-$stmt = $pdo->query("SELECT * FROM couleur_bois");
+$stmt = $pdo->query("SELECT * FROM couleur_bois  ORDER BY prix ASC");
 $couleur_bois = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 // Vérifier si le formulaire a été soumis

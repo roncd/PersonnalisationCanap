@@ -11,7 +11,7 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 // Récupérer les types de dossier bois depuis la base de données
-$stmt = $pdo->query("SELECT * FROM dossier_bois");
+$stmt = $pdo->query("SELECT * FROM dossier_bois ORDER BY prix ASC");
 $dossier_bois = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 

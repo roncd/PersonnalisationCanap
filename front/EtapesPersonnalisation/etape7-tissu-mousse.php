@@ -11,7 +11,7 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 // Récupérer les types de mousse depuis la base de données
-$stmt = $pdo->query("SELECT * FROM mousse");
+$stmt = $pdo->query("SELECT * FROM mousse ORDER BY prix ASC");
 $mousse = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 // Vérifier si le formulaire a été soumis
@@ -22,7 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   $prix_total = isset($_POST['total_price']) ? floatval($_POST['total_price']) : 0;
 
   // Vérifier si une commande temporaire existe déjà pour cet utilisateur
-  $stmt = $pdo->prepare("SELECT id FROM commande_temporaire WHERE id_client = ?");
+  $stmt = $pdo->prepare("SELECT id FROM commande_temporaire WHERE id_client = ? ");
   $stmt->execute([$id_client]);
   $existing_order = $stmt->fetch(PDO::FETCH_ASSOC);
 

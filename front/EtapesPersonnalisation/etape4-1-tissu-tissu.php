@@ -11,7 +11,7 @@ if (!isset($_SESSION['user_id'])) {
 }
 
 // Récupérer les tissus disponibles depuis la base de données
-$stmt = $pdo->query("SELECT * FROM couleur_tissu");
+$stmt = $pdo->query("SELECT * FROM couleur_tissu  ORDER BY prix ASC");
 $couleur_tissu = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 // Vérifier si le formulaire a été soumis
