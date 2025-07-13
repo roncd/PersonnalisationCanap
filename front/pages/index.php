@@ -106,7 +106,144 @@ function calculPrix($commande, &$composition = [])
 
   return $totalPrice;
 }
-?>
+
+// Gestion de l'ajout au panier
+$produitAjoute = null; // Variable pour savoir quel produit a été ajouté
+
+// 1. Si on n'est pas connecté, on ne restaure pas de POST
+if (!isset($_SESSION['user_id']) && isset($_GET['post_restore'])) {
+    // L'utilisateur n'est toujours pas connecté → on ne restaure pas
+    unset($_SESSION['temp_post']);
+    header("Location: Connexion.php");
+    exit;
+}
+
+// 2. Sinon on peut restaurer le POST si c'était prévu
+if (isset($_GET['post_restore']) && isset($_SESSION['temp_post'])) {
+    $_POST = $_SESSION['temp_post'];
+    unset($_SESSION['temp_post']);
+    $_SERVER['REQUEST_METHOD'] = 'POST';
+}
+
+if (isset($_SESSION['popup_produit'])) {
+    $produitAjoute = $_SESSION['popup_produit']['nom'];
+    $imageProduitAjoute = $_SESSION['popup_produit']['img'];
+    unset($_SESSION['popup_produit']);
+}
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['produit'])) {
+    if (!isset($_SESSION['user_id'])) {
+        $_SESSION['pending_add_to_cart'] = $_POST;
+        header('Location: ../formulaire/Connexion.php');
+        exit;
+    }
+
+    if (isset($_SESSION['user_id'])) {
+        $id_client = $_SESSION['user_id'];
+
+        $nomProduit = $_POST['produit'];
+        $quantite = intval($_POST['quantite'] ?? 1);
+        // Récupérer l'ID et le prix du produit via son nom
+        $stmt = $pdo->prepare("SELECT id, prix, img FROM vente_produit WHERE nom = ?");
+        $stmt->execute([$nomProduit]);
+        $produit = $stmt->fetch();
+
+        if (!$produit) {
+            // Sécurité : produit introuvable (mauvaise saisie ?)
+            die("Produit introuvable.");
+        }
+
+        $id = $produit['id'];
+        $prix = $produit['prix'];
+        $img = $produit['img'];
+
+        // Vérifie s'il y a déjà un panier pour ce client
+        $stmt = $pdo->prepare("SELECT id FROM panier WHERE id_client = ?");
+        $stmt->execute([$id_client]);
+        $panier = $stmt->fetch();
+
+        if (!$panier) {
+            // Créer un nouveau panier
+            $stmt = $pdo->prepare("INSERT INTO panier (id_client, prix) VALUES (?, ?)");
+            $stmt->execute([$id_client, 0]);
+            $panier_id = $pdo->lastInsertId();
+        } else {
+            $panier_id = $panier['id'];
+        }
+
+        // Vérifie si le produit est déjà dans le panier
+        $stmt = $pdo->prepare("SELECT * FROM panier_detail WHERE id_panier = ? AND id_produit = ?");
+        $stmt->execute([$panier_id, $id]);
+        $produit_existe = $stmt->fetch();
+
+        if ($produit_existe) {
+            $stmt = $pdo->prepare("UPDATE panier_detail SET quantite = quantite + ? WHERE id_panier = ? AND id_produit = ?");
+            $stmt->execute([$quantite, $panier_id, $id]);
+        } else {
+            $stmt = $pdo->prepare("INSERT INTO panier_detail (id_panier, id_produit, quantite) VALUES (?, ?, ?)");
+            $stmt->execute([$panier_id, $id, $quantite]);
+        }
+
+        // Mettre à jour le prix total dans la table panier
+        $stmt = $pdo->prepare("UPDATE panier SET prix = prix + ? WHERE id = ?");
+        $stmt->execute([$prix * $quantite, $panier_id]);
+        $produitAjoute = $nomProduit;
+
+        // Stocker le produit dans la session pour le popup après redirection
+$_SESSION['popup_produit'] = [
+    'nom' => $nomProduit,
+    'img' => $img
+];
+
+// Rediriger pour éviter re-post et déclencher le modal
+header("Location: ?post_restore=1");
+exit;
+        
+    }
+}
+if (!empty($produitAjoute)) : ?>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const modal = document.getElementById("reservation-modal");
+            const productNameEl = document.getElementById("product-name");
+            const productImgEl = document.getElementById("product-image");
+
+            const lastAddedProduct = {
+                name: <?= json_encode($produitAjoute) ?>,
+                image: <?= json_encode($imageProduitAjoute ?? '') ?>
+            };
+
+            function openReservationModal(productName, productImg) {
+                productNameEl.textContent = `Nom du produit : ${productName}`;
+                productImgEl.src = `../../admin/uploads/produit/${productImg}`;
+                modal.style.display = "flex";
+                document.documentElement.classList.add("no-scroll");
+                document.body.classList.add("no-scroll");
+                console.log("Image du produit :", productImgEl.src);
+
+            }
+
+            function fermerModal() {
+                modal.style.display = "none";
+                document.documentElement.classList.remove("no-scroll");
+                document.body.classList.remove("no-scroll");
+            }
+
+            document.querySelector(".close-modal")?.addEventListener("click", fermerModal);
+
+            window.addEventListener("click", (event) => {
+                if (event.target === modal) {
+                    fermerModal();
+                }
+            });
+
+            if (lastAddedProduct.name) {
+                openReservationModal(lastAddedProduct.name, lastAddedProduct.image);
+            }
+        });
+    </script>
+<?php endif; ?>
+
 <!DOCTYPE html>
 <html lang="fr">
 
@@ -268,10 +405,17 @@ function calculPrix($commande, &$composition = [])
           }, 1000); // attend 1s après dernier scroll
         });
       </script>
+
+
       <section class="combination-section transition-all">
         <h2>Les indispensables à l’unité</h2>
         <div class="carousel-container" id="carousel-unitaires">
           <?php foreach ($produits as $produit): ?>
+                                    <?php
+                        $catNom = isset($categoriesAssoc[$produit['id_categorie']])
+                            ? strtolower($categoriesAssoc[$produit['id_categorie']])
+                            : '';
+                        ?>
             <div class="product-card">
               <div class="product-image">
                 <img
@@ -281,14 +425,53 @@ function calculPrix($commande, &$composition = [])
               <div class="product-content">
                 <h3><?= htmlspecialchars($produit['nom']) ?></h3>
                 <p class="price"><?= number_format($produit['prix'], 2, ',', ' ') ?> €</p>
-                <button class="btn-beige btn-fullwidth"
-                  onclick="window.location.href = 'page-produit.php?id=<?= (int)$produit['id']; ?>'">
-                  Ajouter au panier
-                </button>
+                <form method="POST" style="display:inline;">
+                  <input type="hidden" name="produit" value="<?= htmlspecialchars($produit['nom']) ?>" />
+                  <input type="hidden" name="quantite" value="1" />
+                  <button type="submit" class="btn-beige btn-fullwidth">Ajouter au panier</button>
+                </form>
               </div>
             </div>
           <?php endforeach; ?>
         </div>
+              
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const filterButtons = document.querySelectorAll(".filter-btn");
+
+            filterButtons.forEach((button) => {
+                button.addEventListener("click", () => {
+                    const selectedCategory = button.getAttribute("data-category").toLowerCase();
+                    window.location.href = `?categorie=${encodeURIComponent(selectedCategory)}&page=1`;
+                });
+            });
+        });
+        const modal = document.getElementById("reservation-modal");
+        const productNameEl = document.getElementById("product-name");
+
+        function openReservationModal(productName) {
+            modal.style.display = "flex"; // Affiche la modale
+            productNameEl.textContent = `Nom du produit : ${productName}`;
+            document.documentElement.classList.add("no-scroll");
+            document.body.classList.add("no-scroll");
+        }
+
+        function fermerModal() {
+            modal.style.display = "none";
+            document.documentElement.classList.remove("no-scroll");
+            document.body.classList.remove("no-scroll");
+        }
+
+        document.querySelector(".close-modal").onclick = fermerModal;
+
+        window.onclick = (event) => {
+            if (event.target === modal) {
+                fermerModal();
+            }
+        };
+    </script>
+
+
 
               <div class="voir-plus">
         <button class="btn-noir"
@@ -334,6 +517,8 @@ function calculPrix($commande, &$composition = [])
           }, 1000);
         });
       </script>
+
+      
 
       
 
@@ -391,11 +576,35 @@ function calculPrix($commande, &$composition = [])
     </div>
 
 
+                <!-- Modal d'ajout au panier -->
+            <div id="reservation-modal" class="modal" style="display:none;">
+                <div class="modal-content">
+                    <span class="close-modal">&times;</span>
+                    <img src="../../assets/check-icone.svg" alt="Image du produit" class="check-icon" />
+                    <br />
+                    <h2 class="success-message">Ajouté au panier avec succès !</h2>
+                    <div class="product-info">
+                        <img id="product-image" class="img-panier" />
+                        <p id="product-name">Nom du produit :</p>
+                        <p>
+                            Quantité : <span id="quantity">1</span>
+                        </p>
+                    </div>
+                    <div class="modal-buttons">
+                        <button class="ajt-panier" onclick="window.location.href='index.php'">Continuer vos achats</button>
+                        <button class="btn-noir" onclick="window.location.href='panier.php'">Voir le panier</button>
+                    </div>
+                </div>
+
+
   </main>
   <!-- Footer -->
   <footer>
     <?php require '../../squelette/footer.php'; ?>
   </footer>
+
+
+  
 
 </body>
 
