@@ -128,6 +128,19 @@ if (isset($_SESSION['user_id'])) {
     </header>
 
     <script>
+    document.querySelectorAll("li a").forEach(link => {
+        const parentLi = link.closest("li");
+        if (parentLi && !parentLi.classList.contains("dropdown")) {
+            parentLi.addEventListener("click", () => {
+                window.location.href = link.href;
+            });
+            parentLi.style.cursor = "pointer";
+        }
+    });
+</script>
+
+
+    <script>
         document.addEventListener("DOMContentLoaded", function() {
             document.querySelectorAll(".dropdown > a").forEach((dropdownToggle) => {
                 dropdownToggle.addEventListener("click", function(event) {
