@@ -189,9 +189,9 @@ foreach ($details as $detail) {
           // Ajout des données au PDF
             $displayTableName = $tableDisplayNames[$table] ?? $table; 
             $pdf->Cell(60, 10, mb_convert_encoding($displayTableName, "ISO-8859-1", "UTF-8"), 1);
-            $pdf->Cell(60, 10, mb_convert_encoding($element['nom'], "ISO-8859-1", "UTF-8"), 1);
+            $pdf->Cell(80, 10, mb_convert_encoding($element['nom'], "ISO-8859-1", "UTF-8"), 1);
             $pdf->Cell(20, 10, "-", 1); // Quantité par défaut
-            $pdf->Cell(50, 10, $prix, 1);
+            $pdf->Cell(30, 10, $prix, 1);
             $pdf->Ln();
         }
     }
@@ -211,9 +211,9 @@ foreach ($details as $detail) {
             $quantite = $stmtQuantite->fetchColumn() ?? '-';
 
             $pdf->Cell(60, 10, $tableDisplayNames['accoudoir_bois'], 1);
-            $pdf->Cell(60, 10, $nom, 1);
+            $pdf->Cell(80, 10, $nom, 1);
             $pdf->Cell(20, 10, $quantite, 1);
-            $pdf->Cell(50, 10, $prix, 1);
+            $pdf->Cell(30, 10, $prix, 1);
             $pdf->Ln();
         }
     }

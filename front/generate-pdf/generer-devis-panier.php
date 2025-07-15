@@ -128,9 +128,9 @@ $pdf->Ln();
 // Table des produits commandés
 $pdf->SetFont('Arial', 'B', 12);
 $pdf->Cell(60, 10, mb_convert_encoding("Produit à l'unité", "ISO-8859-1", "UTF-8"), 1);
-$pdf->Cell(60, 10, mb_convert_encoding("Référence", "ISO-8859-1", "UTF-8"), 1);
+$pdf->Cell(80, 10, mb_convert_encoding("Référence", "ISO-8859-1", "UTF-8"), 1);
 $pdf->Cell(20, 10, mb_convert_encoding("Quantité", "ISO-8859-1", "UTF-8"), 1);
-$pdf->Cell(50, 10, "Prix", 1);
+$pdf->Cell(30, 10, "Prix", 1);
 $pdf->Ln();
 
 $pdf->SetFont('Arial', '', 12);
@@ -144,9 +144,9 @@ if (!empty($produits)) {
     $prix = isset($produit['prix']) ? number_format($produit['prix'], 2, ',', ' ') . " EUR" : "-";
 
     $pdf->Cell(60, 10, $nomCat, 1);
-    $pdf->Cell(60, 10, $nom, 1);
+    $pdf->Cell(80, 10, $nom, 1);
     $pdf->Cell(20, 10, $quantite, 1);
-    $pdf->Cell(50, 10, $prix, 1);
+    $pdf->Cell(30, 10, $prix, 1);
     $pdf->Ln();
 }
 
