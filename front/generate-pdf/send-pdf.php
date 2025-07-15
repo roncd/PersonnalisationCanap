@@ -70,7 +70,7 @@ $mailClient = new PHPMailer(true);
 
 try {
     $mailClient->isSMTP();
-    $env = parse_ini_file(__DIR__ . '/../../.env');
+    $env = include __DIR__ . '/../../config/mail.php';
     $mailClient->Host       = $env['SMTP_HOST'];
     $mailClient->SMTPAuth   = true;
     $mailClient->Username   = $env['SMTP_USER'];
@@ -123,7 +123,7 @@ $mailEntreprise = new PHPMailer(true);
 
 try {
     $mailEntreprise->isSMTP();
-    $env = parse_ini_file(__DIR__ . '/../../.env');
+    $env = include __DIR__ . '/../../config/mail.php';
     $mailEntreprise->Host       = $env['SMTP_HOST'];
     $mailEntreprise->SMTPAuth   = true;
     $mailEntreprise->Username   = $env['SMTP_USER'];

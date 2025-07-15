@@ -7,7 +7,7 @@ document.querySelectorAll('.bx.bxs-file-pdf').forEach(button => {
 
         if (idCommande) {
             const currentPath = window.location.origin;
-            const basePath = '/PersonnalisationCanap/front/generate-pdf/'
+            const basePath = '/front/generate-pdf/'
             let url = '';
             url = `${currentPath}${basePath}generer-devis-panier.php`;
             if (url) {

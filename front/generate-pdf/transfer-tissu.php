@@ -1,6 +1,5 @@
 <?php
 require '../../admin/config.php'; // Connexion à la BDD
-
 header('Content-Type: application/json');
 
 try {
@@ -37,5 +36,3 @@ try {
     $pdo->rollBack();
     echo json_encode(["success" => false, "message" => "Erreur : " . $e->getMessage()]);
 }
-
-?>

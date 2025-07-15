@@ -1,6 +1,5 @@
 <?php
 require '../../admin/config.php';
-
 header('Content-Type: application/json');
 
 try {
@@ -60,4 +59,3 @@ try {
     $pdo->rollBack();
     echo json_encode(["success" => false, "message" => "Erreur : " . $e->getMessage()]);
 }
-?>

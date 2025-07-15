@@ -7,7 +7,7 @@ document.querySelectorAll('.bx.bxs-file-pdf').forEach(button => {
 
         if (idCommande) {
             const currentPath = window.location.origin;
-            const basePath = '/PersonnalisationCanap/front/generate-pdf/'
+            const basePath = '/front/generate-pdf/'
             // vérification du type de commande dans la database
             fetch(`${currentPath}${basePath}type-commande.php`, {
                 method: 'POST',
@@ -21,11 +21,11 @@ document.querySelectorAll('.bx.bxs-file-pdf').forEach(button => {
                         // Choisir le fichier PHP en fonction du type
                         if (data.type === 'Bois') {
                             const currentPath = window.location.origin;
-                            const basePath = '/PersonnalisationCanap/front/generate-pdf/';
+                            const basePath = '/front/generate-pdf/';
                             url = `${currentPath}${basePath}generer-devis-bois.php`;
                         } else if (data.type === 'Tissu') {
                             const currentPath = window.location.origin;
-                            const basePath = '/PersonnalisationCanap/front/generate-pdf/';
+                            const basePath = '/front/generate-pdf/';
                             url = `${currentPath}${basePath}generer-devis-tissu.php`;
                         }
 
