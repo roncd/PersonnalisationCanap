@@ -321,9 +321,11 @@ input:checked + label {
   .container {
     width: 95vw;
     height: 95vw;
-    margin-top: 21rem;
-    margin-bottom: -22rem;
+    margin-top: 12rem!important;
+    margin-bottom: -13rem!important;
   }
+
+
 
   .container label {
     width: 33.33%;

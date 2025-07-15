@@ -41,6 +41,14 @@ body {
   text-align: center;
 }
 
+.btn-fullwidth {
+  width: 100%;
+  display: block;
+  text-align: center;
+  box-sizing: border-box;
+  margin-top: 1rem; /* optionnel */
+}
+
 /* --------------- SECTION PERSONNALISATION --------------- */
 .customize-section {
   position: relative;
