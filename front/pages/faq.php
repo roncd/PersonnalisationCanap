@@ -1,6 +1,7 @@
 <?php
 require '../../admin/config.php';
 session_start();
+require '../../admin/include/session_expiration.php';
 
 $stmt = $pdo->prepare("SELECT id, nom, icon FROM faq_categorie ORDER BY nom ASC");
 $stmt->execute();

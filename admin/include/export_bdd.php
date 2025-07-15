@@ -1,6 +1,7 @@
 <?php
 require '../config.php';
 session_start();
+require '../include/session_expiration.php';
 
 if (!isset($_SESSION['id'])) {
     header("Location: ../index.php");

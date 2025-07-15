@@ -1,6 +1,7 @@
 <?php
 require '../../admin/config.php';
 session_start();
+require '../../admin/include/session_expiration.php';
 
 
 // 1. Canapés préfaits
@@ -275,7 +276,6 @@ if (!empty($produitAjoute)) : ?>
       <div class="hero-container">
         <img src="../../medias/hero-banner.jpg" alt="Salon marocain" class="hero-image">
         <div class="hero-content">
-          <br><br><br>
           <h1 class="hero-title h2">
             Personnalise ton salon marocain
           </h1>

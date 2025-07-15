@@ -25,31 +25,6 @@
             $path = dirname($_SERVER['PHP_SELF']); // chemin du dossier actuel
             $baseUrl = $protocol . '://' . $host . $path;
 
-
-            // if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            //     $email = $_POST['adresse'];
-            //     $stmt = $pdo->prepare("SELECT * FROM client WHERE mail = :mail");
-            //     $stmt->execute(['mail' => $email]);
-            //     $user = $stmt->fetch(PDO::FETCH_ASSOC);
-            //     if ($user) {
-            //         $token = bin2hex(random_bytes(50));
-            //         $stmt = $pdo->prepare("UPDATE client SET reset_token = :token, reset_expires = DATE_ADD(NOW(), INTERVAL 1 HOUR) WHERE mail = :mail");
-            //         $stmt->execute(['token' => $token, 'mail' => $email]);
-            //         $reset_link = "http://diangou-cmr.alwaysdata.net/PersonnalisationCanapLocal/front/formulaire/new_password.php?token=$token";
-            //         $to = $email;
-            //         $subject = "Réinitialisation de votre mot de passe";
-            //         $message = "Cliquez sur ce lien pour réinitialiser votre mot de passe : $reset_link";
-            //         $headers = "From: decodumonde.alternance@gmail.com\r\n";
-            //         if (mail($to, $subject, $message, $headers)) {
-            //             echo "<div class='message success'>Un e-mail de réinitialisation a été envoyé.</div>";
-            //         } else {
-            //             echo "<div class='message error'>Erreur lors de l'envoi de l'e-mail.</div>";
-            //         }
-            //     } else {
-            //         echo "<div class='message error'>Aucun compte trouvé avec cet e-mail.</div>";
-            //     }
-            // }
-
             //Méthode SMTP
             use PHPMailer\PHPMailer\PHPMailer;
             use PHPMailer\PHPMailer\Exception;
