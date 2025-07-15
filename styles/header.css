@@ -288,7 +288,7 @@ body.menu-open::before {
 
 
 /* Responsive Design */
-@media screen and (max-width: 1125px) {
+@media (max-width: 1125px) {
 
     .header-content {
         justify-content: center;
@@ -432,7 +432,25 @@ body.menu-open::before {
 }
 
 /* Small Screen Adjustments */
-@media screen and (max-width: 480px) {
+@media (max-width: 480px) {
+
+    h1 {
+        padding-top: 0px;
+    }
+
+    .hero-title.h2 {
+        padding-top: 0px;
+    }
+
+    header nav {
+        padding: 90px 20px 0px;
+    }
+
+    /* Ajout de la classe active pour afficher la modal au clic */
+    header nav.active {
+        justify-content: flex-start;
+    }
+
     header {
         padding: 12px 16px;
     }

@@ -23,6 +23,10 @@
     font-size: 14px;
 }
 
+button {
+    appearance: none;
+}
+
 /* Boutons en noir */
 .btn-noir {
     background-color: #000;
@@ -104,6 +108,11 @@
     font-weight: bold;
 }
 
+input {
+    appearance: none;
+    color: black;
+}
+
 .button-section input {
     padding: 10px 20px;
     border: none;
@@ -146,7 +155,14 @@
 
     .button-section button {
         padding: 10px 10px;
-       
+
+    }
+
+}
+
+@media (max-width: 1024px) {
+    button#pdf-btn.btn-noir {
+        display: none;
     }
 
 }

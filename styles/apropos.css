@@ -204,6 +204,11 @@ body {
 
 }
 
+input {
+    appearance: none;
+    color: black;
+}
+
 .container input {
   display: none;
 }
