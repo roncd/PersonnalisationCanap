@@ -3,18 +3,13 @@ require '../config.php';
 session_start();
 require '../include/session_expiration.php';
 
-
 if (!isset($_SESSION['id'])) {
     $_SESSION['redirect_to'] = $_SERVER['REQUEST_URI'];
     header("Location: ../index.php");
     exit();
 }
-$search = $_GET['search'] ?? '';
 
-// Récupération de toutes les catégories FAQ
-$stmt = $pdo->prepare("SELECT id, nom, icon FROM faq_categorie ORDER BY id DESC");
-$stmt->execute();
-$categories = $stmt->fetchAll(PDO::FETCH_ASSOC);
+$search = $_GET['search'] ?? '';
 
 // Paramètres de pagination
 $page = isset($_GET['page']) && is_numeric($_GET['page']) && $_GET['page'] > 0 ? (int)$_GET['page'] : 1;
@@ -30,7 +25,7 @@ $params = $_GET;
 $params['order'] = $next;
 $triURL = '?' . http_build_query($params);
 
-$stmtCount = $pdo->prepare("SELECT COUNT(*) AS total FROM couleur_tissu_bois");
+$stmtCount = $pdo->prepare("SELECT COUNT(*) AS total FROM faq_categorie");
 $stmtCount->execute();
 $totalCommandes = $stmtCount->fetchColumn();
 
@@ -60,7 +55,7 @@ $totalPages = ceil($totalCommandes / $limit);
     </header>
     <main>
         <div class="container">
-                <h2>Liste des catégories de la FAQ</h2>
+            <h2>Liste des catégories de la FAQ</h2>
 
             <div class="option">
                 <div class="section-button">
@@ -79,32 +74,50 @@ $totalPages = ceil($totalCommandes / $limit);
                 </div>
             </div>
             <?php require '../include/message.php'; ?>
-           <div class="tab-container">
-    <?php require '../include/message.php'; ?>
-    <table class="styled-table">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Nom</th>
-                <th>Icône</th>
-                <th class="sticky-col">Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php foreach ($categories as $categorie): ?>
-                <tr>
-                    <td><?= htmlspecialchars($categorie['id']) ?></td>
-                    <td><?= htmlspecialchars($categorie['nom']) ?></td>
-                    <td><?= htmlspecialchars($categorie['icon']) ?></td>
-                    <td class="actions">
-                        <a href="edit-site.php?id=<?= $categorie['id'] ?>" class="edit-action actions vert" title="Modifier">EDIT</a>
-                        <a href="delete.php?id=<?= $categorie['id'] ?>" class="delete-action actions rouge" title="Supprimer">DELETE</a>
-                    </td>
-                </tr>
-            <?php endforeach; ?>
-        </tbody>
-    </table>
-</div>
+            <div class="tab-container">
+                <?php require '../include/message.php'; ?>
+                <table class="styled-table">
+                    <thead>
+                        <tr>
+                            <th class="btn-order">
+                                <a
+                                    href="<?= $triURL ?>"
+                                    title="Trier <?= $order === 'ASC' ? 'du plus récent au plus ancien' : 'du plus ancien au plus récent' ?>">
+                                    <img src="<?= $icon ?>" alt="" width="20" height="20">
+                                </a>
+                                ID
+                            </th>
+                            <th>Nom</th>
+                            <th>Icône</th>
+                            <th class="sticky-col">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                        if ($search) {
+                            $stmt = $pdo->prepare("SELECT id, nom, icon FROM faq_categorie WHERE nom LIKE :search ORDER BY id $order");
+                            $stmt->bindValue(':search', '%' . $search . '%', PDO::PARAM_STR);
+                        } else {
+                            $stmt = $pdo->prepare("SELECT id, nom, icon FROM faq_categorie ORDER BY id $order LIMIT :limit OFFSET :offset");
+                            $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
+                            $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+                        }
+                        $stmt->execute();
+                        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                            echo "<tr>";
+                            echo "<td>{$row['id']}</td>";
+                            echo "<td>{$row['nom']}</td>";
+                            echo "<td>{$row['icon']}</td>";
+                            echo "<td class='actions'>";
+                            echo "<a href='edit-site.php?id={$row['id']}' class='edit-action actions vert' title='Modifier'>EDIT</a>";
+                            echo "<a href='delete.php?id={$row['id']}' class='delete-action actions rouge' data-id='{$row['id']}' title='Supprimer'>DELETE</a>";
+                            echo "</td>";
+                            echo "</tr>";
+                        }
+                        ?>
+                    </tbody>
+                </table>
+            </div>
             <?php require '../include/pagination.php'; ?>
         </div>
         <div id="supprimer-popup" class="popup">
