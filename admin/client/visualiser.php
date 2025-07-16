@@ -136,7 +136,7 @@ $totalPages = ceil($totalCommandes / $limit);
         <div id="supprimer-popup" class="popup">
             <div class="popup-content">
                 <h2>Êtes-vous sûr de vouloir supprimer ?</h2>
-                <p>(L'élément sera supprimé définitivement)</p>
+                <p>(Le client sera supprimé définitivement, ainsi que <br>toutes les commandes associés au client)</p>
                 <br>
                 <button id="confirm-delete" class="btn-beige">Oui</button>
                 <button id="cancel-delete" class="btn-noir">Non</button>

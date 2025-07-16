@@ -38,7 +38,7 @@ if (!isset($_SESSION['id'])) {
             <div class="grid-wrapper">
 
             <section class="category-block">
-            <h2>Section - FAQ</h2>
+            <h2>Page - FAQ</h2>
             <div class="button-grid">
                     <a href="../faq/visualiser-site.php" class="btn">FAQ</a>
                     <a href="../faq-categorie/visualiser-site.php" class="btn">Catégorie FAQ</a>
