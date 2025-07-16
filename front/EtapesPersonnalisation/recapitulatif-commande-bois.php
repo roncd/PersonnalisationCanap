@@ -94,25 +94,6 @@ $stmt = $pdo->prepare("SELECT cta.id_accoudoir_bois, cta.nb_accoudoir, ab.nom, a
 $stmt->execute([$commande['id']]);
 $accoudoirs = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-/*if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['comment'])) {
-  // Vérifier si un commentaire a été saisi
-  if (!empty($_POST["comment"])) {
-    $commentaire = trim($_POST["comment"]);
-
-    if ($commande) {
-      // Mettre à jour la commande temporaire avec le commentaire
-      $stmt = $pdo->prepare("UPDATE commande_temporaire SET commentaire = ? WHERE id = ?");
-      $stmt->execute([$commentaire, $id]);
-      $message = '<p class="message success">Commentaire ajouté avec succès !</p>';
-    } else {
-      $message = '<p class="message error">Aucune commande trouvée pour cet utilisateur.</p>';
-    }
-  } else {
-    $message = '<p class="message error">Le commentaire ne peut pas être vide.</p>';
-  }
-}*/
-
-
 // Traitement du formulaire pour ajouter ou modifier un commentaire
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['comment'])) {
   $commentaire_saisi = trim($_POST["comment"]);
@@ -174,13 +155,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['comment'])) {
     <div class="container transition recap-container">
       <!-- Colonne de gauche -->
       <div class="left-column">
-          <div class="buttons align-right h2 h2-recap">
-            <button id="btn-aide" class="btn-beige">Besoin d'aide ?</button>
-            <button type="button" data-url="../pages/dashboard.php" id="btn-abandonner" class="btn-noir">Abandonner</button>
-          </div>
+        <div class="buttons align-right h2 h2-recap">
+          <button id="btn-aide" class="btn-beige">Besoin d'aide ?</button>
+          <button type="button" data-url="../pages/dashboard.php" id="btn-abandonner" class="btn-noir">Abandonner</button>
+        </div>
 
 
-        <h2 >Récapitulatif de la commande</h2>
+        <h2>Récapitulatif de la commande</h2>
         <section class="color-options">
 
           <h3>Étape 1.1 : Choisi ta structure</h3>
@@ -194,21 +175,39 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['comment'])) {
 
           <h3>Étape 1.2 : Choisi tes dimensions</h3>
           <?php
+          // Récupérer la structure correspondante depuis la base de données
+          $stmt = $pdo->prepare("SELECT nb_longueurs FROM structure WHERE id = ?");
+          $stmt->execute([$commande['id_structure']]);
+          $structure = $stmt->fetch(PDO::FETCH_ASSOC);
+
+          if ($structure) {
+            $nbLongueurs = $structure['nb_longueurs'];
+          } else {
+            // Gestion de l'erreur si la structure n'existe pas
+            $nbLongueurs = 0;
+          }
+          // Sanitize les valeurs
+          $longueurA = isset($dim['longueurA']) && !empty(trim($dim['longueurA'])) ? htmlspecialchars($dim['longueurA']) : null;
           $longueurB = isset($dim['longueurB']) && !empty(trim($dim['longueurB'])) ? htmlspecialchars($dim['longueurB']) : null;
           $longueurC = isset($dim['longueurC']) && !empty(trim($dim['longueurC'])) ? htmlspecialchars($dim['longueurC']) : null;
 
-          echo '<div class="dimension-container">
-          <p class="input-field">Longueur banquette A : ' . htmlspecialchars($dim['longueurA'] ?? '-') . ' cm</p>
-        </div>';
-          if ($longueurB !== null) {
+          // Affichage en fonction du nbLongueurs
+          if ($nbLongueurs >= 1 && $longueurA !== null) {
             echo '<div class="dimension-container">
-              <p class="input-field">Longueur banquette B : ' . $longueurB . ' cm</p>
-            </div>';
+            <p class="input-field">Longueur banquette A : ' . $longueurA . ' cm</p>
+          </div>';
           }
-          if ($longueurC !== null) {
+
+          if ($nbLongueurs >= 2 && $longueurB !== null) {
             echo '<div class="dimension-container">
-              <p class="input-field">Longueur banquette C : ' . $longueurC . ' cm</p>
-            </div>';
+            <p class="input-field">Longueur banquette B : ' . $longueurB . ' cm</p>
+          </div>';
+          }
+
+          if ($nbLongueurs >= 3 && $longueurC !== null) {
+            echo '<div class="dimension-container">
+            <p class="input-field">Longueur banquette C : ' . $longueurC . ' cm</p>
+          </div>';
           }
           ?>
           <h3>Étape 2 : Choisi ton type de banquette</h3>
@@ -238,16 +237,16 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['comment'])) {
           ?>
           <h3>Étape 5 : Choisi tes accoudoirs</h3>
           <?php
-          if (!empty($accoudoirs)){
-          foreach ($accoudoirs as $accoudoir) {
-            // Affichage de l'accoudoir avec son image, nom, et quantité
-            echo '<div class="option">
+          if (!empty($accoudoirs)) {
+            foreach ($accoudoirs as $accoudoir) {
+              // Affichage de l'accoudoir avec son image, nom, et quantité
+              echo '<div class="option">
               <img src="../../admin/uploads/accoudoirs-bois/' . htmlspecialchars($accoudoir['img'] ?? 'N/A') . '"
                   alt="' . htmlspecialchars($accoudoir['nom'] ?? 'N/A') . '">
               <p>' . htmlspecialchars($accoudoir['nom'] ?? 'N/A') . '</p>
               <p>Quantité : ' . htmlspecialchars($accoudoir['nb_accoudoir']) . '</p>
             </div>';
-          } 
+            }
           } else {
             echo '<p>Tu n\'as pas sélectionné d\'accoudoir.</p>';
           }
@@ -293,7 +292,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['comment'])) {
 
 
         <div class="footer-processus">
-          <p>Total : <span>0 €</span></p>
+          <p>Total : <span><?= $commande['prix']; ?></span></p>
           <div class="buttons">
             <button onclick="retourEtapePrecedente()" class="btn-beige">Retour</button>
             <button id="btn-generer" class="btn-noir">Générer un devis</button>
@@ -384,7 +383,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['comment'])) {
   </main>
   <?php require_once '../../squelette/footer.php'; ?>
 
-  <script>
+  <!-- <script>
     document.addEventListener('DOMContentLoaded', () => {
       let totalPrice = 0; // Total global pour toutes les étapes
 
@@ -438,7 +437,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['comment'])) {
       updateTotal();
       saveData();
     });
-  </script>
+  </script> -->
 
   <script>
     setTimeout(() => {
