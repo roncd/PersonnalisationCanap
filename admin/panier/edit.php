@@ -128,6 +128,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 $valeurs = [
     "validation"   => "En attente de validation",
     "traitement" => "En cours de traitement",
+    "livraison" => "En cours de livraison",
     "final"        => "Commande finalisée"
 ];
 $selected = (string) $commande['statut'];

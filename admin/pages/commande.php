@@ -13,7 +13,7 @@ if (!isset($_SESSION['id'])) {
 
 $search = $_GET['search'] ?? '';
 
-$statut = isset($_GET['statut']) && in_array($_GET['statut'], ['validation', 'construction', 'final'])
+$statut = isset($_GET['statut']) && in_array($_GET['statut'], ['validation', 'construction', 'livraison', 'final'])
     ? $_GET['statut']
     : 'validation';
 
@@ -113,6 +113,7 @@ $commandes = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <div class="tabs">
                         <button onclick="location.href='?statut=validation'" class="tab <?= ($statut === 'validation') ? 'active' : '' ?>">En attente de validation</button>
                         <button onclick="location.href='?statut=construction'" class="tab <?= ($statut === 'construction') ? 'active' : '' ?>">En cours de construction</button>
+                        <button onclick="location.href='?statut=livraison'" class="tab <?= ($statut === 'livraison') ? 'active' : '' ?>">En cours de livraison</button>
                         <button onclick="location.href='?statut=final'" class="tab <?= ($statut === 'final') ? 'active' : '' ?>">Commandes finalisées</button>
                     </div>
                     <div id="message-container"></div>
@@ -158,6 +159,29 @@ $commandes = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         </div>
                     </div>
                     <div class="tab-content <?= $statut === 'construction' ? 'active' : '' ?>" id="construction">
+                        <div id="commandes-container">
+                            <?php if (!empty($commandes)): ?>
+                                <?php foreach ($commandes as $commande): ?>
+                                    <div class="commande" data-id="<?= htmlspecialchars($commande['id']) ?>" data-statut="<?= htmlspecialchars($commande['statut']) ?>">
+                                        <div class="info">
+                                            <p><strong>Nom :</strong> <?= htmlspecialchars($commande['nom']) ?></p>
+                                            <p><strong>Prénom :</strong> <?= htmlspecialchars($commande['prenom']) ?></p>
+                                            <p><strong>Date :</strong> <?= htmlspecialchars(date('d/m/Y', strtotime($commande['date']))) ?></p>
+                                            <p><strong>N° commande :</strong> <?= htmlspecialchars($commande['id']) ?></p>
+                                        </div>
+                                        <div class="actions">
+                                            <i title="Passez la commande au statut suivant" class="bx bxs-chevrons-right vert" onclick="updateStatus(this)"></i>
+                                            <i title="Supprimez la commande" class="bx bx-trash-alt actions rouge" onclick="removeCommand(this)"></i>
+                                            <i title="Téléchargez le devis" class="bx bxs-file-pdf" data-id="<?= htmlspecialchars($commande['id']) ?>"></i>
+                                        </div>
+                                    </div>
+                                <?php endforeach; ?>
+                            <?php else: ?>
+                                <p>Aucune commande trouvée pour ce statut.</p>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+                    <div class="tab-content <?= $statut === 'livraison' ? 'active' : '' ?>" id="livraison">
                         <div id="commandes-container">
                             <?php if (!empty($commandes)): ?>
                                 <?php foreach ($commandes as $commande): ?>
