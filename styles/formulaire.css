@@ -54,7 +54,6 @@ label {
 input, select {
     appearance: none;
     color: black;
-    display: unset;
 }
 
 /* Champs d'entrée */

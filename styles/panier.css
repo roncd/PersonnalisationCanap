@@ -243,6 +243,15 @@ td .actions {
         border-radius: 12px;
     }
 
+    .panier-table th,
+    .panier-table td {
+        font-size: 0.8rem;
+    }
+
+    .panier-table th {
+        font-size: 1.04rem;
+    }
+
     .panier-title {
         font-size: 18px;
     }

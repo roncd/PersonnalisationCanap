@@ -67,9 +67,8 @@ strong {
 ul {
   margin: 1rem 0;
   padding-left: 1.25rem;
-  list-style:disc;
+  list-style: disc;
 }
-
 
 /* Links */
 a {
@@ -78,10 +77,9 @@ a {
   transition: color 0.3s ease;
 }
 
-
-
 /* ------------------- RESPONSIVE DESIGN ------------------- */
 @media screen and (max-width: 1024px) {
+
   .container-intro,
   .container {
     max-width: 90%;
@@ -106,18 +104,22 @@ a {
   .intro {
     font-size: 0.95rem;
   }
-  
-  
+
+  ul {
+    font-size: 0.95rem;
+  }
+
 }
 
 @media screen and (max-width: 768px) {
+
   .container-intro,
   .container {
     max-width: 100%;
     padding: 1rem;
   }
 
-  .container-intro{
+  .container-intro {
     margin-top: -1.5rem;
   }
 
@@ -132,6 +134,7 @@ a {
 
   .section h2 {
     font-size: 1.4rem;
+    margin-top: 2rem;
   }
 
   .section h3 {
@@ -142,13 +145,13 @@ a {
     font-size: 0.9rem;
   }
 
-  .intro {
+  ul {
     font-size: 0.9rem;
   }
 
-  .section h2 {
-    margin-top: -1.5rem;
-}
+  .intro {
+    font-size: 0.9rem;
+  }
 }
 
 @media screen and (max-width: 480px) {
@@ -156,14 +159,13 @@ a {
     padding: 1rem;
   }
 
-  
-  .container-intro{
-    margin-top: -1.5rem;
+  .title-bar h1 {
+    margin-top: 50px;
   }
 
-  .section h2 {
+  .container-intro {
     margin-top: -1.5rem;
-}
+  }
 
   .baloo-2-bold {
     font-size: 1.5rem;
@@ -175,6 +177,7 @@ a {
 
   .section h2 {
     font-size: 1.3rem;
+    margin-top: 2rem;
   }
 
   .section h3 {
@@ -182,6 +185,10 @@ a {
   }
 
   p {
+    font-size: 0.85rem;
+  }
+
+  ul {
     font-size: 0.85rem;
   }
 

@@ -29,6 +29,10 @@ h2 {
   margin: 20px auto;
 }
 
+.tabs button {
+ color: black;
+}
+
 .tab {
   padding: 10px 20px;
   border: none;
@@ -208,7 +212,6 @@ h2 {
 
   .actions {
     align-self: flex-end;
-    font-size: 1.6rem;
   }
 
   .pagination {
@@ -253,10 +256,6 @@ h2 {
 
   .info p {
     font-size: 14px;
-  }
-
-  .actions {
-    font-size: 1.4rem;
   }
 
   .actions .img,

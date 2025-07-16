@@ -21,3 +21,30 @@
   opacity: 1;
   transform: scale(1) translateY(0);
 }
+
+
+/* Désactive les transitions sur mobile et tablette*/
+@media (max-width: 700px) {
+  .transition-all {
+  opacity: unset;
+  transform: unset;
+  transition: unset;
+}
+
+.transition-all.show {
+  opacity: unset;
+  transform: unset;
+}
+
+.transition-boom {
+  opacity: unset;
+  transform: unset;
+  transition: unset;
+}
+
+.transition-boom.show {
+  opacity: unset;
+  transform: unset;
+}
+
+}

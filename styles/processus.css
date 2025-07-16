@@ -31,7 +31,6 @@ body {
 h2 {
   font-size: 32px;
   font-family: 'Baloo 2', sans-serif;
-  margin-bottom: 20px;
 }
 
 span {
@@ -501,7 +500,7 @@ label {
 }
 
 .left-column .info-text {
-  margin-top: -1rem;
+  margin-top: 5px;
   margin-bottom: 1.5rem;
 }
 
