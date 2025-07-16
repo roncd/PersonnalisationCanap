@@ -289,8 +289,6 @@ if (!empty($produitAjoute)) : ?>
   <script type="module" src="../../script/transition.js"></script>
   <script type="module" src="../../script/animate-value.js"></script>
 
-
-
 </head>
 
 <body>
@@ -341,13 +339,12 @@ if (!empty($produitAjoute)) : ?>
     <section class="customize-section transition-all">
       <div class="customize-text">
         <h2>Crée toi-même ton canapé marocain idéal</h2>
-        <br>
-        <br>
+
         <ul class="customize-features">
-          <li><img src="../../medias/canape_icon.png" alt="Forme" class="feature-icon">Choisis la structure du canapé</li>
-          <li><img src="../../medias/couleurs_icon.png" alt="Couleurs" class="feature-icon">Sélectionne les couleurs & matières</li>
-          <li><img src="../../medias/coussin_icon.png" alt="Coussins" class="feature-icon">Ajoutez tes options préférés</li>
-          <li><img src="../../medias/artiste_icon.png" alt="Aperçu" class="feature-icon">Vue d'ensemble de ta création</li>
+          <li><img src="../../assets/canape_icon.png" alt="Forme" class="feature-icon">Choisis la structure du canapé</li>
+          <li><img src="../../assets/couleurs_icon.png" alt="Couleurs" class="feature-icon">Sélectionne les couleurs & matières</li>
+          <li><img src="../../assets/coussin_icon.png" alt="Coussins" class="feature-icon">Ajoutez tes options préférés</li>
+          <li><img src="../../assets/artiste_icon.png" alt="Aperçu" class="feature-icon">Vue d'ensemble de ta création</li>
         </ul>
       </div>
       <div class="customize-image">
