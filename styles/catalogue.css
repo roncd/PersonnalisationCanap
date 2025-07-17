@@ -36,6 +36,8 @@ body {
 }
 
 .filter-btn {
+    appearance: none;
+    color: black;
     padding: 0.5rem 4rem;
     border: 2px solid #E3D1C8;
     background: none;
@@ -43,7 +45,7 @@ body {
     cursor: pointer;
     transition: all 0.3s ease;
     font-weight: bold;
-
+    background-color: white;
 }
 
 .filter-btn.active,
@@ -128,6 +130,12 @@ body {
     /* ✅ largeur égale au select */
 }
 
+input,
+select {
+    appearance: none;
+    color: black;
+}
+
 #searchInput {
     width: 100%;
     padding: 8px 30px 8px 10px;
@@ -136,6 +144,8 @@ body {
     border-radius: 8px;
     box-sizing: border-box;
 }
+
+
 
 #sortPrice {
     padding: 8px 10px;
@@ -381,7 +391,7 @@ body {
 }
 
 .img-panier {
-    width: 400px;
+    width: 100%;
     /* Ajuste la taille selon tes besoins */
     height: auto;
     /* Garde les proportions correctes */
@@ -461,7 +471,7 @@ body {
 
     .hero-title {
         font-size: 1.75rem;
-        padding-top: 6rem !important;
+        padding-top: 0rem;
     }
 
     .hero-description {

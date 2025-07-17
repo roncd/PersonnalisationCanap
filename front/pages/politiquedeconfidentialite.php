@@ -1,6 +1,7 @@
 <?php
 require '../../admin/config.php';
 session_start();
+require '../../admin/include/session_expiration.php';
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -15,7 +16,7 @@ session_start();
     <link rel="stylesheet" href="../../styles/mentions.css">
     <link rel="stylesheet" href="../../styles/transition.css">
     <script type="module" src="../../script/transition.js"></script>
-  
+
 </head>
 
 <body>
@@ -85,14 +86,14 @@ session_start();
 
                 <p>
                     La durée de conservation des données personnelles des Clients dépend de la finalité concernée. Dans ce cadre, les données personnelles des Clients sont conservées le temps nécessaire à l’accomplissement
-                    de leur requête. A défaut d’une quelconque réalisation, les données personnelles sont supprimées dans les délais recommandés par la Commission Nationale Informatique et Libertés (CNIL), au terme d’un délai de trois ans à compter de leur collecte, sous réserve :
+                    de leur requête. A défaut d’une quelconque réalisation, les données personnelles sont supprimées dans les délais recommandés par la Commission Nationale Informatique et Libertés (CNIL), au terme d’un délai de trois ans à compter de leur collecte, sous réserve :</p>
                 <ul>
                     <li>des possibilités et obligations légales en matière d’archivage,</li>
                     <li>des obligations de conservation de certaines données, à des fins probatoires, et/ou d’anonymisation de celles-ci.</li>
                 </ul>
-                Les données personnelles du Client collectées et traitées, pour les besoins d’exécution des offres, sont conservées
-                pour la durée nécessaire à la gestion de la relation contractuelle.
-                Par dérogation, les données personnelles requises pour à l’établissement de la preuve d’un droit ou d’un contrat sont archivées conformément aux dispositions légales (5 ou 10 ans après la fin de la relation commerciale selon le cas).
+                <p>Les données personnelles du Client collectées et traitées, pour les besoins d’exécution des offres, sont conservées
+                    pour la durée nécessaire à la gestion de la relation contractuelle.
+                    Par dérogation, les données personnelles requises pour à l’établissement de la preuve d’un droit ou d’un contrat sont archivées conformément aux dispositions légales (5 ou 10 ans après la fin de la relation commerciale selon le cas).
                 </p>
             </section>
             <section class="section transition-all">

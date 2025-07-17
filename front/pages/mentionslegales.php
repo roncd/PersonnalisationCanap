@@ -1,6 +1,7 @@
 <?php
 require '../../admin/config.php';
 session_start();
+require '../../admin/include/session_expiration.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -49,7 +50,7 @@ session_start();
                 </p>
                 <p><b>Numéro de téléphone :</b> 01 48 22 98 05</p>
                 <p><b>E-mail :</b> decorient@gmail.com</p>
-                <p><b>Adresse du siège :</b> 76 Avenue Lenine, 93380 Pierrefitte-Sur-Seine</p>
+                <p><b>Adresse du siège social :</b> 76 Avenue Lenine, 93380 Pierrefitte-Sur-Seine</p>
                 <p><b>TVA :</b> FR43490981289</p>
                 <p><b>Numéro de SIRET (siège) :</b> 49098128900013</p>
                 <p><b>RCS de Déco du Monde :</b> 490 981 289 R.C.S. Bobigny</p>
@@ -61,9 +62,10 @@ session_start();
 
             <section class="section transition-all">
                 <h2>Ce site est hébergé par :</h2>
-                <p><b>IONOS</b></p>
-                <p><b>RCS :</b></p>
-                <p><b>Siège social :</b> 7 PLACE DE LA GARE, 57200 SARREGUEMINES</p>
+                <p><b>O2SWITCH</b></p>
+                <p><b>RCS :</b> Clermont-Ferrand B 510909807</p>
+                <p><b>Adresse siège social :</b> Che Des Pardiaux, 63000 Clermont Ferrand, France</p>
+                 <p><b>Numéro de SIRET (siège) :</b> 51090980700032</p>
             </section>
 
             <section class="section transition-all">

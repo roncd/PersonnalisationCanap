@@ -34,16 +34,34 @@ if (!$prefait) {
 $pdo->beginTransaction();
 
 // Vérifier si une commande temporaire existe déjà pour cet utilisateur et cette commande pré-faite
-$stmt = $pdo->prepare("SELECT id FROM commande_temporaire WHERE id_client = ? AND id_commande_prefait = ?");
-$stmt->execute([$id_client, $id_prefait]);
+$stmt = $pdo->prepare("SELECT id FROM commande_temporaire WHERE id_client = ?");
+$stmt->execute([$id_client]);
 $commandeExistante = $stmt->fetch(PDO::FETCH_ASSOC);
 
 if ($commandeExistante) {
     // Mettre à jour la commande temporaire existante
     $stmt = $pdo->prepare("UPDATE commande_temporaire SET 
-        longueurA = ?, longueurB = ?, longueurC = ?, prix_dimensions = ?
+        id_commande_prefait = ? , id_structure = ?, id_banquette = ?, id_mousse = ?, id_couleur_bois = ?, id_decoration = ?, id_dossier_bois = ?, 
+        id_couleur_tissu_bois = ?, id_motif_bois = ?, id_modele = ?, id_couleur_tissu = ?, id_motif_tissu = ?, 
+        id_dossier_tissu = ?, id_accoudoir_tissu = ?, id_nb_accoudoir = ?, longueurA = ?, longueurB = ?, 
+        longueurC = ?, prix_dimensions = ?
         WHERE id = ?");
     $stmt->execute([
+        $id_prefait,
+        $prefait['id_structure'],
+        $prefait['id_banquette'],
+        $prefait['id_mousse'],
+        $prefait['id_couleur_bois'],
+        $prefait['id_decoration'],
+        $prefait['id_dossier_bois'],
+        $prefait['id_couleur_tissu_bois'],
+        $prefait['id_motif_bois'],
+        $prefait['id_modele'],
+        $prefait['id_couleur_tissu'],
+        $prefait['id_motif_tissu'],
+        $prefait['id_dossier_tissu'],
+        $prefait['id_accoudoir_tissu'],
+        $prefait['id_nb_accoudoir'],
         $longueurA,
         $longueurB,
         $longueurC,
@@ -53,15 +71,14 @@ if ($commandeExistante) {
 } else {
     // Insérer une nouvelle commande temporaire si aucune existante
     $stmt = $pdo->prepare("INSERT INTO commande_temporaire (
-        commentaire, statut, id_client, id_commande_prefait, id_structure, id_banquette, id_mousse, id_couleur_bois, id_decoration, id_dossier_bois, 
+        statut, id_client, id_commande_prefait, id_structure, id_banquette, id_mousse, id_couleur_bois, id_decoration, id_dossier_bois, 
         id_couleur_tissu_bois, id_motif_bois, id_modele, id_couleur_tissu, id_motif_tissu, 
         id_dossier_tissu, id_accoudoir_tissu, id_nb_accoudoir, longueurA, longueurB, 
         longueurC, prix_dimensions
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
+    ) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
     )");
 
     $stmt->execute([
-        '',
         'validation',
         $id_client,
         $id_prefait,

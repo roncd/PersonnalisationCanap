@@ -1,6 +1,7 @@
 <?php
 require '../config.php';
 session_start();
+require '../include/session_expiration.php';
 
 
 if (!isset($_SESSION['id'])) {
@@ -78,32 +79,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div class="container">
             <h2>Modifie une catégorie de la FAQ</h2>
             <?php require '../include/message.php'; ?>
-           <div class="form">
-    <form class="formulaire-creation-compte" method="POST">
-        <div class="form-group">
-            <label for="nom">Nom de la catégorie<span class="required">*</span></label>
-            <input type="text" id="nom" name="nom" class="input-field" 
-                   value="<?= htmlspecialchars($categorie['nom']) ?>" required>
-        </div>
-        <div class="form-group">
-<label for="icon">
-  Icône Font Awesome 
-  (ex: fa-solid fa-truck |
-  <a href="https://fontawesome.com/search" target="_blank" style="color: #a4745a; text-decoration: underline;">
-    lien vers la bibliothèque
-  </a>)
-</label>    <input type="text" id="icon" name="icon" class="input-field" 
-           placeholder="fa-truck" 
-           value="<?= htmlspecialchars($categorie['icon']) ?>" required>
-</div>
-        <div class="button-section">
-            <div class="buttons">
-                <button type="button" id="btn-retour" class="btn-beige" onclick="history.go(-1)">Retour</button>
-                <input type="submit" class="btn-noir" value="Modifier">
+            <div class="form">
+                <form class="formulaire-creation-compte" method="POST">
+                    <div class="form-group">
+                        <label for="nom">Nom de la catégorie<span class="required">*</span></label>
+                        <input type="text" id="nom" name="nom" class="input-field"
+                            value="<?= htmlspecialchars($categorie['nom']) ?>" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="icon">
+                            Icône Font Awesome
+                            (ex: fa-solid fa-truck |
+                            <a href="https://fontawesome.com/search" target="_blank" style="color: #a4745a; text-decoration: underline;">
+                                lien vers la bibliothèque
+                            </a>) <span class="required">*</span>
+                        </label> <input type="text" id="icon" name="icon" class="input-field"
+                            placeholder="fa-truck"
+                            value="<?= htmlspecialchars($categorie['icon']) ?>" required>
+                    </div>
+                    <div class="button-section">
+                        <div class="buttons">
+                            <button type="button" id="btn-retour" class="btn-beige" onclick="history.go(-1)">Retour</button>
+                            <input type="submit" class="btn-noir" value="Modifier">
+                        </div>
+                    </div>
+                </form>
             </div>
-        </div>
-    </form>
-</div>
         </div>
     </main>
     <footer>

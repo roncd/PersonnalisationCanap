@@ -1,12 +1,13 @@
 <?php
 require '../../admin/config.php';
 session_start();
+require '../../admin/include/session_expiration.php';
 
 // Vérifier si l'utilisateur est connecté
 if (!isset($_SESSION['user_id'])) {
-    $_SESSION['redirect_to'] = $_SERVER['REQUEST_URI'];
-    header("Location: ../formulaire/Connexion.php"); // Redirection vers la page de connexion
-    exit();
+  $_SESSION['redirect_to'] = $_SERVER['REQUEST_URI'];
+  header("Location: ../formulaire/Connexion.php"); // Redirection vers la page de connexion
+  exit();
 }
 
 
@@ -137,136 +138,135 @@ $produitAjoute = null; // Variable pour savoir quel produit a été ajouté
 
 // 1. Si on n'est pas connecté, on ne restaure pas de POST
 if (!isset($_SESSION['user_id']) && isset($_GET['post_restore'])) {
-    // L'utilisateur n'est toujours pas connecté → on ne restaure pas
-    unset($_SESSION['temp_post']);
-    header("Location: Connexion.php");
-    exit;
+  // L'utilisateur n'est toujours pas connecté → on ne restaure pas
+  unset($_SESSION['temp_post']);
+  header("Location: Connexion.php");
+  exit;
 }
 
 // 2. Sinon on peut restaurer le POST si c'était prévu
 if (isset($_GET['post_restore']) && isset($_SESSION['temp_post'])) {
-    $_POST = $_SESSION['temp_post'];
-    unset($_SESSION['temp_post']);
-    $_SERVER['REQUEST_METHOD'] = 'POST';
+  $_POST = $_SESSION['temp_post'];
+  unset($_SESSION['temp_post']);
+  $_SERVER['REQUEST_METHOD'] = 'POST';
 }
 
 if (isset($_SESSION['popup_produit'])) {
-    $produitAjoute = $_SESSION['popup_produit']['nom'];
-    $imageProduitAjoute = $_SESSION['popup_produit']['img'];
-    unset($_SESSION['popup_produit']);
+  $produitAjoute = $_SESSION['popup_produit']['nom'];
+  $imageProduitAjoute = $_SESSION['popup_produit']['img'];
+  unset($_SESSION['popup_produit']);
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['produit'])) {
-    if (!isset($_SESSION['user_id'])) {
-        $_SESSION['pending_add_to_cart'] = $_POST;
-        header('Location: ../formulaire/Connexion.php');
-        exit;
+  if (!isset($_SESSION['user_id'])) {
+    $_SESSION['pending_add_to_cart'] = $_POST;
+    header('Location: ../formulaire/Connexion.php');
+    exit;
+  }
+
+  if (isset($_SESSION['user_id'])) {
+    $id_client = $_SESSION['user_id'];
+
+    $nomProduit = $_POST['produit'];
+    $quantite = intval($_POST['quantite'] ?? 1);
+    // Récupérer l'ID et le prix du produit via son nom
+    $stmt = $pdo->prepare("SELECT id, prix, img FROM vente_produit WHERE nom = ?");
+    $stmt->execute([$nomProduit]);
+    $produit = $stmt->fetch();
+
+    if (!$produit) {
+      // Sécurité : produit introuvable (mauvaise saisie ?)
+      die("Produit introuvable.");
     }
 
-    if (isset($_SESSION['user_id'])) {
-        $id_client = $_SESSION['user_id'];
+    $id = $produit['id'];
+    $prix = $produit['prix'];
+    $img = $produit['img'];
 
-        $nomProduit = $_POST['produit'];
-        $quantite = intval($_POST['quantite'] ?? 1);
-        // Récupérer l'ID et le prix du produit via son nom
-        $stmt = $pdo->prepare("SELECT id, prix, img FROM vente_produit WHERE nom = ?");
-        $stmt->execute([$nomProduit]);
-        $produit = $stmt->fetch();
+    // Vérifie s'il y a déjà un panier pour ce client
+    $stmt = $pdo->prepare("SELECT id FROM panier WHERE id_client = ?");
+    $stmt->execute([$id_client]);
+    $panier = $stmt->fetch();
 
-        if (!$produit) {
-            // Sécurité : produit introuvable (mauvaise saisie ?)
-            die("Produit introuvable.");
-        }
-
-        $id = $produit['id'];
-        $prix = $produit['prix'];
-        $img = $produit['img'];
-
-        // Vérifie s'il y a déjà un panier pour ce client
-        $stmt = $pdo->prepare("SELECT id FROM panier WHERE id_client = ?");
-        $stmt->execute([$id_client]);
-        $panier = $stmt->fetch();
-
-        if (!$panier) {
-            // Créer un nouveau panier
-            $stmt = $pdo->prepare("INSERT INTO panier (id_client, prix) VALUES (?, ?)");
-            $stmt->execute([$id_client, 0]);
-            $panier_id = $pdo->lastInsertId();
-        } else {
-            $panier_id = $panier['id'];
-        }
-
-        // Vérifie si le produit est déjà dans le panier
-        $stmt = $pdo->prepare("SELECT * FROM panier_detail WHERE id_panier = ? AND id_produit = ?");
-        $stmt->execute([$panier_id, $id]);
-        $produit_existe = $stmt->fetch();
-
-        if ($produit_existe) {
-            $stmt = $pdo->prepare("UPDATE panier_detail SET quantite = quantite + ? WHERE id_panier = ? AND id_produit = ?");
-            $stmt->execute([$quantite, $panier_id, $id]);
-        } else {
-            $stmt = $pdo->prepare("INSERT INTO panier_detail (id_panier, id_produit, quantite) VALUES (?, ?, ?)");
-            $stmt->execute([$panier_id, $id, $quantite]);
-        }
-
-        // Mettre à jour le prix total dans la table panier
-        $stmt = $pdo->prepare("UPDATE panier SET prix = prix + ? WHERE id = ?");
-        $stmt->execute([$prix * $quantite, $panier_id]);
-        $produitAjoute = $nomProduit;
-
-        // Stocker le produit dans la session pour le popup après redirection
-$_SESSION['popup_produit'] = [
-    'nom' => $nomProduit,
-    'img' => $img
-];
-
-// Rediriger pour éviter re-post et déclencher le modal
-header("Location: ?post_restore=1");
-exit;
-        
+    if (!$panier) {
+      // Créer un nouveau panier
+      $stmt = $pdo->prepare("INSERT INTO panier (id_client, prix) VALUES (?, ?)");
+      $stmt->execute([$id_client, 0]);
+      $panier_id = $pdo->lastInsertId();
+    } else {
+      $panier_id = $panier['id'];
     }
+
+    // Vérifie si le produit est déjà dans le panier
+    $stmt = $pdo->prepare("SELECT * FROM panier_detail WHERE id_panier = ? AND id_produit = ?");
+    $stmt->execute([$panier_id, $id]);
+    $produit_existe = $stmt->fetch();
+
+    if ($produit_existe) {
+      $stmt = $pdo->prepare("UPDATE panier_detail SET quantite = quantite + ? WHERE id_panier = ? AND id_produit = ?");
+      $stmt->execute([$quantite, $panier_id, $id]);
+    } else {
+      $stmt = $pdo->prepare("INSERT INTO panier_detail (id_panier, id_produit, quantite) VALUES (?, ?, ?)");
+      $stmt->execute([$panier_id, $id, $quantite]);
+    }
+
+    // Mettre à jour le prix total dans la table panier
+    $stmt = $pdo->prepare("UPDATE panier SET prix = prix + ? WHERE id = ?");
+    $stmt->execute([$prix * $quantite, $panier_id]);
+    $produitAjoute = $nomProduit;
+
+    // Stocker le produit dans la session pour le popup après redirection
+    $_SESSION['popup_produit'] = [
+      'nom' => $nomProduit,
+      'img' => $img
+    ];
+
+    // Rediriger pour éviter re-post et déclencher le modal
+    header("Location: ?post_restore=1");
+    exit;
+  }
 }
 if (!empty($produitAjoute)) : ?>
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const modal = document.getElementById("reservation-modal");
-            const productNameEl = document.getElementById("product-name");
-            const productImgEl = document.getElementById("product-image");
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const modal = document.getElementById("reservation-modal");
+      const productNameEl = document.getElementById("product-name");
+      const productImgEl = document.getElementById("product-image");
 
-            const lastAddedProduct = {
-                name: <?= json_encode($produitAjoute) ?>,
-                image: <?= json_encode($imageProduitAjoute ?? '') ?>
-            };
+      const lastAddedProduct = {
+        name: <?= json_encode($produitAjoute) ?>,
+        image: <?= json_encode($imageProduitAjoute ?? '') ?>
+      };
 
-            function openReservationModal(productName, productImg) {
-                productNameEl.textContent = `Nom du produit : ${productName}`;
-                productImgEl.src = `../../admin/uploads/produit/${productImg}`;
-                modal.style.display = "flex";
-                document.documentElement.classList.add("no-scroll");
-                document.body.classList.add("no-scroll");
-                console.log("Image du produit :", productImgEl.src);
+      function openReservationModal(productName, productImg) {
+        productNameEl.textContent = `Nom du produit : ${productName}`;
+        productImgEl.src = `../../admin/uploads/produit/${productImg}`;
+        modal.style.display = "flex";
+        document.documentElement.classList.add("no-scroll");
+        document.body.classList.add("no-scroll");
+        console.log("Image du produit :", productImgEl.src);
 
-            }
+      }
 
-            function fermerModal() {
-                modal.style.display = "none";
-                document.documentElement.classList.remove("no-scroll");
-                document.body.classList.remove("no-scroll");
-            }
+      function fermerModal() {
+        modal.style.display = "none";
+        document.documentElement.classList.remove("no-scroll");
+        document.body.classList.remove("no-scroll");
+      }
 
-            document.querySelector(".close-modal")?.addEventListener("click", fermerModal);
+      document.querySelector(".close-modal")?.addEventListener("click", fermerModal);
 
-            window.addEventListener("click", (event) => {
-                if (event.target === modal) {
-                    fermerModal();
-                }
-            });
+      window.addEventListener("click", (event) => {
+        if (event.target === modal) {
+          fermerModal();
+        }
+      });
 
-            if (lastAddedProduct.name) {
-                openReservationModal(lastAddedProduct.name, lastAddedProduct.image);
-            }
-        });
-    </script>
+      if (lastAddedProduct.name) {
+        openReservationModal(lastAddedProduct.name, lastAddedProduct.image);
+      }
+    });
+  </script>
 <?php endif; ?>
 
 <!DOCTYPE html>
@@ -288,8 +288,6 @@ if (!empty($produitAjoute)) : ?>
   <script type="module" src="../../script/transition.js"></script>
   <script type="module" src="../../script/animate-value.js"></script>
 
-
-
 </head>
 
 <body>
@@ -302,7 +300,7 @@ if (!empty($produitAjoute)) : ?>
       <!-- Section avec image de fond et texte superposé -->
       <section class="hero-section">
         <div class="hero-container">
-        <img src="../../medias/hero-banner.jpg" alt="Salon marocain" class="hero-image">
+          <img src="../../medias/hero-banner.jpg" alt="Salon marocain" class="hero-image">
           <div class="hero-content">
             <h1 class="hero-title">
               Bienvenue, <?php echo htmlspecialchars($_SESSION['user_name']); ?>!
@@ -336,21 +334,20 @@ if (!empty($produitAjoute)) : ?>
 
       </section>
 
-    <!-- SECTION PERSONNALISATION -->
-    <section class="customize-section transition-all">
-      <div class="customize-text">
-        <h2>Crée toi-même ton canapé marocain idéal</h2>
-        <br>
-        <br>
-        <ul class="customize-features">
-          <li><img src="../../medias/canape_icon.png" alt="Forme" class="feature-icon">Choisis la structure du canapé</li>
-          <li><img src="../../medias/couleurs_icon.png" alt="Couleurs" class="feature-icon">Sélectionne les couleurs & matières</li>
-          <li><img src="../../medias/coussin_icon.png" alt="Coussins" class="feature-icon">Ajoutez tes options préférés</li>
-          <li><img src="../../medias/artiste_icon.png" alt="Aperçu" class="feature-icon">Vue d'ensemble de ta création</li>
-        </ul>
-      </div>
-      <div class="customize-image">
-        <!-- Blob de fond (SVG ou PNG) 
+      <!-- SECTION PERSONNALISATION -->
+      <section class="customize-section transition-all">
+        <div class="customize-text">
+          <h2>Crée toi-même ton canapé marocain idéal</h2>
+
+          <ul class="customize-features">
+            <li><img src="../../assets/canape_icon.png" alt="Forme" class="feature-icon">Choisis la structure du canapé</li>
+            <li><img src="../../assets/couleurs_icon.png" alt="Couleurs" class="feature-icon">Sélectionne les couleurs & matières</li>
+            <li><img src="../../assets/coussin_icon.png" alt="Coussins" class="feature-icon">Ajoutez tes options préférés</li>
+            <li><img src="../../assets/artiste_icon.png" alt="Aperçu" class="feature-icon">Vue d'ensemble de ta création</li>
+          </ul>
+        </div>
+        <div class="customize-image">
+          <!-- Blob de fond (SVG ou PNG) 
         <img class="blob" src="../../medias/blob.png" alt="forme décorative">-->
           <!-- Image du canapé (taille réduite, devant le blob)
         <img class="sofa" src="../../medias/sofa.png" alt="Canapé personnalisé"> -->
@@ -358,10 +355,10 @@ if (!empty($produitAjoute)) : ?>
         </div>
       </section>
 
-<!-- ------------------- SECTION COMBINAISONS ------------------- -->
-<section class="combination-section transition-all">
-  <h2>Choisis une combinaison à personnaliser</h2>
-  <div class="combination-container">
+      <!-- ------------------- SECTION COMBINAISONS ------------------- -->
+      <section class="combination-section transition-all">
+        <h2>Choisis une combinaison à personnaliser</h2>
+        <div class="combination-container">
 
           <?php foreach ($commandes as $commande): ?>
             <?php
@@ -370,8 +367,19 @@ if (!empty($produitAjoute)) : ?>
             ?>
             <div class="product-card">
               <div class="product-image">
-                <img
-                  src="../../admin/uploads/canape-prefait/<?php echo htmlspecialchars($commande['img'] ?? 'default.jpg', ENT_QUOTES); ?>"
+                <?php
+                $imgName = $commande['img'] ?? 'canapePrefait.jpg';
+                $imgPathPrimary = "../../admin/uploads/canape-prefait/" . $imgName;
+                $imgPathFallback = "../../medias/canapePrefait.jpg";
+
+                // Choisir le chemin selon l'existence du fichier
+                if (!empty($imgName) && file_exists($imgPathPrimary)) {
+                  $imgSrc = $imgPathPrimary;
+                } else {
+                  $imgSrc = $imgPathFallback;
+                }
+                ?>
+                <img src="<?php echo htmlspecialchars($imgSrc, ENT_QUOTES); ?>"
                   alt="<?php echo htmlspecialchars($commande['nom'] ?? 'Canapé pré-fait', ENT_QUOTES); ?>">
               </div>
               <div class="product-content">
@@ -390,42 +398,42 @@ if (!empty($produitAjoute)) : ?>
       </section>
 
 
-      
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const filterButtons = document.querySelectorAll(".filter-btn");
 
-            filterButtons.forEach((button) => {
-                button.addEventListener("click", () => {
-                    const selectedCategory = button.getAttribute("data-category").toLowerCase();
-                    window.location.href = `?categorie=${encodeURIComponent(selectedCategory)}&page=1`;
-                });
+      <script>
+        document.addEventListener("DOMContentLoaded", function() {
+          const filterButtons = document.querySelectorAll(".filter-btn");
+
+          filterButtons.forEach((button) => {
+            button.addEventListener("click", () => {
+              const selectedCategory = button.getAttribute("data-category").toLowerCase();
+              window.location.href = `?categorie=${encodeURIComponent(selectedCategory)}&page=1`;
             });
+          });
         });
         const modal = document.getElementById("reservation-modal");
         const productNameEl = document.getElementById("product-name");
 
         function openReservationModal(productName) {
-            modal.style.display = "flex"; // Affiche la modale
-            productNameEl.textContent = `Nom du produit : ${productName}`;
-            document.documentElement.classList.add("no-scroll");
-            document.body.classList.add("no-scroll");
+          modal.style.display = "flex"; // Affiche la modale
+          productNameEl.textContent = `Nom du produit : ${productName}`;
+          document.documentElement.classList.add("no-scroll");
+          document.body.classList.add("no-scroll");
         }
 
         function fermerModal() {
-            modal.style.display = "none";
-            document.documentElement.classList.remove("no-scroll");
-            document.body.classList.remove("no-scroll");
+          modal.style.display = "none";
+          document.documentElement.classList.remove("no-scroll");
+          document.body.classList.remove("no-scroll");
         }
 
         document.querySelector(".close-modal").onclick = fermerModal;
 
         window.onclick = (event) => {
-            if (event.target === modal) {
-                fermerModal();
-            }
+          if (event.target === modal) {
+            fermerModal();
+          }
         };
-    </script>
+      </script>
 
 
 
@@ -436,34 +444,45 @@ if (!empty($produitAjoute)) : ?>
         </button>
       </div>
 
-<section class="avantages-card transition-boom">
-  <div class="avantages-text">
-    <h2>Pourquoi personnaliser ton canapé ici ?</h2>
-    <ul>
-      <li>Des modèles uniques</li>
-      <li>Produits faits main, sur mesure</li>
-      <li>Livraison rapide et soignée</li>
-      <li>Paiement sécurisé</li>
-    </ul>
-  </div>
-  <div class="avantages-img">
-    <img src="../../medias/accueil-whyhere.jpg" alt="Aperçu canapé personnalisé">
-  </div>
-</section>
+      <section class="avantages-card transition-boom">
+        <div class="avantages-text">
+          <h2>Pourquoi personnaliser ton canapé ici ?</h2>
+          <ul>
+            <li>Des modèles uniques</li>
+            <li>Produits faits main, sur mesure</li>
+            <li>Livraison rapide et soignée</li>
+            <li>Paiement sécurisé</li>
+          </ul>
+        </div>
+        <div class="avantages-img">
+          <img src="../../medias/accueil-whyhere.jpg" alt="Aperçu canapé personnalisé">
+        </div>
+      </section>
 
 
 
-<!-- ------------------- SECTION ARTICLES ASSOCIES ------------------- -->
-<section class="combination-section transition-all">
-  <h2>Ces articles peuvent aussi t'intéresser</h2>
-  <div class="combination-container">
+      <!-- ------------------- SECTION ARTICLES ASSOCIES ------------------- -->
+      <section class="combination-section transition-all">
+        <h2>Ces articles peuvent aussi t'intéresser</h2>
+        <div class="combination-container">
 
           <?php foreach ($produits as $produit): ?>
             <div class="product-card">
               <div class="product-image">
-                <img
-                  src="../../admin/uploads/produit/<?php echo htmlspecialchars($produit['img'] ?? 'default.jpg', ENT_QUOTES); ?>"
-                  alt="<?php echo htmlspecialchars($produit['nom'], ENT_QUOTES); ?>">
+                <?php
+                $imgName = $produit['img'] ?? 'produit.jpg';
+                $imgPathPrimary = "../../admin/uploads/produit/" . $imgName;
+                $imgPathFallback = "../../medias/produit.jpg";
+
+                // Choisir le chemin selon l'existence du fichier
+                if (!empty($imgName) && file_exists($imgPathPrimary)) {
+                  $imgSrc = $imgPathPrimary;
+                } else {
+                  $imgSrc = $imgPathFallback;
+                }
+                ?>
+                <img src="<?php echo htmlspecialchars($imgSrc, ENT_QUOTES); ?>"
+                  alt="<?php echo htmlspecialchars($produit['nom'] ?? 'Canapé pré-fait', ENT_QUOTES); ?>">
               </div>
               <div class="product-content">
                 <h3><?php echo htmlspecialchars($produit['nom'], ENT_QUOTES); ?></h3>
@@ -489,14 +508,14 @@ if (!empty($produitAjoute)) : ?>
         </button>
       </div>
 
-<section class="stats-section transition-boom">
-  <h2 class="h2-center">Ils nous font confiance</h2>
-  <ul class="stats-list">
-    <li><strong data-target="500" data-plus="true">0</strong> canapés personnalisés</li>
-    <li><strong data-target="4.8" data-decimal="true">0/5</strong> de satisfaction client</li>
-    <li><strong data-target="17" data-plus="true">0</strong> ans d’expérience depuis 2006</li>
-  </ul>
-</section>
+      <section class="stats-section transition-boom">
+        <h2 class="h2-center">Ils nous font confiance</h2>
+        <ul class="stats-list">
+          <li><strong data-target="500" data-plus="true">0</strong> canapés personnalisés</li>
+          <li><strong data-target="4.8" data-decimal="true">0/5</strong> de satisfaction client</li>
+          <li><strong data-target="17" data-plus="true">0</strong> ans d’expérience depuis 2006</li>
+        </ul>
+      </section>
 
     </div>
     <!-- POPUP ABANDONNER -->
@@ -512,27 +531,27 @@ if (!empty($produitAjoute)) : ?>
     </div>
 
 
-    
 
-                <!-- Modal d'ajout au panier -->
-            <div id="reservation-modal" class="modal" style="display:none;">
-                <div class="modal-content">
-                    <span class="close-modal">&times;</span>
-                    <img src="../../assets/check-icone.svg" alt="Image du produit" class="check-icon" />
-                    <br />
-                    <h2 class="success-message">Ajouté au panier avec succès !</h2>
-                    <div class="product-info">
-                        <img id="product-image" class="img-panier" />
-                        <p id="product-name">Nom du produit :</p>
-                        <p>
-                            Quantité : <span id="quantity">1</span>
-                        </p>
-                    </div>
-                    <div class="modal-buttons">
-                        <button class="ajt-panier" onclick="window.location.href='dashboard.php'">Continuer vos achats</button>
-                        <button class="btn-noir" onclick="window.location.href='panier.php'">Voir le panier</button>
-                    </div>
-                </div>
+
+    <!-- Modal d'ajout au panier -->
+    <div id="reservation-modal" class="modal" style="display:none;">
+      <div class="modal-content">
+        <span class="close-modal">&times;</span>
+        <img src="../../assets/check-icone.svg" alt="Image du produit" class="check-icon" />
+        <br />
+        <h2 class="success-message">Ajouté au panier avec succès !</h2>
+        <div class="product-info">
+          <img id="product-image" class="img-panier" />
+          <p id="product-name">Nom du produit :</p>
+          <p>
+            Quantité : <span id="quantity">1</span>
+          </p>
+        </div>
+        <div class="modal-buttons">
+          <button class="ajt-panier" onclick="window.location.href='dashboard.php'">Continuer vos achats</button>
+          <button class="btn-noir" onclick="window.location.href='panier.php'">Voir le panier</button>
+        </div>
+      </div>
 
   </main>
 </body>

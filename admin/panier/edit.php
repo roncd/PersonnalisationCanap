@@ -1,6 +1,7 @@
 <?php
 require '../config.php';
 session_start();
+require '../include/session_expiration.php';
 
 
 if (!isset($_SESSION['id'])) {
@@ -127,6 +128,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 $valeurs = [
     "validation"   => "En attente de validation",
     "traitement" => "En cours de traitement",
+    "livraison" => "En cours de livraison",
     "final"        => "Commande finalisée"
 ];
 $selected = (string) $commande['statut'];

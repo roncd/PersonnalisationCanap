@@ -1,6 +1,7 @@
 <?php
 require '../../admin/config.php';
 session_start();
+require '../../admin/include/session_expiration.php';
 
 if (!isset($_SESSION['user_id'])) {
     $_SESSION['redirect_to'] = $_SERVER['REQUEST_URI'];
@@ -62,6 +63,7 @@ $panier = $stmt->fetch();
                 SELECT 
                     vp.id AS id_produit,
                     vp.nom,
+                    vp.img,
                     vp.prix,
                     pd.quantite
                 FROM panier_detail pd
@@ -87,7 +89,8 @@ $panier = $stmt->fetch();
                             <?php if (!empty($produits)): ?>
                                 <?php foreach ($produits as $produit): ?>
                                     <tr>
-                                        <td><?= htmlspecialchars($produit['nom']) ?></td>
+                                     
+                                        <td class="img-ref"><img src='../../admin/uploads/produit/<?=htmlspecialchars($produit['img']) ?>' alt='<?= htmlspecialchars($produit['nom']) ?>'  style='width:70px; height:auto;'><?= htmlspecialchars($produit['nom']) ?></td>
                                         <td><?= intval($produit['quantite']) ?></td>
                                         <td><?= number_format($produit['prix'], 2) ?> €</td>
                                         <td><?= number_format($produit['prix'] * $produit['quantite'], 2) ?> €</td>

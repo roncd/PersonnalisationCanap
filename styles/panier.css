@@ -30,19 +30,27 @@ h1 {
     overflow-x: auto;
     margin-bottom: 10px;
 }
+
 .panier-table table {
     min-width: 800px;
     width: 100%;
     border-collapse: collapse;
     background: transparent;
     margin-bottom: 26px;
-   
+
 }
 
 .panier-table th,
 .panier-table td {
     padding: 16px 8px 16px 8px;
     text-align: center;
+}
+
+.img-ref {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 11px;
 }
 
 .panier-table th {
@@ -221,8 +229,8 @@ td .actions {
     }
 
     h1 {
-    font-size: 1.6rem;
-}
+        font-size: 1.6rem;
+    }
 
 }
 
@@ -233,6 +241,15 @@ td .actions {
         margin: 10px auto 15px auto;
         padding: 20px 16px;
         border-radius: 12px;
+    }
+
+    .panier-table th,
+    .panier-table td {
+        font-size: 0.8rem;
+    }
+
+    .panier-table th {
+        font-size: 1.04rem;
     }
 
     .panier-title {
@@ -276,8 +293,8 @@ td .actions {
         font-size: 13px;
     }
 
-        h1 {
-    font-size: 1.4rem;
-}
+    h1 {
+        font-size: 1.4rem;
+    }
 
 }

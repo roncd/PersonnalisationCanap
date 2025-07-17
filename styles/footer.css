@@ -52,6 +52,10 @@
   justify-content: left;
 }
 
+.ft-contact a {
+  color: white;
+}
+
 .ft-text {
   margin: 24px 0;
   color: #ffffff;

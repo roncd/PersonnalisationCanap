@@ -1,6 +1,7 @@
 <?php
 require '../config.php';
 session_start();
+require '../include/session_expiration.php';
 
 
 if (!isset($_SESSION['id'])) {
@@ -122,7 +123,7 @@ $totalPages = ceil($totalCommandes / $limit);
         <div id="supprimer-popup" class="popup">
             <div class="popup-content">
                 <h2>Êtes vous sûr de vouloir supprimer ?</h2>
-                <p>(La commande disparaîtra définitivement)</p>
+                <p>(La commande disparaîtra définitivement les kits coussins <br>associés à ce tissu ne seront plus visible sur le site)</p>
                 <br>
                 <button class="btn-beige">Oui</button>
                 <button class="btn-noir">Non</button>

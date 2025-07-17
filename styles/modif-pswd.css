@@ -86,6 +86,11 @@ h2 {
     text-decoration: underline;
 }
 
+input, select {
+    appearance: none;
+    color: black;
+}
+
 /* Wrapper en position relative */
 .input-section {
     position: relative;

@@ -6,6 +6,7 @@ error_reporting(E_ALL);
 
 require '../../admin/config.php';
 session_start();
+require '../../admin/include/session_expiration.php';
 
 
 // Vérifier si l'utilisateur est connecté

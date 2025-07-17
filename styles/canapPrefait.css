@@ -375,6 +375,11 @@ label {
   gap: 8px;
 }
 
+input {
+    appearance: none;
+    color: black;
+}
+
 .input-field {
   padding: 10px;
   font-size: 16px;

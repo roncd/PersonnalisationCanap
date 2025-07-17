@@ -1,3 +1,44 @@
+<?php
+require 'config.php';
+session_start();
+
+try {
+    $bddlink = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $username, $password);
+    $bddlink->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+} catch (PDOException $e) {
+    die("Erreur de connexion à la base de données : " . $e->getMessage());
+}
+
+$error_message = "";
+$old_login = "";
+
+if (isset($_POST['connecter'])) {
+    if (!empty($_POST['login']) && !empty($_POST['mdp'])) {
+        $login = trim($_POST['login']);
+        $mdp = trim($_POST['mdp']);
+        $old_login = htmlspecialchars($login);
+
+        $requete = $bddlink->prepare('SELECT * FROM utilisateur WHERE mail = ?');
+        $requete->execute([$login]);
+
+        if ($requete->rowCount() > 0) {
+            $utilisateur = $requete->fetch();
+            if (password_verify($mdp, $utilisateur['mdp'])) {
+                $_SESSION['mail'] = $utilisateur['mail'];
+                $_SESSION['id'] = $utilisateur['id'];
+                header('Location: pages/index.php');
+                exit();
+            } else {
+                $error_message = "Le mot de passe est incorrect.";
+            }
+        } else {
+            $error_message = "L'adresse e-mail est incorrecte.";
+        }
+    } else {
+        $error_message = "Veuillez compléter les champs vide.";
+    }
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -20,53 +61,6 @@
     <main class="connexion">
         <div class="container">
             <h2>Connexion</h2>
-            <?php
-            require 'config.php';
-            session_start();
-
-            try {
-                $bddlink = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $username, $password);
-                $bddlink->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            } catch (PDOException $e) {
-                die("Erreur de connexion à la base de données : " . $e->getMessage());
-            }
-
-            $error_message = "";
-            $old_login = "";
-
-            if (isset($_POST['connecter'])) {
-                if (!empty($_POST['login']) && !empty($_POST['mdp'])) {
-                    $login = trim($_POST['login']);
-                    $mdp = trim($_POST['mdp']);
-                    $old_login = htmlspecialchars($login); // on garde le champ email pour le réafficher
-
-                    $requete = $bddlink->prepare('SELECT * FROM utilisateur WHERE mail = ?');
-                    $requete->execute([$login]);
-
-                    if ($requete->rowCount() > 0) {
-                        $utilisateur = $requete->fetch();
-                        if (password_verify($mdp, $utilisateur['mdp'])) {
-                            $_SESSION['mail'] = $utilisateur['mail'];
-                            $_SESSION['id'] = $utilisateur['id'];
-                            header('Location: pages/index.php');
-                            exit();
-                        } else {
-                            $error_message = "Le mot de passe est incorrect.";
-                        }
-                    } else {
-                        $error_message = "L'adresse e-mail est incorrecte.";
-                    }
-                } else {
-                    $error_message = "Veuillez compléter les champs vide.";
-                }
-            }
-
-            if (!empty($error_message)) {
-                echo "<div class='message error'>" . htmlspecialchars($error_message) . "</div>";
-            }
-            ?>
-
-
             <div class="form">
                 <form action="" method="POST" class="formulaire-connexion">
                     <div class="form-row">

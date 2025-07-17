@@ -4,7 +4,7 @@ document.getElementById('btn-oui').addEventListener('click', function () {
   if (!idCommande) return;
 
     // Étape 1 : Transfert de commande tempo -> commande detail dans bdd
-    fetch('../generate-pdf/transfer-panier.php', {
+    fetch('/front/generate-pdf/transfer-panier.php', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ id: idCommande })
@@ -22,7 +22,7 @@ document.getElementById('btn-oui').addEventListener('click', function () {
           document.getElementById('pdf-btn').setAttribute('data-id', newCommandeId);
 
           // Étape 2 : envoi du devis par mail avec le nouvel ID de commande detail
-          fetch('../generate-pdf/send-pdf-panier.php', {
+          fetch('/front/generate-pdf/send-pdf-panier.php', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ id: newCommandeId })
@@ -44,7 +44,7 @@ document.getElementById('pdf-btn').addEventListener('click', function () {
   console.log("Nouvel ID de commande :", newCommandeId);
 
   if (newCommandeId) {
-    fetch('../generate-pdf/generer-devis-panier.php', {
+    fetch('/front/generate-pdf/generer-devis-panier.php', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

@@ -1,11 +1,12 @@
 <?php
 require '../../admin/config.php';
 session_start();
+require '../../admin/include/session_expiration.php';
 
 // Paramètres URL
 $search = $_GET['search'] ?? '';
 $page = (isset($_GET['page']) && is_numeric($_GET['page']) && $_GET['page'] > 0) ? (int) $_GET['page'] : 1;
-$type = $_GET['type'] ?? ''; 
+$type = $_GET['type'] ?? '';
 $limit = 6;
 $offset = ($page - 1) * $limit;
 
@@ -181,7 +182,7 @@ function calculPrix($commande, &$composition = [])
 
     <section class="hero-section">
         <div class="hero-container">
-        <img src="../../medias/hero-banner.jpg" alt="Salon marocain" class="hero-image">
+            <img src="../../medias/hero-banner.jpg" alt="Salon marocain" class="hero-image">
             <div class="hero-content">
                 <br><br><br>
                 <h1 class="hero-title h2">
@@ -244,8 +245,20 @@ function calculPrix($commande, &$composition = [])
                     ?>
                     <div class="product-card" data-type="<?= htmlspecialchars(strtolower($commande['type_nom'] ?? '')) ?>">
                         <div class="product-image">
-                            <img src="../../admin/uploads/canape-prefait/<?php echo htmlspecialchars($commande['img'] ?? 'default.jpg', ENT_QUOTES); ?>"
-                                alt="<?php echo htmlspecialchars($commande['nom'] ?? 'Canapé pré-fait', ENT_QUOTES); ?>">
+                            <?php
+                            $imgName = $commande['img'] ?? 'canapePrefait.jpg';
+                            $imgPathPrimary = "../../admin/uploads/canape-prefait/" . $imgName;
+                            $imgPathFallback = "../../medias/canapePrefait.jpg";
+
+                            // Choisir le chemin selon l'existence du fichier
+                            if (!empty($imgName) && file_exists($imgPathPrimary)) {
+                                $imgSrc = $imgPathPrimary;
+                            } else {
+                                $imgSrc = $imgPathFallback;
+                            }
+                            ?>
+                            <img src="<?php echo htmlspecialchars($imgSrc, ENT_QUOTES); ?>"
+                            alt="<?php echo htmlspecialchars($commande['nom'] ?? 'Canapé pré-fait', ENT_QUOTES); ?>">
                         </div>
                         <div class="product-content">
                             <h3><?= htmlspecialchars($commande['nom']) ?></h3>

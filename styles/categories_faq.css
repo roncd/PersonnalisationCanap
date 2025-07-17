@@ -45,6 +45,11 @@ body {
   box-shadow: 0 2px 6px rgba(0,0,0,0.04);
   overflow: hidden;
 }
+
+.accordeon-item button {
+ color: black;
+}
+
 .accordeon-item:hover {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
 }
@@ -110,6 +115,32 @@ h1 {
 }
 
 /* ---- Responsive ---- */
+
+
+/* =============== RÉCAP TABLETTE (769 – 1110 px) =============== */
+@media (max-width: 1110px) {
+  
+  .faq-page-container h1 {
+  font-size: 2.30rem;
+  margin-top: -2.5rem;
+}
+
+
+  .accordeon-header {
+    font-size: 18px;
+    padding: 16px;
+  }
+
+  .accordeon-icon {
+    font-size: 20px;
+  }
+
+  .accordeon-content p {
+    padding: 16px;
+    font-size: 16px;
+  }
+}
+
 @media (max-width: 600px) {
   .faq-page-container h1 {
     font-size: 26px;
@@ -132,18 +163,14 @@ h1 {
 }
 
 
-
-
 /* =============== RÉCAP MOBILE (≤ 768 px) =============== */
 @media (max-width: 768px) {
-
-  .faq-page-container h1 {
-  font-size: 2rem;
-  margin-top: -2.5rem;
-
+.btn-beige.retour {
+  margin-bottom: 0;
 }
-
-
+  .faq-page-container h1 {
+  margin-top: 0;
+}
   .accordeon-header {
     font-size: 16px;
     padding: 16px;
@@ -163,30 +190,5 @@ h1 {
 }
 
 
-/* =============== RÉCAP TABLETTE (769 – 1110 px) =============== */
-@media (min-width: 769px) and (max-width: 1110px) {
-  
-  .faq-page-container h1 {
-  font-size: 2.30rem;
-  margin-top: -2.5rem;
-}
 
-
-  .accordeon-header {
-    font-size: 18px;
-    padding: 16px;
-  }
-
-  .accordeon-icon {
-    font-size: 20px;
-  }
-
-  .accordeon-content p {
-    padding: 16px;
-    font-size: 16px;
-  }
-
-
-    
-}
 

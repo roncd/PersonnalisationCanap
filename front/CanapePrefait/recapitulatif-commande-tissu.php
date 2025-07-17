@@ -1,6 +1,7 @@
 <?php
 require '../../admin/config.php';
 session_start();
+require '../../admin/include/session_expiration.php';
 
 
 // Vérifier si l'utilisateur est connecté
@@ -17,6 +18,25 @@ if (!$id_commande_prefait) {
   die("ID de la commande non fourni.");
 }
 
+$stmt = $pdo->prepare("SELECT img FROM commande_prefait WHERE id = ?");
+$stmt->execute([$id_commande_prefait]);
+$imgCanape = $stmt->fetch(PDO::FETCH_ASSOC);
+
+
+$stmt = $pdo->prepare("SELECT img FROM commande_prefait WHERE id = ?");
+$stmt->execute([$id_commande_prefait]);
+$imgCanape = $stmt->fetch(PDO::FETCH_ASSOC);
+
+$imgName = $imgCanape['img'] ?? 'recap-tissu.jpg';
+$imgPathPrimary = "../../admin/uploads/canape-prefait/" . $imgName;
+$imgPathFallback = "../../medias/recap-tissu.jpg";
+
+// Choisir le chemin selon l'existence du fichier
+if (!empty($imgName) && file_exists($imgPathPrimary)) {
+  $imgSrc = $imgPathPrimary;
+} else {
+  $imgSrc = $imgPathFallback;
+}
 
 $stmt = $pdo->prepare("SELECT * FROM commande_temporaire WHERE id_client = ? AND id_commande_prefait = ?");
 $stmt->execute([$id_client, $id_commande_prefait]);
@@ -136,7 +156,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['comment'])) {
   <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
   <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&family=Be+Vietnam+Pro&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../../styles/popup.css">
-    <link rel="stylesheet" href="../../styles/canapPrefait.css">
+  <link rel="stylesheet" href="../../styles/canapPrefait.css">
   <link rel="stylesheet" href="../../styles/message.css">
   <link rel="stylesheet" href="../../styles/buttons.css">
   <script type="module" src="../../script/popup-tissu.js"></script>
@@ -156,9 +176,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['comment'])) {
       <!-- Colonne de gauche -->
       <div class="left-column-recap">
         <div class="buttons h2-recap h2">
-            <button id="btn-aide" class="btn-beige">Besoin d'aide ?</button>
-            <button type="button" data-url="../pages/dashboard.php" id="btn-abandonner" class="btn-noir">Abandonner</button>
-          </div>
+          <button id="btn-aide" class="btn-beige">Besoin d'aide ?</button>
+          <button type="button" data-url="../pages/dashboard.php" id="btn-abandonner" class="btn-noir">Abandonner</button>
+        </div>
         <h2>Récapitulatif de la commande</h2>
 
         <section class="color-options">
@@ -284,9 +304,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['comment'])) {
       <div class="right-column-recap">
         <section class="main-display-recap">
 
-          <img src="../../medias/canapekenitra.png" alt="Armoire">
-
-
+          <img src="<?php echo htmlspecialchars($imgSrc, ENT_QUOTES); ?>"
+            alt="Canapé Préfait">
           <!-- Section commentaire -->
           <section class="comment-section">
             <?php if (!empty($message)) { ?>

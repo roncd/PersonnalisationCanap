@@ -17,7 +17,9 @@ window.updateStatus = function (button) {
         if (currentStatut === 'validation') {
             nextStatut = 'traitement'; // Passe de Validation à traitement
         } else if (currentStatut === 'traitement') {
-            nextStatut = 'final'; // Passe de traitement à Final
+            nextStatut = 'livraison'; // Passe de traitement à livraison
+        } else if (currentStatut === 'livraison') {
+            nextStatut = 'final'; // Passe de livraison à Final
         } else {
             console.error('Statut actuel non valide :', currentStatut);
             return; // Arrête l'exécution si le statut est invalide

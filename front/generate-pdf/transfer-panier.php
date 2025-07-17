@@ -1,6 +1,5 @@
 <?php
 require '../../admin/config.php';
-
 header('Content-Type: application/json');
 
 try {

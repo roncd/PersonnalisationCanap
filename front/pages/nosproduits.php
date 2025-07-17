@@ -1,6 +1,7 @@
 <?php
 require '../../admin/config.php';
 session_start();
+require '../../admin/include/session_expiration.php';
 
 // Paramètres URL
 $search = $_GET['search'] ?? '';

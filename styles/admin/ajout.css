@@ -83,6 +83,10 @@ label {
     margin-bottom: 5px;
 }
 
+input, select {
+    appearance: none;
+    color: black;
+}
 /* Champs d'entrée */
 .input-field {
     padding: 12px;

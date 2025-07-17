@@ -1,8 +1,9 @@
 <?php
 require '../../admin/config.php';
 session_start();
+require '../../admin/include/session_expiration.php';
 
-require '../../vendor/autoload.php'; 
+require '../../vendor/autoload.php';
 
 // determine le lien du link
 $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
@@ -67,7 +68,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt->execute([$nom, $prenom, $mail, $tel, $mdp, $adresse, $info, $codepostal, $ville, $token]);
 
     // Envoi de l'e-mail de vérification via SMTP
-    $env = parse_ini_file(__DIR__ . '/../../.env');
+    $env = include __DIR__ . '/../../config/mail.php';
 
     $mailSMTP = new PHPMailer(true);
     $mailSMTP->isSMTP();
@@ -221,7 +222,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
               <input type="text" id="ville" name="ville" class="input-field" required>
             </div>
           </div>
-          
+          <div class="form-row">
+            <div class="form-group">
+              <div class="politique">
+                <input type="checkbox" id="politique" name="politique" required />
+                <label for="politique">J'accepte la <a href="../pages/politiquedeconfidentialite.php">politique de confidentialité.</a> <span class="required">*</span></label>
+              </div>
+            </div>
+          </div>
           <!-- Pied de formulaire -->
           <div class="footer">
             <p>Tu as déjà un compte ? <span><a href="Connexion.php" class="link-connect">Connecte-toi</a></span></p>

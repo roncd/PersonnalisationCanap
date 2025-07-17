@@ -1,5 +1,3 @@
-<!DOCTYPE html>
-<html lang="en">
 <?php
 session_start();
 
@@ -40,7 +38,8 @@ $data[$table] = fetchData($pdo, $table);
 $assocData[$table] = array_column($data[$table], 'nom', 'id');
 
 ?>
-
+<!DOCTYPE html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
