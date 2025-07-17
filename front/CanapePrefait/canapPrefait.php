@@ -263,9 +263,7 @@ $totalPrice += floatval($commande['prix_dimensions'] ?? 0);
             <button id="btn-aide" class="btn-beige">Besoin d'aide ?</button>
           </div>
           <br>
-          <?php
-          $imgFile = !empty($commande['img']) ? htmlspecialchars($commande['img'], ENT_QUOTES) : 'default.jpg';
-          ?>
+          <?php $imgFile = $commande['img']; ?>
           <img
             src="../../admin/uploads/canape-prefait/<?php echo $imgFile; ?>"
             alt="<?php echo htmlspecialchars($commande['nom'] ?? 'Canapé pré-fait', ENT_QUOTES); ?>"
