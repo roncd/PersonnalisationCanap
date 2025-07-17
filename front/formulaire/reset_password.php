@@ -21,7 +21,7 @@
 
             // determine le lien du reset_link
             $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
-            $host = $_SERVER['HTTP_HOST']; 
+            $host = $_SERVER['HTTP_HOST'];
             $path = dirname($_SERVER['PHP_SELF']); // chemin du dossier actuel
             $baseUrl = $protocol . '://' . $host . $path;
 
@@ -46,7 +46,7 @@
 
                     $mail = new PHPMailer(true);
                     try {
-                        $env = parse_ini_file(__DIR__ . '/../../.env');
+                        $env = include __DIR__ . '/../../config/mail.php';
 
                         $mail->isSMTP();
                         $mail->Host = $env['SMTP_HOST'];

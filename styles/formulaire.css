@@ -56,6 +56,14 @@ input, select {
     color: black;
 }
 
+.politique input {
+    appearance: auto !important;
+}
+
+.politique a {
+    color: #997765;
+}
+
 /* Champs d'entrée */
 .input-field {
     padding: 12px;
@@ -126,7 +134,6 @@ input, select {
 }
 
 
-
 .footer .link-connect {
     color: #997765;
     text-decoration: none;
@@ -195,25 +202,9 @@ input, select {
 /* Le champ de saisie : on décale un peu le texte à droite */
 .input-section .input-field {
     width: 100%;
-    padding-right: 40px;
-    /* suffisamment pour laisser la place de l'œil */
+    padding-right: 4.1rem;
     box-sizing: border-box;
 }
-
-/* L’icône œil en position absolue */
-.input-section img {
-    position: absolute;
-    top: 50%;
-    right: 10px;
-    transform: translateY(-50%);
-    width: 24px;
-    /* ajuster selon la taille souhaitée */
-    height: 24px;
-    cursor: pointer;
-}
-
-
-/*Mot de passe et confirmation de mot de passe */
 
 /* Vérification dynamique des critères de mot de passe */
 .password-requirements {
@@ -327,12 +318,10 @@ input, select {
     margin-top: 10px;
 }
 
-
 .dropzone.dragover {
     background-color: rgba(227, 209, 200, 0.85);
     /* même hover que .input-field:focus */
 }
-
 
 #file-list {
   list-style-type: none;
@@ -374,10 +363,6 @@ input, select {
 .space {
     margin-top: 100px;
 }
-
-
-
-
 
 /* ----------- RESPONSIVE DESIGN ----------- */
 

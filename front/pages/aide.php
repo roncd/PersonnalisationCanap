@@ -21,13 +21,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["envoyer"])) {
   } else {
     $mail = new PHPMailer(true);
 
-   require '../../admin/include/cleanFileName.php';
-
+    require '../../admin/include/cleanFileName.php';
   }
   try {
     // Configuration SMTP
     $mail->isSMTP();
-    $env = parse_ini_file(__DIR__ . '/../../.env');
+    $env = include __DIR__ . '/../../config/mail.php';
     $mail->Host       = $env['SMTP_HOST'];
     $mail->SMTPAuth   = true;
     $mail->Username   = $env['SMTP_USER'];
