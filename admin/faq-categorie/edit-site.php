@@ -34,14 +34,16 @@ if (!$categorie) {
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nom = trim($_POST['nom']);
     $icon = trim($_POST['icon']);
+    $visible = isset($_POST['visible']) ? 1 : 0;
+
 
     if (empty($nom) || empty($icon)) {
         $_SESSION['message'] = 'Le nom et l’icône sont requis.';
         $_SESSION['message_type'] = 'error';
     } else {
         try {
-            $stmt = $pdo->prepare("UPDATE faq_categorie SET nom = ?, icon = ? WHERE id = ?");
-            $stmt->execute([$nom, $icon, $id]);
+            $stmt = $pdo->prepare("UPDATE faq_categorie SET nom = ?, icon = ?, visible = ? WHERE id = ?");
+            $stmt->execute([$nom, $icon, $visible, $id]);
 
             $_SESSION['message'] = 'Catégorie mise à jour avec succès.';
             $_SESSION['message_type'] = 'success';
@@ -62,7 +64,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FAQ - Catégorie</title>
-    <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
+    <link rel="icon" type="image/png" href="https://www.decorient.fr/medias/favicon.png">
     <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&family=Be+Vietnam+Pro&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../../styles/admin/ajout.css">
     <link rel="stylesheet" href="../../styles/message.css">
@@ -96,6 +98,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         </label> <input type="text" id="icon" name="icon" class="input-field"
                             placeholder="fa-truck"
                             value="<?= htmlspecialchars($categorie['icon']) ?>" required>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group btn-slider">
+                            <label for="visible">Afficher sur le site</label>
+                            <label class="switch">
+                                <input type="checkbox" id="visible" name="visible" <?php if ($categorie['visible']) echo 'checked'; ?>>
+                                <span class="slider round"></span>
+                            </label>
+                        </div>
                     </div>
                     <div class="button-section">
                         <div class="buttons">

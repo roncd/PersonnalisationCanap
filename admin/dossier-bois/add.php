@@ -14,6 +14,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nom = trim($_POST['name']);
     $prix = trim($_POST['price']);
     $img = $_FILES['img'];
+    $visible = isset($_POST['visible']) ? 1 : 0;
+
 
     if (empty($nom) || !isset($prix) || empty($img['name'])) {
         $_SESSION['message'] = 'Tous les champs sont requis !';
@@ -36,8 +38,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             if (move_uploaded_file($img['tmp_name'], $uploadPath)) {
                 try {
-                    $stmt = $pdo->prepare("INSERT INTO dossier_bois (nom, prix, img) VALUES (?, ?, ?)");
-                    $stmt->execute([$nom, $prix, $fileName]);
+                    $stmt = $pdo->prepare("INSERT INTO dossier_bois (nom, prix, img, visible) VALUES (?, ?, ?, ?)");
+                    $stmt->execute([$nom, $prix, $fileName, $visible]);
 
                     $_SESSION['message'] = 'Le dossier a été ajouté avec succès !';
                     $_SESSION['message_type'] = 'success';
@@ -65,7 +67,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ajoute un dossier bois</title>
-    <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
+    <link rel="icon" type="image/png" href="https://www.decorient.fr/medias/favicon.png">
     <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&family=Be+Vietnam+Pro&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../../styles/admin/ajout.css">
     <link rel="stylesheet" href="../../styles/message.css">
@@ -99,6 +101,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <label for="img">Image <span class="required">*</span></label>
                             <input type="file" id="img" name="img" class="input-field" accept="image/*" onchange="loadFile(event)" required>
                             <img class="preview-img" id="output" />
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group btn-slider">
+                            <label for="visible">Afficher sur le site</label>
+                            <label class="switch">
+                                <input type="checkbox" id="visible" name="visible" checked>
+                                <span class="slider round"></span>
+                            </label>
                         </div>
                     </div>
                     <div class="button-section">

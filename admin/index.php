@@ -18,7 +18,7 @@ if (isset($_POST['connecter'])) {
         $mdp = trim($_POST['mdp']);
         $old_login = htmlspecialchars($login);
 
-        $requete = $bddlink->prepare('SELECT * FROM utilisateur WHERE mail = ?');
+        $requete = $bddlink->prepare('SELECT mail, mdp, id FROM utilisateur WHERE mail = ?');
         $requete->execute([$login]);
 
         if ($requete->rowCount() > 0) {

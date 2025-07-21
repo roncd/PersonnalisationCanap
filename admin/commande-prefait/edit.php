@@ -92,6 +92,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nbAccoudoirBois = $_POST['nb_accoudoir_bois'] !== '' ? intval($_POST['nb_accoudoir_bois']) : null;
     $nom = trim($_POST['nom']);
     $imagePath = isset($commande['img']) ? $commande['img'] : null;
+    $visible = isset($_POST['visible']) ? 1 : 0;
+
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (isset($_FILES['img']) && $_FILES['img']['error'] === 0) {
@@ -178,7 +180,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     id_nb_accoudoir = ?, 
     nb_accoudoir_bois = ?,
     nom = ?, 
-    img = ?
+    img = ?,
+    visible = ?
     WHERE id = ?");
 
     if ($stmt->execute([
@@ -202,6 +205,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $nbAccoudoirBois,
         $nom,
         $imagePath,
+        $visible,
         $id
     ])) {
         $_SESSION['message'] = 'La commande a été mise à jour avec succès !';
@@ -223,7 +227,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Modifier un canapé pré-fait</title>
-    <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
+    <link rel="icon" type="image/png" href="https://www.decorient.fr/medias/favicon.png">
     <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&family=Be+Vietnam+Pro&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../../styles/admin/ajout.css">
     <link rel="stylesheet" href="../../styles/message.css">
@@ -506,6 +510,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                     <?php endforeach; ?>
                                 </select>
                             </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group btn-slider">
+                            <label for="visible">Afficher sur le site</label>
+                            <label class="switch">
+                                <input type="checkbox" id="visible" name="visible" <?php if ($commande['visible']) echo 'checked'; ?>>
+                                <span class="slider round"></span>
+                            </label>
                         </div>
                     </div>
                     <div class="button-section">

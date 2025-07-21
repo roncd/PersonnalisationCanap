@@ -41,6 +41,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $prix = trim($_POST['prix']);
     $img = $_FILES['img'];
     $id_categorie = trim($_POST['id_categorie']);
+    $visible = isset($_POST['visible']) ? 1 : 0;
+
 
     if (empty($nom) || !isset($prix)  || empty($id_categorie)) {
         $_SESSION['message'] = 'Tous les champs sont requis !';
@@ -70,8 +72,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         if (!isset($_SESSION['message'])) {
-            $stmt = $pdo->prepare("UPDATE vente_produit SET nom = ?, prix = ?, img = ?, id_categorie = ? WHERE id = ?");
-            $stmt->execute([$nom, $prix, $fileName, $id_categorie, $id]);
+            $stmt = $pdo->prepare("UPDATE vente_produit SET nom = ?, prix = ?, img = ?, id_categorie = ?, visible = ? WHERE id = ?");
+            $stmt->execute([$nom, $prix, $fileName, $id_categorie, $visible, $id]);
             $_SESSION['message'] = 'Produit mis à jour avec succès!';
             $_SESSION['message_type'] = 'success';
             header("Location: visualiser.php");
@@ -89,7 +91,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <title>Modifier le produit </title>
     <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../../styles/admin/ajout.css">
-    <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
+    <link rel="icon" type="image/png" href="https://www.decorient.fr/medias/favicon.png">
     <link rel="stylesheet" href="../../styles/message.css">
 
     <link rel="stylesheet" href="../../styles/buttons.css">
@@ -136,6 +138,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                     </option>
                                 <?php endforeach; ?>
                             </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group btn-slider">
+                            <label for="visible">Afficher sur le site</label>
+                            <label class="switch">
+                                <input type="checkbox" id="visible" name="visible" <?php if ($produit['visible']) echo 'checked'; ?>>
+                                <span class="slider round"></span>
+                            </label>
                         </div>
                     </div>
                     <div class="button-section">

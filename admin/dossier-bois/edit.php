@@ -36,8 +36,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nom = trim($_POST['name']);
     $prix = trim($_POST['prix']);
     $img = $_FILES['img'];
+    $visible = isset($_POST['visible']) ? 1 : 0;
 
-     if (empty($nom) || !isset($prix)) {
+
+    if (empty($nom) || !isset($prix)) {
         $_SESSION['message'] = 'Tous les champs sont requis !';
         $_SESSION['message_type'] = 'error';
     } else {
@@ -65,8 +67,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         if (!isset($_SESSION['message'])) {
-            $stmt = $pdo->prepare("UPDATE dossier_bois SET nom = ?, prix = ?, img = ? WHERE id = ?");
-            $stmt->execute([$nom, $prix, $fileName, $id]);
+            $stmt = $pdo->prepare("UPDATE dossier_bois SET nom = ?, prix = ?, img = ?, visible = ? WHERE id = ?");
+            $stmt->execute([$nom, $prix, $fileName, $visible, $id]);
             $_SESSION['message'] = 'Dossier mis à jour avec succès!';
             $_SESSION['message_type'] = 'success';
             header("Location: visualiser.php");
@@ -82,7 +84,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Modifier le dossier de Tissu</title>
-    <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
+    <link rel="icon" type="image/png" href="https://www.decorient.fr/medias/favicon.png">
     <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&family=Be+Vietnam+Pro&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../../styles/admin/ajout.css">
     <link rel="stylesheet" href="../../styles/message.css">
@@ -116,6 +118,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <label for="img">Image (Laissez vide pour conserver l'image actuelle) <span class="required">*</span></label>
                             <input type="file" id="img" name="img" class="input-field" accept="image/*" onchange="loadFile(event)">
                             <img class="preview-img" src="../uploads/dossier-bois/<?php echo htmlspecialchars($dossier['img']); ?>" id="output" />
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group btn-slider">
+                            <label for="visible">Afficher sur le site</label>
+                            <label class="switch">
+                                <input type="checkbox" id="visible" name="visible" <?php if ($dossier['visible']) echo 'checked'; ?>>
+                                <span class="slider round"></span>
+                            </label>
                         </div>
                     </div>
                     <div class="button-section">

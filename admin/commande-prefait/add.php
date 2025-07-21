@@ -58,6 +58,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nbAccoudoir = trim($_POST['nb_accoudoir']) ?: null;
     $nbAccoudoirBois = $_POST['nb_accoudoir_bois'] !== '' ? intval($_POST['nb_accoudoir_bois']) : null;
     $nom = trim($_POST['nom']);
+    $visible = isset($_POST['visible']) ? 1 : 0;
 
     $imagePath = null;
 
@@ -92,67 +93,68 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (empty($longueurA) || empty($idStructure) || empty($idMousse) || empty($idBanquette) || empty($imagePath) || empty($nom)) {
         $_SESSION['message'] = 'Les champs obligatoires doivent être remplis.';
         $_SESSION['message_type'] = 'error';
-    } 
-        
+    }
+
     try {
-            $stmt = $pdo->prepare("INSERT INTO commande_prefait (
+        $stmt = $pdo->prepare("INSERT INTO commande_prefait (
         id_structure, longueurA, longueurB, longueurC,
         id_banquette, id_mousse, id_couleur_bois, id_decoration, id_dossier_bois, id_couleur_tissu_bois, id_motif_bois,
         id_modele, id_couleur_tissu, id_motif_tissu, id_dossier_tissu, id_accoudoir_tissu,
-        id_nb_accoudoir, nb_accoudoir_bois, nom, img
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        id_nb_accoudoir, nb_accoudoir_bois, nom, img, visible
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 
-            $stmt->execute([
-                $idStructure,
-                $longueurA,
-                $longueurB,
-                $longueurC,
-                $idBanquette,
-                $idMousse,
-                $idCouleurBois,
-                $idDecoration,
-                $idDossierBois,
-                $idTissuBois,
-                $idMotifBois,
-                $idModele,
-                $idCouleurTissu,
-                $idMotifTissu,
-                $idDossierTissu,
-                $idAccoudoirTissu,
-                $nbAccoudoir,
-                $nbAccoudoirBois,
-                $nom,
-                $imagePath
-            ]);
+        $stmt->execute([
+            $idStructure,
+            $longueurA,
+            $longueurB,
+            $longueurC,
+            $idBanquette,
+            $idMousse,
+            $idCouleurBois,
+            $idDecoration,
+            $idDossierBois,
+            $idTissuBois,
+            $idMotifBois,
+            $idModele,
+            $idCouleurTissu,
+            $idMotifTissu,
+            $idDossierTissu,
+            $idAccoudoirTissu,
+            $nbAccoudoir,
+            $nbAccoudoirBois,
+            $nom,
+            $imagePath,
+            $visible
+        ]);
 
-            // 2. Récupérer l'ID de la commande insérée
-            $idCommande = $pdo->lastInsertId();
+        // 2. Récupérer l'ID de la commande insérée
+        $idCommande = $pdo->lastInsertId();
 
-            // 3. Insérer les accoudoirs bois (si type BOIS)
-            $acc1 = $_POST['accoudoir1'] ?? null;
-            $acc2 = $_POST['accoudoir2'] ?? null;
+        // 3. Insérer les accoudoirs bois (si type BOIS)
+        $acc1 = $_POST['accoudoir1'] ?? null;
+        $acc2 = $_POST['accoudoir2'] ?? null;
 
-            if (!empty($acc1)) {
-                $stmtAcc1 = $pdo->prepare("INSERT INTO commande_prefait_accoudoir (id_commande_prefait, id_accoudoir_bois, nb_accoudoir) VALUES (?, ?, 1)");
-                $stmtAcc1->execute([$idCommande, intval($acc1)]);
-            }
-
-            if (!empty($acc2)) {
-                $stmtAcc2 = $pdo->prepare("INSERT INTO commande_prefait_accoudoir (id_commande_prefait, id_accoudoir_bois, nb_accoudoir) VALUES (?, ?, 1)");
-                $stmtAcc2->execute([$idCommande, intval($acc2)]);
-            }
-
-            $_SESSION['message'] = 'La commande pré-faite a été ajoutée avec succès.';
-            $_SESSION['message_type'] = 'success';
-            header('Location: visualiser.php');
-            exit();
-        } catch (Exception $e) {
-            $_SESSION['message'] = 'Erreur lors de l\'ajout du canapé pré-fait : ' . $e->getMessage();
-            $_SESSION['message_type'] = 'error';
+        if (!empty($acc1)) {
+            $stmtAcc1 = $pdo->prepare("INSERT INTO commande_prefait_accoudoir (id_commande_prefait, id_accoudoir_bois, nb_accoudoir) VALUES (?, ?, 1)");
+            $stmtAcc1->execute([$idCommande, intval($acc1)]);
         }
-        header("Location: add.php");
+
+        if (!empty($acc2)) {
+            $stmtAcc2 = $pdo->prepare("INSERT INTO commande_prefait_accoudoir (id_commande_prefait, id_accoudoir_bois, nb_accoudoir) VALUES (?, ?, 1)");
+            $stmtAcc2->execute([$idCommande, intval($acc2)]);
+        }
+
+        $_SESSION['message'] = 'La commande pré-faite a été ajoutée avec succès.';
+        $_SESSION['message_type'] = 'success';
+        header('Location: visualiser.php');
         exit();
+    } catch (Exception $e) {
+        $_SESSION['message'] = 'Erreur lors de l\'ajout du canapé pré-fait : ' . $e->getMessage();
+        $_SESSION['message_type'] = 'error';
     }
+    header("Location: add.php");
+    exit();
+}
 ?>
 
 <!DOCTYPE html>
@@ -162,7 +164,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ajoute un canapé pré-fait</title>
-    <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
+    <link rel="icon" type="image/png" href="https://www.decorient.fr/medias/favicon.png">
     <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&family=Be+Vietnam+Pro&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../../styles/admin/ajout.css">
     <link rel="stylesheet" href="../../styles/message.css">
@@ -399,6 +401,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                     <?php endforeach; ?>
                                 </select>
                             </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group btn-slider">
+                            <label for="visible">Afficher sur le site</label>
+                            <label class="switch">
+                                <input type="checkbox" id="visible" name="visible" checked>
+                                <span class="slider round"></span>
+                            </label>
                         </div>
                     </div>
                     <div class="button-section">

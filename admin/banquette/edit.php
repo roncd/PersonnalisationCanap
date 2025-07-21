@@ -34,6 +34,8 @@ if (!$banquette) {
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nom = trim($_POST['name']);
     $img = $_FILES['img'];
+    $visible = isset($_POST['visible']) ? 1 : 0;
+
 
     if (empty($nom)) {
         $_SESSION['message'] = 'Le nom est requis.';
@@ -63,8 +65,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         if (!isset($_SESSION['message'])) {
-            $stmt = $pdo->prepare("UPDATE type_banquette SET nom = ?, img = ? WHERE id = ?");
-            $stmt->execute([$nom, $fileName, $id]);
+            $stmt = $pdo->prepare("UPDATE type_banquette SET nom = ?, img = ?, visible = ? WHERE id = ?");
+            $stmt->execute([$nom, $fileName, $visible, $id]);
             $_SESSION['message'] = 'La banquette a été mise à jour avec succès !';
             $_SESSION['message_type'] = 'success';
             header("Location: visualiser.php");
@@ -80,11 +82,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Modifie un type de banquette</title>
-    <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
+    <link rel="icon" type="image/png" href="https://www.decorient.fr/medias/favicon.png">
     <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&family=Be+Vietnam+Pro&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../../styles/admin/ajout.css">
     <link rel="stylesheet" href="../../styles/message.css">
-    
+
     <link rel="stylesheet" href="../../styles/buttons.css">
     <script src="../../script/previewImage.js"></script>
 </head>
@@ -109,14 +111,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <div class="form-row">
                         <div class="form-group">
                             <label for="img">Image (Laissez vide pour conserver l'image actuelle) <span class="required">*</span></label>
-                            <input type="file" id="img" name="img" class="input-field" accept="image/*" onchange="loadFile(event)" >
+                            <input type="file" id="img" name="img" class="input-field" accept="image/*" onchange="loadFile(event)">
                             <img class="preview-img" src="../uploads/banquette/<?php echo htmlspecialchars($banquette['img']); ?>" id="output" />
-                         </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group btn-slider">
+                            <label for="visible">Afficher sur le site</label>
+                            <label class="switch">
+                                <input type="checkbox" id="visible" name="visible" <?php if ($banquette['visible']) echo 'checked'; ?>>
+                                <span class="slider round"></span>
+                            </label>
+                        </div>
                     </div>
                     <div class="button-section">
                         <div class="buttons">
                             <button type="button" id="btn-retour" class="btn-beige" onclick="history.go(-1)">Retour</button>
-                            <input type="submit"  class="btn-noir" value="Mettre à jour">
+                            <input type="submit" class="btn-noir" value="Mettre à jour">
                         </div>
                     </div>
                 </form>

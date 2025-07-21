@@ -34,13 +34,15 @@ if (!$couleur) {
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Récupérer et valider les données
     $nom = trim($_POST['name']);
+    $visible = isset($_POST['visible']) ? 1 : 0;
+
 
     if (empty($nom)) {
         $_SESSION['message'] = 'Tous les champs requis doivent être remplis.';
         $_SESSION['message_type'] = 'error';
     } else {
-        $stmt = $pdo->prepare("UPDATE couleur SET nom = ? WHERE id = ?");
-        $stmt->execute([$nom, $id]);
+        $stmt = $pdo->prepare("UPDATE couleur SET nom = ?, visible = ? WHERE id = ?");
+        $stmt->execute([$nom, $visible, $id]);
 
         $_SESSION['message'] = 'Couleur mise à jour avec succès!';
         $_SESSION['message_type'] = 'success';
@@ -56,7 +58,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Modifie une couleur de tissu bois</title>
-    <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
+    <link rel="icon" type="image/png" href="https://www.decorient.fr/medias/favicon.png">
     <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&family=Be+Vietnam+Pro&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../../styles/admin/ajout.css">
     <link rel="stylesheet" href="../../styles/message.css">
@@ -81,10 +83,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <input type="text" id="name" name="name" class="input-field" value="<?php echo htmlspecialchars($couleur['nom']); ?>" required>
                         </div>
                     </div>
+                    <div class="form-row">
+                        <div class="form-group btn-slider">
+                            <label for="visible">Afficher sur le site</label>
+                            <label class="switch">
+                                <input type="checkbox" id="visible" name="visible" value="<?php echo htmlspecialchars($couleur['visible']); ?>">
+                                <span class="slider round"></span>
+                            </label>
+                        </div>
+                    </div>
                     <div class="button-section">
                         <div class="buttons">
                             <button type="button" id="btn-retour" class="btn-beige" onclick="history.go(-1)">Retour</button>
-                            <input type="submit"  class="btn-noir" value="Mettre à jour">
+                            <input type="submit" class="btn-noir" value="Mettre à jour">
                         </div>
                     </div>
                 </form>

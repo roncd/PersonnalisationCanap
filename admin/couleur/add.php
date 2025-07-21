@@ -12,6 +12,8 @@ if (!isset($_SESSION['id'])) {
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nom = trim($_POST['name']);
+    $visible = isset($_POST['visible']) ? 1 : 0;
+
 
     // Validation du champ obligatoire
     if (empty($nom)) {
@@ -21,8 +23,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Tentative d'insertion dans la base de données
     try {
-        $stmt = $pdo->prepare("INSERT INTO couleur (nom) VALUES (?)");
-        $stmt->execute([$nom]);
+        $stmt = $pdo->prepare("INSERT INTO couleur (nom, visible) VALUES (?, ?)");
+        $stmt->execute([$nom, $visible]);
 
         $_SESSION['message'] = 'La couleur a été ajoutée avec succès !';
         $_SESSION['message_type'] = 'success';
@@ -44,7 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ajoute une couleur de tissu - bois</title>
-    <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
+    <link rel="icon" type="image/png" href="https://www.decorient.fr/medias/favicon.png">
     <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&family=Be+Vietnam+Pro&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../../styles/admin/ajout.css">
     <link rel="stylesheet" href="../../styles/message.css">
@@ -67,6 +69,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <div class="form-group">
                             <label for="name">Nom <span class="required">*</span></label>
                             <input type="text" id="name" name="name" class="input-field" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group btn-slider">
+                            <label for="visible">Afficher sur le site</label>
+                            <label class="switch">
+                                <input type="checkbox" id="visible" name="visible" checked>
+                                <span class="slider round"></span>
+                            </label>
                         </div>
                     </div>
                     <div class="button-section">

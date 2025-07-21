@@ -21,7 +21,7 @@ $stmt = $pdo->prepare("SELECT id, nom FROM couleur");
 $stmt->execute();
 $couleurs = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-$stmt = $pdo->prepare("SELECT * FROM couleur_tissu_bois WHERE  id = :id");
+$stmt = $pdo->prepare("SELECT * FROM couleur_tissu_bois WHERE id = :id");
 $stmt->bindValue(':id', $id, PDO::PARAM_INT);
 $stmt->execute();
 $motifTissuBois = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -38,9 +38,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $price = ($_POST['price']);
     $img = $_FILES['img'];
     $id_couleur = trim($_POST['id_couleur']);
+    $visible = isset($_POST['visible']) ? 1 : 0;
 
 
-     if (empty($nom) || !isset($price)) {
+    if (empty($nom) || !isset($price)) {
         $_SESSION['message'] = 'Tous les champs sont requis !';
         $_SESSION['message_type'] = 'error';
     } else {
@@ -67,8 +68,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         }
         if (!isset($_SESSION['message'])) {
-            $stmt = $pdo->prepare("UPDATE couleur_tissu_bois SET nom = ?, prix = ?, img = ?, couleur_id = ? WHERE id = ?");
-            $stmt->execute([$nom, $price, $fileName, $id_couleur, $id]);
+            $stmt = $pdo->prepare("UPDATE couleur_tissu_bois SET nom = ?, prix = ?, img = ?, couleur_id = ?, visible = ? WHERE id = ?");
+            $stmt->execute([$nom, $price, $fileName, $id_couleur, $visible, $id]);
             $_SESSION['message'] = 'Le motif a été mis à jour avec succès !';
             $_SESSION['message_type'] = 'success';
             header("Location: visualiser.php");
@@ -84,7 +85,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Modifie un motif de tissu - bois</title>
-    <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
+    <link rel="icon" type="image/png" href="https://www.decorient.fr/medias/favicon.png">
     <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&family=Be+Vietnam+Pro&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../../styles/admin/ajout.css">
     <link rel="stylesheet" href="../../styles/message.css">
@@ -116,9 +117,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <div class="form-row">
                         <div class="form-group">
                             <label for="img">Image (Laissez vide pour conserver l'image actuelle) <span class="required">*</span></label>
-                            <input type="file" id="img" name="img" class="input-field" accept="image/*" onchange="loadFile(event)" >
+                            <input type="file" id="img" name="img" class="input-field" accept="image/*" onchange="loadFile(event)">
                             <img class="preview-img" src="../uploads/couleur-tissu-bois/<?php echo htmlspecialchars($motifTissuBois['img']); ?>" id="output" />
-                         </div>
+                        </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group">
@@ -133,10 +134,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             </select>
                         </div>
                     </div>
+                    <div class="form-row">
+                        <div class="form-group btn-slider">
+                            <label for="visible">Afficher sur le site</label>
+                            <label class="switch">
+                                <input type="checkbox" id="visible" name="visible" <?php if ($motifTissuBois['visible']) echo 'checked'; ?>>
+                                <span class="slider round"></span>
+                            </label>
+                        </div>
+                    </div>
                     <div class="button-section">
                         <div class="buttons">
                             <button type="button" id="btn-retour" class="btn-beige" onclick="history.go(-1)">Retour</button>
-                            <input type="submit"  class="btn-noir" value="Mettre à jour">
+                            <input type="submit" class="btn-noir" value="Mettre à jour">
                         </div>
                     </div>
                 </form>

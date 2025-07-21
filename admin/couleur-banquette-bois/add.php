@@ -14,6 +14,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nom = trim($_POST['name']);
     $price = ($_POST['price']);
     $img = $_FILES['img'];
+    $visible = isset($_POST['visible']) ? 1 : 0;
+
 
     if (empty($nom) || !isset($price) || empty($img['name'])) {
         $_SESSION['message'] = 'Tous les champs sont requis !';
@@ -40,8 +42,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (move_uploaded_file($img['tmp_name'], $uploadPath)) {
         try {
-            $stmt = $pdo->prepare("INSERT INTO couleur_bois (nom, prix, img) VALUES (?, ?, ?)");
-            $stmt->execute([$nom, $price, $fileName]);
+            $stmt = $pdo->prepare("INSERT INTO couleur_bois (nom, prix, img, visible) VALUES (?, ?, ?, ?)");
+            $stmt->execute([$nom, $price, $fileName, $visible]);
 
             $_SESSION['message'] = 'La couleur du bois a été ajoutée avec succès !';
             $_SESSION['message_type'] = 'success';
@@ -66,7 +68,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ajoute une couleur de bois</title>
-    <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
+    <link rel="icon" type="image/png" href="https://www.decorient.fr/medias/favicon.png">
     <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&family=Be+Vietnam+Pro&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../../styles/admin/ajout.css">
     <link rel="stylesheet" href="../../styles/message.css">
@@ -102,7 +104,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <img class="preview-img" id="output" />
                         </div>
                     </div>
-
+                    <div class="form-row">
+                        <div class="form-group btn-slider">
+                            <label for="visible">Afficher sur le site</label>
+                            <label class="switch">
+                                <input type="checkbox" id="visible" name="visible" checked>
+                                <span class="slider round"></span>
+                            </label>
+                        </div>
+                    </div>
                     <div class="button-section">
                         <div class="buttons">
                             <button type="button" id="btn-retour" class="btn-beige" onclick="history.go(-1)">Retour</button>

@@ -13,6 +13,8 @@ if (!isset($_SESSION['id'])) {
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nom = trim($_POST['name']);
     $img = $_FILES['img'];
+    $visible = isset($_POST['visible']) ? 1 : 0;
+
 
     // Vérification des champs requis
     if (empty($nom) || empty($img['name'])) {
@@ -41,9 +43,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (move_uploaded_file($img['tmp_name'], $uploadPath)) {
         try {
-            $stmt = $pdo->prepare("INSERT INTO type_banquette (nom, img) VALUES (:nom, :img)");
+            $stmt = $pdo->prepare("INSERT INTO type_banquette (nom, img, visible) VALUES (:nom, :img, :visible)");
             $stmt->bindValue(':nom', $nom, PDO::PARAM_STR);
             $stmt->bindValue(':img', $fileName, PDO::PARAM_STR);
+            $stmt->bindValue(':visible', $visible, PDO::PARAM_INT);
             $stmt->execute();
 
             $_SESSION['message'] = 'La banquette a été ajoutée avec succès !';
@@ -74,7 +77,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link rel="stylesheet" href="../../styles/admin/ajout.css">
 
     <link rel="stylesheet" href="../../styles/buttons.css">
-    <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
+    <link rel="icon" type="image/png" href="https://www.decorient.fr/medias/favicon.png">
     <link rel="stylesheet" href="../../styles/message.css">
     <script src="../../script/previewImage.js"></script>
 </head>
@@ -103,7 +106,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <img class="preview-img" id="output" />
                         </div>
                     </div>
-
+                    <div class="form-row">
+                        <div class="form-group btn-slider">
+                            <label for="visible">Afficher sur le site</label>
+                            <label class="switch">
+                                <input type="checkbox" id="visible" name="visible" checked>
+                                <span class="slider round"></span>
+                            </label>
+                        </div>
+                    </div>
                     <div class="button-section">
                         <div class="buttons">
                             <button type="button" id="btn-retour" class="btn-beige" onclick="history.go(-1)">Retour</button>

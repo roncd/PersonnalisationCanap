@@ -30,6 +30,20 @@ $stmtCount->execute();
 $totalCommandes = $stmtCount->fetchColumn();
 
 $totalPages = ceil($totalCommandes / $limit);
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id'], $_POST['visible'])) {
+    $id = (int) $_POST['id'];
+    $visible = (int) $_POST['visible'];
+
+    $stmt = $pdo->prepare("UPDATE categorie SET visible = :visible WHERE id = :id");
+    $stmt->execute([
+        ':visible' => $visible,
+        ':id' => $id
+    ]);
+
+    echo 'ok';
+    exit;
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -38,7 +52,7 @@ $totalPages = ceil($totalCommandes / $limit);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Catégorie des produits à l'unité</title>
-    <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
+    <link rel="icon" type="image/png" href="https://www.decorient.fr/medias/favicon.png">
     <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&family=Be+Vietnam+Pro&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../../styles/admin/tab.css">
     <link rel="stylesheet" href="../../styles/message.css">
@@ -46,6 +60,8 @@ $totalPages = ceil($totalCommandes / $limit);
     <link rel="stylesheet" href="../../styles/buttons.css">
     <link rel="stylesheet" href="../../styles/popup.css">
     <script src="../../script/deleteRow.js"></script>
+    <script type="module" src="../../script/visible.js"></script>
+
 </head>
 
 <body>
@@ -85,6 +101,7 @@ $totalPages = ceil($totalCommandes / $limit);
                                 </a>
                                 ID
                             </th>
+                            <th>VISIBLE</th>
                             <th>NOM</th>
                             <th class="sticky-col">ACTION</th>
                         </tr>
@@ -103,6 +120,8 @@ $totalPages = ceil($totalCommandes / $limit);
                         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                             echo "<tr>";
                             echo "<td>{$row['id']}</td>";
+                           $checked = $row['visible'] ? 'checked' : '';
+                            echo "<td class='visible'><input type='checkbox' class='toggle-visible' data-id='{$row['id']}' $checked></td>";
                             echo "<td>{$row['nom']}</td>";
                             echo "<td class='actions'>";
                             echo "<a href='edit.php?id={$row['id']}' class='edit-action actions vert' title='Modifier'>EDIT</a>";

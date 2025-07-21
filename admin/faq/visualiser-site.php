@@ -30,6 +30,20 @@ $stmtCount->execute();
 $totalCommandes = $stmtCount->fetchColumn();
 
 $totalPages = ceil($totalCommandes / $limit);
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id'], $_POST['visible'])) {
+    $id = (int) $_POST['id'];
+    $visible = (int) $_POST['visible'];
+
+    $stmt = $pdo->prepare("UPDATE faq SET visible = :visible WHERE id = :id");
+    $stmt->execute([
+        ':visible' => $visible,
+        ':id' => $id
+    ]);
+
+    echo 'ok';
+    exit;
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -38,7 +52,7 @@ $totalPages = ceil($totalCommandes / $limit);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FAQ</title>
-    <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
+    <link rel="icon" type="image/png" href="https://www.decorient.fr/medias/favicon.png">
     <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&family=Be+Vietnam+Pro&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../../styles/admin/tab.css">
     <link rel="stylesheet" href="../../styles/message.css">
@@ -46,6 +60,8 @@ $totalPages = ceil($totalCommandes / $limit);
     <link rel="stylesheet" href="../../styles/buttons.css">
     <link rel="stylesheet" href="../../styles/popup.css">
     <script src="../../script/deleteRow.js"></script>
+    <script type="module" src="../../script/visible.js"></script>
+
 </head>
 
 <body>
@@ -85,10 +101,11 @@ $totalPages = ceil($totalCommandes / $limit);
                                 </a>
                                 ID
                             </th>
-                            <th>Question</th>
-                            <th>Réponse</th>
-                            <th>Catégorie</th>
-                            <th class="sticky-col">Action</th>
+                            <th>VISIBLE</th>
+                            <th>QUESTION</th>
+                            <th>RÉPONSE</th>
+                            <th>CATÉGORIE</th>
+                            <th class="sticky-col">ACTION</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -111,6 +128,8 @@ $totalPages = ceil($totalCommandes / $limit);
                             $categorieNom = $categorieData[$row['categorie_id']] ?? 'Non définie';
                             echo "<tr>";
                             echo "<td>{$row['id']}</td>";
+                            $checked = $row['visible'] ? 'checked' : '';
+                            echo "<td class='visible'><input type='checkbox' class='toggle-visible' data-id='{$row['id']}' $checked></td>";
                             echo "<td>" . htmlspecialchars($row['question']) . "</td>";
                             echo "<td>" . htmlspecialchars($row['reponse']) . "</td>";
                             echo "<td>" . htmlspecialchars($categorieNom) . "</td>";

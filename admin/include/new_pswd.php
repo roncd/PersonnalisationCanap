@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nouveau mot de passe</title>
-    <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
+    <link rel="icon" type="image/png" href="https://www.decorient.fr/medias/favicon.png">
     <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&family=Be+Vietnam+Pro&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../../styles/formulaire.css">
     <link rel="stylesheet" href="../../styles/modif-pswd.css">
@@ -26,7 +26,7 @@
             }
 
             $token = $_GET['token'];
-            $stmt = $pdo->prepare("SELECT * FROM utilisateur WHERE reset_token = :token AND reset_expires > NOW()");
+            $stmt = $pdo->prepare("SELECT id, mdp, reset_token, reset_expires, token FROM utilisateur WHERE reset_token = :token AND reset_expires > NOW()");
             $stmt->execute(['token' => $token]);
             $user = $stmt->fetch(PDO::FETCH_ASSOC);
 

@@ -38,6 +38,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nb_banquette = trim($_POST['nb_banquette']);
     $img = $_FILES['img'];
     $coffre = trim($_POST['coffre']);
+    $visible = isset($_POST['visible']) ? 1 : 0;
+
 
 
     if (empty($nom) || !isset($price) || !isset($_POST['coffre'])) {
@@ -67,8 +69,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         }
         if (!isset($_SESSION['message'])) {
-            $stmt = $pdo->prepare("UPDATE structure SET nom = ?, img = ?, prix = ?, nb_longueurs = ?, coffre = ? WHERE id = ?");
-            $stmt->execute([$nom, $fileName, $price, $nb_banquette, $coffre, $id]);
+            $stmt = $pdo->prepare("UPDATE structure SET nom = ?, img = ?, prix = ?, nb_longueurs = ?, coffre = ?, visible = ? WHERE id = ?");
+            $stmt->execute([$nom, $fileName, $price, $nb_banquette, $coffre, $visible, $id]);
             $_SESSION['message'] = 'La structure a été mise à jour avec succès !';
             $_SESSION['message_type'] = 'success';
             header("Location: visualiser.php");
@@ -87,7 +89,7 @@ $valeurs = [1, 2, 3];
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Modifier une structure</title>
-    <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
+    <link rel="icon" type="image/png" href="https://www.decorient.fr/medias/favicon.png">
     <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&family=Be+Vietnam+Pro&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../../styles/admin/ajout.css">
     <link rel="stylesheet" href="../../styles/message.css">
@@ -149,6 +151,15 @@ $valeurs = [1, 2, 3];
                             <label for="img">Image (Laissez vide pour conserver l'image actuelle)</label>
                             <input type="file" id="img" name="img" class="input-field" accept="image/*" onchange="loadFile(event)">
                             <img class="preview-img" src="../uploads/structure/<?php echo htmlspecialchars($structure['img']); ?>" id="output" />
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group btn-slider">
+                            <label for="visible">Afficher sur le site</label>
+                            <label class="switch">
+                                <input type="checkbox" id="visible" name="visible" <?php if ($structure['visible']) echo 'checked'; ?>>
+                                <span class="slider round"></span>
+                            </label>
                         </div>
                     </div>
                     <div class="button-section">

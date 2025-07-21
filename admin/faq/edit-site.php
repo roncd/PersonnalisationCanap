@@ -41,14 +41,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $question = trim($_POST['question']);
     $reponse = trim($_POST['reponse']);
     $categorie_id = $_POST['categorie_id'];
+    $visible = isset($_POST['visible']) ? 1 : 0;
+
 
     if (empty($question) || empty($reponse) || empty($categorie_id)) {
         $_SESSION['message'] = 'Tous les champs sont requis.';
         $_SESSION['message_type'] = 'error';
     } else {
         try {
-            $stmt = $pdo->prepare("UPDATE faq SET question = ?, reponse = ?, categorie_id = ? WHERE id = ?");
-            $stmt->execute([$question, $reponse, $categorie_id, $id]);
+            $stmt = $pdo->prepare("UPDATE faq SET question = ?, reponse = ?, categorie_id = ?, visible = ? WHERE id = ?");
+            $stmt->execute([$question, $reponse, $categorie_id, $visible, $id]);
             $_SESSION['message'] = 'Question mise à jour avec succès.';
             $_SESSION['message_type'] = 'success';
             header("Location: visualiser-site.php");
@@ -68,7 +70,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Modifie un motif de tissu - bois</title>
-    <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
+    <link rel="icon" type="image/png" href="https://www.decorient.fr/medias/favicon.png">
     <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&family=Be+Vietnam+Pro&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../../styles/admin/ajout.css">
     <link rel="stylesheet" href="../../styles/message.css">
@@ -85,40 +87,49 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div class="container">
             <h2>Modifie un motif de tissu - bois</h2>
             <?php require '../include/message.php'; ?>
- <div class="form">
-    <form class="formulaire-creation-compte" action="" method="POST">
-        <div class="form-group">
-            <label for="question">Question<span class="required">*</span></label>
-            <input type="text" id="question" name="question" class="input-field" 
-                   value="<?= htmlspecialchars($faq['question']) ?>" required>
-        </div>
-        <div class="form-group">
-            <label for="reponse">Réponse<span class="required">*</span></label>
-            <input type="text" id="reponse" name="reponse" class="input-field" 
-                   value="<?= htmlspecialchars($faq['reponse']) ?>" required>
-        </div>
-        <div class="form-row">
-            <div class="form-group">
-                <label for="categorie_id">Catégorie <span class="required">*</span></label>
-                <select class="input-field" id="categorie_id" name="categorie_id" required>
-                    <option value="">-- Sélectionnez une catégorie --</option>
-                    <?php foreach ($categories as $categorie): ?>
-                        <option value="<?= htmlspecialchars($categorie['id']) ?>"
-                            <?= ($categorie['id'] == $faq['categorie_id']) ? 'selected' : '' ?>>
-                            <?= htmlspecialchars($categorie['nom']) ?>
-                        </option>
-                    <?php endforeach; ?>
-                </select>
+            <div class="form">
+                <form class="formulaire-creation-compte" action="" method="POST">
+                    <div class="form-group">
+                        <label for="question">Question<span class="required">*</span></label>
+                        <input type="text" id="question" name="question" class="input-field"
+                            value="<?= htmlspecialchars($faq['question']) ?>" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="reponse">Réponse<span class="required">*</span></label>
+                        <input type="text" id="reponse" name="reponse" class="input-field"
+                            value="<?= htmlspecialchars($faq['reponse']) ?>" required>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="categorie_id">Catégorie <span class="required">*</span></label>
+                            <select class="input-field" id="categorie_id" name="categorie_id" required>
+                                <option value="">-- Sélectionnez une catégorie --</option>
+                                <?php foreach ($categories as $categorie): ?>
+                                    <option value="<?= htmlspecialchars($categorie['id']) ?>"
+                                        <?= ($categorie['id'] == $faq['categorie_id']) ? 'selected' : '' ?>>
+                                        <?= htmlspecialchars($categorie['nom']) ?>
+                                    </option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group btn-slider">
+                            <label for="visible">Afficher sur le site</label>
+                            <label class="switch">
+                                <input type="checkbox" id="visible" name="visible" <?php if ($faq['visible']) echo 'checked'; ?>>
+                                <span class="slider round"></span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="button-section">
+                        <div class="buttons">
+                            <button type="button" id="btn-retour" class="btn-beige" onclick="history.go(-1)">Retour</button>
+                            <input type="submit" class="btn-noir" value="Modifier">
+                        </div>
+                    </div>
+                </form>
             </div>
-        </div>
-        <div class="button-section">
-            <div class="buttons">
-                <button type="button" id="btn-retour" class="btn-beige" onclick="history.go(-1)">Retour</button>
-                <input type="submit" class="btn-noir" value="Modifier">
-            </div>
-        </div>
-    </form>
-</div>
         </div>
     </main>
     <footer>

@@ -19,6 +19,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $prix = trim($_POST['price']);
     $img = $_FILES['img'];
     $id_couleur = ($_POST['id_couleur']);
+    $visible = isset($_POST['visible']) ? 1 : 0;
+
 
     if (empty($nom) || !isset($prix) || empty($img['name']) || empty($id_couleur)) {
         $_SESSION['message'] = 'Tous les champs sont requis !';
@@ -41,8 +43,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             if (move_uploaded_file($img['tmp_name'], $uploadPath)) {
                 try {
-                    $stmt = $pdo->prepare("INSERT INTO motif_bois (nom, prix, img, id_couleur_tissu) VALUES (?, ?, ?, ?)");
-                    $stmt->execute([$nom, $prix, $fileName, $id_couleur]);
+                    $stmt = $pdo->prepare("INSERT INTO motif_bois (nom, prix, img, id_couleur_tissu, visible) VALUES (?, ?, ?, ?, ?)");
+                    $stmt->execute([$nom, $prix, $fileName, $id_couleur, $visible]);
 
                     $_SESSION['message'] = 'Le motif du coussin a été ajouté avec succès !';
                     $_SESSION['message_type'] = 'success';
@@ -71,7 +73,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <title>Ajoute un Kit de coussins - bois</title>
     <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../../styles/admin/ajout.css">
-    <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
+    <link rel="icon" type="image/png" href="https://www.decorient.fr/medias/favicon.png">
     <link rel="stylesheet" href="../../styles/message.css">
 
     <link rel="stylesheet" href="../../styles/buttons.css">
@@ -117,6 +119,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                     </option>
                                 <?php endforeach; ?>
                             </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group btn-slider">
+                            <label for="visible">Afficher sur le site</label>
+                            <label class="switch">
+                                <input type="checkbox" id="visible" name="visible" checked>
+                                <span class="slider round"></span>
+                            </label>
                         </div>
                     </div>
                     <div class="button-section">
