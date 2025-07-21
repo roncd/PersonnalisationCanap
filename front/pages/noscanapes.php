@@ -11,19 +11,21 @@ $limit = 6;
 $offset = ($page - 1) * $limit;
 
 // Tous les types 
-$stmt = $pdo->query("SELECT id, nom FROM type_banquette");
+$stmt = $pdo->query("SELECT id, nom FROM type_banquette WHERE visible = 1");
 $types = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 //Récupération des canapés avec leurs types et structures associés
 $sql = "SELECT cp.*, 
                tb.nom AS type_nom, 
                s.nom AS structure_nom
-        FROM commande_prefait cp
-        LEFT JOIN type_banquette tb ON cp.id_banquette = tb.id
-        LEFT JOIN structure s ON cp.id_structure = s.id";
+        FROM commande_prefait cp 
+         JOIN type_banquette tb ON cp.id_banquette = tb.id
+         JOIN structure s ON cp.id_structure = s.id";
 
 $conditions = [];
 $params = [];
+
+$conditions[] = "cp.visible = 1";
 
 // recherche
 if (!empty($search)) {
@@ -54,7 +56,7 @@ $commandes = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 
 $sqlCount = "SELECT COUNT(*) FROM commande_prefait cp
-             LEFT JOIN type_banquette tb ON cp.id_banquette = tb.id";
+             JOIN type_banquette tb ON cp.id_banquette = tb.id";
 
 if (!empty($conditions)) {
     $sqlCount .= " WHERE " . implode(" AND ", $conditions);
@@ -163,9 +165,10 @@ function calculPrix($commande, &$composition = [])
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Choisis ton style, réservez ton modèle favoris et récupére-le directement en boutique ou fait toi livrer." />
     <title>Nos Canapés</title>
     <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&family=Be+Vietnam+Pro&display=swap" rel="stylesheet">
-    <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
+    <link rel="icon" type="image/png" href="https://www.decorient.fr/medias/favicon.png">
     <link rel="stylesheet" href="../../styles/catalogue.css">
     <link rel="stylesheet" href="../../styles/transition.css">
     <script type="module" src="../../script/transition.js"></script>
@@ -190,7 +193,7 @@ function calculPrix($commande, &$composition = [])
                 </h1>
 
                 <p class="hero-description">
-                    Choisissez votre style, réservez votre modèle favoris et récupérez-le directement en boutique.
+                    Choisis ton style, réservez ton modèle favoris et récupére-le directement en boutique ou fait toi livrer.
                 </p>
             </div>
         </div>
@@ -258,7 +261,7 @@ function calculPrix($commande, &$composition = [])
                             }
                             ?>
                             <img src="<?php echo htmlspecialchars($imgSrc, ENT_QUOTES); ?>"
-                            alt="<?php echo htmlspecialchars($commande['nom'] ?? 'Canapé pré-fait', ENT_QUOTES); ?>">
+                                alt="<?php echo htmlspecialchars($commande['nom'] ?? 'Canapé pré-fait', ENT_QUOTES); ?>">
                         </div>
                         <div class="product-content">
                             <h3><?= htmlspecialchars($commande['nom']) ?></h3>

@@ -15,7 +15,7 @@ $selectedTissuId = $_SESSION['id_couleur_tissu_bois'];
 
 
 // Récupérer les motifs de bois depuis la base de données
-$stmt = $pdo->prepare("SELECT * FROM motif_bois WHERE id_couleur_tissu = ? ORDER BY prix ASC");
+$stmt = $pdo->prepare("SELECT * FROM motif_bois WHERE id_couleur_tissu = ? AND visible = 1 ORDER BY prix ASC");
 $stmt->execute([$selectedTissuId]);
 $motif_bois = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -50,7 +50,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
+  <meta name="description" content="Commence la personnalisation de ton canapé, choisis le kit de coussins de ton futur canapé marocain." />
+  <link rel="icon" type="image/png" href="https://www.decorient.fr/medias/favicon.png">
   <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&family=Be+Vietnam+Pro&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../../styles/processus.css">
   <link rel="stylesheet" href="../../styles/popup.css">

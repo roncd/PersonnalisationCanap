@@ -79,7 +79,7 @@ $totalPrice += floatval($commande['prix_dimensions'] ?? 0);
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
+  <link rel="icon" type="image/png" href="https://www.decorient.fr/medias/favicon.png">
   <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&family=Be+Vietnam+Pro&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../../styles/popup.css">
   <link rel="stylesheet" href="../../styles/canapPrefait.css">

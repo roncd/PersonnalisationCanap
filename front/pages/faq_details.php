@@ -22,7 +22,7 @@ if (!$categorie) {
 }
 
 // Récupère toutes les questions associées à cette catégorie
-$stmtFaq = $pdo->prepare("SELECT question, reponse FROM faq WHERE categorie_id = ? ORDER BY id ASC");
+$stmtFaq = $pdo->prepare("SELECT question, reponse FROM faq WHERE categorie_id = ? AND visible = 1 ORDER BY id ASC");
 $stmtFaq->execute([$categorie_id]);
 $questions = $stmtFaq->fetchAll(PDO::FETCH_ASSOC);
 ?>
@@ -32,7 +32,8 @@ $questions = $stmtFaq->fetchAll(PDO::FETCH_ASSOC);
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
+  <meta name="description" content="Tu as des questions sur la livraison, les moyens de paiement, les produits, le processuss de personnalisation, la garantit... Ici tu trouveras tes réponses." />
+  <link rel="icon" type="image/png" href="https://www.decorient.fr/medias/favicon.png">
   <link rel="stylesheet" href="../../styles/transition.css">
   <link rel="stylesheet" href="../../styles/buttons.css">
   <script type="module" src="../../script/transition.js"></script>

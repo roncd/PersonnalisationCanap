@@ -5,23 +5,21 @@ require '../../admin/include/session_expiration.php';
 
 
 // 1. Canapés préfaits
-$sqlCommandes = "
-    SELECT cp.*, tb.nom AS type_nom 
+$sqlCommandes = "SELECT cp.*, tb.nom AS type_nom 
     FROM commande_prefait cp
-    LEFT JOIN type_banquette tb ON cp.id_banquette = tb.id
-";
+    JOIN type_banquette tb ON cp.id_banquette = tb.id
+    WHERE cp.visible = 1";
 $stmtCommandes = $pdo->prepare($sqlCommandes);
 $stmtCommandes->execute();
 $commandes = $stmtCommandes->fetchAll(PDO::FETCH_ASSOC);
 
 
 // 2. Articles à l’unité (vente_produit)
-$sqlProduits = "
-    SELECT vente_produit.*, categorie.nom AS nom_categorie 
+$sqlProduits = "SELECT vente_produit.*, categorie.nom AS nom_categorie 
     FROM vente_produit 
-    JOIN categorie ON vente_produit.id_categorie = categorie.id
-    ORDER BY vente_produit.id DESC
-";
+    JOIN categorie ON vente_produit.id_categorie = categorie.id 
+    WHERE vente_produit.visible = 1
+    ORDER BY vente_produit.id DESC";
 $stmtProduits = $pdo->prepare($sqlProduits);
 $stmtProduits->execute();
 $produits = $stmtProduits->fetchAll(PDO::FETCH_ASSOC);
@@ -250,9 +248,10 @@ if (!empty($produitAjoute)) : ?>
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Accueil</title>
+  <meta name="description" content="Personnalise ton salon marocain selon tes goûts : canapé, tissus, couleurs et configurations à prix raisonnables avec Déco du Monde.">
+  <title>Déco du Monde - Personnalisation de canapé marocain</title>
   <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&family=Be+Vietnam+Pro&display=swap" rel="stylesheet">
-  <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
+  <link rel="icon" type="image/png" href="https://www.decorient.fr/medias/favicon.png">
   <link rel="stylesheet" href="../../styles/styles.css">
   <link rel="stylesheet" href="../../styles/buttons.css">
   <link rel="stylesheet" href="../../styles/accueil.css">
@@ -281,10 +280,8 @@ if (!empty($produitAjoute)) : ?>
 
           <p class="hero-description">
             Laisse-toi tenter et personnalise ton salon de A à Z !
-            Du canapé à la table, choisis les configurations qui te plaisent le plus.
-            La couleur, le tissu, la forme… fais ce qui te ressemble, et tout ça à un prix raisonnable.
-
-
+            Du canapé aux décorations, choisis les configurations qui te plaisent le plus.
+            La couleur, le tissu, la forme, fais ce qui te ressemble, et tout ça à un prix raisonnable.
           </p>
           <a href="dashboard.php">
             <button class="btn-noir">PERSONNALISER</button>

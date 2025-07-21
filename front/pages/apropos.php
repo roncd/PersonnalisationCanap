@@ -9,8 +9,9 @@ require '../../admin/include/session_expiration.php';
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Découvre l'histoire de Déco du Monde, notre atelier de fabrication de canapé marocain sur mesure, nos valeurs, notre promesse et bien d'autres." />
   <title>À propos</title>
-  <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
+  <link rel="icon" type="image/png" href="https://www.decorient.fr/medias/favicon.png">
   <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&family=Be+Vietnam+Pro&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../../styles/apropos.css">
   <link rel="stylesheet" href="../../styles/buttons.css">

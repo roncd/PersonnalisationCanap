@@ -16,21 +16,20 @@ $sql = "SELECT cp.*,
                tb.nom AS type_nom, 
                s.nom AS structure_nom
         FROM commande_prefait cp
-        LEFT JOIN type_banquette tb ON cp.id_banquette = tb.id
-        LEFT JOIN structure s ON cp.id_structure = s.id
+        JOIN type_banquette tb ON cp.id_banquette = tb.id
+        JOIN structure s ON cp.id_structure = s.id
+        WHERE cp.visible = 1
         ORDER BY cp.id DESC
         LIMIT 3";
-
 $stmt = $pdo->prepare($sql);
 $stmt->execute();
 $commandes = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-$sql = "
-    SELECT vente_produit.*, categorie.nom AS nom_categorie 
-    FROM vente_produit 
+$sql = "SELECT vente_produit.*, categorie.nom AS nom_categorie 
+    FROM vente_produit
     JOIN categorie ON vente_produit.id_categorie = categorie.id
-    LIMIT 3
-";
+    WHERE vente_produit.visible = 1
+   LIMIT 3 ";
 $stmt = $pdo->query($sql);
 $produits = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -275,8 +274,9 @@ if (!empty($produitAjoute)) : ?>
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Commence la personnalisation de ton canapé ou inspire toi de modèle déjà existant pour confectionner ton salon marocain, imagine le meuble qui répond le plus à tes goûts, et à l’aménagement de ton salon." />
   <title>Tableau de bord</title>
-  <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
+  <link rel="icon" type="image/png" href="https://www.decorient.fr/medias/favicon.png">
   <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&family=Be+Vietnam+Pro&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../../styles/processus.css">
   <link rel="stylesheet" href="../../styles/dashboard.css">

@@ -12,7 +12,7 @@ $limit = 6;
 $offset = ($page - 1) * $limit;
 
 // Toutes les catégories 
-$stmt = $pdo->query("SELECT id, nom FROM categorie");
+$stmt = $pdo->query("SELECT id, nom FROM categorie WHERE visible = 1");
 $categories = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 // Affichage des cat dans les produits
@@ -47,6 +47,7 @@ if (!empty($search)) {
     $conditions[] = "(vente_produit.nom LIKE :search OR categorie.nom LIKE :search)";
     $params[':search'] = '%' . $search . '%';
 }
+$conditions[] = "vente_produit.visible = 1";
 
 $whereSQL = count($conditions) ? 'WHERE ' . implode(' AND ', $conditions) : '';
 
@@ -169,15 +170,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['produit'])) {
         $produitAjoute = $nomProduit;
 
         // Stocker le produit dans la session pour le popup après redirection
-$_SESSION['popup_produit'] = [
-    'nom' => $nomProduit,
-    'img' => $img
-];
+        $_SESSION['popup_produit'] = [
+            'nom' => $nomProduit,
+            'img' => $img
+        ];
 
-// Rediriger pour éviter re-post et déclencher le modal
-header("Location: ?post_restore=1");
-exit;
-        
+        // Rediriger pour éviter re-post et déclencher le modal
+        header("Location: ?post_restore=1");
+        exit;
     }
 }
 if (!empty($produitAjoute)) : ?>
@@ -230,6 +230,7 @@ if (!empty($produitAjoute)) : ?>
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Découvre notre sélection de produits de qualité vendu à l'unité. Ces produits sont disponibles uniquement sur réservation et pick-up en boutique." />
     <title>Nos Produits</title>
     <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&family=Be+Vietnam+Pro&display=swap" rel="stylesheet">
     <link rel="icon" type="image/x-icon" href="../../medias/favicon.png" />
@@ -238,7 +239,7 @@ if (!empty($produitAjoute)) : ?>
     <link rel="stylesheet" href="../../styles/pagination.css">
     <link rel="stylesheet" href="../../styles/transition.css">
     <script type="module" src="../../script/transition.js"></script>
-  
+
 </head>
 
 <body>
@@ -249,14 +250,14 @@ if (!empty($produitAjoute)) : ?>
 
     <section class="hero-section">
         <div class="hero-container">
-        <img src="../../medias/hero-banner.jpg" alt="Salon marocain" class="hero-image">
+            <img src="../../medias/hero-banner.jpg" alt="Salon marocain" class="hero-image">
             <div class="hero-content">
                 <br /><br /><br />
                 <h1 class="hero-title h2">Nos Produits</h1>
 
                 <p class="hero-description">
-                    Découvrez notre sélection de mousses et tissus de qualité.
-                    Ces produits sont disponibles uniquement sur réservation et pick-up en boutique.
+                    Découvre notre sélection de produits de qualité vendu à l'unité.
+                    Ces produits sont disponibles uniquement sur réservation.
                 </p>
             </div>
         </div>
@@ -321,7 +322,7 @@ if (!empty($produitAjoute)) : ?>
                             </div>
                             <div class="product-content">
                                 <h3><?= htmlspecialchars($produit['nom']) ?></h3>
-                               <p class="description"> Catégorie : <?= htmlspecialchars(ucfirst($catNom)) ?>
+                                <p class="description"> Catégorie : <?= htmlspecialchars(ucfirst($catNom)) ?>
                                 </p>
                                 <p class="price"><?= number_format($produit['prix'], 2, ',', ' ') ?> €</p>
                                 <form method="POST" style="display:inline;">

@@ -39,7 +39,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (!$user['verified']) {
             $message = '<p class="error">Compte non vérifié&nbsp;: consulte ton e‑mail de confirmation.</p>';
 
-        /* 2) Mot de passe ok → connexion */
+            /* 2) Mot de passe ok → connexion */
         } elseif (password_verify($password, $user['mdp'])) {
 
             $_SESSION['user_id']   = $user['id'];
@@ -65,11 +65,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             header("Location: ../pages/index.php");
             exit;
 
-        /* 3) Mot de passe incorrect */
+            /* 3) Mot de passe incorrect */
         } else {
             $message = '<p class="error">Mot de passe incorrect.</p>';
         }
-
     } else {
         $message = '<p class="error">Utilisateur non trouvé.</p>';
     }
@@ -91,8 +90,10 @@ if (isset($_GET['message']) && $_GET['message'] == 'success') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="https://www.decorient.fr/medias/favicon.png">
+    <meta name="description" content="Connecte toi à notre site pour avoir accès à la personnaisation sur-mesure des canapés marocains." />
     <title>Connexion</title>
-    <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
+    <link rel="icon" type="image/png" href="https://www.decorient.fr/medias/favicon.png">
     <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&family=Be+Vietnam+Pro&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../../styles/formulaire.css">
     <link rel="stylesheet" href="../../styles/transition.css">
