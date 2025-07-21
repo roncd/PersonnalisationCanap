@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mot de passe oublié</title>
-    <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
+    <link rel="icon" type="image/png" href="https://www.decorient.fr/medias/favicon.png">
     <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&family=Be+Vietnam+Pro&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../../styles/formulaire.css">
     <link rel="stylesheet" href="../../styles/modif-pswd.css">
@@ -33,7 +33,7 @@
 
             if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $email = $_POST['adresse'];
-                $stmt = $pdo->prepare("SELECT * FROM client WHERE mail = :mail");
+                $stmt = $pdo->prepare("SELECT mail, mdp, reset_token, reset_expires, token FROM client WHERE mail = :mail");
                 $stmt->execute(['mail' => $email]);
                 $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
