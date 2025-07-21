@@ -62,9 +62,6 @@ h2 {
 
 .input-field {
     width: 95%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
 }
 
 .buttons {
@@ -86,7 +83,8 @@ h2 {
     text-decoration: underline;
 }
 
-input, select {
+input,
+select {
     appearance: none;
     color: black;
 }
@@ -100,7 +98,7 @@ input, select {
 /* Le champ de saisie : on décale un peu le texte à droite */
 .input-section .input-field {
     width: 100%;
-    padding-right: 40px;
+    padding-right: 4.1rem;
     box-sizing: border-box;
 }
 
