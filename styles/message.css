@@ -66,6 +66,29 @@
     margin-bottom: 10px;
 }
 
+.toggle-password-text {
+    cursor: pointer;
+    color: #666;
+    user-select: none;
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-weight: 100;
+}
+
+.pwd-strenght-text {
+    font-size: 0.9em;
+    margin-top: 5px;
+    text-align: left;
+}
+
+.warning {
+    display: none;
+    font-size: 0.85em;
+    margin-top: 4px;
+}
+
 /* ----------- RESPONSIVE DESIGN ----------- */
 
 /* Large devices (desktops) */

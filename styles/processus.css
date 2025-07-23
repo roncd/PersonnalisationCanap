@@ -31,6 +31,7 @@ body {
 h2 {
   font-size: 32px;
   font-family: 'Baloo 2', sans-serif;
+  line-height: 2.5rem;
 }
 
 span {
@@ -47,6 +48,19 @@ span {
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
+}
+
+.title-info {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+}
+
+.title-info .information {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
 }
 
 /* ================== COLOR OPTIONS ================== */
@@ -376,7 +390,6 @@ label {
 .place-select-field:focus {
   outline: none;
 }
-
 
 .input-field:focus {
   background-color: rgba(227, 209, 200, 0.85);

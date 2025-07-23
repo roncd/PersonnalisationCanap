@@ -51,7 +51,8 @@ label {
     margin-bottom: 5px;
 }
 
-input, select {
+input,
+select {
     appearance: none;
     color: black;
 }
@@ -206,6 +207,12 @@ input, select {
     box-sizing: border-box;
 }
 
+.form-group a.input-field{
+    text-decoration: none;
+    color: black;
+    text-align: center;
+}
+
 /* Vérification dynamique des critères de mot de passe */
 .password-requirements {
     list-style: none;
@@ -324,8 +331,8 @@ input, select {
 }
 
 #file-list {
-  list-style-type: none;
-  padding-left: 0;
+    list-style-type: none;
+    padding-left: 0;
 }
 
 #file-list li {

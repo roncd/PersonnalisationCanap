@@ -131,7 +131,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id'], $_POST['visible
                             echo "<td>{$row['nom']}</td>";
                             echo "<td>{$row['prix']}</td>";
                             echo "<td>{$row['nb_longueurs']}</td>";
-                            echo "<td><img src='../uploads/structure/{$row['img']}' alt='{$row['nom']}' style='width:50px; height:auto;'></td>";
+                            echo "<td><img src='../uploads/structure/{$row['img']}' alt='{$row['nom']}' ></td>";
                             echo "<td class='actions'>";
                             echo "<a href='edit.php?id={$row['id']}' class='edit-action actions vert' title='Modifier'>EDIT</a>";
                             echo "<a href='delete.php?id={$row['id']}' class='delete-action actions rouge' data-id='{$row['id']}' title='Supprimer'>DELETE</a>";

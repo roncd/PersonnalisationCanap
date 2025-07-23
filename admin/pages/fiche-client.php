@@ -116,10 +116,10 @@ function age($date)
                                 if (!empty($results)) {
                                     foreach ($results as $commande) {
                                         echo "<tr>";
-                                        echo "<td style='height: 30px;'>{$commande['id']}</td>";
-                                        echo "<td style='height: 30px;'>{$commande['date']}</td>";
-                                        echo "<td style='height: 30px;'>{$commande['statut']}</td>";
-                                        echo "<td style='height: 30px;'>{$commande['prix']}€</td>";
+                                        echo "<td '>{$commande['id']}</td>";
+                                        echo "<td '>{$commande['date']}</td>";
+                                        echo "<td '>{$commande['statut']}</td>";
+                                        echo "<td '>{$commande['prix']}€</td>";
                                         echo "</tr>";
                                     }
                                 } else {
@@ -168,10 +168,10 @@ function age($date)
                                 if (!empty($results)) {
                                     foreach ($results as $commande) {
                                         echo "<tr>";
-                                        echo "<td style='height: 30px;'>{$commande['id']}</td>";
-                                        echo "<td style='height: 30px;'>{$commande['date']}</td>";
-                                        echo "<td style='height: 30px;'>{$commande['statut']}</td>";
-                                        echo "<td style='height: 30px;'>{$commande['prix']}€</td>";
+                                        echo "<td '>{$commande['id']}</td>";
+                                        echo "<td '>{$commande['date']}</td>";
+                                        echo "<td '>{$commande['statut']}</td>";
+                                        echo "<td '>{$commande['prix']}€</td>";
                                         echo "</tr>";
                                     }
                                 } else {

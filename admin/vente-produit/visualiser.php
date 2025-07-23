@@ -148,7 +148,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id'], $_POST['visible
                             echo "<td class='visible'><input type='checkbox' class='toggle-visible' data-id='{$row['id']}' $checked></td>";
                             echo "<td>{$row['nom']}</td>";
                             echo "<td>{$row['prix']}</td>";
-                            echo "<td><img src='../uploads/produit/{$row['img']}' alt='{$row['nom']}' style='width:50px; height:auto;'></td>";
+                            echo "<td><img src='../uploads/produit/{$row['img']}' alt='{$row['nom']}' ></td>";
                             echo "<td>" . htmlspecialchars($assocData['categorie'][$row['id_categorie']]) . "</td>";
                             echo "<td class='actions'>";
                             echo "<a href='edit.php?id={$row['id']}' class='edit-action actions vert' title='Modifier'>EDIT</a>";

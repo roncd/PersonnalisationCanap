@@ -73,6 +73,10 @@ td {
     text-align: left;
 }
 
+td {
+    height: 30px;
+}
+
 th {
     font-weight: 700;
 }

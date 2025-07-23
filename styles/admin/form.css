@@ -70,6 +70,12 @@ h2 {
     width: 100%;
 }
 
+.form-group a.input-field {
+    text-decoration: none;
+    color: black;
+    text-align: center;
+}
+
 .form-group.btn-slider {
     display: flex;
     flex-direction: row-reverse;
@@ -92,6 +98,10 @@ h2 {
 /* Labels */
 label {
     margin-bottom: 5px;
+}
+
+.icon-link {
+    color: #a4745a;
 }
 
 input,

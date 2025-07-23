@@ -8,7 +8,8 @@
     <link rel="icon" type="image/png" href="https://www.decorient.fr/medias/favicon.png">
     <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&family=Be+Vietnam+Pro&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../../styles/formulaire.css">
-    <link rel="stylesheet" href="../../styles/modif-pswd.css">
+    <link rel="stylesheet" href="../../styles/message.css">
+    <link rel="stylesheet" href="../../styles/reset-pswd.css">
     <link rel="stylesheet" href="../../styles/buttons.css">
     <script type="module" src="../../script/mdp_check.js"></script>
     <script type="module" src="../../script/togglePassword.js"></script>
@@ -76,13 +77,12 @@
                     <label for="mdp">Nouveau mot de passe <span class="required">*</span></label>
                     <div class="input-section">
                         <input type="password" id="mdp" name="mdp" class="input-field" required>
-                        <span class="toggle-password-text"
-                            style="cursor: pointer; color: #666; user-select: none; position: absolute; right: 10px; top: 50%; transform: translateY(-50%); font-weight: 100;">
+                        <span class="toggle-password-text">
                             Afficher
                         </span>
                     </div>
                 </div>
-                <p id="password-strength-text" style="font-size: 0.9em; margin-top: 5px; text-align: left;"></p>
+                <p id="password-strength-text" class="pwd-strenght-text"></p>
 
                 <!-- Checklist dynamique -->
                 <ul class="password-requirements">
@@ -97,8 +97,7 @@
                     <label for="confirm-password">Confirmer le mot de passe <span class="required">*</span></label>
                     <div class="input-section">
                         <input class="input-field" type="password" id="confirm-password" name="confirm-password" required>
-                        <span class="toggle-password-text"
-                            style="cursor: pointer; color: #666; user-select: none; position: absolute; right: 10px; top: 50%; transform: translateY(-50%); font-weight: 100;">
+                        <span class="toggle-password-text">
                             Afficher
                         </span>
                     </div>

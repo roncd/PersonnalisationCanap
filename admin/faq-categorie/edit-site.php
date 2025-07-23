@@ -66,7 +66,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <title>FAQ - Catégorie</title>
     <link rel="icon" type="image/png" href="https://www.decorient.fr/medias/favicon.png">
     <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&family=Be+Vietnam+Pro&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../../styles/admin/ajout.css">
+    <link rel="stylesheet" href="../../styles/admin/form.css">
     <link rel="stylesheet" href="../../styles/message.css">
     <link rel="stylesheet" href="../../styles/buttons.css">
     <script src="../../script/previewImage.js"></script>
@@ -89,10 +89,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             value="<?= htmlspecialchars($categorie['nom']) ?>" required>
                     </div>
                     <div class="form-group">
-                        <label for="icon">
-                            Icône Font Awesome
-                            (ex: fa-solid fa-truck |
-                            <a href="https://fontawesome.com/search" target="_blank" style="color: #a4745a; text-decoration: underline;">
+                        <label for="icon">Icône Font Awesome (ex: fa-solid fa-truck |
+                            <a href="https://fontawesome.com/search" target="_blank" class="icon-link">
                                 lien vers la bibliothèque
                             </a>) <span class="required">*</span>
                         </label> <input type="text" id="icon" name="icon" class="input-field"

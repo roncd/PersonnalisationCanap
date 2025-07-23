@@ -224,7 +224,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id'], $_POST['visible
                                 echo "<td>" . htmlspecialchars($assocData['dossier_tissu'][$row['id_dossier_tissu']] ?? '-') . "</td>";
                                 echo "<td>" . htmlspecialchars($assocData['accoudoir_tissu'][$row['id_accoudoir_tissu']] ?? '-') . "</td>";
                                 echo "<td>{$row['id_nb_accoudoir']}</td>";
-                                echo "<td><img src='../uploads/canape-prefait/{$row['img']}' alt='{$row['nom']}' style='width:50px; height:auto;'></td>";
+                                echo "<td><img src='../uploads/canape-prefait/{$row['img']}' alt='{$row['nom']}' ></td>";
                                 echo "<td class='actions'>";
                                 echo "<a href='edit.php?id={$row['id']}' class='edit-action actions vert' title='Modifier'>EDIT</a>";
                                 echo "<a href='delete.php?id={$row['id']}' class='delete-action actions rouge' data-id='{$row['id']}' title='Supprimer'>DELETE</a>";

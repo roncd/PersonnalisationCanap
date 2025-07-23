@@ -79,10 +79,10 @@ $assocData[$table] = array_column($data[$table], 'nom', 'id');
                             $stmt->execute();
                             while ($commande = $stmt->fetch(PDO::FETCH_ASSOC)) {
                                 echo "<tr>";
-                                echo "<td style='height: 30px;'>{$commande['id']}</td>";
+                                echo "<td '>{$commande['id']}</td>";
                                 echo "<td>" . htmlspecialchars($assocData['client'][$commande['id_client']] ?? '-') . "</td>";
-                                echo "<td style='height: 30px;'>{$commande['date']}</td>";
-                                echo "<td style='height: 30px;'>{$commande['prix']}€</td>";
+                                echo "<td '>{$commande['date']}</td>";
+                                echo "<td '>{$commande['prix']}€</td>";
                                 echo "</tr>";
                             }
                             ?>
@@ -107,10 +107,10 @@ $assocData[$table] = array_column($data[$table], 'nom', 'id');
                             $stmt->execute();
                             while ($commande = $stmt->fetch(PDO::FETCH_ASSOC)) {
                                 echo "<tr>";
-                                echo "<td style='height: 30px;'>{$commande['id']}</td>";
+                                echo "<td '>{$commande['id']}</td>";
                                 echo "<td>" . htmlspecialchars($assocData['client'][$commande['id_client']] ?? '-') . "</td>";
-                                echo "<td style='height: 30px;'>{$commande['date']}</td>";
-                                echo "<td style='height: 30px;'>{$commande['prix']}€</td>";
+                                echo "<td '>{$commande['date']}</td>";
+                                echo "<td '>{$commande['prix']}€</td>";
                                 echo "</tr>";
                             }
                             ?>
@@ -139,9 +139,9 @@ $assocData[$table] = array_column($data[$table], 'nom', 'id');
                             $stmt->execute();
                             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                                 echo "<tr>";
-                                echo "<td style='height: 30px;'>{$row['id']}</td>";
-                                echo "<td style='height: 30px;'>{$row['nom']}</td>";
-                                echo "<td style='height: 30px;'>{$row['prenom']}</td>";
+                                echo "<td '>{$row['id']}</td>";
+                                echo "<td '>{$row['nom']}</td>";
+                                echo "<td '>{$row['prenom']}</td>";
                                 echo "</tr>";
                             }
                             ?>
