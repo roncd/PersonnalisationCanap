@@ -234,14 +234,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['couleur_tissu_id'])) 
             });
         </script>
 
-
         <!-- BOUTTON RETOUR -->
         <script>
             function retourEtapePrecedente() {
                 window.location.href = "etape3-tissu-modele-banquette.php";
             }
         </script>
-
 
         <!-- FIL ARIANE -->
         <script>

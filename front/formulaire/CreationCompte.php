@@ -161,15 +161,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <div class="form-group">
               <label for="mdp">Mot de passe <span class="required">*</span></label>
 
-              <div class="input-section" style="position: relative;">
-                <input type="password" id="mdp" name="mdp" class="input-field" required style="padding-right: 60px;">
-                <span class="toggle-password-text"
-                  style="cursor: pointer; color: #666; user-select: none; position: absolute; right: 10px; top: 50%; transform: translateY(-50%); font-weight: 100;">
+              <div class="input-section">
+                <input type="password" id="mdp" name="mdp" class="input-field" required>
+                <span class="toggle-password-text">
                   Afficher
                 </span>
               </div>
 
-              <p id="password-strength-text" style="font-size: 0.9em; margin-top: 5px;"></p>
+              <p id="password-strength-text" class="pwd-strenght-text"></p>
 
               <ul class="password-requirements" id="password-checklist">
                 <li id="check-length"><span class="check-icon"></span> Minimum 8 caractères</li>
@@ -187,11 +186,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <div class="form-group password-confirm-wrapper">
               <label for="confirm-password">Confirmer le mot de passe <span class="required">*</span></label>
 
-              <div class="input-section" style="position: relative;">
-                <input type="password" id="confirm-password" name="confirm-password" class="input-field" required style="padding-right: 60px;">
-                <span class="toggle-password-text"
-                  style="cursor: pointer; color: #666; user-select: none; position: absolute; right: 10px; top: 50%; 
-                   transform: translateY(-50%); font-weight: 100;">
+              <div class="input-section ">
+                <input type="password" id="confirm-password" name="confirm-password" class="input-field" required>
+                <span class="toggle-password-text">
                   Afficher
                 </span>
               </div>

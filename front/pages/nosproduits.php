@@ -223,7 +223,6 @@ if (!empty($produitAjoute)) : ?>
     </script>
 <?php endif; ?>
 
-
 <!DOCTYPE html>
 <html lang="fr">
 
@@ -286,14 +285,14 @@ if (!empty($produitAjoute)) : ?>
 
             <div class="search-tri transition-all">
                 <!-- Nouveau select de tri prix -->
-                <select id="sortPrice" style="text-align:left; margin: 20px;">
+                <select id="sortPrice">
                     <option value="none">Trier par prix</option>
                     <option value="asc">Prix : du - cher au + cher</option>
                     <option value="desc">Prix : du + cher au - cher</option>
                 </select>
                 <!--------------------- BARRE DE RECHERCHE EN PHP --------------------->
                 <div class="search-bar transition-all">
-                    <form method="GET" action="" style="position: relative;">
+                    <form method="GET" action="">
                         <input
                             type="text"
                             name="search"
@@ -325,7 +324,7 @@ if (!empty($produitAjoute)) : ?>
                                 <p class="description"> Catégorie : <?= htmlspecialchars(ucfirst($catNom)) ?>
                                 </p>
                                 <p class="price"><?= number_format($produit['prix'], 2, ',', ' ') ?> €</p>
-                                <form method="POST" style="display:inline;">
+                                <form method="POST">
                                     <input type="hidden" name="produit" value="<?= htmlspecialchars($produit['nom']) ?>" />
                                     <input type="hidden" name="quantite" value="1" />
                                     <button type="submit" class="btn-beige">Ajouter au panier</button>
@@ -362,43 +361,6 @@ if (!empty($produitAjoute)) : ?>
     <footer>
         <?php require '../../squelette/footer.php'; ?>
     </footer>
-
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const filterButtons = document.querySelectorAll(".filter-btn");
-
-            filterButtons.forEach((button) => {
-                button.addEventListener("click", () => {
-                    const selectedCategory = button.getAttribute("data-category").toLowerCase();
-                    window.location.href = `?categorie=${encodeURIComponent(selectedCategory)}&page=1`;
-                });
-            });
-        });
-        const modal = document.getElementById("reservation-modal");
-        const productNameEl = document.getElementById("product-name");
-
-        function openReservationModal(productName) {
-            modal.style.display = "flex"; // Affiche la modale
-            productNameEl.textContent = `Nom du produit : ${productName}`;
-            document.documentElement.classList.add("no-scroll");
-            document.body.classList.add("no-scroll");
-        }
-
-        function fermerModal() {
-            modal.style.display = "none";
-            document.documentElement.classList.remove("no-scroll");
-            document.body.classList.remove("no-scroll");
-        }
-
-        document.querySelector(".close-modal").onclick = fermerModal;
-
-        window.onclick = (event) => {
-            if (event.target === modal) {
-                fermerModal();
-            }
-        };
-    </script>
-
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {

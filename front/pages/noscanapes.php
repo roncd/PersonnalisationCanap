@@ -217,7 +217,7 @@ function calculPrix($commande, &$composition = [])
 
         <div class="search-tri transition-all">
             <!-- Nouveau select de tri prix -->
-            <select id="sortPrice" style="text-align:left; margin: 20px;">
+            <select id="sortPrice">
                 <option value="none">Trier par prix</option>
                 <option value="asc">Prix : du - cher au + cher</option>
                 <option value="desc">Prix : du + cher au - cher</option>
@@ -225,7 +225,7 @@ function calculPrix($commande, &$composition = [])
 
             <!-- ------------------- BARRE DE RECHERCHE EN PHP ------------------- -->
             <div class="search-bar transition-all">
-                <form method="GET" action="" style="position: relative;">
+                <form method="GET" action="">
                     <input
                         type="text"
                         name="search"

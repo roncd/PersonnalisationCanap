@@ -11,7 +11,7 @@ require '../../admin/include/session_expiration.php';
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mentions Légales</title>
     <link rel="icon" type="image/png" href="https://www.decorient.fr/medias/favicon.png">
-    <link rel="stylesheet" href="../../styles/mentions.css">
+    <link rel="stylesheet" href="../../styles/page-text.css">
     <link rel="stylesheet" href="../../styles/transition.css">
     <script type="module" src="../../script/transition.js"></script>
 </head>

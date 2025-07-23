@@ -331,9 +331,6 @@ if (!empty($produitAjoute)) : ?>
         </div>
       </section>
 
-
-      </section>
-
       <!-- SECTION PERSONNALISATION -->
       <section class="customize-section transition-all">
         <div class="customize-text">
@@ -396,46 +393,6 @@ if (!empty($produitAjoute)) : ?>
           <?php endforeach; ?>
         </div>
       </section>
-
-
-
-      <script>
-        document.addEventListener("DOMContentLoaded", function() {
-          const filterButtons = document.querySelectorAll(".filter-btn");
-
-          filterButtons.forEach((button) => {
-            button.addEventListener("click", () => {
-              const selectedCategory = button.getAttribute("data-category").toLowerCase();
-              window.location.href = `?categorie=${encodeURIComponent(selectedCategory)}&page=1`;
-            });
-          });
-        });
-        const modal = document.getElementById("reservation-modal");
-        const productNameEl = document.getElementById("product-name");
-
-        function openReservationModal(productName) {
-          modal.style.display = "flex"; // Affiche la modale
-          productNameEl.textContent = `Nom du produit : ${productName}`;
-          document.documentElement.classList.add("no-scroll");
-          document.body.classList.add("no-scroll");
-        }
-
-        function fermerModal() {
-          modal.style.display = "none";
-          document.documentElement.classList.remove("no-scroll");
-          document.body.classList.remove("no-scroll");
-        }
-
-        document.querySelector(".close-modal").onclick = fermerModal;
-
-        window.onclick = (event) => {
-          if (event.target === modal) {
-            fermerModal();
-          }
-        };
-      </script>
-
-
 
       <div class="voir-plus">
         <button class="btn-noir"
@@ -529,9 +486,6 @@ if (!empty($produitAjoute)) : ?>
         <button id="no-btn" class="btn-noir">Non</button>
       </div>
     </div>
-
-
-
 
     <!-- Modal d'ajout au panier -->
     <div id="reservation-modal" class="modal" style="display:none;">

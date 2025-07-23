@@ -46,7 +46,7 @@ $categories = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <?php foreach ($categories as $categorie): ?>
           <a href="faq_details.php?categorie=<?= urlencode($categorie['id']) ?>" class="faq-card">
             <div class="icon">
-              <i class="fa <?= htmlspecialchars($categorie['icon'] ?? 'fa-question-circle') ?>"></i>
+              <i class="<?= htmlspecialchars($categorie['icon'] ?? 'fa-question-circle') ?>"></i>
             </div>
             <span><?= htmlspecialchars($categorie['nom']) ?></span>
           </a>

@@ -8,7 +8,8 @@
     <link rel="icon" type="image/png" href="https://www.decorient.fr/medias/favicon.png">
     <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&family=Be+Vietnam+Pro&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../../styles/formulaire.css">
-    <link rel="stylesheet" href="../../styles/modif-pswd.css">
+    <link rel="stylesheet" href="../../styles/reset-pswd.css">
+    <link rel="stylesheet" href="../../styles/message.css">
     <link rel="stylesheet" href="../../styles/buttons.css">
 </head>
 

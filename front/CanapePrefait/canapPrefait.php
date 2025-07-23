@@ -1,5 +1,7 @@
 <?php
 require '../../admin/config.php';
+session_start();
+require '../../admin/include/session_expiration.php';
 
 // Récupère la commande pré-faite (exemple avec l'ID 1, adapte-le dynamiquement si besoin)
 if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
@@ -150,9 +152,6 @@ $totalPrice += floatval($commande['prix_dimensions'] ?? 0);
 
               $dossier = $dossierUploadMap[$nomTable] ?? $nomTable;
               ?>
-
-
-
               <?php if ($nomTable === 'accoudoirs_bois_multiples'): ?>
                 <?php foreach ($details as $accoudoir): ?>
                   <div class="option">
@@ -237,9 +236,6 @@ $totalPrice += floatval($commande['prix_dimensions'] ?? 0);
           }
         }
       }
-
-
-
       ?>
 
       <div class="footer">
@@ -254,12 +250,10 @@ $totalPrice += floatval($commande['prix_dimensions'] ?? 0);
       </div>
       </div>
 
-
-
       <!-- Colonne de droite -->
       <div class="right-column">
         <section class="main-display">
-          <div class="buttons">
+          <div class="buttons h2">
             <button id="btn-aide" class="btn-beige">Besoin d'aide ?</button>
           </div>
           <br>
@@ -298,7 +292,6 @@ $totalPrice += floatval($commande['prix_dimensions'] ?? 0);
 
     <?php require_once '../../squelette/footer.php'; ?>
 
-
     <script>
       document.getElementById("btn-suivant").addEventListener("click", function(event) {
         event.preventDefault();
@@ -306,7 +299,6 @@ $totalPrice += floatval($commande['prix_dimensions'] ?? 0);
         window.location.href = "choix-dimension.php?id=" + id;
       });
     </script>
-
 
     <!-- BOUTTON RETOUR -->
     <script>

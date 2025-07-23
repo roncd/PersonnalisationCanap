@@ -120,9 +120,6 @@ header("Pragma: no-cache");
 header("Expires: 0");
 ?>
 
-
-
-
 <!DOCTYPE html>
 <html lang="fr">
 
@@ -136,9 +133,6 @@ header("Expires: 0");
   <link rel="stylesheet" href="../../styles/buttons.css">
   <script type="module" src="../../script/popup.js"></script>
   <script type="module" src="../../script/keydown.js"></script>
-
-
-
   <title>Choisi tes dimensions</title>
 </head>
 
@@ -149,18 +143,16 @@ header("Expires: 0");
   </header>
 
   <main>
-    
-      <div class="fil-ariane-container h2 " aria-label="fil-ariane">
-          <ul class="fil-ariane">
-            <?php
-            $id = $_GET['id'] ?? null;
-            ?>
-            <li><a href="./choix-dimension.php?id=<?= $id ?>" class="active">Dimension</a></li>
-            <li><a href="./choix-mousse.php?id=<?= $id ?>" >Mousse</a></li>
-          </ul>
-        </div>
-<div style="margin-bottom: 60px !important;"></div>    <div class="container transition">
-      
+
+    <div class="fil-ariane-container h2 " aria-label="fil-ariane">
+      <ul class="fil-ariane">
+        <?php
+        $id = $_GET['id'] ?? null;
+        ?>
+        <li><a href="./choix-dimension.php?id=<?= $id ?>" class="active">Dimension</a></li>
+        <li><a href="./choix-mousse.php?id=<?= $id ?>">Mousse</a></li>
+      </ul>
+    </div>
     <div class="container transition">
       <!-- Colonne de gauche -->
       <div class="left-column">
@@ -238,8 +230,6 @@ header("Expires: 0");
         $totalPrix = $totalOptions + $prixDimensions;
         ?>
 
-
-
         <div class="footer">
           <p>Total : <span id="total-price"><?= number_format($totalPrix, 2, ',', ' ') ?> €</span></p>
           <div class="buttons">
@@ -256,75 +246,12 @@ header("Expires: 0");
         </div>
       </div>
 
-      <script>
-        const form = document.querySelector('form[action="creer_commande_temporaire.php"]');
-        form.addEventListener('submit', function() {
-          document.getElementById('input-longueurA').value = longueurAInput ? longueurAInput.value : 0;
-          document.getElementById('input-longueurB').value = longueurBInput ? longueurBInput.value : 0;
-          document.getElementById('input-longueurC').value = longueurCInput ? longueurCInput.value : 0;
-
-          const prixDimensions = ((+longueurAInput?.value || 0) + (+longueurBInput?.value || 0) + (+longueurCInput?.value || 0)) * prixParCm;
-
-          // Récupérer moussePrix localStorage
-          const moussePrix = parseFloat(localStorage.getItem('moussePrix') || '0');
-
-          const total = totalOptions + prixDimensions + moussePrix;
-
-          document.getElementById('input-prix-dimensions').value = prixDimensions.toFixed(2);
-
-          // Sauvegarde dans localStorage
-          localStorage.setItem('prix_total_jusqua_dimensions', total.toFixed(2));
-        });
-      </script>
-
-
-      <script>
-        const prixParCm = <?= json_encode($prixParCm); ?>;
-        const totalOptions = <?= json_encode($totalOptions); ?>;
-
-        const longueurAInput = document.getElementById('longueurA');
-        const longueurBInput = document.getElementById('longueurB');
-        const longueurCInput = document.getElementById('longueurC');
-
-        const dimensionPriceSpan = document.getElementById('dimension-price');
-        const totalPriceSpan = document.getElementById('total-price');
-
-        function calculePrix() {
-          const longueurA = Number(longueurAInput ? longueurAInput.value : 0);
-          const longueurB = Number(longueurBInput ? longueurBInput.value : 0);
-          const longueurC = Number(longueurCInput ? longueurCInput.value : 0);
-
-          const prixDimensions = (longueurA + longueurB + longueurC) * prixParCm;
-          dimensionPriceSpan.textContent = prixDimensions.toFixed(2).replace('.', ',') + ' €';
-
-          // Récupérer le prix mousse depuis localStorage (ou 0 si absent)
-          const moussePrix = parseFloat(localStorage.getItem('moussePrix') || '0');
-
-          // Ajouter moussePrix au total
-          const total = totalOptions + prixDimensions + moussePrix;
-          totalPriceSpan.textContent = total.toFixed(2).replace('.', ',') + ' €';
-        }
-
-
-        [longueurAInput, longueurBInput, longueurCInput].forEach(input => {
-          if (input) {
-            input.addEventListener('input', calculePrix);
-            input.addEventListener('change', calculePrix);
-          }
-        });
-
-        window.addEventListener('DOMContentLoaded', calculePrix);
-      </script>
-
-
       <!-- Colonne de droite -->
       <div class="right-column ">
-        <section class="main-display2">
-
+        <section class="main-display">
           <div class="buttons">
             <button id="btn-aide" class="btn-beige">Besoin d'aide ?</button>
           </div>
-          <br>
           <?php if (!empty($composition['structure']['img'])): ?>
             <img
               src="../../admin/uploads/structure/<?php echo htmlspecialchars($composition['structure']['img'], ENT_QUOTES); ?>"
@@ -334,17 +261,14 @@ header("Expires: 0");
         </section>
       </div>
     </div>
-
-
     <!-- Popup besoin d'aide -->
     <div id="help-popup" class="popup">
       <div class="popup-content">
         <h2>Vous avez une question ?</h2>
         <p>Contactez-nous au numéro suivant et un vendeur vous assistera :
-          <br><br>
+          <br>
           <strong>06 58 47 58 56</strong>
         </p>
-        <br>
         <button class="btn-noir">Merci !</button>
       </div>
     </div>
@@ -353,7 +277,6 @@ header("Expires: 0");
     <div id="abandonner-popup" class="popup">
       <div class="popup-content">
         <h2>Êtes-vous sûr de vouloir abandonner ?</h2>
-        <br>
         <button class="btn-beige">Oui...</button>
         <button class="btn-noir">Non !</button>
       </div>
@@ -368,12 +291,64 @@ header("Expires: 0");
     </div>
   </main>
 
+  <script>
+    const form = document.querySelector('form[action="creer_commande_temporaire.php"]');
+    form.addEventListener('submit', function() {
+      document.getElementById('input-longueurA').value = longueurAInput ? longueurAInput.value : 0;
+      document.getElementById('input-longueurB').value = longueurBInput ? longueurBInput.value : 0;
+      document.getElementById('input-longueurC').value = longueurCInput ? longueurCInput.value : 0;
+
+      const prixDimensions = ((+longueurAInput?.value || 0) + (+longueurBInput?.value || 0) + (+longueurCInput?.value || 0)) * prixParCm;
+
+      // Récupérer moussePrix localStorage
+      const moussePrix = parseFloat(localStorage.getItem('moussePrix') || '0');
+
+      const total = totalOptions + prixDimensions + moussePrix;
+
+      document.getElementById('input-prix-dimensions').value = prixDimensions.toFixed(2);
+
+      // Sauvegarde dans localStorage
+      localStorage.setItem('prix_total_jusqua_dimensions', total.toFixed(2));
+    });
+  </script>
+
 
   <script>
-    document.querySelector(".btn-suivant").addEventListener("click", function(event) {
-      event.preventDefault(); // Empêche l'envoi du formulaire si ce n'est pas nécessaire
-      window.location.href = "choix-mousse.php"; // Remplace par l’URL correcte
+    const prixParCm = <?= json_encode($prixParCm); ?>;
+    const totalOptions = <?= json_encode($totalOptions); ?>;
+
+    const longueurAInput = document.getElementById('longueurA');
+    const longueurBInput = document.getElementById('longueurB');
+    const longueurCInput = document.getElementById('longueurC');
+
+    const dimensionPriceSpan = document.getElementById('dimension-price');
+    const totalPriceSpan = document.getElementById('total-price');
+
+    function calculePrix() {
+      const longueurA = Number(longueurAInput ? longueurAInput.value : 0);
+      const longueurB = Number(longueurBInput ? longueurBInput.value : 0);
+      const longueurC = Number(longueurCInput ? longueurCInput.value : 0);
+
+      const prixDimensions = (longueurA + longueurB + longueurC) * prixParCm;
+      dimensionPriceSpan.textContent = prixDimensions.toFixed(2).replace('.', ',') + ' €';
+
+      // Récupérer le prix mousse depuis localStorage (ou 0 si absent)
+      const moussePrix = parseFloat(localStorage.getItem('moussePrix') || '0');
+
+      // Ajouter moussePrix au total
+      const total = totalOptions + prixDimensions + moussePrix;
+      totalPriceSpan.textContent = total.toFixed(2).replace('.', ',') + ' €';
+    }
+
+
+    [longueurAInput, longueurBInput, longueurCInput].forEach(input => {
+      if (input) {
+        input.addEventListener('input', calculePrix);
+        input.addEventListener('change', calculePrix);
+      }
     });
+
+    window.addEventListener('DOMContentLoaded', calculePrix);
   </script>
 
   <!-- BOUTTON RETOUR -->
@@ -387,7 +362,6 @@ header("Expires: 0");
       }
     }
   </script>
-
 
 
   <?php require_once '../../squelette/footer.php'; ?>

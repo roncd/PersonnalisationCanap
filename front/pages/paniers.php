@@ -83,11 +83,11 @@ foreach ($commandes as $commande) {
                         <button onclick="location.href='?statut=livraison'" class="tab <?= ($statut === 'livraison') ? 'active' : '' ?>">En cours de livraison</button>
                         <button onclick="location.href='?statut=final'" class="tab <?= ($statut === 'final') ? 'active' : '' ?>">Commandes finalisées</button>
                     </div>
-                    <div class="tab-content transition-all <?= $statut === 'validation' ? 'active' : '' ?>" id="validation">
+                    <div class="tab-content <?= $statut === 'validation' ? 'active' : '' ?>" id="validation">
                         <div id="commandes-container">
                             <?php if (!empty($commandes)): ?>
                                 <?php foreach ($commandes as $commande): ?>
-                                    <div class="commande" data-id="<?= htmlspecialchars($commande['id']) ?>" data-statut="<?= htmlspecialchars($commande['statut']) ?>">
+                                    <div class="commande transition-all" data-id="<?= htmlspecialchars($commande['id']) ?>" data-statut="<?= htmlspecialchars($commande['statut']) ?>">
                                         <div class="info">
                                             <p><strong>Nom :</strong> <?= htmlspecialchars($commande['nom']) ?></p>
                                             <p><strong>Prénom :</strong> <?= htmlspecialchars($commande['prenom']) ?></p>
@@ -104,11 +104,11 @@ foreach ($commandes as $commande) {
                             <?php endif; ?>
                         </div>
                     </div>
-                    <div class="tab-content transition-all <?= $statut === 'traitement' ? 'active' : '' ?>" id="traitement">
+                    <div class="tab-content <?= $statut === 'traitement' ? 'active' : '' ?>" id="traitement">
                         <div id="commandes-container">
                             <?php if (!empty($commandes)): ?>
                                 <?php foreach ($commandes as $commande): ?>
-                                    <div class="commande" data-id="<?= htmlspecialchars($commande['id']) ?>" data-statut="<?= htmlspecialchars($commande['statut']) ?>">
+                                    <div class="commande transition-all" data-id="<?= htmlspecialchars($commande['id']) ?>" data-statut="<?= htmlspecialchars($commande['statut']) ?>">
                                         <div class="info">
                                             <p><strong>Nom :</strong> <?= htmlspecialchars($commande['nom']) ?></p>
                                             <p><strong>Prénom :</strong> <?= htmlspecialchars($commande['prenom']) ?></p>
@@ -129,7 +129,7 @@ foreach ($commandes as $commande) {
                         <div id="commandes-container">
                             <?php if (!empty($commandes)): ?>
                                 <?php foreach ($commandes as $commande): ?>
-                                    <div class="commande" data-id="<?= htmlspecialchars($commande['id']) ?>" data-statut="<?= htmlspecialchars($commande['statut']) ?>">
+                                    <div class="commande transition-all" data-id="<?= htmlspecialchars($commande['id']) ?>" data-statut="<?= htmlspecialchars($commande['statut']) ?>">
                                         <div class="info">
                                             <p><strong>Nom :</strong> <?= htmlspecialchars($commande['nom']) ?></p>
                                             <p><strong>Prénom :</strong> <?= htmlspecialchars($commande['prenom']) ?></p>
@@ -146,11 +146,11 @@ foreach ($commandes as $commande) {
                             <?php endif; ?>
                         </div>
                     </div>
-                    <div class="tab-content transition-all <?= $statut === 'final' ? 'active' : '' ?>" id="final">
+                    <div class="tab-content <?= $statut === 'final' ? 'active' : '' ?>" id="final">
                         <div id="commandes-container">
                             <?php if (!empty($commandes)): ?>
                                 <?php foreach ($commandes as $commande): ?>
-                                    <div class="commande" data-id="<?= htmlspecialchars($commande['id']) ?>" data-statut="<?= htmlspecialchars($commande['statut']) ?>">
+                                    <div class="commande transition-all" data-id="<?= htmlspecialchars($commande['id']) ?>" data-statut="<?= htmlspecialchars($commande['statut']) ?>">
                                         <div class="info">
                                             <p><strong>Nom :</strong> <?= htmlspecialchars($commande['nom']) ?></p>
                                             <p><strong>Prénom :</strong> <?= htmlspecialchars($commande['prenom']) ?></p>

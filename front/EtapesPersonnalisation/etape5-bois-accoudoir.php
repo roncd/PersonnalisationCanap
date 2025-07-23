@@ -128,10 +128,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <div class="container transition">
       <!-- Colonne de gauche -->
       <div class="left-column ">
-        <div style="display: flex; align-items: center; gap: 0.5em;">
+        <div class="title-info">
           <h2>Étape 5 - Choisi ta forme d'accoudoirs</h2>
           <!-- Icône d'information avec popup -->
-          <button id="info-coussin-btn" title="Information" style="background: none; border: none; cursor: pointer; padding: 0;">
+          <button id="info-coussin-btn" title="Information" class="information">
             <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
               <circle cx="10" cy="10" r="9" stroke="#997765" stroke-width="2" fill="#f5f5f5" />
               <text x="10" y="15" text-anchor="middle" font-size="13" fill="#997765" font-family="Arial" font-weight="bold">i</text>
@@ -139,7 +139,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           </button>
         </div>
         <div id="info-coussin-popup" style="display:none; position:absolute; background:#fff; border:1px solid #ccc; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.1); padding:1em; z-index:1000; max-width:300px;">
-          <span style="font-size: 1em;">Cette étape est facultative. Clique sur “Suivant” pour passer si tu ne souhaite pas d’accoudoirs.</span>
+          <span>Cette étape est facultative. Clique sur “Suivant” pour passer si tu ne souhaite pas d’accoudoirs.</span>
         </div>
         <p class="info-text">Forme au choix, les décorations seront celles sélectionnées précédement.</p>
 

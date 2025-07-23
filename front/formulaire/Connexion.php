@@ -132,16 +132,15 @@ if (isset($_GET['message']) && $_GET['message'] == 'success') {
                             <label for="mdp">Mot de passe</label>
                             <div class="input-section">
                                 <input type="password" id="mdp" name="mdp" class="input-field" required>
-                                <span class="toggle-password-text"
-                                    style="cursor: pointer; color: #666; user-select: none; position: absolute; right: 10px; top: 50%; transform: translateY(-50%); font-weight: 100;">
+                                <span class="toggle-password-text">
                                     Afficher
                                 </span>
 
                             </div>
-                            <div id="caps-lock-warning" style="display:none; font-size: 0.85em; margin-top: 4px;">
+                            <div id="caps-lock-warning" class="warning">
                                 ⚠️ Attention : Verr Maj est activé !
                             </div>
-                            <div id="shift-warning" style="display:none; font-size: 0.85em; margin-top: 4px;">
+                            <div id="shift-warning" class="warning">
                                 ⚠️ Attention : La touche Maj (Shift) est maintenue !
                             </div>
                             <div class="footer">
