@@ -36,16 +36,44 @@ if (!isset($_SESSION['id'])) {
             </div>
 
             <div class="grid-wrapper">
-
-            <section class="category-block">
-            <h2>Page - FAQ</h2>
-            <div class="button-grid">
-                    <a href="../faq/visualiser-site.php" class="btn">FAQ</a>
-                    <a href="../faq-categorie/visualiser-site.php" class="btn">Catégorie FAQ</a>
+                <section class="category-block">
+                    <h2>Page - Accueil</h2>
+                    <div class="button-grid">
+                        <a href="../sections-accueil/visualiser-site.php" class="btn">Sections</a>
+                        <a href="../etapes-accueil/visualiser-site.php" class="btn">Étapes</a>
+                        <a href="../stats-accueil/visualiser-site.php" class="btn">Stats</a>
                     </div>
                 </section>
-                
 
+                <section class="category-block">
+                    <h2>Page - Tableau de bord</h2>
+                    <div class="button-grid">
+                        <a href="../sections-dashboard/visualiser-site.php" class="btn">Sections</a>
+                        <a href="../liste-dashboard/visualiser-site.php" class="btn">Liste</a>
+                    </div>
+                </section>
+
+                <section class="category-block">
+                    <h2>Page - Catalogue</h2>
+                    <div class="button-grid">
+                        <a href="../sections-catalogue/visualiser-site.php" class="btn">Bannières</a>
+                    </div>
+                </section>
+
+                <section class="category-block">
+                    <h2>Page - À propos</h2>
+                    <div class="button-grid">
+                        <a href="../sections-apropos/visualiser-site.php" class="btn">Sections</a>
+                    </div>
+                </section>
+
+                <section class="category-block">
+                    <h2>Page - FAQ</h2>
+                    <div class="button-grid">
+                        <a href="../faq/visualiser-site.php" class="btn">FAQ</a>
+                        <a href="../faq-categorie/visualiser-site.php" class="btn">Catégorie FAQ</a>
+                    </div>
+                </section>
             </div>
         </div>
     </main>

@@ -6,6 +6,43 @@ var loadFile = function (event) {
     }
 };
 
+
+function previewExistingImage(fileName) {
+    if (fileName) {
+        document.getElementById('existing_output').src = '../../medias/' + fileName;
+    } else {
+        document.getElementById('existing_output').src = '';
+    }
+}
+
+function handleImageUpload(event) {
+    const select = document.getElementById('existing_img');
+    if (event.target.files.length > 0) {
+        // Réinitialise la liste déroulante à l'option vide
+        select.selectedIndex = 0;
+
+        // Réinitialise aussi l’aperçu éventuel
+        document.getElementById('existing_output').src = '';
+    }
+
+    // Aperçu de l’image téléversée (optionnel)
+    const output = document.getElementById('output');
+    output.src = URL.createObjectURL(event.target.files[0]);
+    output.onload = () => URL.revokeObjectURL(output.src);
+}
+
+function handleBothImageEvents(event) {
+    handleImageUpload(event);
+    loadFile(event);
+}
+
+function clearFileInput(inputId) {
+  const input = document.getElementById(inputId);
+  input.value = ""; 
+  const preview = document.getElementById('output');
+  if (preview) preview.src = "";
+}
+
 document.addEventListener('DOMContentLoaded', function () {
     const imgInput = document.getElementById('img');
     if (imgInput) {

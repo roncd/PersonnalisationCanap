@@ -159,8 +159,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
-
-    $stmt = $pdo->prepare("UPDATE commande_prefait SET 
+    try {
+        $stmt = $pdo->prepare("UPDATE commande_prefait SET 
     id_structure = ?, 
     longueurA = ?, 
     longueurB = ?, 
@@ -184,36 +184,41 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     visible = ?
     WHERE id = ?");
 
-    if ($stmt->execute([
-        $idStructure,
-        $longueurA,
-        $longueurB,
-        $longueurC,
-        $idBanquette,
-        $idMousse,
-        $idCouleurBois,
-        $idDecoration,
-        $idDossierBois,
-        $idTissuBois,
-        $idMotifBois,
-        $idModele,
-        $idCouleurTissu,
-        $idMotifTissu,
-        $idDossierTissu,
-        $idAccoudoirTissu,
-        $nbAccoudoir,
-        $nbAccoudoirBois,
-        $nom,
-        $imagePath,
-        $visible,
-        $id
-    ])) {
-        $_SESSION['message'] = 'La commande a été mise à jour avec succès !';
-        $_SESSION['message_type'] = 'success';
-        header("Location: visualiser.php");
-        exit();
-    } else {
-        $_SESSION['message'] = 'Erreur lors de la mise à jour de la commande.';
+        if ($stmt->execute([
+            $idStructure,
+            $longueurA,
+            $longueurB,
+            $longueurC,
+            $idBanquette,
+            $idMousse,
+            $idCouleurBois,
+            $idDecoration,
+            $idDossierBois,
+            $idTissuBois,
+            $idMotifBois,
+            $idModele,
+            $idCouleurTissu,
+            $idMotifTissu,
+            $idDossierTissu,
+            $idAccoudoirTissu,
+            $nbAccoudoir,
+            $nbAccoudoirBois,
+            $nom,
+            $imagePath,
+            $visible,
+            $id
+        ])) {
+            $_SESSION['message'] = 'La commande a été mise à jour avec succès !';
+            $_SESSION['message_type'] = 'success';
+            header("Location: visualiser.php");
+            exit();
+        }
+    } catch (PDOException $e) {
+        if ($e->getCode() == 23000) {
+            $_SESSION['message'] = 'Erreur : Ce nom d\'image est déjà utilisé.';
+        } else {
+            $_SESSION['message'] = 'Erreur lors de la mise à jour : ' . $e->getMessage();
+        }
         $_SESSION['message_type'] = 'error';
     }
 }
@@ -257,7 +262,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <div class="form-row">
                         <div class="form-group">
                             <label for="img">Image (Laissez vide pour conserver l'image actuelle) <span class="required">*</span></label>
-                            <input type="file" id="img" name="img" class="input-field" accept="image/*" onchange="loadFile(event)">
+                            <div class="input-wrapper">
+                                <input type="file" id="img" name="img" class="input-field" accept="image/*" onchange="loadFile(event)">
+                                <button type="button" class="clear-btn" onclick="clearFileInput('img')" title="Supprimer l'image sélectionnée">
+                                    &times;
+                                </button>
+                            </div>
                             <img class="preview-img" src="../uploads/canape-prefait/<?php echo htmlspecialchars($commande['img']); ?>" id="output" />
                         </div>
                     </div>

@@ -57,7 +57,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             header("Location: visualiser.php");
             exit();
         } catch (Exception $e) {
-            $_SESSION['message'] = 'Erreur lors de l\'ajout de la décoration : ' . $e->getMessage();
+            if ($e->getCode() == 23000) {
+                $_SESSION['message'] = 'Erreur : Le nom de l\'image est déjà utilisé.';
+            } else {
+                $_SESSION['message'] = 'Erreur lors de l\'ajout : ' . $e->getMessage();
+            }
             $_SESSION['message_type'] = 'error';
         }
     } else {
@@ -109,7 +113,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <div class="form-row">
                         <div class="form-group">
                             <label for="img">Image <span class="required">*</span></label>
-                            <input type="file" id="img" name="img" class="input-field" accept="image/*" onchange="loadFile(event)" required>
+                            <div class="input-wrapper">
+                                <input type="file" id="img" name="img" class="input-field" accept="image/*" onchange="loadFile(event)">
+                                <button type="button" class="clear-btn" onclick="clearFileInput('img')" title="Supprimer l'image sélectionnée">
+                                    &times;
+                                </button>
+                            </div>
                             <img class="preview-img" id="output" />
                         </div>
                     </div>

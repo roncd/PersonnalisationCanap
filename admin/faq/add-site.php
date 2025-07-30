@@ -39,7 +39,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['message_type'] = 'error';
         }
     }
-    header("Location: add.php");
+    header("Location: add-site.php");
     exit();
 }
 ?>

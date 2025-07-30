@@ -67,12 +67,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         if (!isset($_SESSION['message'])) {
-            $stmt = $pdo->prepare("UPDATE accoudoir_tissu SET nom = ?, prix = ?, img = ?, visible = ? WHERE id = ?");
-            $stmt->execute([$nom, $price, $fileName, $visible, $id]);
-            $_SESSION['message'] = 'L\'accoudoir en tissu a été mis à jour avec succès !';
-            $_SESSION['message_type'] = 'success';
-            header("Location: visualiser.php");
-            exit();
+            try {
+                $stmt = $pdo->prepare("UPDATE accoudoir_tissu SET nom = ?, prix = ?, img = ?, visible = ? WHERE id = ?");
+                $stmt->execute([$nom, $price, $fileName, $visible, $id]);
+                $_SESSION['message'] = 'L\'accoudoir en tissu a été mis à jour avec succès !';
+                $_SESSION['message_type'] = 'success';
+                header("Location: visualiser.php");
+                exit();
+            } catch (PDOException $e) {
+                if ($e->getCode() == 23000) {
+                    $_SESSION['message'] = 'Erreur : Ce nom d\'image est déjà utilisé.';
+                } else {
+                    $_SESSION['message'] = 'Erreur lors de la mise à jour : ' . $e->getMessage();
+                }
+                $_SESSION['message_type'] = 'error';
+            }
         }
     }
 }
@@ -118,7 +127,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <div class="form-row">
                         <div class="form-group">
                             <label for="img">Image (Laissez vide pour conserver l'image actuelle) <span class="required">*</span></label>
-                            <input type="file" id="img" name="img" class="input-field" accept="image/*" onchange="loadFile(event)">
+                            <div class="input-wrapper">
+                                <input type="file" id="img" name="img" class="input-field" accept="image/*" onchange="loadFile(event)">
+                                <button type="button" class="clear-btn" onclick="clearFileInput('img')" title="Supprimer l'image sélectionnée">
+                                    &times;
+                                </button>
+                            </div>
                             <img class="preview-img" src="../uploads/accoudoirs-tissu/<?php echo htmlspecialchars($accoudoirtissu['img']); ?>" id="output" />
                         </div>
                     </div>

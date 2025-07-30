@@ -66,11 +66,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <input type="text" id="nom" name="nom" class="input-field" required>
                     </div>
                     <div class="form-group">
-                        <label for="icon">Icône Font Awesome (ex: fa-solid fa-truck |
+                        <label for="icon">Icône Font Awesome <span class="required">*</span> (ex: fa-solid fa-truck |
                             <a href="https://fontawesome.com/search" target="_blank" class="icon-link">
                                 lien vers la bibliothèque
                             </a>)
-                            <span class="required">*</span></label>
+                            </label>
                         <input type="text" id="icon" name="icon" class="input-field" placeholder="fa-truck" required>
                     </div>
                     <div class="form-row">
