@@ -1,11 +1,11 @@
+body {
+  font-family: 'Be Vietnam Pro', sans-serif;
+}
+
 .accueil h2 {
-  font-size: 2rem;
-  color: #000000;
-  margin-bottom: 2rem;
   text-align: left;
   font-family: 'Baloo 2', sans-serif;
 }
-
 
 .accueil .h2-center {
   font-size: 2rem;
@@ -15,279 +15,19 @@
   text-align: center;
 }
 
-.voir-plus {
-  text-align: center;
+/* ----------- HERO SECTION ----------- */
+.hero-content button {
+  padding: 0.75rem 2rem;
+  font-size: 1rem;
 }
 
-/* Modal Styles */
-.modal {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    z-index: 1000;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-    /* Empêche tout défilement */
-
+.hero-content button:hover {
+  transform: scale(1.05);
 }
-
-.modal-content {
-    background-color: white;
-    max-width: 500px;
-    width: 90%;
-    padding: 2rem;
-    border-radius: 8px;
-    position: relative;
-    margin: 0;
-    /* Enlève le margin auto vertical */
-}
-
-
-.close-modal {
-    position: absolute;
-    right: 1rem;
-    top: 1rem;
-    font-size: 1.5rem;
-    cursor: pointer;
-}
-
-.no-scroll {
-    overflow: hidden;
-    height: 100%;
-}
-
-
-.success-message {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    color: #155724;
-    margin-bottom: 0rem !important;
-    margin-top: 0rem !important;
-}
-
-.check-icon {
-    width: 60px;
-    height: 60px;
-    margin-bottom: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: auto;
-}
-
-
-.modal-buttons {
-    display: flex;
-    justify-content: center;
-    /* Centre les boutons */
-    gap: 10px;
-    /* Espacement entre les boutons */
-}
-
-.ajt-panier {
-    background-color: #997765;
-    color: #fff;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-    padding: 10px 20px;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    font-weight: bold;
-    transition: transform 0.3s ease;
-    text-decoration: none;
-    font-size: 14px;
-}
-
-.ajt-panier:hover {
-    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.3);
-    transform: translateY(-3px);
-    transition: all 0.3s ease;
-}
-
-.img-panier {
-    width: 400px;
-    /* Ajuste la taille selon tes besoins */
-    height: auto;
-    /* Garde les proportions correctes */
-    border-radius: 15px;
-    /* Arrondit les bords */
-    object-fit: cover;
-    /* Ajuste l'image sans déformation */
-}
-
-
-.product-info {
-    padding: 1.5rem;
-}
-
-.product-info h3 {
-    margin: 0 0 0.5rem;
-    color: #000000;
-    font-weight: bold;
-    font-size: 18px;
-}
-
-.product-info p {
-    color: #000000;
-    margin: 0.5rem 0;
-    font-size: 14px;
-
-}
-
-
-
-
-body {
-  font-family: 'Be Vietnam Pro', sans-serif;
-}
-
-/* ------------------- STYLES SECTION COMBINAISONS ------------------- */
-.combination-section {
-  width: 100%;
-  font-family: 'Be Vietnam Pro', sans-serif;
-
-    margin: 4rem auto;
-  max-width: 1145px;
-  width: 87%;
-}
-
-.combination-section h2 {
-  font-size: 2rem;
-  color: #000000;
-  margin-bottom: 2rem;
-  text-align: left;
-  font-family: 'Baloo 2', sans-serif;
-}
-
-.combination-container {
-  flex-wrap: wrap;
-  justify-content: center;
-  max-width: 100%;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 2rem;
-}
-
-
-.combination-container {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 2rem;
-}
-
-
-.product-card {
-  width: 100%;
-  background: #fff;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
-  text-align: left;
-  padding: 0;
-}
-
-
-.product-image img {
-  width: 100%;
-  height: 200px;
-  object-fit: cover;
-  display: block;
-}
-
-.product-content {
-  padding: 1rem;
-}
-
-.product-card h3 {
-  font-size: 1.125rem;
-  margin: 0.5rem 0 0.25rem;
-  color: #000000;
-}
-.product-card p {
-  font-size: 0.8rem;
-  color: #666;
-  margin-bottom: 0.5rem;
-}
-
-.price {
-    font-weight: bold; 
-    color: #997765 !important;
-    font-size: 1.1rem!important;
-    justify-content: right!important;
-    align-items: right !important;
-    margin-bottom: 0.25rem;
-}
-
-.btn-fullwidth {
-  width: 100%;
-  display: block;
-  text-align: center;
-  box-sizing: border-box;
-  margin-top: 1rem; /* optionnel */
-}
-
-.carousel-container {
-  display: flex;
-  gap: 1.5rem;
-  overflow-x: scroll; /* permet le scroll manuel */
-  scroll-snap-type: x mandatory;
-  -webkit-overflow-scrolling: touch;
-  padding-bottom: 1rem;
-  position: relative;
-  scrollbar-width: none;
-  scroll-behavior: smooth; /* défilement fluide */
-}
-
-.carousel-container::-webkit-scrollbar {
-  display: none;
-}
-
-.carousel-container .product-card {
-  flex: 0 0 calc((100% - 3rem) / 3);
-  scroll-snap-align: start;
-}
-
-
-
-
-
-/* ✅ Tablette : 2 produits visibles */
-@media (min-width: 481px) and (max-width: 1000px) {
-  .carousel-container .product-card {
-    flex: 0 0 min(300px, 90%);
-  }
-
-  .combination-section h2 {
-    font-size: 1.6rem;
-  }
-}
-
-/* ✅ Mobile : 1 produit visible */
-@media (max-width: 600px) {
-  .carousel-container .product-card {
-    flex: 0 0 100%;
-  }
-}
-
-/* ✅ Mobile : 1 produit visible */
-@media (max-width: 480px) {
-  .combination-section h2 {
-    font-size: 1.4rem;
-    text-align: center;
-  }
-}
-
 
 .banner-artisanal {
   overflow: hidden;
-  background-color: #997765; /* couleur douce */
+  background-color: #997765;
   padding: 0.5rem 0;
 }
 
@@ -296,7 +36,6 @@ body {
   white-space: nowrap;
   animation: scroll-left 20s linear infinite;
   font-family: 'Baloo 2', sans-serif;
-  /*font-family: 'Be Vietnam Pro', sans-serif;*/
   font-size: 1rem;
   color: #ffffff;
 }
@@ -305,104 +44,34 @@ body {
   0% {
     transform: translateX(0%);
   }
+
   100% {
     transform: translateX(-50%);
   }
 }
 
-
-
-/* --------------- AVANTAGES CARD --------------- */
-.avantages-card {
-  background-color: rgba(227, 209, 200, 0.9);
-  border-radius: 20px;
-  margin: 4rem auto;
-  max-width: 1145px;
-  width: 87%;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  display: flex;
-  flex-direction: row;
-  align-items: stretch;
-  position: relative;
-  overflow: hidden;
-}
-
-.avantages-text {
-  flex: 1 1 60%;
-  padding: 2rem; /* padding déplacé ici */
-  padding-right: 3rem; /* tu peux ajuster pour plus d'espace à droite */
-  z-index: 2;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
-.avantages-text h2 {
-  font-size: 1.8rem;
-  margin-bottom: 1.5rem;
-  color: #000000;
-}
-
-.avantages-text ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.avantages-text li {
-  position: relative;
-  padding-left: 2rem;
-  margin-bottom: 1rem;
-  font-size: 1.1rem;
-  color: #000000;
-}
-
-.avantages-text li::before {
-  content: "✔";
-  position: absolute;
-  left: 0;
-  top: 0;
-}
-
-.avantages-img {
-  flex: 0 0 520px;        /* largeur fixe pour l’image */
-  height: auto;
-  position: relative;
-}
-
-.avantages-img img {
-  height: 100%;           /* image prend toute la hauteur du container parent */
-  width: 100%;            /* prend toute la largeur du conteneur image */
-  border-radius:  100px 0 0 100px; /* arrondi uniquement côté gauche */
-  object-fit: cover;      /* bien remplir le cadre sans déformation */
-  display: block;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.686);
-}
-
+/* ----------- À PROPOS ----------- */
 .histoire-img {
-  flex: 0 0 520px;        /* largeur fixe pour l’image */
+  flex: 0 0 520px;
   height: auto;
   position: relative;
 }
 
 .histoire-img img {
-  height: 100%;           /* image prend toute la hauteur du container parent */
-  width: 100%;            /* prend toute la largeur du conteneur image */
-  border-radius: 0 218px 0 0; /* arrondi uniquement côté gauche */
-  object-fit: cover;      /* bien remplir le cadre sans déformation */
+  height: 100%;
+  width: 100%;
+  border-radius: 0 218px 0 0;
+  object-fit: cover;
   display: block;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.686);
-
-  
 }
 
 .histoire-btn {
-  width: 220px; /* Modifie cette valeur comme tu veux */
+  width: 220px;
   display: inline-block;
   text-align: center;
   white-space: nowrap;
 }
-
 
 .histoire-description,
 .histoire-mission {
@@ -412,200 +81,7 @@ body {
   color: #000000;
 }
 
-/* ----------- AVANTAGES SECTION ----------- */
-@media (max-width: 480px) {
-  .avantages-card {
-    flex-direction: column;
-  }
-
-  .avantages-img {
-    display: none;
-  }
-
-    .histoire-img {
-    display: none; /* Supprime l’image sur mobile */
-  }
-
-  .avantages-text {
-    flex: 1 1 auto;
-    padding: 1rem;
-  }
-
-  .avantages-text h2 {
-    font-size: 1.4rem;
-    text-align: center;
-  }
-
-  .avantages-text li {
-    font-size: 0.95rem;
-  }
-
-  .histoire-btn {
-    margin: 0 auto;
-    display: block; /* s'assurer qu'il prend toute la ligne pour bien se centrer */
-    margin-bottom: 1rem;
-  }
-
-
-  
-}
-
-@media (min-width: 481px) and (max-width: 1000px) {
-  .avantages-card {
-    flex-direction: row;
-  }
-
-  .avantages-text {
-    flex: 1 1 auto;
-    padding: 1.5rem;
-  }
-
-  .avantages-img {
-    flex: 0 0 120px;
-    display: block;
-  }
-
-    .histoire-img {
-    flex: 0 0 120px;
-    display: block;
-  }
-
-
-  .avantages-img img {
-    height: 100%;
-    width: 100%;
-    border-radius: 50px 0 0 50px;
-    object-fit: cover;
-  }
-
-    .histoire-img img {
-    height: 100%;
-    width: 100%;
-    border-radius: 0 100px 0 0;
-    object-fit: cover;
-  }
-
-
-  .avantages-text h2 {
-    font-size: 1.6rem;
-    text-align: left;
-
-  }
-
-  .avantages-text li {
-    font-size: 1rem;
-  }
-
-}
-
-
-
-
-
-/* --------------- SECTION STAT --------------- */
-.stats-section {
-  background-color: rgba(227, 209, 200, 0.9);
-  padding: 4rem 2rem;
-  text-align: center;
-  margin: 4rem auto;
-  max-width: 1145px;
-  width: 87%;
-  border-radius: 20px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-}
-
-.stats-section h2 {
-  font-size: 2rem;
-  margin-bottom: 2rem;
-  color: #000000;
-}
-
-.stats-list {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 2rem;
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.stats-list li {
-  font-size: 1.2rem;
-  color: #000000;
-}
-
-.stats-list strong {
-  display: block;
-  font-size: 2rem;
-  color: #997765 !important;
-  font-weight: 700;
-  margin-bottom: 0.5rem;
-}
-
-
-
-/* ----------- STATS SECTION ----------- */
-@media (max-width: 480px) {
-  .stats-section {
-    padding: 2rem 1rem;
-    margin: 2rem auto;
-  }
-
-  .stats-section h2 {
-    font-size: 1.4rem!important;
-    margin-bottom: 1.5rem!important;
-  }
-
-  .stats-list {
-    flex-direction: column;
-    gap: 1.5rem;
-  }
-
-  .stats-list li {
-    font-size: 1rem;
-  }
-
-  .stats-list strong {
-    font-size: 1.5rem;
-  }
-}
-
-@media (min-width: 481px) and (max-width: 768px) {
-  .stats-section {
-    padding: 3rem 1.5rem;
-    margin: 3rem auto;
-  }
-
-  .stats-section h2 {
-    font-size: 1.6rem!important;
-    margin-bottom: 1.4rem!important;
-  }
-
-  .stats-list {
-    flex-direction: row;
-    justify-content: center;
-    gap: 1.5rem;
-  }
-
-  .stats-list li {
-    font-size: 1.1rem;
-  }
-
-  .stats-list strong {
-    font-size: 1.8rem;
-  }
-}
-
-
-
-
-.devis-section {
-  padding: 40px 20px;
-}
-
-
-/* Section Devis */
+/* ----------- DEVIS SECTION ----------- */
 .devis-section {
   padding: 4rem 0;
 }
@@ -635,16 +111,7 @@ body {
   line-height: 1.75;
 }
 
-
-@media (max-width: 480px) {
-  .devis-title { font-size: 2rem; }
-  .devis-description { font-size: 1rem; padding: 0 1rem; }
-  .devis-container button { padding: 0.6rem 1.2rem; font-size: 0.9rem; }
-}
-
-
-
-
+/* ----------- FAQ ----------- */
 .faq-contact {
   padding: 40px 30px;
   border: 1px solid #ddd;
@@ -652,12 +119,9 @@ body {
   background-color: #fff;
   text-align: center;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.04);
-
-
   margin: 4rem auto;
   max-width: 1145px;
   width: 87%;
- 
 }
 
 .faq-contact-icon {
@@ -665,9 +129,10 @@ body {
   margin-bottom: 15px;
   display: inline-block;
   line-height: 1;
-    color: #997765;
-
+  color: #997765;
 }
+
+/* ----------- ETAPES SECTION ----------- */
 .process-section {
   padding: 3rem 1.5rem;
   background-color: #ffffff;
@@ -701,13 +166,6 @@ body {
   transform: translateY(-5px);
 }
 
-/* Icône Font Awesome */
-.process-card i {
-  font-size: 2.5rem;
-  color: #000000; /* Une teinte brune pour aller avec le fond beige */
-  margin-bottom: 1rem;
-}
-
 .process-card h3 {
   font-size: 1.1rem;
   margin-bottom: 0.5rem;
@@ -719,8 +177,29 @@ body {
   color: #000000;
 }
 
-/* Responsive tablette : 1 colonne */
-@media (min-width: 481px) and (max-width: 768px) {
+/* Icône Font Awesome */
+.process-card i {
+  font-size: 2.5rem;
+  color: #000000;
+  margin-bottom: 1rem;
+}
+
+@media (max-width: 1000px) {
+
+  /* ----------- A PROPOS SECTION ----------- */
+  .histoire-img {
+    flex: 0 0 183px;
+    display: block;
+  }
+
+  .histoire-img img {
+    border-radius: 0 100px 0 0;
+  }
+}
+
+@media (max-width: 768px) {
+
+  /* ----------- ETAPES SECTION ----------- */
   .process-cards {
     flex-direction: column;
     align-items: center;
@@ -734,38 +213,44 @@ body {
   .process-section h2 {
     font-size: 1.6rem;
   }
+
+  /* ----------- FAQ SECTION ----------- */
+  .faq-contact h2 {
+    font-size: 1.6rem !important;
+  }
 }
-/* Responsive mobile : 1 colonne */
-@media screen and (max-width: 480px) {
-  .process-cards {
-    flex-direction: column;
-    align-items: center;
+
+
+@media (max-width: 480px) {
+
+  /* ----------- DEVIS SECTION ----------- */
+  .devis-title {
+    font-size: 2rem;
   }
 
-  .process-card {
-    width: 90%;
-    max-width: 100%;
+  .devis-description {
+    font-size: 1rem;
+    padding: 0 1rem;
   }
-  
+
+  .devis-container button {
+    padding: 0.6rem 1.2rem;
+    font-size: 0.9rem;
+  }
+
+  /* ----------- À PROPOS SECTION ----------- */
+  .histoire-btn {
+    margin: 0 auto;
+    display: block;
+    margin-bottom: 1rem;
+  }
+
   .process-section h2 {
     font-size: 1.4rem;
   }
-}
 
-
-/* Responsive tablette : 1 colonne */
-@media (min-width: 481px) and (max-width: 768px) {
+  /* ----------- FAQ SECTION ----------- */
   .faq-contact h2 {
-    font-size: 1.6rem!important;
+    font-size: 1.4rem !important;
   }
 }
-/* Responsive mobile : 1 colonne */
-@media screen and (max-width: 480px) {
-  .faq-contact h2 {
-    font-size: 1.4rem!important;
-  }
-}
-
-
-
-

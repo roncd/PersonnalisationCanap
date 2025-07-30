@@ -72,14 +72,12 @@ select {
     border: 1px solid #ccc;
     border-radius: 8px;
     background-color: rgba(227, 209, 200, 0.71);
-    /* Beige avec opacité */
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
     transition: all 0.3s ease;
 }
 
 .form-group select {
     -webkit-appearance: none;
-    /* Supprime l'apparence par défaut */
     appearance: none;
     -moz-appearance: none;
     cursor: pointer;
@@ -108,13 +106,11 @@ select {
 .footer p {
     font-size: 15px;
     position: relative;
-    /* Nécessaire pour que ::after utilise .footer p comme référence */
 }
 
 .footer span {
     font-size: 15px;
     position: relative;
-    /* Nécessaire pour que ::after utilise .footer p comme référence */
 }
 
 .footer span::after {
@@ -122,7 +118,6 @@ select {
     position: absolute;
     left: 0;
     bottom: -2px;
-    /* Position du soulignement juste en dessous du texte */
     width: 0;
     height: 1px;
     background-color: #997765;
@@ -131,7 +126,6 @@ select {
 
 .footer span:hover::after {
     width: 100%;
-    /* Le soulignement s'étend sur toute la largeur au survol */
 }
 
 
@@ -194,13 +188,17 @@ select {
 
 }
 
-/* Wrapper en position relative */
 .input-section {
     position: relative;
     width: 100%;
 }
 
-/* Le champ de saisie : on décale un peu le texte à droite */
+textarea.input-field {
+    min-height: fit-content;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Champ de saisie */
 .input-section .input-field {
     width: 100%;
     padding-right: 4.1rem;
@@ -220,12 +218,10 @@ select {
     margin-top: 10px;
     font-size: 0.95rem;
     display: none;
-    /* caché par défaut */
 }
 
 .password-requirements.show {
     display: block;
-    /* affiché quand le champ est actif */
 }
 
 .password-requirements li {
@@ -274,9 +270,6 @@ select {
 
 
 /* Champ de confirmation de mot de passe */
-
-
-/* Style par défaut */
 .password-confirm-wrapper {
     position: relative;
 }
@@ -288,7 +281,6 @@ select {
     display: none;
 }
 
-/* Si les mots de passe ne correspondent pas */
 .input-error {
     border: 1px solid red;
 }
@@ -327,7 +319,6 @@ select {
 
 .dropzone.dragover {
     background-color: rgba(227, 209, 200, 0.85);
-    /* même hover que .input-field:focus */
 }
 
 #file-list {
@@ -382,9 +373,7 @@ select {
         height: 500px;
         width: 100%;
         object-fit: cover;
-        /* Changed from contain to cover */
         object-position: center;
-        /* Added to ensure image is centered */
     }
 
     h2 {
@@ -475,7 +464,6 @@ select {
     }
 }
 
-/* Ajout pour les très petits écrans */
 @media screen and (max-width: 320px) {
     .container {
         margin: 10px;

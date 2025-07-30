@@ -2,33 +2,12 @@ body {
     font-family: 'Be Vietnam Pro', sans-serif;
 }
 
-.products-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 2rem;
-}
-
-.products-header {
-    text-align: center;
-    margin-bottom: 3rem;
-}
-
-.products-header h1 {
-    font-size: 2.5rem;
-    color: #333;
-    margin-bottom: 1rem;
-}
-
-.products-description {
-    color: #666;
-    max-width: 600px;
-    margin: 0 auto;
-}
-
+/* -------------------- BARRE DE RECHERCHE & FILTRES -------------------- */
 .filters {
     display: flex;
     justify-content: center;
-    gap: 1rem;
+    gap: 8px;
+    flex-wrap: wrap;
     margin-bottom: 2rem;
     color: #000000;
     font-weight: bold;
@@ -56,66 +35,13 @@ body {
     transform: scale(1.03);
 }
 
-.products-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 2rem;
-}
-
-.product-card {
-    border-radius: 8px;
-    overflow: hidden;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease;
-}
-
-.product-card:hover {
-    transform: translateY(-5px);
-}
-
-.product-card img {
-    width: 100%;
-    height: 200px;
-    object-fit: cover;
-    display: block;
-}
-
-.product-info {
-    padding: 1.5rem;
-}
-
-.product-info h3 {
-    margin: 0 0 0.5rem;
-    color: #000000;
-    font-weight: bold;
-    font-size: 18px;
-}
-
-.product-info p {
-    color: #000000;
-    margin: 0.5rem 0;
-    font-size: 14px;
-
-}
-
-.price {
-    font-weight: bold;
-    color: #997765 !important;
-    font-size: 1.1rem !important;
-    justify-content: right !important;
-    align-items: right !important;
-
-}
-
-/* -------------------- BARRE DE RECHERCHE & FILTRES -------------------- */
-/* -------------------- BARRE DE RECHERCHE & FILTRES -------------------- */
 .search-tri {
     display: flex;
     justify-content: space-between;
     align-items: center;
     flex-wrap: wrap;
     gap: 20px;
-    margin: 20px;
+    margin: 1rem;
 }
 
 .search-bar {
@@ -127,7 +53,6 @@ body {
 .search-bar form {
     position: relative;
     width: 100%;
-    /* ✅ largeur égale au select */
 }
 
 input,
@@ -145,8 +70,6 @@ select {
     box-sizing: border-box;
 }
 
-
-
 #sortPrice {
     padding: 8px 10px;
     font-size: 16px;
@@ -155,7 +78,6 @@ select {
     flex: 1;
     box-sizing: border-box;
     -webkit-appearance: none;
-    /* Supprime l'apparence par défaut */
     appearance: none;
     -moz-appearance: none;
     cursor: pointer;
@@ -184,50 +106,40 @@ select {
     color: #555;
 }
 
-/* ✅ Responsive : colonne + même largeur */
-@media (max-width: 768px) {
-    .search-tri {
-        flex-direction: column;
-        align-items: stretch;
-    }
-
-    .search-bar,
-    #sortPrice {
-        width: 100%;
-    }
-
-    .search-bar {
-        order: 1;
-    }
-
-    #sortPrice {
-        order: 2;
-    }
+/* ------------------- STYLES SECTION PRODUITS ------------------- */
+.products-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
 }
 
-.filters {
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
+.products-header {
+    text-align: center;
+    margin-bottom: 3rem;
 }
 
+.products-header h1 {
+    font-size: 2.5rem;
+    color: #333;
+    margin-bottom: 1rem;
+}
 
+.products-description {
+    color: #666;
+    max-width: 600px;
+    margin: 0 auto;
+}
 
-@media (max-width: 768px) {
-    #sortPrice {
-        font-size: 14px;
-        width: 100%;
-        margin-right: 0;
-        margin-bottom: 10px;
-    }
+.products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
 }
 
 /* ------------------- STYLES SECTION COMBINAISONS ------------------- */
 .combination-section {
     max-width: 1200px;
-    margin: 4rem auto;
-    padding: 0 2rem;
-    font-family: 'Be Vietnam Pro', sans-serif;
+     margin: 4rem 1rem;
 }
 
 .combination-section h2 {
@@ -238,253 +150,14 @@ select {
 }
 
 .combination-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 2rem;
     margin-bottom: 40px
-}
-
-.product-card {
-    background: #fff;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    overflow: hidden;
-    text-align: left;
-    padding: 0;
-    /* padding déplacé dans .product-content */
-}
-
-.product-image img {
-    width: 100%;
-    height: 200px;
-    object-fit: cover;
-    display: block;
-}
-
-.product-content {
-    padding: 1rem;
-}
-
-.product-card h3 {
-    font-size: 1.125rem;
-    margin: 0.5rem 0 0.25rem;
-    color: #000000;
-}
-
-.product-card p {
-    font-size: 0.8rem;
-    color: #666;
-    margin-bottom: 0.5rem;
-}
-
-.price {
-    font-weight: bold;
-    color: #997765 !important;
-    font-size: 1.1rem !important;
-    justify-content: right !important;
-    align-items: right !important;
-    margin-bottom: 0.25rem;
-
-
 }
 
 .btn-beige {
     width: 500px;
-    /* fixe la largeur à 250px, adapte selon ce que tu veux */
     max-width: 100%;
-    /* empêche que ça dépasse le conteneur si écran trop petit */
     box-sizing: border-box;
-    /* pour inclure padding dans la largeur */
 }
-
-
-/* Modal Styles */
-.modal {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    z-index: 1000;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-    /* Empêche tout défilement */
-
-}
-
-.modal-content {
-    background-color: white;
-    max-width: 500px;
-    width: 90%;
-    padding: 2rem;
-    border-radius: 8px;
-    position: relative;
-    margin: 0;
-    /* Enlève le margin auto vertical */
-}
-
-
-.close-modal {
-    position: absolute;
-    right: 1rem;
-    top: 1rem;
-    font-size: 1.5rem;
-    cursor: pointer;
-}
-
-.no-scroll {
-    overflow: hidden;
-    height: 100%;
-}
-
-
-.success-message {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    color: #155724;
-    margin-bottom: 0rem !important;
-    margin-top: 0rem !important;
-}
-
-.check-icon {
-    width: 60px;
-    height: 60px;
-    margin-bottom: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: auto;
-}
-
-
-.modal-buttons {
-    display: flex;
-    justify-content: center;
-    /* Centre les boutons */
-    gap: 10px;
-    /* Espacement entre les boutons */
-}
-
-.ajt-panier {
-    background-color: #997765;
-    color: #fff;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-    padding: 10px 20px;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    font-weight: bold;
-    transition: transform 0.3s ease;
-    text-decoration: none;
-    font-size: 14px;
-}
-
-.ajt-panier:hover {
-    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.3);
-    transform: translateY(-3px);
-    transition: all 0.3s ease;
-}
-
-.img-panier {
-    width: 100%;
-    /* Ajuste la taille selon tes besoins */
-    height: auto;
-    /* Garde les proportions correctes */
-    border-radius: 15px;
-    /* Arrondit les bords */
-    object-fit: cover;
-    /* Ajuste l'image sans déformation */
-}
-
-/* Hero Section */
-.hero-section {
-    position: relative;
-    width: 100%;
-    height: 60vh;
-    overflow: hidden;
-    margin-top: -80px;
-}
-
-.hero-container {
-    width: 100%;
-    height: 100%;
-    position: relative;
-}
-
-.hero-image {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center 30%;
-    filter: brightness(50%);
-    opacity: 0.9;
-}
-
-.hero-content {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    text-align: center;
-    color: white;
-    z-index: 2;
-    max-width: 800px;
-    padding: 2rem;
-}
-
-.hero-title {
-    font-family: 'Baloo 2', sans-serif;
-    font-size: 2.80rem;
-    font-weight: 800;
-    margin-bottom: 1.25rem;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
-    line-height: 1.2;
-}
-
-.hero-description {
-    font-size: 1.2rem;
-    line-height: 1.6;
-    margin-bottom: 2rem;
-    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.6);
-}
-
-.hero-content button {
-    padding: 0.75rem 2rem;
-    font-size: 1rem;
-}
-
-.hero-content button:hover {
-    transform: scale(1.05);
-}
-
-/* Hero Responsive */
-
-@media (max-width: 480px) {
-    .hero-section {
-        height: 50vh;
-    }
-
-    .hero-title {
-        font-size: 1.75rem;
-        padding-top: 0rem;
-    }
-
-    .hero-description {
-        font-size: 0.9rem;
-    }
-
-    .hero-content button {
-        padding: 0.6rem 1.5rem;
-        font-size: 0.9rem;
-    }
-}
-
-
 
 /* Responsive Design */
 @media (max-width: 840px) {
@@ -495,29 +168,34 @@ select {
     .products-header h1 {
         font-size: 2rem;
     }
+}
 
-    .filters {
-        flex-wrap: wrap;
+@media (max-width: 768px) {
+    .search-tri {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
     }
 
-    .modal-content {
-        margin: 1rem;
-        padding: 1rem;
+    .search-bar,
+    #sortPrice {
+        width: 100%;
     }
 
-    .hero-title {
-        font-size: 2.25rem;
+    .search-bar {
+        order: 1;
+        justify-content: center;
     }
 
-    .hero-description {
-        font-size: 1.1rem;
-        padding: 0 1rem;
+    #sortPrice {
+        order: 2;
+        width: calc(100% - 40px);
+        margin: 20px;
+        font-size: 16px;
     }
 
-    .hero-content {
-        width: 90%;
-        padding: 1.5rem;
-
+    .search-bar form {
+        width: calc(100% - 40px);
     }
 }
 
@@ -533,43 +211,5 @@ select {
 
     .hero-section {
         height: 65vh;
-    }
-
-    .hero-title {
-        font-size: 1.75rem;
-    }
-
-    .hero-description {
-        font-size: 0.9rem;
-    }
-
-    .hero-content button {
-        padding: 0.6rem 1.5rem;
-        font-size: 0.9rem;
-    }
-}
-
-@media (max-width: 768px) {
-    .search-tri {
-        flex-direction: column;
-        align-items: stretch;
-        gap: 10px;
-    }
-
-    .search-bar {
-        justify-content: center;
-
-    }
-
-    .search-bar form {
-        width: calc(100% - 40px);
-        /* 100% moins les marges */
-    }
-
-    #sortPrice {
-        width: calc(100% - 40px);
-        /* 100% moins les marges */
-        margin: 20px;
-        font-size: 16px;
     }
 }

@@ -62,13 +62,11 @@ button {
 .button-section p {
     font-size: 15px;
     position: relative;
-    /* Nécessaire pour que ::after utilise .button-section p comme référence */
 }
 
 .button-section span {
     font-size: 15px;
     position: relative;
-    /* Nécessaire pour que ::after utilise .button-section p comme référence */
 }
 
 .button-section span::after {
@@ -76,7 +74,6 @@ button {
     position: absolute;
     left: 0;
     bottom: -2px;
-    /* Position du soulignement juste en dessous du texte */
     width: 0;
     height: 1px;
     background-color: #997765;
@@ -85,7 +82,6 @@ button {
 
 .button-section span:hover::after {
     width: 100%;
-    /* Le soulignement s'étend sur toute la largeur au survol */
 }
 
 
@@ -194,6 +190,22 @@ input:checked + .slider:before {
   border-radius: 50%;
 }
 
+.clear-btn {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  font-size: 18px;
+  color: #787777;
+  cursor: pointer;
+}
+
+.clear-btn:hover {
+  color: red;
+}
+
 @media (max-width: 500px) {
 
     /* Bouton */
@@ -204,7 +216,6 @@ input:checked + .slider:before {
     }
 
     /* ADMIN */
-
     /* button section */
     .button-section {
         font-size: 13px;
@@ -226,11 +237,4 @@ input:checked + .slider:before {
         padding: 10px 10px;
 
     }
-
 }
-/* 
-@media (max-width: 1024px) {
-    button#pdf-btn.btn-noir {
-        display: none;
-    }
-} */

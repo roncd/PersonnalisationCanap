@@ -324,6 +324,10 @@ label {
   align-items: flex-start;
   gap: 8px;
 }
+textarea.input-field {
+    min-height: fit-content;
+    font-family: Arial, Helvetica, sans-serif;
+}
 
 .input-field {
   padding: 10px;

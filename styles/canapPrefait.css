@@ -394,8 +394,6 @@ input {
 }
 
 
-
-
 /* ================= TABLETTE ================= */
 @media (max-width: 1024px) {
 
@@ -501,8 +499,6 @@ input {
   .primary-img {
     display: none;
   }
-
-  /* cache l’image uniquement mobile */
 
   /* 3. Grille des options : 2 cartes + scroll conservé */
   .color-options {
@@ -732,11 +728,9 @@ input {
     font-size: 22px;
   }
 
-
   .h2-recap {
     padding-top: 70px !important;
   }
-
 
   .left-column-recap button {
     margin: 0 !important;
@@ -840,24 +834,18 @@ input {
 
   .color-options h3 {
     font-size: 1.1em;
-    /* cohérent avec ton h2 à 1.4 em   */
   }
 
   .color-options .option p {
     font-size: 0.875em;
-    /* ≈ 14 px                         */
   }
 
   .main-display-recap img {
     display: none;
   }
-
-  /* cache l’image uniquement mobile */
-
   .footer-buttons {
     display: flex;
     justify-content: space-between;
-    /* un à gauche, un à droite */
     width: 100%;
   }
 
@@ -866,5 +854,4 @@ input {
     justify-content: flex-end;
     gap: 10px;
   }
-
 }

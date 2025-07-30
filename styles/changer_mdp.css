@@ -76,12 +76,10 @@ body {
     margin-top: 10px;
     font-size: 0.95rem;
     display: none;
-    /* caché par défaut */
 }
 
 .password-requirements.show {
     display: block;
-    /* affiché quand le champ est actif */
 }
 
 .password-requirements li {

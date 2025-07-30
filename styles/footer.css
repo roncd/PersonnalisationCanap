@@ -7,9 +7,7 @@
   align-items: center;
   border-radius: 30px;
   width: 95%;
-  /* Augmente la largeur */
   max-width: 1800px;
-  /* Ajustement de la largeur maximale */
   margin: 0 auto;
   padding: 0 20px;
   margin-top: 25px;
@@ -20,19 +18,15 @@
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
-  /* Permet au contenu de passer sur plusieurs lignes si nécessaire */
 }
 
 .ft-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  /* 3 colonnes sur grand écran */
   align-items: center;
   gap: 20px;
-  /* Espacement entre les colonnes */
   width: 100%;
   max-width: 1200px;
-  /* Largeur maximale du footer */
 }
 
 /* Logo */
@@ -93,9 +87,7 @@
 
 .ft-nav-item a {
   white-space: normal;
-  /* Permet le retour à la ligne */
   word-break: break-word;
-  /* Coupe les mots longs si nécessaire */
   color: #ffffff;
   text-decoration: none;
   font-family: "Baloo 2", sans-serif;
@@ -104,15 +96,12 @@
   position: relative;
   display: inline-block;
 
-  /* Ajout du padding dès l’état normal */
   padding: 8px 24px;
 
-  /* Fond transparent par défaut */
   background-color: transparent;
 
   border-radius: 20px;
 
-  /* Transition fluide pour toutes les propriétés importantes */
   transition:
     background-color 0.3s ease,
     color 0.3s ease,
@@ -140,7 +129,6 @@
 .ft-map {
   width: 100%;
   max-width: 500px;
-  /* ajuste selon la largeur souhaitée */
   border-radius: 12px;
   overflow: hidden;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
@@ -163,7 +151,6 @@
 
   .ft-grid {
     grid-template-columns: repeat(2, 1fr);
-    /* 2 colonnes sur tablette */
     gap: 16px;
   }
 
@@ -189,7 +176,6 @@
 
   .ft-grid {
     grid-template-columns: 1fr;
-    /* 1 colonne sur mobile */
     gap: 20px;
     text-align: center;
   }
@@ -204,7 +190,6 @@
 
   .ft-nav-item a {
     padding: 12px 32px;
-    /* Plus gros padding sur mobile */
     font-size: 15px;
   }
 
@@ -220,8 +205,6 @@
     grid-column: 1 / -1;
     margin-top: -10px;
     margin-left: auto;
-    /* annule le -30px */
     margin-right: auto;
-    /* centre la map */
   }
 }

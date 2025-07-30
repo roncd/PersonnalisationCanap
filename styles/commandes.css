@@ -100,19 +100,16 @@ h2 {
   margin-right: -3px;
   text-decoration: none;
   color: #000000;
-  /* Couleur des icônes */
   transition: color 0.3s ease;
   cursor: pointer;
 }
 
 .actions .vert:hover {
   color: #25a042;
-  /* Vert pour Modifier */
 }
 
 .actions .rouge:hover {
   color: #dc3545;
-  /* Rouge pour Supprimer */
 }
 
 .visuallyhidden {

@@ -110,6 +110,11 @@ select {
     color: black;
 }
 
+textarea.input-field {
+    min-height: fit-content;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
 /* Champs d'entrée */
 .input-field {
     padding: 12px;
@@ -120,6 +125,14 @@ select {
     /* Beige avec opacité */
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
     transition: all 0.3s ease;
+}
+
+.input-wrapper {
+    position: relative;
+}
+
+.input-wrapper .input-field {
+    width: -webkit-fill-available;
 }
 
 select.input-field {
