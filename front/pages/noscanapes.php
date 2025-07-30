@@ -76,6 +76,14 @@ $urlParams = $_GET;
 $triURL = '?' . http_build_query($urlParams);
 
 
+function getSectionCatalogue($slug)
+{
+    global $pdo;
+    $stmt = $pdo->prepare("SELECT * FROM sections_catalogue WHERE slug = ? AND visible = 1 LIMIT 1");
+    $stmt->execute([$slug]);
+    return $stmt->fetch(PDO::FETCH_ASSOC);
+}
+
 function calculPrix($commande, &$composition = [])
 {
     global $pdo;
@@ -169,6 +177,7 @@ function calculPrix($commande, &$composition = [])
     <title>Nos Canapés</title>
     <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&family=Be+Vietnam+Pro&display=swap" rel="stylesheet">
     <link rel="icon" type="image/png" href="https://www.decorient.fr/medias/favicon.png">
+    <link rel="stylesheet" href="../../styles/styles.css">
     <link rel="stylesheet" href="../../styles/catalogue.css">
     <link rel="stylesheet" href="../../styles/transition.css">
     <script type="module" src="../../script/transition.js"></script>
@@ -183,103 +192,107 @@ function calculPrix($commande, &$composition = [])
 
     </header>
 
-    <section class="hero-section">
-        <div class="hero-container">
-            <img src="../../medias/hero-banner.jpg" alt="Salon marocain" class="hero-image">
-            <div class="hero-content">
-                <br><br><br>
-                <h1 class="hero-title h2">
-                    Nos Canapés Pré-fait
-                </h1>
+    <main>
 
-                <p class="hero-description">
-                    Choisis ton style, réservez ton modèle favoris et récupére-le directement en boutique ou fait toi livrer.
-                </p>
-            </div>
-        </div>
-    </section>
-
-    <main class="products-container">
-        <!-- Filtres -->
-        <?php
-        $currentType = isset($_GET['type']) ? strtolower($_GET['type']) : '';
-        ?>
-
-        <div class="filters">
-            <button class="filter-btn <?= $currentType === '' ? 'active' : '' ?>" data-type="">Tous</button>
-            <?php foreach ($types as $t): ?>
-                <?php $typeNom = strtolower($t['nom']); ?>
-                <button class="filter-btn <?= $currentType === $typeNom ? 'active' : '' ?>" data-type="<?= htmlspecialchars($typeNom) ?>">
-                    <?= htmlspecialchars($t['nom']) ?>
-                </button>
-            <?php endforeach; ?>
-        </div>
-
-        <div class="search-tri transition-all">
-            <!-- Nouveau select de tri prix -->
-            <select id="sortPrice">
-                <option value="none">Trier par prix</option>
-                <option value="asc">Prix : du - cher au + cher</option>
-                <option value="desc">Prix : du + cher au - cher</option>
-            </select>
-
-            <!-- ------------------- BARRE DE RECHERCHE EN PHP ------------------- -->
-            <div class="search-bar transition-all">
-                <form method="GET" action="">
-                    <input
-                        type="text"
-                        name="search"
-                        id="searchInput"
-                        placeholder="Rechercher par nom..."
-                        value="<?= htmlspecialchars($_GET['search'] ?? '', ENT_QUOTES) ?>">
-                    <button type="button" id="clearSearch" class="clear-button" style="display: none;">&times;</button>
-                </form>
-            </div>
-        </div>
-
-        <!-- ------------------- SECTION COMBINAISONS ------------------- -->
-        <section class="combination-section">
-            <div class="combination-container transition-all">
-
-                <?php foreach ($commandes as $commande): ?>
-                    <?php
-                    $composition = [];
-                    $prixDynamique = calculPrix($commande, $composition);
-                    ?>
-                    <div class="product-card" data-type="<?= htmlspecialchars(strtolower($commande['type_nom'] ?? '')) ?>">
-                        <div class="product-image">
-                            <?php
-                            $imgName = $commande['img'] ?? 'canapePrefait.jpg';
-                            $imgPathPrimary = "../../admin/uploads/canape-prefait/" . $imgName;
-                            $imgPathFallback = "../../medias/canapePrefait.jpg";
-
-                            // Choisir le chemin selon l'existence du fichier
-                            if (!empty($imgName) && file_exists($imgPathPrimary)) {
-                                $imgSrc = $imgPathPrimary;
-                            } else {
-                                $imgSrc = $imgPathFallback;
-                            }
-                            ?>
-                            <img src="<?php echo htmlspecialchars($imgSrc, ENT_QUOTES); ?>"
-                                alt="<?php echo htmlspecialchars($commande['nom'] ?? 'Canapé pré-fait', ENT_QUOTES); ?>">
-                        </div>
-                        <div class="product-content">
-                            <h3><?= htmlspecialchars($commande['nom']) ?></h3>
-                            <p class="description">Type : <?= htmlspecialchars($commande['type_nom'] ?? '') ?></p>
-                            <p class="description">Structure :
-                                <?= htmlspecialchars($commande['structure_nom'] ?? 'Non défini') ?></p>
-                            <p class="price"><?= number_format($prixDynamique, 2, ',', ' ') ?> €</p>
-                            <button class="btn-beige"
-                                onclick="window.location.href = '../CanapePrefait/canapPrefait.php?id=<?= (int)$commande['id']; ?>'">
-                                Personnaliser
-                            </button>
-                        </div>
+        <?php $hero = getSectionCatalogue('hero-canap'); ?>
+        <?php if ($hero && $hero['visible']): ?>
+            <section class="hero-section">
+                <div class="hero-container">
+                    <img src="../../medias/<?= htmlspecialchars($hero['img']) ?>" alt="Salon marocain" class="hero-image">
+                    <div class="hero-content">
+                        <h1 class="hero-title h2"><?= htmlspecialchars($hero['titre']) ?></h1>
+                        <p class="hero-description"><?= nl2br(htmlspecialchars($hero['description'])) ?></p>
+                        <?php if ($hero['bouton_texte'] && $hero['bouton_lien']): ?>
+                            <a href="<?= htmlspecialchars($hero['bouton_lien']) ?>">
+                                <button class="btn-noir"><?= htmlspecialchars($hero['bouton_texte']) ?></button>
+                            </a>
+                        <?php endif; ?>
                     </div>
+                </div>
+            </section>
+        <?php endif; ?>
+
+        <div class="products-container">
+            <!-- Filtres -->
+            <?php
+            $currentType = isset($_GET['type']) ? strtolower($_GET['type']) : '';
+            ?>
+
+            <div class="filters">
+                <button class="filter-btn <?= $currentType === '' ? 'active' : '' ?>" data-type="">Tous</button>
+                <?php foreach ($types as $t): ?>
+                    <?php $typeNom = strtolower($t['nom']); ?>
+                    <button class="filter-btn <?= $currentType === $typeNom ? 'active' : '' ?>" data-type="<?= htmlspecialchars($typeNom) ?>">
+                        <?= htmlspecialchars($t['nom']) ?>
+                    </button>
                 <?php endforeach; ?>
             </div>
-            <?php require '../../admin/include/pagination.php'; ?>
-        </section>
 
+            <div class="search-tri transition-all">
+                <!-- Nouveau select de tri prix -->
+                <select id="sortPrice">
+                    <option value="none">Trier par prix</option>
+                    <option value="asc">Prix : du - cher au + cher</option>
+                    <option value="desc">Prix : du + cher au - cher</option>
+                </select>
+
+                <!-- ------------------- BARRE DE RECHERCHE EN PHP ------------------- -->
+                <div class="search-bar transition-all">
+                    <form method="GET" action="">
+                        <input
+                            type="text"
+                            name="search"
+                            id="searchInput"
+                            placeholder="Rechercher par nom..."
+                            value="<?= htmlspecialchars($_GET['search'] ?? '', ENT_QUOTES) ?>">
+                        <button type="button" id="clearSearch" class="clear-button" style="display: none;">&times;</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- ------------------- SECTION COMBINAISONS ------------------- -->
+            <section class="combination-section">
+                <div class="combination-container transition-all">
+
+                    <?php foreach ($commandes as $commande): ?>
+                        <?php
+                        $composition = [];
+                        $prixDynamique = calculPrix($commande, $composition);
+                        ?>
+                        <div class="product-card" data-type="<?= htmlspecialchars(strtolower($commande['type_nom'] ?? '')) ?>">
+                            <div class="product-image">
+                                <?php
+                                $imgName = $commande['img'] ?? 'canapePrefait.jpg';
+                                $imgPathPrimary = "../../admin/uploads/canape-prefait/" . $imgName;
+                                $imgPathFallback = "../../medias/canapePrefait.jpg";
+
+                                // Choisir le chemin selon l'existence du fichier
+                                if (!empty($imgName) && file_exists($imgPathPrimary)) {
+                                    $imgSrc = $imgPathPrimary;
+                                } else {
+                                    $imgSrc = $imgPathFallback;
+                                }
+                                ?>
+                                <img src="<?php echo htmlspecialchars($imgSrc, ENT_QUOTES); ?>"
+                                    alt="<?php echo htmlspecialchars($commande['nom'] ?? 'Canapé pré-fait', ENT_QUOTES); ?>">
+                            </div>
+                            <div class="product-content">
+                                <h3><?= htmlspecialchars($commande['nom']) ?></h3>
+                                <p class="description">Type : <?= htmlspecialchars($commande['type_nom'] ?? '') ?></p>
+                                <p class="description">Structure :
+                                    <?= htmlspecialchars($commande['structure_nom'] ?? 'Non défini') ?></p>
+                                <p class="price"><?= number_format($prixDynamique, 2, ',', ' ') ?> €</p>
+                                <button class="btn-beige"
+                                    onclick="window.location.href = '../CanapePrefait/canapPrefait.php?id=<?= (int)$commande['id']; ?>'">
+                                    Personnaliser
+                                </button>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+                <?php require '../../admin/include/pagination.php'; ?>
+            </section>
+        </div>
 
     </main>
 

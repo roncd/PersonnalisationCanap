@@ -1,6 +1,5 @@
-function animateValue(element, target, duration, isDecimal = false, showPlus = false) {
+function animateValue(element, target, duration, isDecimal = false, showPlus = false, isPercent = false, isNotation = false) {
   const startTime = performance.now();
-  const originalText = element.textContent.replace(/[\d\.,]+/, ''); // garde le suffixe : /5 ou j
 
   function update(currentTime) {
     const elapsed = currentTime - startTime;
@@ -9,8 +8,10 @@ function animateValue(element, target, duration, isDecimal = false, showPlus = f
       ? (progress * target).toFixed(1)
       : Math.floor(progress * target);
 
-    const prefix = showPlus && !isDecimal ? '+' : '';
-    element.textContent = `${prefix}${value}${originalText}`;
+    const prefix = showPlus && !isDecimal && !isNotation ? '+' : '';
+    const suffix = isNotation ? '/5' : isPercent ? '%' : '';
+
+    element.textContent = `${prefix}${value}${suffix}`;
 
     if (progress < 1) {
       requestAnimationFrame(update);
@@ -29,7 +30,10 @@ const observer = new IntersectionObserver((entries, obs) => {
         const target = parseFloat(el.getAttribute('data-target'));
         const isDecimal = el.hasAttribute('data-decimal');
         const showPlus = el.hasAttribute('data-plus');
-        animateValue(el, target, 1500, isDecimal, showPlus);
+        const isPercent = el.hasAttribute('data-percent');
+        const isNotation = el.hasAttribute('data-notation');
+
+        animateValue(el, target, 1500, isDecimal, showPlus, isPercent, isNotation);
       });
       obs.disconnect(); // Une seule fois
     }
