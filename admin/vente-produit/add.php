@@ -19,6 +19,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $prix = trim($_POST['price']);
     $img = $_FILES['img'];
     $id_categorie = ($_POST['id_categorie']);
+    $visible = isset($_POST['visible']) ? 1 : 0;
+
 
     if (empty($nom) || !isset($prix) || empty($img['name']) || empty($id_categorie)) {
         $_SESSION['message'] = 'Tous les champs sont requis !';
@@ -41,15 +43,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             if (move_uploaded_file($img['tmp_name'], $uploadPath)) {
                 try {
-                    $stmt = $pdo->prepare("INSERT INTO vente_produit (nom, prix, img, id_categorie) VALUES (?, ?, ?, ?)");
-                    $stmt->execute([$nom, $prix, $fileName, $id_categorie]);
+                    $stmt = $pdo->prepare("INSERT INTO vente_produit (nom, prix, img, id_categorie, visible) VALUES (?, ?, ?, ?, ?)");
+                    $stmt->execute([$nom, $prix, $fileName, $id_categorie, $visible]);
 
                     $_SESSION['message'] = 'Le produit a été ajouté avec succès !';
                     $_SESSION['message_type'] = 'success';
                     header("Location: visualiser.php");
                     exit();
                 } catch (Exception $e) {
-                    $_SESSION['message'] = 'Erreur lors de l\'ajout du produit : ' . $e->getMessage();
+                    if ($e->getCode() == 23000) {
+                        $_SESSION['message'] = 'Erreur : Le nom de l\'image est déjà utilisé.';
+                    } else {
+                        $_SESSION['message'] = 'Erreur lors de l\'ajout : ' . $e->getMessage();
+                    }
                     $_SESSION['message_type'] = 'error';
                 }
             } else {
@@ -70,8 +76,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ajoute un produit vendu à l'unité</title>
     <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../../styles/admin/ajout.css">
-    <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
+    <link rel="stylesheet" href="../../styles/admin/form.css">
+    <link rel="icon" type="image/png" href="https://www.decorient.fr/medias/favicon.png">
     <link rel="stylesheet" href="../../styles/message.css">
 
     <link rel="stylesheet" href="../../styles/buttons.css">
@@ -102,7 +108,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <div class="form-row">
                         <div class="form-group">
                             <label for="img">Image <span class="required">*</span></label>
-                            <input type="file" id="img" name="img" class="input-field" accept="image/*" onchange="loadFile(event)" required>
+                            <div class="input-wrapper">
+                                <input type="file" id="img" name="img" class="input-field" accept="image/*" onchange="loadFile(event)">
+                                <button type="button" class="clear-btn" onclick="clearFileInput('img')" title="Supprimer l'image sélectionnée">
+                                    &times;
+                                </button>
+                            </div>
                             <img class="preview-img" id="output" />
                         </div>
                     </div>
@@ -117,6 +128,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                     </option>
                                 <?php endforeach; ?>
                             </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group btn-slider">
+                            <label for="visible">Afficher sur le site</label>
+                            <label class="switch">
+                                <input type="checkbox" id="visible" name="visible" checked>
+                                <span class="slider round"></span>
+                            </label>
                         </div>
                     </div>
                     <div class="button-section">

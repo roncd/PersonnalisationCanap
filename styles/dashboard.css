@@ -6,10 +6,8 @@ body {
 }
 
 .dashboard h2 {
-  font-size: 2rem;
-  color: #000;
-  margin-bottom: 1rem;
   text-align: left;
+  font-family: 'Baloo 2', sans-serif;
 }
 
 .dashboard .h2-center {
@@ -24,7 +22,6 @@ body {
   display: flex;
   justify-content: center;
   gap: 20px;
-  flex-wrap: nowrap;
   margin-top: 2rem;
 }
 
@@ -33,19 +30,6 @@ body {
   width: 250px;
   max-width: 100%;
   box-sizing: border-box;
-}
-
-.voir-plus {
-  text-align: center;
-}
-
-.btn-fullwidth {
-  width: 100%;
-  display: block;
-  text-align: center;
-  box-sizing: border-box;
-  margin-top: 1rem;
-  /* optionnel */
 }
 
 /* --------------- SECTION PERSONNALISATION --------------- */
@@ -99,9 +83,7 @@ body {
   justify-content: center;
   align-items: center;
   padding: 0;
-  /* enlève les marges internes */
   overflow: hidden;
-  /* empêche le débordement */
   height: auto;
 }
 
@@ -124,378 +106,13 @@ body {
   width: 100%;
   max-width: 700px;
   z-index: -1;
-  /* Derrière le sofa */
   pointer-events: none;
-  /* au cas où */
 }
 
 
-/* --------------- SECTION STAT --------------- */
-.stats-section {
-  background-color: rgba(227, 209, 200, 0.9);
-  padding: 4rem 2rem;
-  text-align: center;
-  margin: 4rem auto;
-  max-width: 1145px;
-  width: 87%;
-  border-radius: 20px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-}
-
-.stats-section h2 {
-  font-size: 2rem;
-  margin-bottom: 2rem;
-  color: #000000;
-}
-
-.stats-list {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 2rem;
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.stats-list li {
-  font-size: 1.2rem;
-  color: #000000;
-}
-
-.stats-list strong {
-  display: block;
-  font-size: 2rem;
-  color: #997765 !important;
-  font-weight: 700;
-  margin-bottom: 0.5rem;
-}
-
-/* --------------- AVANTAGES CARD --------------- */
-.avantages-card {
-  background-color: rgba(227, 209, 200, 0.9);
-  border-radius: 20px;
-  margin: 4rem auto;
-  max-width: 1145px;
-  width: 87%;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  display: flex;
-  flex-direction: row;
-  align-items: stretch;
-  position: relative;
-  overflow: hidden;
-}
-
-.avantages-text {
-  flex: 1 1 60%;
-  padding: 2rem;
-  /* padding déplacé ici */
-  padding-right: 3rem;
-  /* tu peux ajuster pour plus d'espace à droite */
-  z-index: 2;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
-.avantages-text h2 {
-  font-size: 1.8rem;
-  margin-bottom: 1.5rem;
-  color: #000000;
-}
-
-.avantages-text ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.avantages-text li {
-  position: relative;
-  padding-left: 2rem;
-  margin-bottom: 1rem;
-  font-size: 1.1rem;
-  color: #000000;
-}
-
-.avantages-text li::before {
-  content: "✅";
-  position: absolute;
-  left: 0;
-  top: 0;
-}
-
-.avantages-img {
-  flex: 0 0 520px;
-  /* largeur fixe pour l’image */
-  height: auto;
-  position: relative;
-}
-
-.avantages-img img {
-  height: 100%;
-  /* image prend toute la hauteur du container parent */
-  width: 100%;
-  /* prend toute la largeur du conteneur image */
-  border-radius: 0 20px 20px 0;
-  /* arrondi uniquement côté gauche */
-  object-fit: cover;
-  /* bien remplir le cadre sans déformation */
-  display: block;
-}
-
-
-/* Hero Section */
-.hero-section {
-  position: relative;
-  width: 100%;
-  height: 70vh;
-  overflow: hidden;
-  margin-top: -80px;
-}
-
-.hero-container {
-  width: 100%;
-  height: 100%;
-  position: relative;
-}
-
-.hero-image {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center 30%;
-  filter: brightness(50%);
-  opacity: 0.9;
-}
-
-.hero-content {
-  position: absolute;
-  top: 55%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  text-align: center;
-  color: white;
-  z-index: 2;
-  max-width: 800px;
-  padding: 2rem;
-}
-
-.hero-title {
-  font-family: 'Baloo 2', sans-serif;
-  font-size: 2.80rem;
-  font-weight: 800;
-  margin-bottom: 1.25rem;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
-  line-height: 1.2;
-}
-
-.hero-description {
-  font-size: 1.2rem;
-  line-height: 1.6;
-  margin-bottom: 2rem;
-  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.6);
-}
-
-/* Hero Responsive */
-@media (max-width: 768px) {
-  .hero-title {
-    font-size: 2.25rem;
-    margin-top: 25px;
-  }
-
-  .hero-description {
-    font-size: 1.1rem;
-    padding: 0 1rem;
-  }
-
-  .hero-content {
-    width: 90%;
-    padding: 1.5rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .hero-section {
-    height: 80vh;
-  }
-
-  .hero-title {
-    font-size: 1.75rem;
-    padding-top: 0rem;
-  }
-
-  .hero-description {
-    font-size: 0.9rem;
-  }
-
-  .hero-content button {
-    padding: 0.6rem 1.5rem;
-    font-size: 0.9rem;
-  }
-}
-
-
-/* ----------- RESPONSIVE GLOBAL (H2) ----------- */
-@media (max-width: 480px) {
-  h2 {
-    font-size: 1.4rem;
-  }
-}
-
-@media (min-width: 481px) and (max-width: 768px) {
-  h2 {
-    font-size: 1.6rem;
-  }
-}
-
-
-/* ----------- HERO IMAGE ----------- */
-.hero-img {
-  height: 400px;
-  object-fit: cover;
-  width: 100%;
-}
-
-@media (max-width: 480px) {
-  .hero-img {
-    height: 500px;
-  }
-}
-
-@media (min-width: 481px) and (max-width: 768px) {
-  .hero-img {
-    height: 450px;
-  }
-}
-
-
-/* ----------- BOUTONS CONTAINER ----------- */
-@media (max-width: 760px) {
-  .boutons-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 1rem;
-  }
-
-  .boutons-container form {
-    width: 100%;
-  }
-
-  .boutons-container button {
-    width: 100%;
-  }
-}
-
-/* ----------- COMBINATION CONTAINER ----------- */
-@media (max-width: 768px) {
-  .combination-container {
-    display: grid !important;
-    grid-template-columns: 1fr 1fr !important;
-  }
-
-
-  .combination-section .combination-container h2 {
-    text-align: left !important;
-  }
-}
-
-@media (max-width: 480px) {
-  .combination-container {
-    grid-template-columns: 1fr !important;
-  }
-
-  .combination-section .combination-container h2 {
-    text-align: left !important;
-  }
-}
-
-/* ----------- AVANTAGES SECTION ----------- */
-@media (max-width: 480px) {
-  .avantages-card {
-    flex-direction: column;
-  }
-
-  .avantages-img {
-    display: none;
-  }
-
-  .avantages-text {
-    flex: 1 1 auto;
-    padding: 1rem;
-  }
-
-  .avantages-text h2 {
-    font-size: 1.4rem;
-  }
-
-  .avantages-text li {
-    font-size: 0.95rem;
-  }
-
-
-  .h2-center {
-    text-align: center;
-  }
-
-
-}
-
-@media (min-width: 481px) and (max-width: 100px) {
-  .avantages-card {
-    flex-direction: row;
-  }
-
-  .avantages-text {
-    flex: 1 1 auto;
-    padding: 1.5rem;
-  }
-
-  .avantages-img {
-    flex: 0 0 120px;
-    display: block;
-  }
-
-  .avantages-img img {
-    height: 100%;
-    width: 100%;
-    border-radius: 0 20px 20px 0;
-    object-fit: cover;
-  }
-
-  .avantages-text h2 {
-    font-size: 1.6rem;
-  }
-
-  .avantages-text li {
-    font-size: 1rem;
-  }
-
-  .h2-center {
-    text-align: center;
-  }
-
-}
-
-
-/* ----------- INTEREST CONTAINER ----------- */
-@media (max-width: 768px) {
-  .interest-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-  }
-}
-
-@media (max-width: 480px) {
-  .interest-container {
-    grid-template-columns: 1fr;
-  }
-}
-
-/* ----------- CUSTOMIZE SECTION ----------- */
 @media (max-width: 1052px) {
+
+  /* ----------- CUSTOMIZE SECTION ----------- */
   .customize-section {
     flex-direction: row;
     align-items: center;
@@ -519,7 +136,6 @@ body {
 
   .customize-image {
     flex: 1;
-    /* ✅ Laisse moins de place à l'image */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -536,7 +152,60 @@ body {
   }
 }
 
+
+@media (max-width: 768px) {
+
+  /* ----------- RESPONSIVE GLOBAL (H2) ----------- */
+  h2 {
+    font-size: 1.6rem;
+  }
+
+  /* ----------- HERO  ----------- */
+  .hero-img {
+    height: 450px;
+  }
+
+  .hero-title {
+    font-size: 2.25rem;
+    margin-top: 25px;
+  }
+
+  .hero-content {
+    padding: 1.5rem;
+  }
+
+  /* ----------- COMBINATION CONTAINER ----------- */
+  .combination-container {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+  }
+
+  .combination-section .combination-container h2 {
+    text-align: left !important;
+  }
+
+  /* ----------- BOUTONS CONTAINER ----------- */
+  .boutons-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .boutons-container form {
+    width: 100%;
+  }
+
+  .boutons-container button {
+    width: 100%;
+  }
+}
+
+
+
 @media (max-width: 535px) {
+
+  /* ----------- CUSTOM SECTION ----------- */
   .customize-section {
     flex-direction: column;
     width: 100%;
@@ -557,69 +226,38 @@ body {
     font-size: 0.95rem;
   }
 
-  .customize-image {
-    justify-content: center;
-  }
-
   .customize-image .sofa {
-    width: 100%;
     max-width: 420px;
-    /* 🔼 Agrandi pour mobile aussi */
-    height: auto;
   }
 }
 
-
-
-
-/* ----------- STATS SECTION ----------- */
 @media (max-width: 480px) {
-  .stats-section {
-    padding: 2rem 1rem;
-    margin: 2rem auto;
-  }
 
-  .stats-section h2 {
+  /* ----------- RESPONSIVE GLOBAL (H2) ----------- */
+  h2 {
     font-size: 1.4rem;
-    margin-bottom: 1.5rem;
   }
 
-  .stats-list {
-    flex-direction: column;
-    gap: 1.5rem;
+  /* ----------- HERO  ----------- */
+  .hero-img {
+    height: 500px;
   }
 
-  .stats-list li {
-    font-size: 1rem;
+  .hero-section {
+    height: 80vh;
   }
 
-  .stats-list strong {
-    font-size: 1.5rem;
-  }
-}
-
-@media (min-width: 481px) and (max-width: 768px) {
-  .stats-section {
-    padding: 3rem 1.5rem;
-    margin: 3rem auto;
+  .hero-content button {
+    padding: 0.6rem 1.5rem;
+    font-size: 0.9rem;
   }
 
-  .stats-section h2 {
-    font-size: 2rem;
-    margin-bottom: 1.8rem;
+  /* ----------- CANAP PREFAIT ----------- */
+  .combination-container {
+    grid-template-columns: 1fr !important;
   }
 
-  .stats-list {
-    flex-direction: row;
-    justify-content: center;
-    gap: 1.5rem;
-  }
-
-  .stats-list li {
-    font-size: 1.1rem;
-  }
-
-  .stats-list strong {
-    font-size: 1.8rem;
+  .combination-section .combination-container h2 {
+    text-align: left !important;
   }
 }

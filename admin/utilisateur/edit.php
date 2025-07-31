@@ -73,9 +73,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Modifie un membre</title>
-    <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
+    <link rel="icon" type="image/png" href="https://www.decorient.fr/medias/favicon.png">
     <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&family=Be+Vietnam+Pro&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../../styles/admin/ajout.css">
+    <link rel="stylesheet" href="../../styles/admin/form.css">
     <link rel="stylesheet" href="../../styles/message.css">
     <link rel="stylesheet" href="../../styles/buttons.css">
 </head>
@@ -126,8 +126,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         </div>
                         <div class="form-group">
                             <a href="../include/changer_mdp.php?id=<?php echo $utilisateur['id']; ?>"
-                                class="input-field"
-                                style=" text-decoration: none; color: black; text-align: center;">
+                                class="input-field">
                                 Modifier le mot de passe
                             </a>
                         </div>

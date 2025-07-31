@@ -76,12 +76,10 @@ body {
     margin-top: 10px;
     font-size: 0.95rem;
     display: none;
-    /* caché par défaut */
 }
 
 .password-requirements.show {
     display: block;
-    /* affiché quand le champ est actif */
 }
 
 .password-requirements li {
@@ -107,23 +105,25 @@ body {
 }
 
 .valid .check-icon::after {
-   content: "\2713";
-  color: white;
-  font-weight: bold;
-  font-size: 11px;
-  position: absolute;
-  top: 1px;
-  left: 4px;
+    content: "\2713";
+    color: white;
+    font-weight: bold;
+    font-size: 11px;
+    position: absolute;
+    top: 1px;
+    left: 4px;
 }
 
 .input-weak {
-  border: 1px solid red;
+    border: 1px solid red;
 }
+
 .input-medium {
-  border: 1px solid orange;
+    border: 1px solid orange;
 }
+
 .input-strong {
-  border: 1px solid green;
+    border: 1px solid green;
 }
 
 
@@ -136,7 +136,7 @@ body {
 /* Le champ de saisie : on décale un peu le texte à droite */
 .input-section .input-field {
     width: 100%;
-    padding-right: 40px;
+    padding-right: 4.1rem;
     box-sizing: border-box;
 }
 
@@ -145,21 +145,21 @@ body {
 
 /* Style par défaut */
 .password-confirm-wrapper {
-  position: relative;
+    position: relative;
 }
 
 #match-message {
-  font-size: 0.9em;
-  margin-top: 5px;
-  color: red;
-  display: none;
+    font-size: 0.9em;
+    margin-top: 5px;
+    color: red;
+    display: none;
 }
 
 /* Si les mots de passe ne correspondent pas */
 .input-error {
-  border: 1px solid red;
+    border: 1px solid red;
 }
 
 .input-valid {
-  border: 1px solid green;
+    border: 1px solid green;
 }

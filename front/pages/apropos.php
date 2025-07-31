@@ -2,6 +2,15 @@
 require '../../admin/config.php';
 session_start();
 require '../../admin/include/session_expiration.php';
+
+function getSectionApropos($slug)
+{
+  global $pdo;
+  $stmt = $pdo->prepare("SELECT * FROM sections_apropos WHERE slug = ? AND visible = 1 LIMIT 1");
+  $stmt->execute([$slug]);
+  return $stmt->fetch(PDO::FETCH_ASSOC);
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -9,10 +18,12 @@ require '../../admin/include/session_expiration.php';
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Découvre l'histoire de Déco du Monde, notre atelier de fabrication de canapé marocain sur mesure, nos valeurs, notre promesse et bien d'autres." />
   <title>À propos</title>
-  <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
+  <link rel="icon" type="image/png" href="https://www.decorient.fr/medias/favicon.png">
   <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&family=Be+Vietnam+Pro&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../../styles/apropos.css">
+  <link rel="stylesheet" href="../../styles/styles.css">
   <link rel="stylesheet" href="../../styles/buttons.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link rel="stylesheet" href="../../styles/transition.css">
@@ -26,10 +37,23 @@ require '../../admin/include/session_expiration.php';
   </header>
 
   <main>
-    <div class="banner">
-      <img src="../../medias/apropos-banner.jpg" alt="Canapé à propos">
-      <h1>À propos</h1>
-    </div>
+    <?php $hero = getSectionApropos('hero'); ?>
+    <?php if ($hero && $hero['visible']): ?>
+      <section class="hero-section">
+        <div class="hero-container">
+          <img src="../../medias/<?= htmlspecialchars($hero['img']) ?>" alt="Salon marocain" class="hero-image">
+          <div class="hero-content">
+            <h1 class="hero-title h2"><?= htmlspecialchars($hero['titre']) ?></h1>
+            <p class="hero-description"><?= nl2br(htmlspecialchars($hero['description'])) ?></p>
+            <?php if ($hero['bouton_texte'] && $hero['bouton_lien']): ?>
+              <a href="<?= htmlspecialchars($hero['bouton_lien']) ?>">
+                <button class="btn-noir"><?= htmlspecialchars($hero['bouton_texte']) ?></button>
+              </a>
+            <?php endif; ?>
+          </div>
+        </div>
+      </section>
+    <?php endif; ?>
     <div class="about-content ">
       <div class="text-content transition-all">
         <h2>Déco du Monde</h2>

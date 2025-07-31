@@ -13,14 +13,16 @@ if (!isset($_SESSION['id'])) {
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nom = trim($_POST['nom']);
     $icon = trim($_POST['icon']);
+    $visible = isset($_POST['visible']) ? 1 : 0;
+
 
     if (empty($nom) || empty($icon)) {
         $_SESSION['message'] = 'Le nom et l’icône sont requis.';
         $_SESSION['message_type'] = 'error';
     } else {
         try {
-            $stmt = $pdo->prepare("INSERT INTO faq_categorie (nom, icon) VALUES (?, ?)");
-            $stmt->execute([$nom, $icon]);
+            $stmt = $pdo->prepare("INSERT INTO faq_categorie (nom, icon, visible) VALUES (?, ?, ?)");
+            $stmt->execute([$nom, $icon, $visible]);
             $_SESSION['message'] = 'Catégorie ajoutée avec succès.';
             $_SESSION['message_type'] = 'success';
             header("Location: visualiser-site.php");
@@ -40,9 +42,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FAQ - Catégorie</title>
-    <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
+    <link rel="icon" type="image/png" href="https://www.decorient.fr/medias/favicon.png">
     <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&family=Be+Vietnam+Pro&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../../styles/admin/ajout.css">
+    <link rel="stylesheet" href="../../styles/admin/form.css">
     <link rel="stylesheet" href="../../styles/message.css">
     <link rel="stylesheet" href="../../styles/buttons.css">
     <script src="../../script/previewImage.js"></script>
@@ -64,14 +66,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <input type="text" id="nom" name="nom" class="input-field" required>
                     </div>
                     <div class="form-group">
-                        <label for="icon">Icône Font Awesome <label for="icon">
-                                Icône Font Awesome
-                                (ex: fa-solid fa-truck |
-                                <a href="https://fontawesome.com/search" target="_blank" style="color: #a4745a; text-decoration: underline;">
-                                    lien vers la bibliothèque
-                                </a>)
-                            </label><span class="required">*</span></label>
+                        <label for="icon">Icône Font Awesome <span class="required">*</span> (ex: fa-solid fa-truck |
+                            <a href="https://fontawesome.com/search" target="_blank" class="icon-link">
+                                lien vers la bibliothèque
+                            </a>)
+                            </label>
                         <input type="text" id="icon" name="icon" class="input-field" placeholder="fa-truck" required>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group btn-slider">
+                            <label for="visible">Afficher sur le site</label>
+                            <label class="switch">
+                                <input type="checkbox" id="visible" name="visible" checked>
+                                <span class="slider round"></span>
+                            </label>
+                        </div>
                     </div>
                     <div class="button-section">
                         <div class="buttons">

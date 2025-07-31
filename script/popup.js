@@ -2,27 +2,31 @@
 document.addEventListener('DOMContentLoaded', () => {
   const openButton = document.getElementById('btn-aide'); // Bouton pour ouvrir le popup
   const popup = document.getElementById('help-popup');
-  const closeButton = popup.querySelector('.btn-noir'); // Bouton "Merci !" pour fermer le popup
+  if (openButton && popup) {
+    const closeButton = popup.querySelector('.btn-noir'); // Bouton "Merci !" pour fermer le popup
 
-  // Afficher le popup
-  openButton.addEventListener('click', () => {
-    console.log('Bouton Aide cliqué');
-    popup.style.display = 'flex';
-  });
+    if (closeButton) {
+      // Afficher le popup
+      openButton.addEventListener('click', () => {
+        console.log('Bouton Aide cliqué');
+        popup.style.display = 'flex';
+      });
 
-  // Masquer le popup avec le bouton "Merci !"
-  closeButton.addEventListener('click', () => {
-    console.log('Popup fermé via le bouton');
-    popup.style.display = 'none';
-  });
+      closeButton.addEventListener('click', () => {
+        console.log('Popup fermé via le bouton');
+        popup.style.display = 'none';
+      });
 
-  // Fermer le popup si clic à l'extérieur
-  window.addEventListener('click', (event) => {
-    if (event.target === popup) {
-      console.log('Clic à l\'extérieur du popup');
-      popup.style.display = 'none';
+
+      // Fermer le popup si clic à l'extérieur
+      window.addEventListener('click', (event) => {
+        if (event.target === popup) {
+          console.log('Clic à l\'extérieur du popup');
+          popup.style.display = 'none';
+        }
+      });
     }
-  });
+  }
 });
 
 //Transition affichage des pages

@@ -13,7 +13,7 @@ if (!isset($_SESSION['user_id'])) {
 $selectedCouleurId = $_SESSION['id_couleur_bois'];
 
 //Affiche seulement les deco lié à la couleur séléctionné 
-$stmt = $pdo->prepare("SELECT * FROM decoration WHERE id_couleur_bois = ? ORDER BY prix ASC");
+$stmt = $pdo->prepare("SELECT * FROM decoration WHERE id_couleur_bois = ? AND visible = 1 ORDER BY prix ASC");
 $stmt->execute([$selectedCouleurId]);
 $decoration = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -52,7 +52,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
+  <meta name="description" content="Commence la personnalisation de ton canapé, choisis la décoration de ton futur canapé marocain." />
+  <link rel="icon" type="image/png" href="https://www.decorient.fr/medias/favicon.png">
   <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&family=Be+Vietnam+Pro&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../../styles/processus.css">
   <link rel="stylesheet" href="../../styles/popup.css">
@@ -73,7 +74,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   </header>
 
   <main>
-    <div class="fil-ariane-container h2" aria-label="fil-ariane" id="filAriane" >
+    <div class="fil-ariane-container h2" aria-label="fil-ariane" id="filAriane">
       <ul class="fil-ariane">
         <li><a href="etape1-1-structure.php">Structure</a></li>
         <li><a href="etape1-2-dimension.php">Dimension</a></li>
@@ -167,120 +168,120 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       </div>
     </div>
 
-        <!-- Popup bloquant pour les étapes non validées -->
-<div id="filariane-popup" class="popup">
-  <div class="popup-content">
-    <h2>Veuillez cliquez sur "suivant" pour passer à l’étape d’après.</h2>
-    <button class="btn-noir">OK</button>
-  </div>
-</div>
+    <!-- Popup bloquant pour les étapes non validées -->
+    <div id="filariane-popup" class="popup">
+      <div class="popup-content">
+        <h2>Veuillez cliquez sur "suivant" pour passer à l’étape d’après.</h2>
+        <button class="btn-noir">OK</button>
+      </div>
+    </div>
 
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-  const options               = document.querySelectorAll('.color-options .option img');
-  const mainImage             = document.querySelector('.main-display img');
-  const erreurPopup           = document.getElementById('erreur-popup');
-  const closeErreurBtn        = erreurPopup.querySelector('.btn-noir');
-  const selectedDecorationInput = document.getElementById('selected-decoration');
-  const form                  = document.querySelector('form');
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        const options = document.querySelectorAll('.color-options .option img');
+        const mainImage = document.querySelector('.main-display img');
+        const erreurPopup = document.getElementById('erreur-popup');
+        const closeErreurBtn = erreurPopup.querySelector('.btn-noir');
+        const selectedDecorationInput = document.getElementById('selected-decoration');
+        const form = document.querySelector('form');
 
-  // ───────────────────────────────────────────────
-  // 1. Récupération et détection du contexte
-  // ───────────────────────────────────────────────
-  let selectedDecoId = localStorage.getItem('selectedDecoration') || '';
-  let selected       = selectedDecoId !== '';
+        // ───────────────────────────────────────────────
+        // 1. Récupération et détection du contexte
+        // ───────────────────────────────────────────────
+        let selectedDecoId = localStorage.getItem('selectedDecoration') || '';
+        let selected = selectedDecoId !== '';
 
-  const currentStep  = document.body.getAttribute('data-current-step') || '';
-  const isTissu      = currentStep.includes('tissu');
-  const isBois       = currentStep.includes('bois');
+        const currentStep = document.body.getAttribute('data-current-step') || '';
+        const isTissu = currentStep.includes('tissu');
+        const isBois = currentStep.includes('bois');
 
-  // ───────────────────────────────────────────────
-  // 2. Vérifier si la sélection stockée est compatible
-  // ───────────────────────────────────────────────
-  const decoSelector = isBois
-    ? `[data-deco-bois-id="${selectedDecoId}"]`
-    : `[data-deco-tissu-id="${selectedDecoId}"]`;
+        // ───────────────────────────────────────────────
+        // 2. Vérifier si la sélection stockée est compatible
+        // ───────────────────────────────────────────────
+        const decoSelector = isBois ?
+          `[data-deco-bois-id="${selectedDecoId}"]` :
+          `[data-deco-tissu-id="${selectedDecoId}"]`;
 
-  const idCompatible = selectedDecoId && document.querySelector(decoSelector);
+        const idCompatible = selectedDecoId && document.querySelector(decoSelector);
 
-  if (selectedDecoId && !idCompatible) {
-    // L’ID stocké ne correspond pas au chemin actuel → on nettoie
-    options.forEach(img => img.classList.remove('selected'));
-    localStorage.removeItem('selectedDecoration');
-    selectedDecoId = '';
-    selected = false;
-    selectedDecorationInput.value = '';
-    console.log('🧹 Changement de chemin : déco réinitialisée');
-  }
+        if (selectedDecoId && !idCompatible) {
+          // L’ID stocké ne correspond pas au chemin actuel → on nettoie
+          options.forEach(img => img.classList.remove('selected'));
+          localStorage.removeItem('selectedDecoration');
+          selectedDecoId = '';
+          selected = false;
+          selectedDecorationInput.value = '';
+          console.log('🧹 Changement de chemin : déco réinitialisée');
+        }
 
-  // ───────────────────────────────────────────────
-  // 3. Restaurer la sélection si cohérente
-  // ───────────────────────────────────────────────
-  options.forEach(img => {
-    if (
-      (isBois  && img.getAttribute('data-deco-bois-id')  === selectedDecoId) ||
-      (isTissu && img.getAttribute('data-deco-tissu-id') === selectedDecoId)
-    ) {
-      img.classList.add('selected');
-      mainImage.src = img.src;
-      selectedDecorationInput.value = selectedDecoId;
-    }
-  });
+        // ───────────────────────────────────────────────
+        // 3. Restaurer la sélection si cohérente
+        // ───────────────────────────────────────────────
+        options.forEach(img => {
+          if (
+            (isBois && img.getAttribute('data-deco-bois-id') === selectedDecoId) ||
+            (isTissu && img.getAttribute('data-deco-tissu-id') === selectedDecoId)
+          ) {
+            img.classList.add('selected');
+            mainImage.src = img.src;
+            selectedDecorationInput.value = selectedDecoId;
+          }
+        });
 
-  // ───────────────────────────────────────────────
-  // 4. Sauvegarde
-  // ───────────────────────────────────────────────
-  function saveSelection() {
-    localStorage.setItem('selectedDecoration', selectedDecoId);
-  }
+        // ───────────────────────────────────────────────
+        // 4. Sauvegarde
+        // ───────────────────────────────────────────────
+        function saveSelection() {
+          localStorage.setItem('selectedDecoration', selectedDecoId);
+        }
 
-  // ───────────────────────────────────────────────
-  // 5. Gestion du clic sur une décoration
-  // ───────────────────────────────────────────────
-  options.forEach(img => {
-    img.addEventListener('click', () => {
-      // Retirer la sélection précédente
-      options.forEach(opt => opt.classList.remove('selected'));
+        // ───────────────────────────────────────────────
+        // 5. Gestion du clic sur une décoration
+        // ───────────────────────────────────────────────
+        options.forEach(img => {
+          img.addEventListener('click', () => {
+            // Retirer la sélection précédente
+            options.forEach(opt => opt.classList.remove('selected'));
 
-      // Appliquer la nouvelle sélection
-      img.classList.add('selected');
-      mainImage.src = img.src;
+            // Appliquer la nouvelle sélection
+            img.classList.add('selected');
+            mainImage.src = img.src;
 
-      // Stocker l’ID selon le chemin courant
-      selectedDecoId = isBois
-        ? img.getAttribute('data-deco-bois-id')
-        : img.getAttribute('data-deco-tissu-id');
+            // Stocker l’ID selon le chemin courant
+            selectedDecoId = isBois ?
+              img.getAttribute('data-deco-bois-id') :
+              img.getAttribute('data-deco-tissu-id');
 
-      selectedDecorationInput.value = selectedDecoId;
-      selected = true;
-      saveSelection();
+            selectedDecorationInput.value = selectedDecoId;
+            selected = true;
+            saveSelection();
 
-      console.log(`🎨 Décoration sélectionnée : ${selectedDecoId}`);
-    });
-  });
+            console.log(`🎨 Décoration sélectionnée : ${selectedDecoId}`);
+          });
+        });
 
-  // ───────────────────────────────────────────────
-  // 6. Empêcher l’envoi si aucune déco n’est choisie
-  // ───────────────────────────────────────────────
-  form.addEventListener('submit', e => {
-    if (!selectedDecorationInput.value) {
-      e.preventDefault();
-      erreurPopup.style.display = 'flex';
-    }
-  });
+        // ───────────────────────────────────────────────
+        // 6. Empêcher l’envoi si aucune déco n’est choisie
+        // ───────────────────────────────────────────────
+        form.addEventListener('submit', e => {
+          if (!selectedDecorationInput.value) {
+            e.preventDefault();
+            erreurPopup.style.display = 'flex';
+          }
+        });
 
-  // ───────────────────────────────────────────────
-  // 7. Popup erreur (fermeture)
-  // ───────────────────────────────────────────────
-  closeErreurBtn.addEventListener('click', () => {
-    erreurPopup.style.display = 'none';
-  });
+        // ───────────────────────────────────────────────
+        // 7. Popup erreur (fermeture)
+        // ───────────────────────────────────────────────
+        closeErreurBtn.addEventListener('click', () => {
+          erreurPopup.style.display = 'none';
+        });
 
-  window.addEventListener('click', event => {
-    if (event.target === erreurPopup) erreurPopup.style.display = 'none';
-  });
-});
-</script>
+        window.addEventListener('click', event => {
+          if (event.target === erreurPopup) erreurPopup.style.display = 'none';
+        });
+      });
+    </script>
 
     <!-- BOUTTON RETOUR -->
     <script>
@@ -289,54 +290,79 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     </script>
 
-    
+
     <!-- FIL ARIANE -->
     <script>
-    
-    document.addEventListener('DOMContentLoaded', () => {
-  const filAriane = document.querySelector('.fil-ariane');
-  const links = filAriane.querySelectorAll('a');
+      document.addEventListener('DOMContentLoaded', () => {
+        const filAriane = document.querySelector('.fil-ariane');
+        const links = filAriane.querySelectorAll('a');
 
-  const filArianePopup = document.getElementById('filariane-popup');
-  const closeFilArianePopupBtn = filArianePopup.querySelector('.btn-noir');
+        const filArianePopup = document.getElementById('filariane-popup');
+        const closeFilArianePopupBtn = filArianePopup.querySelector('.btn-noir');
 
-  const etapes = [
-    { id: 'etape1-1-structure.php', key: null }, // toujours accessible
-    { id: 'etape1-2-dimension.php', key: null },
-    { id: 'etape2-type-banquette.php', key: null },
-    { id: 'etape3-bois-couleur.php', key: null },
-    { id: 'etape4-bois-decoration.php', key: null },
-    { id: 'etape5-bois-accoudoir.php', key: 'etape5_valide' },
-    { id: 'etape6-bois-dossier.php', key: 'etape6_valide' },
-    { id: 'etape7-1-bois-tissu.php', key: 'etape7_valide' },
-    { id: 'etape8-bois-mousse.php', key: 'etape8_valide' },
-  ];
+        const etapes = [{
+            id: 'etape1-1-structure.php',
+            key: null
+          }, // toujours accessible
+          {
+            id: 'etape1-2-dimension.php',
+            key: null
+          },
+          {
+            id: 'etape2-type-banquette.php',
+            key: null
+          },
+          {
+            id: 'etape3-bois-couleur.php',
+            key: null
+          },
+          {
+            id: 'etape4-bois-decoration.php',
+            key: null
+          },
+          {
+            id: 'etape5-bois-accoudoir.php',
+            key: 'etape5_valide'
+          },
+          {
+            id: 'etape6-bois-dossier.php',
+            key: 'etape6_valide'
+          },
+          {
+            id: 'etape7-1-bois-tissu.php',
+            key: 'etape7_valide'
+          },
+          {
+            id: 'etape8-bois-mousse.php',
+            key: 'etape8_valide'
+          },
+        ];
 
- links.forEach((link, index) => {
-    const etape = etapes[index];
+        links.forEach((link, index) => {
+          const etape = etapes[index];
 
-    // Empêche de cliquer si l'étape n’est pas validée
-    if (etape.key && sessionStorage.getItem(etape.key) !== 'true') {
-      link.addEventListener('click', (e) => {
-        e.preventDefault();
-        filArianePopup.style.display = 'flex';
+          // Empêche de cliquer si l'étape n’est pas validée
+          if (etape.key && sessionStorage.getItem(etape.key) !== 'true') {
+            link.addEventListener('click', (e) => {
+              e.preventDefault();
+              filArianePopup.style.display = 'flex';
+            });
+            link.classList.add('disabled-link');
+          }
+        });
+
+        // Fermer le popup avec le bouton
+        closeFilArianePopupBtn.addEventListener('click', () => {
+          filArianePopup.style.display = 'none';
+        });
+
+        // Fermer si on clique en dehors du contenu
+        window.addEventListener('click', (event) => {
+          if (event.target === filArianePopup) {
+            filArianePopup.style.display = 'none';
+          }
+        });
       });
-      link.classList.add('disabled-link');
-    }
-  });
-
-  // Fermer le popup avec le bouton
-  closeFilArianePopupBtn.addEventListener('click', () => {
-    filArianePopup.style.display = 'none';
-  });
-
-  // Fermer si on clique en dehors du contenu
-  window.addEventListener('click', (event) => {
-    if (event.target === filArianePopup) {
-      filArianePopup.style.display = 'none';
-    }
-  });
-});
     </script>
 
 

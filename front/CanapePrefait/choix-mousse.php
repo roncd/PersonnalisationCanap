@@ -87,23 +87,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 ?>
 
-
-<script>
-  const sofaId = <?= json_encode($id_commande_prefait) ?>;
-  const defaultFoamId = <?= json_encode($selectedMousseId) ?>;
-  const defaultFoamPrice = <?= json_encode($oldMoussePrice) ?>;
-</script>
-
-
-
-
 <!DOCTYPE html>
 <html lang="fr">
 
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
+  <link rel="icon" type="image/png" href="https://www.decorient.fr/medias/favicon.png">
   <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&family=Be+Vietnam+Pro&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../../styles/popup.css">
   <link rel="stylesheet" href="../../styles/canapPrefait.css">
@@ -124,16 +114,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 
   <main>
-      <div class="fil-ariane-container h2 " aria-label="fil-ariane">
-          <ul class="fil-ariane">
-            <?php
-            $id = $_GET['id'] ?? null;
-            ?>
-            <li><a href="./choix-dimension.php?id=<?= $id ?>">Dimension</a></li>
-            <li><a href="./choix-mousse.php?id=<?= $id ?>" class="active">Mousse</a></li>
-          </ul>
-        </div>
-<div style="margin-bottom: 60px !important;"></div>    <div class="container transition">
+    <div class="fil-ariane-container h2 " aria-label="fil-ariane">
+      <ul class="fil-ariane">
+        <?php
+        $id = $_GET['id'] ?? null;
+        ?>
+        <li><a href="./choix-dimension.php?id=<?= $id ?>">Dimension</a></li>
+        <li><a href="./choix-mousse.php?id=<?= $id ?>" class="active">Mousse</a></li>
+      </ul>
+    </div>
+    <div class="container transition">
       <!-- Colonne de gauche -->
       <div class="left-column">
         <h2>Choisi ta mousse </h2>
@@ -178,13 +168,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
       <!-- Colonne de droite -->
       <div class="right-column">
-        <section class="main-display2">
+        <section class="main-display">
           <div class="buttons">
             <button id="btn-aide" class="btn-beige">Besoin d'aide ?</button>
             <button type="button" data-url="../pages/noscanapes.php" id="btn-abandonner" class="btn-noir">Abandonner</button>
           </div>
-          <br>
-
           <?php if (!empty($composition['mousse']['img'])): ?>
             <img
               src="../../admin/uploads/mousse/<?php echo htmlspecialchars($composition['mousse']['img'], ENT_QUOTES); ?>"
@@ -200,10 +188,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       <div class="popup-content">
         <h2>Vous avez une question ?</h2>
         <p>Contactez-nous au numéro suivant et un vendeur vous assistera :
-          <br><br>
+          <br>
           <strong>06 58 47 58 56</strong>
         </p>
-        <br>
         <button class="btn-noir">Merci !</button>
       </div>
     </div>
@@ -212,7 +199,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <div id="abandonner-popup" class="popup ">
       <div class="popup-content">
         <h2>Êtes-vous sûr de vouloir abandonner ?</h2>
-        <br>
         <button class="btn-beige">Oui...</button>
         <button class="btn-noir">Non !</button>
       </div>
@@ -228,106 +214,115 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   </main>
 
 
-
-<!-- GESTION DES SELECTIONS -->
-<script>
-  // Helpers pour lire / écrire l'objet central
-  function loadFoamData() {
-    return JSON.parse(localStorage.getItem('mousseBySofa') || '{}');
-  }
-  function saveFoamData(data) {
-    localStorage.setItem('mousseBySofa', JSON.stringify(data));
-  }
-
-  document.addEventListener('DOMContentLoaded', () => {
-    // --------- DOM ----------
-    const options            = document.querySelectorAll('.color-options .option img');
-    const mainImage          = document.querySelector('.main-display2 img');
-    const erreurPopup        = document.getElementById('erreur-popup');
-    const closeErreurBtn     = erreurPopup?.querySelector('.btn-noir');
-    const selectedMousseInput= document.getElementById('selected-mousse');
-    const prixTotalInput     = document.getElementById('input-prix-total');
-    const form               = document.querySelector('form');
-    const totalSansMousseEl  = document.getElementById('prix-sans-mousse');
-    const prixTotalFinalEl   = document.getElementById('prix-total-final');
-
-    // --------- lecture des données persistées ----------
-    const prixAvantMousseStr = localStorage.getItem('prix_total_jusqua_dimensions');  // prix du canapé sans mousse
-    const data               = loadFoamData();                                        // { [sofaId]: {id, price}, ... }
-    const stored             = data[sofaId] || { id: defaultFoamId, price: defaultFoamPrice };
-
-    let selectedMousseId = stored.id ? String(stored.id) : '';                        // peut être '' si pas de mousse
-    let ancienPrixMousse = parseFloat(stored.price || 0);                             // prix de la mousse stockée
-    const prixBrut       = parseFloat(prixAvantMousseStr || '0');                     // prix canapé + mousse
-    let prixBaseSansMousse = Math.max(prixBrut - ancienPrixMousse, 0);                // prix canapé SANS mousse
-
-    // --------- affichage initial ----------
-    if (totalSansMousseEl) {
-      totalSansMousseEl.textContent = prixBaseSansMousse.toFixed(2).replace('.', ',') + ' €';
-    }
-    const prixInitial = prixBaseSansMousse + ancienPrixMousse;
-    prixTotalFinalEl.textContent = prixInitial.toFixed(2).replace('.', ',') + ' €';
-    prixTotalInput.value = prixInitial.toFixed(2);
-
-    // --------- fonction centrale ----------
-    function updateSelection(mousseElement, force = false) {
-      const moussePrix = parseFloat(mousseElement.dataset.mousseBoisPrix || '0');
-      const newMousseId = mousseElement.getAttribute('data-mousse-bois-id');
-
-      // si clic sur la mousse déjà sélectionnée (et pas forcé) → on ne fait rien
-      if (!force && selectedMousseId === newMousseId) return;
-
-      // visuel : retirer / ajouter la classe 'selected'
-      options.forEach(opt => opt.classList.remove('selected'));
-      mousseElement.classList.add('selected');
-
-      // mémorise la sélection
-      selectedMousseId = newMousseId;
-      selectedMousseInput.value = selectedMousseId;
-      if (mainImage) mainImage.src = mousseElement.src;
-
-      // prix
-      const totalFinal = prixBaseSansMousse + moussePrix;
-      prixTotalFinalEl.textContent = totalFinal.toFixed(2).replace('.', ',') + ' €';
-      prixTotalInput.value = totalFinal.toFixed(2);
-
-      // ---- persistance : on met à jour UNIQUEMENT la branche du canapé courant ----
-      data[sofaId] = { id: selectedMousseId, price: moussePrix };
-      saveFoamData(data);
+  <script>
+    // Helpers pour lire / écrire l'objet central
+    function loadFoamData() {
+      return JSON.parse(localStorage.getItem('mousseBySofa') || '{}');
     }
 
-    // ----- ré‑applique la sélection enregistrée (si elle existe dans le DOM) -----
-    if (selectedMousseId) {
-      const previouslySelected = document.querySelector(`[data-mousse-bois-id="${selectedMousseId}"]`);
-      if (previouslySelected) {
-        updateSelection(previouslySelected, true); // true = charge sans recalculer
-      }
+    function saveFoamData(data) {
+      localStorage.setItem('mousseBySofa', JSON.stringify(data));
     }
+   
+    const sofaId = <?= json_encode($id_commande_prefait) ?>;
+    const defaultFoamId = <?= json_encode($selectedMousseId) ?>;
+    const defaultFoamPrice = <?= json_encode($oldMoussePrice) ?>;
 
-    // ----- gestion des clics sur les images de mousse -----
-    options.forEach(img => {
-      img.addEventListener('click', () => updateSelection(img));
-    });
+    document.addEventListener('DOMContentLoaded', () => {
+      // --------- DOM ----------
+      const options = document.querySelectorAll('.color-options .option img');
+      const mainImage = document.querySelector('.main-display2 img');
+      const erreurPopup = document.getElementById('erreur-popup');
+      const closeErreurBtn = erreurPopup?.querySelector('.btn-noir');
+      const selectedMousseInput = document.getElementById('selected-mousse');
+      const prixTotalInput = document.getElementById('input-prix-total');
+      const form = document.querySelector('form');
+      const totalSansMousseEl = document.getElementById('prix-sans-mousse');
+      const prixTotalFinalEl = document.getElementById('prix-total-final');
 
-    // ----- validation du formulaire -----
-    form?.addEventListener('submit', (e) => {
-      if (!selectedMousseInput.value) {
-        e.preventDefault();
-        if (erreurPopup) erreurPopup.style.display = 'flex';
+      // --------- lecture des données persistées ----------
+      const prixAvantMousseStr = localStorage.getItem('prix_total_jusqua_dimensions'); // prix du canapé sans mousse
+      const data = loadFoamData(); // { [sofaId]: {id, price}, ... }
+      const stored = data[sofaId] || {
+        id: defaultFoamId,
+        price: defaultFoamPrice
+      };
+
+      let selectedMousseId = stored.id ? String(stored.id) : ''; // peut être '' si pas de mousse
+      let ancienPrixMousse = parseFloat(stored.price || 0); // prix de la mousse stockée
+      const prixBrut = parseFloat(prixAvantMousseStr || '0'); // prix canapé + mousse
+      let prixBaseSansMousse = Math.max(prixBrut - ancienPrixMousse, 0); // prix canapé SANS mousse
+
+      // --------- affichage initial ----------
+      if (totalSansMousseEl) {
+        totalSansMousseEl.textContent = prixBaseSansMousse.toFixed(2).replace('.', ',') + ' €';
       }
-    });
+      const prixInitial = prixBaseSansMousse + ancienPrixMousse;
+      prixTotalFinalEl.textContent = prixInitial.toFixed(2).replace('.', ',') + ' €';
+      prixTotalInput.value = prixInitial.toFixed(2);
 
-    // ----- popup d'erreur -----
-    closeErreurBtn?.addEventListener('click', () => {
-      if (erreurPopup) erreurPopup.style.display = 'none';
-    });
-    window.addEventListener('click', (event) => {
-      if (event.target === erreurPopup) {
-        erreurPopup.style.display = 'none';
+      // --------- fonction centrale ----------
+      function updateSelection(mousseElement, force = false) {
+        const moussePrix = parseFloat(mousseElement.dataset.mousseBoisPrix || '0');
+        const newMousseId = mousseElement.getAttribute('data-mousse-bois-id');
+
+        // si clic sur la mousse déjà sélectionnée (et pas forcé) → on ne fait rien
+        if (!force && selectedMousseId === newMousseId) return;
+
+        // visuel : retirer / ajouter la classe 'selected'
+        options.forEach(opt => opt.classList.remove('selected'));
+        mousseElement.classList.add('selected');
+
+        // mémorise la sélection
+        selectedMousseId = newMousseId;
+        selectedMousseInput.value = selectedMousseId;
+        if (mainImage) mainImage.src = mousseElement.src;
+
+        // prix
+        const totalFinal = prixBaseSansMousse + moussePrix;
+        prixTotalFinalEl.textContent = totalFinal.toFixed(2).replace('.', ',') + ' €';
+        prixTotalInput.value = totalFinal.toFixed(2);
+
+        // ---- persistance : on met à jour UNIQUEMENT la branche du canapé courant ----
+        data[sofaId] = {
+          id: selectedMousseId,
+          price: moussePrix
+        };
+        saveFoamData(data);
       }
+
+      // ----- ré‑applique la sélection enregistrée (si elle existe dans le DOM) -----
+      if (selectedMousseId) {
+        const previouslySelected = document.querySelector(`[data-mousse-bois-id="${selectedMousseId}"]`);
+        if (previouslySelected) {
+          updateSelection(previouslySelected, true); // true = charge sans recalculer
+        }
+      }
+
+      // ----- gestion des clics sur les images de mousse -----
+      options.forEach(img => {
+        img.addEventListener('click', () => updateSelection(img));
+      });
+
+      // ----- validation du formulaire -----
+      form?.addEventListener('submit', (e) => {
+        if (!selectedMousseInput.value) {
+          e.preventDefault();
+          if (erreurPopup) erreurPopup.style.display = 'flex';
+        }
+      });
+
+      // ----- popup d'erreur -----
+      closeErreurBtn?.addEventListener('click', () => {
+        if (erreurPopup) erreurPopup.style.display = 'none';
+      });
+      window.addEventListener('click', (event) => {
+        if (event.target === erreurPopup) {
+          erreurPopup.style.display = 'none';
+        }
+      });
     });
-  });
-</script>
+  </script>
 
 
 

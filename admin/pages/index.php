@@ -45,7 +45,7 @@ $assocData[$table] = array_column($data[$table], 'nom', 'id');
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin - Déco Du Monde</title>
     <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&family=Be+Vietnam+Pro&display=swap" rel="stylesheet">
-    <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
+    <link rel="icon" type="image/png" href="https://www.decorient.fr/medias/favicon.png">
     <link rel="stylesheet" href="../../styles/admin/landing-page.css">
 </head>
 
@@ -79,10 +79,10 @@ $assocData[$table] = array_column($data[$table], 'nom', 'id');
                             $stmt->execute();
                             while ($commande = $stmt->fetch(PDO::FETCH_ASSOC)) {
                                 echo "<tr>";
-                                echo "<td style='height: 30px;'>{$commande['id']}</td>";
+                                echo "<td '>{$commande['id']}</td>";
                                 echo "<td>" . htmlspecialchars($assocData['client'][$commande['id_client']] ?? '-') . "</td>";
-                                echo "<td style='height: 30px;'>{$commande['date']}</td>";
-                                echo "<td style='height: 30px;'>{$commande['prix']}€</td>";
+                                echo "<td '>{$commande['date']}</td>";
+                                echo "<td '>{$commande['prix']}€</td>";
                                 echo "</tr>";
                             }
                             ?>
@@ -107,10 +107,10 @@ $assocData[$table] = array_column($data[$table], 'nom', 'id');
                             $stmt->execute();
                             while ($commande = $stmt->fetch(PDO::FETCH_ASSOC)) {
                                 echo "<tr>";
-                                echo "<td style='height: 30px;'>{$commande['id']}</td>";
+                                echo "<td '>{$commande['id']}</td>";
                                 echo "<td>" . htmlspecialchars($assocData['client'][$commande['id_client']] ?? '-') . "</td>";
-                                echo "<td style='height: 30px;'>{$commande['date']}</td>";
-                                echo "<td style='height: 30px;'>{$commande['prix']}€</td>";
+                                echo "<td '>{$commande['date']}</td>";
+                                echo "<td '>{$commande['prix']}€</td>";
                                 echo "</tr>";
                             }
                             ?>
@@ -139,9 +139,9 @@ $assocData[$table] = array_column($data[$table], 'nom', 'id');
                             $stmt->execute();
                             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                                 echo "<tr>";
-                                echo "<td style='height: 30px;'>{$row['id']}</td>";
-                                echo "<td style='height: 30px;'>{$row['nom']}</td>";
-                                echo "<td style='height: 30px;'>{$row['prenom']}</td>";
+                                echo "<td '>{$row['id']}</td>";
+                                echo "<td '>{$row['nom']}</td>";
+                                echo "<td '>{$row['prenom']}</td>";
                                 echo "</tr>";
                             }
                             ?>

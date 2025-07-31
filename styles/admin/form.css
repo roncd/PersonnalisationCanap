@@ -70,6 +70,23 @@ h2 {
     width: 100%;
 }
 
+.form-group a.input-field {
+    text-decoration: none;
+    color: black;
+    text-align: center;
+}
+
+.form-group.btn-slider {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 10px;
+    flex: 1;
+    margin-bottom: 20px;
+    width: 100%;
+}
+
 .form-group .required {
     color: red;
 }
@@ -83,10 +100,21 @@ label {
     margin-bottom: 5px;
 }
 
-input, select {
+.icon-link {
+    color: #a4745a;
+}
+
+input,
+select {
     appearance: none;
     color: black;
 }
+
+textarea.input-field {
+    min-height: fit-content;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
 /* Champs d'entrée */
 .input-field {
     padding: 12px;
@@ -97,6 +125,14 @@ input, select {
     /* Beige avec opacité */
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
     transition: all 0.3s ease;
+}
+
+.input-wrapper {
+    position: relative;
+}
+
+.input-wrapper .input-field {
+    width: -webkit-fill-available;
 }
 
 select.input-field {
@@ -126,7 +162,7 @@ select.input-field {
 /* Le champ de saisie : on décale un peu le texte à droite */
 .input-section .input-field {
     width: 100%;
-    padding-right: 40px;
+    padding-right: 4.1rem;
     box-sizing: border-box;
 }
 

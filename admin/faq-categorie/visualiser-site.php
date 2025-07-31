@@ -30,6 +30,20 @@ $stmtCount->execute();
 $totalCommandes = $stmtCount->fetchColumn();
 
 $totalPages = ceil($totalCommandes / $limit);
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id'], $_POST['visible'])) {
+    $id = (int) $_POST['id'];
+    $visible = (int) $_POST['visible'];
+
+    $stmt = $pdo->prepare("UPDATE faq_categorie SET visible = :visible WHERE id = :id");
+    $stmt->execute([
+        ':visible' => $visible,
+        ':id' => $id
+    ]);
+
+    echo 'ok';
+    exit;
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -38,14 +52,17 @@ $totalPages = ceil($totalCommandes / $limit);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FAQ</title>
-    <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
-    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&family=Be+Vietnam+Pro&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="https://www.decorient.fr/medias/favicon.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?politiquemily=Baloo+2:wght@700&family=Be+Vietnam+Pro&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../../styles/admin/tab.css">
     <link rel="stylesheet" href="../../styles/message.css">
     <link rel="stylesheet" href="../../styles/pagination.css">
     <link rel="stylesheet" href="../../styles/buttons.css">
     <link rel="stylesheet" href="../../styles/popup.css">
     <script src="../../script/deleteRow.js"></script>
+    <script type="module" src="../../script/visible.js"></script>
+
 </head>
 
 <body>
@@ -87,18 +104,19 @@ $totalPages = ceil($totalCommandes / $limit);
                                 </a>
                                 ID
                             </th>
-                            <th>Nom</th>
-                            <th>Icône</th>
-                            <th class="sticky-col">Action</th>
+                            <th>VISIBLE</th>
+                            <th>NOM</th>
+                            <th>ICÔNE</th>
+                            <th class="sticky-col">ACTION</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php
                         if ($search) {
-                            $stmt = $pdo->prepare("SELECT id, nom, icon FROM faq_categorie WHERE nom LIKE :search ORDER BY id $order");
+                            $stmt = $pdo->prepare("SELECT * FROM faq_categorie WHERE nom LIKE :search ORDER BY id $order");
                             $stmt->bindValue(':search', '%' . $search . '%', PDO::PARAM_STR);
                         } else {
-                            $stmt = $pdo->prepare("SELECT id, nom, icon FROM faq_categorie ORDER BY id $order LIMIT :limit OFFSET :offset");
+                            $stmt = $pdo->prepare("SELECT * FROM faq_categorie ORDER BY id $order LIMIT :limit OFFSET :offset");
                             $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
                             $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
                         }
@@ -106,8 +124,12 @@ $totalPages = ceil($totalCommandes / $limit);
                         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                             echo "<tr>";
                             echo "<td>{$row['id']}</td>";
+                            $checked = $row['visible'] ? 'checked' : '';
+                            echo "<td class='visible'><input type='checkbox' class='toggle-visible' data-id='{$row['id']}' $checked></td>";
                             echo "<td>{$row['nom']}</td>";
-                            echo "<td>{$row['icon']}</td>";
+                            $icon = $row['icon'] ?? 'fa-question-circle';
+                            echo "<td><i class='$icon'></i></td>";
+                            // echo "<td>{$row['icon']}</td>";
                             echo "<td class='actions'>";
                             echo "<a href='edit-site.php?id={$row['id']}' class='edit-action actions vert' title='Modifier'>EDIT</a>";
                             echo "<a href='delete.php?id={$row['id']}' class='delete-action actions rouge' data-id='{$row['id']}' title='Supprimer'>DELETE</a>";

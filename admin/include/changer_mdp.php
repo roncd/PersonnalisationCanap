@@ -71,7 +71,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Modifier le mot de passe</title>
-    <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
+    <link rel="icon" type="image/png" href="https://www.decorient.fr/medias/favicon.png">
     <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&family=Be+Vietnam+Pro&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../../styles/changer_mdp.css">
     <link rel="stylesheet" href="../../styles/buttons.css">
@@ -94,8 +94,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <label for="ancien">Ancien mot de passe <span class="required">*</span></label>
                     <div class="input-section">
                         <input type="password" id="ancien" name="ancien" required>
-                        <span class="toggle-password-text"
-                            style="cursor: pointer; color: #666; user-select: none; position: absolute; right: 10px; top: 50%; transform: translateY(-50%); font-weight: 100;">
+                        <span class="toggle-password-text">
                             Afficher
                         </span>
                     </div>
@@ -103,12 +102,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <label for="mdp">Nouveau mot de passe <span class="required">*</span></label>
                     <div class="input-section">
                         <input type="password" id="mdp" name="mdp" required>
-                        <span class="toggle-password-text"
-                            style="cursor: pointer; color: #666; user-select: none; position: absolute; right: 10px; top: 50%; transform: translateY(-50%); font-weight: 100;">
+                        <span class="toggle-password-text">
                             Afficher
                         </span>
                     </div>
-                    <p id="password-strength-text" style="font-size: 0.9em; margin-top: 5px;"></p>
+                    <p id="password-strength-text" class="pwd-strenght-text"></p>
 
                     <!-- Checklist dynamique -->
                     <ul class="password-requirements">
@@ -122,8 +120,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <label for="confirm-password">Confirmer le mot de passe <span class="required">*</span></label>
                     <div class="input-section">
                         <input class="password-confirm-wrapper" type="password" id="confirm-password" name="confirm-password" required>
-                        <span class="toggle-password-text"
-                            style="cursor: pointer; color: #666; user-select: none; position: absolute; right: 10px; top: 50%; transform: translateY(-50%); font-weight: 100;">
+                        <span class="toggle-password-text">
                             Afficher
                         </span>
                     </div>

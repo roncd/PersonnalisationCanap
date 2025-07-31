@@ -10,8 +10,8 @@ require '../../admin/include/session_expiration.php';
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mentions Légales</title>
-    <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
-    <link rel="stylesheet" href="../../styles/mentions.css">
+    <link rel="icon" type="image/png" href="https://www.decorient.fr/medias/favicon.png">
+    <link rel="stylesheet" href="../../styles/page-text.css">
     <link rel="stylesheet" href="../../styles/transition.css">
     <script type="module" src="../../script/transition.js"></script>
 </head>
@@ -65,7 +65,7 @@ require '../../admin/include/session_expiration.php';
                 <p><b>O2SWITCH</b></p>
                 <p><b>RCS :</b> Clermont-Ferrand B 510909807</p>
                 <p><b>Adresse siège social :</b> Che Des Pardiaux, 63000 Clermont Ferrand, France</p>
-                 <p><b>Numéro de SIRET (siège) :</b> 51090980700032</p>
+                <p><b>Numéro de SIRET (siège) :</b> 51090980700032</p>
             </section>
 
             <section class="section transition-all">
@@ -195,7 +195,7 @@ require '../../admin/include/session_expiration.php';
 
                 <div ng-bind-html="rgpdHTML"></div>
             </section>
-            <section class="section transition-all" >
+            <section class="section transition-all">
                 <h2>7. Notification d’incident</h2>
                 <p>
                     Quels que soient les efforts fournis, aucune méthode de transmission sur Internet et aucune méthode de stockage électronique n'est complètement sûre. Nous ne pouvons en conséquence pas garantir une sécurité absolue.
@@ -230,17 +230,17 @@ require '../../admin/include/session_expiration.php';
                     Le cas échéant, <a href="https://decorient.fr">https://decorient.fr</a> décline toute responsabilité pour les conséquences liées au fonctionnement dégradé du Site et des services éventuellement proposés par <a href="https://decorient.fr">https://decorient.fr</a>, résultant (i) du refus de Cookies par l’Utilisateur (ii) de l’impossibilité pour <a href="https://decorient.fr">https://decorient.fr</a> d’enregistrer ou de consulter les Cookies nécessaires à leur fonctionnement du fait du choix de l’Utilisateur. Pour la gestion des Cookies et des choix de l’Utilisateur, la configuration de chaque navigateur est différente. Elle est décrite dans le menu d’aide du navigateur, qui permettra de savoir de quelle manière l’Utilisateur peut modifier ses souhaits en matière de Cookies.</p>
                 <p>
                     À tout moment, l’Utilisateur peut faire le choix d’exprimer et de modifier ses souhaits en matière de Cookies. <a href="https://decorient.fr">https://decorient.fr</a> pourra en outre faire appel aux services de prestataires externes pour l’aider à recueillir et traiter les informations décrites dans cette section.</p>
-              
+
             </section>
             <section class="section transition-all">
 
-            <h2>9. Droit applicable et attribution de juridiction.</h2>
-            <p>
-                Tout litige en relation avec l’utilisation du site <a href="https://decorient.fr">https://decorient.fr</a> est soumis au droit français.
-                En dehors des cas où la loi ne le permet pas, il est fait attribution exclusive de juridiction aux tribunaux compétents de Pierrefitte-Sur-Seine</p>
-                    </section>
+                <h2>9. Droit applicable et attribution de juridiction.</h2>
+                <p>
+                    Tout litige en relation avec l’utilisation du site <a href="https://decorient.fr">https://decorient.fr</a> est soumis au droit français.
+                    En dehors des cas où la loi ne le permet pas, il est fait attribution exclusive de juridiction aux tribunaux compétents de Pierrefitte-Sur-Seine</p>
+            </section>
 
-            </div>
+        </div>
     </main>
 
     <?php require_once '../../squelette/footer.php'; ?>

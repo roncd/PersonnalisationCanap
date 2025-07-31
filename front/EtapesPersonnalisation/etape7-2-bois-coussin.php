@@ -15,7 +15,7 @@ $selectedTissuId = $_SESSION['id_couleur_tissu_bois'];
 
 
 // Récupérer les motifs de bois depuis la base de données
-$stmt = $pdo->prepare("SELECT * FROM motif_bois WHERE id_couleur_tissu = ? ORDER BY prix ASC");
+$stmt = $pdo->prepare("SELECT * FROM motif_bois WHERE id_couleur_tissu = ? AND visible = 1 ORDER BY prix ASC");
 $stmt->execute([$selectedTissuId]);
 $motif_bois = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -50,7 +50,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
+  <meta name="description" content="Commence la personnalisation de ton canapé, choisis le kit de coussins de ton futur canapé marocain." />
+  <link rel="icon" type="image/png" href="https://www.decorient.fr/medias/favicon.png">
   <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&family=Be+Vietnam+Pro&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../../styles/processus.css">
   <link rel="stylesheet" href="../../styles/popup.css">
@@ -89,54 +90,54 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <div class="container transition">
       <!-- Colonne de gauche -->
       <div class="left-column ">
-        <div style="display: flex; align-items: center; gap: 0.5em;">
-          <h2 style="margin: 0;">Étape 7.2 - Choisi ton kit de coussins</h2>
+        <div class="title-info">
+          <h2>Étape 7.2 - Choisi ton kit de coussins</h2>
           <!-- Icône d'information avec popup -->
-          <button id="info-coussin-btn" title="Information" style="background: none; border: none; cursor: pointer; padding: 0;">
+          <button id="info-coussin-btn" title="Information" class="information">
             <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
-              <circle cx="10" cy="10" r="9" stroke="#997765" stroke-width="2" fill="#f5f5f5"/>
+              <circle cx="10" cy="10" r="9" stroke="#997765" stroke-width="2" fill="#f5f5f5" />
               <text x="10" y="15" text-anchor="middle" font-size="13" fill="#997765" font-family="Arial" font-weight="bold">i</text>
             </svg>
           </button>
         </div>
-        <div id="info-coussin-popup" style="display:none; position:absolute; background:#fff; border:1px solid #ccc; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.1); padding:1em; z-index:1000; max-width:300px;">
-          <span style="font-size: 1em;">Le nombre de coussin est calculé en fonction de la longueur.</span>
+        <div id="info-coussin-popup" class="text-info" style="display:none; position:absolute; background:#fff; border:1px solid #ccc; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.1); padding:1em; z-index:1000; max-width:300px;">
+          <span>Le nombre de coussin est calculé en fonction de la longueur.</span>
         </div>
-      
-      <script>
-document.addEventListener('DOMContentLoaded', () => {
-  const btn   = document.getElementById('info-coussin-btn');
-  const popup = document.getElementById('info-coussin-popup');
 
-  btn.addEventListener('click', e => {
-    e.stopPropagation();
+        <script>
+          document.addEventListener('DOMContentLoaded', () => {
+            const btn = document.getElementById('info-coussin-btn');
+            const popup = document.getElementById('info-coussin-popup');
 
-    /* ── toggle affichage ───────────────────────── */
-    const visible = popup.style.display === 'block';
-    popup.style.display = visible ? 'none' : 'block';
-    if (visible) return;   // on vient de fermer : pas besoin de repositionner
+            btn.addEventListener('click', e => {
+              e.stopPropagation();
 
-    /* ── coordonnées du bouton ──────────────────── */
-    const rect    = btn.getBoundingClientRect();
-    const scrollY = window.scrollY || window.pageYOffset;
-    const scrollX = window.scrollX || window.pageXOffset;
+              /* ── toggle affichage ───────────────────────── */
+              const visible = popup.style.display === 'block';
+              popup.style.display = visible ? 'none' : 'block';
+              if (visible) return; // on vient de fermer : pas besoin de repositionner
 
-    /* ── positionner AU‑DESSUS et 8 px À GAUCHE du “i” ── */
-    const top  = scrollY + rect.top  - popup.offsetHeight - 10; // 8 px au‑dessus
-    const left = scrollX + rect.left - popup.offsetWidth - 10;  // 8 px à gauche
+              /* ── coordonnées du bouton ──────────────────── */
+              const rect = btn.getBoundingClientRect();
+              const scrollY = window.scrollY || window.pageYOffset;
+              const scrollX = window.scrollX || window.pageXOffset;
 
-    popup.style.top  = `${top}px`;
-    popup.style.left = `${left}px`;
-  });
+              /* ── positionner AU‑DESSUS et 8 px À GAUCHE du “i” ── */
+              const top = scrollY + rect.top - popup.offsetHeight - 10; // 8 px au‑dessus
+              const left = scrollX + rect.left - popup.offsetWidth - 10; // 8 px à gauche
 
-  /* ── clic extérieur : fermer le popup ─────────── */
-  document.addEventListener('click', e => {
-    if (!popup.contains(e.target) && e.target !== btn) {
-      popup.style.display = 'none';
-    }
-  });
-});
-</script>
+              popup.style.top = `${top}px`;
+              popup.style.left = `${left}px`;
+            });
+
+            /* ── clic extérieur : fermer le popup ─────────── */
+            document.addEventListener('click', e => {
+              if (!popup.contains(e.target) && e.target !== btn) {
+                popup.style.display = 'none';
+              }
+            });
+          });
+        </script>
 
 
         <section class="color-options">
@@ -212,13 +213,13 @@ document.addEventListener('DOMContentLoaded', () => {
       </div>
     </div>
 
-        <!-- Popup bloquant pour les étapes non validées -->
-<div id="filariane-popup" class="popup">
-  <div class="popup-content">
-    <h2>Veuillez cliquez sur "suivant" pour passer à l’étape d’après.</h2>
-    <button class="btn-noir">OK</button>
-  </div>
-</div>
+    <!-- Popup bloquant pour les étapes non validées -->
+    <div id="filariane-popup" class="popup">
+      <div class="popup-content">
+        <h2>Veuillez cliquez sur "suivant" pour passer à l’étape d’après.</h2>
+        <button class="btn-noir">OK</button>
+      </div>
+    </div>
 
 
 
@@ -287,56 +288,81 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     </script>
 
-    
+
 
     <!-- FIL ARIANE -->
     <script>
-document.addEventListener('DOMContentLoaded', () => {
-  const filAriane = document.querySelector('.fil-ariane');
-  const links = filAriane.querySelectorAll('a');
+      document.addEventListener('DOMContentLoaded', () => {
+        const filAriane = document.querySelector('.fil-ariane');
+        const links = filAriane.querySelectorAll('a');
 
-  const filArianePopup = document.getElementById('filariane-popup');
-  const closeFilArianePopupBtn = filArianePopup.querySelector('.btn-noir');
+        const filArianePopup = document.getElementById('filariane-popup');
+        const closeFilArianePopupBtn = filArianePopup.querySelector('.btn-noir');
 
-  const etapes = [
-    { id: 'etape1-1-structure.php', key: null }, // toujours accessible
-    { id: 'etape1-2-dimension.php', key: null },
-    { id: 'etape2-type-banquette.php', key: null },
-    { id: 'etape3-bois-couleur.php', key: null },
-    { id: 'etape4-bois-decoration.php', key: null },
-    { id: 'etape5-bois-accoudoir.php', key: null },
-    { id: 'etape6-bois-dossier.php', key: null },
-    { id: 'etape7-1-bois-tissu.php', key: null},
-    { id: 'etape8-bois-mousse.php', key: 'etape8_valide' },
-  ];
+        const etapes = [{
+            id: 'etape1-1-structure.php',
+            key: null
+          }, // toujours accessible
+          {
+            id: 'etape1-2-dimension.php',
+            key: null
+          },
+          {
+            id: 'etape2-type-banquette.php',
+            key: null
+          },
+          {
+            id: 'etape3-bois-couleur.php',
+            key: null
+          },
+          {
+            id: 'etape4-bois-decoration.php',
+            key: null
+          },
+          {
+            id: 'etape5-bois-accoudoir.php',
+            key: null
+          },
+          {
+            id: 'etape6-bois-dossier.php',
+            key: null
+          },
+          {
+            id: 'etape7-1-bois-tissu.php',
+            key: null
+          },
+          {
+            id: 'etape8-bois-mousse.php',
+            key: 'etape8_valide'
+          },
+        ];
 
 
- links.forEach((link, index) => {
-    const etape = etapes[index];
+        links.forEach((link, index) => {
+          const etape = etapes[index];
 
-    // Empêche de cliquer si l'étape n’est pas validée
-    if (etape.key && sessionStorage.getItem(etape.key) !== 'true') {
-      link.addEventListener('click', (e) => {
-        e.preventDefault();
-        filArianePopup.style.display = 'flex';
+          // Empêche de cliquer si l'étape n’est pas validée
+          if (etape.key && sessionStorage.getItem(etape.key) !== 'true') {
+            link.addEventListener('click', (e) => {
+              e.preventDefault();
+              filArianePopup.style.display = 'flex';
+            });
+            link.classList.add('disabled-link');
+          }
+        });
+
+        // Fermer le popup avec le bouton
+        closeFilArianePopupBtn.addEventListener('click', () => {
+          filArianePopup.style.display = 'none';
+        });
+
+        // Fermer si on clique en dehors du contenu
+        window.addEventListener('click', (event) => {
+          if (event.target === filArianePopup) {
+            filArianePopup.style.display = 'none';
+          }
+        });
       });
-      link.classList.add('disabled-link');
-    }
-  });
-
-  // Fermer le popup avec le bouton
-  closeFilArianePopupBtn.addEventListener('click', () => {
-    filArianePopup.style.display = 'none';
-  });
-
-  // Fermer si on clique en dehors du contenu
-  window.addEventListener('click', (event) => {
-    if (event.target === filArianePopup) {
-      filArianePopup.style.display = 'none';
-    }
-  });
-});
-
     </script>
 
 

@@ -16,21 +16,20 @@ $sql = "SELECT cp.*,
                tb.nom AS type_nom, 
                s.nom AS structure_nom
         FROM commande_prefait cp
-        LEFT JOIN type_banquette tb ON cp.id_banquette = tb.id
-        LEFT JOIN structure s ON cp.id_structure = s.id
+        JOIN type_banquette tb ON cp.id_banquette = tb.id
+        JOIN structure s ON cp.id_structure = s.id
+        WHERE cp.visible = 1
         ORDER BY cp.id DESC
         LIMIT 3";
-
 $stmt = $pdo->prepare($sql);
 $stmt->execute();
 $commandes = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-$sql = "
-    SELECT vente_produit.*, categorie.nom AS nom_categorie 
-    FROM vente_produit 
+$sql = "SELECT vente_produit.*, categorie.nom AS nom_categorie 
+    FROM vente_produit
     JOIN categorie ON vente_produit.id_categorie = categorie.id
-    LIMIT 3
-";
+    WHERE vente_produit.visible = 1
+   LIMIT 3 ";
 $stmt = $pdo->query($sql);
 $produits = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -48,6 +47,26 @@ $existing_order = $stmt->fetch(PDO::FETCH_ASSOC);
 //commande existante
 $show_commencer = !$existing_order;
 
+function getSectionAccueil($slug)
+{
+  global $pdo;
+  $stmt = $pdo->prepare("SELECT * FROM sections_accueil WHERE slug = ? AND visible = 1 LIMIT 1");
+  $stmt->execute([$slug]);
+  return $stmt->fetch(PDO::FETCH_ASSOC);
+}
+
+$listes = $pdo->query("SELECT * FROM liste_dashboard WHERE visible = 1")->fetchAll();
+
+function getSectionDashboard($slug)
+{
+  global $pdo;
+  $stmt = $pdo->prepare("SELECT * FROM sections_dashboard WHERE slug = ? AND visible = 1 LIMIT 1");
+  $stmt->execute([$slug]);
+  return $stmt->fetch(PDO::FETCH_ASSOC);
+}
+
+$stats = $pdo->query("SELECT * FROM stats_accueil WHERE visible = 1")->fetchAll();
+
 
 function calculPrix($commande, &$composition = [])
 {
@@ -57,7 +76,6 @@ function calculPrix($commande, &$composition = [])
   $totalPrice = 0;
   $id_commande = $commande['id'];
 
-  // Liste des éléments simples
   $elements = [
     'id_structure' => 'structure',
     'id_banquette' => 'type_banquette',
@@ -131,8 +149,6 @@ function calculPrix($commande, &$composition = [])
   return $totalPrice;
 }
 
-
-
 // Gestion de l'ajout au panier
 $produitAjoute = null; // Variable pour savoir quel produit a été ajouté
 
@@ -169,13 +185,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['produit'])) {
 
     $nomProduit = $_POST['produit'];
     $quantite = intval($_POST['quantite'] ?? 1);
-    // Récupérer l'ID et le prix du produit via son nom
     $stmt = $pdo->prepare("SELECT id, prix, img FROM vente_produit WHERE nom = ?");
     $stmt->execute([$nomProduit]);
     $produit = $stmt->fetch();
 
     if (!$produit) {
-      // Sécurité : produit introuvable (mauvaise saisie ?)
       die("Produit introuvable.");
     }
 
@@ -275,13 +289,13 @@ if (!empty($produitAjoute)) : ?>
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Commence la personnalisation de ton canapé ou inspire toi de modèle déjà existant pour confectionner ton salon marocain, imagine le meuble qui répond le plus à tes goûts, et à l’aménagement de ton salon." />
   <title>Tableau de bord</title>
-  <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
+  <link rel="icon" type="image/png" href="https://www.decorient.fr/medias/favicon.png">
   <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&family=Be+Vietnam+Pro&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../../styles/processus.css">
+  <link rel="stylesheet" href="../../styles/styles.css">
   <link rel="stylesheet" href="../../styles/dashboard.css">
   <link rel="stylesheet" href="../../styles/popup.css">
-  <link rel="stylesheet" href="../../styles/accueil.css">
   <link rel="stylesheet" href="../../styles/buttons.css">
   <script type="module" src="../../script/popup.js"></script>
   <link rel="stylesheet" href="../../styles/transition.css">
@@ -297,62 +311,60 @@ if (!empty($produitAjoute)) : ?>
   </header>
   <main>
     <div class="dashboard">
-      <!-- Section avec image de fond et texte superposé -->
-      <section class="hero-section">
-        <div class="hero-container">
-          <img src="../../medias/hero-banner.jpg" alt="Salon marocain" class="hero-image">
-          <div class="hero-content">
-            <h1 class="hero-title">
-              Bienvenue, <?php echo htmlspecialchars($_SESSION['user_name']); ?>!
-            </h1>
-            <p class="hero-description">
-              Teste notre <strong>configurateur de canapé, </strong> et imagine le meuble qui répond le plus à tes goûts, et à l’aménagement de ton salon !
-            </p>
-            <?php if ($show_commencer): ?>
-              <form action="../EtapesPersonnalisation/etape1-1-structure.php" method="get">
-                <button type="submit" class="btn-noir">Commencer la personnalisation</button>
-              </form>
-            <?php else: ?>
-              <div class="boutons-container">
+      <?php $hero = getSectionDashboard('hero'); ?>
+      <?php if ($hero && $hero['visible']): ?>
+        <section class="hero-section">
+          <div class="hero-container">
+            <img src="../../medias/<?= htmlspecialchars($hero['img']) ?>" alt="Salon marocain" class="hero-image">
+            <div class="hero-content">
+              <h1 class="hero-title h2"><?= htmlspecialchars($hero['titre']) ?> <?php echo htmlspecialchars($_SESSION['user_name']); ?>!</h1>
+              <p class="hero-description"><?= nl2br(htmlspecialchars($hero['description'])) ?></p>
+              <?php if ($show_commencer): ?>
                 <form action="../EtapesPersonnalisation/etape1-1-structure.php" method="get">
-                  <button type="submit" class="btn-beige">Reprendre la personnalisation</button>
+                  <button type="submit" class="btn-noir">Commencer la personnalisation</button>
                 </form>
-                <form>
-                  <button
-                    type="button" id="btn-abandonner"
-                    class="btn-noir"
-                    data-url="../EtapesPersonnalisation/etape1-1-structure.php">
-                    Nouvelle personnalisation
-                  </button>
-                </form>
-              </div>
-            <?php endif; ?>
+              <?php else: ?>
+                <div class="boutons-container">
+                  <form action="../EtapesPersonnalisation/etape1-1-structure.php" method="get">
+                    <button type="submit" class="btn-beige">Reprendre la personnalisation</button>
+                  </form>
+                  <form>
+                    <button
+                      type="button" id="btn-abandonner"
+                      class="btn-noir"
+                      data-url="../EtapesPersonnalisation/etape1-1-structure.php">
+                      Nouvelle personnalisation
+                    </button>
+                  </form>
+                </div>
+              <?php endif; ?>
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      <?php endif; ?>
 
-
-      </section>
 
       <!-- SECTION PERSONNALISATION -->
       <section class="customize-section transition-all">
-        <div class="customize-text">
-          <h2>Crée toi-même ton canapé marocain idéal</h2>
-
-          <ul class="customize-features">
-            <li><img src="../../assets/canape_icon.png" alt="Forme" class="feature-icon">Choisis la structure du canapé</li>
-            <li><img src="../../assets/couleurs_icon.png" alt="Couleurs" class="feature-icon">Sélectionne les couleurs & matières</li>
-            <li><img src="../../assets/coussin_icon.png" alt="Coussins" class="feature-icon">Ajoutez tes options préférés</li>
-            <li><img src="../../assets/artiste_icon.png" alt="Aperçu" class="feature-icon">Vue d'ensemble de ta création</li>
-          </ul>
-        </div>
-        <div class="customize-image">
-          <!-- Blob de fond (SVG ou PNG) 
-        <img class="blob" src="../../medias/blob.png" alt="forme décorative">-->
-          <!-- Image du canapé (taille réduite, devant le blob)
-        <img class="sofa" src="../../medias/sofa.png" alt="Canapé personnalisé"> -->
-          <img class="sofa" src="../../medias/sofablob.png" alt="Canapé personnalisé">
-        </div>
+        <?php $customize = getSectionDashboard('customize'); ?>
+        <?php if ($customize && $customize['visible']): ?>
+          <div class="customize-text">
+            <h2><?= htmlspecialchars($customize['titre']) ?></h2>
+            <?php
+            $listesVisibles = array_filter($listes, fn($liste) => $liste['visible']);
+            ?>
+            <?php if (!empty($listesVisibles)): ?>
+              <ul class="customize-features">
+                <?php foreach ($listes as $liste): ?>
+                  <li><img src="../../assets/<?= htmlspecialchars($liste['icon']) ?>" alt="Forme" class="feature-icon"><?= htmlspecialchars($liste['description']) ?></li>
+                <?php endforeach; ?>
+              </ul>
+          </div>
+          <div class="customize-image">
+            <img class="sofa" src="../../medias/<?= htmlspecialchars($customize['img']) ?>" alt="Canapé personnalisé">
+          <?php endif; ?>
+          </div>
+        <?php endif; ?>
       </section>
 
       <!-- ------------------- SECTION COMBINAISONS ------------------- -->
@@ -397,46 +409,6 @@ if (!empty($produitAjoute)) : ?>
         </div>
       </section>
 
-
-
-      <script>
-        document.addEventListener("DOMContentLoaded", function() {
-          const filterButtons = document.querySelectorAll(".filter-btn");
-
-          filterButtons.forEach((button) => {
-            button.addEventListener("click", () => {
-              const selectedCategory = button.getAttribute("data-category").toLowerCase();
-              window.location.href = `?categorie=${encodeURIComponent(selectedCategory)}&page=1`;
-            });
-          });
-        });
-        const modal = document.getElementById("reservation-modal");
-        const productNameEl = document.getElementById("product-name");
-
-        function openReservationModal(productName) {
-          modal.style.display = "flex"; // Affiche la modale
-          productNameEl.textContent = `Nom du produit : ${productName}`;
-          document.documentElement.classList.add("no-scroll");
-          document.body.classList.add("no-scroll");
-        }
-
-        function fermerModal() {
-          modal.style.display = "none";
-          document.documentElement.classList.remove("no-scroll");
-          document.body.classList.remove("no-scroll");
-        }
-
-        document.querySelector(".close-modal").onclick = fermerModal;
-
-        window.onclick = (event) => {
-          if (event.target === modal) {
-            fermerModal();
-          }
-        };
-      </script>
-
-
-
       <div class="voir-plus">
         <button class="btn-noir"
           onclick="window.location.href = 'noscanapes.php';">
@@ -444,21 +416,25 @@ if (!empty($produitAjoute)) : ?>
         </button>
       </div>
 
-      <section class="avantages-card transition-boom">
-        <div class="avantages-text">
-          <h2>Pourquoi personnaliser ton canapé ici ?</h2>
-          <ul>
-            <li>Des modèles uniques</li>
-            <li>Produits faits main, sur mesure</li>
-            <li>Livraison rapide et soignée</li>
-            <li>Paiement sécurisé</li>
-          </ul>
-        </div>
-        <div class="avantages-img">
-          <img src="../../medias/accueil-whyhere.jpg" alt="Aperçu canapé personnalisé">
-        </div>
-      </section>
-
+      <?php $avantage = getSectionAccueil('avantage'); ?>
+      <?php if ($avantage && $avantage['visible']): ?>
+        <section class="avantages-card transition-boom">
+          <div class="avantages-text">
+            <h2><?= htmlspecialchars($avantage['titre']) ?></h2>
+            <?php
+            $lines = explode("\n", trim($avantage['description']));
+            echo '<ul>';
+            foreach ($lines as $line) {
+              echo '<li>' . htmlspecialchars($line) . '</li>';
+            }
+            echo '</ul>';
+            ?>
+          </div>
+          <div class="avantages-img">
+            <img src="../../medias/<?= htmlspecialchars($avantage['img']) ?>" alt="Aperçu canapé personnalisé">
+          </div>
+        </section>
+      <?php endif; ?>
 
 
       <!-- ------------------- SECTION ARTICLES ASSOCIES ------------------- -->
@@ -508,14 +484,29 @@ if (!empty($produitAjoute)) : ?>
         </button>
       </div>
 
-      <section class="stats-section transition-boom">
-        <h2 class="h2-center">Ils nous font confiance</h2>
-        <ul class="stats-list">
-          <li><strong data-target="500" data-plus="true">0</strong> canapés personnalisés</li>
-          <li><strong data-target="4.8" data-decimal="true">0/5</strong> de satisfaction client</li>
-          <li><strong data-target="17" data-plus="true">0</strong> ans d’expérience depuis 2006</li>
-        </ul>
-      </section>
+      <?php
+      $statsVisibles = array_filter($stats, fn($s) => $s['visible']);
+      ?>
+      <?php if (!empty($statsVisibles)): ?>
+        <section class="stats-section transition-boom">
+          <h2 class="h2-center">Ils nous font confiance</h2>
+          <ul class="stats-list">
+            <?php foreach ($stats as $stat): ?>
+              <?php
+              $attrs = [];
+              $attrs[] = 'data-target="' . htmlspecialchars($stat['valeur']) . '"';
+              if ($stat['plus']) $attrs[] = 'data-plus="true"';
+              if ($stat['decimal']) $attrs[] = 'data-decimal="true"';
+              if ($stat['pourcentage']) $attrs[] = 'data-percent="true"';
+              if ($stat['notation']) $attrs[] = 'data-notation="true"';
+              ?>
+              <li>
+                <strong <?= implode(' ', $attrs) ?>>0</strong> <?= htmlspecialchars($stat['label']) ?>
+              </li>
+            <?php endforeach; ?>
+          </ul>
+        </section>
+      <?php endif; ?>
 
     </div>
     <!-- POPUP ABANDONNER -->
@@ -529,9 +520,6 @@ if (!empty($produitAjoute)) : ?>
         <button id="no-btn" class="btn-noir">Non</button>
       </div>
     </div>
-
-
-
 
     <!-- Modal d'ajout au panier -->
     <div id="reservation-modal" class="modal" style="display:none;">

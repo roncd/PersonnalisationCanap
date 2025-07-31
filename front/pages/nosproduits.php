@@ -12,7 +12,7 @@ $limit = 6;
 $offset = ($page - 1) * $limit;
 
 // Toutes les catégories 
-$stmt = $pdo->query("SELECT id, nom FROM categorie");
+$stmt = $pdo->query("SELECT id, nom FROM categorie WHERE visible = 1");
 $categories = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 // Affichage des cat dans les produits
@@ -47,6 +47,7 @@ if (!empty($search)) {
     $conditions[] = "(vente_produit.nom LIKE :search OR categorie.nom LIKE :search)";
     $params[':search'] = '%' . $search . '%';
 }
+$conditions[] = "vente_produit.visible = 1";
 
 $whereSQL = count($conditions) ? 'WHERE ' . implode(' AND ', $conditions) : '';
 
@@ -110,6 +111,14 @@ if (isset($_SESSION['popup_produit'])) {
     unset($_SESSION['popup_produit']);
 }
 
+function getSectionCatalogue($slug)
+{
+    global $pdo;
+    $stmt = $pdo->prepare("SELECT * FROM sections_catalogue WHERE slug = ? AND visible = 1 LIMIT 1");
+    $stmt->execute([$slug]);
+    return $stmt->fetch(PDO::FETCH_ASSOC);
+}
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['produit'])) {
     if (!isset($_SESSION['user_id'])) {
         $_SESSION['pending_add_to_cart'] = $_POST;
@@ -169,15 +178,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['produit'])) {
         $produitAjoute = $nomProduit;
 
         // Stocker le produit dans la session pour le popup après redirection
-$_SESSION['popup_produit'] = [
-    'nom' => $nomProduit,
-    'img' => $img
-];
+        $_SESSION['popup_produit'] = [
+            'nom' => $nomProduit,
+            'img' => $img
+        ];
 
-// Rediriger pour éviter re-post et déclencher le modal
-header("Location: ?post_restore=1");
-exit;
-        
+        // Rediriger pour éviter re-post et déclencher le modal
+        header("Location: ?post_restore=1");
+        exit;
     }
 }
 if (!empty($produitAjoute)) : ?>
@@ -223,22 +231,23 @@ if (!empty($produitAjoute)) : ?>
     </script>
 <?php endif; ?>
 
-
 <!DOCTYPE html>
 <html lang="fr">
 
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Découvre notre sélection de produits de qualité vendu à l'unité. Ces produits sont disponibles uniquement sur réservation et pick-up en boutique." />
     <title>Nos Produits</title>
     <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&family=Be+Vietnam+Pro&display=swap" rel="stylesheet">
     <link rel="icon" type="image/x-icon" href="../../medias/favicon.png" />
+    <link rel="stylesheet" href="../../styles/styles.css">
     <link rel="stylesheet" href="../../styles/catalogue.css" />
     <link rel="stylesheet" href="../../styles/buttons.css" />
     <link rel="stylesheet" href="../../styles/pagination.css">
     <link rel="stylesheet" href="../../styles/transition.css">
     <script type="module" src="../../script/transition.js"></script>
-  
+
 </head>
 
 <body>
@@ -247,157 +256,123 @@ if (!empty($produitAjoute)) : ?>
         <?php require '../../squelette/header.php'; ?>
     </header>
 
-    <section class="hero-section">
-        <div class="hero-container">
-        <img src="../../medias/hero-banner.jpg" alt="Salon marocain" class="hero-image">
-            <div class="hero-content">
-                <br /><br /><br />
-                <h1 class="hero-title h2">Nos Produits</h1>
-
-                <p class="hero-description">
-                    Découvrez notre sélection de mousses et tissus de qualité.
-                    Ces produits sont disponibles uniquement sur réservation et pick-up en boutique.
-                </p>
-            </div>
-        </div>
-    </section>
-
-    <main class="products-container">
-
-        <!-- ------------------- SECTION ARTICLES ASSOCIES ------------------- -->
-        <section class="combination-section">
-
-            <!------------ BOUTONS DE FILTRE PAR CATÉGORIE ----------->
-            <?php
-            $currentCategorie = isset($_GET['categorie']) ? strtolower($_GET['categorie']) : '';
-            ?>
-
-            <div class="filters">
-                <button class="filter-btn <?= $currentCategorie === '' ? 'active' : '' ?>" data-category="">Tous</button>
-
-                <?php foreach ($categories as $cat): ?>
-                    <?php $catNom = strtolower($cat['nom']); ?>
-                    <button class="filter-btn <?= $currentCategorie === $catNom ? 'active' : '' ?>" data-category="<?= htmlspecialchars($catNom) ?>">
-                        <?= htmlspecialchars($cat['nom']) ?>
-                    </button>
-                <?php endforeach; ?>
-            </div>
-
-            <div class="search-tri transition-all">
-                <!-- Nouveau select de tri prix -->
-                <select id="sortPrice" style="text-align:left; margin: 20px;">
-                    <option value="none">Trier par prix</option>
-                    <option value="asc">Prix : du - cher au + cher</option>
-                    <option value="desc">Prix : du + cher au - cher</option>
-                </select>
-                <!--------------------- BARRE DE RECHERCHE EN PHP --------------------->
-                <div class="search-bar transition-all">
-                    <form method="GET" action="" style="position: relative;">
-                        <input
-                            type="text"
-                            name="search"
-                            id="searchInput"
-                            placeholder="Rechercher par nom..."
-                            value="<?= htmlspecialchars($_GET['search'] ?? '', ENT_QUOTES) ?>">
-                        <button type="button" id="clearSearch" class="clear-button" style="display: none;">&times;</button>
-                    </form>
+    <main>
+        <?php $hero = getSectionCatalogue('hero-produits'); ?>
+        <?php if ($hero && $hero['visible']): ?>
+            <section class="hero-section">
+                <div class="hero-container">
+                    <img src="../../medias/<?= htmlspecialchars($hero['img']) ?>" alt="Salon marocain" class="hero-image">
+                    <div class="hero-content">
+                        <h1 class="hero-title h2"><?= htmlspecialchars($hero['titre']) ?></h1>
+                        <p class="hero-description"><?= nl2br(htmlspecialchars($hero['description'])) ?></p>
+                        <?php if ($hero['bouton_texte'] && $hero['bouton_lien']): ?>
+                            <a href="<?= htmlspecialchars($hero['bouton_lien']) ?>">
+                                <button class="btn-noir"><?= htmlspecialchars($hero['bouton_texte']) ?></button>
+                            </a>
+                        <?php endif; ?>
+                    </div>
                 </div>
-            </div>
+            </section>
+        <?php endif; ?>
 
+        <div class="products-container">
             <!-- ------------------- SECTION ARTICLES ASSOCIES ------------------- -->
             <section class="combination-section">
-                <div class="combination-container transition-all">
-                    <?php foreach ($produits as $produit): ?>
-                        <?php
-                        $catNom = isset($categoriesAssoc[$produit['id_categorie']])
-                            ? strtolower($categoriesAssoc[$produit['id_categorie']])
-                            : '';
-                        ?>
-                        <div class="product-card" data-category="<?= htmlspecialchars($catNom) ?>">
-                            <div class="product-image">
-                                <img
-                                    src="../../admin/uploads/produit/<?= htmlspecialchars($produit['img']) ?>"
-                                    alt="<?= htmlspecialchars($produit['nom']) ?>" />
-                            </div>
-                            <div class="product-content">
-                                <h3><?= htmlspecialchars($produit['nom']) ?></h3>
-                               <p class="description"> Catégorie : <?= htmlspecialchars(ucfirst($catNom)) ?>
-                                </p>
-                                <p class="price"><?= number_format($produit['prix'], 2, ',', ' ') ?> €</p>
-                                <form method="POST" style="display:inline;">
-                                    <input type="hidden" name="produit" value="<?= htmlspecialchars($produit['nom']) ?>" />
-                                    <input type="hidden" name="quantite" value="1" />
-                                    <button type="submit" class="btn-beige">Ajouter au panier</button>
-                                </form>
-                            </div>
-                        </div>
+
+                <!------------ BOUTONS DE FILTRE PAR CATÉGORIE ----------->
+                <?php
+                $currentCategorie = isset($_GET['categorie']) ? strtolower($_GET['categorie']) : '';
+                ?>
+
+                <div class="filters">
+                    <button class="filter-btn <?= $currentCategorie === '' ? 'active' : '' ?>" data-category="">Tous</button>
+
+                    <?php foreach ($categories as $cat): ?>
+                        <?php $catNom = strtolower($cat['nom']); ?>
+                        <button class="filter-btn <?= $currentCategorie === $catNom ? 'active' : '' ?>" data-category="<?= htmlspecialchars($catNom) ?>">
+                            <?= htmlspecialchars($cat['nom']) ?>
+                        </button>
                     <?php endforeach; ?>
                 </div>
-                <?php require '../../admin/include/pagination.php'; ?>
-            </section>
 
-            <!-- Modal d'ajout au panier -->
-            <div id="reservation-modal" class="modal" style="display:none;">
-                <div class="modal-content">
-                    <span class="close-modal">&times;</span>
-                    <img src="../../assets/check-icone.svg" alt="Image du produit" class="check-icon" />
-                    <br />
-                    <h2 class="success-message">Ajouté au panier avec succès !</h2>
-                    <div class="product-info">
-                        <img id="product-image" class="img-panier" />
-                        <p id="product-name">Nom du produit :</p>
-                        <p>
-                            Quantité : <span id="quantity">1</span>
-                        </p>
-                    </div>
-                    <div class="modal-buttons">
-                        <button class="ajt-panier" onclick="fermerModal()">Continuer vos achats</button>
-                        <button class="btn-noir" onclick="window.location.href='panier.php'">Voir le panier</button>
+                <div class="search-tri transition-all">
+                    <!-- Nouveau select de tri prix -->
+                    <select id="sortPrice">
+                        <option value="none">Trier par prix</option>
+                        <option value="asc">Prix : du - cher au + cher</option>
+                        <option value="desc">Prix : du + cher au - cher</option>
+                    </select>
+                    <!--------------------- BARRE DE RECHERCHE EN PHP --------------------->
+                    <div class="search-bar transition-all">
+                        <form method="GET" action="">
+                            <input
+                                type="text"
+                                name="search"
+                                id="searchInput"
+                                placeholder="Rechercher par nom..."
+                                value="<?= htmlspecialchars($_GET['search'] ?? '', ENT_QUOTES) ?>">
+                            <button type="button" id="clearSearch" class="clear-button" style="display: none;">&times;</button>
+                        </form>
                     </div>
                 </div>
-            </div>
-    </main>
 
+                <!-- ------------------- SECTION ARTICLES ASSOCIES ------------------- -->
+                <section class="combination-section">
+                    <div class="combination-container transition-all">
+                        <?php foreach ($produits as $produit): ?>
+                            <?php
+                            $catNom = isset($categoriesAssoc[$produit['id_categorie']])
+                                ? strtolower($categoriesAssoc[$produit['id_categorie']])
+                                : '';
+                            ?>
+                            <div class="product-card" data-category="<?= htmlspecialchars($catNom) ?>">
+                                <div class="product-image">
+                                    <img
+                                        src="../../admin/uploads/produit/<?= htmlspecialchars($produit['img']) ?>"
+                                        alt="<?= htmlspecialchars($produit['nom']) ?>" />
+                                </div>
+                                <div class="product-content">
+                                    <h3><?= htmlspecialchars($produit['nom']) ?></h3>
+                                    <p class="description"> Catégorie : <?= htmlspecialchars(ucfirst($catNom)) ?>
+                                    </p>
+                                    <p class="price"><?= number_format($produit['prix'], 2, ',', ' ') ?> €</p>
+                                    <form method="POST">
+                                        <input type="hidden" name="produit" value="<?= htmlspecialchars($produit['nom']) ?>" />
+                                        <input type="hidden" name="quantite" value="1" />
+                                        <button type="submit" class="btn-beige">Ajouter au panier</button>
+                                    </form>
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
+                    <?php require '../../admin/include/pagination.php'; ?>
+                </section>
+
+                <!-- Modal d'ajout au panier -->
+                <div id="reservation-modal" class="modal" style="display:none;">
+                    <div class="modal-content">
+                        <span class="close-modal">&times;</span>
+                        <img src="../../assets/check-icone.svg" alt="Image du produit" class="check-icon" />
+                        <br />
+                        <h2 class="success-message">Ajouté au panier avec succès !</h2>
+                        <div class="product-info">
+                            <img id="product-image" class="img-panier" />
+                            <p id="product-name">Nom du produit :</p>
+                            <p>
+                                Quantité : <span id="quantity">1</span>
+                            </p>
+                        </div>
+                        <div class="modal-buttons">
+                            <button class="ajt-panier" onclick="fermerModal()">Continuer vos achats</button>
+                            <button class="btn-noir" onclick="window.location.href='panier.php'">Voir le panier</button>
+                        </div>
+                    </div>
+                </div>
+        </div>
+    </main>
     <footer>
         <?php require '../../squelette/footer.php'; ?>
     </footer>
-
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const filterButtons = document.querySelectorAll(".filter-btn");
-
-            filterButtons.forEach((button) => {
-                button.addEventListener("click", () => {
-                    const selectedCategory = button.getAttribute("data-category").toLowerCase();
-                    window.location.href = `?categorie=${encodeURIComponent(selectedCategory)}&page=1`;
-                });
-            });
-        });
-        const modal = document.getElementById("reservation-modal");
-        const productNameEl = document.getElementById("product-name");
-
-        function openReservationModal(productName) {
-            modal.style.display = "flex"; // Affiche la modale
-            productNameEl.textContent = `Nom du produit : ${productName}`;
-            document.documentElement.classList.add("no-scroll");
-            document.body.classList.add("no-scroll");
-        }
-
-        function fermerModal() {
-            modal.style.display = "none";
-            document.documentElement.classList.remove("no-scroll");
-            document.body.classList.remove("no-scroll");
-        }
-
-        document.querySelector(".close-modal").onclick = fermerModal;
-
-        window.onclick = (event) => {
-            if (event.target === modal) {
-                fermerModal();
-            }
-        };
-    </script>
-
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {

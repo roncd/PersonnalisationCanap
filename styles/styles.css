@@ -7,29 +7,16 @@
   padding: 0;
 }
 
-/* Base */
 body {
-  padding-top: 80px;
   font-family: 'Be Vietnam Pro', sans-serif;
 }
 
-.title {
-  font-family: 'Baloo 2', cursive;
-  margin-top: 1rem;
-  margin-bottom: 2rem;
-  font-size: 2rem;
-  line-height: 1.25;
-  text-align: center;
-  font-weight: bold;
-}
-
-/* Hero Section */
+/* ------------------- HERO SECTION  ------------------- */
 .hero-section {
   position: relative;
   width: 100%;
   height: 60vh;
   overflow: hidden;
-  margin-top: -80px;
 }
 
 .hero-container {
@@ -43,8 +30,7 @@ body {
   height: 100%;
   object-fit: cover;
   object-position: center 30%;
-  filter: brightness(50%);
-  opacity: 0.9;
+  filter: brightness(70%);
 }
 
 .hero-content {
@@ -75,17 +61,329 @@ body {
   text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.6);
 }
 
-.hero-content button {
-  padding: 0.75rem 2rem;
-  font-size: 1rem;
+/* ------------------- MODAL SECTION PRODUITS ------------------- */
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+
 }
 
-.hero-content button:hover {
-  transform: scale(1.05);
+.modal-content {
+  background-color: white;
+  max-width: 500px;
+  width: 90%;
+  padding: 2rem;
+  border-radius: 8px;
+  position: relative;
+  margin: 0;
 }
 
-/* Hero Responsive */
-@media (min-width: 825px) and (max-width: 1500px) {
+
+.close-modal {
+  position: absolute;
+  right: 1rem;
+  top: 1rem;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.voir-plus {
+  text-align: center;
+}
+
+.no-scroll {
+  overflow: hidden;
+  height: 100%;
+}
+
+.success-message {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  color: #155724;
+  margin-bottom: 0rem !important;
+  margin-top: 0rem !important;
+}
+
+.check-icon {
+  width: 60px;
+  height: 60px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: auto;
+}
+
+.modal-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.ajt-panier {
+  background-color: #997765;
+  color: #fff;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  padding: 10px 20px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: transform 0.3s ease;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.ajt-panier:hover {
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.3);
+  transform: translateY(-3px);
+  transition: all 0.3s ease;
+}
+
+.img-panier {
+  width: 100%;
+  height: auto;
+  border-radius: 15px;
+  object-fit: cover;
+}
+
+.product-info {
+  padding: 1.5rem;
+}
+
+.product-info h3 {
+  margin: 0 0 0.5rem;
+  color: #000000;
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.product-info p {
+  color: #000000;
+  margin: 0.5rem 0;
+  font-size: 14px;
+
+}
+
+/* ------------------- SECTION COMBINAISONS ------------------- */
+.combination-section {
+  font-family: 'Be Vietnam Pro', sans-serif;
+  margin: 4rem auto;
+  max-width: 1145px;
+}
+
+.combination-section h2 {
+  font-size: 2rem;
+  color: #000000;
+  margin-bottom: 2rem;
+  text-align: left;
+  font-family: 'Baloo 2', sans-serif;
+  line-height: 1.2;
+}
+
+.combination-container {
+  max-width: 100%;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+}
+
+.product-card {
+  width: 100%;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  text-align: left;
+  padding: 0;
+}
+
+.product-image img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  display: block;
+}
+
+.product-content {
+  padding: 1rem;
+}
+
+.product-card h3 {
+  font-size: 1.125rem;
+  margin: 0.5rem 0 0.25rem;
+  color: #000000;
+}
+
+.product-card p {
+  font-size: 0.8rem;
+  color: #666;
+  margin-bottom: 0.5rem;
+}
+
+.price {
+  font-weight: bold;
+  color: #997765 !important;
+  font-size: 1.1rem !important;
+  justify-content: right !important;
+  align-items: right !important;
+  margin-bottom: 0.25rem;
+}
+
+.btn-fullwidth {
+  width: 100%;
+  display: block;
+  text-align: center;
+  box-sizing: border-box;
+  margin-top: 1rem;
+}
+
+.carousel-container {
+  display: flex;
+  gap: 1.5rem;
+  overflow-x: scroll;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: 1rem;
+  position: relative;
+  scrollbar-width: none;
+  scroll-behavior: smooth;
+}
+
+.carousel-container::-webkit-scrollbar {
+  display: none;
+}
+
+.carousel-container .product-card {
+  flex: 0 0 calc((100% - 3rem) / 3);
+  scroll-snap-align: start;
+}
+
+/* --------------- AVANTAGES CARD --------------- */
+.avantages-card {
+  background-color: rgba(227, 209, 200, 0.9);
+  border-radius: 20px;
+  margin: 4rem auto;
+  max-width: 1145px;
+  width: 90%;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  position: relative;
+  overflow: hidden;
+  gap: 10px;
+}
+
+.avantages-text {
+  flex: 1 1 60%;
+  padding: 2rem;
+  padding-right: 3rem;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.avantages-text h2 {
+  font-size: 1.8rem;
+  margin-bottom: 1.5rem;
+  color: #000000;
+  line-height: 1.2;
+}
+
+.avantages-text ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.avantages-text li {
+  position: relative;
+  padding-left: 2rem;
+  margin-bottom: 1rem;
+  font-size: 1.1rem;
+  color: #000000;
+}
+
+.avantages-text li::before {
+  content: "✔";
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+.avantages-img {
+  flex: 0 0 520px;
+  height: auto;
+  position: relative;
+}
+
+.avantages-img img {
+  height: 100%;
+  width: 100%;
+  border-radius: 100px 0 0 100px;
+  object-fit: cover;
+  display: block;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.686);
+}
+
+/* --------------- SECTION STAT --------------- */
+.stats-section {
+  background-color: rgba(227, 209, 200, 0.9);
+  padding: 4rem 2rem;
+  text-align: center;
+  margin: 4rem auto;
+  max-width: 1145px;
+  width: 90%;
+  border-radius: 20px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.stats-section h2 {
+  font-size: 2rem;
+  margin-bottom: 2rem;
+  color: #000000;
+  line-height: 1.2;
+}
+
+.stats-list {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 2rem;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.stats-list li {
+  font-size: 1.2rem;
+  color: #000000;
+}
+
+.stats-list strong {
+  display: block;
+  font-size: 2rem;
+  color: #997765 !important;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+
+/* ------------------- RESPONSIVE ------------------- */
+@media (max-width: 1500px) {
   .hero-section {
     height: 60vh;
   }
@@ -104,8 +402,44 @@ body {
   }
 }
 
+@media (max-width: 1000px) {
+  .avantages-card {
+    flex-direction: row;
+  }
 
-/* Hero Responsive */
+  .avantages-text {
+    flex: 1 1 auto;
+    padding: 1.5rem;
+  }
+
+  .avantages-img {
+    flex: 0 0 120px;
+    display: block;
+  }
+
+  .avantages-img img {
+    border-radius: 50px 0 0 50px;
+  }
+
+  .avantages-text h2 {
+    font-size: 1.6rem;
+    text-align: left;
+
+  }
+
+  .avantages-text li {
+    font-size: 1rem;
+  }
+
+  .carousel-container .product-card {
+    flex: 0 0 min(300px, 90%);
+  }
+
+  .combination-section h2 {
+    font-size: 1.6rem;
+  }
+}
+
 @media (max-width: 824px) {
   .hero-section {
     height: 70vh;
@@ -117,17 +451,58 @@ body {
 
   .hero-description {
     font-size: 1rem;
-    padding: 0 1rem;
   }
 
   .hero-content {
-    width: 90%;
     padding: 1.5rem;
+  }
+
+  .modal-content {
+    padding: 1rem;
   }
 }
 
 
+@media (max-width: 768px) {
+  .stats-section {
+    padding: 3rem 1.5rem;
+    margin: 3rem auto;
+  }
+
+  .stats-section h2 {
+    font-size: 1.6rem !important;
+    margin-bottom: 1.4rem !important;
+  }
+
+  .stats-list {
+    flex-direction: row;
+    justify-content: center;
+    gap: 1.5rem;
+  }
+
+  .stats-list li {
+    font-size: 1.1rem;
+  }
+
+  .stats-list strong {
+    font-size: 1.8rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .carousel-container .product-card {
+    flex: 0 0 100%;
+  }
+}
+
 @media (max-width: 480px) {
+
+  /* ----------- HERO  ----------- */
+  .hero-content button {
+    padding: 0.6rem 1.5rem;
+    font-size: 0.9rem;
+  }
+
   .hero-title {
     font-size: 1.75rem;
   }
@@ -136,418 +511,54 @@ body {
     font-size: 0.9rem;
   }
 
-  .hero-content button {
-    padding: 0.6rem 1.5rem;
-    font-size: 0.9rem;
+  /* ----------- STATS SECTION ----------- */
+  .stats-section {
+    padding: 2rem 1rem;
+    margin: 2rem auto;
   }
-}
 
-/* Titres de section */
-.section-title {
-  text-align: center;
-  font-size: 2rem;
-  margin: 40px 0;
-  color: #333;
-}
-
-/* Layout */
-.modeles-section,
-.about-section,
-.devis-section {
-  padding: 40px 20px;
-}
-
-/* Section "Inspirez-vous de nos modèles" */
-/* Section Wrapper */
-.sections-wrapper {
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
-}
-
-/* Carousel Section */
-.carousel-section {
-  min-height: 500px;
-  position: relative;
-}
-
-/* Fix pour le carousel */
-.hs-carousel {
-  position: relative;
-  z-index: 1;
-}
-
-.hs-carousel-body {
-  position: relative !important;
-  height: auto !important;
-}
-
-/* Carousel Container */
-.hs-carousel {
-  background-color: none;
-  border-radius: 3px;
-  overflow: hidden;
-  padding: 20px 0;
-  position: relative;
-}
-
-/* Carousel Slides */
-.hs-carousel-body {
-  display: flex;
-  transition: transform 0.5s ease;
-}
-
-.hs-carousel-slide {
-  flex-shrink: 0;
-  padding: 0 15px;
-  width: 100%;
-}
-
-@media (min-width: 1024px) {
-  .hs-carousel-slide {
-    width: 33.333%;
+  .stats-section h2 {
+    font-size: 1.4rem !important;
+    margin-bottom: 1.5rem !important;
   }
-}
 
-/* Slide Content */
-.hs-carousel-slide .flex-col {
-  background: none;
-  border-radius: 3px;
-  transition: transform 0.3s ease;
-}
+  .stats-list {
+    flex-direction: column;
+  }
 
-.hs-carousel-slide .flex-col:hover {
-  transform: translateY(-5px);
-}
+  .stats-list li {
+    font-size: 1rem;
+  }
 
-/* Slide Image */
-.hs-carousel-slide img {
-  width: 100%;
-  height: 300px;
-  object-fit: cover;
-  border-radius: 8px;
-  transition: transform 0.3s ease;
-}
-
-.hs-carousel-slide img:hover {
-  transform: scale(1.02);
-}
-
-/* Slide Text Content */
-.hs-carousel-slide .text-center {
-  padding: 20px 10px;
-}
-
-.hs-carousel-slide h3.baloo-2-bold {
-  color: #000000;
-  font-size: 1.25rem;
-  margin-bottom: 8px;
-  font-weight: 700;
-}
-
-.hs-carousel-slide p.text-lg {
-  color: #4B5563;
-  font-size: 1.125rem;
-  font-weight: 600;
-}
-
-/* Navigation Arrows */
-.hs-carousel-prev,
-.hs-carousel-next {
-  background-color: rgba(227, 209, 200, 0.9);
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  height: 40px;
-  position: absolute;
-  top: 130px;
-  transform: translateY(0);
-  transition: all 0.3s ease;
-  width: 40px;
-  z-index: 10;
-}
-
-.hs-carousel-prev {
-  left: 10px;
-}
-
-.hs-carousel-next {
-  right: 10px;
-}
-
-.hs-carousel-prev:hover,
-.hs-carousel-next:hover {
-  background-color: rgba(227, 209, 200, 1);
-  transform: scale(1.1);
-}
-
-.hs-carousel-prev span,
-.hs-carousel-next span {
-  color: #000000;
-  font-size: 24px;
-  line-height: 1;
-}
-
-/* Disabled State */
-.hs-carousel-disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-/* Responsive Adjustments */
-@media (max-width: 768px) {
-  .title {
+  .stats-list strong {
     font-size: 1.5rem;
   }
 
-  .hs-carousel {
-    padding: 15px 0;
-  }
-
-  .hs-carousel-slide {
-    padding: 0 10px;
-  }
-
-  .hs-carousel-slide img {
-    height: 250px;
-  }
-
-  .hs-carousel-prev,
-  .hs-carousel-next {
-    top: 105px;
-  }
-}
-
-@media (max-width: 480px) {
-  .hs-carousel-slide h3.baloo-2-bold {
-    font-size: 1.1rem;
-  }
-
-  .hs-carousel-slide p.text-lg {
-    font-size: 1rem;
-  }
-}
-
-
-/* Flèches */
-.hs-carousel-prev,
-.hs-carousel-next {
-  background-color: rgba(227, 209, 200, 0.9);
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  height: 40px;
-  width: 40px;
-  position: absolute;
-  top: 130px;
-  z-index: 10;
-  transition: all 0.3s ease;
-}
-
-.hs-carousel-prev:hover,
-.hs-carousel-next:hover {
-  background-color: rgba(227, 209, 200, 1);
-  transform: scale(1.1);
-}
-
-.hs-carousel-prev {
-  left: 10px;
-}
-
-.hs-carousel-next {
-  right: 10px;
-}
-
-.hs-carousel-prev span,
-.hs-carousel-next span {
-  color: #000;
-  font-size: 24px;
-}
-
-.hs-carousel-disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-/* Carousel responsive */
-@media (max-width: 768px) {
-  .hs-carousel {
-    padding: 15px 0;
-  }
-
-  .hs-carousel-slide {
-    padding: 0 10px;
-  }
-
-  .hs-carousel-slide img {
-    height: 250px;
-  }
-
-  .hs-carousel-prev,
-  .hs-carousel-next {
-    top: 105px;
-  }
-}
-
-@media (max-width: 480px) {
-  .hs-carousel-slide img {
-    height: 200px;
-  }
-
-  .hs-carousel-slide h3.baloo-2-bold {
-    font-size: 1.1rem;
-  }
-
-  .hs-carousel-slide p.text-lg {
-    font-size: 1rem;
-  }
-
-  .hs-carousel-prev,
-  .hs-carousel-next {
-    top: 90px;
-    width: 32px;
-    height: 32px;
-  }
-
-  .hs-carousel-prev span,
-  .hs-carousel-next span {
-    font-size: 20px;
-  }
-}
-
-/* Section About */
-.about-section {
-  padding: 4rem 0;
-}
-
-.about-container {
-  max-width: 1280px;
-  margin: 0 auto;
-}
-
-.about-content {
-  display: flex;
-  justify-content: space-between;
-  align-items: stretch;
-  gap: 0;
-  min-height: 400px;
-  background-color: rgba(227, 209, 200, 0.3);
-}
-
-.about-text {
-  flex: 1;
-  text-align: left;
-  padding: 4rem;
-}
-
-.about-image {
-  flex: 1;
-  max-width: 50%;
-}
-
-.about-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
-
-.about-title {
-  font-family: 'Baloo 2', sans-serif;
-  font-size: 3rem;
-  font-weight: 700;
-  text-align: center;
-  margin-bottom: 1.5rem;
-  color: black;
-}
-
-.about-description,
-.about-mission {
-  font-size: 1.1rem;
-  line-height: 1.6;
-  margin-bottom: 1.5rem;
-  color: #4a4a4a;
-}
-
-/* About Responsive */
-@media (max-width: 768px) {
-  .about-content {
+  /* ----------- AVANTAGES SECTION ----------- */
+  .avantages-card {
     flex-direction: column;
-    gap: 2rem;
   }
 
-  .about-image {
-    max-width: 100%;
+  .avantages-img {
+    display: none;
   }
 
-  .about-text {
-    text-align: center;
-  }
-}
-
-@media (max-width: 480px) {
-  .about-content {
+  .avantages-text {
     padding: 1rem;
   }
 
-  .about-text {
-    padding: 2rem 1rem;
+  .avantages-text h2 {
+    font-size: 1.4rem;
+    text-align: center;
   }
 
-  .about-title {
-    font-size: 2rem;
+  .avantages-text li {
+    font-size: 0.95rem;
   }
 
-  .about-description,
-  .about-mission {
-    font-size: 1rem;
+  /* ----------- CANAP PREFAIT SECTION ----------- */
+  .combination-section h2 {
+    font-size: 1.4rem;
+    text-align: center;
   }
-}
-
-/* Section Devis */
-.devis-section {
-  padding: 4rem 0;
-}
-
-.devis-container {
-  margin: 0;
-  text-align: center;
-  border: 4px solid #E3D1C8;
-  background-color: rgba(255, 255, 255, 0.5);
-  backdrop-filter: blur(8px);
-  padding: 2rem;
-  width: 100%;
-}
-
-.devis-title {
-  font-family: 'Baloo 2', sans-serif;
-  font-weight: 700;
-  margin: 1rem 0 2rem;
-  line-height: 1.25;
-  text-align: center;
-  font-size: 3rem;
-}
-
-.devis-description {
-  font-size: 1.125rem;
-  margin-bottom: 2rem;
-  line-height: 1.75;
-}
-
-
-@media (max-width: 480px) {
-  .devis-title {
-    font-size: 2rem;
-  }
-
-  .devis-description {
-    font-size: 1rem;
-    padding: 0 1rem;
-  }
-
-  .devis-container button {
-    padding: 0.6rem 1.2rem;
-    font-size: 0.9rem;
-  }
-
 }

@@ -40,9 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const genericKeysToClear = [
       'selectedDecoration',
       'selectedAccoudoir',
-      'selectedMousse',      // ← AJOUT ICI
-
-      // ajoute ici d’autres clés globales si nécessaire
+      'selectedMousse',     
     ];
     genericKeysToClear.forEach(k => localStorage.removeItem(k));
 

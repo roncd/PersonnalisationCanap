@@ -1,5 +1,7 @@
 <?php
 require '../../admin/config.php';
+session_start();
+require '../../admin/include/session_expiration.php';
 
 // Récupère la commande pré-faite (exemple avec l'ID 1, adapte-le dynamiquement si besoin)
 if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
@@ -79,7 +81,7 @@ $totalPrice += floatval($commande['prix_dimensions'] ?? 0);
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
+  <link rel="icon" type="image/png" href="https://www.decorient.fr/medias/favicon.png">
   <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&family=Be+Vietnam+Pro&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../../styles/popup.css">
   <link rel="stylesheet" href="../../styles/canapPrefait.css">
@@ -150,9 +152,6 @@ $totalPrice += floatval($commande['prix_dimensions'] ?? 0);
 
               $dossier = $dossierUploadMap[$nomTable] ?? $nomTable;
               ?>
-
-
-
               <?php if ($nomTable === 'accoudoirs_bois_multiples'): ?>
                 <?php foreach ($details as $accoudoir): ?>
                   <div class="option">
@@ -237,9 +236,6 @@ $totalPrice += floatval($commande['prix_dimensions'] ?? 0);
           }
         }
       }
-
-
-
       ?>
 
       <div class="footer">
@@ -254,12 +250,10 @@ $totalPrice += floatval($commande['prix_dimensions'] ?? 0);
       </div>
       </div>
 
-
-
       <!-- Colonne de droite -->
       <div class="right-column">
         <section class="main-display">
-          <div class="buttons">
+          <div class="buttons h2">
             <button id="btn-aide" class="btn-beige">Besoin d'aide ?</button>
           </div>
           <br>
@@ -298,7 +292,6 @@ $totalPrice += floatval($commande['prix_dimensions'] ?? 0);
 
     <?php require_once '../../squelette/footer.php'; ?>
 
-
     <script>
       document.getElementById("btn-suivant").addEventListener("click", function(event) {
         event.preventDefault();
@@ -306,7 +299,6 @@ $totalPrice += floatval($commande['prix_dimensions'] ?? 0);
         window.location.href = "choix-dimension.php?id=" + id;
       });
     </script>
-
 
     <!-- BOUTTON RETOUR -->
     <script>

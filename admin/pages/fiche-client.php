@@ -57,7 +57,7 @@ function age($date)
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fiche Client</title>
-    <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
+    <link rel="icon" type="image/png" href="https://www.decorient.fr/medias/favicon.png">
     <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&family=Be+Vietnam+Pro&display=swap" rel="stylesheet">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <link rel="stylesheet" href="../../styles/admin/fiche-client.css">
@@ -116,10 +116,10 @@ function age($date)
                                 if (!empty($results)) {
                                     foreach ($results as $commande) {
                                         echo "<tr>";
-                                        echo "<td style='height: 30px;'>{$commande['id']}</td>";
-                                        echo "<td style='height: 30px;'>{$commande['date']}</td>";
-                                        echo "<td style='height: 30px;'>{$commande['statut']}</td>";
-                                        echo "<td style='height: 30px;'>{$commande['prix']}€</td>";
+                                        echo "<td '>{$commande['id']}</td>";
+                                        echo "<td '>{$commande['date']}</td>";
+                                        echo "<td '>{$commande['statut']}</td>";
+                                        echo "<td '>{$commande['prix']}€</td>";
                                         echo "</tr>";
                                     }
                                 } else {
@@ -168,10 +168,10 @@ function age($date)
                                 if (!empty($results)) {
                                     foreach ($results as $commande) {
                                         echo "<tr>";
-                                        echo "<td style='height: 30px;'>{$commande['id']}</td>";
-                                        echo "<td style='height: 30px;'>{$commande['date']}</td>";
-                                        echo "<td style='height: 30px;'>{$commande['statut']}</td>";
-                                        echo "<td style='height: 30px;'>{$commande['prix']}€</td>";
+                                        echo "<td '>{$commande['id']}</td>";
+                                        echo "<td '>{$commande['date']}</td>";
+                                        echo "<td '>{$commande['statut']}</td>";
+                                        echo "<td '>{$commande['prix']}€</td>";
                                         echo "</tr>";
                                     }
                                 } else {

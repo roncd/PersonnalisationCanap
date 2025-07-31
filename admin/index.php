@@ -18,7 +18,7 @@ if (isset($_POST['connecter'])) {
         $mdp = trim($_POST['mdp']);
         $old_login = htmlspecialchars($login);
 
-        $requete = $bddlink->prepare('SELECT * FROM utilisateur WHERE mail = ?');
+        $requete = $bddlink->prepare('SELECT mail, mdp, id FROM utilisateur WHERE mail = ?');
         $requete->execute([$login]);
 
         if ($requete->rowCount() > 0) {
@@ -50,7 +50,7 @@ if (isset($_POST['connecter'])) {
     <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../styles/buttons.css">
     <link rel="stylesheet" href="../styles/message.css">
-    <link rel="stylesheet" href="../styles/admin/ajout.css">
+    <link rel="stylesheet" href="../styles/admin/form.css">
     <script type="module" src="../script/togglePassword.js"></script>
     <script type="module" src="../script/warningMajActive.js"></script>
 
@@ -74,15 +74,14 @@ if (isset($_POST['connecter'])) {
                             <label for="mdp">Mot de passe</label>
                             <div class="input-section">
                                 <input type="password" id="mdp" name="mdp" class="input-field" required>
-                                <span class="toggle-password-text"
-                                    style="cursor: pointer; color: #666; user-select: none; position: absolute; right: 10px; top: 50%; transform: translateY(-50%); font-weight: 100;">
+                                <span class="toggle-password-text">
                                     Afficher
                                 </span>
                             </div>
-                            <div id="caps-lock-warning" style="display:none; font-size: 0.85em; margin-top: 4px;">
+                            <div id="caps-lock-warning" class="warning">
                                 ⚠️ Attention : Verr Maj est activé !
                             </div>
-                            <div id="shift-warning" style="display:none; font-size: 0.85em; margin-top: 4px;">
+                            <div id="shift-warning" class="warning">
                                 ⚠️ Attention : La touche Maj (Shift) est maintenue !
                             </div>
                         </div>

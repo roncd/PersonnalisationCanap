@@ -112,6 +112,9 @@ h1 {
     text-align: left;
 }
 
+.commandes-card td {
+    height: 30px;
+}
 .commandes-card th {
     font-weight: 700;
 }

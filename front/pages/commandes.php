@@ -54,8 +54,9 @@ foreach ($commandes as $commande) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="description" content="Retrouve ton suivis et historique de commande de canapé marocain." />
     <title>Suivis des commandes - canapés marocains</title>
-    <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
+    <link rel="icon" type="image/png" href="https://www.decorient.fr/medias/favicon.png">
     <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&family=Be+Vietnam+Pro&display=swap" rel="stylesheet">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <link rel="stylesheet" href="../../styles/commandes.css">
@@ -83,11 +84,11 @@ foreach ($commandes as $commande) {
                         <button onclick="location.href='?statut=livraison'" class="tab <?= ($statut === 'livraison') ? 'active' : '' ?>">En cours de livraison</button>
                         <button onclick="location.href='?statut=final'" class="tab <?= ($statut === 'final') ? 'active' : '' ?>">Commandes finalisées</button>
                     </div>
-                    <div class="tab-content transition-all <?= $statut === 'validation' ? 'active' : '' ?>" id="validation">
+                    <div class="tab-content <?= $statut === 'validation' ? 'active' : '' ?>" id="validation">
                         <div id="commandes-container">
                             <?php if (!empty($commandes)): ?>
                                 <?php foreach ($commandes as $commande): ?>
-                                    <div class="commande" data-id="<?= htmlspecialchars($commande['id']) ?>" data-statut="<?= htmlspecialchars($commande['statut']) ?>">
+                                    <div class="commande transition-all" data-id="<?= htmlspecialchars($commande['id']) ?>" data-statut="<?= htmlspecialchars($commande['statut']) ?>">
                                         <div class="info">
                                             <p><strong>Nom :</strong> <?= htmlspecialchars($commande['nom']) ?></p>
                                             <p><strong>Prénom :</strong> <?= htmlspecialchars($commande['prenom']) ?></p>
@@ -105,11 +106,11 @@ foreach ($commandes as $commande) {
                         </div>
                     </div>
 
-                    <div class="tab-content transition-all <?= $statut === 'construction' ? 'active' : '' ?>" id="construction">
+                    <div class="tab-content <?= $statut === 'construction' ? 'active' : '' ?>" id="construction">
                         <div id="commandes-container">
                             <?php if (!empty($commandes)): ?>
                                 <?php foreach ($commandes as $commande): ?>
-                                    <div class="commande" data-id="<?= htmlspecialchars($commande['id']) ?>" data-statut="<?= htmlspecialchars($commande['statut']) ?>">
+                                    <div class="commande transition-all" data-id="<?= htmlspecialchars($commande['id']) ?>" data-statut="<?= htmlspecialchars($commande['statut']) ?>">
                                         <div class="info">
                                             <p><strong>Nom :</strong> <?= htmlspecialchars($commande['nom']) ?></p>
                                             <p><strong>Prénom :</strong> <?= htmlspecialchars($commande['prenom']) ?></p>
@@ -131,7 +132,7 @@ foreach ($commandes as $commande) {
                         <div id="commandes-container">
                             <?php if (!empty($commandes)): ?>
                                 <?php foreach ($commandes as $commande): ?>
-                                    <div class="commande" data-id="<?= htmlspecialchars($commande['id']) ?>" data-statut="<?= htmlspecialchars($commande['statut']) ?>">
+                                    <div class="commande transition-all" data-id="<?= htmlspecialchars($commande['id']) ?>" data-statut="<?= htmlspecialchars($commande['statut']) ?>">
                                         <div class="info">
                                             <p><strong>Nom :</strong> <?= htmlspecialchars($commande['nom']) ?></p>
                                             <p><strong>Prénom :</strong> <?= htmlspecialchars($commande['prenom']) ?></p>
@@ -148,11 +149,11 @@ foreach ($commandes as $commande) {
                             <?php endif; ?>
                         </div>
                     </div>
-                    <div class="tab-content transition-all <?= $statut === 'final' ? 'active' : '' ?>" id="final">
+                    <div class="tab-content <?= $statut === 'final' ? 'active' : '' ?>" id="final">
                         <div id="commandes-container">
                             <?php if (!empty($commandes)): ?>
                                 <?php foreach ($commandes as $commande): ?>
-                                    <div class="commande" data-id="<?= htmlspecialchars($commande['id']) ?>" data-statut="<?= htmlspecialchars($commande['statut']) ?>">
+                                    <div class="commande transition-all" data-id="<?= htmlspecialchars($commande['id']) ?>" data-statut="<?= htmlspecialchars($commande['statut']) ?>">
                                         <div class="info">
                                             <p><strong>Nom :</strong> <?= htmlspecialchars($commande['nom']) ?></p>
                                             <p><strong>Prénom :</strong> <?= htmlspecialchars($commande['prenom']) ?></p>

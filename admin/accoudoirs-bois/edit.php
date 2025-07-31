@@ -34,6 +34,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nom = trim($_POST['name']);
     $price = ($_POST['price']);
     $img = $_FILES['img'];
+    $visible = isset($_POST['visible']) ? 1 : 0;
+
 
     if (empty($nom) || !isset($price)) {
         $_SESSION['message'] = 'Tous les champs sont requis !';
@@ -41,13 +43,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
         // Garder l'image actuelle si aucune nouvelle image n'est téléchargée
         $fileName = $accoudoirbois['img'];
+        $newImageUploaded = false;
+
         if (!empty($img['name'])) {
             $allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/jpg'];
             if (!in_array($img['type'], $allowedTypes)) {
                 $_SESSION['message'] = 'Seuls les fichiers JPEG, PNG et GIF sont autorisés.';
                 $_SESSION['message_type'] = 'error';
             } else {
-                $uploadDir = '../uploads/accoudoirs-bois/'; 
+                $uploadDir = '../uploads/accoudoirs-bois/';
                 if (!is_dir($uploadDir)) {
                     mkdir($uploadDir, 0777, true);
                 }
@@ -58,16 +62,54 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 if (!move_uploaded_file($img['tmp_name'], $uploadPath)) {
                     $_SESSION['message'] = 'Échec du téléchargement de l\'image.';
                     $_SESSION['message_type'] = 'error';
+                } else {
+                    $newImageUploaded = true;
                 }
             }
         }
+
         if (!isset($_SESSION['message'])) {
-            $stmt = $pdo->prepare("UPDATE accoudoir_bois SET nom = ?, prix = ?, img = ? WHERE id = ?");
-            $stmt->execute([$nom, $price, $fileName, $id]);
-            $_SESSION['message'] = 'L\'accoudoir en bois a été mis à jour avec succès !';
-            $_SESSION['message_type'] = 'success';
-            header("Location: visualiser.php");
-            exit();
+            try {
+                // Récupérer le nom du fichier image associé
+                $stmt = $pdo->prepare("SELECT img FROM accoudoir_bois WHERE id = :id");
+                $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+                $stmt->execute();
+                $ancienneImage = $stmt->fetchColumn();
+
+                $stmt = $pdo->prepare("UPDATE accoudoir_bois SET nom = ?, prix = ?, img = ?, visible = ? WHERE id = ?");
+                $stmt->execute([$nom, $price, $fileName, $visible, $id]);
+
+                if ($stmt->rowCount() > 0) {
+                    // Supprimer le fichier image du serveur
+                    if ($newImageUploaded) {
+                        $uploadPath = $uploadDir . $fileName;
+                        $ancienneImagePath = '../uploads/accoudoirs-bois/' . $ancienneImage;
+
+                        if (file_exists($ancienneImagePath)) {
+                            $newHash = hash_file('md5', $uploadPath);
+                            $oldHash = hash_file('md5', $ancienneImagePath);
+
+                            if ($newHash !== $oldHash) {
+                                unlink($ancienneImagePath);
+                            } else {
+                                $_SESSION['message'] = 'Erreur lors de la suppression de l\'ancienne image';
+                                $_SESSION['message_type'] = 'error';
+                            }
+                        }
+                    }
+                }
+                $_SESSION['message'] = 'L\'accoudoir en bois a été mis à jour avec succès !';
+                $_SESSION['message_type'] = 'success';
+                header("Location: visualiser.php");
+                exit();
+            } catch (PDOException $e) {
+                if ($e->getCode() == 23000) {
+                    $_SESSION['message'] = 'Erreur : Ce nom d\'image est déjà utilisé.';
+                } else {
+                    $_SESSION['message'] = 'Erreur lors de la mise à jour : ' . $e->getMessage();
+                }
+                $_SESSION['message_type'] = 'error';
+            }
         }
     }
 }
@@ -76,13 +118,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <html lang="en">
 
 <head>
-    <link rel="icon" type="image/x-icon" href="../../medias/favicon.png">
+    <link rel="icon" type="image/png" href="https://www.decorient.fr/medias/favicon.png">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Modifie un accoudoir bois</title>
     <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&family=Be+Vietnam+Pro&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../../styles/admin/ajout.css">
-    <link rel="stylesheet" href="../../styles/buttons.css">    
+    <link rel="stylesheet" href="../../styles/admin/form.css">
+    <link rel="stylesheet" href="../../styles/buttons.css">
     <link rel="stylesheet" href="../../styles/message.css">
     <script src="../../script/previewImage.js"></script>
 </head>
@@ -111,14 +153,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <div class="form-row">
                         <div class="form-group">
                             <label for="img">Image (Laissez vide pour conserver l'image actuelle) <span class="required">*</span></label>
-                            <input type="file" id="img" name="img" class="input-field" accept="image/*" onchange="loadFile(event)" >
+                            <div class="input-wrapper">
+                                <input type="file" id="img" name="img" class="input-field" accept="image/*" onchange="loadFile(event)">
+                                <button type="button" class="clear-btn" onclick="clearFileInput('img')" title="Supprimer l'image sélectionnée">
+                                    &times;
+                                </button>
+                            </div>
                             <img class="preview-img" src="../uploads/accoudoirs-bois/<?php echo htmlspecialchars($accoudoirbois['img']); ?>" id="output" />
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group btn-slider">
+                            <label for="visible">Afficher sur le site</label>
+                            <label class="switch">
+                                <input type="checkbox" id="visible" name="visible" <?php if ($accoudoirbois['visible']) echo 'checked'; ?>>
+                                <span class="slider round"></span>
+                            </label>
                         </div>
                     </div>
                     <div class="button-section">
                         <div class="buttons">
-                            <button type="button"id="btn-retour" class="btn-beige" onclick="history.go(-1)">Retour</button>
-                            <input type="submit"  class="btn-noir" value="Mettre à jour">
+                            <button type="button" id="btn-retour" class="btn-beige" onclick="history.go(-1)">Retour</button>
+                            <input type="submit" class="btn-noir" value="Mettre à jour">
                         </div>
                     </div>
                 </form>

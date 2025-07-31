@@ -19,27 +19,22 @@ body {
 
 h1 {
     padding-top: 70px;
-    /* ou la hauteur exacte de ton header */
 }
 
 .h2 {
     padding-top: 70px;
-    /* ou la hauteur exacte de ton header */
 }
 
 .h2-commande {
     padding-top: 120px;
-    /* ou la hauteur exacte de ton header */
 }
 
-/* Conteneur général */
 
 /* Header */
 header {
     width: 100%;
     display: flex;
     justify-content: flex-end;
-    /* Aligner tout à droite */
     align-items: center;
     padding: 20px 0;
     position: fixed;
@@ -60,9 +55,7 @@ header {
     align-items: center;
     border-radius: 20px;
     width: 94%;
-    /* Augmente la largeur */
     max-width: 2000px;
-    /* Ajustement de la largeur maximale */
     margin: 0 auto;
     padding: 0 20px;
 }
@@ -72,7 +65,6 @@ header {
     display: flex;
     align-items: center;
     margin-left: auto;
-    /* Pousse le panier complètement à droite */
     padding-right: 30px;
 }
 
@@ -101,7 +93,6 @@ header {
 
 .hamburger {
     display: none;
-    /* Bouton hamburger caché par défaut */
     flex-direction: column;
     cursor: pointer;
 }
@@ -116,14 +107,12 @@ header {
 
 .logo img {
     height: 50px;
-    /* Ajustement de la taille du logo */
 }
 
 nav {
     flex-grow: 1;
     display: flex;
     justify-content: center;
-    /* Centre le menu */
 }
 
 header nav ul {
@@ -143,7 +132,6 @@ header nav ul li a {
     text-decoration: none;
     font-weight: bold;
     padding: 8px 24px;
-    /* Taille fixe */
     border-radius: 20px;
     font-family: "Baloo 2", sans-serif;
     transition:
@@ -164,7 +152,6 @@ header nav ul li a.active {
 }
 
 
-/* Dropdown Menu */
 .dropdown {
     position: relative;
 }
@@ -208,7 +195,6 @@ header nav ul li a.active {
 /* Liens du dropdown */
 .dropdown-menu li {
     width: 100%;
-    /* Assure que chaque élément occupe toute la largeur */
 }
 
 .dropdown-menu li a {
@@ -224,14 +210,10 @@ header nav ul li a.active {
 .dropdown-menu li a:hover {
     background-color: rgba(227, 209, 200, 0.9);
     color: #000000;
-    /* padding-left: 25px; <-- on enlève ça */
-
-    /* Pour décaler le texte sans changer la taille du conteneur : */
     transform: translateY(5px);
 }
 
 
-/* Affichage au clic */
 .dropdown.active .dropdown-menu {
     opacity: 1;
     visibility: visible;
@@ -292,13 +274,11 @@ body.menu-open::before {
 
     .header-content {
         justify-content: center;
-        /* Centre le logo */
         position: relative;
     }
 
     .hamburger {
         display: flex;
-        /* Affichage du menu burger */
         position: absolute;
         left: 10px;
         z-index: 1100;
@@ -308,13 +288,11 @@ body.menu-open::before {
         position: absolute;
         right: 10px;
         z-index: 10000;
-        /* plus que nav (9999) */
 
     }
 
     .logo {
         z-index: 10000;
-        /* plus que nav (9999) */
     }
 
     header nav {
@@ -325,18 +303,14 @@ body.menu-open::before {
         width: 100%;
         height: 100vh;
         background-color: rgba(153, 119, 101, 0.7);
-        /* moins opaque */
         flex-direction: column;
         align-items: center;
         justify-content: center;
         padding: 60px 20px;
         z-index: 9999;
-        /* au-dessus de tout */
         overflow: hidden;
-        /* important pour le pseudo-élément */
     }
 
-    /* Ajout de la classe active pour afficher la modal au clic */
     header nav.active {
         display: flex;
         animation: fadeIn 0.3s ease;
@@ -345,7 +319,6 @@ body.menu-open::before {
     header nav ul {
         flex-direction: column;
         align-items: center;
-        /* ✅ centre horizontalement */
         justify-content: center;
         width: 100%;
     }
@@ -398,8 +371,6 @@ body.menu-open::before {
         margin-left: 20px;
         cursor: pointer;
         z-index: 10000;
-        /* plus que nav (9999) */
-
     }
 
     body.menu-open .header-content {
@@ -414,7 +385,6 @@ body.menu-open::before {
         width: 100vw;
         height: 100vh;
         overflow: hidden;
-        /* Empêche tout défilement */
     }
 }
 
@@ -431,7 +401,6 @@ body.menu-open::before {
     }
 }
 
-/* Small Screen Adjustments */
 @media (max-width: 480px) {
 
     h1 {
@@ -446,7 +415,6 @@ body.menu-open::before {
         padding: 90px 20px 0px;
     }
 
-    /* Ajout de la classe active pour afficher la modal au clic */
     header nav.active {
         justify-content: flex-start;
     }
@@ -489,6 +457,5 @@ body.menu-open::before {
         width: 100vw;
         height: 100vh;
         overflow: hidden;
-        /* Empêche tout défilement */
     }
 }

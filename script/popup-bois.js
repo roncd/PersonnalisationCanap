@@ -3,67 +3,40 @@ document.getElementById('btn-oui').addEventListener('click', function () {
   let idCommande = this.getAttribute('data-id'); // Récupérer l'ID stocké    
   if (!idCommande) return;
 
-    // Étape 1 : Transfert de commande tempo -> commande detail dans bdd
-    fetch('/front/generate-pdf/transfer-bois.php', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ id: idCommande })
-    })
-      .then(response => response.json())
-      .then(data => {
-        console.log(data); // Vérifie ce que renvoie PHP
+  // Étape 1 : Transfert de commande tempo -> commande detail dans bdd
+  fetch('/front/generate-pdf/transfer-bois.php', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ id: idCommande })
+  })
+    .then(response => response.json())
+    .then(data => {
+      console.log(data); // Vérifie ce que renvoie PHP
 
-        if (data.success && data.new_id) {
-          let newCommandeId = data.new_id;
-          console.log("Nouvel ID de commande :", newCommandeId);
+      if (data.success && data.new_id) {
+        let newCommandeId = data.new_id;
+        console.log("Nouvel ID de commande :", newCommandeId);
 
-          // Affiche le pop-up et stocke l’ID dans le bouton
-          document.getElementById('pdf-popup').style.display = 'flex';
-          document.getElementById('pdf-btn').setAttribute('data-id', newCommandeId);
+        // Affiche le pop-up et stocke l’ID dans le bouton
+        document.getElementById('pdf-popup').style.display = 'flex';
+        document.getElementById('pdf-btn').setAttribute('data-id', newCommandeId);
 
-          // Étape 2 : envoi du devis par mail avec le nouvel ID de commande detail
-          fetch('/front/generate-pdf/send-pdf.php', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ id: newCommandeId })
+        // Étape 2 : envoi du devis par mail avec le nouvel ID de commande detail
+        fetch('/front/generate-pdf/send-pdf.php', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id: newCommandeId })
+        })
+          .then(response => response.text())
+          .then(data => {
+            console.log('Réponse brute du serveur :', data);
           })
-            .then(response => response.text())
-            .then(data => {
-              console.log('Réponse brute du serveur :', data);
-            })
-        } else {
-          console.error('Erreur : newCommandeId est invalide ou non défini.');
-        }
-      })
-      .catch(error => console.error('Erreur:', error));
-  });
-
-// document.querySelector('.btn-suivant').addEventListener('click', function () {
-//   let idCommande = this.getAttribute('data-id'); // Récupérer l'ID stocké    
-
-//   fetch('/front/generate-pdf/transfer-bois.php', {
-//     method: 'POST',
-//     headers: { 'Content-Type': 'application/json' },
-//     body: JSON.stringify({ id: idCommande })
-//   })
-//     .then(response => response.json())
-//     .then(data => {
-//       console.log(data); // Vérifie ce que renvoie PHP
-
-//       if (data.success && data.new_id) {
-//         let newCommandeId = data.new_id;
-//         console.log("Nouvel ID de commande :", newCommandeId);
-
-//         // Afficher le pop-up et stocker l’ID dans le bouton
-//         document.getElementById('pdf-popup').style.display = 'flex';
-//         document.querySelector('.pdf-btn').setAttribute('data-id', newCommandeId);
-
-//       } else {
-//         console.error('Erreur : newCommandeId est invalide ou non défini.');
-//       }
-//     })
-//     .catch(error => console.error('Erreur:', error));
-// });
+      } else {
+        console.error('Erreur : newCommandeId est invalide ou non défini.');
+      }
+    })
+    .catch(error => console.error('Erreur:', error));
+});
 
 //Bouton pour voir pdf sur navigateur (lien temporaire)
 document.getElementById('pdf-btn').addEventListener('click', function () {
@@ -71,6 +44,7 @@ document.getElementById('pdf-btn').addEventListener('click', function () {
   console.log("Nouvel ID de commande :", newCommandeId);
 
   if (newCommandeId) {
+    const win = window.open('', '_blank');
     fetch('/front/generate-pdf/generer-devis-bois.php', {
       method: 'POST',
       headers: {
@@ -81,8 +55,7 @@ document.getElementById('pdf-btn').addEventListener('click', function () {
       .then(response => response.blob())
       .then(blob => {
         const url = window.URL.createObjectURL(blob);
-        // ouvre un nouvel onglet avec l'URL temporaire
-        window.open(url, '_blank');
+        win.location.href = url;
       })
       .catch(error => console.error('Erreur lors de la génération du PDF:', error));
   } else {
