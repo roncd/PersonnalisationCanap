@@ -89,11 +89,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             header("Location: visualiser-site.php");
             exit();
         } catch (PDOException $e) {
-            if ($e->getCode() == 23000) {
-                $_SESSION['message'] = 'Erreur : Ce nom d\'image est déjà utilisé.';
-            } else {
-                $_SESSION['message'] = 'Erreur lors de la mise à jour : ' . $e->getMessage();
-            }
+            $_SESSION['message'] = 'Erreur lors de la mise à jour : ' . $e->getMessage();
             $_SESSION['message_type'] = 'error';
         }
     }

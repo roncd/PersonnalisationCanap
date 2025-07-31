@@ -43,6 +43,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
         // Garder l'image actuelle si aucune nouvelle image n'est téléchargée
         $fileName = $banquette['img'];
+        $newImageUploaded = false;
+
         if (!empty($img['name'])) {
             $allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/jpg'];
             if (!in_array($img['type'], $allowedTypes)) {
@@ -66,8 +68,34 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if (!isset($_SESSION['message'])) {
             try {
+                  // Récupérer le nom du fichier image associé
+                $stmt = $pdo->prepare("SELECT img FROM type_banquette WHERE id = :id");
+                $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+                $stmt->execute();
+                $ancienneImage = $stmt->fetchColumn();
+
                 $stmt = $pdo->prepare("UPDATE type_banquette SET nom = ?, img = ?, visible = ? WHERE id = ?");
                 $stmt->execute([$nom, $fileName, $visible, $id]);
+
+                 if ($stmt->rowCount() > 0) {
+                    // Supprimer le fichier image du serveur
+                    if ($newImageUploaded) {
+                        $uploadPath = $uploadDir . $fileName;
+                        $ancienneImagePath = '../uploads/banquette/' . $ancienneImage;
+
+                        if (file_exists($ancienneImagePath)) {
+                            $newHash = hash_file('md5', $uploadPath);
+                            $oldHash = hash_file('md5', $ancienneImagePath);
+
+                            if ($newHash !== $oldHash) {
+                                unlink($ancienneImagePath);
+                            } else {
+                                $_SESSION['message'] = 'Erreur lors de la suppression de l\'ancienne image';
+                                $_SESSION['message_type'] = 'error';
+                            }
+                        }
+                    }
+                }
                 $_SESSION['message'] = 'La banquette a été mise à jour avec succès !';
                 $_SESSION['message_type'] = 'success';
                 header("Location: visualiser.php");

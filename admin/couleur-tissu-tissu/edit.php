@@ -45,6 +45,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
         // Garder l'image actuelle si aucune nouvelle image n'est téléchargée
         $fileName = $couleurtissu['img'];
+        $newImageUploaded = false;
+
         if (!empty($img['name'])) {
             $allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/jpg'];
             if (!in_array($img['type'], $allowedTypes)) {
@@ -62,13 +64,41 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 if (!move_uploaded_file($img['tmp_name'], $uploadPath)) {
                     $_SESSION['message'] = 'Erreur lors de l\'upload de l\'image.';
                     $_SESSION['message_type'] = 'error';
+                } else {
+                    $newImageUploaded = true;
                 }
             }
         }
         if (!isset($_SESSION['message'])) {
             try {
+                // Récupérer le nom du fichier image associé
+                $stmt = $pdo->prepare("SELECT img FROM couleur_tissu WHERE id = :id");
+                $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+                $stmt->execute();
+                $ancienneImage = $stmt->fetchColumn();
+
                 $stmt = $pdo->prepare("UPDATE couleur_tissu SET nom = ?, prix = ?, img = ?, visible = ? WHERE id = ?");
                 $stmt->execute([$nom, $price, $fileName, $visible, $id]);
+
+                if ($stmt->rowCount() > 0) {
+                    // Supprimer le fichier image du serveur
+                    if ($newImageUploaded) {
+                        $uploadPath = $uploadDir . $fileName;
+                        $ancienneImagePath = '../uploads/couleur-tissu-tissu/' . $ancienneImage;
+
+                        if (file_exists($ancienneImagePath)) {
+                            $newHash = hash_file('md5', $uploadPath);
+                            $oldHash = hash_file('md5', $ancienneImagePath);
+
+                            if ($newHash !== $oldHash) {
+                                unlink($ancienneImagePath);
+                            } else {
+                                $_SESSION['message'] = 'Erreur lors de la suppression de l\'ancienne image';
+                                $_SESSION['message_type'] = 'error';
+                            }
+                        }
+                    }
+                }
                 $_SESSION['message'] = 'La couleur du tissu a été mise à jour avec succès !';
                 $_SESSION['message_type'] = 'success';
                 header("Location: visualiser.php");

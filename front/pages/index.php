@@ -43,7 +43,6 @@ function calculPrix($commande, &$composition = [])
   $totalPrice = 0;
   $id_commande = $commande['id'];
 
-  // Liste des éléments simples
   $elements = [
     'id_structure' => 'structure',
     'id_banquette' => 'type_banquette',
@@ -93,7 +92,7 @@ function calculPrix($commande, &$composition = [])
     }
   }
 
-  // 💰 Prix par centimètre (350 € / mètre = 3.5 € / cm)
+  // rix par centimètre (350 € / mètre = 3.5 € / cm)
   $prixParCm = 3.5;
 
   foreach (['longueurA', 'longueurB', 'longueurC'] as $longueur) {
@@ -102,7 +101,7 @@ function calculPrix($commande, &$composition = [])
     }
   }
 
-  // 💡 Bonus : traitement spécifique de certains éléments (optionnel)
+  // traitement spécifique de certains éléments (optionnel)
   if (!empty($composition)) {
     foreach ($composition as $nomTable => $details) {
       if ($nomTable === 'accoudoirs_bois_multiples') continue; // déjà traité
@@ -118,11 +117,10 @@ function calculPrix($commande, &$composition = [])
 }
 
 // Gestion de l'ajout au panier
-$produitAjoute = null; // Variable pour savoir quel produit a été ajouté
+$produitAjoute = null; 
 
 // 1. Si on n'est pas connecté, on ne restaure pas de POST
 if (!isset($_SESSION['user_id']) && isset($_GET['post_restore'])) {
-  // L'utilisateur n'est toujours pas connecté → on ne restaure pas
   unset($_SESSION['temp_post']);
   header("Location: Connexion.php");
   exit;
@@ -153,13 +151,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['produit'])) {
 
     $nomProduit = $_POST['produit'];
     $quantite = intval($_POST['quantite'] ?? 1);
-    // Récupérer l'ID et le prix du produit via son nom
     $stmt = $pdo->prepare("SELECT id, prix, img FROM vente_produit WHERE nom = ?");
     $stmt->execute([$nomProduit]);
     $produit = $stmt->fetch();
 
     if (!$produit) {
-      // Sécurité : produit introuvable (mauvaise saisie ?)
       die("Produit introuvable.");
     }
 
@@ -229,7 +225,6 @@ if (!empty($produitAjoute)) : ?>
         document.documentElement.classList.add("no-scroll");
         document.body.classList.add("no-scroll");
         console.log("Image du produit :", productImgEl.src);
-
       }
 
       function fermerModal() {

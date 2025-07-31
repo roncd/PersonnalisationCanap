@@ -65,7 +65,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             exit();
         } catch (Exception $e) {
             if ($e->getCode() == 23000) {
-                $_SESSION['message'] = 'Erreur : Le nom de l\'image est déjà utilisé.';
+                $_SESSION['message'] = 'Erreur : Le nom du slug est déjà utilisé.';
             } else {
                 $_SESSION['message'] = 'Erreur lors de l\'ajout : ' . $e->getMessage();
             }

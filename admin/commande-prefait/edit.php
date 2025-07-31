@@ -91,135 +91,145 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nbAccoudoir = trim($_POST['nb_accoudoir']) ?: null;
     $nbAccoudoirBois = $_POST['nb_accoudoir_bois'] !== '' ? intval($_POST['nb_accoudoir_bois']) : null;
     $nom = trim($_POST['nom']);
-    $imagePath = isset($commande['img']) ? $commande['img'] : null;
+    $img = $_FILES['img'];
     $visible = isset($_POST['visible']) ? 1 : 0;
 
-
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        if (isset($_FILES['img']) && $_FILES['img']['error'] === 0) {
-            $uploadDir = '../uploads/canape-prefait/';
-
-            // Vérifier si le dossier d'upload existe, sinon le créer
-            if (!is_dir($uploadDir)) {
-                mkdir($uploadDir, 0777, true);
-            }
-
-            $tmpName = $_FILES['img']['tmp_name'];
-            $originalName = basename($_FILES['img']['name']);
-            $extension = strtolower(pathinfo($originalName, PATHINFO_EXTENSION));
-            $allowedExtensions = ['jpg', 'jpeg', 'png', 'webp'];
-
-            if (in_array($extension, $allowedExtensions)) {
-                // Générer un nom unique pour éviter les conflits
-                $baseName = pathinfo($originalName, PATHINFO_FILENAME);
-                $imageName = $baseName . '_' . time() . '.' . $extension;
-                $destination = $uploadDir . $imageName;
-
-                if (move_uploaded_file($tmpName, $destination)) {
-                    // Optionnel : Supprimer l'ancienne image si elle existe
-                    if (!empty($commande['img']) && file_exists($uploadDir . $commande['img'])) {
-                        unlink($uploadDir . $commande['img']);
-                    }
-
-                    $imagePath = $imageName; // Mettre à jour l'image
-                } else {
-                    $_SESSION['message'] = "Erreur lors du téléchargement de l'image.";
-                    $_SESSION['message_type'] = "error";
-                }
-            } else {
-                $_SESSION['message'] = "Format de fichier non autorisé.";
-                $_SESSION['message_type'] = "error";
-            }
-        }
-
-        // Si aucun fichier n'est uploadé, conserver l'image actuelle
-        if (empty($imagePath)) {
-            $imagePath = isset($commande['img']) ? $commande['img'] : null;
-        }
-
-        // Mettre à jour l'image dans la base de données
-        $stmt = $pdo->prepare("UPDATE commande_prefait SET img = ? WHERE id = ?");
-        $stmt->execute([$imagePath, $commande['id']]);
-
-        // Supprimer les anciens accoudoirs
-        $pdo->prepare("DELETE FROM commande_prefait_accoudoir WHERE id_commande_prefait = ?")->execute([$commande['id']]);
-
-        // Réinsérer les nouveaux accoudoirs
-        $acc1 = $_POST['accoudoir1'] ?? null;
-        $acc2 = $_POST['accoudoir2'] ?? null;
-
-        if (!empty($acc1)) {
-            $stmtAcc1 = $pdo->prepare("INSERT INTO commande_prefait_accoudoir (id_commande_prefait, id_accoudoir_bois, nb_accoudoir) VALUES (?, ?, 1)");
-            $stmtAcc1->execute([$commande['id'], intval($acc1)]);
-        }
-
-        if (!empty($acc2)) {
-            $stmtAcc2 = $pdo->prepare("INSERT INTO commande_prefait_accoudoir (id_commande_prefait, id_accoudoir_bois, nb_accoudoir) VALUES (?, ?, 1)");
-            $stmtAcc2->execute([$commande['id'], intval($acc2)]);
-        }
-    }
-
-    try {
-        $stmt = $pdo->prepare("UPDATE commande_prefait SET 
-    id_structure = ?, 
-    longueurA = ?, 
-    longueurB = ?, 
-    longueurC = ?, 
-    id_banquette = ?, 
-    id_mousse = ?, 
-    id_couleur_bois = ?, 
-    id_decoration = ?, 
-    id_dossier_bois = ?, 
-    id_couleur_tissu_bois = ?, 
-    id_motif_bois = ?, 
-    id_modele = ?, 
-    id_couleur_tissu = ?,  
-    id_motif_tissu = ?, 
-    id_dossier_tissu = ?, 
-    id_accoudoir_tissu = ?, 
-    id_nb_accoudoir = ?, 
-    nb_accoudoir_bois = ?,
-    nom = ?, 
-    img = ?,
-    visible = ?
-    WHERE id = ?");
-
-        if ($stmt->execute([
-            $idStructure,
-            $longueurA,
-            $longueurB,
-            $longueurC,
-            $idBanquette,
-            $idMousse,
-            $idCouleurBois,
-            $idDecoration,
-            $idDossierBois,
-            $idTissuBois,
-            $idMotifBois,
-            $idModele,
-            $idCouleurTissu,
-            $idMotifTissu,
-            $idDossierTissu,
-            $idAccoudoirTissu,
-            $nbAccoudoir,
-            $nbAccoudoirBois,
-            $nom,
-            $imagePath,
-            $visible,
-            $id
-        ])) {
-            $_SESSION['message'] = 'La commande a été mise à jour avec succès !';
-            $_SESSION['message_type'] = 'success';
-            header("Location: visualiser.php");
-            exit();
-        }
-    } catch (PDOException $e) {
-        if ($e->getCode() == 23000) {
-            $_SESSION['message'] = 'Erreur : Ce nom d\'image est déjà utilisé.';
-        } else {
-            $_SESSION['message'] = 'Erreur lors de la mise à jour : ' . $e->getMessage();
-        }
+    if (empty($nom) || !isset($img)) {
+        $_SESSION['message'] = 'Tous les champs sont requis !';
         $_SESSION['message_type'] = 'error';
+    } else {
+        // Garder l'image actuelle si aucune nouvelle image n'est téléchargée
+        $fileName = $commande['img'];
+        $newImageUploaded = false;
+
+        if (!empty($img['name'])) {
+            $allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/jpg'];
+            if (!in_array($img['type'], $allowedTypes)) {
+                $_SESSION['message'] = 'Seuls les fichiers JPEG, PNG et GIF sont autorisés.';
+                $_SESSION['message_type'] = 'error';
+            } else {
+                $uploadDir = '../uploads/canape-prefait/';
+                if (!is_dir($uploadDir)) {
+                    mkdir($uploadDir, 0777, true);
+                }
+                require '../include/cleanFileName.php';
+                $fileName = basename($img['name']);
+                $fileName = cleanFileName($fileName);
+                $uploadPath = $uploadDir . $fileName;
+                if (!move_uploaded_file($img['tmp_name'], $uploadPath)) {
+                    $_SESSION['message'] = 'Échec du téléchargement de l\'image.';
+                    $_SESSION['message_type'] = 'error';
+                } else {
+                    $newImageUploaded = true;
+                }
+            }
+        }
+
+        if (!isset($_SESSION['message'])) {
+            try {
+                // Supprimer les anciens accoudoirs
+                $pdo->prepare("DELETE FROM commande_prefait_accoudoir WHERE id_commande_prefait = ?")->execute([$commande['id']]);
+
+                // Réinsérer les nouveaux accoudoirs
+                $acc1 = $_POST['accoudoir1'] ?? null;
+                $acc2 = $_POST['accoudoir2'] ?? null;
+
+                if (!empty($acc1)) {
+                    $stmtAcc1 = $pdo->prepare("INSERT INTO commande_prefait_accoudoir (id_commande_prefait, id_accoudoir_bois, nb_accoudoir) VALUES (?, ?, 1)");
+                    $stmtAcc1->execute([$commande['id'], intval($acc1)]);
+                }
+
+                if (!empty($acc2)) {
+                    $stmtAcc2 = $pdo->prepare("INSERT INTO commande_prefait_accoudoir (id_commande_prefait, id_accoudoir_bois, nb_accoudoir) VALUES (?, ?, 1)");
+                    $stmtAcc2->execute([$commande['id'], intval($acc2)]);
+                }
+
+                // Récupérer le nom du fichier image associé
+                $stmt = $pdo->prepare("SELECT img FROM commande_prefait WHERE id = :id");
+                $stmt->bindValue(':id', $commande['id'], PDO::PARAM_INT);
+                $stmt->execute();
+                $ancienneImage = $stmt->fetchColumn();
+
+                $stmt = $pdo->prepare("UPDATE commande_prefait SET 
+        id_structure = ?, 
+        longueurA = ?, 
+        longueurB = ?, 
+        longueurC = ?, 
+        id_banquette = ?, 
+        id_mousse = ?, 
+        id_couleur_bois = ?, 
+        id_decoration = ?, 
+        id_dossier_bois = ?, 
+        id_couleur_tissu_bois = ?, 
+        id_motif_bois = ?, 
+        id_modele = ?, 
+        id_couleur_tissu = ?,  
+        id_motif_tissu = ?, 
+        id_dossier_tissu = ?, 
+        id_accoudoir_tissu = ?, 
+        id_nb_accoudoir = ?, 
+        nb_accoudoir_bois = ?,
+        nom = ?, 
+        img = ?,
+        visible = ?
+        WHERE id = ?");
+                $stmt->execute([
+                    $idStructure,
+                    $longueurA,
+                    $longueurB,
+                    $longueurC,
+                    $idBanquette,
+                    $idMousse,
+                    $idCouleurBois,
+                    $idDecoration,
+                    $idDossierBois,
+                    $idTissuBois,
+                    $idMotifBois,
+                    $idModele,
+                    $idCouleurTissu,
+                    $idMotifTissu,
+                    $idDossierTissu,
+                    $idAccoudoirTissu,
+                    $nbAccoudoir,
+                    $nbAccoudoirBois,
+                    $nom,
+                    $fileName,
+                    $visible,
+                    $id
+                ]);
+
+                if ($stmt->rowCount() > 0) {
+                    // Supprimer le fichier image du serveur
+                    if ($newImageUploaded) {
+                        $uploadPath = $uploadDir . $fileName;
+                        $ancienneImagePath = '../uploads/canape-prefait/' . $ancienneImage;
+
+                        if (file_exists($ancienneImagePath)) {
+                            $newHash = hash_file('md5', $uploadPath);
+                            $oldHash = hash_file('md5', $ancienneImagePath);
+
+                            if ($newHash !== $oldHash) {
+                                unlink($ancienneImagePath);
+                            } else {
+                                $_SESSION['message'] = 'Erreur lors de la suppression de l\'ancienne image';
+                                $_SESSION['message_type'] = 'error';
+                            }
+                        }
+                    }
+                }
+                $_SESSION['message'] = 'La commande a été mise à jour avec succès !';
+                $_SESSION['message_type'] = 'success';
+                header("Location: visualiser.php");
+                exit();
+            } catch (PDOException $e) {
+                if ($e->getCode() == 23000) {
+                    $_SESSION['message'] = 'Erreur : Ce nom d\'image est déjà utilisé.';
+                } else {
+                    $_SESSION['message'] = 'Erreur lors de la mise à jour : ' . $e->getMessage();
+                }
+                $_SESSION['message_type'] = 'error';
+            }
+        }
     }
 }
 ?>

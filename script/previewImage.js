@@ -6,10 +6,17 @@ var loadFile = function (event) {
     }
 };
 
-
 function previewExistingImage(fileName) {
     if (fileName) {
         document.getElementById('existing_output').src = '../../medias/' + fileName;
+    } else {
+        document.getElementById('existing_output').src = '';
+    }
+}
+
+function previewExistingAssets(fileName) {
+    if (fileName) {
+        document.getElementById('existing_output').src = '../../assets/' + fileName;
     } else {
         document.getElementById('existing_output').src = '';
     }
@@ -37,10 +44,10 @@ function handleBothImageEvents(event) {
 }
 
 function clearFileInput(inputId) {
-  const input = document.getElementById(inputId);
-  input.value = ""; 
-  const preview = document.getElementById('output');
-  if (preview) preview.src = "";
+    const input = document.getElementById(inputId);
+    input.value = "";
+    const preview = document.getElementById('output');
+    if (preview) preview.src = "";
 }
 
 document.addEventListener('DOMContentLoaded', function () {

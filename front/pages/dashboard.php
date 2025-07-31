@@ -55,6 +55,8 @@ function getSectionAccueil($slug)
   return $stmt->fetch(PDO::FETCH_ASSOC);
 }
 
+$listes = $pdo->query("SELECT * FROM liste_dashboard WHERE visible = 1")->fetchAll();
+
 function getSectionDashboard($slug)
 {
   global $pdo;
@@ -74,7 +76,6 @@ function calculPrix($commande, &$composition = [])
   $totalPrice = 0;
   $id_commande = $commande['id'];
 
-  // Liste des éléments simples
   $elements = [
     'id_structure' => 'structure',
     'id_banquette' => 'type_banquette',
@@ -184,13 +185,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['produit'])) {
 
     $nomProduit = $_POST['produit'];
     $quantite = intval($_POST['quantite'] ?? 1);
-    // Récupérer l'ID et le prix du produit via son nom
     $stmt = $pdo->prepare("SELECT id, prix, img FROM vente_produit WHERE nom = ?");
     $stmt->execute([$nomProduit]);
     $produit = $stmt->fetch();
 
     if (!$produit) {
-      // Sécurité : produit introuvable (mauvaise saisie ?)
       die("Produit introuvable.");
     }
 
@@ -351,15 +350,19 @@ if (!empty($produitAjoute)) : ?>
         <?php if ($customize && $customize['visible']): ?>
           <div class="customize-text">
             <h2><?= htmlspecialchars($customize['titre']) ?></h2>
-            <ul class="customize-features">
-              <li><img src="../../assets/canape_icon.png" alt="Forme" class="feature-icon">Choisis la structure du canapé</li>
-              <li><img src="../../assets/couleurs_icon.png" alt="Couleurs" class="feature-icon">Sélectionne les couleurs & matières</li>
-              <li><img src="../../assets/coussin_icon.png" alt="Coussins" class="feature-icon">Ajoutez tes options préférés</li>
-              <li><img src="../../assets/artiste_icon.png" alt="Aperçu" class="feature-icon">Vue d'ensemble de ta création</li>
-            </ul>
+            <?php
+            $listesVisibles = array_filter($listes, fn($liste) => $liste['visible']);
+            ?>
+            <?php if (!empty($listesVisibles)): ?>
+              <ul class="customize-features">
+                <?php foreach ($listes as $liste): ?>
+                  <li><img src="../../assets/<?= htmlspecialchars($liste['icon']) ?>" alt="Forme" class="feature-icon"><?= htmlspecialchars($liste['description']) ?></li>
+                <?php endforeach; ?>
+              </ul>
           </div>
           <div class="customize-image">
             <img class="sofa" src="../../medias/<?= htmlspecialchars($customize['img']) ?>" alt="Canapé personnalisé">
+          <?php endif; ?>
           </div>
         <?php endif; ?>
       </section>
