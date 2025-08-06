@@ -159,6 +159,34 @@ select {
     box-sizing: border-box;
 }
 
+/* ------------------- RUPTURE PRODUIT ------------------- */
+
+.product-card {
+    position: relative;
+}
+
+.product-card.rupture .product-image,
+.product-card.rupture .product-content {
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+/* Bannière visible et bien contrastée */
+.product-card.rupture::after {
+    content: "RUPTURE DE STOCK";
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: #e74c3c;
+    color: white;
+    font-size: 12px;
+    padding: 5px 8px;
+    border-radius: 6px;
+    font-weight: bold;
+    z-index: 2;
+}
+
+
 /* Responsive Design */
 @media (max-width: 840px) {
     .products-container {

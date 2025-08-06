@@ -123,6 +123,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id'], $_POST['visible
                                 ID
                             </th>
                             <th>VISIBLE</th>
+                            <th>RUPTURE</th>
                             <th>NOM</th>
                             <th>PRIX</th>
                             <th>IMAGE</th>
@@ -146,6 +147,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id'], $_POST['visible
                             echo "<td>{$row['id']}</td>";
                            $checked = $row['visible'] ? 'checked' : '';
                             echo "<td class='visible'><input type='checkbox' class='toggle-visible' data-id='{$row['id']}' $checked></td>";
+                            $rupture = $row['en_rupture'] ? "<span >Oui</span>" : "<span>Non</span>";
+                            echo "<td>$rupture</td>";
                             echo "<td>{$row['nom']}</td>";
                             echo "<td>{$row['prix']}</td>";
                             echo "<td><img src='../uploads/produit/{$row['img']}' alt='{$row['nom']}' ></td>";

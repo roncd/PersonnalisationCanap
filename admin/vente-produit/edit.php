@@ -42,6 +42,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $img = $_FILES['img'];
     $id_categorie = trim($_POST['id_categorie']);
     $visible = isset($_POST['visible']) ? 1 : 0;
+    $en_rupture = isset($_POST['en_rupture']) ? 1 : 0;
+
 
 
     if (empty($nom) || !isset($prix)  || empty($id_categorie)) {
@@ -83,8 +85,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $stmt->execute();
                 $ancienneImage = $stmt->fetchColumn();
 
-                $stmt = $pdo->prepare("UPDATE vente_produit SET nom = ?, prix = ?, img = ?, id_categorie = ?, visible = ? WHERE id = ?");
-                $stmt->execute([$nom, $prix, $fileName, $id_categorie, $visible, $id]);
+                $stmt = $pdo->prepare("UPDATE vente_produit SET nom = ?, prix = ?, img = ?, id_categorie = ?, visible = ?, en_rupture = ? WHERE id = ?");
+                $stmt->execute([$nom, $prix, $fileName, $id_categorie, $visible, $en_rupture, $id]);
+
               
                if ($stmt->rowCount() > 0) {
                     // Supprimer le fichier image du serveur
@@ -193,6 +196,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             </label>
                         </div>
                     </div>
+                    <div class="form-row">
+    <div class="form-group btn-slider">
+        <label for="en_rupture">Produit en rupture</label>
+        <label class="switch">
+            <input type="checkbox" id="en_rupture" name="en_rupture" <?= ($produit['en_rupture']) ? 'checked' : '' ?>>
+            <span class="slider round"></span>
+        </label>
+    </div>
+</div>
+
                     <div class="button-section">
                         <div class="buttons">
                             <button type="button" id="btn-retour" class="btn-beige" onclick="history.go(-1)">Retour</button>

@@ -317,36 +317,57 @@ if (!empty($produitAjoute)) : ?>
                 </div>
 
                 <!-- ------------------- SECTION ARTICLES ASSOCIES ------------------- -->
-                <section class="combination-section">
-                    <div class="combination-container transition-all">
-                        <?php foreach ($produits as $produit): ?>
-                            <?php
-                            $catNom = isset($categoriesAssoc[$produit['id_categorie']])
-                                ? strtolower($categoriesAssoc[$produit['id_categorie']])
-                                : '';
-                            ?>
-                            <div class="product-card" data-category="<?= htmlspecialchars($catNom) ?>">
-                                <div class="product-image">
-                                    <img
-                                        src="../../admin/uploads/produit/<?= htmlspecialchars($produit['img']) ?>"
-                                        alt="<?= htmlspecialchars($produit['nom']) ?>" />
-                                </div>
-                                <div class="product-content">
-                                    <h3><?= htmlspecialchars($produit['nom']) ?></h3>
-                                    <p class="description"> Catégorie : <?= htmlspecialchars(ucfirst($catNom)) ?>
-                                    </p>
-                                    <p class="price"><?= number_format($produit['prix'], 2, ',', ' ') ?> €</p>
-                                    <form method="POST">
-                                        <input type="hidden" name="produit" value="<?= htmlspecialchars($produit['nom']) ?>" />
-                                        <input type="hidden" name="quantite" value="1" />
-                                        <button type="submit" class="btn-beige">Ajouter au panier</button>
-                                    </form>
-                                </div>
-                            </div>
-                        <?php endforeach; ?>
-                    </div>
-                    <?php require '../../admin/include/pagination.php'; ?>
-                </section>
+<?php
+$produitsEnStock = [];
+$produitsRupture = [];
+
+foreach ($produits as $produit) {
+    if (!empty($produit['en_rupture']) && $produit['en_rupture'] == 1) {
+        $produitsRupture[] = $produit;
+    } else {
+        $produitsEnStock[] = $produit;
+    }
+}
+
+// Fusionner les deux tableaux : stock d'abord, rupture ensuite
+$produitsOrdonnes = array_merge($produitsEnStock, $produitsRupture);
+?>
+
+
+<section class="combination-section">
+    <div class="combination-container transition-all">
+        <?php foreach ($produitsOrdonnes as $produit): ?>
+    <?php
+    $catNom = isset($categoriesAssoc[$produit['id_categorie']])
+        ? strtolower($categoriesAssoc[$produit['id_categorie']])
+        : '';
+    $isRupture = $produit['en_rupture'] == 1;
+    ?>
+    <div class="product-card <?= $isRupture ? 'rupture' : '' ?>" data-category="<?= htmlspecialchars($catNom) ?>">
+        <div class="product-image">
+            <img
+                src="../../admin/uploads/produit/<?= htmlspecialchars($produit['img']) ?>"
+                alt="<?= htmlspecialchars($produit['nom']) ?>" />
+        </div>
+        <div class="product-content">
+            <h3><?= htmlspecialchars($produit['nom']) ?></h3>
+            <p class="description">Catégorie : <?= htmlspecialchars(ucfirst($catNom)) ?></p>
+            <p class="price"><?= number_format($produit['prix'], 2, ',', ' ') ?> €</p>
+
+            <form method="POST">
+                <input type="hidden" name="produit" value="<?= htmlspecialchars($produit['nom']) ?>" />
+                <input type="hidden" name="quantite" value="1" />
+                <button type="submit" class="btn-beige" <?= $isRupture ? 'disabled' : '' ?>>
+                    <?= $isRupture ? 'Rupture de stock' : 'Ajouter au panier' ?>
+                </button>
+            </form>
+        </div>
+    </div>
+<?php endforeach; ?>
+    </div>
+    <?php require '../../admin/include/pagination.php'; ?>
+</section>
+
 
                 <!-- Modal d'ajout au panier -->
                 <div id="reservation-modal" class="modal" style="display:none;">
