@@ -53,6 +53,21 @@
     strpos($currentPath, '/utilisateur/') === false   
 );
   ?>
+
+<?php
+
+require '../config.php';
+
+// Compter les commandes en attente pour panier
+$stmtPanier = $pdo->query("SELECT COUNT(*) FROM panier_final WHERE statut = 'validation'");
+$nbPanierAttente = $stmtPanier->fetchColumn();
+
+// Compter les commandes en attente pour canapé marocain
+$stmtCanape = $pdo->query("SELECT COUNT(*) FROM commande_detail WHERE statut = 'validation'");
+$nbCanapeAttente = $stmtCanape->fetchColumn();
+?>
+
+
   <aside>
     <div class="menu-section">
       <div class="close-icone">
@@ -77,16 +92,30 @@
           <span>Clients</span>
         </a>
 
-        <div class="menu-group">
-          <a href="#" class="menu-link commande-link <?= strpos($currentPage, 'commande.php') !== false  || strpos($currentPage, 'panier.php') !== false  ? 'active' : '' ?>" data-icon="commande">
-            <img src="../../assets/menu/commande.svg" alt="" width="20" height="20">
-            <span>Commandes</span>
-            <span class="arrow">▾</span>
-          </a>
-          <div class="submenu">
-            <a href="../pages/commande.php" class="<?= strpos($currentPage, 'commande.php') !== false ? 'active' : '' ?>">Canapé marocain</a>
-            <a href="../pages/panier.php" class="<?= strpos($currentPage, 'panier.php') !== false ? 'active' : '' ?>">Panier</a>
-          </div>
+       
+<div class="menu-group">
+  <a href="#" class="menu-link commande-link <?= strpos($currentPage, 'commande.php') !== false || strpos($currentPage, 'panier.php') !== false ? 'active' : '' ?>" data-icon="commande">
+    <img src="../../assets/menu/commande.svg" alt="" width="20" height="20">
+    <span>Commandes</span>
+    <?php if ($nbPanierAttente > 0 || $nbCanapeAttente > 0): ?>
+      <span class="notif-dot"></span>
+    <?php endif; ?>
+    <span class="arrow">▾</span>
+  </a>
+  <div class="submenu">
+    <a href="../pages/commande.php" class="<?= strpos($currentPage, 'commande.php') !== false ? 'active' : '' ?>">
+      Canapé marocain
+      <?php if ($nbCanapeAttente > 0): ?>
+        <span class="notif-dot"></span>
+      <?php endif; ?>
+    </a>
+    <a href="../pages/panier.php" class="<?= strpos($currentPage, 'panier.php') !== false ? 'active' : '' ?>">
+      Panier
+      <?php if ($nbPanierAttente > 0): ?>
+        <span class="notif-dot"></span>
+      <?php endif; ?>
+    </a>
+  </div>
         </div>
 
       </nav>

@@ -358,7 +358,7 @@ $produitsOrdonnes = array_merge($produitsEnStock, $produitsRupture);
                 <input type="hidden" name="produit" value="<?= htmlspecialchars($produit['nom']) ?>" />
                 <input type="hidden" name="quantite" value="1" />
                 <button type="submit" class="btn-beige" <?= $isRupture ? 'disabled' : '' ?>>
-                    <?= $isRupture ? 'Rupture de stock' : 'Ajouter au panier' ?>
+                    <?= $isRupture ? 'Ajouter au panier' : 'Ajouter au panier' ?>
                 </button>
             </form>
         </div>
