@@ -1,3 +1,9 @@
+<?php
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+require '../config.php';
+?>
 <!DOCTYPE html>
 <html lang="fr">
 
@@ -65,6 +71,16 @@ $nbPanierAttente = $stmtPanier->fetchColumn();
 // Compter les commandes en attente pour canapé marocain
 $stmtCanape = $pdo->query("SELECT COUNT(*) FROM commande_detail WHERE statut = 'validation'");
 $nbCanapeAttente = $stmtCanape->fetchColumn();
+
+// Récupérer la date de dernière consultation depuis la base
+$stmtLastCheck = $pdo->prepare("SELECT last_client_check FROM utilisateur WHERE id = :id");
+$stmtLastCheck->execute(['id' => $_SESSION['id']]);
+$lastCheck = $stmtLastCheck->fetchColumn() ?? '2000-01-01 00:00:00';
+
+// Compter les nouveaux clients depuis cette date
+$stmtClient = $pdo->prepare("SELECT COUNT(*) FROM client WHERE date_creation > :lastCheck");
+$stmtClient->execute(['lastCheck' => $lastCheck]);
+$nbNouveauxClients = $stmtClient->fetchColumn();
 ?>
 
 
@@ -87,12 +103,15 @@ $nbCanapeAttente = $stmtCanape->fetchColumn();
           <span>Catalogue</span>
         </a>
 
-        <a href="../client/visualiser.php" class="menu-link <?= (strpos($currentPage, 'fiche-client') !== false || $isClientPage  || strpos($currentPath, '/commande-detail/index.php') !== false)  ? 'active' : '' ?>" data-icon="client">
-          <img src="../../assets/menu/client.svg" alt="" width="20" height="20">
-          <span>Clients</span>
-        </a>
+<a href="../client/mark_clients_seen.php" class="menu-link <?= (strpos($currentPage,'fiche-client')!==false || $isClientPage) ? 'active' : '' ?>" data-icon="client">
+  <img src="../../assets/menu/client.svg" alt="" width="20" height="20">
+  <span>Clients</span>
+  <?php if($nbNouveauxClients > 0): ?>
+    <span class="notif-dot"></span>
+  <?php endif; ?>
+</a>
 
-       
+
 <div class="menu-group">
   <a href="#" class="menu-link commande-link <?= strpos($currentPage, 'commande.php') !== false || strpos($currentPage, 'panier.php') !== false ? 'active' : '' ?>" data-icon="commande">
     <img src="../../assets/menu/commande.svg" alt="" width="20" height="20">
