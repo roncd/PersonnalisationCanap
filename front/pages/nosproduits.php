@@ -191,43 +191,43 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['produit'])) {
 if (!empty($produitAjoute)) : ?>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const modal = document.getElementById("reservation-modal");
-            const productNameEl = document.getElementById("product-name");
-            const productImgEl = document.getElementById("product-image");
+    const modal = document.getElementById("reservation-modal");
+    const productNameEl = document.getElementById("product-name");
+    const productImgEl = document.getElementById("product-image");
 
-            const lastAddedProduct = {
-                name: <?= json_encode($produitAjoute) ?>,
-                image: <?= json_encode($imageProduitAjoute ?? '') ?>
-            };
+    const lastAddedProduct = {
+        name: <?= json_encode($produitAjoute) ?>,
+        image: <?= json_encode($imageProduitAjoute ?? '') ?>
+    };
 
-            function openReservationModal(productName, productImg) {
-                productNameEl.textContent = `Nom du produit : ${productName}`;
-                productImgEl.src = `../../admin/uploads/produit/${productImg}`;
-                modal.style.display = "flex";
-                document.documentElement.classList.add("no-scroll");
-                document.body.classList.add("no-scroll");
-                console.log("Image du produit :", productImgEl.src);
+    // Définir la fonction fermerModal globalement
+    window.fermerModal = function() {
+        modal.style.display = "none";
+        document.documentElement.classList.remove("no-scroll");
+        document.body.classList.remove("no-scroll");
+    };
 
-            }
+    function openReservationModal(productName, productImg) {
+        productNameEl.textContent = `Nom du produit : ${productName}`;
+        productImgEl.src = `../../admin/uploads/produit/${productImg}`;
+        modal.style.display = "flex";
+        document.documentElement.classList.add("no-scroll");
+        document.body.classList.add("no-scroll");
+        console.log("Image du produit :", productImgEl.src);
+    }
 
-            function fermerModal() {
-                modal.style.display = "none";
-                document.documentElement.classList.remove("no-scroll");
-                document.body.classList.remove("no-scroll");
-            }
+    document.querySelector(".close-modal")?.addEventListener("click", fermerModal);
 
-            document.querySelector(".close-modal")?.addEventListener("click", fermerModal);
+    window.addEventListener("click", (event) => {
+        if (event.target === modal) {
+            fermerModal();
+        }
+    });
 
-            window.addEventListener("click", (event) => {
-                if (event.target === modal) {
-                    fermerModal();
-                }
-            });
-
-            if (lastAddedProduct.name) {
-                openReservationModal(lastAddedProduct.name, lastAddedProduct.image);
-            }
-        });
+    if (lastAddedProduct.name) {
+        openReservationModal(lastAddedProduct.name, lastAddedProduct.image);
+    }
+});
     </script>
 <?php endif; ?>
 
@@ -452,6 +452,30 @@ $produitsOrdonnes = array_merge($produitsEnStock, $produitsRupture);
             });
         });
     </script>
+
+
+
+    <script>
+  // Récupérer tous les boutons filtre
+  const filterButtons = document.querySelectorAll('.filter-btn');
+
+  filterButtons.forEach(button => {
+    button.addEventListener('click', () => {
+      const category = button.getAttribute('data-category');
+      const url = new URL(window.location);
+
+      if(category === '') {
+        // Retirer le paramètre catégorie pour "Tous"
+        url.searchParams.delete('categorie');
+      } else {
+        url.searchParams.set('categorie', category);
+      }
+
+      // Recharger la page avec le paramètre catégorie modifié
+      window.location.href = url.toString();
+    });
+  });
+</script>
 
 </body>
 
